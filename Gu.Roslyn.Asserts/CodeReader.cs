@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Linq;
     using System.Text.RegularExpressions;
 

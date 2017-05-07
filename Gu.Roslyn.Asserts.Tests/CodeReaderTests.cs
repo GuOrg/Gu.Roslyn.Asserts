@@ -4,7 +4,6 @@
 
     public partial class CodeReaderTests
     {
-
         [Test]
         public void NamespaceFromClass()
         {

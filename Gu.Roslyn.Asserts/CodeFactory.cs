@@ -1,82 +1,56 @@
 namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Linq;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.CSharp;
 
     public static class CodeFactory
     {
-        //internal static Project CreateProject(IEnumerable<DiagnosticAnalyzer> analyzers)
-        //{
-        //    var projFile = ProjFile(typeof(KnownSymbol)).FullName;
-        //    var projectName = Path.GetFileNameWithoutExtension(projFile);
-        //    var projectId = ProjectId.CreateNewId(projectName);
-        //    var solution = CreateSolution(projectId, projectName);
-        //    var doc = XDocument.Parse(File.ReadAllText(projFile));
-        //    var directory = Path.GetDirectoryName(projFile);
-        //    var compiles = doc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
-        //        .ToArray();
-        //    if (compiles.Length == 0)
-        //    {
-        //        throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
-        //    }
-
-        //    foreach (var compile in compiles)
-        //    {
-        //        var csFile = Path.Combine(directory, compile.Attribute("Include").Value);
-        //        var documentId = DocumentId.CreateNewId(projectId);
-        //        using (var stream = File.OpenRead(csFile))
-        //        {
-        //            solution = solution.AddDocument(documentId, csFile, SourceText.From(stream));
-        //        }
-        //    }
-
-        //    var project = solution.GetProject(projectId);
-        //    return ApplyCompilationOptions(project, analyzers);
-        //}
-
-        //[SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        //private static FileInfo ProjFile(Type typeInAssembly)
-        //{
-        //    return new FileInfo(new Uri(typeInAssembly.Assembly.CodeBase).LocalPath)
-        //        .Directory
-        //        .Parent
-        //        .Parent
-        //        .Parent
-        //        .EnumerateFiles("Gu.Analyzers.Analyzers.csproj", SearchOption.AllDirectories)
-        //        .Single();
-        //}
-
         public static Solution CreateSolution(string[] code, params MetadataReference[] metadataReferences)
         {
-            throw new NotImplementedException();
-            //var solution = new AdhocWorkspace()
-            //    .CurrentSolution
-            //    .AddProject(projectId, projectName, projectName, LanguageNames.CSharp)
-            //    .WithProjectCompilationOptions(
-            //        projectId,
-            //        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true))
-            //    .AddMetadataReferences(projectId, metadataReferences);
-            //var parseOptions = solution.GetProject(projectId).ParseOptions;
-            //return solution.WithProjectParseOptions(projectId, parseOptions.WithDocumentationMode(DocumentationMode.Diagnose));
+            return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
-        private static Project ApplyCompilationOptions(Project project, IEnumerable<DiagnosticAnalyzer> analyzer)
+        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
-            // update the project compilation options
-            var diagnostics = ImmutableDictionary.CreateRange(
-                analyzer.SelectMany(
-                    a => a.SupportedDiagnostics.Select(
-                        x => new KeyValuePair<string, ReportDiagnostic>(x.Id, ReportDiagnostic.Warn))));
+            var solution = new AdhocWorkspace()
+                .CurrentSolution;
+            var byNamespaces = code.Select(c => new WithMetaData(c))
+                .GroupBy(c => c.Namespace);
+            foreach (var byNamespace in byNamespaces)
+            {
+                var assemblyName = byNamespace.Key;
+                var projectId = ProjectId.CreateNewId(assemblyName);
+                solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
+                    .WithProjectCompilationOptions(
+                        projectId,
+                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true))
+                    .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                foreach (var file in byNamespace)
+                {
+                    var documentId = DocumentId.CreateNewId(projectId);
+                    solution = solution.AddDocument(documentId, file.FileName, file.Code);
+                }
+            }
 
-            var modifiedSpecificDiagnosticOptions = diagnostics.SetItems(project.CompilationOptions.SpecificDiagnosticOptions);
-            var modifiedCompilationOptions = project.CompilationOptions.WithSpecificDiagnosticOptions(modifiedSpecificDiagnosticOptions);
+            return solution;
+        }
 
-            var solution = project.Solution.WithProjectCompilationOptions(project.Id, modifiedCompilationOptions);
-            return solution.GetProject(project.Id);
+        private struct WithMetaData
+        {
+            public WithMetaData(string code)
+            {
+                this.Code = code;
+                this.FileName = CodeReader.FileName(code);
+                this.Namespace = CodeReader.Namespace(code);
+            }
+
+            internal string Code { get; }
+
+            internal string FileName { get; }
+
+            internal string Namespace { get; }
         }
     }
 }
