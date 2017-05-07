@@ -1,0 +1,6 @@
+source https://www.nuget.org/api/v2/
+framework >= net461
+redirects: on
+
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.1.0
+nuget NUnit 3.6.1
