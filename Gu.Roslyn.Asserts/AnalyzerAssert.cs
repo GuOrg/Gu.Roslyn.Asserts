@@ -32,7 +32,14 @@
 
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
-            NoDiagnosticsAsync(analyzer, code).Wait();
+            try
+            {
+                NoDiagnosticsAsync(analyzer, code).Wait();
+            }
+            catch (AggregateException e)
+            {
+                throw e.InnerException;
+            }
         }
 
         public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
@@ -54,7 +61,7 @@
 
             if (results.SelectMany(x => x).Any())
             {
-                throw new InvalidOperationException(string.Join(Environment.NewLine, results.SelectMany(x => x)));
+                throw new AssertException(string.Join(Environment.NewLine, results.SelectMany(x => x)));
             }
         }
     }

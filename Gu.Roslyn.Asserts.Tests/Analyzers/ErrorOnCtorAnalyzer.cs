@@ -1,17 +1,17 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    internal class NoErrorAnalyzer : DiagnosticAnalyzer
+    internal class ErrorOnCtorAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "NoError";
+        public const string DiagnosticId = "ErrorOnCtor";
 
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,
-            title: "This analyzer never reports an error.",
+            title: "This analyzer always reports a error on constructors.",
             messageFormat: "Message format.",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
@@ -22,11 +22,12 @@
 
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(HandleIdentifierName, SyntaxKind.IdentifierName);
+            context.RegisterSyntaxNodeAction(HandleConstructorDeclaration, SyntaxKind.ConstructorDeclaration);
         }
 
-        private static void HandleIdentifierName(SyntaxNodeAnalysisContext context)
+        private static void HandleConstructorDeclaration(SyntaxNodeAnalysisContext context)
         {
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation()));
         }
     }
 }

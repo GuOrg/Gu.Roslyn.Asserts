@@ -12,7 +12,7 @@
                 var code = @"
 namespace Gu.Roslyn.Asserts.Tests
 {
-    class CodeReaderTests
+    class Foo
     {
     }
 }";
@@ -37,6 +37,24 @@ namespace Gu.Roslyn.Asserts.Tests
     }
 }";
                 AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code1, code2);
+            }
+
+            [Test]
+            public void SingleClassOneError()
+            {
+                var code = @"
+namespace Gu.Roslyn.Asserts.Tests
+{
+    class Foo
+    {
+        public Foo()
+        {
+        }
+    }
+}";
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code));
+                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
             }
         }
     }
