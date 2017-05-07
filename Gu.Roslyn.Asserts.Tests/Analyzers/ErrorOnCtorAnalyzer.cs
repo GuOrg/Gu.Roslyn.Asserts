@@ -5,6 +5,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ErrorOnCtorAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "ErrorOnCtor";

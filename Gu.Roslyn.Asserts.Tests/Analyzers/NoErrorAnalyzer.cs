@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class NoErrorAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "NoError";

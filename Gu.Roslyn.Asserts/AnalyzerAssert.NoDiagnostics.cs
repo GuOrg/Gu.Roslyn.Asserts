@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    public class AnalyzerAssert
+    public partial class AnalyzerAssert
     {
         public static readonly List<MetadataReference> References = new List<MetadataReference>();
 

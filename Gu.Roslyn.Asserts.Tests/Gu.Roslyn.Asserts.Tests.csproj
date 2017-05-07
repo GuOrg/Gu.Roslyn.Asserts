@@ -43,7 +43,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerAssertTests.cs" />
+    <Compile Include="AnalyzerAssertTests.HappyPath.cs" />
+    <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
     <Compile Include="Analyzers\ErrorOnCtorAnalyzer.cs" />
     <Compile Include="CodeReaderTests.cs" />
     <Compile Include="CodeReaderTests.FileName.cs" />
