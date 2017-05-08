@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    public partial class AnalyzerAssert
+    public static partial class AnalyzerAssert
     {
         public static void Diagnostics<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
