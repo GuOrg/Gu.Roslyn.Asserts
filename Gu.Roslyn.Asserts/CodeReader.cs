@@ -1,7 +1,9 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Microsoft.CodeAnalysis.Text;
 
     public static class CodeReader
     {
@@ -49,6 +51,29 @@ namespace Gu.Roslyn.Asserts
             }
 
             return "Unknown";
+        }
+
+        public static IEnumerable<LinePosition> FindDiagnosticsPositions(string code)
+        {
+            var line = 1;
+            var character = 1;
+            foreach (var c in code)
+            {
+                if (c == '\n')
+                {
+                    line++;
+                    character = 1;
+                    continue;
+                }
+
+                if (c == '↓')
+                {
+                    yield return new LinePosition(line, character);
+                    continue;
+                }
+
+                character++;
+            }
         }
     }
 }
