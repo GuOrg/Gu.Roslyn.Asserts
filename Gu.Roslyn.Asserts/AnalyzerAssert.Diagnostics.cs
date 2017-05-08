@@ -52,20 +52,20 @@
             foreach (var project in sln.Projects)
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                    .ConfigureAwait(false);
+                                               .ConfigureAwait(false);
 
                 var withAnalyzers = compilation.WithAnalyzers(
                     ImmutableArray.Create(analyzer),
                     project.AnalyzerOptions,
                     CancellationToken.None);
                 results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                    .ConfigureAwait(false));
+                                               .ConfigureAwait(false));
             }
 
             var actuals = results.SelectMany(x => x)
-                .OrderBy(d => d.Id)
-                .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
-                .ToArray();
+                                 .OrderBy(d => d.Id)
+                                 .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
+                                 .ToArray();
             if (expecteds.Count != actuals.Length)
             {
                 Fail.WithMessage($"Expected count does not match actual.{Environment.NewLine}" +
@@ -74,8 +74,8 @@
             }
 
             expecteds = expecteds.OrderBy(d => d.Analyzer.SupportedDiagnostics[0].Id)
-                .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
-                .ToArray();
+                                 .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
+                                 .ToArray();
             for (var i = 0; i < expecteds.Count; i++)
             {
                 var expected = expecteds[i];
