@@ -16,7 +16,8 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
+                Assert.Fail("Implement");
+                //AnalyzerAssert.Diagnostic<ErrorOnCtorAnalyzer>(code);
             }
 
             [Test]
@@ -29,7 +30,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics(typeof(NoErrorAnalyzer), code);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -42,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics(new NoErrorAnalyzer(), code);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -62,7 +63,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code1, code2);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -78,9 +79,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
-                ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -96,8 +95,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics(typeof(ErrorOnCtorAnalyzer), code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -113,8 +111,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics(new ErrorOnCtorAnalyzer(), code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -137,9 +134,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
-                Assert.AreEqual("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
-                ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
+                Assert.Fail("Implement");
             }
 
             [Test]
@@ -165,10 +160,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
-                NUnit.Framework.StringAssert.Contains("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
-                NUnit.Framework.StringAssert.Contains("Foo2.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
-                ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
+                Assert.Fail("Implement");
             }
         }
     }

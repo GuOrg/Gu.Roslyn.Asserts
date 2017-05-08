@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code));
                 Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
                 ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
             }
@@ -96,7 +96,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics(typeof(ErrorOnCtorAnalyzer),code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(typeof(ErrorOnCtorAnalyzer),code));
                 Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
             }
 
@@ -113,7 +113,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics(new ErrorOnCtorAnalyzer(), code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(new ErrorOnCtorAnalyzer(), code));
                 Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
             }
 
@@ -137,7 +137,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
                 Assert.AreEqual("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
                 ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
             }
@@ -165,7 +165,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
                 StringAssert.Contains("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
                 StringAssert.Contains("Foo2.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
                 ////AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);

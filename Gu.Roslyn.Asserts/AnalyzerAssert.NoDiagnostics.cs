@@ -24,7 +24,6 @@
             NoDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
         }
 
-
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
             NoDiagnostics(analyzer, (IEnumerable<string>)code);
@@ -38,7 +37,7 @@
             }
             catch (AggregateException e)
             {
-                throw e.InnerException;
+                Fail.WithMessage(e.InnerExceptions[0].Message);
             }
         }
 
