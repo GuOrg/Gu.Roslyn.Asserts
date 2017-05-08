@@ -16,7 +16,9 @@ namespace Gu.Roslyn.Asserts.Tests
 }";
     AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
 }
+```
 
+Indicate error position with ↓
 ```c#
 [Test]
 public void SingleClassOneErrorGeneric()
