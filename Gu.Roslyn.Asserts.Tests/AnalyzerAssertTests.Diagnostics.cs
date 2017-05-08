@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
@@ -74,12 +74,12 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo
     {
-        public Foo()
+        ↓public Foo()
         {
         }
     }
 }";
-                Assert.Fail("Implement");
+                AnalyzerAssert.Diagnostics(new ErrorOnCtorAnalyzer(), new[] { code });
             }
 
             [Test]

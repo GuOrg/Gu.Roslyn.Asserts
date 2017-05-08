@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                CollectionAssert.AreEqual(new[] { new LinePosition(9, 5) }, CodeReader.FindDiagnosticsPositions(code));
+                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4) }, CodeReader.FindDiagnosticsPositions(code));
             }
 
             [Test]
@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                CollectionAssert.AreEqual(new[] { new LinePosition(9, 5), new LinePosition(9, 11) }, CodeReader.FindDiagnosticsPositions(code));
+                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4), new LinePosition(8, 10) }, CodeReader.FindDiagnosticsPositions(code));
             }
         }
     }

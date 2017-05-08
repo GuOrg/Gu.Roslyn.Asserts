@@ -55,14 +55,14 @@
 
         public static IEnumerable<LinePosition> FindDiagnosticsPositions(string code)
         {
-            var line = 1;
-            var character = 1;
+            var line = 0;
+            var character = 0;
             foreach (var c in code)
             {
                 if (c == '\n')
                 {
                     line++;
-                    character = 1;
+                    character = 0;
                     continue;
                 }
 
