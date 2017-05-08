@@ -1,7 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
-    using System.Reflection;
     using NUnit.Framework;
 
     public class Sandbox

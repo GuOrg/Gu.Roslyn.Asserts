@@ -1,7 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
     using System;
-    using System.Reflection;
 
     internal static class Fail
     {
