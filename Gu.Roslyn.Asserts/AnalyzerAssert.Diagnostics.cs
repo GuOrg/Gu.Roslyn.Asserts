@@ -11,6 +11,22 @@
 
     public partial class AnalyzerAssert
     {
+        public static void Diagnostics<TAnalyzer>(params string[] code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            Diagnostics(new TAnalyzer(), code);
+        }
+
+        public static void Diagnostics(Type analyzerType, params string[] code)
+        {
+            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+        }
+
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
+        {
+            Diagnostics(analyzer, (IEnumerable<string>)code);
+        }
+
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
             try
@@ -46,7 +62,10 @@
                     .ConfigureAwait(false));
             }
 
-            var actuals = results.SelectMany(x => x).ToArray();
+            var actuals = results.SelectMany(x => x)
+                .OrderBy(d => d.Id)
+                .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
+                .ToArray();
             if (expecteds.Count != actuals.Length)
             {
                 Fail.WithMessage($"Expected count does not match actual.{Environment.NewLine}" +
@@ -54,6 +73,9 @@
                                  $"Actual:   {actuals.Length}");
             }
 
+            expecteds = expecteds.OrderBy(d => d.Analyzer.SupportedDiagnostics[0].Id)
+                .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
+                .ToArray();
             for (var i = 0; i < expecteds.Count; i++)
             {
                 var expected = expecteds[i];

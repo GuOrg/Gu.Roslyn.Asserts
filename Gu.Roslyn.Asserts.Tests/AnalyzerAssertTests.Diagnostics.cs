@@ -7,7 +7,7 @@
         public class Diagnostics
         {
             [Test]
-            public void SingleClassNoErrorGeneric()
+            public void SingleClassNoErrorIndicatedGeneric()
             {
                 var code = @"
 namespace Gu.Roslyn.Asserts.Tests
@@ -16,8 +16,22 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                Assert.Fail("Implement");
-                //AnalyzerAssert.Diagnostic<ErrorOnCtorAnalyzer>(code);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
+            }
+
+            [Test]
+            public void SingleClassNoErrorInCode()
+            {
+                var code = @"
+namespace Gu.Roslyn.Asserts.Tests
+{
+    ↓class Foo
+    {
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                Assert.AreEqual("Expected count does not match actual.\r\nExpected: 1\r\nActual:   0", exception.Message);
             }
 
             [Test]
@@ -30,7 +44,8 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                Assert.Fail("Implement");
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
             [Test]
@@ -43,11 +58,12 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                Assert.Fail("Implement");
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
             [Test]
-            public void TwoClassesNoError()
+            public void TwoClassesNoErrorIndicated()
             {
                 var code1 = @"
 namespace Gu.Roslyn.Asserts.Tests
@@ -63,7 +79,29 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                Assert.Fail("Implement");
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code1, code2));
+                Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
+            }
+
+            [Test]
+            public void TwoClassesNoErrorInCode()
+            {
+                var code1 = @"
+namespace Gu.Roslyn.Asserts.Tests
+{
+    ↓class Code1
+    {
+    }
+}";
+                var code2 = @"
+namespace Gu.Roslyn.Asserts.Tests
+{
+    class Code2
+    {
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code1, code2));
+                Assert.AreEqual("Expected count does not match actual.\r\nExpected: 1\r\nActual:   0", exception.Message);
             }
 
             [Test]
@@ -79,7 +117,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                AnalyzerAssert.Diagnostics(new ErrorOnCtorAnalyzer(), new[] { code });
+                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code);
             }
 
             [Test]
@@ -90,12 +128,12 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo
     {
-        public Foo()
+        ↓public Foo()
         {
         }
     }
 }";
-                Assert.Fail("Implement");
+                AnalyzerAssert.Diagnostics(typeof(ErrorOnCtorAnalyzer), code);
             }
 
             [Test]
@@ -106,12 +144,12 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo
     {
-        public Foo()
+        ↓public Foo()
         {
         }
     }
 }";
-                Assert.Fail("Implement");
+                AnalyzerAssert.Diagnostics(new ErrorOnCtorAnalyzer(), code);
             }
 
             [Test]
@@ -122,7 +160,7 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo1
     {
-        public Foo1()
+        ↓public Foo1()
         {
         }
     }
@@ -134,7 +172,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-                Assert.Fail("Implement");
+                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
             }
 
             [Test]
@@ -145,7 +183,7 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo1
     {
-        public Foo1()
+        ↓public Foo1()
         {
         }
     }
@@ -155,12 +193,12 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     class Foo2
     {
-        public Foo2()
+        ↓public Foo2()
         {
         }
     }
 }";
-                Assert.Fail("Implement");
+                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
             }
         }
     }
