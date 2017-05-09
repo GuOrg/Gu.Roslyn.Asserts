@@ -4,7 +4,9 @@
 
 Asserts for testing Roslyn analyzers.
 
-#Samples
+# Samples
+
+## No diagnostic, happy path.
 
 ```c#
 [Test]
@@ -20,6 +22,8 @@ namespace Gu.Roslyn.Asserts.Tests
     AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
 }
 ```
+
+## Diagnostic
 
 Indicate error position with ↓
 ```c#
@@ -40,4 +44,29 @@ namespace Gu.Roslyn.Asserts.Tests
 }
 ```
 
+## Diagnostic and code fix
 
+```c#
+[Test]
+public void SingleClassOneErrorCorrectFix()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+    AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+}
+```
