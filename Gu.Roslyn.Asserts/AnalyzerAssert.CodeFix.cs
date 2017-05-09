@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -22,6 +21,13 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(new TAnalyzer(), new TCodeFix(), new[] { code }, new[] { fixedCode });
+        }
+
+        public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> code, IEnumerable<string> fixedCode)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+            where TCodeFix : CodeFixProvider, new()
+        {
+            CodeFix(new TAnalyzer(), new TCodeFix(), code, fixedCode);
         }
 
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> code, IEnumerable<string> fixedCode)

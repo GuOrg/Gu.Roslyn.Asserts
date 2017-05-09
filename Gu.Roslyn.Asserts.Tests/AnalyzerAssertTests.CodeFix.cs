@@ -31,6 +31,38 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoClassOneErrorCorrectFix()
+            {
+                var barCode = @"
+namespace RoslynSandbox
+{
+    class Bar
+    {
+        private readonly int value;
+    }
+}";
+
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode });
+            }
+
+            [Test]
             public void SingleClassOneErrorErrorInFix()
             {
                 var code = @"
@@ -51,6 +83,43 @@ namespace RoslynSandbox
     }
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode));
+                var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
+                               "Expected:         private readonly int bar;\r\n" +
+                               "Actual:           private readonly int value;\r\n" +
+                               "                                       ^\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void TwoClassesOneErrorErrorInFix()
+            {
+                var barCode = @"
+namespace RoslynSandbox
+{
+    class Bar
+    {
+        private readonly int value;
+    }
+}";
+
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int bar;
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode }));
                 var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
