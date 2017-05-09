@@ -26,7 +26,7 @@
                 Fail.WithMessage("Expected code to have exactly one error with position indicated by '↓'");
             }
 
-            var sln = CodeFactory.CreateSolution(sources, References);
+            var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, References);
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in sln.Projects)
             {

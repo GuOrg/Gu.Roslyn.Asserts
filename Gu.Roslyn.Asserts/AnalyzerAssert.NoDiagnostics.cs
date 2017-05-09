@@ -43,7 +43,7 @@
 
         public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
-            var sln = CodeFactory.CreateSolution(code, References);
+            var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, References);
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in sln.Projects)
             {

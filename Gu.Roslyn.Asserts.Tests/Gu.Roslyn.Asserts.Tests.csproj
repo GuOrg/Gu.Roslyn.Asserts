@@ -46,6 +46,7 @@
     <Compile Include="AnalyzerAssertTests.NoDiagnostics.cs" />
     <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
     <Compile Include="Analyzers\ErrorOnCtorAnalyzer.cs" />
+    <Compile Include="Analyzers\ErrorOnCtorAnalyzerDisabled.cs" />
     <Compile Include="CodeReaderTests.cs" />
     <Compile Include="CodeReaderTests.FileName.cs" />
     <Compile Include="Analyzers\NoErrorAnalyzer.cs" />

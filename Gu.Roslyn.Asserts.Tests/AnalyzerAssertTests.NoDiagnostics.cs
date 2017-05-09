@@ -1,4 +1,6 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿using System;
+
+namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
@@ -88,8 +90,9 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
             }
 
-            [Test]
-            public void SingleClassOneErrorType()
+            [TestCase(typeof(ErrorOnCtorAnalyzer))]
+            [TestCase(typeof(ErrorOnCtorAnalyzerDisabled))]
+            public void SingleClassOneErrorType(Type type)
             {
                 var code = @"
 namespace Gu.Roslyn.Asserts.Tests
@@ -101,11 +104,11 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(typeof(ErrorOnCtorAnalyzer), code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(type, code));
                 Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics(typeof(ErrorOnCtorAnalyzer), code);
+                    AnalyzerAssert.NoDiagnostics(type, code);
                 }
             }
 

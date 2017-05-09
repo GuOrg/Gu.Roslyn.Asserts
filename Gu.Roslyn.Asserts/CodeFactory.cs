@@ -1,3 +1,6 @@
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis.Diagnostics;
+
 namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
@@ -12,7 +15,7 @@ namespace Gu.Roslyn.Asserts
             return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
-        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
+        private static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
@@ -27,6 +30,36 @@ namespace Gu.Roslyn.Asserts
                         projectId,
                         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true))
                     .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                foreach (var file in byNamespace)
+                {
+                    var documentId = DocumentId.CreateNewId(projectId);
+                    solution = solution.AddDocument(documentId, file.FileName, file.Code);
+                }
+            }
+
+            return solution;
+        }
+
+        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences)
+        {
+            var solution = new AdhocWorkspace()
+                .CurrentSolution;
+            var byNamespaces = code.Select(c => new WithMetaData(c))
+                                   .GroupBy(c => c.Namespace);
+
+            var diagnosticOptions = analyzers.SelectMany(a => a.SupportedDiagnostics)
+                                             .ToDictionary(d => d.Id, d => ReportDiagnostic.Warn);
+            diagnosticOptions.Add("AD0001", ReportDiagnostic.Error);
+            foreach (var byNamespace in byNamespaces)
+            {
+                var assemblyName = byNamespace.Key;
+                var projectId = ProjectId.CreateNewId(assemblyName);
+                solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
+                                   .WithProjectCompilationOptions(
+                                       projectId,
+                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
+                                                .WithSpecificDiagnosticOptions(diagnosticOptions))
+                                   .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
                 foreach (var file in byNamespace)
                 {
                     var documentId = DocumentId.CreateNewId(projectId);

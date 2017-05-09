@@ -41,13 +41,13 @@
 
         public static async Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
-            (IReadOnlyList<ExpectedDiagnostic> expecteds, IEnumerable<string> sources) = ExpectedDiagnostic.FromCode(analyzer,code);
+            (IReadOnlyList<ExpectedDiagnostic> expecteds, IEnumerable<string> sources) = ExpectedDiagnostic.FromCode(analyzer, code);
             if (expecteds.Count == 0)
             {
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var sln = CodeFactory.CreateSolution(sources, References);
+            var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, References);
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in sln.Projects)
             {

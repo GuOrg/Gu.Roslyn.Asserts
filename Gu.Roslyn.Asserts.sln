@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3F667C
 		appveyor.yml = appveyor.yml
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
+		.paket\Readme.paket.md = .paket\Readme.paket.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts", "Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj", "{FC4FEA0F-4047-4E99-A588-D0D4B9695F42}"

@@ -1,4 +1,6 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿using System;
+
+namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
@@ -120,8 +122,9 @@ namespace Gu.Roslyn.Asserts.Tests
                 AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code);
             }
 
-            [Test]
-            public void SingleClassOneErrorType()
+            [TestCase(typeof(ErrorOnCtorAnalyzer))]
+            [TestCase(typeof(ErrorOnCtorAnalyzerDisabled))]
+            public void SingleClassOneErrorType(Type type)
             {
                 var code = @"
 namespace Gu.Roslyn.Asserts.Tests
@@ -133,7 +136,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
     }
 }";
-                AnalyzerAssert.Diagnostics(typeof(ErrorOnCtorAnalyzer), code);
+                AnalyzerAssert.Diagnostics(type, code);
             }
 
             [Test]
