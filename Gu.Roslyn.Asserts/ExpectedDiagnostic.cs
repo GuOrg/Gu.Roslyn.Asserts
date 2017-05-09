@@ -1,6 +1,7 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -35,8 +36,9 @@
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
         /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
-        /// <param name="codeWithErrorsIndicated">The code with erros indicated.</param>
+        /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "Maybe we change this to IReadOnlyList idk.")]
         public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
             var diagnostics = new List<ExpectedDiagnostic>();
@@ -61,6 +63,7 @@
         /// <summary>
         /// Expected diagnostics and code.
         /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
         public class DiagnosticsAndSources
         {
             /// <summary>

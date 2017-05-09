@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿// ReSharper disable RedundantNameQualifier
+namespace Gu.Roslyn.Asserts.Tests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;

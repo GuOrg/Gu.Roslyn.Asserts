@@ -152,6 +152,7 @@
                 for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
                 {
                     var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
+                    //// ReSharper disable once PossibleMultipleEnumeration
                     CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
                 }
             }

@@ -1,3 +1,5 @@
+// ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable PossibleNullReferenceException
 namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System;
@@ -13,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Text;
 
-    internal partial class CustomBatchFixAllProvider : FixAllProvider
+    internal class CustomBatchFixAllProvider : FixAllProvider
     {
         protected CustomBatchFixAllProvider()
         {
@@ -28,11 +30,9 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 var documentsAndDiagnosticsToFixMap = await this.GetDocumentDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
                 return await this.GetFixAsync(documentsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
             }
-            else
-            {
-                var projectsAndDiagnosticsToFixMap = await this.GetProjectDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
-                return await this.GetFixAsync(projectsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
-            }
+
+            var projectsAndDiagnosticsToFixMap = await this.GetProjectDiagnosticsToFixAsync(fixAllContext).ConfigureAwait(false);
+            return await this.GetFixAsync(projectsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
         }
 
         public virtual async Task<CodeAction> GetFixAsync(
@@ -257,15 +257,16 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                     cancellationToken.ThrowIfCancellationRequested();
                     var document = changedSolution.GetDocument(documentId);
 
-                    Document existingDocument;
-                    if (changedDocumentsMap.TryGetValue(documentId, out existingDocument))
+                    if (changedDocumentsMap.TryGetValue(documentId, out Document existingDocument))
                     {
                         if (existingDocument != null)
                         {
                             changedDocumentsMap[documentId] = null;
-                            var documentsToMerge = new List<Document>();
-                            documentsToMerge.Add(existingDocument);
-                            documentsToMerge.Add(document);
+                            var documentsToMerge = new List<Document>
+                            {
+                                existingDocument,
+                                document,
+                            };
                             documentsToMergeMap = documentsToMergeMap ?? new Dictionary<DocumentId, List<Document>>();
                             documentsToMergeMap[documentId] = documentsToMerge;
                         }

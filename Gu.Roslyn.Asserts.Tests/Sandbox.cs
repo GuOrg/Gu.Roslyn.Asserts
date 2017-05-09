@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedVariable
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
