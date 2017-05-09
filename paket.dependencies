@@ -4,3 +4,10 @@ redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.1.0
 nuget NUnit 3.6.1
+
+group Analyzers
+  source http://www.nuget.org/api/v2/
+  nuget Gu.Analyzers
+  nuget StyleCop.Analyzers
+  nuget AsyncUsageAnalyzers
+

@@ -13,13 +13,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class CodeReaderTests
     {
     }
 }";
-            Assert.AreEqual("Gu.Roslyn.Asserts.Tests", CodeReader.Namespace(code));
+            Assert.AreEqual("RoslynSandbox", CodeReader.Namespace(code));
         }
     }
 }

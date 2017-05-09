@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts
             return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
-        private static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
@@ -40,6 +40,13 @@ namespace Gu.Roslyn.Asserts
             return solution;
         }
 
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="code">The code to create the sln from.</param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns></returns>
         public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()

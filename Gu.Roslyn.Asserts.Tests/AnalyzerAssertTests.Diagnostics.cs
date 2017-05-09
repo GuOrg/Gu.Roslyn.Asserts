@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using NUnit.Framework;
 
     public partial class AnalyzerAssertTests
@@ -12,13 +11,13 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorIndicatedGeneric()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
@@ -26,13 +25,13 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorInCode()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     ↓class Foo
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual("Expected count does not match actual.\r\nExpected: 1\r\nActual:   0", exception.Message);
             }
 
@@ -40,13 +39,13 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorType()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
@@ -54,13 +53,13 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorPassingAnalyzer()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
@@ -68,20 +67,20 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TwoClassesNoErrorIndicated()
             {
                 var code1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Code1
     {
     }
 }";
                 var code2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Code2
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code1, code2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code1, code2));
                 Assert.AreEqual("Expected code to have at least one error position indicated with '↓'", exception.Message);
             }
 
@@ -89,20 +88,20 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TwoClassesNoErrorInCode()
             {
                 var code1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     ↓class Code1
     {
     }
 }";
                 var code2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Code2
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code1, code2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code1, code2));
                 Assert.AreEqual("Expected count does not match actual.\r\nExpected: 1\r\nActual:   0", exception.Message);
             }
 
@@ -110,30 +109,26 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassOneErrorGeneric()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        ↓public Foo()
-        {
-        }
+        private readonly int ↓_value;
     }
 }";
-                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
             }
 
-            [TestCase(typeof(ErrorOnCtorAnalyzer))]
-            [TestCase(typeof(ErrorOnCtorAnalyzerDisabled))]
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
             public void SingleClassOneErrorType(Type type)
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        ↓public Foo()
-        {
-        }
+        private readonly int ↓_value = 1;
     }
 }";
                 AnalyzerAssert.Diagnostics(type, code);
@@ -143,65 +138,80 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassOneErrorPassingAnalyzer()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        ↓public Foo()
-        {
-        }
+        private readonly int ↓_value = 1;
     }
 }";
-                AnalyzerAssert.Diagnostics(new ErrorOnCtorAnalyzer(), code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
             }
 
             [Test]
             public void TwoClassesOneError()
             {
                 var foo1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo1
     {
-        ↓public Foo1()
-        {
-        }
+        private readonly int ↓_value = 1;
     }
 }";
                 var foo2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo2
     {
     }
 }";
-                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
             }
 
             [Test]
-            public void TwoClassesTwoErrors()
+            public void TwoClassesTwoErrorsGeneric()
             {
                 var foo1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo1
     {
-        ↓public Foo1()
-        {
-        }
+        private readonly int ↓_value = 1;
     }
 }";
                 var foo2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo2
     {
-        ↓public Foo2()
-        {
-        }
+        private readonly int ↓_value = 1;
     }
 }";
-                AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
+            }
+
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
+            public void TwoClassesTwoErrorsType(Type type)
+            {
+                var foo1 = @"
+namespace RoslynSandbox
+{
+    class Foo1
+    {
+        private readonly int ↓_value = 1;
+    }
+}";
+                var foo2 = @"
+namespace RoslynSandbox
+{
+    class Foo2
+    {
+        private readonly int ↓_value = 1;
+    }
+}";
+                AnalyzerAssert.Diagnostics(type, foo1, foo2);
             }
         }
     }

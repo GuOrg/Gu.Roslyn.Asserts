@@ -45,8 +45,8 @@
   <ItemGroup>
     <Compile Include="AnalyzerAssertTests.NoDiagnostics.cs" />
     <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
-    <Compile Include="Analyzers\ErrorOnCtorAnalyzer.cs" />
-    <Compile Include="Analyzers\ErrorOnCtorAnalyzerDisabled.cs" />
+    <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
+    <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
     <Compile Include="CodeReaderTests.cs" />
     <Compile Include="CodeReaderTests.FileName.cs" />
     <Compile Include="Analyzers\NoErrorAnalyzer.cs" />
@@ -60,6 +60,37 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj">
+      <Project>{fc4fea0f-4047-4e99-a588-d0d4b9695f42}</Project>
+      <Name>Gu.Roslyn.Asserts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\.paket\paket.targets" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\analyzers\AsyncUsageAnalyzers\analyzers\dotnet\AsyncUsageAnalyzers.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\analyzers\Gu.Analyzers\analyzers\dotnet\cs\Gu.Analyzers.Analyzers.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\packages\analyzers\Gu.Analyzers\analyzers\dotnet\cs\Gu.Analyzers.CodeFixes.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\Newtonsoft.Json.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\packages\analyzers\StyleCop.Analyzers\analyzers\dotnet\cs\StyleCop.Analyzers.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
       <ItemGroup>
@@ -79,13 +110,6 @@
       <Paket>True</Paket>
     </Analyzer>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj">
-      <Project>{fc4fea0f-4047-4e99-a588-d0d4b9695f42}</Project>
-      <Name>Gu.Roslyn.Asserts</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
       <ItemGroup>
@@ -598,5 +622,4 @@
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="..\.paket\paket.targets" />
 </Project>

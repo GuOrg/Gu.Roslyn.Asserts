@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using NUnit.Framework;
 
     public partial class AnalyzerAssertTests
@@ -14,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorGeneric()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
@@ -27,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorType()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
@@ -40,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassNoErrorPassingAnalyzer()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
@@ -53,14 +52,14 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TwoClassesNoError()
             {
                 var code1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Code1
     {
     }
 }";
                 var code2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Code2
     {
@@ -73,39 +72,35 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassOneErrorGeneric()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        public Foo()
-        {
-        }
+        private readonly int _value = 1;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(code));
+                Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(code);
+                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(code);
                 }
             }
 
-            [TestCase(typeof(ErrorOnCtorAnalyzer))]
-            [TestCase(typeof(ErrorOnCtorAnalyzerDisabled))]
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
+            [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
             public void SingleClassOneErrorType(Type type)
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        public Foo()
-        {
-        }
+        private readonly int _value = 1;
     }
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(type, code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
                     AnalyzerAssert.NoDiagnostics(type, code);
@@ -116,20 +111,18 @@ namespace Gu.Roslyn.Asserts.Tests
             public void SingleClassOneErrorPassingAnalyzer()
             {
                 var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        public Foo()
-        {
-        }
+        private readonly int _value = 1;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(new ErrorOnCtorAnalyzer(), code));
-                Assert.AreEqual("Foo.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
+                Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics(new ErrorOnCtorAnalyzer(), code);
+                    AnalyzerAssert.NoDiagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
                 }
             }
 
@@ -137,27 +130,25 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TwoClassesOneError()
             {
                 var foo1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo1
     {
-        public Foo1()
-        {
-        }
+        private readonly int _value = 1;
     }
 }";
                 var foo2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo2
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
-                Assert.AreEqual("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                Assert.AreEqual("Foo1.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
+                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
                 }
             }
 
@@ -165,31 +156,27 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TwoClassesTwoErrors()
             {
                 var foo1 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo1
     {
-        public Foo1()
-        {
-        }
+        private readonly int _value1 = 1;
     }
 }";
                 var foo2 = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo2
     {
-        public Foo2()
-        {
-        }
+        private readonly int _value2 = 2;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2));
-                StringAssert.Contains("Foo1.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
-                StringAssert.Contains("Foo2.cs(6,9): warning ErrorOnCtor: Message format.", exception.Message);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                StringAssert.Contains("Foo1.cs(6,30): warning SA1309: Field '_value1' must not begin with an underscore", exception.Message);
+                StringAssert.Contains("Foo2.cs(6,30): warning SA1309: Field '_value2' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<ErrorOnCtorAnalyzer>(foo1, foo2);
+                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
                 }
             }
         }
