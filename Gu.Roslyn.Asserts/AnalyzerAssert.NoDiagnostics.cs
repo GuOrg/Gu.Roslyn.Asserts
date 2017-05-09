@@ -11,8 +11,6 @@
 
     public static partial class AnalyzerAssert
     {
-        public static readonly List<MetadataReference> References = new List<MetadataReference>();
-
         public static void NoDiagnostics<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {

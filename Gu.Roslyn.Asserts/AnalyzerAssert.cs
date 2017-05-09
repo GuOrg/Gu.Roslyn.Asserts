@@ -1,16 +1,18 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Simplification;
-
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeActions;
+    using Microsoft.CodeAnalysis.Formatting;
+    using Microsoft.CodeAnalysis.Simplification;
 
     public static partial class AnalyzerAssert
     {
+        public static readonly List<MetadataReference> References = new List<MetadataReference>();
+
         private static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {
             var simplifiedDoc = await Simplifier.ReduceAsync(document, Simplifier.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
