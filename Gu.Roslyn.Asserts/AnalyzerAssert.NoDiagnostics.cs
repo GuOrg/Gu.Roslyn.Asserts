@@ -43,24 +43,12 @@
 
         public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
-            var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, References);
-            var results = new List<ImmutableArray<Diagnostic>>();
-            foreach (var project in sln.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
+            var diagnostics = await CodeFactory.GetDiagnosticsAsync(analyzer, code, References)
                                                .ConfigureAwait(false);
 
-                var withAnalyzers = compilation.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                               .ConfigureAwait(false));
-            }
-
-            if (results.SelectMany(x => x).Any())
+            if (diagnostics.SelectMany(x => x).Any())
             {
-                throw new AssertException(string.Join(Environment.NewLine, results.SelectMany(x => x)));
+                throw new AssertException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
             }
         }
     }

@@ -45,10 +45,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyzerAssertTests.CodeFix.cs" />
     <Compile Include="AnalyzerAssertTests.NoDiagnostics.cs" />
     <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
+    <Compile Include="CodeAssertTests.cs" />
     <Compile Include="CodeFixes\CustomBatchFixAllProvider.cs" />
     <Compile Include="CodeFixes\CustomFixAllProviders.cs" />
     <Compile Include="CodeFixes\FixAllContextHelper.cs" />
