@@ -4,6 +4,9 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class PlaceholderAnalyzer : DiagnosticAnalyzer
     {
         public PlaceholderAnalyzer(string id)

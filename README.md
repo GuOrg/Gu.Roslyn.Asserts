@@ -47,16 +47,14 @@ Indicate error position with ↓
 public void SingleClassOneErrorGeneric()
 {
     var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class Foo
     {
-        ↓public Foo()
-        {
-        }
+        private readonly int ↓_value;
     }
 }";
-    AnalyzerAssert.Diagnostics<ErrorOnCtorAnalyzer>(code);
+    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
 }
 ```
 
