@@ -8,6 +8,11 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class CodeAssert
     {
+        /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="expected">The expected code.</param>
+        /// <param name="actual">The actual code.</param>
         public static void AreEqual(string expected, string actual)
         {
             var pos = 0;
@@ -34,7 +39,7 @@ namespace Gu.Roslyn.Asserts
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
                     var diffPos = Math.Min(expectedLine.Length, actualLine.Length);
-                    for (int i = 0; i < Math.Min(expectedLine.Length, actualLine.Length); i++)
+                    for (var i = 0; i < Math.Min(expectedLine.Length, actualLine.Length); i++)
                     {
                         if (expectedLine[i] != actualLine[i])
                         {

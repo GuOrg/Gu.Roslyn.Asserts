@@ -4,14 +4,14 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    internal class PlaceholderAnalyzer : DiagnosticAnalyzer
+    public class PlaceholderAnalyzer : DiagnosticAnalyzer
     {
         public PlaceholderAnalyzer(string id)
         {
             this.SupportedDiagnostics = ImmutableArray.Create(new DiagnosticDescriptor(
                 id: id,
                 title: "Placeholder",
-                messageFormat: "Placeholder", 
+                messageFormat: "Placeholder",
                 category: "Placeholder",
                 defaultSeverity: DiagnosticSeverity.Warning,
                 isEnabledByDefault: true));

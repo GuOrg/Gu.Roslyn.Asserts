@@ -80,14 +80,14 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The meta data from the run..</returns>
         public static async Task<DiagnosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
-            (var expecteds, var sources) = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
-
+            var result = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
+            var expecteds = result.ExpectedDiagnostics;
             if (expecteds.Count == 0)
             {
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, sources, references)
+            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, result.CleanedSources, references)
                                         .ConfigureAwait(false);
 
             var actuals = data.Diagnostics
@@ -132,7 +132,7 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            return new DiagnosticMetaData(codeWithErrorsIndicated, sources, expecteds, data.Diagnostics, data.Solution);
+            return new DiagnosticMetaData(codeWithErrorsIndicated, result.CleanedSources, expecteds, data.Diagnostics, data.Solution);
         }
 
         /// <summary>

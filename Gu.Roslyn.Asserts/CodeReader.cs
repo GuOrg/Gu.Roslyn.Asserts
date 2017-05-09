@@ -5,14 +5,22 @@
     using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis.Text;
 
+    /// <summary>
+    /// Helper exposing methods for parsing code.
+    /// </summary>
     public static class CodeReader
     {
+        /// <summary>
+        /// Get the filename from code as a string.
+        /// </summary>
+        /// <param name="code">The code to parse.</param>
+        /// <returns>The file name </returns>
         public static string FileName(string code)
         {
             string fileName;
-            if (code == string.Empty)
+            if (string.IsNullOrEmpty(code))
             {
-                return $"Test.cs";
+                return $"Empty.cs";
             }
 
             var match = Regex.Match(code, @"(class|struct|enum|interface) (?<name>\w+)(<(?<type>\w+)(, ?(?<type>\w+))*>)?", RegexOptions.ExplicitCapture);
@@ -21,20 +29,25 @@
                 return "AssemblyInfo.cs";
             }
 
-            //Assert.LessOrEqual(1, matches.Count, "Use class per file, it catches more bugs");
             fileName = match.Groups["name"].Value;
             if (match.Groups["type"].Success)
             {
-                var args = string.Join(",",
+                var args = string.Join(
+                    ",",
                     match.Groups["type"]
-                              .Captures.OfType<Capture>()
-                              .Select(c => c.Value.Trim()));
+                         .Captures.OfType<Capture>()
+                         .Select(c => c.Value.Trim()));
                 fileName += $"{{{args}}}";
             }
 
             return $"{fileName}.cs";
         }
 
+        /// <summary>
+        /// Get the namespace from code as a string.
+        /// </summary>
+        /// <param name="code">The code to parse.</param>
+        /// <returns>The namespace </returns>
         public static string Namespace(string code)
         {
             const string nameSpacePattern = @"(?<name>\w+(\.\w+)*)";
@@ -53,6 +66,11 @@
             return "Unknown";
         }
 
+        /// <summary>
+        /// Get the diagnostics from code as a string.
+        /// </summary>
+        /// <param name="code">The code to parse.</param>
+        /// <returns>The positions of the expected diagnostics. </returns>
         public static IEnumerable<LinePosition> FindDiagnosticsPositions(string code)
         {
             var line = 0;

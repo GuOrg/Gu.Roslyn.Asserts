@@ -5,23 +5,43 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// Info about an expected diagnostic.
+    /// </summary>
     public class ExpectedDiagnostic
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpectedDiagnostic"/> class.
+        /// </summary>
+        /// <param name="analyzer"> The analyzer that is expected to report a diagnostic.</param>
+        /// <param name="span"> The position of the expected diagnostic.</param>
         public ExpectedDiagnostic(DiagnosticAnalyzer analyzer, FileLinePositionSpan span)
         {
             this.Analyzer = analyzer;
             this.Span = span;
         }
 
+        /// <summary>
+        /// Gets the analyzer that is expected to report a diagnostic.
+        /// </summary>
         public DiagnosticAnalyzer Analyzer { get; }
 
+        /// <summary>
+        /// Gets the position of the expected diagnostic.
+        /// </summary>
         public FileLinePositionSpan Span { get; }
 
-        public static (IReadOnlyList<ExpectedDiagnostic>, IReadOnlyList<string>) FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> sources)
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
+        /// <param name="codeWithErrorsIndicated">The code with erros indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
             var diagnostics = new List<ExpectedDiagnostic>();
             var cleanedSources = new List<string>();
-            foreach (var source in sources)
+            foreach (var source in codeWithErrorsIndicated)
             {
                 var positions = CodeReader.FindDiagnosticsPositions(source).ToArray();
                 if (positions.Length == 0)
@@ -35,7 +55,44 @@
                 diagnostics.AddRange(positions.Select(p => new ExpectedDiagnostic(analyzer, new FileLinePositionSpan(fileName, p, p))));
             }
 
-            return (diagnostics, cleanedSources);
+            return new DiagnosticsAndSources(diagnostics, codeWithErrorsIndicated, cleanedSources);
+        }
+
+        /// <summary>
+        /// Expected diagnostics and code.
+        /// </summary>
+        public class DiagnosticsAndSources
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DiagnosticsAndSources"/> class.
+            /// </summary>
+            /// <param name="expectedDiagnostics">The expected diagnostics that were indicated in the code.</param>
+            /// <param name="codeWithErrorsIndicated">The code with positions for diagnostics indicated.</param>
+            /// <param name="cleanedSources">The <paramref name="codeWithErrorsIndicated"/> with indicators removed.</param>
+            public DiagnosticsAndSources(
+                IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
+                IEnumerable<string> codeWithErrorsIndicated,
+                IReadOnlyList<string> cleanedSources)
+            {
+                this.ExpectedDiagnostics = expectedDiagnostics;
+                this.CodeWithErrorsIndicated = codeWithErrorsIndicated;
+                this.CleanedSources = cleanedSources;
+            }
+
+            /// <summary>
+            /// Gets the expected diagnostics that were indicated in the code.
+            /// </summary>
+            public IReadOnlyList<ExpectedDiagnostic> ExpectedDiagnostics { get; }
+
+            /// <summary>
+            /// Gets the code with positions for diagnostics indicated.
+            /// </summary>
+            public IEnumerable<string> CodeWithErrorsIndicated { get; }
+
+            /// <summary>
+            /// Gets the <see cref="CodeWithErrorsIndicated"/> with indicators removed.
+            /// </summary>
+            public IReadOnlyList<string> CleanedSources { get; }
         }
     }
 }
