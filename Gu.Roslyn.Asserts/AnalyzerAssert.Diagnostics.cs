@@ -10,27 +10,47 @@
 
     public static partial class AnalyzerAssert
     {
-        public static void Diagnostics<TAnalyzer>(params string[] code)
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Diagnostics(new TAnalyzer(), code);
+            Diagnostics(new TAnalyzer(), codeWithErrorsIndicated);
         }
 
-        public static void Diagnostics(Type analyzerType, params string[] code)
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), codeWithErrorsIndicated);
         }
 
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, (IEnumerable<string>)code);
+            Diagnostics(analyzer, (IEnumerable<string>)codeWithErrorsIndicated);
         }
 
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
             try
             {
-                DiagnosticsAsync(analyzer, code).Wait();
+                DiagnosticsAsync(analyzer, codeWithErrorsIndicated).Wait();
             }
             catch (AggregateException e)
             {
@@ -38,6 +58,12 @@
             }
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
             return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, References);
