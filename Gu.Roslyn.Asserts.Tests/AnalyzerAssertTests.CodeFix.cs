@@ -1,6 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
-    using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
@@ -9,7 +8,7 @@
         public class CodeFix
         {
             [Test]
-            public async Task SingleClassOneErrorCorrectFix()
+            public void SingleClassOneErrorCorrectFix()
             {
                 var code = @"
 namespace RoslynSandbox
