@@ -120,6 +120,39 @@ namespace RoslynSandbox
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
             }
 
+            [Test]
+            public void SingleClassOneErrorsWrongPosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private ↓readonly int _value1;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
+                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+            }
+
+            [Test]
+            public void SingleClassTwoErrorsIndicated()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value1;
+        private readonly int ↓_value2;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
+                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+            }
+
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
             public void SingleClassOneErrorType(Type type)

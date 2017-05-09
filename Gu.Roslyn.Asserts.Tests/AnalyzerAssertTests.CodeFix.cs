@@ -33,11 +33,61 @@ namespace RoslynSandbox
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
             }
 
-[Test]
-public void SingleClassCodeFixOnlyCorrectFix()
+            [Test]
+            public void SingleClassTwoIndicatedErrorsCorrectFix()
+            {
+                var code = @"
+namespace RoslynSandbox
 {
-    AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
-    var code = @"
+    class Foo
+    {
+        private readonly int ↓_value1;
+        private readonly int ↓_value2;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+            }
+
+            [Test]
+            public void SingleClassTwoErrorsCorrectFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value1;
+        private readonly int _value2;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+            }
+
+            [Test]
+            public void SingleClassOneErrorsWrongPosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private ↓readonly int _value1;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+            }
+
+            [Test]
+            public void SingleClassCodeFixOnlyCorrectFix()
+            {
+                AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
+                var code = @"
 namespace RoslynSandbox
 {
     using System;
@@ -48,7 +98,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+                var fixedCode = @"
 namespace RoslynSandbox
 {
     using System;
@@ -57,8 +107,8 @@ namespace RoslynSandbox
     {
     }
 }";
-    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
-}
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+            }
 
             [Test]
             public void TwoClassOneErrorCorrectFix()
