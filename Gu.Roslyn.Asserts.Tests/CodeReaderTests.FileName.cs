@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     class CodeReaderTests
     {
@@ -38,7 +38,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     interface IFoo
     {
@@ -57,7 +57,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gu.Roslyn.Asserts.Tests
+namespace RoslynSandbox
 {
     enum Foo
     {

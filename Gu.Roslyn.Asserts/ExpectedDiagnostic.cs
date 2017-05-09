@@ -17,7 +17,7 @@
 
         public FileLinePositionSpan Span { get; }
 
-        public static (IReadOnlyList<ExpectedDiagnostic>, IEnumerable<string>) FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> sources)
+        public static (IReadOnlyList<ExpectedDiagnostic>, IReadOnlyList<string>) FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> sources)
         {
             var diagnostics = new List<ExpectedDiagnostic>();
             var cleanedSources = new List<string>();

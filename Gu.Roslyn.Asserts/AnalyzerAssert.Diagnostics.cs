@@ -39,33 +39,28 @@
             }
         }
 
-        public static async Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
+        public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
-            (IReadOnlyList<ExpectedDiagnostic> expecteds, IEnumerable<string> sources) = ExpectedDiagnostic.FromCode(analyzer,code);
+            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated);
+        }
+
+        public static async Task<DaignosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
+        {
+            (var expecteds, var sources) = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
+
             if (expecteds.Count == 0)
             {
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var sln = CodeFactory.CreateSolution(sources, References);
-            var results = new List<ImmutableArray<Diagnostic>>();
-            foreach (var project in sln.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                    .ConfigureAwait(false);
+            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, sources, References)
+                                               .ConfigureAwait(false);
 
-                var withAnalyzers = compilation.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                    .ConfigureAwait(false));
-            }
-
-            var actuals = results.SelectMany(x => x)
-                .OrderBy(d => d.Id)
-                .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
-                .ToArray();
+            var actuals = data.Diagnostics
+                              .SelectMany(x => x)
+                              .OrderBy(d => d.Id)
+                              .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
+                              .ToArray();
             if (expecteds.Count != actuals.Length)
             {
                 Fail.WithMessage($"Expected count does not match actual.{Environment.NewLine}" +
@@ -74,8 +69,8 @@
             }
 
             expecteds = expecteds.OrderBy(d => d.Analyzer.SupportedDiagnostics[0].Id)
-                .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
-                .ToArray();
+                                 .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
+                                 .ToArray();
             for (var i = 0; i < expecteds.Count; i++)
             {
                 var expected = expecteds[i];
@@ -102,6 +97,35 @@
                                      $"Actual:   {actual.Location.SourceTree.FilePath}");
                 }
             }
+
+            return new DaignosticMetaData(codeWithErrorsIndicated, sources, expecteds, data.Diagnostics, data.Solution);
+        }
+
+        public class DaignosticMetaData
+        {
+            public DaignosticMetaData(
+                IEnumerable<string> codeWithErrorsIndicated,
+                IReadOnlyList<string> sources,
+                IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
+                IReadOnlyList<ImmutableArray<Diagnostic>> actualDiagnostics,
+                Solution solution)
+            {
+                this.CodeWithErrorsIndicated = codeWithErrorsIndicated;
+                this.Sources = sources;
+                this.ExpectedDiagnostics = expectedDiagnostics;
+                this.ActualDiagnostics = actualDiagnostics;
+                this.Solution = solution;
+            }
+
+            public IEnumerable<string> CodeWithErrorsIndicated { get; }
+
+            public IReadOnlyList<string> Sources { get; }
+
+            public IReadOnlyList<ExpectedDiagnostic> ExpectedDiagnostics { get; }
+
+            public IReadOnlyList<ImmutableArray<Diagnostic>> ActualDiagnostics { get; }
+
+            public Solution Solution { get; }
         }
     }
 }

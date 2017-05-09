@@ -1,2 +1,7 @@
 Microsoft.CodeAnalysis.CSharp.Workspaces
 NUnit
+
+group Analyzers
+  Gu.Analyzers
+  StyleCop.Analyzers
+  AsyncUsageAnalyzers
