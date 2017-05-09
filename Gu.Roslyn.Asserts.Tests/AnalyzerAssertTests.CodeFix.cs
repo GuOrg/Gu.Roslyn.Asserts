@@ -1,9 +1,8 @@
-﻿using System.Collections.Immutable;
-using Microsoft.CodeAnalysis;
-
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     public partial class AnalyzerAssertTests

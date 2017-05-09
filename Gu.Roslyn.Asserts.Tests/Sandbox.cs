@@ -13,7 +13,7 @@
             Console.WriteLine(assemblyQualifiedName);
             var type = Type.GetType(
                 "NUnit.Framework.AssertionException, nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb",
-                false);
+                throwOnError: false);
             Assert.Throws<NUnit.Framework.AssertionException>(() => throw (Exception)Activator.CreateInstance(type, "Error"));
         }
 

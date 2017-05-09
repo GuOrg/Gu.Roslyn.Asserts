@@ -9,8 +9,14 @@
     using Microsoft.CodeAnalysis.Formatting;
     using Microsoft.CodeAnalysis.Simplification;
 
+    /// <summary>
+    /// The AnalyzerAssert class contains a collection of static methods used for assertions on the behavior of analyzers and code fixes.
+    /// </summary>
     public static partial class AnalyzerAssert
     {
+        /// <summary>
+        /// The metadata references used when creating the projects created in the tests.
+        /// </summary>
         public static readonly List<MetadataReference> References = new List<MetadataReference>();
 
         private static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
