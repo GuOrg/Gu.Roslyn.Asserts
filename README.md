@@ -24,6 +24,21 @@ namespace Gu.Roslyn.Asserts.Tests
 }
 ```
 
+```c#
+[TestCase(typeof(NoErrorAnalyzer))]
+public void SingleClassNoErrorType(Type type)
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+    }
+}";
+    AnalyzerAssert.NoDiagnostics(type, code);
+}
+```
+
 ## Diagnostic
 
 Indicate error position with ↓

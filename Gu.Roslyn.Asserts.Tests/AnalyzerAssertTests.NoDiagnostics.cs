@@ -22,8 +22,8 @@ namespace RoslynSandbox
                 AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
             }
 
-            [Test]
-            public void SingleClassNoErrorType()
+            [TestCase(typeof(NoErrorAnalyzer))]
+            public void SingleClassNoErrorType(Type type)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics(typeof(NoErrorAnalyzer), code);
+                AnalyzerAssert.NoDiagnostics(type, code);
             }
 
             [Test]
