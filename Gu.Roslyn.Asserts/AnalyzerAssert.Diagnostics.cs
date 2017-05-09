@@ -1,8 +1,10 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿// ReSharper disable PossibleMultipleEnumeration
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
@@ -69,7 +71,7 @@
             return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, References);
         }
 
-        public static async Task<DaignosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
+        public static async Task<DiagnosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
             (var expecteds, var sources) = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
 
@@ -123,12 +125,24 @@
                 }
             }
 
-            return new DaignosticMetaData(codeWithErrorsIndicated, sources, expecteds, data.Diagnostics, data.Solution);
+            return new DiagnosticMetaData(codeWithErrorsIndicated, sources, expecteds, data.Diagnostics, data.Solution);
         }
 
-        public class DaignosticMetaData
+        /// <summary>
+        /// Meta data from a call to GetAnalyzerDiagnosticsAsync
+        /// </summary>
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
+        public class DiagnosticMetaData
         {
-            public DaignosticMetaData(
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DiagnosticMetaData"/> class.
+            /// </summary>
+            /// <param name="codeWithErrorsIndicated">The code with errors indicated</param>
+            /// <param name="sources"><paramref name="codeWithErrorsIndicated"/> cleaned from indicators.</param>
+            /// <param name="expectedDiagnostics">Info about the expected diagnostics.</param>
+            /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
+            /// <param name="solution">The solution the analysis was run on.</param>
+            public DiagnosticMetaData(
                 IEnumerable<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> sources,
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
@@ -142,14 +156,29 @@
                 this.Solution = solution;
             }
 
+            /// <summary>
+            /// Gets the code with errors indicated
+            /// </summary>
             public IEnumerable<string> CodeWithErrorsIndicated { get; }
 
+            /// <summary>
+            /// Gets the code that was analyzed. This is <see cref="CodeWithErrorsIndicated"/> with indicators stripped.
+            /// </summary>
             public IReadOnlyList<string> Sources { get; }
 
+            /// <summary>
+            /// Gets the meta data about the expected diagnostics.
+            /// </summary>
             public IReadOnlyList<ExpectedDiagnostic> ExpectedDiagnostics { get; }
 
+            /// <summary>
+            /// Gets the actual diagnostics returned from Roslyn.
+            /// </summary>
             public IReadOnlyList<ImmutableArray<Diagnostic>> ActualDiagnostics { get; }
 
+            /// <summary>
+            /// Gets the solution the analysis was performed on.
+            /// </summary>
             public Solution Solution { get; }
         }
     }

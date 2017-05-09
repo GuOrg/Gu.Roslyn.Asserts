@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿// ReSharper disable UnusedVariable
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Reflection;

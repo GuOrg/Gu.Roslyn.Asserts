@@ -39,7 +39,7 @@
 
         private static async Task<Document> ApplyFixAsync(CancellationToken cancellationToken, Document document, MemberDeclarationSyntax member)
         {
-            var editor = await DocumentEditor.CreateAsync(document)
+            var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);
             editor.RemoveNode(member);
             return editor.GetChangedDocument();

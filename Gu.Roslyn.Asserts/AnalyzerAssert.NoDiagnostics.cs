@@ -8,22 +8,42 @@
 
     public static partial class AnalyzerAssert
     {
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             NoDiagnostics(new TAnalyzer(), code);
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(Type analyzerType, params string[] code)
         {
             NoDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
             NoDiagnostics(analyzer, (IEnumerable<string>)code);
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
             try
@@ -36,6 +56,12 @@
             }
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
             var diagnostics = await CodeFactory.GetDiagnosticsAsync(analyzer, code, References)
