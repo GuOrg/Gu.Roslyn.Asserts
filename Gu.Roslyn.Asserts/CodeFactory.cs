@@ -9,6 +9,9 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// A helper for creating projects and solutions from strings of code.
+    /// </summary>
     public static class CodeFactory
     {
         /// <summary>
@@ -73,11 +76,25 @@ namespace Gu.Roslyn.Asserts
             return results;
         }
 
+        /// <summary>
+        /// Creates a solution for <paramref name="code"/>
+        /// If code contains many namespaces one project per namespace is created.
+        /// </summary>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(string[] code, params MetadataReference[] metadataReferences)
         {
             return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
+        /// <summary>
+        /// Creates a solution for <paramref name="code"/>
+        /// If code contains many namespaces one project per namespace is created.
+        /// </summary>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()
@@ -140,19 +157,6 @@ namespace Gu.Roslyn.Asserts
             return solution;
         }
 
-        public class DiagnosticsWithMetaData
-        {
-            public DiagnosticsWithMetaData(Solution solution, List<ImmutableArray<Diagnostic>> diagnostics)
-            {
-                this.Solution = solution;
-                this.Diagnostics = diagnostics;
-            }
-
-            public Solution Solution { get; }
-
-            public IReadOnlyList<ImmutableArray<Diagnostic>> Diagnostics { get; }
-        }
-
         private struct SourceMetaData
         {
             public SourceMetaData(string code)
@@ -167,6 +171,33 @@ namespace Gu.Roslyn.Asserts
             internal string FileName { get; }
 
             internal string Namespace { get; }
+        }
+
+        /// <summary>
+        /// The diagnostics and the solution the analysis was performed on.
+        /// </summary>
+        public class DiagnosticsWithMetaData
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DiagnosticsWithMetaData"/> class.
+            /// </summary>
+            /// <param name="solution">The solution the analysis was performed on.</param>
+            /// <param name="diagnostics">The diagnostics returned from Roslyn.</param>
+            public DiagnosticsWithMetaData(Solution solution, List<ImmutableArray<Diagnostic>> diagnostics)
+            {
+                this.Solution = solution;
+                this.Diagnostics = diagnostics;
+            }
+
+            /// <summary>
+            /// Gets the solution the analysis was performed on.
+            /// </summary>
+            public Solution Solution { get; }
+
+            /// <summary>
+            /// Gets the diagnostics returned from Roslyn.
+            /// </summary>
+            public IReadOnlyList<ImmutableArray<Diagnostic>> Diagnostics { get; }
         }
     }
 }

@@ -71,6 +71,13 @@ namespace Gu.Roslyn.Asserts
             return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, References);
         }
 
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="references">The meta data references to use when compiling.</param>
+        /// <returns>The meta data from the run..</returns>
         public static async Task<DiagnosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
             (var expecteds, var sources) = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
