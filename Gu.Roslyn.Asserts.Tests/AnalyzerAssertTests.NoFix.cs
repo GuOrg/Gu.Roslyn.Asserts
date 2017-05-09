@@ -5,10 +5,10 @@
 
     public partial class AnalyzerAssertTests
     {
-        public class CodeFix
+        public class NoFix
         {
             [Test]
-            public void SingleClassOneErrorCorrectFix()
+            public void SingleClassOneErrorNoFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -19,19 +19,11 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
+                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code);
             }
 
             [Test]
-            public void TwoClassOneErrorCorrectFix()
+            public void TwoClassOneErrorNoFix()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -51,19 +43,11 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode });
+                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(barCode, code);
             }
 
             [Test]
-            public void SingleClassOneErrorErrorInFix()
+            public void SingleClassOneErrorCodeFixFixedTheCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -74,24 +58,16 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int bar;
-    }
-}";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
                 var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
-                               "Expected:         private readonly int bar;\r\n" +
+                               "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void TwoClassesOneErrorErrorInFix()
+            public void TwoClassesOneErrorCodeFixFixedTheCode()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -111,17 +87,9 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int bar;
-    }
-}";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode }));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
                 var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
-                               "Expected:         private readonly int bar;\r\n" +
+                               "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n";
                 Assert.AreEqual(expected, exception.Message);

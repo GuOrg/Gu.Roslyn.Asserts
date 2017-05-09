@@ -12,25 +12,25 @@
 
     public static partial class AnalyzerAssert
     {
-        public static void CodeFix<TAnalyzer, TCodeFix>(string code, string fixedCode)
+        public static void NoFix<TAnalyzer, TCodeFix>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { code }, new[] { fixedCode });
+            NoFix(new TAnalyzer(), new TCodeFix(), code);
         }
 
-        public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> code, IEnumerable<string> fixedCode)
+        public static void NoFix<TAnalyzer, TCodeFix>(IEnumerable<string> code)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), code, fixedCode);
+            NoFix(new TAnalyzer(), new TCodeFix(), code);
         }
 
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> code, IEnumerable<string> fixedCode)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> code)
         {
             try
             {
-                CodeFixAsync(analyzer, codeFix, code, fixedCode, References).Wait();
+                NoFixAsync(analyzer, codeFix, code, References).Wait();
             }
             catch (AggregateException e)
             {
@@ -38,7 +38,7 @@
             }
         }
 
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> references)
+        public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, references).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
@@ -79,13 +79,13 @@
                     .ConfigureAwait(false);
                 if (ReferenceEquals(fixedProject, project))
                 {
-                    Fail.WithMessage("Fix did nothing.");
+                    continue;
                 }
 
                 for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
                 {
                     var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(project.DocumentIds[i]), CancellationToken.None);
-                    CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
+                    CodeAssert.AreEqual(data.Sources[i], fixedSource);
                 }
             }
         }

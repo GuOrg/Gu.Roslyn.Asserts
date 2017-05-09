@@ -41,10 +41,10 @@
 
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
-            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated);
+            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, References);
         }
 
-        public static async Task<DaignosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
+        public static async Task<DaignosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
             (var expecteds, var sources) = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
 
@@ -53,7 +53,7 @@
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, sources, References)
+            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, sources, references)
                                                .ConfigureAwait(false);
 
             var actuals = data.Diagnostics

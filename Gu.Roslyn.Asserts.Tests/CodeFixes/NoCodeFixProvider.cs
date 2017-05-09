@@ -1,25 +1,22 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
-{
-    using System.Collections.Immutable;
-    using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
-    using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Immutable;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SA1309CodeFixProvider))]
-    internal class SA1309CodeFixProvider : CodeFixProvider
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+{
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NoCodeFixProvider))]
+    internal class NoCodeFixProvider : CodeFixProvider
     {
-        /// <inheritdoc/>
         public override ImmutableArray<string> FixableDiagnosticIds { get; } =
             ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 
-        /// <inheritdoc/>
         public override FixAllProvider GetFixAllProvider()
         {
             return CustomFixAllProviders.BatchFixer;
         }
 
-        /// <inheritdoc/>
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var document = context.Document;
@@ -42,8 +39,8 @@
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             $"Rename to: {newName}",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(SA1309CodeFixProvider)),
+                            cancellationToken => Task.FromResult(context.Document.Project.Solution),
+                            nameof(DontUseUnderscoreCodeFixProvider)),
                         diagnostic);
                 }
             }

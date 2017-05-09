@@ -70,3 +70,22 @@ namespace RoslynSandbox
     AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
 }
 ```
+
+## Diagnostic and code fix when expecting the fix to not do anything
+
+```c#
+[Test]
+public void SingleClassOneErrorCorrectFix()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+    AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
+}
+```
