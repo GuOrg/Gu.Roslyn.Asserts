@@ -26,6 +26,7 @@ namespace Gu.Roslyn.Asserts
         {
         }
 
-        public override string ToString() => base.Message;
+        /// <inheritdoc />
+        public override string ToString() => this.Message;
     }
 }

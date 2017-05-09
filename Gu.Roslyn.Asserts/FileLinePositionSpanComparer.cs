@@ -3,11 +3,16 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
-    internal class FileLinePositionSpanComparer : IComparer<FileLinePositionSpan>
+    /// <inheritdoc />
+    internal class FileLinePositionSpanComparer : Comparer<FileLinePositionSpan>
     {
-        public static readonly FileLinePositionSpanComparer Default = new FileLinePositionSpanComparer();
+        /// <summary>
+        /// The default instance.
+        /// </summary>
+        public new static readonly FileLinePositionSpanComparer Default = new FileLinePositionSpanComparer();
 
-        public int Compare(FileLinePositionSpan x, FileLinePositionSpan y)
+        /// <inheritdoc />
+        public override int Compare(FileLinePositionSpan x, FileLinePositionSpan y)
         {
             if (x.Path != y.Path)
             {
