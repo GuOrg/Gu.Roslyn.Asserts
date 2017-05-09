@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,6 +49,11 @@
     <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
+    <Compile Include="CodeFixes\CustomBatchFixAllProvider.cs" />
+    <Compile Include="CodeFixes\CustomFixAllProviders.cs" />
+    <Compile Include="CodeFixes\FixAllContextHelper.cs" />
+    <Compile Include="CodeFixes\SA1309CodeFixProvider.cs" />
+    <Compile Include="CodeFixes\RenameHelper.cs" />
     <Compile Include="CodeReaderTests.cs" />
     <Compile Include="CodeReaderTests.FileName.cs" />
     <Compile Include="Analyzers\NoErrorAnalyzer.cs" />
@@ -56,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Gu.Roslyn.Asserts.Tests.ruleset" />
     <None Include="paket.references">
     </None>
   </ItemGroup>
