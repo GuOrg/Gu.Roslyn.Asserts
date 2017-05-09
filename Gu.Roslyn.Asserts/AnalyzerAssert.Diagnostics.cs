@@ -54,7 +54,7 @@
             }
 
             var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, sources, references)
-                                               .ConfigureAwait(false);
+                                        .ConfigureAwait(false);
 
             var actuals = data.Diagnostics
                               .SelectMany(x => x)

@@ -71,6 +71,36 @@ namespace RoslynSandbox
     AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
 }
 ```
+## Code fix only
+
+```c#
+[Test]
+public void SingleClassCodeFixOnlyCorrectFix()
+{
+    AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
+    var code = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+    }
+}";
+    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+}
+```
 
 ## Diagnostic and code fix when expecting the fix to not do anything
 

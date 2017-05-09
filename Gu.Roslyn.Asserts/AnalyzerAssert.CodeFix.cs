@@ -19,11 +19,23 @@
             CodeFix(new TAnalyzer(), new TCodeFix(), new[] { code }, new[] { fixedCode });
         }
 
+        public static void CodeFix<TCodeFix>(string id, string code, string fixedCode)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { code }, new[] { fixedCode });
+        }
+
         public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> code, IEnumerable<string> fixedCode)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(new TAnalyzer(), new TCodeFix(), code, fixedCode);
+        }
+
+        public static void CodeFix<TCodeFix>(string id,IEnumerable<string> code, IEnumerable<string> fixedCode)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), code, fixedCode);
         }
 
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> code, IEnumerable<string> fixedCode)

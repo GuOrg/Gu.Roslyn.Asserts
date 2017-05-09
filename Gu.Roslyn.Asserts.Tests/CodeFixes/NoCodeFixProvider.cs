@@ -40,7 +40,7 @@
                         CodeAction.Create(
                             $"Rename to: {newName}",
                             cancellationToken => Task.FromResult(context.Document.Project.Solution),
-                            nameof(DontUseUnderscoreCodeFixProvider)),
+                            nameof(NoCodeFixProvider)),
                         diagnostic);
                 }
             }

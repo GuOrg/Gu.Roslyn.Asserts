@@ -57,6 +57,7 @@
     <Compile Include="CodeFixes\FixAllContextHelper.cs" />
     <Compile Include="CodeFixes\DontUseUnderscoreCodeFixProvider.cs" />
     <Compile Include="CodeFixes\NoCodeFixProvider.cs" />
+    <Compile Include="CodeFixes\RemoveUnusedFixProvider.cs" />
     <Compile Include="CodeFixes\RenameHelper.cs" />
     <Compile Include="CodeReaderTests.cs" />
     <Compile Include="CodeReaderTests.FileName.cs" />

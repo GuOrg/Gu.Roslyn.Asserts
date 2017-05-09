@@ -1,4 +1,7 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+
+namespace Gu.Roslyn.Asserts.Tests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
@@ -29,6 +32,33 @@ namespace RoslynSandbox
 }";
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
             }
+
+[Test]
+public void SingleClassCodeFixOnlyCorrectFix()
+{
+    AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
+    var code = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+    }
+}";
+    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+}
 
             [Test]
             public void TwoClassOneErrorCorrectFix()

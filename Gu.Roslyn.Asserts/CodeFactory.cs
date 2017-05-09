@@ -27,13 +27,19 @@ namespace Gu.Roslyn.Asserts
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
                                                .ConfigureAwait(false);
-
-                var withAnalyzers = compilation.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                               .ConfigureAwait(false));
+                if (analyzer is PlaceholderAnalyzer)
+                {
+                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                }
+                else
+                {
+                    var withAnalyzers = compilation.WithAnalyzers(
+                        ImmutableArray.Create(analyzer),
+                        project.AnalyzerOptions,
+                        CancellationToken.None);
+                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                                                   .ConfigureAwait(false));
+                }
             }
 
             return new DiagnosticsWithMetaData(sln, results);
