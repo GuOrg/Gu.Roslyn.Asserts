@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -85,45 +84,9 @@
                 throw Fail.CreateException("Expected code to have exactly one fixable diagnostic.");
             }
 
-            var diagnostic = fixableDiagnostics.Single();
-            foreach (var project in data.Solution.Projects)
-            {
-                var document = project.GetDocument(diagnostic.Location.SourceTree);
-                if (document == null)
-                {
-                    continue;
-                }
-
-                var actions = new List<CodeAction>();
-                var context = new CodeFixContext(
-                    document,
-                    diagnostic,
-                    (a, d) => actions.Add(a),
-                    CancellationToken.None);
-                await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
-                if (actions.Count == 0)
-                {
-                    continue;
-                }
-
-                if (actions.Count > 1)
-                {
-                    throw Fail.CreateException("Expected only one action");
-                }
-
-                var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None)
-                    .ConfigureAwait(false);
-                if (ReferenceEquals(fixedProject, project))
-                {
-                    continue;
-                }
-
-                for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
-                {
-                    var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(project.DocumentIds[i]), CancellationToken.None);
-                    CodeAssert.AreEqual(data.Sources[i], fixedSource);
-                }
-            }
+            var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), CancellationToken.None)
+                                         .ConfigureAwait(false);
+            await AreEqualAsync(data.Sources, fixedSolution).ConfigureAwait(false);
         }
     }
 }

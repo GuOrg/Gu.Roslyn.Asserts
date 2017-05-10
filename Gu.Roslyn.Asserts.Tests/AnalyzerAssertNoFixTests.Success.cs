@@ -1,6 +1,7 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Collections.Generic;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
@@ -46,6 +47,7 @@ namespace RoslynSandbox
 }";
 
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(barCode, code);
+                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IEnumerable<string>)new[] { barCode, code });
             }
 
             [Test]

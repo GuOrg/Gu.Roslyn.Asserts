@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
@@ -129,55 +130,10 @@ namespace Gu.Roslyn.Asserts
                 throw Fail.CreateException(message);
             }
 
-            throw new NotImplementedException("Test fixing one by one");
-            throw new NotImplementedException("Test fixing all supported scopes if FixAll != null");
-            //var projects = data.Solution.Projects.ToArray();
-            //int oldCount;
-            //do
-            //{
-            //    var diagnostic = fixableDiagnostics.First();
-            //    for (var i = 0; i < projects.Length; i++)
-            //    {
-            //        var project = projects[i];
-            //        var document = project.GetDocument(diagnostic.Location.SourceTree);
-            //        if (document == null)
-            //        {
-            //            continue;
-            //        }
+            var solution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, CancellationToken.None).ConfigureAwait(false);
+            await AreEqualAsync(fixedCode, solution).ConfigureAwait(false);
 
-            //        var actions = new List<CodeAction>();
-            //        var context = new CodeFixContext(
-            //            document,
-            //            diagnostic,
-            //            (a, d) => actions.Add(a),
-            //            CancellationToken.None);
-            //        await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
-            //        if (actions.Count == 0)
-            //        {
-            //            continue;
-            //        }
-
-            //        var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None).ConfigureAwait(false);
-            //    }
-
-            //    oldCount = fixableDiagnostics.Length;
-            //    var data = await Analyze.GetDiagnosticsAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
-            //                            .ConfigureAwait(false);
-            //    fixableDiagnostics = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReference).ConfigureAwait(false);
-            //                             .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
-            //                             .ToArray();
-            //} while (oldCount > fixableDiagnostics.Length && fixableDiagnostics.Length > 0);
-
-            //foreach (var fixedProject in projects)
-            //{
-            //    for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
-            //    {
-            //        var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(fixedProject.DocumentIds[i]), CancellationToken.None)
-            //                .ConfigureAwait(false);
-            //        //// ReSharper disable once PossibleMultipleEnumeration
-            //        CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
-            //    }
-            //}
+            //throw new NotImplementedException("Test fixing all supported scopes if FixAll != null");
         }
     }
 }

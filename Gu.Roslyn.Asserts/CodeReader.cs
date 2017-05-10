@@ -3,7 +3,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.Formatting;
+    using Microsoft.CodeAnalysis.Simplification;
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
@@ -215,6 +220,14 @@
 
             StringBuilderPool.Return(builder);
             return $"Code dod not have position {position}";
+        }
+
+        internal static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
+        {
+            var simplifiedDoc = await Simplifier.ReduceAsync(document, Simplifier.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var formatted = await Formatter.FormatAsync(simplifiedDoc, Formatter.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var sourceText = await formatted.GetTextAsync(cancellationToken).ConfigureAwait(false);
+            return sourceText.ToString();
         }
     }
 }

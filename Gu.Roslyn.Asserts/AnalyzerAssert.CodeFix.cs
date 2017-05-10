@@ -138,14 +138,14 @@
             }
 
             var diagnostic = fixableDiagnostics.Single();
-            var fixedSolution = await ApplyFixAsync(data.Solution, codeFix, diagnostic, CancellationToken.None).ConfigureAwait(false);
+            var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, diagnostic, CancellationToken.None).ConfigureAwait(false);
             if (ReferenceEquals(data.Solution, fixedSolution))
             {
                 throw Fail.CreateException($"{codeFix} did not change any document.");
             }
 
-            var fixedSource = await GetStringFromDocumentAsync(
-                fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id), 
+            var fixedSource = await CodeReader.GetStringFromDocumentAsync(
+                fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id),
                 CancellationToken.None).ConfigureAwait(false);
             //// ReSharper disable once PossibleMultipleEnumeration
             CodeAssert.AreEqual(fixedCode, fixedSource);

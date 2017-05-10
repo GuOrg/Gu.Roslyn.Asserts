@@ -4,9 +4,11 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -25,8 +27,7 @@ namespace Gu.Roslyn.Asserts
         public static async Task<DiagnosticsWithMetaData> GetDiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
-            var results = await GetDiagnosticsAsync(analyzer, sln);
-
+            var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
             return new DiagnosticsWithMetaData(sln, results);
         }
 
@@ -41,7 +42,7 @@ namespace Gu.Roslyn.Asserts
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
-            return GetDiagnosticsAsync(analyzer, sln);
+            return GetDiagnosticsAsync(sln, analyzer);
         }
 
         /// <summary>
@@ -91,11 +92,11 @@ namespace Gu.Roslyn.Asserts
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IEnumerable<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, references);
-            return GetDiagnosticsAsync(analyzer, sln);
+            return GetDiagnosticsAsync(sln, analyzer);
         }
 
         /// <summary>
-        /// Creates a solution and  compiles it and returns the diagnostics.
+        /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -112,10 +113,49 @@ namespace Gu.Roslyn.Asserts
             return results;
         }
 
-        private static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution sln)
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="codeFix"/>.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="codeFix">The code fix to use when filtering the diagnostics.</param>
+        /// <returns>A list with all fixable diagnostics.</returns>
+        internal static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        {
+            var fixableDiagnostics = new List<Diagnostic>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                               .ConfigureAwait(false);
+                if (analyzer is PlaceholderAnalyzer)
+                {
+                    fixableDiagnostics.AddRange(compilation.GetDiagnostics(CancellationToken.None).Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
+                }
+                else
+                {
+                    var withAnalyzers = compilation.WithAnalyzers(
+                        ImmutableArray.Create(analyzer),
+                        project.AnalyzerOptions,
+                        CancellationToken.None);
+                    var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                                                            .ConfigureAwait(false);
+                    fixableDiagnostics.AddRange(diagnostics.Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
+                }
+            }
+
+            return fixableDiagnostics;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        internal static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
             var results = new List<ImmutableArray<Diagnostic>>();
-            foreach (var project in sln.Projects)
+            foreach (var project in solution.Projects)
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
                                                .ConfigureAwait(false);
