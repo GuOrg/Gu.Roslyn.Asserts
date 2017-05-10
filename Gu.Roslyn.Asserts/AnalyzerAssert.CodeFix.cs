@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -26,7 +25,7 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, new[] { fixedCode });
+            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode);
         }
 
         /// <summary>
@@ -41,7 +40,7 @@
         public static void CodeFix<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode)
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { codeWithErrorsIndicated }, new[] { fixedCode });
+            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode);
         }
 
         /// <summary>
@@ -53,7 +52,7 @@
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode)
+        public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -69,7 +68,7 @@
         /// <param name="id">The id of the expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TCodeFix>(string id, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode)
+        public static void CodeFix<TCodeFix>(string id, IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode);
@@ -84,7 +83,7 @@
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
         {
             try
             {
@@ -107,7 +106,7 @@
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, string fixedCode, IEnumerable<MetadataReference> metadataReferences)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -118,11 +117,6 @@
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
-            if (CodeReader.AreEqual(data.Sources, fixedCode))
-            {
-                throw Fail.CreateException("Fixed code is identical to provided code. Did you mean to call NoFix?");
-            }
-
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
@@ -144,43 +138,19 @@
             }
 
             var diagnostic = fixableDiagnostics.Single();
-            var actions = new List<CodeAction>();
-            foreach (var project in data.Solution.Projects)
+            var fixedSolution = await ApplyFixAsync(data.Solution, codeFix, diagnostic, CancellationToken.None).ConfigureAwait(false);
+            if (ReferenceEquals(data.Solution, fixedSolution))
             {
-                var document = data.Solution.GetDocument(diagnostic.Location.SourceTree);
-                actions.Clear();
-                var context = new CodeFixContext(
-                    document,
-                    diagnostic,
-                    (a, d) => actions.Add(a),
-                    CancellationToken.None);
-                await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
-                if (actions.Count == 0)
-                {
-                    continue;
-                }
-
-                if (actions.Count > 1)
-                {
-                    throw Fail.CreateException("Expected only one action");
-                }
-
-                var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None).ConfigureAwait(false);
-                if (ReferenceEquals(fixedProject, project))
-                {
-                    throw Fail.CreateException($"{codeFix} did not change the document.");
-                }
-
-                for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
-                {
-                    var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
-                    //// ReSharper disable once PossibleMultipleEnumeration
-                    CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
-                }
+                throw Fail.CreateException($"{codeFix} did not change any document.");
             }
 
-            var sln = CodeFactory.CreateSolution(fixedCode, metadataReferences);
-            var diagnostics = await Analyze.GetDiagnosticsAsync(sln);
+            var fixedSource = await GetStringFromDocumentAsync(
+                fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id), 
+                CancellationToken.None).ConfigureAwait(false);
+            //// ReSharper disable once PossibleMultipleEnumeration
+            CodeAssert.AreEqual(fixedCode, fixedSource);
+
+            var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             if (diagnostics.SelectMany(x => x).Any(x => x.Severity == DiagnosticSeverity.Error))
             {
                 var message = $"{codeFix} introduced syntax error.\r\n" +
