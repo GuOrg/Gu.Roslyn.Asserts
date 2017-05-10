@@ -25,25 +25,7 @@ namespace Gu.Roslyn.Asserts
         public static async Task<DiagnosticsWithMetaData> GetDiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
         {
             var sln = CreateSolution(sources, new[] { analyzer }, references);
-            var results = new List<ImmutableArray<Diagnostic>>();
-            foreach (var project in sln.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false);
-                if (analyzer is PlaceholderAnalyzer)
-                {
-                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
-                }
-                else
-                {
-                    var withAnalyzers = compilation.WithAnalyzers(
-                        ImmutableArray.Create(analyzer),
-                        project.AnalyzerOptions,
-                        CancellationToken.None);
-                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                                   .ConfigureAwait(false));
-                }
-            }
+            var results = await GetDiagnosticsAsync(analyzer, sln);
 
             return new DiagnosticsWithMetaData(sln, results);
         }
@@ -56,24 +38,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="sources">The sources as strings.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
         {
             var sln = CreateSolution(sources, new[] { analyzer }, references);
-            var results = new List<ImmutableArray<Diagnostic>>();
-            foreach (var project in sln.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false);
-
-                var withAnalyzers = compilation.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                               .ConfigureAwait(false));
-            }
-
-            return results;
+            return GetDiagnosticsAsync(analyzer, sln);
         }
 
         /// <summary>
@@ -157,6 +125,31 @@ namespace Gu.Roslyn.Asserts
             return solution;
         }
 
+        private static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution sln)
+        {
+            var results = new List<ImmutableArray<Diagnostic>>();
+            foreach (var project in sln.Projects)
+            {
+                var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                               .ConfigureAwait(false);
+                if (analyzer is PlaceholderAnalyzer)
+                {
+                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                }
+                else
+                {
+                    var withAnalyzers = compilation.WithAnalyzers(
+                        ImmutableArray.Create(analyzer),
+                        project.AnalyzerOptions,
+                        CancellationToken.None);
+                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                                                   .ConfigureAwait(false));
+                }
+            }
+
+            return results;
+        }
+
         private struct SourceMetaData
         {
             public SourceMetaData(string code)
@@ -183,7 +176,7 @@ namespace Gu.Roslyn.Asserts
             /// </summary>
             /// <param name="solution">The solution the analysis was performed on.</param>
             /// <param name="diagnostics">The diagnostics returned from Roslyn.</param>
-            public DiagnosticsWithMetaData(Solution solution, List<ImmutableArray<Diagnostic>> diagnostics)
+            public DiagnosticsWithMetaData(Solution solution, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
             {
                 this.Solution = solution;
                 this.Diagnostics = diagnostics;

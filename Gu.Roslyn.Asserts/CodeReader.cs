@@ -72,7 +72,7 @@
         /// Get the diagnostics from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
-        /// <returns>The positions of the expected diagnostics. </returns>
+        /// <returns>The positions of the expected diagnostics.</returns>
         public static IEnumerable<LinePosition> FindDiagnosticsPositions(string code)
         {
             var line = 0;
@@ -96,6 +96,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the line indicated by <paramref name="position"/> and inserts ↓ before the character.
+        /// </summary>
+        /// <param name="code">The code to parse.</param>
+        /// <param name="position">The error position.</param>
+        /// <returns>A string with the line with error indicated.</returns>
         public static string GetLineWithErrorIndicated(string code, LinePosition position)
         {
             var builder = StringBuilderPool.Borrow();

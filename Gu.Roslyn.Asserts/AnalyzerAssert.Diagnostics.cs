@@ -132,6 +132,20 @@ namespace Gu.Roslyn.Asserts
                 this.Span = span;
             }
 
+            public string Id { get; }
+
+            public FileLinePositionSpan Span { get; }
+
+            public static bool operator ==(IdAndPosition left, IdAndPosition right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(IdAndPosition left, IdAndPosition right)
+            {
+                return !left.Equals(right);
+            }
+
             public bool Equals(IdAndPosition other)
             {
                 bool EndPositionsEquals(FileLinePositionSpan x, FileLinePositionSpan y)
@@ -149,20 +163,6 @@ namespace Gu.Roslyn.Asserts
                        string.Equals(this.Span.Path, other.Span.Path) &&
                        this.Span.StartLinePosition == other.Span.StartLinePosition &&
                        EndPositionsEquals(this.Span, other.Span);
-            }
-
-            public string Id { get; }
-
-            public FileLinePositionSpan Span { get; }
-
-            public static bool operator ==(IdAndPosition left, IdAndPosition right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(IdAndPosition left, IdAndPosition right)
-            {
-                return !left.Equals(right);
             }
 
             public override bool Equals(object obj)
