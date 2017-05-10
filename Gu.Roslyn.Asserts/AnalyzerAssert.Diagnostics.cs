@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
         {
-            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, References);
+            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReference);
         }
 
         /// <summary>

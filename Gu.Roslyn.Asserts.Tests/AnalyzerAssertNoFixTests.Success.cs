@@ -4,9 +4,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
-    public partial class AnalyzerAssertTests
+    [TestFixture]
+    public partial class AnalyzerAssertNoFixTests
     {
-        public class NoFix
+        public class Success
         {
             [Test]
             public void SingleClassOneErrorNoFix()
@@ -45,6 +46,16 @@ namespace RoslynSandbox
 }";
 
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(barCode, code);
+            }
+
+            [Test]
+            public void FixDoesNotMatchAnalyzer()
+            {
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>((string)null, (string)null));
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
+                               "The analyzer produces the following diagnostics: {NoError}\r\n" +
+                               "The code fix supports the following diagnostics: {SA1309}";
+                Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]

@@ -54,7 +54,7 @@
         {
             try
             {
-                NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, References).Wait();
+                NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReference).Wait();
             }
             catch (AggregateException e)
             {
@@ -74,6 +74,7 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> metadataReferences)
         {
+            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))

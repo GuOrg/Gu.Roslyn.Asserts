@@ -1,38 +1,14 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public partial class AnalyzerAssertTests
+    [TestFixture]
+    public partial class AnalyzerAssertCodeFixTests
     {
-        public class CodeFix
+        public class Fail
         {
-            [Test]
-            public void SingleClassOneErrorCorrectFix()
-            {
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
-
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
-            }
-
             [Test]
             public void SingleClassTwoIndicatedErrorsCorrectFix()
             {
@@ -51,7 +27,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassTwoErrorsCorrectFix()
+            public void SingleClassTwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -64,7 +40,9 @@ namespace RoslynSandbox
 }";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
-                Assert.AreEqual("Expected code to have exactly one fixable diagnostic.", exception.Message);
+                var message = "Expected code to have exactly one fixable diagnostic.\r\n" +
+                              "Maybe you meant to call AnalyzerAssert.FixAll?";
+                Assert.AreEqual(message, exception.Message);
             }
 
             [Test]
@@ -84,62 +62,13 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassCodeFixOnlyCorrectFix()
+            public void FixDoesNotMatchAnalyzer()
             {
-                AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
-                var code = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    public class Foo
-    {
-        public event EventHandler ↓Bar;
-    }
-}";
-
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    public class Foo
-    {
-    }
-}";
-                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
-            }
-
-            [Test]
-            public void TwoClassOneErrorCorrectFix()
-            {
-                var barCode = @"
-namespace RoslynSandbox
-{
-    class Bar
-    {
-        private readonly int value;
-    }
-}";
-
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
-
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode });
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>((string)null, (string)null));
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
+                               "The analyzer produces the following diagnostics: {NoError}\r\n" +
+                               "The code fix supports the following diagnostics: {SA1309}";
+                Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]

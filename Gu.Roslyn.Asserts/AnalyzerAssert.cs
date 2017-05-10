@@ -17,7 +17,7 @@
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly List<MetadataReference> References = new List<MetadataReference>();
+        public static readonly List<MetadataReference> MetadataReference = new List<MetadataReference>();
 
         private static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {

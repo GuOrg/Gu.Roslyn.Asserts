@@ -87,7 +87,7 @@
         {
             try
             {
-                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, References).Wait();
+                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference).Wait();
             }
             catch (AggregateException e)
             {
@@ -108,13 +108,33 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> references)
         {
+            if (analyzer.SupportedDiagnostics.Length != 1)
+            {
+                var message = $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
+                Fail.WithMessage(message);
+            }
+
+            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, references).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
-            if (fixableDiagnostics.Length != 1)
+            if (fixableDiagnostics.Length == 0)
             {
-                Fail.WithMessage("Expected code to have exactly one fixable diagnostic.");
+                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
+                Fail.WithMessage(message);
+            }
+
+            if (fixableDiagnostics.Length > 1)
+            {
+                var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {codeFix}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0]))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
+                              $"Maybe you meant to call AnalyzerAssert.FixAll?";
+                Fail.WithMessage(message);
             }
 
             var diagnostic = fixableDiagnostics.Single();
@@ -155,6 +175,17 @@
                     //// ReSharper disable once PossibleMultipleEnumeration
                     CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
                 }
+            }
+        }
+
+        private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        {
+            if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
+            {
+                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
+                Fail.WithMessage(message);
             }
         }
     }

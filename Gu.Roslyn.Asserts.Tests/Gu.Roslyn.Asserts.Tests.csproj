@@ -45,10 +45,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerAssertTests.CodeFix.cs" />
-    <Compile Include="AnalyzerAssertTests.NoDiagnostics.cs" />
-    <Compile Include="AnalyzerAssertTests.Diagnostics.cs" />
-    <Compile Include="AnalyzerAssertTests.NoFix.cs" />
+    <Compile Include="AnalyzerAssertCodeFixTests.Success.cs" />
+    <Compile Include="AnalyzerAssertNoDiagnosticsTests.Fail.cs" />
+    <Compile Include="AnalyzerAssertNoDiagnosticsTests.Success.cs" />
+    <Compile Include="AnalyzerAssertDiagnosticsTests.Fail.cs" />
+    <Compile Include="AnalyzerAssertNoFixTests.Fail.cs" />
+    <Compile Include="AnalyzerAssertNoFixTests.Success.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
     <Compile Include="CodeAssertTests.cs" />
@@ -63,6 +65,8 @@
     <Compile Include="CodeReaderTests.FileName.cs" />
     <Compile Include="Analyzers\NoErrorAnalyzer.cs" />
     <Compile Include="CodeReaderTests.FindDiagnosticsPositions.cs" />
+    <Compile Include="AnalyzerAssertDiagnosticsTests.Success.cs" />
+    <Compile Include="AnalyzerAssertCodeFixTests.Fail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sandbox.cs" />
   </ItemGroup>

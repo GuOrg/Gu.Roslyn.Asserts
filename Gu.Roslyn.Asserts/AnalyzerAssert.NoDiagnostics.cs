@@ -64,7 +64,7 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
         {
-            var diagnostics = await CodeFactory.GetDiagnosticsAsync(analyzer, code, References)
+            var diagnostics = await CodeFactory.GetDiagnosticsAsync(analyzer, code, MetadataReference)
                                                .ConfigureAwait(false);
 
             if (diagnostics.SelectMany(x => x).Any())
