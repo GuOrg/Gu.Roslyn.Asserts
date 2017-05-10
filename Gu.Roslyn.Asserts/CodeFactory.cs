@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -138,6 +137,12 @@ namespace Gu.Roslyn.Asserts
             throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
         }
 
+        /// <summary>
+        /// Searches parent directories for <paramref name="dllFile"/>
+        /// </summary>
+        /// <param name="dllFile">Ex Foo.dll</param>
+        /// <param name="result">The <see cref="File"/> if found.</param>
+        /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindProjectFile(FileInfo dllFile, out FileInfo result)
         {
             var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";

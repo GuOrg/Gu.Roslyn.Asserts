@@ -59,7 +59,7 @@
             }
             catch (AggregateException e)
             {
-                Fail.WithMessage(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0].Message);
             }
         }
 
@@ -82,7 +82,7 @@
                                          .ToArray();
             if (fixableDiagnostics.Length != 1)
             {
-                Fail.WithMessage("Expected code to have exactly one fixable diagnostic.");
+                throw Fail.CreateException("Expected code to have exactly one fixable diagnostic.");
             }
 
             var diagnostic = fixableDiagnostics.Single();
@@ -108,7 +108,7 @@
 
                 if (actions.Count > 1)
                 {
-                    Fail.WithMessage("Expected only one action");
+                    throw Fail.CreateException("Expected only one action");
                 }
 
                 var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None)

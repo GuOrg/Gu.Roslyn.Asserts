@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts
             }
             catch (AggregateException e)
             {
-                Fail.WithMessage(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0].Message);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Gu.Roslyn.Asserts
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
-                Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
+                throw Fail.CreateException("Expected code to have at least one error position indicated with '↓'");
             }
 
             var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)

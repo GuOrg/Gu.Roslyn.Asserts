@@ -51,7 +51,7 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .solution file
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzerType">The type of the analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .solution file
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .solution file
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -92,6 +92,24 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, references);
             return GetDiagnosticsAsync(analyzer, sln);
+        }
+
+        /// <summary>
+        /// Creates a solution and  compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        internal static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution)
+        {
+            var results = new List<ImmutableArray<Diagnostic>>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                               .ConfigureAwait(false);
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+            }
+
+            return results;
         }
 
         private static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution sln)

@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzerAssertCodeFixTests.Success.cs" />
+    <Compile Include="AnalyzerAssertFixAllTests.Success.cs" />
+    <Compile Include="AnalyzerAssertFixAllTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoDiagnosticsTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoDiagnosticsTests.Success.cs" />
     <Compile Include="AnalyzerAssertDiagnosticsTests.Fail.cs" />

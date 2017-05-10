@@ -1,7 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
-    using System.Text;
     using Gu.Roslyn.Asserts.Internals;
 
     /// <summary>
@@ -35,7 +34,7 @@ namespace Gu.Roslyn.Asserts
 
                 if (expected[pos] != actual[otherPos])
                 {
-                    var errorBuilder = new StringBuilder();
+                    var errorBuilder = StringBuilderPool.Borrow();
                     errorBuilder.AppendLine($"Mismatch on line {line} of file {CodeReader.FileName(expected)}");
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
@@ -52,7 +51,7 @@ namespace Gu.Roslyn.Asserts
                     errorBuilder.AppendLine($"Expected: {expectedLine}");
                     errorBuilder.AppendLine($"Actual:   {actualLine}");
                     errorBuilder.AppendLine($"          {new string(' ', diffPos)}^");
-                    Fail.WithMessage(errorBuilder.ToString());
+                    throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(errorBuilder));
                 }
 
                 if (expected[pos] == '\n')
@@ -79,7 +78,7 @@ namespace Gu.Roslyn.Asserts
                 return;
             }
 
-            Fail.WithMessage($"Mismatch at end of file {CodeReader.FileName(expected)}");
+            throw Fail.CreateException($"Mismatch at end of file {CodeReader.FileName(expected)}");
         }
     }
 }

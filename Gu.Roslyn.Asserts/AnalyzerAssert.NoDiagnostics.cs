@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert
@@ -50,11 +51,11 @@
         {
             try
             {
-                NoDiagnosticsAsync(analyzer, code).Wait();
+                NoDiagnosticsAsync(analyzer, code, MetadataReference).Wait();
             }
             catch (AggregateException e)
             {
-                Fail.WithMessage(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0].Message);
             }
         }
 
@@ -63,10 +64,11 @@
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
+        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, MetadataReference)
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
                                            .ConfigureAwait(false);
 
             if (diagnostics.SelectMany(x => x).Any())
@@ -111,11 +113,11 @@
         {
             try
             {
-                NoDiagnosticsAsync(analyzer, code).Wait();
+                NoDiagnosticsAsync(analyzer, code, MetadataReference).Wait();
             }
             catch (AggregateException e)
             {
-                Fail.WithMessage(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0].Message);
             }
         }
 
@@ -127,10 +129,11 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file
         /// </param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code)
+        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IEnumerable<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, MetadataReference)
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
                                            .ConfigureAwait(false);
 
             if (diagnostics.SelectMany(x => x).Any())

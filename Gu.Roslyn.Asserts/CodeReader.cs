@@ -12,6 +12,71 @@
     public static class CodeReader
     {
         /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="xs">The expected code.</param>
+        /// <param name="ys">The actual code.</param>
+        /// <returns>True if the code is found to be equal</returns>
+        public static bool AreEqual(IReadOnlyList<string> xs, IEnumerable<string> ys)
+        {
+            for (var i = 0; i < xs.Count; i++)
+            {
+                if (!AreEqual(xs[i], ys.ElementAt(i)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="x">The expected code.</param>
+        /// <param name="y">The actual code.</param>
+        /// <returns>True if the code is found to be equal</returns>
+        public static bool AreEqual(string x, string y)
+        {
+            var pos = 0;
+            var otherPos = 0;
+            while (pos < x.Length && otherPos < y.Length)
+            {
+                if (x[pos] == '\r')
+                {
+                    pos++;
+                    continue;
+                }
+
+                if (y[otherPos] == '\r')
+                {
+                    otherPos++;
+                    continue;
+                }
+
+                if (x[pos] != y[otherPos])
+                {
+                    return false;
+                }
+
+                pos++;
+                otherPos++;
+            }
+
+            while (pos < x.Length && x[pos] == '\r')
+            {
+                pos++;
+            }
+
+            while (otherPos < y.Length && y[otherPos] == '\r')
+            {
+                otherPos++;
+            }
+
+            return pos == x.Length && otherPos == y.Length;
+        }
+
+        /// <summary>
         /// Get the filename from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
