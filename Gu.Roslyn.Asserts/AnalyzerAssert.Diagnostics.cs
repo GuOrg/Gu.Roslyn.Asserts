@@ -6,7 +6,9 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Immutable;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -78,78 +80,135 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="references">The meta data references to use when compiling.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
+        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
         {
-            var result = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
-            var expecteds = result.ExpectedDiagnostics;
-            if (expecteds.Count == 0)
+            var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
+            if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, result.CleanedSources, references)
+            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
                                         .ConfigureAwait(false);
+
+            var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(x => new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span)));
 
             var actuals = data.Diagnostics
                               .SelectMany(x => x)
-                              .OrderBy(d => d.Id)
-                              .ThenBy(d => d.Location.GetMappedLineSpan(), FileLinePositionSpanComparer.Default)
+                              .Select(x => new IdAndPosition(x.Id, x.Location.GetMappedLineSpan()))
                               .ToArray();
-            if (expecteds.Count != actuals.Length)
+
+            if (expecteds.SetEquals(actuals))
             {
-                Fail.WithMessage($"Expected count does not match actual.{Environment.NewLine}" +
-                                 $"Expected: {expecteds.Count}{Environment.NewLine}" +
-                                 $"Actual:   {actuals.Length}");
+                return new DiagnosticsMetaData(codeWithErrorsIndicated, expectedDiagnosticsAndSources.CleanedSources, expectedDiagnosticsAndSources.ExpectedDiagnostics, data.Diagnostics, data.Solution);
             }
 
-            expecteds = expecteds.OrderBy(d => d.Analyzer.SupportedDiagnostics[0].Id)
-                                 .ThenBy(d => d.Span, FileLinePositionSpanComparer.Default)
-                                 .ToArray();
-            for (var i = 0; i < expecteds.Count; i++)
+            var error = StringBuilderPool.Borrow();
+            error.AppendLine("Expected and actual diagnostics do not match.");
+            var unMatchedExpecteds = expecteds.Except(actuals).ToArray();
+            for (var i = 0; i < unMatchedExpecteds.Length; i++)
             {
-                var expected = expecteds[i];
-                var actual = actuals[i];
-                if (expected.Analyzer.SupportedDiagnostics[0].Id != actual.Id)
+                error.Append(i == 0 ? "Expected: " : "            ");
+                var expected = unMatchedExpecteds[i];
+                error.AppendLine(expected.ToString(expectedDiagnosticsAndSources.CleanedSources));
+            }
+
+            var unmatchedActuals = actuals.Except(expecteds).ToArray();
+            for (var i = 0; i < unmatchedActuals.Length; i++)
+            {
+                error.Append(i == 0 ? "Actual:   " : "            ");
+                var actual = unmatchedActuals[i];
+                error.AppendLine(actual.ToString(expectedDiagnosticsAndSources.CleanedSources));
+            }
+
+            throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
+        }
+
+        private struct IdAndPosition : IEquatable<IdAndPosition>
+        {
+            public IdAndPosition(string id, FileLinePositionSpan span)
+            {
+                this.Id = id;
+                this.Span = span;
+            }
+
+            public bool Equals(IdAndPosition other)
+            {
+                bool EndPositionsEquals(FileLinePositionSpan x, FileLinePositionSpan y)
                 {
-                    Fail.WithMessage($"Expected id does not match actual.{Environment.NewLine}" +
-                                     $"Expected: {expected.Analyzer.SupportedDiagnostics[0].Id}{Environment.NewLine}" +
-                                     $"Actual:   {actual.Id}");
+                    if (x.StartLinePosition == x.EndLinePosition ||
+                        y.StartLinePosition == y.EndLinePosition)
+                    {
+                        return true;
+                    }
+
+                    return x.EndLinePosition == y.EndLinePosition;
                 }
 
-                var actualSpan = actual.Location.GetMappedLineSpan();
-                if (expected.Span.Path != actualSpan.Path)
+                return string.Equals(this.Id, other.Id) &&
+                       string.Equals(this.Span.Path, other.Span.Path) &&
+                       this.Span.StartLinePosition == other.Span.StartLinePosition &&
+                       EndPositionsEquals(this.Span, other.Span);
+            }
+
+            public string Id { get; }
+
+            public FileLinePositionSpan Span { get; }
+
+            public static bool operator ==(IdAndPosition left, IdAndPosition right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(IdAndPosition left, IdAndPosition right)
+            {
+                return !left.Equals(right);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
                 {
-                    Fail.WithMessage($"Expected id does not match actual.{Environment.NewLine}" +
-                                     $"Expected: {expected.Span.Path}" +
-                                     $"Actual:   {actual.Location.SourceTree.FilePath}");
+                    return false;
                 }
 
-                if (expected.Span.StartLinePosition != actualSpan.StartLinePosition)
+                return obj is IdAndPosition && this.Equals((IdAndPosition)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
                 {
-                    Fail.WithMessage($"Expected id does not match actual.{Environment.NewLine}" +
-                                     $"Expected: {expected.Span.Path}" +
-                                     $"Actual:   {actual.Location.SourceTree.FilePath}");
+                    return (this.Id.GetHashCode() * 397) ^
+                           this.Span.Path.GetHashCode() ^
+                           this.Span.StartLinePosition.GetHashCode();
                 }
             }
 
-            return new DiagnosticMetaData(codeWithErrorsIndicated, result.CleanedSources, expecteds, data.Diagnostics, data.Solution);
+            internal string ToString(IReadOnlyList<string> sources)
+            {
+                var path = this.Span.Path;
+                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
+                var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
+                return $"{this.Id} at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} |{line}";
+            }
         }
 
         /// <summary>
         /// Meta data from a call to GetAnalyzerDiagnosticsAsync
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
-        public class DiagnosticMetaData
+        public class DiagnosticsMetaData
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="DiagnosticMetaData"/> class.
+            /// Initializes a new instance of the <see cref="DiagnosticsMetaData"/> class.
             /// </summary>
             /// <param name="codeWithErrorsIndicated">The code with errors indicated</param>
             /// <param name="sources"><paramref name="codeWithErrorsIndicated"/> cleaned from indicators.</param>
             /// <param name="expectedDiagnostics">Info about the expected diagnostics.</param>
             /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
             /// <param name="solution">The solution the analysis was run on.</param>
-            public DiagnosticMetaData(
+            public DiagnosticsMetaData(
                 IEnumerable<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> sources,
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,

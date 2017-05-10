@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert

@@ -1,11 +1,15 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
+    using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.Formatting;
     using Microsoft.CodeAnalysis.Simplification;
 
@@ -18,6 +22,17 @@
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
         public static readonly List<MetadataReference> MetadataReference = new List<MetadataReference>();
+
+        private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        {
+            if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
+            {
+                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
+                Fail.WithMessage(message);
+            }
+        }
 
         private static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {

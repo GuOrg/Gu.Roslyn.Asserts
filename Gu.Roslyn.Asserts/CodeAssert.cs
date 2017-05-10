@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Text;
+    using Gu.Roslyn.Asserts.Internals;
 
     /// <summary>
     /// Assert for testing if code equals

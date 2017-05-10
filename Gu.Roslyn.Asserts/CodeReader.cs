@@ -2,7 +2,9 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Text.RegularExpressions;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
@@ -92,6 +94,57 @@
 
                 character++;
             }
+        }
+
+        public static string GetLineWithErrorIndicated(string code, LinePosition position)
+        {
+            var builder = StringBuilderPool.Borrow();
+            var line = 0;
+            var character = 0;
+            foreach (var c in code)
+            {
+                if (c == '\r')
+                {
+                    continue;
+                }
+
+                if (c == '\n')
+                {
+                    if (builder.Length != 0)
+                    {
+                        return StringBuilderPool.ReturnAndGetText(builder);
+                    }
+
+                    line++;
+                    character = 0;
+                    continue;
+                }
+
+                if (line == position.Line)
+                {
+                    if (character == position.Character)
+                    {
+                        builder.Append('↓');
+                    }
+
+                    builder.Append(c);
+                }
+
+                character++;
+            }
+
+            if (builder.Length != 0)
+            {
+                if (position.Character == builder.Length)
+                {
+                    builder.Append('↓');
+                }
+
+                return StringBuilderPool.ReturnAndGetText(builder);
+            }
+
+            StringBuilderPool.Return(builder);
+            return $"Code dod not have position {position}";
         }
     }
 }

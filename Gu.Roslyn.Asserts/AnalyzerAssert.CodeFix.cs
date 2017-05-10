@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -117,6 +118,7 @@
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, references).ConfigureAwait(false);
+
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
@@ -131,7 +133,7 @@
             if (fixableDiagnostics.Length > 1)
             {
                 var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {codeFix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0]))}}}{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
                               $"Maybe you meant to call AnalyzerAssert.FixAll?";
                 Fail.WithMessage(message);
@@ -175,17 +177,6 @@
                     //// ReSharper disable once PossibleMultipleEnumeration
                     CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
                 }
-            }
-        }
-
-        private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
-        {
-            if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
-            {
-                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                Fail.WithMessage(message);
             }
         }
     }

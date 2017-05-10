@@ -1,8 +1,8 @@
-﻿using Gu.Roslyn.Asserts.Tests.CodeFixes;
-using NUnit.Framework;
-
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using Gu.Roslyn.Asserts.Tests.CodeFixes;
+    using NUnit.Framework;
+
     [TestFixture]
     public partial class AnalyzerAssertNoFixTests
     {

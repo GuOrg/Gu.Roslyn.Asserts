@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
 
@@ -7,13 +7,23 @@
     /// </summary>
     internal static class Fail
     {
-        private static Action<string> action;
+        private static Func<string, Exception> action;
 
         /// <summary>
         /// Throw an <see cref="AssertException"/> or an exception specific to the testing library used if found.
         /// </summary>
         /// <param name="message">The message explaining why the assertion failed.</param>
         internal static void WithMessage(string message)
+        {
+            throw CreateException(message);
+        }
+
+        /// <summary>
+        /// Create an assert exception or an exception specific to the currently used test framework if found.
+        /// </summary>
+        /// <param name="message">The message explaining why the assertion failed.</param>
+        /// <returns>The exception.</returns>
+        internal static Exception CreateException(string message)
         {
             if (action == null)
             {
@@ -22,15 +32,15 @@
                     throwOnError: false);
                 if (type == null)
                 {
-                    action = text => throw new AssertException(text);
+                    action = text => new AssertException(text);
                 }
                 else
                 {
-                    action = text => throw (Exception)Activator.CreateInstance(type, text);
+                    action = text => (Exception)Activator.CreateInstance(type, text);
                 }
             }
 
-            action(message);
+            return action(message);
         }
     }
 }
