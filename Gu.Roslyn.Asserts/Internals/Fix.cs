@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts.Internals
             return fixedSolution;
         }
 
-        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, FixAllScope scope, CancellationToken cancellationToken)
+        internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, FixAllScope scope, CancellationToken cancellationToken)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, codeFix).ConfigureAwait(false);
             var fixedSolution = solution;
@@ -91,7 +91,7 @@ namespace Gu.Roslyn.Asserts.Internals
                     return fixedSolution;
                 }
 
-                var diagnosticProvider = await TestDiagnosticProvider.CreateAsync(solution, codeFix, fixable).ConfigureAwait(false);
+                var diagnosticProvider = await TestDiagnosticProvider.CreateAsync(fixedSolution, codeFix, fixable).ConfigureAwait(false);
                 fixedSolution = await ApplyAsync(codeFix, scope, diagnosticProvider, cancellationToken).ConfigureAwait(false);
                 fixable = await Analyze.GetFixableDiagnosticsAsync(fixedSolution, analyzer, codeFix).ConfigureAwait(false);
             }
