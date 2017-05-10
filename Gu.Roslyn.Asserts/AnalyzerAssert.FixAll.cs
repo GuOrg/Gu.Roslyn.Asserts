@@ -131,45 +131,55 @@ namespace Gu.Roslyn.Asserts
                 throw Fail.CreateException(message);
             }
 
-            var diagnostic = fixableDiagnostics.Single();
-            foreach (var project in data.Solution.Projects)
-            {
-                var document = project.GetDocument(diagnostic.Location.SourceTree);
-                if (document == null)
-                {
-                    continue;
-                }
+            throw new NotImplementedException("Test fixing one by one");
+            throw new NotImplementedException("Test fixing all supported scopes if FixAll != null");
+            //var projects = data.Solution.Projects.ToArray();
+            //int oldCount;
+            //do
+            //{
+            //    var diagnostic = fixableDiagnostics.First();
+            //    for (var i = 0; i < projects.Length; i++)
+            //    {
+            //        var project = projects[i];
+            //        var document = project.GetDocument(diagnostic.Location.SourceTree);
+            //        if (document == null)
+            //        {
+            //            continue;
+            //        }
 
-                var actions = new List<CodeAction>();
-                var context = new CodeFixContext(
-                    document,
-                    diagnostic,
-                    (a, d) => actions.Add(a),
-                    CancellationToken.None);
-                await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
-                if (actions.Count == 0)
-                {
-                    continue;
-                }
+            //        var actions = new List<CodeAction>();
+            //        var context = new CodeFixContext(
+            //            document,
+            //            diagnostic,
+            //            (a, d) => actions.Add(a),
+            //            CancellationToken.None);
+            //        await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            //        if (actions.Count == 0)
+            //        {
+            //            continue;
+            //        }
 
-                if (actions.Count > 1)
-                {
-                    throw Fail.CreateException("Expected only one action");
-                }
+            //        var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None).ConfigureAwait(false);
+            //    }
 
-                var fixedProject = await ApplyFixAsync(project, actions[0], CancellationToken.None).ConfigureAwait(false);
-                if (ReferenceEquals(fixedProject, project))
-                {
-                    throw Fail.CreateException("Fix did nothing.");
-                }
+            //    oldCount = fixableDiagnostics.Length;
+            //    var data = await Analyze.GetDiagnosticsAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
+            //                            .ConfigureAwait(false);
+            //    fixableDiagnostics = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReference).ConfigureAwait(false);
+            //                             .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
+            //                             .ToArray();
+            //} while (oldCount > fixableDiagnostics.Length && fixableDiagnostics.Length > 0);
 
-                for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
-                {
-                    var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
-                    //// ReSharper disable once PossibleMultipleEnumeration
-                    CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
-                }
-            }
+            //foreach (var fixedProject in projects)
+            //{
+            //    for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
+            //    {
+            //        var fixedSource = await GetStringFromDocumentAsync(fixedProject.GetDocument(fixedProject.DocumentIds[i]), CancellationToken.None)
+            //                .ConfigureAwait(false);
+            //        //// ReSharper disable once PossibleMultipleEnumeration
+            //        CodeAssert.AreEqual(fixedCode.ElementAt(i), fixedSource);
+            //    }
+            //}
         }
     }
 }

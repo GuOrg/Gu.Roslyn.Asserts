@@ -145,15 +145,11 @@
             }
 
             var diagnostic = fixableDiagnostics.Single();
+            var actions = new List<CodeAction>();
             foreach (var project in data.Solution.Projects)
             {
-                var document = project.GetDocument(diagnostic.Location.SourceTree);
-                if (document == null)
-                {
-                    continue;
-                }
-
-                var actions = new List<CodeAction>();
+                var document = data.Solution.GetDocument(diagnostic.Location.SourceTree);
+                actions.Clear();
                 var context = new CodeFixContext(
                     document,
                     diagnostic,
