@@ -62,7 +62,43 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassOneErrorCorrectFix()
+            public void TwoClassesCodeFixOnlyCorrectFix()
+            {
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
+                var code1 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox
+{
+    public class Foo2
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, new[] { code2, fixedCode });
+            }
+
+            [Test]
+            public void TwoClassesOneErrorCorrectFix()
             {
                 var barCode = @"
 namespace RoslynSandbox

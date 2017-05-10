@@ -105,9 +105,9 @@
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="references">The meta data references to add to the compilation.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> references)
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> metadataReferences)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -117,8 +117,7 @@
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, references).ConfigureAwait(false);
-
+            var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
             if (CodeReader.AreEqual(data.Sources, fixedCode))
             {
                 throw Fail.CreateException("Fixed code is identical to provided code. Did you mean to call NoFix?");
@@ -180,7 +179,7 @@
                 }
             }
 
-            var sln = CodeFactory.CreateSolution(fixedCode, references);
+            var sln = CodeFactory.CreateSolution(fixedCode, metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln);
             if (diagnostics.SelectMany(x => x).Any(x => x.Severity == DiagnosticSeverity.Error))
             {

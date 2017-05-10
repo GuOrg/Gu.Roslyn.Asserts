@@ -4,9 +4,9 @@ namespace Gu.Roslyn.Asserts
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
@@ -78,9 +78,9 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="references">The meta data references to use when compiling.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> references)
+        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> metadataReferences)
         {
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
@@ -88,7 +88,7 @@ namespace Gu.Roslyn.Asserts
                 throw Fail.CreateException("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
+            var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
                                     .ConfigureAwait(false);
 
             var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(x => new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span)));
@@ -124,6 +124,7 @@ namespace Gu.Roslyn.Asserts
             throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
         }
 
+        [DebuggerDisplay("{this.Id} {this.Span}")]
         private struct IdAndPosition : IEquatable<IdAndPosition>
         {
             public IdAndPosition(string id, FileLinePositionSpan span)
