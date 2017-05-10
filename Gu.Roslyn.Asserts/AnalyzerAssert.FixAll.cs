@@ -133,7 +133,15 @@ namespace Gu.Roslyn.Asserts
             var solution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, CancellationToken.None).ConfigureAwait(false);
             await AreEqualAsync(fixedCode, solution).ConfigureAwait(false);
 
-            //throw new NotImplementedException("Test fixing all supported scopes if FixAll != null");
+            var fixAllProvider = codeFix.GetFixAllProvider();
+            if (fixAllProvider != null)
+            {
+                foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
+                {
+                    solution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, scope, CancellationToken.None).ConfigureAwait(false);
+                    await AreEqualAsync(fixedCode, solution).ConfigureAwait(false);
+                }
+            }
         }
     }
 }

@@ -59,6 +59,53 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoClassesCodeFixOnlyCorrectFix()
+            {
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
+                var code1 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox
+{
+    public class Foo2
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var fixed1 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+
+                var fixed2 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo2
+    {
+    }
+}";
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, new[] { fixed1, fixed2 });
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, new[] { fixed2, fixed1 });
+            }
+
+            [Test]
             public void SingleClassCodeFixOnlyCorrectFix()
             {
                 AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
