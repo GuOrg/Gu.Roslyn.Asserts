@@ -2,6 +2,8 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -20,6 +22,14 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
+            }
+
+            [Test]
+            public void ProjectFileNoErrorGeneric()
+            {
+                var dllFile = new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath;
+                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(new DirectoryInfo(Path.GetDirectoryName(dllFile)), Path.GetFileNameWithoutExtension(dllFile) + ".csproj", out FileInfo projectFile));
+                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(projectFile);
             }
 
             [TestCase(typeof(NoErrorAnalyzer))]

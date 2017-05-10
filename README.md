@@ -133,3 +133,17 @@ namespace RoslynSandbox
     AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
 }
 ```
+
+## Analyze a project on disk
+
+```c#
+[Test]
+public async Task GetDiagnosticsFromProjectOnDisk()
+{
+    var dllFile = new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath;
+    Assert.AreEqual(true, CodeFactory.TryFindProjectFile(new FileInfo(dllFile), out FileInfo projectFile));
+    var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences)
+                                    .ConfigureAwait(false);
+    ...
+}
+```` 

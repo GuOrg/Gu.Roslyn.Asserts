@@ -88,8 +88,8 @@ namespace Gu.Roslyn.Asserts
                 Fail.WithMessage("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await CodeFactory.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
-                                        .ConfigureAwait(false);
+            var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, references)
+                                    .ConfigureAwait(false);
 
             var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(x => new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span)));
 

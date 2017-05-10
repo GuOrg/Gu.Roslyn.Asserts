@@ -53,7 +53,9 @@
     <Compile Include="AnalyzerAssertNoFixTests.Success.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
+    <Compile Include="AnalyzeTests.cs" />
     <Compile Include="CodeAssertTests.cs" />
+    <Compile Include="CodeFactoryTests.cs" />
     <Compile Include="CodeFixes\CustomBatchFixAllProvider.cs" />
     <Compile Include="CodeFixes\CustomFixAllProviders.cs" />
     <Compile Include="CodeFixes\FixAllContextHelper.cs" />
