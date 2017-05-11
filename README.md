@@ -4,6 +4,16 @@
 
 Asserts for testing Roslyn analyzers.
 As of now MetaDataReferences must be added to the static field `AnalyzerAssert.References` not super nice.
+A halper like this can be used.
+```c#
+private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
+{
+    return types.Select(type => type.GetTypeInfo().Assembly)
+                .Distinct()
+                .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
+                .ToArray();
+}
+```
 
 # Samples
 
