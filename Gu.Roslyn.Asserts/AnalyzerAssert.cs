@@ -33,11 +33,11 @@
 
         private static async Task AreEqualAsync(IEnumerable<string> expected, Solution actual)
         {
-            foreach (var fixedProject in actual.Projects)
+            foreach (var project in actual.Projects)
             {
-                for (var i = 0; i < fixedProject.DocumentIds.Count; i++)
+                for (var i = 0; i < project.DocumentIds.Count; i++)
                 {
-                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(fixedProject.GetDocument(fixedProject.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
+                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
                     //// ReSharper disable once PossibleMultipleEnumeration
                     CodeAssert.AreEqual(expected.ElementAt(i), fixedSource);
                 }

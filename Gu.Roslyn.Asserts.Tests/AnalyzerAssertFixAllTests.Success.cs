@@ -76,6 +76,8 @@ namespace RoslynSandbox
                 var code2 = @"
 namespace RoslynSandbox
 {
+    using System;
+
     public class Foo2
     {
         public event EventHandler ↓Bar;
