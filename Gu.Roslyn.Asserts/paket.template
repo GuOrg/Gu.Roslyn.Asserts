@@ -1,10 +1,22 @@
-﻿type project
+﻿type file
+id Gu.Roslyn.Asserts
+title Gu.Roslyn.Asserts
+version 0.1.0-dev
+authors Johan Larsson
+owners Johan Larsson
+copyright Copyright Johan Larsson 2017
+
+description
+  Asserts for testing Roslyn analyzers and code fixes.
 projectUrl https://github.com/JohanLarsson/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
-excludeddependencies
-  JetBrains.Annotations
-  StyleCop.Analyzers
-  WpfAnalyzers
-  Gu.Analyzers
+tags Roslyn Diagnostic Analyzer Test
+
+dependencies
+  Microsoft.CodeAnalysis.CSharp.Workspaces 2.1.0
+
+files
+  ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.dll ==> lib/netstandard1.3
+  ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.xml ==> lib/netstandard1.3 
 

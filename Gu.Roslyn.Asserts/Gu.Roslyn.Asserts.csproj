@@ -8,7 +8,7 @@
     <DocumentationFile>bin\Debug\netstandard1.3\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.3\.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.3\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
