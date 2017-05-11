@@ -10,14 +10,6 @@
 
     public class CodeFactoryTests
     {
-        public static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
-        {
-            return types.Select(type => type.GetTypeInfo().Assembly)
-                        .Distinct()
-                        .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
-                        .ToArray();
-        }
-
         [Test]
         public void TryFindProjectFileInParentDirectory()
         {
@@ -105,6 +97,14 @@
             //// ReSharper restore UnusedVariable
 
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
+        {
+            return types.Select(type => type.GetTypeInfo().Assembly)
+                        .Distinct()
+                        .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
+                        .ToArray();
         }
     }
 }
