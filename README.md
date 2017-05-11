@@ -84,6 +84,37 @@ namespace RoslynSandbox
     AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
 }
 ```
+
+When there are many isses that will be fixed:
+
+```c#
+[Test]
+public void SingleClassOneErrorCorrectFix()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value1;
+        private readonly int ↓_value2;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value1;
+        private readonly int value2;
+    }
+}";
+    AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+}
+```
+
+
 ## Code fix only
 
 ```c#
