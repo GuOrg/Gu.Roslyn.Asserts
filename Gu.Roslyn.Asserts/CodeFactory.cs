@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -113,7 +114,6 @@ namespace Gu.Roslyn.Asserts
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
             {
                 var solution = new AdhocWorkspace().CurrentSolution;
-
                 var assemblyName = Path.GetFileNameWithoutExtension(code.FullName);
                 var projectId = ProjectId.CreateNewId(assemblyName);
                 solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
@@ -128,6 +128,34 @@ namespace Gu.Roslyn.Asserts
                     using (var stream = File.OpenRead(file.FullName))
                     {
                         solution = solution.AddDocument(documentId, file.Name, SourceText.From(stream));
+                    }
+                }
+
+                return solution;
+            }
+
+            if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
+            {
+                var sln = File.ReadAllText(code.FullName);
+                var solution = new AdhocWorkspace().CurrentSolution;
+                var matches = Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture);
+                foreach (Match match in matches)
+                {
+                    var assemblyName = match.Groups["name"].Value;
+                    var projectId = ProjectId.CreateNewId(assemblyName);
+                    solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
+                                       .WithProjectCompilationOptions(
+                                           projectId,
+                                           new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
+                                               .WithSpecificDiagnosticOptions(GetSpecificDiagnosticOptions(analyzers)))
+                                       .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                    foreach (var file in GetCodeFilesInProject(new FileInfo(Path.Combine(code.DirectoryName, match.Groups["path"].Value))))
+                    {
+                        var documentId = DocumentId.CreateNewId(projectId);
+                        using (var stream = File.OpenRead(file.FullName))
+                        {
+                            solution = solution.AddDocument(documentId, file.Name, SourceText.From(stream));
+                        }
                     }
                 }
 
@@ -197,6 +225,19 @@ namespace Gu.Roslyn.Asserts
                               .ToArray();
             if (compiles.Length == 0)
             {
+                var root = doc.Root;
+                if (root.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
+                {
+                    foreach (var csFile in projectFile.Directory
+                                                      .EnumerateFiles("*.cs", SearchOption.AllDirectories)
+                                                      .Where(f => !f.Name.StartsWith("TemporaryGeneratedFile_")))
+                    {
+                        yield return csFile;
+                    }
+
+                    yield break;
+                }
+
                 throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
             }
 
