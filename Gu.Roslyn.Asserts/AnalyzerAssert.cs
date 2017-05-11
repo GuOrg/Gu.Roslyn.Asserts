@@ -31,14 +31,14 @@
             }
         }
 
-        private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual)
+        private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)
         {
             foreach (var project in actual.Projects)
             {
                 for (var i = 0; i < project.DocumentIds.Count; i++)
                 {
                     var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
-                    CodeAssert.AreEqual(expected[i], fixedSource);
+                    CodeAssert.AreEqual(expected[i], fixedSource, messageHeader);
                 }
             }
         }

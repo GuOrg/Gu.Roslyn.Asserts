@@ -15,6 +15,17 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(string expected, string actual)
         {
+            AreEqual(expected, actual, null);
+        }
+
+        /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="expected">The expected code.</param>
+        /// <param name="actual">The actual code.</param>
+        /// <param name="messageHeader">The first line to add to the exception message on error.</param>
+        internal static void AreEqual(string expected, string actual, string messageHeader)
+        {
             var pos = 0;
             var otherPos = 0;
             var line = 1;
@@ -35,6 +46,11 @@ namespace Gu.Roslyn.Asserts
                 if (expected[pos] != actual[otherPos])
                 {
                     var errorBuilder = StringBuilderPool.Borrow();
+                    if (messageHeader != null)
+                    {
+                        errorBuilder.AppendLine(messageHeader);
+                    }
+
                     errorBuilder.AppendLine($"Mismatch on line {line} of file {CodeReader.FileName(expected)}");
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
@@ -76,6 +92,12 @@ namespace Gu.Roslyn.Asserts
             if (pos == expected.Length && otherPos == actual.Length)
             {
                 return;
+            }
+
+            if (messageHeader != null)
+            {
+                throw Fail.CreateException($"{messageHeader}{Environment.NewLine}" +
+                                           $"Mismatch at end of file {CodeReader.FileName(expected)}");
             }
 
             throw Fail.CreateException($"Mismatch at end of file {CodeReader.FileName(expected)}");

@@ -222,6 +222,12 @@
             return $"Code dod not have position {position}";
         }
 
+        /// <summary>
+        /// Gets the simplified and formatted text from the document.
+        /// </summary>
+        /// <param name="document">The document to extract the source code from.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
         internal static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {
             var simplifiedDoc = await Simplifier.ReduceAsync(document, Simplifier.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);

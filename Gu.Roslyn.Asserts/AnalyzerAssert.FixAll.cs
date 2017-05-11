@@ -131,7 +131,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             var solution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, CancellationToken.None).ConfigureAwait(false);
-            await AreEqualAsync(fixedCode, solution).ConfigureAwait(false);
+            await AreEqualAsync(fixedCode, solution, "Applying fixes one by one failed.").ConfigureAwait(false);
 
             var fixAllProvider = codeFix.GetFixAllProvider();
             if (fixAllProvider != null)
@@ -139,7 +139,7 @@ namespace Gu.Roslyn.Asserts
                 foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
                 {
                     solution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, scope, CancellationToken.None).ConfigureAwait(false);
-                    await AreEqualAsync(fixedCode, solution).ConfigureAwait(false);
+                    await AreEqualAsync(fixedCode, solution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
                 }
             }
         }

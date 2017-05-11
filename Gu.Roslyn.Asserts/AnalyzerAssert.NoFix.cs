@@ -86,7 +86,7 @@
 
             var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), CancellationToken.None)
                                          .ConfigureAwait(false);
-            await AreEqualAsync(data.Sources, fixedSolution).ConfigureAwait(false);
+            await AreEqualAsync(data.Sources, fixedSolution, "Expected the code fix to not change any document.").ConfigureAwait(false);
         }
     }
 }

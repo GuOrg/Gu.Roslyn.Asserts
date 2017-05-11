@@ -9,8 +9,19 @@ namespace Gu.Roslyn.Asserts.Internals
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// Helper class for applying code fixes
+    /// </summary>
     internal static class Fix
     {
+        /// <summary>
+        /// Fix the solution by applying the code fix.
+        /// </summary>
+        /// <param name="solution">The solution with the diagnostic.</param>
+        /// <param name="codeFix">The code fix.</param>
+        /// <param name="diagnostic">The diagnostic.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, CancellationToken cancellationToken)
         {
             var actions = new List<CodeAction>();
@@ -39,6 +50,10 @@ namespace Gu.Roslyn.Asserts.Internals
                              .ChangedSolution;
         }
 
+        /// <summary>
+        /// Fix the solution by applying the code fix.
+        /// </summary>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAsync(CodeFixProvider codeFix, FixAllScope scope, TestDiagnosticProvider diagnosticProvider, CancellationToken cancellationToken)
         {
             var context = new FixAllContext(
@@ -58,6 +73,10 @@ namespace Gu.Roslyn.Asserts.Internals
                              .ChangedSolution;
         }
 
+        /// <summary>
+        /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
+        /// </summary>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, CancellationToken cancellationToken)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, codeFix).ConfigureAwait(false);
@@ -78,6 +97,10 @@ namespace Gu.Roslyn.Asserts.Internals
             return fixedSolution;
         }
 
+        /// <summary>
+        /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
+        /// </summary>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, FixAllScope scope, CancellationToken cancellationToken)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, codeFix).ConfigureAwait(false);
