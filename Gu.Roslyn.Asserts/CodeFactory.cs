@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(string[] code, params MetadataReference[] metadataReferences)
         {
-            return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
+            return CreateSolution(code, (IReadOnlyList<MetadataReference>)metadataReferences);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IEnumerable<string> code, IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
@@ -103,7 +103,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(FileInfo code, IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
@@ -181,7 +181,7 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
-        private static IEnumerable<KeyValuePair<string, ReportDiagnostic>> GetSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers)
+        private static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> GetSpecificDiagnosticOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers)
         {
             var diagnosticOptions = analyzers.SelectMany(a => a.SupportedDiagnostics)
                                              .ToDictionary(d => d.Id, d => ReportDiagnostic.Warn);

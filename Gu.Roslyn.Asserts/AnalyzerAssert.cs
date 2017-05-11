@@ -31,15 +31,14 @@
             }
         }
 
-        private static async Task AreEqualAsync(IEnumerable<string> expected, Solution actual)
+        private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual)
         {
             foreach (var project in actual.Projects)
             {
                 for (var i = 0; i < project.DocumentIds.Count; i++)
                 {
                     var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
-                    //// ReSharper disable once PossibleMultipleEnumeration
-                    CodeAssert.AreEqual(expected.ElementAt(i), fixedSource);
+                    CodeAssert.AreEqual(expected[i], fixedSource);
                 }
             }
         }

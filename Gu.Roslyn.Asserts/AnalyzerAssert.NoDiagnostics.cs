@@ -39,7 +39,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            NoDiagnostics(analyzer, (IEnumerable<string>)code);
+            NoDiagnostics(analyzer, (IReadOnlyList<string>)code);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">The code with error positions indicated.</param>
-        public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> code)
+        public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
             try
             {
@@ -66,7 +66,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> code, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
                                            .ConfigureAwait(false);
@@ -131,7 +131,7 @@
         /// </param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task NoDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
                                            .ConfigureAwait(false);

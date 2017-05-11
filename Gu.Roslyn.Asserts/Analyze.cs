@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="sources">The sources as strings.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<DiagnosticsWithMetaData> GetDiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
+        public static async Task<DiagnosticsWithMetaData> GetDiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
             var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="sources">The sources as strings.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> sources, IEnumerable<MetadataReference> references)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
             return GetDiagnosticsAsync(sln, analyzer);
@@ -56,7 +56,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync<TAnalyzer>(FileInfo code, IEnumerable<MetadataReference> references)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync<TAnalyzer>(FileInfo code, IReadOnlyList<MetadataReference> references)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             return GetDiagnosticsAsync(new TAnalyzer(), code, references);
@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Type analyzerType, FileInfo code, IEnumerable<MetadataReference> references)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Type analyzerType, FileInfo code, IReadOnlyList<MetadataReference> references)
         {
             return GetDiagnosticsAsync((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code, references);
         }
@@ -89,7 +89,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IEnumerable<MetadataReference> references)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, references);
             return GetDiagnosticsAsync(sln, analyzer);

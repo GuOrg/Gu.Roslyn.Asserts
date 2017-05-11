@@ -38,8 +38,7 @@
         /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
         /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "Maybe we change this to IReadOnlyList idk.")]
-        public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
+        public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             var diagnostics = new List<ExpectedDiagnostic>();
             var cleanedSources = new List<string>();
@@ -74,7 +73,7 @@
             /// <param name="cleanedSources">The <paramref name="codeWithErrorsIndicated"/> with indicators removed.</param>
             public DiagnosticsAndSources(
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
-                IEnumerable<string> codeWithErrorsIndicated,
+                IReadOnlyList<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> cleanedSources)
             {
                 this.ExpectedDiagnostics = expectedDiagnostics;
@@ -90,7 +89,7 @@
             /// <summary>
             /// Gets the code with positions for diagnostics indicated.
             /// </summary>
-            public IEnumerable<string> CodeWithErrorsIndicated { get; }
+            public IReadOnlyList<string> CodeWithErrorsIndicated { get; }
 
             /// <summary>
             /// Gets the <see cref="CodeWithErrorsIndicated"/> with indicators removed.

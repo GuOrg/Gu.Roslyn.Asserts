@@ -101,35 +101,44 @@ namespace Gu.Roslyn.Asserts.Internals
 
         internal sealed class TestDiagnosticProvider : FixAllContext.DiagnosticProvider
         {
-            private IEnumerable<Diagnostic> diagnostics;
+            private IReadOnlyList<Diagnostic> diagnostics;
 
-            private TestDiagnosticProvider(IEnumerable<Diagnostic> diagnostics, Document document, string equivalenceKey)
+            private TestDiagnosticProvider(IReadOnlyList<Diagnostic> diagnostics, Document document, string equivalenceKey)
             {
                 this.diagnostics = diagnostics;
                 this.Document = document;
                 this.EquivalenceKey = equivalenceKey;
             }
 
+            /// <summary>
+            /// Get the document for the first diagnostic.
+            /// </summary>
             public Document Document { get; }
 
+            /// <summary>
+            /// Gets the equivalence key for the first registered action.
+            /// </summary>
             public string EquivalenceKey { get; }
 
+            /// <inheritdoc />
             public override Task<IEnumerable<Diagnostic>> GetAllDiagnosticsAsync(Project project, CancellationToken cancellationToken)
             {
-                return Task.FromResult(this.diagnostics);
+                return Task.FromResult((IEnumerable<Diagnostic>)this.diagnostics);
             }
 
+            /// <inheritdoc />
             public override Task<IEnumerable<Diagnostic>> GetDocumentDiagnosticsAsync(Document document, CancellationToken cancellationToken)
             {
                 return Task.FromResult(this.diagnostics.Where(i => i.Location.GetLineSpan().Path == document.Name));
             }
 
+            /// <inheritdoc />
             public override Task<IEnumerable<Diagnostic>> GetProjectDiagnosticsAsync(Project project, CancellationToken cancellationToken)
             {
                 return Task.FromResult(this.diagnostics.Where(i => !i.Location.IsInSource));
             }
 
-            internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider codeFix, IEnumerable<Diagnostic> diagnostics)
+            internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider codeFix, IReadOnlyList<Diagnostic> diagnostics)
             {
                 var actions = new List<CodeAction>();
                 var diagnostic = diagnostics.First();

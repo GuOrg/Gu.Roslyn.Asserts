@@ -52,7 +52,7 @@
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TAnalyzer, TCodeFix>(IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
+        public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -68,7 +68,7 @@
         /// <param name="id">The id of the expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TCodeFix>(string id, IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
+        public static void CodeFix<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode);
@@ -83,7 +83,7 @@
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, string fixedCode)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
         {
             try
             {
@@ -106,7 +106,7 @@
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, string fixedCode, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, IReadOnlyList<MetadataReference> metadataReferences)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -147,7 +147,6 @@
             var fixedSource = await CodeReader.GetStringFromDocumentAsync(
                 fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id),
                 CancellationToken.None).ConfigureAwait(false);
-            //// ReSharper disable once PossibleMultipleEnumeration
             CodeAssert.AreEqual(fixedCode, fixedSource);
 
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);

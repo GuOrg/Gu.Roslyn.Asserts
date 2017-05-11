@@ -22,11 +22,11 @@
         /// <param name="xs">The expected code.</param>
         /// <param name="ys">The actual code.</param>
         /// <returns>True if the code is found to be equal</returns>
-        public static bool AreEqual(IReadOnlyList<string> xs, IEnumerable<string> ys)
+        public static bool AreEqual(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
             for (var i = 0; i < xs.Count; i++)
             {
-                if (!AreEqual(xs[i], ys.ElementAt(i)))
+                if (!AreEqual(xs[i], ys[i]))
                 {
                     return false;
                 }

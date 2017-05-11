@@ -52,7 +52,7 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void FixAll<TAnalyzer, TCodeFix>(IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode)
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="id">The id of the expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void FixAll<TCodeFix>(string id, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode)
+        public static void FixAll<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode)
             where TCodeFix : CodeFixProvider, new()
         {
             FixAll(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode, MetadataReference);
@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="metadataReference">The meta data references to use when compiling the code.</param>
-        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> metadataReference)
+        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<string> fixedCode, IEnumerable<MetadataReference> metadataReference)
+        public static async Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {

@@ -1,5 +1,4 @@
-﻿// ReSharper disable PossibleMultipleEnumeration
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, (IEnumerable<string>)codeWithErrorsIndicated);
+            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated);
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             try
             {
@@ -68,7 +67,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated)
+        public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReference);
         }
@@ -80,7 +79,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
@@ -210,7 +209,7 @@ namespace Gu.Roslyn.Asserts
             /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
             /// <param name="solution">The solution the analysis was run on.</param>
             public DiagnosticsMetaData(
-                IEnumerable<string> codeWithErrorsIndicated,
+                IReadOnlyList<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> sources,
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
                 IReadOnlyList<ImmutableArray<Diagnostic>> actualDiagnostics,
@@ -226,7 +225,7 @@ namespace Gu.Roslyn.Asserts
             /// <summary>
             /// Gets the code with errors indicated
             /// </summary>
-            public IEnumerable<string> CodeWithErrorsIndicated { get; }
+            public IReadOnlyList<string> CodeWithErrorsIndicated { get; }
 
             /// <summary>
             /// Gets the code that was analyzed. This is <see cref="CodeWithErrorsIndicated"/> with indicators stripped.

@@ -47,7 +47,7 @@ namespace RoslynSandbox
 }";
 
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(barCode, code);
-                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IEnumerable<string>)new[] { barCode, code });
+                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IReadOnlyList<string>)new[] { barCode, code });
             }
 
             [Test]

@@ -35,7 +35,7 @@
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void NoFix<TAnalyzer, TCodeFix>(IEnumerable<string> codeWithErrorsIndicated)
+        public static void NoFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -50,7 +50,7 @@
         /// <param name="analyzer">The type of the analyzer.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             try
             {
@@ -72,7 +72,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="metadataReferences">The meta data references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IEnumerable<string> codeWithErrorsIndicated, IEnumerable<MetadataReference> metadataReferences)
+        public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences)
         {
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
