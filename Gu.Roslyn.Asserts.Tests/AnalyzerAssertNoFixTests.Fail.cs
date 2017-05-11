@@ -31,7 +31,8 @@ namespace RoslynSandbox
 }";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
-                var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
+                var expected = "Expected the code fix to not change any document.\r\n" +
+                               "Mismatch on line 6 of file Foo.cs\r\n" +
                                "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n";
@@ -60,7 +61,8 @@ namespace RoslynSandbox
 }";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
-                var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
+                var expected = "Expected the code fix to not change any document.\r\n" +
+                               "Mismatch on line 6 of file Foo.cs\r\n" +
                                "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n";

@@ -122,9 +122,10 @@ namespace Gu.Roslyn.Asserts.Internals
             return fixedSolution;
         }
 
+        /// <inheritdoc />
         internal sealed class TestDiagnosticProvider : FixAllContext.DiagnosticProvider
         {
-            private IReadOnlyList<Diagnostic> diagnostics;
+            private readonly IReadOnlyList<Diagnostic> diagnostics;
 
             private TestDiagnosticProvider(IReadOnlyList<Diagnostic> diagnostics, Document document, string equivalenceKey)
             {
@@ -134,7 +135,7 @@ namespace Gu.Roslyn.Asserts.Internals
             }
 
             /// <summary>
-            /// Get the document for the first diagnostic.
+            /// Gets the document from the first diagnostic.
             /// </summary>
             public Document Document { get; }
 
@@ -161,6 +162,10 @@ namespace Gu.Roslyn.Asserts.Internals
                 return Task.FromResult(this.diagnostics.Where(i => !i.Location.IsInSource));
             }
 
+            /// <summary>
+            /// Create an instance of <see cref="TestDiagnosticProvider"/>
+            /// </summary>
+            /// <returns>The <see cref="TestDiagnosticProvider"/></returns>
             internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider codeFix, IReadOnlyList<Diagnostic> diagnostics)
             {
                 var actions = new List<CodeAction>();
