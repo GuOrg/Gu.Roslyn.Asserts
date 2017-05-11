@@ -83,6 +83,7 @@
                                        .EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                        .Select(f => f.Name)
                                        .Where(x => !x.StartsWith("TemporaryGeneratedFile_"))
+                                       .Distinct()
                                        .OrderBy(x => x)
                                        .ToArray();
             var actual = solution.Projects
