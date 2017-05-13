@@ -1,14 +1,12 @@
 namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
 
     internal static class FixAllContextHelper
     {
@@ -155,8 +153,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             var tree = diagnostic.Location.SourceTree;
             if (tree != null)
             {
-                Document document;
-                if (treeToDocumentsMap.TryGetValue(tree, out document))
+                if (treeToDocumentsMap.TryGetValue(tree, out Document document))
                 {
                     return document;
                 }
