@@ -1,7 +1,4 @@
 version: 1.0.{build}
-install:
-- ps: .paket/paket.exe restore
-os: Visual Studio 2017
 configuration: Release
 platform: Any CPU
 build:
