@@ -90,11 +90,11 @@
             var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
                                     .ConfigureAwait(false);
 
-            var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(x => new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span)));
+            var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(IdAndPosition.Create));
 
             var actuals = data.Diagnostics
                               .SelectMany(x => x)
-                              .Select(x => new IdAndPosition(x.Id, x.Location.GetMappedLineSpan()))
+                              .Select(IdAndPosition.Create)
                               .ToArray();
 
             if (expecteds.SetEquals(actuals))
@@ -131,77 +131,6 @@
             }
 
             throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
-        }
-
-        [DebuggerDisplay("{this.Id} {this.Span}")]
-        private struct IdAndPosition : IEquatable<IdAndPosition>
-        {
-            public IdAndPosition(string id, FileLinePositionSpan span)
-            {
-                this.Id = id;
-                this.Span = span;
-            }
-
-            public string Id { get; }
-
-            public FileLinePositionSpan Span { get; }
-
-            public static bool operator ==(IdAndPosition left, IdAndPosition right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(IdAndPosition left, IdAndPosition right)
-            {
-                return !left.Equals(right);
-            }
-
-            public bool Equals(IdAndPosition other)
-            {
-                bool EndPositionsEquals(FileLinePositionSpan x, FileLinePositionSpan y)
-                {
-                    if (x.StartLinePosition == x.EndLinePosition ||
-                        y.StartLinePosition == y.EndLinePosition)
-                    {
-                        return true;
-                    }
-
-                    return x.EndLinePosition == y.EndLinePosition;
-                }
-
-                return string.Equals(this.Id, other.Id) &&
-                       string.Equals(this.Span.Path, other.Span.Path) &&
-                       this.Span.StartLinePosition == other.Span.StartLinePosition &&
-                       EndPositionsEquals(this.Span, other.Span);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj))
-                {
-                    return false;
-                }
-
-                return obj is IdAndPosition && this.Equals((IdAndPosition)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return (this.Id.GetHashCode() * 397) ^
-                           this.Span.Path.GetHashCode() ^
-                           this.Span.StartLinePosition.GetHashCode();
-                }
-            }
-
-            internal string ToString(IReadOnlyList<string> sources)
-            {
-                var path = this.Span.Path;
-                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
-                var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
-                return $"{this.Id} at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} |{line}";
-            }
         }
 
         /// <summary>

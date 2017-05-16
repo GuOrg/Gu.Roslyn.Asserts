@@ -152,9 +152,14 @@
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             if (diagnostics.SelectMany(x => x).Any(x => x.Severity == DiagnosticSeverity.Error))
             {
-                var message = $"{codeFix} introduced syntax error.\r\n" +
-                              $"{string.Join(", ", diagnostics.SelectMany(x => x).Where(d => d.Severity == DiagnosticSeverity.Error))}";
-                throw Fail.CreateException(message);
+                var error = StringBuilderPool.Borrow();
+                error.AppendLine($"{codeFix} introduced syntax error.");
+                foreach (var introducedDiagnostic in diagnostics.SelectMany(x => x).Where(d => d.Severity == DiagnosticSeverity.Error))
+                {
+                    error.AppendLine($"{introducedDiagnostic.ToString(new[] { fixedCode })}");
+                }
+
+                throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
             }
         }
     }

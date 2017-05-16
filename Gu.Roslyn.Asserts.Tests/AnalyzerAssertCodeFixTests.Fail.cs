@@ -89,7 +89,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorErrorInFix()
+            public void OneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -117,7 +117,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneErrorErrorInFix()
+            public void TwoClassesOneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var barCode = @"
 namespace RoslynSandbox
