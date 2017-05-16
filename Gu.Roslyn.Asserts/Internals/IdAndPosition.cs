@@ -6,6 +6,9 @@ namespace Gu.Roslyn.Asserts.Internals
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
+    /// <summary>
+    /// Metadata about a diagnostic
+    /// </summary>
     [DebuggerDisplay("{this.Id} {this.Span}")]
     internal struct IdAndPosition : IEquatable<IdAndPosition>
     {
@@ -16,12 +19,12 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// The id of the diagnostic.
+        /// Gets the id of the diagnostic.
         /// </summary>
         public string Id { get; }
 
         /// <summary>
-        /// The position of the diagnostic.
+        /// Gets the position of the diagnostic.
         /// </summary>
         public FileLinePositionSpan Span { get; }
 
@@ -35,11 +38,19 @@ namespace Gu.Roslyn.Asserts.Internals
             return !left.Equals(right);
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="IdAndPosition"/>
+        /// </summary>
+        /// <returns>An instance of <see cref="IdAndPosition"/></returns>
         public static IdAndPosition Create(Diagnostic diagnostic)
         {
             return new IdAndPosition(diagnostic.Id, diagnostic.Location.GetMappedLineSpan());
         }
 
+        /// <summary>
+        /// Create an instance of <see cref="IdAndPosition"/>
+        /// </summary>
+        /// <returns>An instance of <see cref="IdAndPosition"/></returns>
         public static IdAndPosition Create(ExpectedDiagnostic x)
         {
             return new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span);

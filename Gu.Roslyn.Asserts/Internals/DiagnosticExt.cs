@@ -27,8 +27,7 @@
         internal static async Task<string> ToStringAsync(this Diagnostic diagnostic, Solution solution)
         {
             var sources = await Task.WhenAll(solution.Projects.SelectMany(p => p.Documents)
-                                                     .Select(d => CodeReader.GetStringFromDocumentAsync(d,
-                                                         CancellationToken.None)));
+                                                     .Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
             return diagnostic.ToString(sources);
         }
     }
