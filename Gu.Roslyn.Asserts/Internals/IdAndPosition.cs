@@ -15,8 +15,14 @@ namespace Gu.Roslyn.Asserts.Internals
             this.Span = span;
         }
 
+        /// <summary>
+        /// The id of the diagnostic.
+        /// </summary>
         public string Id { get; }
 
+        /// <summary>
+        /// The position of the diagnostic.
+        /// </summary>
         public FileLinePositionSpan Span { get; }
 
         public static bool operator ==(IdAndPosition left, IdAndPosition right)
@@ -39,6 +45,7 @@ namespace Gu.Roslyn.Asserts.Internals
             return new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span);
         }
 
+        /// <inheritdoc />
         public bool Equals(IdAndPosition other)
         {
             bool EndPositionsEquals(FileLinePositionSpan x, FileLinePositionSpan y)
@@ -58,6 +65,7 @@ namespace Gu.Roslyn.Asserts.Internals
                    EndPositionsEquals(this.Span, other.Span);
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (object.ReferenceEquals(null, obj))
@@ -68,6 +76,7 @@ namespace Gu.Roslyn.Asserts.Internals
             return obj is IdAndPosition && this.Equals((IdAndPosition)obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -78,6 +87,10 @@ namespace Gu.Roslyn.Asserts.Internals
             }
         }
 
+        /// <summary>
+        /// Writes the diagnostic and the offending code.
+        /// </summary>
+        /// <returns>A string for use in assert exception</returns>
         internal string ToString(IReadOnlyList<string> sources)
         {
             var path = this.Span.Path;

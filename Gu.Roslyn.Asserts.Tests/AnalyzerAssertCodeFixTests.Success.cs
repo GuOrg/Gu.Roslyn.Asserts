@@ -1,7 +1,7 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System.Collections.Immutable;
+    using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
@@ -11,6 +11,12 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public class Success
         {
+            [TearDown]
+            public void TearDown()
+            {
+                AnalyzerAssert.MetadataReference.Clear();
+            }
+
             [Test]
             public void SingleClassOneErrorCorrectFix()
             {
@@ -31,13 +37,13 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
             }
 
             [Test]
             public void SingleClassCodeFixOnlyCorrectFix()
             {
-                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
                 var code = @"
 namespace RoslynSandbox
 {
@@ -58,13 +64,13 @@ namespace RoslynSandbox
     {
     }
 }";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
             }
 
             [Test]
             public void TwoClassesCodeFixOnlyCorrectFix()
             {
-                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
                 var code1 = @"
 namespace RoslynSandbox
 {
@@ -93,6 +99,7 @@ namespace RoslynSandbox
     {
     }
 }";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, fixedCode);
             }
@@ -126,7 +133,30 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode);
+            }
+
+            [Test]
+            public void WhenFixIntroducesCompilerErrorsThatAreAccepted()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    ↓class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}";
+                AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode, AllowCompilationErrors.Yes);
             }
         }
     }

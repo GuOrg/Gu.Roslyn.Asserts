@@ -1,7 +1,9 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -9,6 +11,12 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public class Fail
         {
+            [TearDown]
+            public void TearDown()
+            {
+                AnalyzerAssert.MetadataReference.Clear();
+            }
+
             [Test]
             public void SingleClassTwoIndicatedErrors()
             {
@@ -151,6 +159,63 @@ namespace RoslynSandbox
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n";
                 Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void WhenFixIntroducesCompilerErrors()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    ↓class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
+                var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
+                               "CS0518 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "CS0518 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0246 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS1729 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void WhenFixIsCorrectWitMetaDataReferences()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    ↓class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode);
             }
 
             [Test]

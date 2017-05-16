@@ -42,5 +42,27 @@
                 }
             }
         }
+
+        private static async Task AssertNoCompilerErrorsAsync(CodeFixProvider codeFix, Solution fixedSolution)
+        {
+            var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
+            var introducedDiagnostics = diagnostics
+                .SelectMany(x => x)
+                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                .ToArray();
+            if (introducedDiagnostics.Any())
+            {
+                var error = StringBuilderPool.Borrow();
+                error.AppendLine(
+                    $"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                foreach (var introducedDiagnostic in introducedDiagnostics)
+                {
+                    var errorInfo = await introducedDiagnostic.ToStringAsync(fixedSolution).ConfigureAwait(false);
+                    error.AppendLine($"{errorInfo}");
+                }
+
+                throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
+            }
+        }
     }
 }

@@ -53,6 +53,7 @@
     <Compile Include="AnalyzerAssertDiagnosticsTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoFixTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoFixTests.Success.cs" />
+    <Compile Include="Analyzers\ClassMustHaveEventAnalyzer.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
     <Compile Include="AnalyzeTests.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="CodeFixes\CustomFixAllProviders.cs" />
     <Compile Include="CodeFixes\FixAllContextHelper.cs" />
     <Compile Include="CodeFixes\DontUseUnderscoreCodeFixProvider.cs" />
+    <Compile Include="CodeFixes\InsertEventFixProvider.cs" />
     <Compile Include="CodeFixes\NoCodeFixProvider.cs" />
     <Compile Include="CodeFixes\RemoveUnusedFixProvider.cs" />
     <Compile Include="CodeFixes\RenameHelper.cs" />

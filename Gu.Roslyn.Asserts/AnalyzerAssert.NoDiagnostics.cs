@@ -55,7 +55,7 @@
             }
             catch (AggregateException e)
             {
-                throw Fail.CreateException(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0]);
             }
         }
 
@@ -117,7 +117,7 @@
             }
             catch (AggregateException e)
             {
-                throw Fail.CreateException(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0]);
             }
         }
 

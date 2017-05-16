@@ -21,11 +21,12 @@
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode);
+            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode, allowCompilationErrors);
         }
 
         /// <summary>
@@ -37,10 +38,11 @@
         /// <param name="id">The id of the expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode);
+            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode, allowCompilationErrors);
         }
 
         /// <summary>
@@ -52,11 +54,12 @@
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated, fixedCode);
+            CodeFix(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated, fixedCode, allowCompilationErrors);
         }
 
         /// <summary>
@@ -68,10 +71,11 @@
         /// <param name="id">The id of the expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode);
+            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode, allowCompilationErrors);
         }
 
         /// <summary>
@@ -83,15 +87,16 @@
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             try
             {
-                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference).Wait();
+                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference, allowCompilationErrors).Wait();
             }
             catch (AggregateException e)
             {
-                throw Fail.CreateException(e.InnerExceptions[0].Message);
+                throw Fail.CreateException(e.InnerExceptions[0]);
             }
         }
 
@@ -105,8 +110,9 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -149,17 +155,9 @@
                 CancellationToken.None).ConfigureAwait(false);
             CodeAssert.AreEqual(fixedCode, fixedSource);
 
-            var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
-            if (diagnostics.SelectMany(x => x).Any(x => x.Severity == DiagnosticSeverity.Error))
+            if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                var error = StringBuilderPool.Borrow();
-                error.AppendLine($"{codeFix} introduced syntax error.");
-                foreach (var introducedDiagnostic in diagnostics.SelectMany(x => x).Where(d => d.Severity == DiagnosticSeverity.Error))
-                {
-                    error.AppendLine($"{introducedDiagnostic.ToString(new[] { fixedCode })}");
-                }
-
-                throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
+                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
         }
     }

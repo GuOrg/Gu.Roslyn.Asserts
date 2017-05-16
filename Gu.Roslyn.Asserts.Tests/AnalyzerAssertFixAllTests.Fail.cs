@@ -142,6 +142,36 @@ namespace RoslynSandbox
                                "Actual:   SA1309 at line 5 and character 29 in file Foo.cs |        private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public void WhenFixIntroducesCompilerErrors()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    ↓class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
+                var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
+                               "CS0518 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "CS0518 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0246 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS1729 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }
