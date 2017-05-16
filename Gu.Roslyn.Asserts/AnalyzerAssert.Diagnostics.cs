@@ -112,7 +112,17 @@
                 error.AppendLine(expected.ToString(expectedDiagnosticsAndSources.CleanedSources));
             }
 
+            if (actuals.Length == 0)
+            {
+                error.AppendLine("Actual:   <no errors>");
+            }
+
             var unmatchedActuals = actuals.Except(expecteds).ToArray();
+            if (actuals.Length > 0 && unmatchedActuals.Length == 0)
+            {
+                error.AppendLine("Actual:   <missing>");
+            }
+
             for (var i = 0; i < unmatchedActuals.Length; i++)
             {
                 error.Append(i == 0 ? "Actual:   " : "            ");

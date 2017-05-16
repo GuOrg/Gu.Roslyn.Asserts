@@ -67,7 +67,8 @@ namespace RoslynSandbox
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected: SA1309 at line 3 and character 4 in file Foo.cs |    ↓class Foo\r\n";
+                               "Expected: SA1309 at line 3 and character 4 in file Foo.cs |    ↓class Foo\r\n" +
+                               "Actual:   <no errors>\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -112,7 +113,8 @@ namespace RoslynSandbox
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code1, code2));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected: SA1309 at line 3 and character 4 in file Code1.cs |    ↓class Code1\r\n";
+                               "Expected: SA1309 at line 3 and character 4 in file Code1.cs |    ↓class Code1\r\n" +
+                               "Actual:   <no errors>\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
