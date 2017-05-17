@@ -48,7 +48,7 @@
             var actual = diagnostic.GetMessage(CultureInfo.InvariantCulture);
             if (actual != expected)
             {
-                var message = $"Expected and diagnostic message for the diagnostic {diagnostic} does not match\r\n" +
+                var message = $"Expected and actual diagnostic message for the diagnostic {diagnostic} does not match\r\n" +
                               $"Expected: {expected}\r\n" +
                               $"Actual:   {actual}\r\n";
                 throw Fail.CreateException(message);
