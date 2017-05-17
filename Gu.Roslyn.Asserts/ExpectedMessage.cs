@@ -46,13 +46,7 @@
                            string.Format(CultureInfo.InvariantCulture, diagnostic.Descriptor.MessageFormat.ToString(CultureInfo.InvariantCulture), this.Args.ToArray());
 
             var actual = diagnostic.GetMessage(CultureInfo.InvariantCulture);
-            if (actual != expected)
-            {
-                var message = $"Expected and actual diagnostic message for the diagnostic {diagnostic} does not match\r\n" +
-                              $"Expected: {expected}\r\n" +
-                              $"Actual:   {actual}\r\n";
-                throw Fail.CreateException(message);
-            }
+            TextAssert.AreEqual(expected, actual, $"Expected and actual diagnostic message for the diagnostic {diagnostic} does not match");
         }
     }
 }

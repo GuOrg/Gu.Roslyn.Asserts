@@ -75,6 +75,7 @@
     <Compile Include="AnalyzerAssertCodeFixTests.Fail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sandbox.cs" />
+    <Compile Include="TextAssertTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

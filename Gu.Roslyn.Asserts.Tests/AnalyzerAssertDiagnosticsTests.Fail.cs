@@ -21,9 +21,11 @@ namespace RoslynSandbox
     }
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("WRONG"), code));
-                var expected = "Expected and diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                var expected = "Expected and actual diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                               "Mismatch on line 1\r\n" +
                                "Expected: WRONG\r\n" +
-                               "Actual:   Field \'_value\' must not begin with an underscore\r\n";
+                               "Actual:   Field \'_value\' must not begin with an underscore\r\n" +
+                               "          ^\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -39,9 +41,11 @@ namespace RoslynSandbox
     }
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create(new[] { "WRONG" }), code));
-                var expected = "Expected and diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                var expected = "Expected and actual diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                               "Mismatch on line 1\r\n" +
                                "Expected: Field \'WRONG\' must not begin with an underscore\r\n" +
-                               "Actual:   Field \'_value\' must not begin with an underscore\r\n";
+                               "Actual:   Field \'_value\' must not begin with an underscore\r\n" +
+                               "                 ^\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
