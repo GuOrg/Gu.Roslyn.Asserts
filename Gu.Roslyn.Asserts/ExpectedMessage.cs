@@ -42,7 +42,7 @@
         /// </summary>
         public void AssertIsMatch(Diagnostic diagnostic)
         {
-            var expected = this.Message ?? 
+            var expected = this.Message ??
                            string.Format(CultureInfo.InvariantCulture, diagnostic.Descriptor.MessageFormat.ToString(CultureInfo.InvariantCulture), this.Args.ToArray());
 
             var actual = diagnostic.GetMessage(CultureInfo.InvariantCulture);
