@@ -21,7 +21,7 @@ private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params 
 
 ```c#
 [Test]
-public void SingleClassNoError()
+public void TestThatNoDiagnosticsAreReportedForTheCode()
 {
     var code = @"
 namespace Gu.Roslyn.Asserts.Tests
@@ -54,7 +54,7 @@ namespace RoslynSandbox
 Indicate error position with ↓
 ```c#
 [Test]
-public void SingleClassOneErrorGeneric()
+public void JustCheckPositionAndDiagnosticId()
 {
     var code = @"
 namespace RoslynSandbox
@@ -66,13 +66,41 @@ namespace RoslynSandbox
 }";
     AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
 }
+
+[Test]
+public void CheckMessageAlso()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("Field '_value' must not begin with an underscore"), code);
+}
+
+[Test]
+public void CheckMessageViaArgsPassedToFormatString()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create(new[] { "_value" }), code);
+}
 ```
 
 ## Diagnostic and code fix
 
 ```c#
 [Test]
-public void SingleClassOneErrorCorrectFix()
+public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
 {
     var code = @"
 namespace RoslynSandbox
@@ -99,7 +127,7 @@ When there are many isses that will be fixed:
 
 ```c#
 [Test]
-public void SingleClassOneErrorCorrectFix()
+public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
 {
     var code = @"
 namespace RoslynSandbox
@@ -129,7 +157,7 @@ namespace RoslynSandbox
 
 ```c#
 [Test]
-public void SingleClassCodeFixOnlyCorrectFix()
+public void TestThatCodeFixProducesExpectedCode()
 {
     AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
     var code = @"
@@ -160,7 +188,7 @@ namespace RoslynSandbox
 
 ```c#
 [Test]
-public void SingleClassOneErrorCorrectFix()
+public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixDoesNothing()
 {
     var code = @"
 namespace RoslynSandbox
