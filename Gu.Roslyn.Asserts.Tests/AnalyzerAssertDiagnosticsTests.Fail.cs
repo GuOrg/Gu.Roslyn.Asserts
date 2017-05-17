@@ -10,6 +10,42 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Fail
         {
             [Test]
+            public void MessageDoesNotMatch()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private int ↓_value;
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("WRONG"), code));
+                var expected = "Expected and diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                               "Expected: WRONG\r\n" +
+                               "Actual:   Field \'_value\' must not begin with an underscore\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void MessageArgsDoesNotMatch()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private int ↓_value;
+    }
+}";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create(new[] { "WRONG" }), code));
+                var expected = "Expected and diagnostic message for the diagnostic Foo.cs(6,21): warning SA1309: Field \'_value\' must not begin with an underscore does not match\r\n" +
+                               "Expected: Field \'WRONG\' must not begin with an underscore\r\n" +
+                               "Actual:   Field \'_value\' must not begin with an underscore\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void NoErrorIndicatedGeneric()
             {
                 var code = @"

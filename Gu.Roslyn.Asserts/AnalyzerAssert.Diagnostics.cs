@@ -20,7 +20,19 @@
         public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Diagnostics(new TAnalyzer(), codeWithErrorsIndicated);
+            Diagnostics(new TAnalyzer(), null, codeWithErrorsIndicated);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics<TAnalyzer>(ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            Diagnostics(new TAnalyzer(), expectedMessage, codeWithErrorsIndicated);
         }
 
         /// <summary>
@@ -30,7 +42,18 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), codeWithErrorsIndicated);
+            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), null, codeWithErrorsIndicated);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(Type analyzerType, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
+        {
+            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedMessage, codeWithErrorsIndicated);
         }
 
         /// <summary>
@@ -40,7 +63,18 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated);
+            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated, null);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
+        {
+            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated, expectedMessage);
         }
 
         /// <summary>
@@ -48,11 +82,12 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
             try
             {
-                DiagnosticsAsync(analyzer, codeWithErrorsIndicated).Wait();
+                DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).Wait();
             }
             catch (AggregateException e)
             {
@@ -65,10 +100,11 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
+        public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReference);
+            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReference, expectedMessage);
         }
 
         /// <summary>
@@ -77,8 +113,9 @@
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
+        /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences, ExpectedMessage expectedMessage = null)
         {
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
@@ -98,6 +135,14 @@
 
             if (expecteds.SetEquals(actuals))
             {
+                if (expectedMessage != null)
+                {
+                    foreach (var actual in data.Diagnostics.SelectMany(x => x))
+                    {
+                        expectedMessage.AssertIsMatch(actual);
+                    }
+                }
+
                 return new DiagnosticsMetaData(codeWithErrorsIndicated, expectedDiagnosticsAndSources.CleanedSources, expectedDiagnosticsAndSources.ExpectedDiagnostics, data.Diagnostics, data.Solution);
             }
 
