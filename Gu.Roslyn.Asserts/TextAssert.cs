@@ -97,10 +97,10 @@ namespace Gu.Roslyn.Asserts
             if (messageHeader != null)
             {
                 throw Fail.CreateException($"{messageHeader}{Environment.NewLine}" +
-                                           $"Mismatch at end of file {CodeReader.FileName(expected)}");
+                                           $"Mismatch at end of text.");
             }
 
-            throw Fail.CreateException($"Mismatch at end of file {CodeReader.FileName(expected)}");
+            throw Fail.CreateException($"Mismatch at end of text.");
         }
     }
 }
