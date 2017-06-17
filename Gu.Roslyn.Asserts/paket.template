@@ -14,7 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 dependencies
-  Microsoft.CodeAnalysis.CSharp.Workspaces 2.1.0
+  Microsoft.CodeAnalysis.CSharp.Workspaces 2.2.0
 
 files
   ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.dll ==> lib/netstandard1.3
