@@ -1,6 +1,9 @@
 ﻿namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Reflection;
 
     /// <summary>
     /// Helper for throwing assert exceptions.
@@ -28,16 +31,13 @@
         {
             if (createFromText == null)
             {
-                var type = Type.GetType(
-                    "NUnit.Framework.AssertionException, nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb",
-                    throwOnError: false);
-                if (type == null)
+                if (TryGetExceptionType(out Type type))
                 {
-                    createFromText = text => new AssertException(text);
+                    createFromText = text => (Exception)Activator.CreateInstance(type, text);
                 }
                 else
                 {
-                    createFromText = text => (Exception)Activator.CreateInstance(type, text);
+                    createFromText = text => new AssertException(text);
                 }
             }
 
@@ -53,20 +53,30 @@
         {
             if (createFromException == null)
             {
-                var type = Type.GetType(
-                    "NUnit.Framework.AssertionException, nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb",
-                    throwOnError: false);
-                if (type == null)
+                if (TryGetExceptionType(out Type type))
                 {
-                    createFromException = exception => new AssertException(exception.Message, exception);
+                    createFromException = exception => (Exception)Activator.CreateInstance(type, exception.Message, exception);
                 }
                 else
                 {
-                    createFromException = exception => (Exception)Activator.CreateInstance(type, exception.Message, exception);
+                    createFromException = exception => new AssertException(exception.Message, exception);
                 }
             }
 
             return createFromException(innerException);
+        }
+
+        private static bool TryGetExceptionType(out Type type)
+        {
+            type = null;
+            var nunit = Path.Combine(AppContext.BaseDirectory, "nunit.framework.dll");
+            if (File.Exists(nunit))
+            {
+                var assembly = Assembly.Load(new AssemblyName($"nunit.framework, Version={FileVersionInfo.GetVersionInfo(nunit).ProductVersion}, Culture=neutral, PublicKeyToken=2638cd05610744eb"));
+                type = assembly.GetType("NUnit.Framework.AssertionException");
+            }
+
+            return type != null;
         }
     }
 }
