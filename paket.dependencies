@@ -1,9 +1,9 @@
 source https://www.nuget.org/api/v2/
-framework >= net461
+framework: netstandard1.3, net461
 redirects: on
 
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.1.0
-nuget NUnit 3.6.1
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.2.0
+nuget NUnit
 
 group Analyzers
   source http://www.nuget.org/api/v2/
