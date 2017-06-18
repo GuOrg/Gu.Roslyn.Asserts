@@ -63,7 +63,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated, null);
+            Diagnostics(analyzer, codeWithErrorsIndicated, null);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, (IReadOnlyList<string>)codeWithErrorsIndicated, expectedMessage);
+            Diagnostics(analyzer, codeWithErrorsIndicated, expectedMessage);
         }
 
         /// <summary>

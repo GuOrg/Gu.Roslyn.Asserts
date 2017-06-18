@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable AssignNullToNotNullAttribute
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;

@@ -50,7 +50,7 @@ namespace RoslynSandbox
             [Test]
             public void FixDoesNotMatchAnalyzer()
             {
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>((string)null, (string)null));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(null, (string)null));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309}";

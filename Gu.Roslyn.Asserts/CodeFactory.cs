@@ -6,6 +6,7 @@ namespace Gu.Roslyn.Asserts
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -186,23 +187,14 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindFileInParentDirectory(DirectoryInfo directory, string fileName, out FileInfo result)
         {
-            var files = directory.EnumerateFiles(fileName);
-            var count = files.Count();
-            if (count == 0)
+            if (directory.EnumerateFiles(fileName).TryGetSingle(out result))
             {
-                if (directory.Parent != null)
-                {
-                    return TryFindFileInParentDirectory(directory.Parent, fileName, out result);
-                }
-
-                result = null;
-                return false;
+                return true;
             }
 
-            if (count == 1)
+            if (directory.Parent != null)
             {
-                result = files.Single();
-                return true;
+                return TryFindFileInParentDirectory(directory.Parent, fileName, out result);
             }
 
             result = null;
@@ -226,7 +218,7 @@ namespace Gu.Roslyn.Asserts
             if (compiles.Length == 0)
             {
                 var root = doc.Root;
-                if (root.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
+                if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
                 {
                     foreach (var csFile in projectFile.Directory
                                                       .EnumerateFiles("*.cs", SearchOption.AllDirectories)
@@ -243,7 +235,13 @@ namespace Gu.Roslyn.Asserts
 
             foreach (var compile in compiles)
             {
-                var csFile = Path.Combine(directory, compile.Attribute("Include").Value);
+                var include = compile.Attribute("Include")?.Value;
+                if (include == null)
+                {
+                    throw new InvalidOperationException("Parsing failed, no Include found.");
+                }
+
+                var csFile = Path.Combine(directory, include);
                 yield return new FileInfo(csFile);
             }
         }

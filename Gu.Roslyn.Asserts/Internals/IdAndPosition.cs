@@ -79,7 +79,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (object.ReferenceEquals(null, obj))
+            if (ReferenceEquals(null, obj))
             {
                 return false;
             }

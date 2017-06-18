@@ -10,9 +10,9 @@ namespace Gu.Roslyn.Asserts.Internals
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
-    /// Helper class for applying code fixes
-    /// </summary>
-    internal static class Fix
+        /// Helper class for applying code fixes
+        /// </summary>
+        internal static class Fix
     {
         /// <summary>
         /// Fix the solution by applying the code fix.
