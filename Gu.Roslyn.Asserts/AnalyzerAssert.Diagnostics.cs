@@ -85,14 +85,7 @@
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            try
-            {
-                DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).GetAwaiter().GetResult();
-            }
-            catch (AggregateException e)
-            {
-                throw Fail.CreateException(e.InnerExceptions[0]);
-            }
+            DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).GetAwaiter().GetResult();
         }
 
         /// <summary>

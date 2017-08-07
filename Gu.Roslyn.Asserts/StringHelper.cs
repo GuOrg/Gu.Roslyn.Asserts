@@ -1,5 +1,7 @@
 namespace Gu.Roslyn.Asserts
 {
+    using Gu.Roslyn.Asserts.Internals;
+
     /// <summary>
     /// Helper with methods for manipulating strings.
     /// </summary>
@@ -16,7 +18,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (!text.Contains(oldValue))
             {
-                throw new AssertException($"AssertReplace failed, expected {oldValue} to be in {text}");
+                throw Fail.CreateException($"AssertReplace failed, expected {oldValue} to be in {text}");
             }
 
             return text.Replace(oldValue, newValue);

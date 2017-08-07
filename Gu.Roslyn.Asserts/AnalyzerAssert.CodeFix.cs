@@ -90,14 +90,7 @@
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            try
-            {
-                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference, allowCompilationErrors).GetAwaiter().GetResult();
-            }
-            catch (AggregateException e)
-            {
-                throw Fail.CreateException(e.InnerExceptions[0]);
-            }
+            CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference, allowCompilationErrors).GetAwaiter().GetResult();
         }
 
         /// <summary>

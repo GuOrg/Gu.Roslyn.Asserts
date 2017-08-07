@@ -124,7 +124,7 @@
 
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw new AssertException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                throw Fail.CreateException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
             }
         }
     }

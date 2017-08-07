@@ -91,14 +91,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            try
-            {
-                FixAllAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, metadataReference, allowCompilationErrors).GetAwaiter().GetResult();
-            }
-            catch (AggregateException e)
-            {
-                throw Fail.CreateException(e.InnerExceptions[0]);
-            }
+            FixAllAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, metadataReference, allowCompilationErrors).GetAwaiter().GetResult();
         }
 
         /// <summary>
