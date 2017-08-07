@@ -113,7 +113,7 @@
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
-                throw Fail.CreateException("Expected code to have at least one error position indicated with '↓'");
+                throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
             }
 
             var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
@@ -167,7 +167,7 @@
                 error.AppendLine(actual.ToString(expectedDiagnosticsAndSources.CleanedSources));
             }
 
-            throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
+            throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
         }
 
         /// <summary>

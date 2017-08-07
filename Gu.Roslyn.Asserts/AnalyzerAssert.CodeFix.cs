@@ -111,7 +111,7 @@
             {
                 var message = $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
                               $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
@@ -124,7 +124,7 @@
                 var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
 
             if (fixableDiagnostics.Length > 1)
@@ -133,14 +133,14 @@
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
                               $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
 
             var diagnostic = fixableDiagnostics.Single();
             var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, diagnostic, CancellationToken.None).ConfigureAwait(false);
             if (ReferenceEquals(data.Solution, fixedSolution))
             {
-                throw Fail.CreateException($"{codeFix} did not change any document.");
+                throw AssertException.Create($"{codeFix} did not change any document.");
             }
 
             var fixedSource = await CodeReader.GetStringFromDocumentAsync(

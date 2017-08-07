@@ -112,7 +112,7 @@ namespace Gu.Roslyn.Asserts
             {
                 var message = $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
                               $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
@@ -126,7 +126,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
 
             var fixedSolution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, CancellationToken.None).ConfigureAwait(false);

@@ -27,7 +27,7 @@
                 var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw Fail.CreateException(message);
+                throw AssertException.Create(message);
             }
         }
 
@@ -61,7 +61,7 @@
                     error.AppendLine($"{errorInfo}");
                 }
 
-                throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(error));
+                throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
             }
         }
     }

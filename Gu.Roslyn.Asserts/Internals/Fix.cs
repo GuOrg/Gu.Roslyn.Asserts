@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Internals
 
             if (actions.Count > 1)
             {
-                throw Fail.CreateException("Expected only one action");
+                throw AssertException.Create("Expected only one action");
             }
 
             var operations = await actions[0].GetOperationsAsync(cancellationToken)

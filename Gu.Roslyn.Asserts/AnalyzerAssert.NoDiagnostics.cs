@@ -5,7 +5,6 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -66,7 +65,7 @@
 
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw Fail.CreateException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
             }
         }
 
@@ -124,7 +123,7 @@
 
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw Fail.CreateException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
             }
         }
     }

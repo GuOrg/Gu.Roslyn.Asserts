@@ -67,7 +67,7 @@ namespace Gu.Roslyn.Asserts
                     errorBuilder.AppendLine($"Expected: {expectedLine}");
                     errorBuilder.AppendLine($"Actual:   {actualLine}");
                     errorBuilder.AppendLine($"          {new string(' ', diffPos)}^");
-                    throw Fail.CreateException(StringBuilderPool.ReturnAndGetText(errorBuilder));
+                    throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
                 }
 
                 if (expected[pos] == '\n')
@@ -96,11 +96,11 @@ namespace Gu.Roslyn.Asserts
 
             if (messageHeader != null)
             {
-                throw Fail.CreateException($"{messageHeader}{Environment.NewLine}" +
+                throw AssertException.Create($"{messageHeader}{Environment.NewLine}" +
                                            $"Mismatch at end of file {CodeReader.FileName(expected)}");
             }
 
-            throw Fail.CreateException($"Mismatch at end of file {CodeReader.FileName(expected)}");
+            throw AssertException.Create($"Mismatch at end of file {CodeReader.FileName(expected)}");
         }
     }
 }

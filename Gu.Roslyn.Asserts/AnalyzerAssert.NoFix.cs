@@ -1,6 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -74,7 +73,7 @@
                                          .ToArray();
             if (fixableDiagnostics.Length != 1)
             {
-                throw Fail.CreateException("Expected code to have exactly one fixable diagnostic.");
+                throw AssertException.Create("Expected code to have exactly one fixable diagnostic.");
             }
 
             var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), CancellationToken.None)
