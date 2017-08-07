@@ -54,7 +54,7 @@
         {
             try
             {
-                NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReference).Wait();
+                NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReference).GetAwaiter().GetResult();
             }
             catch (AggregateException e)
             {

@@ -87,7 +87,7 @@
         {
             try
             {
-                DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).Wait();
+                DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).GetAwaiter().GetResult();
             }
             catch (AggregateException e)
             {

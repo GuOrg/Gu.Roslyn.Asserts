@@ -93,7 +93,7 @@ namespace Gu.Roslyn.Asserts
         {
             try
             {
-                FixAllAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, metadataReference, allowCompilationErrors).Wait();
+                FixAllAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, metadataReference, allowCompilationErrors).GetAwaiter().GetResult();
             }
             catch (AggregateException e)
             {

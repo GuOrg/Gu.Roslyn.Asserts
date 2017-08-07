@@ -49,14 +49,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            try
-            {
-                NoDiagnosticsAsync(analyzer, code, MetadataReference).Wait();
-            }
-            catch (AggregateException e)
-            {
-                throw Fail.CreateException(e.InnerExceptions[0]);
-            }
+            NoDiagnosticsAsync(analyzer, code, MetadataReference).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -73,7 +66,7 @@
 
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw new AssertException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                throw Fail.CreateException(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
             }
         }
 
@@ -111,14 +104,7 @@
         /// </param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code)
         {
-            try
-            {
-                NoDiagnosticsAsync(analyzer, code, MetadataReference).Wait();
-            }
-            catch (AggregateException e)
-            {
-                throw Fail.CreateException(e.InnerExceptions[0]);
-            }
+            NoDiagnosticsAsync(analyzer, code, MetadataReference).GetAwaiter().GetResult();
         }
 
         /// <summary>

@@ -92,7 +92,7 @@
         {
             try
             {
-                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference, allowCompilationErrors).Wait();
+                CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, MetadataReference, allowCompilationErrors).GetAwaiter().GetResult();
             }
             catch (AggregateException e)
             {
