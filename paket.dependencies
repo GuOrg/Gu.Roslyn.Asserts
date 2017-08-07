@@ -4,6 +4,7 @@ redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.2.0
 nuget NUnit
+nuget xunit
 
 group Analyzers
   source http://www.nuget.org/api/v2/

@@ -74,6 +74,13 @@ namespace Gu.Roslyn.Asserts
                     var assembly = Assembly.Load(new AssemblyName($"nunit.framework, Version={FileVersionInfo.GetVersionInfo(nunit).ProductVersion}, Culture=neutral, PublicKeyToken=2638cd05610744eb"));
                     exceptionType = assembly.GetType("NUnit.Framework.AssertionException");
                 }
+
+                var xunit = Path.Combine(AppContext.BaseDirectory, "xunit.assert.dll");
+                if (File.Exists(xunit))
+                {
+                    var assembly = Assembly.Load(new AssemblyName($"xunit.assert, Version={FileVersionInfo.GetVersionInfo(xunit).ProductVersion}, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"));
+                    exceptionType = assembly.GetType("Xunit.Sdk.XunitException");
+                }
                 else
                 {
                     exceptionType = typeof(AssertException);
