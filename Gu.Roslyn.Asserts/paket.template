@@ -18,5 +18,7 @@ dependencies
 
 files
   ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.dll ==> lib/netstandard1.3
-  ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.xml ==> lib/netstandard1.3 
+  ../Gu.Roslyn.Asserts/bin/Release/netstandard1.3/Gu.Roslyn.Asserts.xml ==> lib/netstandard1.3
+  ../Gu.Roslyn.Asserts/bin/Release/net46/Gu.Roslyn.Asserts.dll ==> lib/net46
+  ../Gu.Roslyn.Asserts/bin/Release/net46/Gu.Roslyn.Asserts.xml ==> lib/net46 
 
