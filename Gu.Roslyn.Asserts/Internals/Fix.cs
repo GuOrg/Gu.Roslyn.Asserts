@@ -20,9 +20,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="codeFix">The code fix.</param>
         /// <param name="diagnostic">The diagnostic.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, CancellationToken cancellationToken)
+        internal static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, string fixTitle, CancellationToken cancellationToken)
         {
             var actions = new List<CodeAction>();
             var document = solution.GetDocument(diagnostic.Location.SourceTree);
@@ -33,6 +34,23 @@ namespace Gu.Roslyn.Asserts.Internals
                 (a, d) => actions.Add(a),
                 CancellationToken.None);
             await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            if (fixTitle != null)
+            {
+                if (actions.All(x => x.Title != fixTitle))
+                {
+                    var errorBuilder = StringBuilderPool.Borrow();
+                    errorBuilder.AppendLine($"Did not find a code fix with title {fixTitle}.").AppendLine("Found:");
+                    foreach (var codeAction in actions)
+                    {
+                        errorBuilder.AppendLine(codeAction.Title);
+                    }
+
+                    throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
+                }
+
+                actions.RemoveAll(x => x.Title != fixTitle);
+            }
+
             if (actions.Count == 0)
             {
                 return solution;
@@ -77,7 +95,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, CancellationToken cancellationToken)
+        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, string fixTitle, CancellationToken cancellationToken)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, codeFix).ConfigureAwait(false);
             var fixedSolution = solution;
@@ -90,7 +108,7 @@ namespace Gu.Roslyn.Asserts.Internals
                     return fixedSolution;
                 }
 
-                fixedSolution = await ApplyAsync(fixedSolution, codeFix, fixable[0], cancellationToken).ConfigureAwait(false);
+                fixedSolution = await ApplyAsync(fixedSolution, codeFix, fixable[0], fixTitle, cancellationToken).ConfigureAwait(false);
                 fixable = await Analyze.GetFixableDiagnosticsAsync(fixedSolution, analyzer, codeFix).ConfigureAwait(false);
             }
             while (fixable.Count < count);

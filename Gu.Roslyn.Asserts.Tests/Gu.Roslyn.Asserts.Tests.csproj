@@ -61,6 +61,7 @@
     <Compile Include="CodeFactoryTests.cs" />
     <Compile Include="CodeFixes\CustomBatchFixAllProvider.cs" />
     <Compile Include="CodeFixes\CustomFixAllProviders.cs" />
+    <Compile Include="CodeFixes\DontUseUnderscoreManyCodeFixProvider.cs" />
     <Compile Include="CodeFixes\FixAllContextHelper.cs" />
     <Compile Include="CodeFixes\DontUseUnderscoreCodeFixProvider.cs" />
     <Compile Include="CodeFixes\InsertEventFixProvider.cs" />

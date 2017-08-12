@@ -194,7 +194,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-                AnalyzerAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode, AllowCompilationErrors.Yes);
+                AnalyzerAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode, allowCompilationErrors: AllowCompilationErrors.Yes);
             }
         }
     }

@@ -76,7 +76,7 @@
                 throw AssertException.Create("Expected code to have exactly one fixable diagnostic.");
             }
 
-            var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), CancellationToken.None)
+            var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), null, CancellationToken.None)
                                          .ConfigureAwait(false);
             await AreEqualAsync(data.Sources, fixedSolution, "Expected the code fix to not change any document.").ConfigureAwait(false);
         }
