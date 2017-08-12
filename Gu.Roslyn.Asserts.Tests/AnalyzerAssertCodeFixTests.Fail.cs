@@ -192,7 +192,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIsCorrectWitMetaDataReferences()
+            public void WhenFixIsCorrectWithMetaDataReferences()
             {
                 var code = @"
 namespace RoslynSandbox

@@ -1,5 +1,4 @@
 source https://www.nuget.org/api/v2/
-framework: netstandard1.3, net461
 redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.2.0
