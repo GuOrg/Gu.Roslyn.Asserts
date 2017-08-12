@@ -53,6 +53,7 @@
     <Compile Include="AnalyzerAssertDiagnosticsTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoFixTests.Fail.cs" />
     <Compile Include="AnalyzerAssertNoFixTests.Success.cs" />
+    <Compile Include="AnalyzerAssertTests.cs" />
     <Compile Include="Analyzers\ClassMustHaveEventAnalyzer.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />

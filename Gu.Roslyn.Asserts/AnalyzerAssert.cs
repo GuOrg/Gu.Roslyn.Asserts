@@ -20,6 +20,15 @@
         /// </summary>
         public static readonly List<MetadataReference> MetadataReferences = MetaDataReferencesAttribute.GetMetaDataReferences();
 
+        /// <summary>
+        /// Resets <see cref="MetadataReferences"/> to <see cref="MetaDataReferencesAttribute.GetMetaDataReferences()"/>
+        /// </summary>
+        public static void ResetMetadataReferences()
+        {
+            MetadataReferences.Clear();
+            MetadataReferences.AddRange(MetaDataReferencesAttribute.GetMetaDataReferences());
+        }
+
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())

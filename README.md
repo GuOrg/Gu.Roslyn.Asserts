@@ -9,17 +9,6 @@
 -->
 
 Asserts for testing Roslyn analyzers.
-As of now MetaDataReferences must be added to the static field `AnalyzerAssert.References`, or passed explicitly not super nice.
-A halper like this can be used.
-```c#
-private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
-{
-    return types.Select(type => type.GetTypeInfo().Assembly)
-                .Distinct()
-                .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
-                .ToArray();
-}
-```
 
 # Samples
 
@@ -233,6 +222,39 @@ namespace RoslynSandbox
 }";
 
     AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
+}
+```
+
+# MetaDataReferences
+
+When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
+Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
+
+## MetaDataReferencesAttribute
+
+```c#
+[assembly:MetaDataReferences(
+    typeof(object), // mscorlib
+    typeof(System.Diagnostics.Debug), // system
+    typeof(Enumerable))] // System.Core
+```
+
+Calling `AnalyzerAssert.ResetMetadataReferences()` resets `AnalyzerAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
+
+## Exlicit set AnalyzerAssert.MetadataReferences
+
+```c#
+AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+```
+
+A helper like this can be used.
+```c#
+private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
+{
+    return types.Select(type => type.GetTypeInfo().Assembly)
+                .Distinct()
+                .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
+                .ToArray();
 }
 ```
 

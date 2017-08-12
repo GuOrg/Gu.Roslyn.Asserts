@@ -12,6 +12,8 @@
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MetaDataReferencesAttribute : Attribute
     {
+        private static IReadOnlyList<MetadataReference> metadataReferences;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaDataReferencesAttribute"/> class.
         /// </summary>
@@ -54,15 +56,22 @@
         public static List<MetadataReference> GetMetaDataReferences()
         {
 #if NET46
+            if (metadataReferences != null)
+            {
+                return new List<MetadataReference>(metadataReferences);
+            }
+
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 var attribute = (MetaDataReferencesAttribute)GetCustomAttribute(assembly, typeof(MetaDataReferencesAttribute));
                 if (attribute != null)
                 {
-                    return new List<MetadataReference>(attribute.MetadataReferences);
+                    metadataReferences = attribute.MetadataReferences;
+                    return new List<MetadataReference>(metadataReferences);
                 }
             }
 
+            metadataReferences = new MetadataReference[0];
             return new List<MetadataReference>();
 #else
             return new List<MetadataReference>();
