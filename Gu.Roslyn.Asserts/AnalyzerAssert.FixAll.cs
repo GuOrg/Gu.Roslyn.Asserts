@@ -147,7 +147,7 @@ namespace Gu.Roslyn.Asserts
             {
                 foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
                 {
-                    fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, scope, CancellationToken.None).ConfigureAwait(false);
+                    fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, fixTitle, scope, CancellationToken.None).ConfigureAwait(false);
                     await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
                     if (allowCompilationErrors == AllowCompilationErrors.No)
                     {
