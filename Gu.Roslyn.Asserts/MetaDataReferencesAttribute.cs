@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
     using Microsoft.CodeAnalysis;
@@ -12,7 +13,9 @@
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MetadataReferencesAttribute : Attribute
     {
+#pragma warning disable 169
         private static IReadOnlyList<MetadataReference> metadataReferences;
+#pragma warning restore 169
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
@@ -27,6 +30,7 @@
         /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
         /// </summary>
         /// <param name="assemblies">Specify assemblies for which metadata references will be included.</param>
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         public MetadataReferencesAttribute(params Assembly[] assemblies)
 #if NET46
             // ReSharper disable once CoVariantArrayConversion

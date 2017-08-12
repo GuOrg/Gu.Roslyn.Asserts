@@ -28,7 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.XUnit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute\Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.XUnit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute\Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssertExceptionTests.cs" />

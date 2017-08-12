@@ -1,7 +1,7 @@
-using Gu.Roslyn.Asserts;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Gu.Roslyn.Asserts;
 
 [assembly: AssemblyTitle("Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute")]
 [assembly: AssemblyDescription("")]
