@@ -9,7 +9,7 @@
 -->
 
 Asserts for testing Roslyn analyzers.
-As of now MetaDataReferences must be added to the static field `AnalyzerAssert.References` not super nice.
+As of now MetaDataReferences must be added to the static field `AnalyzerAssert.References`, or passed explicitly not super nice.
 A halper like this can be used.
 ```c#
 private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
@@ -126,6 +126,33 @@ namespace RoslynSandbox
     }
 }";
     AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+}
+```
+
+With explicit title for the fix to apply. Useful when there are many candidate fixes.
+
+```c#
+[Test]
+public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+    AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode, "Rename to value");
 }
 ```
 
