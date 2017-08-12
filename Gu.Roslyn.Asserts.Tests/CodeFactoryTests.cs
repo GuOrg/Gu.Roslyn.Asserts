@@ -80,7 +80,15 @@ namespace Gu.Roslyn.Asserts.Tests
                 solutionFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
                 CreateMetaDataReferences(typeof(object)));
-            CollectionAssert.AreEqual(new[] { "Gu.Roslyn.Asserts", "Gu.Roslyn.Asserts.Tests", "Gu.Roslyn.Asserts.XUnit" }, solution.Projects.Select(p => p.Name));
+            var expectedSlns = new[]
+            {
+                "Gu.Roslyn.Asserts",
+                "Gu.Roslyn.Asserts.Tests",
+                "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute",
+                "Gu.Roslyn.Asserts.XUnit"
+            };
+
+            CollectionAssert.AreEquivalent(expectedSlns, solution.Projects.Select(p => p.Name));
 
             var expected = solutionFile.Directory
                                        .EnumerateFiles("*.cs", SearchOption.AllDirectories)
