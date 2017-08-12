@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D8C50F8A-9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.XUnit", "Gu.Roslyn.Asserts.XUnit\Gu.Roslyn.Asserts.XUnit.csproj", "{F237D387-ED9B-457B-A871-B1FCFB5B9868}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute", "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute\Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute.csproj", "{3FB66874-E38F-4CCE-8296-8C25C9C934E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

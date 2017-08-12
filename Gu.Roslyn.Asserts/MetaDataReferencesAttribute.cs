@@ -29,6 +29,7 @@
         /// <param name="assemblies">Specify assemblies for which metadata references will be included.</param>
         public MetaDataReferencesAttribute(params Assembly[] assemblies)
 #if NET46
+            // ReSharper disable once CoVariantArrayConversion
             : this(assemblies.Select(x => MetadataReference.CreateFromFile(x.Location)).ToArray())
 #else
             : this(Array.Empty<MetadataReference>())
