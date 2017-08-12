@@ -97,7 +97,7 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReference, expectedMessage);
+            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage);
         }
 
         /// <summary>

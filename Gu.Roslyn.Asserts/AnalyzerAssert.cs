@@ -18,7 +18,7 @@
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly List<MetadataReference> MetadataReference = MetaDataReferencesAttribute.GetMetaDataReferences();
+        public static readonly List<MetadataReference> MetadataReferences = MetaDataReferencesAttribute.GetMetaDataReferences();
 
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {

@@ -49,7 +49,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
@@ -175,7 +175,7 @@ namespace RoslynSandbox
             [Test]
             public void WhenFixIntroducesCompilerErrors()
             {
-                AnalyzerAssert.MetadataReference.Clear();
+                AnalyzerAssert.MetadataReferences.Clear();
                 var code = @"
 namespace RoslynSandbox
 {

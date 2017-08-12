@@ -51,7 +51,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated)
         {
-            NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReference).GetAwaiter().GetResult();
+            NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>

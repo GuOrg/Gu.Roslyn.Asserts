@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [TearDown]
             public void TearDown()
             {
-                AnalyzerAssert.MetadataReference.Clear();
+                AnalyzerAssert.MetadataReferences.Clear();
             }
 
             [Test]
@@ -37,7 +37,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
@@ -242,7 +242,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode);
             }
 

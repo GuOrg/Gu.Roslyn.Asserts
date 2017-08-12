@@ -48,7 +48,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            NoDiagnosticsAsync(analyzer, code, MetadataReference).GetAwaiter().GetResult();
+            NoDiagnosticsAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@
         /// </param>
         public static void NoDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code)
         {
-            NoDiagnosticsAsync(analyzer, code, MetadataReference).GetAwaiter().GetResult();
+            NoDiagnosticsAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
