@@ -41,6 +41,30 @@ namespace RoslynSandbox
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
             }
 
+            [Test]
+            public void SingleClassOneErrorCorrectFixExplicitTitle()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "Rename to: value");
+            }
+
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
             public void SingleClassOneErrorTwoFixesCorrectFix(string title, string expected)

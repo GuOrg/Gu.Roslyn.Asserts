@@ -2,6 +2,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -25,6 +26,35 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:   SA1309 at line 6 and character 29 in file Foo.cs |        private readonly int ↓_value2;\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+
+            [Test]
+            public void SingleClassExplicitTitle()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
+                var expected = "Did not find a code fix with title WRONG.\r\n" +
+                               "Found:\r\n" +
+                               "Rename to: value\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 

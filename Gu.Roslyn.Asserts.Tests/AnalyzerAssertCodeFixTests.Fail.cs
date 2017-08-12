@@ -18,6 +18,34 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
+            public void SingleClassExplicitTitle()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
+                var expected = "Did not find a code fix with title WRONG.\r\n" +
+                               "Found:\r\n" +
+                               "Rename to: value\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void SingleClassTwoIndicatedErrors()
             {
                 var code = @"
@@ -30,7 +58,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixerdCode = @"
+                var fixedCode = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -40,7 +68,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixerdCode));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzed code contained the following diagnostics: {SA1309, SA1309}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309}\r\n" +

@@ -141,6 +141,50 @@ namespace RoslynSandbox
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, new[] { fixed2, fixed1 });
             }
 
+
+            [TestCase("Rename to: value1", "value1")]
+            [TestCase("Rename to: value2", "value2")]
+            public void TwoClassesOneFixCorrectFix(string title, string expected)
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    class Foo1
+    {
+        private readonly int ↓_value;
+    }
+}";
+                var code2 = @"
+namespace RoslynSandbox
+{
+    class Foo2
+    {
+        private readonly int value;
+    }
+}";
+
+                var fixedCode1 = @"
+namespace RoslynSandbox
+{
+    class Foo1
+    {
+        private readonly int value;
+    }
+}";
+
+                var fixedCode2 = @"
+namespace RoslynSandbox
+{
+    class Foo2
+    {
+        private readonly int value;
+    }
+}";
+                fixedCode1 = fixedCode1.AssertReplace("value", expected);
+                AnalyzerAssert.MetadataReference.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, new[] { fixedCode1, fixedCode2 }, title);
+            }
+
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
             public void TwoClassesTwoFixesCorrectFix(string title, string expected)
