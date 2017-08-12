@@ -175,6 +175,7 @@ namespace RoslynSandbox
             [Test]
             public void WhenFixIntroducesCompilerErrors()
             {
+                AnalyzerAssert.MetadataReference.Clear();
                 var code = @"
 namespace RoslynSandbox
 {
