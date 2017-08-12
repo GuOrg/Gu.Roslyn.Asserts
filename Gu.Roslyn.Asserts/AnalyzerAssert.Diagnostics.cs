@@ -97,7 +97,7 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            return DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage);
+            return DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticsMetaData> DiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences, ExpectedMessage expectedMessage = null)
+        public static async Task<DiagnosticsMetadata> DiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences, ExpectedMessage expectedMessage = null)
         {
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
@@ -116,7 +116,7 @@
                 throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await Analyze.GetDiagnosticsWithMetaDataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
+            var data = await Analyze.GetDiagnosticsWithMetadataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
                                     .ConfigureAwait(false);
 
             var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(IdAndPosition.Create));
@@ -136,7 +136,7 @@
                     }
                 }
 
-                return new DiagnosticsMetaData(codeWithErrorsIndicated, expectedDiagnosticsAndSources.CleanedSources, expectedDiagnosticsAndSources.ExpectedDiagnostics, data.Diagnostics, data.Solution);
+                return new DiagnosticsMetadata(codeWithErrorsIndicated, expectedDiagnosticsAndSources.CleanedSources, expectedDiagnosticsAndSources.ExpectedDiagnostics, data.Diagnostics, data.Solution);
             }
 
             var error = StringBuilderPool.Borrow();
@@ -174,17 +174,17 @@
         /// Meta data from a call to GetAnalyzerDiagnosticsAsync
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
-        public class DiagnosticsMetaData
+        public class DiagnosticsMetadata
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="DiagnosticsMetaData"/> class.
+            /// Initializes a new instance of the <see cref="DiagnosticsMetadata"/> class.
             /// </summary>
             /// <param name="codeWithErrorsIndicated">The code with errors indicated</param>
             /// <param name="sources"><paramref name="codeWithErrorsIndicated"/> cleaned from indicators.</param>
             /// <param name="expectedDiagnostics">Info about the expected diagnostics.</param>
             /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
             /// <param name="solution">The solution the analysis was run on.</param>
-            public DiagnosticsMetaData(
+            public DiagnosticsMetadata(
                 IReadOnlyList<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> sources,
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,

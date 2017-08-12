@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var solution = CodeFactory.CreateSolution(
                 projectFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                CreateMetaDataReferences(typeof(object)));
+                CreateMetadataReferences(typeof(object)));
             Assert.AreEqual("Gu.Roslyn.Asserts.Tests", solution.Projects.Single().Name);
             var expected = projectFile.Directory
                                       .EnumerateFiles("*.cs", SearchOption.AllDirectories)
@@ -79,12 +79,12 @@ namespace Gu.Roslyn.Asserts.Tests
             var solution = CodeFactory.CreateSolution(
                 solutionFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                CreateMetaDataReferences(typeof(object)));
+                CreateMetadataReferences(typeof(object)));
             var expectedSlns = new[]
             {
                 "Gu.Roslyn.Asserts",
                 "Gu.Roslyn.Asserts.Tests",
-                "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute",
+                "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
                 "Gu.Roslyn.Asserts.XUnit"
             };
 
@@ -111,7 +111,7 @@ namespace Gu.Roslyn.Asserts.Tests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
+        private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
         {
             return types.Select(type => type.GetTypeInfo().Assembly)
                         .Distinct()

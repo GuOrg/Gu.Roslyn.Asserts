@@ -24,11 +24,11 @@ namespace Gu.Roslyn.Asserts
         /// <param name="sources">The sources as strings.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<DiagnosticsWithMetaData> GetDiagnosticsWithMetaDataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
+        public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
             var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            return new DiagnosticsWithMetaData(sln, results);
+            return new DiagnosticsWithMetadata(sln, results);
         }
 
         /// <summary>
@@ -180,14 +180,14 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The diagnostics and the solution the analysis was performed on.
         /// </summary>
-        public class DiagnosticsWithMetaData
+        public class DiagnosticsWithMetadata
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="DiagnosticsWithMetaData"/> class.
+            /// Initializes a new instance of the <see cref="DiagnosticsWithMetadata"/> class.
             /// </summary>
             /// <param name="solution">The solution the analysis was performed on.</param>
             /// <param name="diagnostics">The diagnostics returned from Roslyn.</param>
-            public DiagnosticsWithMetaData(Solution solution, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
+            public DiagnosticsWithMetadata(Solution solution, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
             {
                 this.Solution = solution;
                 this.Diagnostics = diagnostics;

@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute.AnalyzersAndFixes
+namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes
 {
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;

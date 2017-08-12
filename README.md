@@ -225,15 +225,15 @@ namespace RoslynSandbox
 }
 ```
 
-# MetaDataReferences
+# MetadataReferences
 
 When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
 Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
 
-## MetaDataReferencesAttribute
+## MetadataReferencesAttribute
 
 ```c#
-[assembly:MetaDataReferences(
+[assembly:MetadataReferences(
     typeof(object), // mscorlib
     typeof(System.Diagnostics.Debug), // system
     typeof(Enumerable))] // System.Core
@@ -249,7 +249,7 @@ AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(in
 
 A helper like this can be used.
 ```c#
-private static IReadOnlyList<MetadataReference> CreateMetaDataReferences(params Type[] types)
+private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
 {
     return types.Select(type => type.GetTypeInfo().Assembly)
                 .Distinct()

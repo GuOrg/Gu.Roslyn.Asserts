@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
-            var byNamespaces = code.Select(c => new SourceMetaData(c))
+            var byNamespaces = code.Select(c => new SourceMetadata(c))
                 .GroupBy(c => c.Namespace);
             foreach (var byNamespace in byNamespaces)
             {
@@ -72,7 +72,7 @@ namespace Gu.Roslyn.Asserts
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
-            var byNamespaces = code.Select(c => new SourceMetaData(c))
+            var byNamespaces = code.Select(c => new SourceMetadata(c))
                                    .GroupBy(c => c.Namespace);
             var specificDiagnosticOptions = GetSpecificDiagnosticOptions(analyzers);
             foreach (var byNamespace in byNamespaces)
@@ -246,9 +246,9 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private struct SourceMetaData
+        private struct SourceMetadata
         {
-            public SourceMetaData(string code)
+            public SourceMetadata(string code)
             {
                 this.Code = code;
                 this.FileName = CodeReader.FileName(code);

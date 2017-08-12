@@ -1,6 +1,6 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute
+﻿namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 {
-    using Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute.AnalyzersAndFixes;
+    using Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes;
     using NUnit.Framework;
 
     public class AnalyzerAssertTests

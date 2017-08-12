@@ -122,7 +122,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetaDataAsync(analyzer, codeWithErrorsIndicated, metadataReference).ConfigureAwait(false);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, metadataReference).ConfigureAwait(false);
 
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))

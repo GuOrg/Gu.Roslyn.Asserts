@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute.AnalyzersAndFixes
+namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes
 {
     using System.Collections.Concurrent;
     using System.Collections.Immutable;

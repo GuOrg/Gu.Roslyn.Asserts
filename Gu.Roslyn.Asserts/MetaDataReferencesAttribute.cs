@@ -10,24 +10,24 @@
     /// Specify what default metadata reference to use.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class MetaDataReferencesAttribute : Attribute
+    public class MetadataReferencesAttribute : Attribute
     {
         private static IReadOnlyList<MetadataReference> metadataReferences;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetaDataReferencesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
         /// </summary>
         /// <param name="types">Specify types in assemblies for which metadata references will be included.</param>
-        public MetaDataReferencesAttribute(params Type[] types)
+        public MetadataReferencesAttribute(params Type[] types)
             : this(types.Select(x => x.GetTypeInfo().Assembly).ToArray())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetaDataReferencesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
         /// </summary>
         /// <param name="assemblies">Specify assemblies for which metadata references will be included.</param>
-        public MetaDataReferencesAttribute(params Assembly[] assemblies)
+        public MetadataReferencesAttribute(params Assembly[] assemblies)
 #if NET46
             // ReSharper disable once CoVariantArrayConversion
             : this(assemblies.Select(x => MetadataReference.CreateFromFile(x.Location)).ToArray())
@@ -38,10 +38,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetaDataReferencesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
         /// </summary>
         /// <param name="metadataReferences">Specify metadata references to  be included.</param>
-        public MetaDataReferencesAttribute(params MetadataReference[] metadataReferences)
+        public MetadataReferencesAttribute(params MetadataReference[] metadataReferences)
         {
             this.MetadataReferences = metadataReferences ?? throw new ArgumentNullException(nameof(metadataReferences), "This only works for Net46");
         }
@@ -52,9 +52,9 @@
         public IReadOnlyList<MetadataReference> MetadataReferences { get; }
 
         /// <summary>
-        /// Get the  metadata references specified for the calling assembly.
+        /// Get the metadata references specified in the test assembly.
         /// </summary>
-        public static List<MetadataReference> GetMetaDataReferences()
+        public static List<MetadataReference> GetMetadataReferences()
         {
 #if NET46
             if (metadataReferences != null)
@@ -64,7 +64,7 @@
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                var attribute = (MetaDataReferencesAttribute)GetCustomAttribute(assembly, typeof(MetaDataReferencesAttribute));
+                var attribute = (MetadataReferencesAttribute)GetCustomAttribute(assembly, typeof(MetadataReferencesAttribute));
                 if (attribute != null)
                 {
                     metadataReferences = attribute.MetadataReferences;
