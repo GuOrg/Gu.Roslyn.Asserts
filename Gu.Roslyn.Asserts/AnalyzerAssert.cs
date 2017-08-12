@@ -53,8 +53,7 @@
             if (introducedDiagnostics.Any())
             {
                 var error = StringBuilderPool.Borrow();
-                error.AppendLine(
-                    $"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                error.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
                     var errorInfo = await introducedDiagnostic.ToStringAsync(fixedSolution).ConfigureAwait(false);

@@ -141,7 +141,6 @@ namespace RoslynSandbox
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, new[] { fixed2, fixed1 });
             }
 
-
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
             public void TwoClassesOneFixCorrectFix(string title, string expected)

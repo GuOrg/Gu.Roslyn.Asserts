@@ -29,7 +29,6 @@ namespace RoslynSandbox
                 Assert.AreEqual(expected, exception.Message);
             }
 
-
             [Test]
             public void SingleClassExplicitTitle()
             {
