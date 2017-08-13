@@ -10,11 +10,11 @@
     /// <summary>
     /// Specify what default metadata reference to use.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     public class MetadataReferencesAttribute : Attribute
     {
 #pragma warning disable 169
-        private static IReadOnlyList<MetadataReference> metadataReferences;
+        private static List<MetadataReference> metadataReferences;
 #pragma warning restore 169
 
         /// <summary>
@@ -66,18 +66,41 @@
                 return new List<MetadataReference>(metadataReferences);
             }
 
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            metadataReferences = new List<MetadataReference>();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                var attributes = GetCustomAttributes(assembly, typeof(MetadataReferenceAttribute));
+                if (attributes != null)
+                {
+                    foreach (MetadataReferenceAttribute attribute in attributes)
+                    {
+                        metadataReferences.Add(attribute.MetadataReference);
+                    }
+                }
+            }
+
+            foreach (var assembly in assemblies)
             {
                 var attribute = (MetadataReferencesAttribute)GetCustomAttribute(assembly, typeof(MetadataReferencesAttribute));
                 if (attribute != null)
                 {
-                    metadataReferences = attribute.MetadataReferences;
-                    return new List<MetadataReference>(metadataReferences);
+                    metadataReferences.AddRange( attribute.MetadataReferences);
                 }
             }
 
-            metadataReferences = new MetadataReference[0];
-            return new List<MetadataReference>();
+            var displayNames = metadataReferences.Select(x => x.Display).ToArray();
+            var distinct = displayNames.Distinct().OrderBy(x => x).ToArray();
+            if (distinct.Length != displayNames.Length)
+            {
+                var dupes = displayNames.Where(x => displayNames.Count(y => x == y) > 1);
+                throw AssertException.Create(
+                    "Expected metadata references to be unique assemblies.\r\n" +
+                    "The following appear more than once.\r\n" +
+                    $"{string.Join(Environment.NewLine, dupes)}");
+            }
+
+            return new List<MetadataReference>(metadataReferences);
 #else
             return new List<MetadataReference>();
 #endif

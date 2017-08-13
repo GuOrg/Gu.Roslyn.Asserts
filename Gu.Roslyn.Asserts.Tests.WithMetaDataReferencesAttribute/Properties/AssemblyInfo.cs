@@ -19,7 +19,10 @@ using Gu.Roslyn.Asserts;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
+[assembly: MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "corlib" })]
 [assembly: MetadataReferences(
-    typeof(object), // mscorlib
-    typeof(System.Diagnostics.Debug), // system
-    typeof(Enumerable))] // System.Core
+    typeof(Enumerable), // System.Core
+    typeof(System.Net.WebClient) // System.Net
+    )] 

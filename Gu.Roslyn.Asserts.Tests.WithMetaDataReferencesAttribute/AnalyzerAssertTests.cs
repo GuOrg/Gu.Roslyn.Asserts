@@ -1,10 +1,28 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 {
+    using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     public class AnalyzerAssertTests
     {
+        [Test]
+        public void ResetMetadataReferences()
+        {
+            var expected = new[]
+                                               {
+                                                   MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+                                                                    .WithAliases(ImmutableArray.Create("global", "system"))
+                                               };
+            CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences);
+            CollectionAssert.AreEqual(expected, MetadataReferencesAttribute.GetMetadataReferences());
+
+            AnalyzerAssert.MetadataReferences.Clear();
+            AnalyzerAssert.ResetMetadataReferences();
+            CollectionAssert.AreEqual(expected, MetadataReferencesAttribute.GetMetadataReferences());
+        }
+
         [Test]
         public void CodeFixSingleClassOneErrorCorrectFix()
         {
