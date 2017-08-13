@@ -11,6 +11,16 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 
         public int Compare(MetadataReference x, MetadataReference y)
         {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (x == null || y == null)
+            {
+                return 1;
+            }
+
             if (x.Display != y.Display)
             {
                 return -1;
@@ -21,6 +31,6 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
                 : 1;
         }
 
-        int IComparer.Compare(object x, object y) => Compare((MetadataReference) x, (MetadataReference) y);
+        int IComparer.Compare(object x, object y) => this.Compare((MetadataReference)x, (MetadataReference)y);
     }
 }
