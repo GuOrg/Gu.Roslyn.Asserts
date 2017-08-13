@@ -2,8 +2,13 @@ source https://www.nuget.org/api/v2/
 redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-nuget NUnit
-nuget xunit
+
+group Test
+  source https://www.nuget.org/api/v2/
+  redirects: on
+  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+  nuget NUnit
+  nuget xunit
 
 group Analyzers
   source http://www.nuget.org/api/v2/

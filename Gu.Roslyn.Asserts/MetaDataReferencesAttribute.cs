@@ -85,7 +85,7 @@
                 var attribute = (MetadataReferencesAttribute)GetCustomAttribute(assembly, typeof(MetadataReferencesAttribute));
                 if (attribute != null)
                 {
-                    metadataReferences.AddRange( attribute.MetadataReferences);
+                    metadataReferences.AddRange(attribute.MetadataReferences);
                 }
             }
 

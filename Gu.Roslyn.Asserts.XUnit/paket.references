@@ -1,5 +1,6 @@
-Microsoft.CodeAnalysis.CSharp.Workspaces
-xunit
+group Test
+  Microsoft.CodeAnalysis.CSharp.Workspaces
+  xunit
 
 group Analyzers
   Gu.Analyzers

@@ -31,15 +31,18 @@
         }
 
         /// <summary>
-        /// Get the type in the assembly
+        /// Gets the type in the assembly
         /// </summary>
         public Type Type { get; }
 
         /// <summary>
-        /// Get the aliases
+        /// Gets the aliases.
         /// </summary>
         public IReadOnlyList<string> Aliases { get; }
 
+        /// <summary>
+        /// Gets the reference, this only works when net46
+        /// </summary>
         public MetadataReference MetadataReference
         {
             get
