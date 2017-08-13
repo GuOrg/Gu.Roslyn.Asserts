@@ -65,8 +65,8 @@ namespace Gu.Roslyn.Asserts
         {
             if (exceptionType == null)
             {
-                exceptionType = Type.GetType("NUnit.Framework.AssertionException,nunit.framework", throwOnError: false, ignoreCase: false) ??
-                                Type.GetType("Xunit.Sdk.XunitException,xunit.assert", throwOnError: false, ignoreCase: false) ??
+                exceptionType = Type.GetType("Xunit.Sdk.XunitException,xunit.assert", throwOnError: false, ignoreCase: false) ??
+                                Type.GetType("NUnit.Framework.AssertionException,nunit.framework", throwOnError: false, ignoreCase: false) ??
                                 typeof(AssertException);
             }
 

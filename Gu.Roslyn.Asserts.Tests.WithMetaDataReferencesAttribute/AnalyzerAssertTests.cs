@@ -1,6 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 {
-    using System.Collections;
     using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes;
     using Microsoft.CodeAnalysis;

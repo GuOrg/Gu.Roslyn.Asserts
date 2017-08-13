@@ -47,16 +47,12 @@
         {
             get
             {
-#if NET46
                 if (this.Aliases == null || this.Aliases.Count == 0)
                 {
                     return MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
                 }
 
                 return MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(this.Aliases);
-#else
-                return null;
-#endif
             }
         }
     }

@@ -32,12 +32,8 @@
         /// <param name="assemblies">Specify assemblies for which metadata references will be included.</param>
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         public MetadataReferencesAttribute(params Assembly[] assemblies)
-#if NET46
             // ReSharper disable once CoVariantArrayConversion
             : this(assemblies.Select(x => MetadataReference.CreateFromFile(x.Location)).ToArray())
-#else
-            : this(Array.Empty<MetadataReference>())
-#endif
         {
         }
 
@@ -60,7 +56,6 @@
         /// </summary>
         public static List<MetadataReference> GetMetadataReferences()
         {
-#if NET46
             if (metadataReferences != null)
             {
                 return new List<MetadataReference>(metadataReferences);
@@ -101,9 +96,6 @@
             }
 
             return new List<MetadataReference>(metadataReferences);
-#else
-            return new List<MetadataReference>();
-#endif
         }
     }
 }

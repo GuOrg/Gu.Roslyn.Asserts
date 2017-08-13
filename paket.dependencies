@@ -1,14 +1,10 @@
 source https://www.nuget.org/api/v2/
 redirects: on
+framework: net46
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-
-group Test
-  source https://www.nuget.org/api/v2/
-  redirects: on
-  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-  nuget NUnit
-  nuget xunit
+nuget NUnit
+nuget xunit
 
 group Analyzers
   source http://www.nuget.org/api/v2/
