@@ -1,9 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
 
     /// <summary>
     /// Thrown when an assertion failed.
@@ -68,24 +65,9 @@ namespace Gu.Roslyn.Asserts
         {
             if (exceptionType == null)
             {
-                var nunit = Path.Combine(AppContext.BaseDirectory, "nunit.framework.dll");
-                if (File.Exists(nunit))
-                {
-                    var assembly = Assembly.Load(new AssemblyName($"nunit.framework, Version={FileVersionInfo.GetVersionInfo(nunit).ProductVersion}, Culture=neutral, PublicKeyToken=2638cd05610744eb"));
-                    exceptionType = assembly.GetType("NUnit.Framework.AssertionException");
-                }
-
-                var xunit = Path.Combine(AppContext.BaseDirectory, "xunit.assert.dll");
-                if (File.Exists(xunit))
-                {
-                    var assembly = Assembly.Load(new AssemblyName($"xunit.assert, Version={FileVersionInfo.GetVersionInfo(xunit).ProductVersion}, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c"));
-                    exceptionType = assembly.GetType("Xunit.Sdk.XunitException");
-                }
-
-                if (exceptionType == null)
-                {
-                    exceptionType = typeof(AssertException);
-                }
+                exceptionType = Type.GetType("NUnit.Framework.AssertionException,nunit.framework", throwOnError: false, ignoreCase: false) ??
+                                Type.GetType("Xunit.Sdk.XunitException,xunit.assert", throwOnError: false, ignoreCase: false) ??
+                                typeof(AssertException);
             }
 
             type = exceptionType;
