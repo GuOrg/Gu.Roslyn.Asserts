@@ -11,10 +11,10 @@
         public void ResetMetadataReferences()
         {
             var expected = new[]
-                                               {
-                                                   MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-                                                                    .WithAliases(ImmutableArray.Create("global", "system"))
-                                               };
+                           {
+                               MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+                                                .WithAliases(ImmutableArray.Create("global", "system"))
+                           };
             CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences);
             CollectionAssert.AreEqual(expected, MetadataReferencesAttribute.GetMetadataReferences());
 
