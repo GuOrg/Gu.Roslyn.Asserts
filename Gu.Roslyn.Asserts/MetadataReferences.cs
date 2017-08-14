@@ -5,6 +5,9 @@ namespace Gu.Roslyn.Asserts
     using System.Linq;
     using Microsoft.CodeAnalysis;
 
+    /// <summary>
+    /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>
+    /// </summary>
     internal static class MetadataReferences
     {
 #pragma warning disable 169
@@ -12,7 +15,7 @@ namespace Gu.Roslyn.Asserts
 #pragma warning restore 169
 
         /// <summary>
-        /// Get the metadata references specified in the test assembly.
+        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assembly.
         /// </summary>
         public static List<MetadataReference> GetMetadataReferences()
         {

@@ -139,6 +139,11 @@ namespace Gu.Roslyn.Asserts
             {
                 var sln = File.ReadAllText(code.FullName);
                 var solution = new AdhocWorkspace().CurrentSolution;
+                if (code.DirectoryName == null)
+                {
+                    return solution;
+                }
+
                 var matches = Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture);
                 foreach (Match match in matches)
                 {
@@ -211,6 +216,12 @@ namespace Gu.Roslyn.Asserts
 
         private static IEnumerable<FileInfo> GetCodeFilesInProject(FileInfo projectFile)
         {
+            if (projectFile.Directory == null ||
+                projectFile.DirectoryName == null)
+            {
+                yield break;
+            }
+
             var doc = XDocument.Parse(File.ReadAllText(projectFile.FullName));
             var directory = projectFile.DirectoryName;
             var compiles = doc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
