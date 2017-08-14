@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -28,6 +29,12 @@
         {
             this.Type = type;
             this.Aliases = aliases ?? new string[0];
+            if (this.Aliases == null || this.Aliases.Count == 0)
+            {
+                this.MetadataReference = MetadataReference.CreateFromFile(type.Assembly.Location);
+            }
+
+            this.MetadataReference = MetadataReference.CreateFromFile(type.Assembly.Location).WithAliases(this.Aliases);
         }
 
         /// <summary>
@@ -43,17 +50,6 @@
         /// <summary>
         /// Gets the reference, this only works when net46
         /// </summary>
-        public MetadataReference MetadataReference
-        {
-            get
-            {
-                if (this.Aliases == null || this.Aliases.Count == 0)
-                {
-                    return MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-                }
-
-                return MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(this.Aliases);
-            }
-        }
+        public MetadataReference MetadataReference { get; }
     }
 }

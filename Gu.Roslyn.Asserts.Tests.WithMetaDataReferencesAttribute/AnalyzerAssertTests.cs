@@ -1,4 +1,9 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
+﻿[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
+[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "System" })]
+[assembly: Gu.Roslyn.Asserts.MetadataReferences(
+    typeof(System.Linq.Enumerable), // System.Core
+    typeof(System.Net.WebClient))] // System.Net
+namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 {
     using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes;
@@ -13,17 +18,18 @@
             var expected = new[]
                            {
                                MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-                                                .WithAliases(ImmutableArray.Create("global", "system")),
+                                                .WithAliases(ImmutableArray.Create("global", "mscorlib")),
+                               MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location)
+                                                .WithAliases(ImmutableArray.Create("global", "System")),
                                MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
                                MetadataReference.CreateFromFile(typeof(System.Net.WebClient).Assembly.Location),
                            };
 
             CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences, MetadataReferenceComparer.Default);
-            CollectionAssert.AreEqual(expected, MetadataReferencesAttribute.GetMetadataReferences(), MetadataReferenceComparer.Default);
 
             AnalyzerAssert.MetadataReferences.Clear();
             AnalyzerAssert.ResetMetadataReferences();
-            CollectionAssert.AreEqual(expected, MetadataReferencesAttribute.GetMetadataReferences(), MetadataReferenceComparer.Default);
+            CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences, MetadataReferenceComparer.Default);
         }
 
         [Test]

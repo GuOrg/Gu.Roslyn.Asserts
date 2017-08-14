@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
             AnalyzerAssert.ResetMetadataReferences();
-            CollectionAssert.AreEqual(AnalyzerAssert.MetadataReferences, MetadataReferencesAttribute.GetMetadataReferences());
+            CollectionAssert.IsEmpty(AnalyzerAssert.MetadataReferences);
         }
     }
 }

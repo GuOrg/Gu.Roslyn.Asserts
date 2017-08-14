@@ -18,15 +18,15 @@
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly List<MetadataReference> MetadataReferences = MetadataReferencesAttribute.GetMetadataReferences();
+        public static readonly List<MetadataReference> MetadataReferences = Asserts.MetadataReferences.GetMetadataReferences();
 
         /// <summary>
-        /// Resets <see cref="MetadataReferences"/> to <see cref="MetadataReferencesAttribute.GetMetadataReferences()"/>
+        /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.GetMetadataReferences()"/>
         /// </summary>
         public static void ResetMetadataReferences()
         {
             MetadataReferences.Clear();
-            MetadataReferences.AddRange(MetadataReferencesAttribute.GetMetadataReferences());
+            MetadataReferences.AddRange(Asserts.MetadataReferences.GetMetadataReferences());
         }
 
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)

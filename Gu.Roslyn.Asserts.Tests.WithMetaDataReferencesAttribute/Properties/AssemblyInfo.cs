@@ -19,8 +19,3 @@ using Gu.Roslyn.Asserts;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: MetadataReference(typeof(object), new[] { "global", "system" })]
-[assembly: MetadataReferences(
-    typeof(Enumerable), // System.Core
-    typeof(System.Net.WebClient))] // System.Net
