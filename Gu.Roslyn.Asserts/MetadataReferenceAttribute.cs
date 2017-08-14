@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -24,7 +23,7 @@
         /// Initializes a new instance of the <see cref="MetadataReferenceAttribute"/> class.
         /// </summary>
         /// <param name="type">A type in the assembly.</param>
-        /// <param name="aliases">Aliases: ex {"global", "corlib"} can be null</param>
+        /// <param name="aliases">Aliases: ex {"global", "mscorlib"} can be null</param>
         public MetadataReferenceAttribute(Type type, string[] aliases)
         {
             this.Type = type;

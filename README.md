@@ -230,17 +230,60 @@ namespace RoslynSandbox
 When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
 Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
 
+## MetadataReferenceAttribute
+For specifying a metadata reference to be used in the tests, with or without aliases.
+```c#
+[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
+```
+
 ## MetadataReferencesAttribute
 
+For specifying a batch of metadata references to be used in the tests.
 ```c#
-[assembly:MetadataReferences(
-    typeof(object), // mscorlib
-    typeof(System.Diagnostics.Debug), // system
-    typeof(Enumerable))] // System.Core
+[assembly: MetadataReferences(
+    typeof(System.Linq.Enumerable),
+    typeof(System.Net.WebClient),
+    typeof(System.Reactive.Disposables.SerialDisposable),
+    typeof(System.Reactive.Disposables.ICancelable),
+    typeof(System.Reactive.Linq.Observable),
+    typeof(Gu.Reactive.Condition),
+    typeof(Gu.Wpf.Reactive.ConditionControl),
+    typeof(System.Xml.Serialization.XmlSerializer),
+    typeof(System.Windows.Media.Matrix),
+    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+    typeof(Microsoft.CodeAnalysis.Compilation),
+    typeof(NUnit.Framework.Assert))]
 ```
 
 Calling `AnalyzerAssert.ResetMetadataReferences()` resets `AnalyzerAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
 
+## Sample AssemblyInfo.cs (for the test project.)
+
+```c#
+using System.Reflection;
+using System.Runtime.InteropServices;
+using Gu.Roslyn.Asserts;
+
+...
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
+[assembly: MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "system" })]
+[assembly: MetadataReferences(
+    typeof(System.Linq.Enumerable),
+    typeof(System.Net.WebClient),
+    typeof(System.Reactive.Disposables.SerialDisposable),
+    typeof(System.Reactive.Disposables.ICancelable),
+    typeof(System.Reactive.Linq.Observable),
+    typeof(Gu.Reactive.Condition),
+    typeof(Gu.Wpf.Reactive.ConditionControl),
+    typeof(System.Xml.Serialization.XmlSerializer),
+    typeof(System.Windows.Media.Matrix),
+    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+    typeof(Microsoft.CodeAnalysis.Compilation),
+    typeof(NUnit.Framework.Assert))]
+```
 ## Exlicit set AnalyzerAssert.MetadataReferences
 
 ```c#
