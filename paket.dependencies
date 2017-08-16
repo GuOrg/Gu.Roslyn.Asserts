@@ -1,10 +1,11 @@
 source https://www.nuget.org/api/v2/
-redirects: on
-framework: net46
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+nuget Microsoft.NET.Test.Sdk
 nuget NUnit
+nuget NUnit3TestAdapter
 nuget xunit
+nuget xunit.runner.visualstudio
 
 group Analyzers
   source http://www.nuget.org/api/v2/
