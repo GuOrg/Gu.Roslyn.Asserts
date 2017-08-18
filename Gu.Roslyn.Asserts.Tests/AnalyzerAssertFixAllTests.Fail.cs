@@ -194,12 +194,18 @@ namespace RoslynSandbox
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
-                               "CS0518 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
-                               "CS0518 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
-                               "CS0246 at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
-                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
-                               "CS0518 at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
-                               "CS1729 at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n";
+                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
+                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
+                               "  at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
+                               "  at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
+                               "  at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
+                               "  at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
+                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
         }
