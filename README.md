@@ -300,12 +300,20 @@ private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params 
 }
 ```
 
-## MetadataReferenceAttribute
+## IgnoredErrorsAttribute
 
-For globally ignoring compiler errors introduced by diagnostics use
+For globally ignoring compiler warnings and errors introduced by code fixes when calling calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
 
 ```c#
-[assembly: MetadataReferences("CS1569", ...)]
+[assembly: IgnoredErrors("CS1569", ...)]
+```
+
+## AllowedDiagnosticsAttribute
+
+For globally ignoring compiler warnings and errors introduced by code fixes when calling calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
+
+```c#
+[assembly: AllowedDiagnostics(AllowedDiagnostics.Warnings)]
 ```
 
 ## Analyze a project on disk

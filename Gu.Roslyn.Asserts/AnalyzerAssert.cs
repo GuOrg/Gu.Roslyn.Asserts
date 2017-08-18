@@ -57,10 +57,10 @@
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
                 .SelectMany(x => x)
-                .Where(d => d.Severity == DiagnosticSeverity.Error)
+                .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
-                                     .Except(IgnoredErrors.Get())
+                                     .Except(DiagnosticSettings.AllowedErrorIds())
                                      .Any())
             {
                 var error = StringBuilderPool.Borrow();
@@ -72,6 +72,21 @@
                 }
 
                 throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
+            }
+        }
+
+        private static bool IsIncluded(Diagnostic diagnostic)
+        {
+            switch (DiagnosticSettings.AllowedDiagnostics())
+            {
+                case AllowedDiagnostics.Warnings:
+                    return diagnostic.Severity == DiagnosticSeverity.Error;
+                case AllowedDiagnostics.None:
+                    return diagnostic.Severity == DiagnosticSeverity.Error || diagnostic.Severity == DiagnosticSeverity.Warning;
+                case AllowedDiagnostics.WarningsAndErrors:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
