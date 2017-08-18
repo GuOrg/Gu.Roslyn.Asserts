@@ -224,36 +224,46 @@ namespace Gu.Roslyn.Asserts
 
             var doc = XDocument.Parse(File.ReadAllText(projectFile.FullName));
             var directory = projectFile.DirectoryName;
-            var compiles = doc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
-                              .ToArray();
-            if (compiles.Length == 0)
+            var root = doc.Root;
+            if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
             {
-                var root = doc.Root;
-                if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
+                foreach (var csFile in projectFile.Directory
+                                                  .EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
                 {
-                    foreach (var csFile in projectFile.Directory
-                                                      .EnumerateFiles("*.cs", SearchOption.AllDirectories)
-                                                      .Where(f => !f.Name.StartsWith("TemporaryGeneratedFile_")))
+                    yield return csFile;
+                }
+
+                foreach (var dir in projectFile.Directory
+                                               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
+                                               .Where(dir => !string.Equals(dir.Name, "bin", StringComparison.OrdinalIgnoreCase))
+                                               .Where(dir => !string.Equals(dir.Name, "obj", StringComparison.OrdinalIgnoreCase)))
+                {
+                    foreach (var nestedFile in dir.EnumerateFiles("*.cs", SearchOption.AllDirectories))
                     {
-                        yield return csFile;
+                        yield return nestedFile;
+                    }
+                }
+            }
+            else
+            {
+                var compiles = doc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
+                                  .ToArray();
+                if (compiles.Length == 0)
+                {
+                    throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
+                }
+
+                foreach (var compile in compiles)
+                {
+                    var include = compile.Attribute("Include")?.Value;
+                    if (include == null)
+                    {
+                        throw new InvalidOperationException("Parsing failed, no Include found.");
                     }
 
-                    yield break;
+                    var csFile = Path.Combine(directory, include);
+                    yield return new FileInfo(csFile);
                 }
-
-                throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
-            }
-
-            foreach (var compile in compiles)
-            {
-                var include = compile.Attribute("Include")?.Value;
-                if (include == null)
-                {
-                    throw new InvalidOperationException("Parsing failed, no Include found.");
-                }
-
-                var csFile = Path.Combine(directory, include);
-                yield return new FileInfo(csFile);
             }
         }
 

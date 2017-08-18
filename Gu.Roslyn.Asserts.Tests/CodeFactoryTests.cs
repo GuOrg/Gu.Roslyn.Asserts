@@ -48,8 +48,9 @@ namespace Gu.Roslyn.Asserts.Tests
             Assert.AreEqual("Gu.Roslyn.Asserts.Tests", solution.Projects.Single().Name);
             var expected = projectFile.Directory
                                       .EnumerateFiles("*.cs", SearchOption.AllDirectories)
+                                      .Where(f => !f.DirectoryName.Contains("bin"))
+                                      .Where(f => !f.DirectoryName.Contains("obj"))
                                       .Select(f => f.Name)
-                                      .Where(x => !x.StartsWith("TemporaryGeneratedFile_"))
                                       .OrderBy(x => x)
                                       .ToArray();
             var actual = solution.Projects
@@ -82,10 +83,20 @@ namespace Gu.Roslyn.Asserts.Tests
 
             CollectionAssert.AreEquivalent(expectedSlns, solution.Projects.Select(p => p.Name));
 
+            var GGGG = solutionFile.Directory
+                                   .EnumerateFiles("*.cs", SearchOption.AllDirectories)
+                                   .Where(f => !f.DirectoryName.Contains(".vs"))
+                                   .Where(f => !f.DirectoryName.Contains(".git"))
+                                   .Where(f => !f.DirectoryName.Contains("bin"))
+                                   .Where(f => !f.DirectoryName.Contains("obj"))
+                                   .ToArray();
             var expected = solutionFile.Directory
                                        .EnumerateFiles("*.cs", SearchOption.AllDirectories)
+                                       .Where(f => !f.DirectoryName.Contains(".vs"))
+                                       .Where(f => !f.DirectoryName.Contains(".git"))
+                                       .Where(f => !f.DirectoryName.Contains("bin"))
+                                       .Where(f => !f.DirectoryName.Contains("obj"))
                                        .Select(f => f.Name)
-                                       .Where(x => !x.StartsWith("TemporaryGeneratedFile_"))
                                        .Distinct()
                                        .OrderBy(x => x)
                                        .ToArray();
