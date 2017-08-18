@@ -1,7 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
