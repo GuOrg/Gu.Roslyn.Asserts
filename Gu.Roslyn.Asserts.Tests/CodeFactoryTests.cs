@@ -12,12 +12,12 @@ namespace Gu.Roslyn.Asserts.Tests
 
     public class CodeFactoryTests
     {
+        private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
+
         [Test]
         public void TryFindProjectFileInParentDirectory()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var dllFile = new Uri(codeBase, UriKind.Absolute).LocalPath;
-            var directory = new DirectoryInfo(Path.GetDirectoryName(dllFile));
+            var directory = ExecutingAssemblyDll.Directory;
             Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.Tests.csproj", out FileInfo projectFile));
             Assert.AreEqual("Gu.Roslyn.Asserts.Tests.csproj", projectFile.Name);
         }
@@ -25,9 +25,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public void TryFindSolutionFileInParentDirectory()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var dllFile = new Uri(codeBase, UriKind.Absolute).LocalPath;
-            var directory = new DirectoryInfo(Path.GetDirectoryName(dllFile));
+            var directory = ExecutingAssemblyDll.Directory;
             Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.sln", out FileInfo projectFile));
             Assert.AreEqual("Gu.Roslyn.Asserts.sln", projectFile.Name);
         }
@@ -35,18 +33,14 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public void TryFindProjectFile()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var dllFile = new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath);
-            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(dllFile, out FileInfo projectFile));
+            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out FileInfo projectFile));
             Assert.AreEqual("Gu.Roslyn.Asserts.Tests.csproj", projectFile.Name);
         }
 
         [Test]
         public void CreateSolutionFromProjectFile()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var dllFile = new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath);
-            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(dllFile, out FileInfo projectFile));
+            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out FileInfo projectFile));
             var solution = CodeFactory.CreateSolution(
                 projectFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -73,9 +67,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public void CreateSolutionFromSolutionFile()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var dllFile = new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath);
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(dllFile.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
             var solution = CodeFactory.CreateSolution(
                 solutionFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
