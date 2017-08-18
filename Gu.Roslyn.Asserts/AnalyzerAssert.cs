@@ -59,7 +59,9 @@
                 .SelectMany(x => x)
                 .Where(d => d.Severity == DiagnosticSeverity.Error)
                 .ToArray();
-            if (introducedDiagnostics.Any())
+            if (introducedDiagnostics.Select(x => x.Id)
+                                     .Except(IgnoredErrors.Get())
+                                     .Any())
             {
                 var error = StringBuilderPool.Borrow();
                 error.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");

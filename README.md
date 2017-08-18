@@ -174,7 +174,6 @@ namespace RoslynSandbox
 }
 ```
 
-
 ## Code fix only
 
 ```c#
@@ -299,6 +298,14 @@ private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params 
                 .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
                 .ToArray();
 }
+```
+
+## MetadataReferenceAttribute
+
+For globally ignoring compiler errors introduced by diagnostics use
+
+```c#
+[assembly: MetadataReferences("CS1569", ...)]
 ```
 
 ## Analyze a project on disk
