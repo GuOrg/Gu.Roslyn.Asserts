@@ -8,4 +8,6 @@ build:
   verbosity: minimal
 
 test_script:
-  - ps: dotnet test
+  - ps: dotnet test Gu.Roslyn.Asserts.Tests
+  - ps: dotnet test Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
+  - ps: dotnet test Gu.Roslyn.Asserts.XUnit
