@@ -1,11 +1,14 @@
 source https://www.nuget.org/api/v2/
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+
 nuget Microsoft.NET.Test.Sdk
+
 nuget NUnit
 nuget NUnit3TestAdapter
+
 nuget xunit
-nuget xunit.runner.visualstudio
+nuget dotnet-xunit
 
 group Analyzers
   source http://www.nuget.org/api/v2/
