@@ -9,7 +9,7 @@ nuget NUnit
 nuget NUnit3TestAdapter
 
 nuget xunit
-nuget dotnet-xunit
+nuget xunit.runner.visualstudio
 
 group Analyzers
   source http://www.nuget.org/api/v2/
