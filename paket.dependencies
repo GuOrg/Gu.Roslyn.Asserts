@@ -2,6 +2,7 @@ source https://www.nuget.org/api/v2/
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
 
+nuget SourceLink.Create.CommandLine
 nuget Microsoft.NET.Test.Sdk
 
 nuget NUnit
