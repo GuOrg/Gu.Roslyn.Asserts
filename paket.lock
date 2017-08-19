@@ -966,28 +966,28 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3) - restriction: && (< net46) (>= netstandard1.3) (< monotouch) (< xamarintvos) (< xamarinwatchos) (< xamarinios) (< xamarinmac)
       System.Xml.XmlDocument (>= 4.3) - restriction: || (>= net46) (&& (>= netstandard1.3) (< monotouch) (< xamarintvos) (< xamarinwatchos) (< xamarinios) (< xamarinmac))
       System.Xml.XPath (>= 4.3) - restriction: || (>= net46) (&& (>= netstandard1.3) (< monotouch) (< xamarintvos) (< xamarinwatchos) (< xamarinios) (< xamarinmac))
-    xunit (2.2)
-      xunit.assert (2.2)
-      xunit.core (2.2)
+    xunit (2.3.0-beta4-build3742)
+      xunit.analyzers (>= 0.6)
+      xunit.assert (2.3.0-beta4-build3742)
+      xunit.core (2.3.0-beta4-build3742)
     xunit.abstractions (2.0.1) - restriction: >= netstandard1.1
       NETStandard.Library (>= 1.6) - restriction: && (< net35) (>= netstandard1.0)
-    xunit.assert (2.2)
-      NETStandard.Library (>= 1.6) - restriction: && (< net452) (>= netstandard1.1)
-    xunit.core (2.2)
-      xunit.extensibility.core (2.2)
-      xunit.extensibility.execution (2.2)
-    xunit.extensibility.core (2.2)
-      NETStandard.Library (>= 1.6) - restriction: && (< net452) (>= netstandard1.1)
+    xunit.analyzers (0.6.1)
+    xunit.assert (2.3.0-beta4-build3742)
+      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
+    xunit.core (2.3.0-beta4-build3742)
+      xunit.extensibility.core (2.3.0-beta4-build3742)
+      xunit.extensibility.execution (2.3.0-beta4-build3742)
+    xunit.extensibility.core (2.3.0-beta4-build3742)
+      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
       xunit.abstractions (>= 2.0.1) - restriction: >= netstandard1.1
-    xunit.extensibility.execution (2.2)
-      NETStandard.Library (>= 1.6) - restriction: && (< net452) (>= netstandard1.1)
-      xunit.extensibility.core (2.2) - restriction: >= netstandard1.1
-    xunit.runner.visualstudio (2.2)
+    xunit.extensibility.execution (2.3.0-beta4-build3742)
+      NETStandard.Library (>= 1.6.1) - restriction: && (< net452) (>= netstandard1.1)
+      xunit.extensibility.core (2.3.0-beta4-build3742) - restriction: >= netstandard1.1
+    xunit.runner.visualstudio (2.3.0-beta4-build3742)
       Microsoft.DotNet.PlatformAbstractions (>= 1.1) - restriction: >= netcore1.0
       Microsoft.Extensions.DependencyModel (>= 1.1) - restriction: >= netcore1.0
-      Microsoft.TestPlatform.ObjectModel (>= 11.0) - restriction: >= netcore1.0
-      NETStandard.Library (>= 1.6) - restriction: >= netcore1.0
-      System.Threading.ThreadPool (>= 4.0.10) - restriction: >= netcore1.0
+      Microsoft.TestPlatform.ObjectModel (>= 15.0) - restriction: >= netcore1.0
 
 GROUP Analyzers
 NUGET

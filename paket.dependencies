@@ -8,8 +8,8 @@ nuget Microsoft.NET.Test.Sdk
 nuget NUnit
 nuget NUnit3TestAdapter
 
-nuget xunit
-nuget xunit.runner.visualstudio
+nuget xunit prerelease
+nuget xunit.runner.visualstudio prerelease
 
 group Analyzers
   source http://www.nuget.org/api/v2/
