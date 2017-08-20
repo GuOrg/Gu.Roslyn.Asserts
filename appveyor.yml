@@ -8,5 +8,6 @@ build:
   verbosity: minimal
   
 test_script:
-  - ps: dotnet test Gu.Roslyn.Asserts.Tests -c Release --logger:"trx;LogFileName=results.xml"
+  - ps: dotnet test Gu.Roslyn.Asserts.Tests -c Release --logger:"trx;LogFileName=..\..\Gu.Roslyn.Asserts.Tests.xml"
+  - ps: build/uploadtests.ps1 "Gu.Roslyn.Asserts.Tests.xml"
   
