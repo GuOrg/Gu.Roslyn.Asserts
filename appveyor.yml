@@ -8,6 +8,10 @@ build:
   verbosity: minimal
   
 test_script:
-  - ps: dotnet test Gu.Roslyn.Asserts.Tests -c Release --logger:"trx;LogFileName=..\..\Gu.Roslyn.Asserts.Tests.xml"
-  - ps: build/uploadtests.ps1 "Gu.Roslyn.Asserts.Tests.xml"
-  
+- ps: |-
+    # run tests
+    dotnet test Gu.Roslyn.Asserts.Tests -c Release --logger:"trx;LogFileName=..\..\Gu.Roslyn.Asserts.Tests.xml"
+    # upload results to AppVeyor
+    $wc = New-Object 'System.Net.WebClient'
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", (Resolve-Path Gu.Roslyn.Asserts.Tests.xml))
+    
