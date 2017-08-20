@@ -6,4 +6,7 @@ before_build:
 configuration: Release
 build:
   verbosity: minimal
-
+  
+test_script:
+  - ps: dotnet test -c Release --logger:"trx;LogFileName=results.xml"
+  
