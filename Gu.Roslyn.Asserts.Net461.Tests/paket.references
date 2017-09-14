@@ -1,4 +1,5 @@
 Microsoft.CodeAnalysis.CSharp.Workspaces
+Microsoft.NET.Test.Sdk
 NUnit
 
 group Analyzers
