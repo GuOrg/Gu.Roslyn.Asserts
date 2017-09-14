@@ -1,3 +1,4 @@
+storage: none
 source https://www.nuget.org/api/v2/
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
@@ -12,6 +13,7 @@ nuget xunit prerelease
 nuget xunit.runner.visualstudio prerelease
 
 group Analyzers
+  storage: none
   source http://www.nuget.org/api/v2/
   nuget Gu.Analyzers
   nuget StyleCop.Analyzers
