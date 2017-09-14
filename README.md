@@ -329,3 +329,16 @@ public async Task GetDiagnosticsFromProjectOnDisk()
     ...
 }
 ```` 
+
+# Usage with different test project types
+## Net461 new project type.
+```xml
+<PropertyGroup>
+  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+</PropertyGroup>
+```
+
+## NetCoreApp2.0
+TODO figure out what is needed here.
+
