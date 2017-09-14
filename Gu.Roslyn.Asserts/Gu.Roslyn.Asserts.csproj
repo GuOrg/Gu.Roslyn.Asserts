@@ -6,6 +6,14 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <Choose>
+    <When Condition="'$(TargetFramework)' == 'netstandard2.0'">
+      <PropertyGroup>
+        <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard2.0\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
