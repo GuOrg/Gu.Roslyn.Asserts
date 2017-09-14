@@ -9,16 +9,16 @@
   <Choose>
     <When Condition="'$(TargetFramework)' == 'netstandard2.0'">
       <PropertyGroup>
-        <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
+        <AssetTargetFallback>net461</AssetTargetFallback>
       </PropertyGroup>
     </When>
   </Choose>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\Gu.Roslyn.Asserts.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Gu.Roslyn.Asserts.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
