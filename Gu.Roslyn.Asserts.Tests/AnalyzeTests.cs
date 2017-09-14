@@ -11,12 +11,13 @@ namespace Gu.Roslyn.Asserts.Tests
     public class AnalyzeTests
     {
         private static readonly MetadataReference[] MetadataReferences = new MetadataReference[0];
+        private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
 
         [Test]
         public async Task AnalyzeProjectFile()
         {
-            var dllFile = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(dllFile.Directory, "Gu.Roslyn.Asserts.Tests.csproj", out FileInfo projectFile));
+            var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
+            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, projectFileName, out FileInfo projectFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences)
                                            .ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
@@ -25,8 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public async Task AnalyzeSolutionFile()
         {
-            var dllFile = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(dllFile.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
                                            .ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));

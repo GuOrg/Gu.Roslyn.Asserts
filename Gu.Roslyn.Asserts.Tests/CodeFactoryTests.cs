@@ -18,8 +18,9 @@ namespace Gu.Roslyn.Asserts.Tests
         public void TryFindProjectFileInParentDirectory()
         {
             var directory = ExecutingAssemblyDll.Directory;
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.Tests.csproj", out FileInfo projectFile));
-            Assert.AreEqual("Gu.Roslyn.Asserts.Tests.csproj", projectFile.Name);
+            var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
+            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, projectFileName, out FileInfo projectFile));
+            Assert.AreEqual(projectFileName, projectFile.Name);
         }
 
         [Test]
@@ -34,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public void TryFindProjectFile()
         {
             Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out FileInfo projectFile));
-            Assert.AreEqual("Gu.Roslyn.Asserts.Tests.csproj", projectFile.Name);
+            Assert.AreEqual(Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj", projectFile.Name);
         }
 
         [Test]
@@ -45,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 projectFile,
                 new[] { new FieldNameMustNotBeginWithUnderscore(), },
                 CreateMetadataReferences(typeof(object)));
-            Assert.AreEqual("Gu.Roslyn.Asserts.Tests", solution.Projects.Single().Name);
+            Assert.AreEqual(Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName), solution.Projects.Single().Name);
             var expected = projectFile.Directory
                                       .EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                       .Where(f => !f.DirectoryName.Contains("bin"))
@@ -77,6 +78,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 "Gu.Roslyn.Asserts",
                 "Gu.Roslyn.Asserts.Tests",
+                "Gu.Roslyn.Asserts.Net461.Tests",
                 "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
                 "Gu.Roslyn.Asserts.XUnit"
             };

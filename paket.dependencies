@@ -1,7 +1,8 @@
 storage: none
 source https://www.nuget.org/api/v2/
+redirects: on
 
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces 1.2.2
 
 nuget SourceLink.Create.CommandLine
 nuget Microsoft.NET.Test.Sdk
