@@ -17,8 +17,19 @@ dependencies
   framework: netstandard2.0
     Microsoft.CodeAnalysis.CSharp.Workspaces
 
+  framework: net461
+    Microsoft.CodeAnalysis.CSharp.Workspaces
+    System.Composition
+    System.Xml.XDocument
+    System.Xml.ReaderWriter
+    System.IO.FileSystem
+    System.Security.Cryptography.Primitives
+
 files
   ../Gu.Roslyn.Asserts/bin/Release/netstandard2.0/Gu.Roslyn.Asserts.dll ==> lib/netstandard2.0
   ../Gu.Roslyn.Asserts/bin/Release/netstandard2.0/Gu.Roslyn.Asserts.pdb ==> lib/netstandard2.0
-  ../Gu.Roslyn.Asserts/bin/Release/netstandard2.0/Gu.Roslyn.Asserts.xml ==> lib/netstandard2.0 
+  ../Gu.Roslyn.Asserts/bin/Release/netstandard2.0/Gu.Roslyn.Asserts.xml ==> lib/netstandard2.0
+  ../Gu.Roslyn.Asserts/bin/Release/net461/Gu.Roslyn.Asserts.dll ==> lib/net461
+  ../Gu.Roslyn.Asserts/bin/Release/net461/Gu.Roslyn.Asserts.pdb ==> lib/net461
+  ../Gu.Roslyn.Asserts/bin/Release/net461/Gu.Roslyn.Asserts.xml ==> lib/net461 
 
