@@ -11,6 +11,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertDiagnosticsTests.Success.cs" Link="AnalyzerAssertDiagnosticsTests.Success.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertFixAllTests.Fail.cs" Link="AnalyzerAssertFixAllTests.Fail.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertFixAllTests.Success.cs" Link="AnalyzerAssertFixAllTests.Success.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertNoCompilerErrorsTests.cs" Link="AnalyzerAssertNoCompilerErrorsTests.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertNoFixTests.Fail.cs" Link="AnalyzerAssertNoFixTests.Fail.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertNoFixTests.Success.cs" Link="AnalyzerAssertNoFixTests.Success.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertTests.cs" Link="AnalyzerAssertTests.cs" />

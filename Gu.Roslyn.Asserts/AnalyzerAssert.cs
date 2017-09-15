@@ -77,7 +77,12 @@
 
         private static bool IsIncluded(Diagnostic diagnostic)
         {
-            switch (DiagnosticSettings.AllowedDiagnostics())
+            return IsIncluded(diagnostic, DiagnosticSettings.AllowedDiagnostics());
+        }
+
+        private static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
+        {
+            switch (allowedDiagnostics)
             {
                 case AllowedDiagnostics.Warnings:
                     return diagnostic.Severity == DiagnosticSeverity.Error;
