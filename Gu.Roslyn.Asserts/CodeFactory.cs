@@ -19,14 +19,36 @@ namespace Gu.Roslyn.Asserts
     {
         /// <summary>
         /// Creates a solution for <paramref name="code"/>
+        /// </summary>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Solution CreateSolution(string code, params MetadataReference[] metadataReferences)
+        {
+            return CreateSolution(new[] { code }, (IReadOnlyList<MetadataReference>)metadataReferences);
+        }
+
+        /// <summary>
+        /// Creates a solution for <paramref name="code"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Solution CreateSolution(string[] code, params MetadataReference[] metadataReferences)
+        public static Solution CreateSolution(IReadOnlyList<string> code, params MetadataReference[] metadataReferences)
         {
             return CreateSolution(code, (IReadOnlyList<MetadataReference>)metadataReferences);
+        }
+
+        /// <summary>
+        /// Creates a solution for <paramref name="code"/>
+        /// </summary>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Solution CreateSolution(string code, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            return CreateSolution(new[] { code }, metadataReferences);
         }
 
         /// <summary>
@@ -39,7 +61,19 @@ namespace Gu.Roslyn.Asserts
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
-            return CreateSolution(code, metadataReferences, compilationOptions);
+            return CreateSolution(code, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolution(new[] { code }, analyzers, metadataReferences);
         }
 
         /// <summary>
@@ -50,12 +84,24 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
             var specificDiagnosticOptions = GetSpecificDiagnosticOptions(analyzers);
             var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
                 .WithSpecificDiagnosticOptions(specificDiagnosticOptions);
-            return CreateSolution(code, metadataReferences, compilationOptions);
+            return CreateSolution(code, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
         }
 
         /// <summary>
@@ -63,10 +109,10 @@ namespace Gu.Roslyn.Asserts
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences, CSharpCompilationOptions compilationOptions)
+        public static Solution CreateSolution(IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;

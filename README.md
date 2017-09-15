@@ -23,7 +23,12 @@ Asserts for testing Roslyn analyzers.
   - [Exlicit set AnalyzerAssert.MetadataReferences](#exlicit-set-analyzerassertmetadatareferences)
   - [IgnoredErrorsAttribute](#ignorederrorsattribute)
   - [AllowedDiagnosticsAttribute](#alloweddiagnosticsattribute)
-  - [Analyze a project on disk](#analyze-a-project-on-disk)
+- [Analyze](#analyze)
+  - [GetDiagnosticsAsync](#getdiagnosticsasync)
+- [CodeFactory](#codefactory)
+  - [CreateSolution](#createsolution)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
 - [Usage with different test project types](#usage-with-different-test-project-types)
   - [Net461 new project type.](#net461-new-project-type)
   - [NetCoreApp2.0](#netcoreapp20)
@@ -343,7 +348,11 @@ For globally ignoring compiler warnings and errors introduced by code fixes when
 [assembly: AllowedDiagnostics(AllowedDiagnostics.Warnings)]
 ```
 
-## Analyze a project on disk
+# Analyze
+
+## GetDiagnosticsAsync
+
+Analyze a cs, csproj or sln file on disk.
 
 ```c#
 [Test]
@@ -356,6 +365,81 @@ public async Task GetDiagnosticsFromProjectOnDisk()
     ...
 }
 ```` 
+
+# CodeFactory
+
+## CreateSolution
+
+### Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.
+
+```c#
+        [Test]
+        public void CreateSolutionFromSources()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value;
+    }
+}";
+            var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
+            Assert.AreEqual("RoslynSandbox", sln.Projects.Single().Name);
+            Assert.AreEqual("Foo.cs", sln.Projects.Single().Documents.Single().Name);
+        }
+
+        [Test]
+        public void CreateSolutionFromSources()
+        {
+            var code1 = @"
+namespace Project1
+{
+    class Foo1
+    {
+        private readonly int _value;
+    }
+}";
+
+            var code2 = @"
+namespace Project2
+{
+    class Foo2
+    {
+        private readonly int _value;
+    }
+}";
+            var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
+            CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
+            Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+        }
+```
+
+### Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.
+
+```c#
+        [Test]
+        public void CreateSolutionFromProjectFile()
+        {
+            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(
+                new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath),
+                out FileInfo projectFile));
+            var solution = CodeFactory.CreateSolution(
+                projectFile,
+                new[] { new FieldNameMustNotBeginWithUnderscore(), },
+                CreateMetadataReferences(typeof(object)));
+        }
+
+        [Test]
+        public void CreateSolutionFromSolutionFile()
+        {
+            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            var solution = CodeFactory.CreateSolution(
+                solutionFile,
+                new[] { new FieldNameMustNotBeginWithUnderscore(), },
+                CreateMetadataReferences(typeof(object)));
+        }
+```
 
 # Usage with different test project types
 ## Net461 new project type.
