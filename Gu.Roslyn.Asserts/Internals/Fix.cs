@@ -20,14 +20,33 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="codeFix">The code fix.</param>
         /// <param name="diagnostic">The diagnostic.</param>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
+        internal static async Task<bool> IsRegisteringFixAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic)
+        {
+            var document = solution.GetDocument(diagnostic.Location.SourceTree);
+            var actions = new List<CodeAction>();
+            var context = new CodeFixContext(
+                document,
+                diagnostic,
+                (a, d) => actions.Add(a),
+                CancellationToken.None);
+            await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            return actions.Count != 0;
+        }
+
+        /// <summary>
+        /// Fix the solution by applying the code fix.
+        /// </summary>
+        /// <param name="solution">The solution with the diagnostic.</param>
+        /// <param name="codeFix">The code fix.</param>
+        /// <param name="diagnostic">The diagnostic.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, string fixTitle, CancellationToken cancellationToken)
         {
-            var actions = new List<CodeAction>();
             var document = solution.GetDocument(diagnostic.Location.SourceTree);
-            actions.Clear();
+            var actions = new List<CodeAction>();
             var context = new CodeFixContext(
                 document,
                 diagnostic,

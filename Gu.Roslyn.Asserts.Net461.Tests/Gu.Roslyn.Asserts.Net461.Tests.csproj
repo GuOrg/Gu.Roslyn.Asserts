@@ -27,6 +27,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\CustomFixAllProviders.cs" Link="CodeFixes\CustomFixAllProviders.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\DontUseUnderscoreCodeFixProvider.cs" Link="CodeFixes\DontUseUnderscoreCodeFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\DontUseUnderscoreManyCodeFixProvider.cs" Link="CodeFixes\DontUseUnderscoreManyCodeFixProvider.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\EmptyCodeFixProvider.cs" Link="CodeFixes\EmptyCodeFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\FixAllContextHelper.cs" Link="CodeFixes\FixAllContextHelper.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\InsertEventFixProvider.cs" Link="CodeFixes\InsertEventFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\NoCodeFixProvider.cs" Link="CodeFixes\NoCodeFixProvider.cs" />
