@@ -154,12 +154,14 @@ namespace Gu.Roslyn.Asserts.Internals
 
             if (actions.Count == 0)
             {
-                throw AssertException.Create("Expected one code fix");
+                throw AssertException.Create("Expected one code fix, was 0.");
             }
 
             if (actions.Count > 1)
             {
-                throw AssertException.Create("Expected only one code fix");
+                throw AssertException.Create($"Expected only one code fix, found {actions.Count}:\r\n" +
+                                             $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
+                                             "Use the overload that specifies title.");
             }
 
             return actions[0];

@@ -32,7 +32,7 @@
         public static void Diagnostics<TAnalyzer>(ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Diagnostics(new TAnalyzer(), expectedMessage, codeWithErrorsIndicated);
+            Diagnostics(new TAnalyzer(), codeWithErrorsIndicated, expectedMessage);
         }
 
         /// <summary>

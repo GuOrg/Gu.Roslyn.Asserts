@@ -33,6 +33,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\NoCodeFixProvider.cs" Link="CodeFixes\NoCodeFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\RemoveUnusedFixProvider.cs" Link="CodeFixes\RemoveUnusedFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\RenameHelper.cs" Link="CodeFixes\RenameHelper.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\TwoFixProvider.cs" Link="CodeFixes\TwoFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeReaderTests.cs" Link="CodeReaderTests.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeReaderTests.FileName.cs" Link="CodeReaderTests.FileName.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeReaderTests.FindDiagnosticsPositions.cs" Link="CodeReaderTests.FindDiagnosticsPositions.cs" />

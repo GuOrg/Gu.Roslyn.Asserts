@@ -128,7 +128,28 @@ namespace RoslynSandbox
 
                 var temp = code.AssertReplace("↓", string.Empty);
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, temp));
-                var expected = "Expected one code fix";
+                var expected = "Expected one code fix, was 0.";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void SingleClassOneErrorTwoFixes()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var temp = code.AssertReplace("↓", string.Empty);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, temp));
+                var expected = "Expected only one code fix, found 2:\r\n" +
+                               "Rename to: value1\r\n" +
+                               "Rename to: value2\r\n" +
+                               "Use the overload that specifies title.";
                 Assert.AreEqual(expected, exception.Message);
             }
 
