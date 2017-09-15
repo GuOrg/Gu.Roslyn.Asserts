@@ -10,9 +10,27 @@
 
 Asserts for testing Roslyn analyzers.
 
-# Samples
+- [NoDiagnostics](#nodiagnostics)
+  - [Diagnostics](#diagnostics)
+- [CodeFix](#codefix)
+  - [Code fix only](#code-fix-only)
+- [FixAll](#fixall)
+- [NoFix](#nofix)
+- [Attributes](#attributes)
+  - [MetadataReferenceAttribute](#metadatareferenceattribute)
+  - [MetadataReferencesAttribute](#metadatareferencesattribute)
+    - [Sample AssemblyInfo.cs (for the test project.)](#sample-assemblyinfocs-for-the-test-project)
+  - [Exlicit set AnalyzerAssert.MetadataReferences](#exlicit-set-analyzerassertmetadatareferences)
+  - [IgnoredErrorsAttribute](#ignorederrorsattribute)
+  - [AllowedDiagnosticsAttribute](#alloweddiagnosticsattribute)
+  - [Analyze a project on disk](#analyze-a-project-on-disk)
+- [Usage with different test project types](#usage-with-different-test-project-types)
+  - [Net461 new project type.](#net461-new-project-type)
+  - [NetCoreApp2.0](#netcoreapp20)
 
-## No diagnostic, happy path.
+# NoDiagnostics
+
+Us this to test that an analyzer does not report errors for valid code.
 
 ```c#
 [Test]
@@ -44,9 +62,10 @@ namespace RoslynSandbox
 }
 ```
 
-## Diagnostic
+## Diagnostics
 
-Indicate error position with ↓
+Us this to test that the analyzer reports error or warning at position indicated with ↓
+
 ```c#
 [Test]
 public void JustCheckPositionAndDiagnosticId()
@@ -91,7 +110,8 @@ namespace RoslynSandbox
 }
 ```
 
-## Diagnostic and code fix
+# CodeFix
+Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix fixes it and produces the expected code.
 
 ```c#
 [Test]
@@ -145,6 +165,39 @@ namespace RoslynSandbox
 }
 ```
 
+## Code fix only
+
+When the code fix is for a warning produced by an analyzer that you do not own, for example a built in analyzer in Visual Studio.
+```c#
+[Test]
+public void TestThatCodeFixProducesExpectedCode()
+{
+    var code = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+    var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+    }
+}";
+    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+}
+```
+
+# FixAll
+
 When there are many isses that will be fixed:
 
 ```c#
@@ -174,38 +227,10 @@ namespace RoslynSandbox
 }
 ```
 
-## Code fix only
+# NoFix
 
-```c#
-[Test]
-public void TestThatCodeFixProducesExpectedCode()
-{
-    AnalyzerAssert.References.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(ImmutableArray.Create("global", "corlib")));
-    var code = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    public class Foo
-    {
-        public event EventHandler ↓Bar;
-    }
-}";
-
-    var fixedCode = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    public class Foo
-    {
-    }
-}";
-    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
-}
-```
-
-## Diagnostic and code fix when expecting the fix to not do anything
+Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix does not change the code.
+This can happen if for example it is decided to not support rare edge cases with the code fix.
 
 ```c#
 [Test]
@@ -224,7 +249,7 @@ namespace RoslynSandbox
 }
 ```
 
-# MetadataReferences
+# Attributes
 
 When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
 Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
@@ -256,7 +281,7 @@ For specifying a batch of metadata references to be used in the tests.
 
 Calling `AnalyzerAssert.ResetMetadataReferences()` resets `AnalyzerAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
 
-## Sample AssemblyInfo.cs (for the test project.)
+### Sample AssemblyInfo.cs (for the test project.)
 
 ```c#
 using System.Reflection;
@@ -272,13 +297,15 @@ using Gu.Roslyn.Asserts;
 [assembly: MetadataReferences(
     typeof(System.Linq.Enumerable),
     typeof(System.Net.WebClient),
+    typeof(System.Data.Common.DbConnection),
     typeof(System.Reactive.Disposables.SerialDisposable),
     typeof(System.Reactive.Disposables.ICancelable),
     typeof(System.Reactive.Linq.Observable),
-    typeof(Gu.Reactive.Condition),
-    typeof(Gu.Wpf.Reactive.ConditionControl),
     typeof(System.Xml.Serialization.XmlSerializer),
+    typeof(System.Windows.Media.Brush),
+    typeof(System.Windows.Controls.Control),
     typeof(System.Windows.Media.Matrix),
+    typeof(System.Xaml.XamlLanguage),
     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
     typeof(Microsoft.CodeAnalysis.Compilation),
     typeof(NUnit.Framework.Assert))]
