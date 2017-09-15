@@ -19,7 +19,7 @@ namespace Gu.Roslyn.Asserts
     {
         /// <summary>
         /// Creates a solution for <paramref name="code"/>
-        /// If code contains many namespaces one project per namespace is created.
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
@@ -31,38 +31,20 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Creates a solution for <paramref name="code"/>
-        /// If code contains many namespaces one project per namespace is created.
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var solution = new AdhocWorkspace()
-                .CurrentSolution;
-            var byNamespaces = code.Select(c => new SourceMetadata(c))
-                .GroupBy(c => c.Namespace);
-            foreach (var byNamespace in byNamespaces)
-            {
-                var assemblyName = byNamespace.Key;
-                var projectId = ProjectId.CreateNewId(assemblyName);
-                solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
-                    .WithProjectCompilationOptions(
-                        projectId,
-                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true))
-                    .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                foreach (var file in byNamespace)
-                {
-                    var documentId = DocumentId.CreateNewId(projectId);
-                    solution = solution.AddDocument(documentId, file.FileName, file.Code);
-                }
-            }
-
-            return solution;
+            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
+            return CreateSolution(code, metadataReferences, compilationOptions);
         }
 
         /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
@@ -70,11 +52,26 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
+            var specificDiagnosticOptions = GetSpecificDiagnosticOptions(analyzers);
+            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
+                .WithSpecificDiagnosticOptions(specificDiagnosticOptions);
+            return CreateSolution(code, metadataReferences, compilationOptions);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences, CSharpCompilationOptions compilationOptions)
+        {
             var solution = new AdhocWorkspace()
                 .CurrentSolution;
             var byNamespaces = code.Select(c => new SourceMetadata(c))
                                    .GroupBy(c => c.Namespace);
-            var specificDiagnosticOptions = GetSpecificDiagnosticOptions(analyzers);
             foreach (var byNamespace in byNamespaces)
             {
                 var assemblyName = byNamespace.Key;
@@ -82,8 +79,7 @@ namespace Gu.Roslyn.Asserts
                 solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
                                    .WithProjectCompilationOptions(
                                        projectId,
-                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
-                                                .WithSpecificDiagnosticOptions(specificDiagnosticOptions))
+                                       compilationOptions)
                                    .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
                 foreach (var file in byNamespace)
                 {
