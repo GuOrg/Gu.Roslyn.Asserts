@@ -115,6 +115,43 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void SingleClassOneErrorNoFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var temp = code.AssertReplace("↓", string.Empty);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, temp));
+                var expected = "Expected one code fix";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void SingleClassOneErrorEmptyFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var temp = code.AssertReplace("↓", string.Empty);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code, temp));
+                var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.EmptyCodeFixProvider did not change any document.";
+                Console.Write(exception.Message);
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void FixDoesNotMatchAnalyzer()
             {
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>((string)null, null));
