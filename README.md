@@ -30,7 +30,7 @@ Asserts for testing Roslyn analyzers.
 
 # Valid
 
-Us this to test that an analyzer does not report errors for valid code.
+Use `AnalyzerAssert.Valid<NoErrorAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
 
 ```c#
 [Test]
@@ -64,7 +64,7 @@ namespace RoslynSandbox
 
 ## Diagnostics
 
-Us this to test that the analyzer reports error or warning at position indicated with ↓
+Use `AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
 
 ```c#
 [Test]
