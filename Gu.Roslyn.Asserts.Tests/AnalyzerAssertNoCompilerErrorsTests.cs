@@ -27,6 +27,26 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public void WhenCodeNoCompilerErrorsCollectionInitializer()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using System.Collections.Generic;
+
+    class Foo
+    {
+        public Foo()
+        {
+            var ints = new List<int> { 1, 2, 3 };
+        }
+    }
+}";
+            AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            AnalyzerAssert.NoCompilerErrors(code);
+        }
+
+        [Test]
         public void WhenCodeHasCompilerErrors()
         {
             var code = @"
