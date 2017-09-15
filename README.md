@@ -418,27 +418,33 @@ namespace Project2
 ### Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.
 
 ```c#
-        [Test]
-        public void CreateSolutionFromProjectFile()
-        {
-            Assert.AreEqual(true, CodeFactory.TryFindProjectFile(
-                new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath),
-                out FileInfo projectFile));
-            var solution = CodeFactory.CreateSolution(
-                projectFile,
-                new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                CreateMetadataReferences(typeof(object)));
-        }
+[Test]
+public void CreateSolutionFromProjectFile()
+{
+    Assert.AreEqual(
+        true,
+        CodeFactory.TryFindProjectFile(
+            new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath),
+            out FileInfo projectFile));
+    var solution = CodeFactory.CreateSolution(
+        projectFile,
+        new[] { new FieldNameMustNotBeginWithUnderscore(), },
+        CreateMetadataReferences(typeof(object)));
+}
 
-        [Test]
-        public void CreateSolutionFromSolutionFile()
-        {
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
-            var solution = CodeFactory.CreateSolution(
-                solutionFile,
-                new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                CreateMetadataReferences(typeof(object)));
-        }
+[Test]
+public void CreateSolutionFromSolutionFile()
+{
+    Assert.AreEqual(
+        true,
+        CodeFactory.TryFindFileInParentDirectory(
+            new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath).Directory, "Gu.Roslyn.Asserts.sln",
+            out FileInfo solutionFile));
+    var solution = CodeFactory.CreateSolution(
+        solutionFile,
+        new[] { new FieldNameMustNotBeginWithUnderscore(), },
+        CreateMetadataReferences(typeof(object)));
+}
 ```
 
 # Usage with different test project types
