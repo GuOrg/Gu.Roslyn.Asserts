@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
-    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
     internal static class CustomFixAllProviders
@@ -13,8 +12,8 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
         /// <see cref="FixAllScope.Document"/>, <see cref="FixAllScope.Project"/> and <see cref="FixAllScope.Solution"/>.
         /// </summary>
         /// <remarks>
-        /// The batch fix all provider only batches operations (i.e. <see cref="CodeActionOperation"/>) of type
-        /// <see cref="ApplyChangesOperation"/> present within the individual diagnostic fixes. Other types of
+        /// The batch fix all provider only batches operations (i.e. <see cref="Microsoft.CodeAnalysis.CodeActions.CodeActionOperation"/>) of type
+        /// <see cref="Microsoft.CodeAnalysis.CodeActions.ApplyChangesOperation"/> present within the individual diagnostic fixes. Other types of
         /// operations present within these fixes are ignored.
         /// </remarks>
         /// <value>
