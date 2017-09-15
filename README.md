@@ -10,7 +10,7 @@
 
 Asserts for testing Roslyn analyzers.
 
-- [NoDiagnostics](#nodiagnostics)
+- [Valid](#valid)
   - [Diagnostics](#diagnostics)
 - [CodeFix](#codefix)
   - [Code fix only](#code-fix-only)
@@ -28,7 +28,7 @@ Asserts for testing Roslyn analyzers.
   - [Net461 new project type.](#net461-new-project-type)
   - [NetCoreApp2.0](#netcoreapp20)
 
-# NoDiagnostics
+# Valid
 
 Us this to test that an analyzer does not report errors for valid code.
 
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
     }
 }";
-    AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
+    AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
 }
 ```
 
@@ -58,7 +58,7 @@ namespace RoslynSandbox
     {
     }
 }";
-    AnalyzerAssert.NoDiagnostics(type, code);
+    AnalyzerAssert.Valid(type, code);
 }
 ```
 

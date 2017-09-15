@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class AnalyzerAssertNoDiagnosticsTests
+    public partial class AnalyzerAssertValidTests
     {
         public class Fail
         {
@@ -22,11 +22,11 @@ namespace RoslynSandbox
         private readonly int _value = 1;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(code);
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(code);
                 }
             }
 
@@ -42,11 +42,11 @@ namespace RoslynSandbox
         private readonly int _value = 1;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(type, code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(type, code));
                 Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics(type, code);
+                    AnalyzerAssert.Valid(type, code);
                 }
             }
 
@@ -61,11 +61,11 @@ namespace RoslynSandbox
         private readonly int _value = 1;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), code));
                 Assert.AreEqual("Foo.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
+                    AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), code);
                 }
             }
 
@@ -87,11 +87,11 @@ namespace RoslynSandbox
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
                 Assert.AreEqual("Foo1.cs(6,30): warning SA1309: Field '_value' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
                 }
             }
 
@@ -114,12 +114,12 @@ namespace RoslynSandbox
         private readonly int _value2 = 2;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
                 StringAssert.Contains("Foo1.cs(6,30): warning SA1309: Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("Foo2.cs(6,30): warning SA1309: Field '_value2' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
-                    AnalyzerAssert.NoDiagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
                 }
             }
         }

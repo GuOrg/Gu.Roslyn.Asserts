@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class AnalyzerAssertNoDiagnosticsTests
+    public partial class AnalyzerAssertValidTests
     {
         public class Success
         {
@@ -22,7 +22,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
             }
 
             [Test]
@@ -30,7 +30,7 @@ namespace RoslynSandbox
             {
                 var dllFile = new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath;
                 Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(new DirectoryInfo(Path.GetDirectoryName(dllFile)), Path.GetFileNameWithoutExtension(dllFile) + ".csproj", out FileInfo projectFile));
-                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(projectFile);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(projectFile);
             }
 
             [TestCase(typeof(NoErrorAnalyzer))]
@@ -43,7 +43,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics(type, code);
+                AnalyzerAssert.Valid(type, code);
             }
 
             [Test]
@@ -56,7 +56,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics(new NoErrorAnalyzer(), code);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), code);
             }
 
             [Test]
@@ -76,7 +76,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                AnalyzerAssert.NoDiagnostics<NoErrorAnalyzer>(code1, code2);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(code1, code2);
             }
         }
     }
