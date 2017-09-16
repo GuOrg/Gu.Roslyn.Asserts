@@ -64,9 +64,16 @@ namespace Gu.Roslyn.Asserts
                         }
                     }
 
-                    errorBuilder.AppendLine($"Expected: {expectedLine}");
-                    errorBuilder.AppendLine($"Actual:   {actualLine}");
-                    errorBuilder.AppendLine($"          {new string(' ', diffPos)}^");
+                    errorBuilder.AppendLine($"Expected: {expectedLine}")
+                                .AppendLine($"Actual:   {actualLine}")
+                                .AppendLine($"          {new string(' ', diffPos)}^")
+                                .AppendLine("Expected:")
+                                .Append(expected)
+                                .AppendLine()
+                                .AppendLine("Actual:")
+                                .Append(actual)
+                                .AppendLine();
+
                     throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
                 }
 

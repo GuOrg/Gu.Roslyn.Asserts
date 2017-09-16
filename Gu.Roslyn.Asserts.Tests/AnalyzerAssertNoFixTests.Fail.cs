@@ -36,7 +36,23 @@ namespace RoslynSandbox
                                "Mismatch on line 6 of file Foo.cs\r\n" +
                                "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n";
+                               "                                       ^\r\n" +
+                               "Expected:\r\n\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int _value;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int value;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -66,7 +82,23 @@ namespace RoslynSandbox
                                "Mismatch on line 6 of file Foo.cs\r\n" +
                                "Expected:         private readonly int _value;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n";
+                               "                                       ^\r\n" +
+                               "Expected:\r\n\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int _value;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int value;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
         }
