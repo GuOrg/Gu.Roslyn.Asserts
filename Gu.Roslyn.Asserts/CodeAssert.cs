@@ -1,7 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
-    using System.Threading;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
 
