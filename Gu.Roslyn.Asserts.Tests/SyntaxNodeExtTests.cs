@@ -7,15 +7,13 @@
 
     internal class SyntaxNodeExtTests
     {
-        internal class IsBeforeInScope
+        [TestCase("var temp = 1;", "var temp = 1;")]
+        [TestCase("var temp = 1;", "var temp = 1;")]
+        [TestCase("temp = 2;", "temp = 2;")]
+        public void FindStatement(string text, string expected)
         {
-            [TestCase("var temp = 1;", "var temp = 1;")]
-            [TestCase("var temp = 1;", "var temp = 1;")]
-            [TestCase("temp = 2;", "temp = 2;")]
-            public void FindStatement(string text, string expected)
-            {
-                var syntaxTree = CSharpSyntaxTree.ParseText(
-                    @"
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
 namespace RoslynSandbox
 {
     internal class Foo
@@ -27,12 +25,11 @@ namespace RoslynSandbox
         }
     }
 }");
-                var node = syntaxTree.FindStatement(text);
-                Assert.AreEqual(expected, node.ToString());
+            var node = syntaxTree.FindStatement(text);
+            Assert.AreEqual(expected, node.ToString());
 
-                node = syntaxTree.FindBestMatch<StatementSyntax>(text);
-                Assert.AreEqual(expected, node.ToString());
-            }
+            node = syntaxTree.FindBestMatch<StatementSyntax>(text);
+            Assert.AreEqual(expected, node.ToString());
         }
 
         [TestCase("temp = 1;", "= 1")]
