@@ -162,7 +162,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode1 = @"
+                var fixedCode = @"
 namespace RoslynSandbox
 {
     class Foo1
@@ -171,7 +171,24 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode2 = @"
+                fixedCode = fixedCode.AssertReplace("value", expected);
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, new[] { fixedCode, code2 }, title);
+            }
+
+            [TestCase("Rename to: value1", "value1")]
+            [TestCase("Rename to: value2", "value2")]
+            public void TwoClassesOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    class Foo1
+    {
+        private readonly int ↓_value;
+    }
+}";
+                var code2 = @"
 namespace RoslynSandbox
 {
     class Foo2
@@ -179,9 +196,19 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                fixedCode1 = fixedCode1.AssertReplace("value", expected);
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo1
+    {
+        private readonly int value;
+    }
+}";
+
+                fixedCode = fixedCode.AssertReplace("value", expected);
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, new[] { fixedCode1, fixedCode2 }, title);
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, fixedCode, title);
             }
 
             [TestCase("Rename to: value1", "value1")]

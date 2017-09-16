@@ -25,7 +25,6 @@ namespace RoslynSandbox
 
         [TestCase(0, 0, "↓using System;")]
         [TestCase(0, 6, "using ↓System;")]
-        [TestCase(0, 6, "using ↓System;")]
         [TestCase(1, 0, "↓using System.Collections.Generic;")]
         [TestCase(11, 0, "↓}")]
         [TestCase(11, 1, "}↓")]

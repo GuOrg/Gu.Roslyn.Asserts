@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -28,6 +28,49 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             FixAll(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, new[] { fixedCode }, MetadataReferences, fixTitle, allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var fixedCodes = new List<string>(codeWithErrorsIndicated.Count);
+            var found = false;
+            foreach (var code in codeWithErrorsIndicated)
+            {
+                if (code.IndexOf('↓') >= 0)
+                {
+                    if (found)
+                    {
+                        throw AssertException.Create("Expected only one with errors indicated.");
+                    }
+
+                    fixedCodes.Add(fixedCode);
+                    found = true;
+                }
+                else
+                {
+                    fixedCodes.Add(code);
+                }
+            }
+
+            if (!found)
+            {
+                throw AssertException.Create("Expected one with errors indicated.");
+            }
+
+            FixAll(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated, fixedCodes, MetadataReferences, fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
