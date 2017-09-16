@@ -11,7 +11,7 @@
 Asserts for testing Roslyn analyzers.
 
 - [Valid](#valid)
-  - [Diagnostics](#diagnostics)
+- [Diagnostics](#diagnostics)
 - [CodeFix](#codefix)
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
@@ -67,7 +67,7 @@ namespace RoslynSandbox
 }
 ```
 
-## Diagnostics
+# Diagnostics
 
 Use `AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
 
