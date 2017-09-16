@@ -42,6 +42,28 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void MakeSealedCorrectFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    ↓public class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    public sealed class Foo
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
+            }
+
+            [Test]
             public void SingleClassOneErrorCorrectFixExplicitTitle()
             {
                 var code = @"

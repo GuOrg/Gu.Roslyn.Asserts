@@ -7,13 +7,13 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ClassMustHaveEventAnalyzer : DiagnosticAnalyzer
+    internal class ClassMustBeSealedAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ClassMustHaveEvent";
+        public const string DiagnosticId = "ClassMustBeSealed";
 
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,
-            title: "This analyzer reports warnings if a class does not have an event.",
+            title: "This analyzer reports warnings if a class is not sealed.",
             messageFormat: "Message format.",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
@@ -30,15 +30,10 @@ namespace Gu.Roslyn.Asserts.Tests
         private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
         {
             var classDeclaration = (ClassDeclarationSyntax)context.Node;
-            foreach (var member in classDeclaration.Members)
+            if (!classDeclaration.Modifiers.Any(SyntaxKind.SealedKeyword))
             {
-                if (member is EventFieldDeclarationSyntax)
-                {
-                    return;
-                }
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
             }
-
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
         }
     }
 }

@@ -17,6 +17,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertTests.cs" Link="AnalyzerAssertTests.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertValidTests.Fail.cs" Link="AnalyzerAssertValidTests.Fail.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\AnalyzerAssertValidTests.Success.cs" Link="AnalyzerAssertValidTests.Success.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\Analyzers\ClassMustBeSealedAnalyzer.cs" Link="Analyzers\ClassMustBeSealedAnalyzer.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\Analyzers\ClassMustHaveEventAnalyzer.cs" Link="Analyzers\ClassMustHaveEventAnalyzer.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\Analyzers\FieldNameMustNotBeginWithUnderscore.cs" Link="Analyzers\FieldNameMustNotBeginWithUnderscore.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" Link="Analyzers\FieldNameMustNotBeginWithUnderscoreDisabled.cs" />
@@ -31,6 +32,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\EmptyCodeFixProvider.cs" Link="CodeFixes\EmptyCodeFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\FixAllContextHelper.cs" Link="CodeFixes\FixAllContextHelper.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\InsertEventFixProvider.cs" Link="CodeFixes\InsertEventFixProvider.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\MakeSealedFixProvider.cs" Link="CodeFixes\MakeSealedFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\NoCodeFixProvider.cs" Link="CodeFixes\NoCodeFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\RemoveUnusedFixProvider.cs" Link="CodeFixes\RemoveUnusedFixProvider.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeFixes\RenameHelper.cs" Link="CodeFixes\RenameHelper.cs" />
