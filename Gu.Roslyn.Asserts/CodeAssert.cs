@@ -1,7 +1,9 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Threading;
     using Gu.Roslyn.Asserts.Internals;
+    using Microsoft.CodeAnalysis;
 
     /// <summary>
     /// Assert for testing if code equals
@@ -16,6 +18,42 @@ namespace Gu.Roslyn.Asserts
         public static void AreEqual(string expected, string actual)
         {
             AreEqual(expected, actual, null);
+        }
+
+        /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="expected">The expected code.</param>
+        /// <param name="actual">The actual code.</param>
+        public static void AreEqual(string expected, Document actual)
+        {
+            AreEqual(expected, actual.GetCode(), null);
+        }
+
+        /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="expected">The expected code.</param>
+        /// <param name="actual">The actual code.</param>
+        public static void AreEqual(Document expected, Document actual)
+        {
+            AreEqual(
+                CodeReader.GetCode(expected),
+                CodeReader.GetCode(actual),
+                null);
+        }
+
+        /// <summary>
+        /// Verify that two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="expected">The expected code.</param>
+        /// <param name="actual">The actual code.</param>
+        public static void AreEqual(Document expected, string actual)
+        {
+            AreEqual(
+                CodeReader.GetCode(expected),
+                actual,
+                null);
         }
 
         /// <summary>

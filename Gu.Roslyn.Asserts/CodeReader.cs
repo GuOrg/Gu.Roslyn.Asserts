@@ -35,6 +35,11 @@
             return true;
         }
 
+        public static string GetCode(this Document document)
+        {
+            return GetStringFromDocumentAsync(document, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
         /// <summary>
         /// Checks if two strings of code are equal. Agnostic to end of line characters.
         /// </summary>
