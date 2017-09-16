@@ -114,47 +114,104 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static async Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
-            if (analyzer.SupportedDiagnostics.Length != 1)
-            {
-                var message = $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
-                              $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
-                throw AssertException.Create(message);
-            }
-
-            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, metadataReference).ConfigureAwait(false);
-
-            var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
-                                         .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
-                                         .ToArray();
-            if (fixableDiagnostics.Length == 0)
-            {
-                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
-            }
-
-            var fixedSolution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, fixTitle, CancellationToken.None).ConfigureAwait(false);
-            await AreEqualAsync(fixedCode, fixedSolution, "Applying fixes one by one failed.").ConfigureAwait(false);
-            if (allowCompilationErrors == AllowCompilationErrors.No)
-            {
-                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
-            }
+            var data = await CreateDiagnosticsMetadataAsync(analyzer, codeFix, codeWithErrorsIndicated, metadataReference);
+            await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data).ConfigureAwait(false);
 
             var fixAllProvider = codeFix.GetFixAllProvider();
             if (fixAllProvider != null)
             {
                 foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
                 {
-                    fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, fixTitle, scope, CancellationToken.None).ConfigureAwait(false);
-                    await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
-                    if (allowCompilationErrors == AllowCompilationErrors.No)
-                    {
-                        await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
-                    }
+                    await FixAllByScope(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
                 }
             }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code by applying it as long as there are fixable errors.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static async Task FixAllOneByOneAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
+        {
+            var data = await CreateDiagnosticsMetadataAsync(analyzer, codeFix, codeWithErrorsIndicated, metadataReference);
+            await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static async Task FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors, FixAllScope scope)
+        {
+            var data = await CreateDiagnosticsMetadataAsync(analyzer, codeFix, codeWithErrorsIndicated, metadataReference);
+            await FixAllByScope(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
+        }
+
+        private static async Task FixAllOneByOneAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, DiagnosticsMetadata data)
+        {
+            var fixedSolution = await Fix.ApplyAllFixableOneByOneAsync(data.Solution, analyzer, codeFix, fixTitle, CancellationToken.None).ConfigureAwait(false);
+            await AreEqualAsync(fixedCode, fixedSolution, "Applying fixes one by one failed.").ConfigureAwait(false);
+            if (allowCompilationErrors == AllowCompilationErrors.No)
+            {
+                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, DiagnosticsMetadata data, FixAllScope scope)
+        {
+            var fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, fixTitle, scope, CancellationToken.None).ConfigureAwait(false);
+            await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
+            if (allowCompilationErrors == AllowCompilationErrors.No)
+            {
+                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReference)
+        {
+            if (analyzer.SupportedDiagnostics.Length != 1)
+            {
+                var message =
+                    $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                    $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
+                throw AssertException.Create(message);
+            }
+
+            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, metadataReference)
+                .ConfigureAwait(false);
+
+            var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
+                                         .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
+                                         .ToArray();
+            if (fixableDiagnostics.Length == 0)
+            {
+                var message =
+                    $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
+                    $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Analyzer.SupportedDiagnostics[0].Id))}}}{Environment.NewLine}" +
+                    $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
+                throw AssertException.Create(message);
+            }
+
+            return data;
         }
     }
 }
