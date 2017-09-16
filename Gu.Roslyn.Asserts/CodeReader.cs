@@ -35,6 +35,9 @@
             return true;
         }
 
+        /// <summary>
+        /// Get the code from the document.
+        /// </summary>
         public static string GetCode(this Document document)
         {
             return GetStringFromDocumentAsync(document, CancellationToken.None).GetAwaiter().GetResult();

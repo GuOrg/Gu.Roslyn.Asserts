@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts.Internals
             var action = await codeFix.GetFixAllProvider().GetFixAsync(context).ConfigureAwait(false);
 
             var operations = await action.GetOperationsAsync(cancellationToken)
-                                             .ConfigureAwait(false);
+                                         .ConfigureAwait(false);
             return operations.OfType<ApplyChangesOperation>()
                              .Single()
                              .ChangedSolution;

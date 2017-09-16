@@ -1,6 +1,11 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.Editing;
     using NUnit.Framework;
 
     public class CodeAssertTests
@@ -70,6 +75,30 @@ namespace RoslynSandbox
                            "    }\r\n" +
                            "}\r\n";
             Assert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
+        public async Task MakeSealed()
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+    }
+}";
+            var sln = CodeFactory.CreateSolution(testCode);
+            var editor = await DocumentEditor.CreateAsync(sln.Projects.First().Documents.First()).ConfigureAwait(false);
+            var type = editor.OriginalRoot.SyntaxTree.FindBestMatch<ClassDeclarationSyntax>("Foo");
+            var expected = @"
+namespace RoslynSandbox
+{
+    public sealed class Foo
+    {
+    }
+}";
+            editor.SetModifiers(type, DeclarationModifiers.From(editor.SemanticModel.GetDeclaredSymbol(type)).WithIsSealed(isSealed: true));
+            CodeAssert.AreEqual(expected, editor.GetChangedDocument());
         }
     }
 }
