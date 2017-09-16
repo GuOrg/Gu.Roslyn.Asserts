@@ -35,7 +35,7 @@ namespace RoslynSandbox
             }
         }
 
-        [TestCase("temp = 1;", "= 1;")]
+        [TestCase("temp = 1;", "= 1")]
         public void FindEqualsValueClause(string text, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
@@ -58,7 +58,7 @@ namespace RoslynSandbox
             Assert.AreEqual(expected, node.ToString());
         }
 
-        [TestCase("temp = 2;", "temp = 2;")]
+        [TestCase("temp = 2;", "temp = 2")]
         public void FindAssignmentExpression(string text, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
