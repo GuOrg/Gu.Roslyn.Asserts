@@ -165,7 +165,7 @@
             {
                 foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
                 {
-                    await FixAllByScope(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
+                    await FixAllByScopeAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
                 }
             }
         }
@@ -202,10 +202,11 @@
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static async Task FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors, FixAllScope scope)
+        /// <param name="scope">The scope to apply fixes for.</param>
+        public static async Task FixAllByScopeAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors, FixAllScope scope)
         {
             var data = await CreateDiagnosticsMetadataAsync(analyzer, codeFix, codeWithErrorsIndicated, metadataReference);
-            await FixAllByScope(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
+            await FixAllByScopeAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
         }
 
         private static async Task FixAllOneByOneAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, DiagnosticsMetadata data)
@@ -218,7 +219,7 @@
             }
         }
 
-        private static async Task FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, DiagnosticsMetadata data, FixAllScope scope)
+        private static async Task FixAllByScopeAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, DiagnosticsMetadata data, FixAllScope scope)
         {
             var fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(data.Solution, analyzer, codeFix, fixTitle, scope, CancellationToken.None).ConfigureAwait(false);
             await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
