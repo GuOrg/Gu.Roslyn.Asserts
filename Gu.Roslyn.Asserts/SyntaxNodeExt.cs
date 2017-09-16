@@ -1,0 +1,91 @@
+namespace Gu.Roslyn.Asserts
+{
+    using System;
+    using System.Linq;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+    public static class SyntaxNodeExt
+    {
+        /// <summary>
+        /// Find a <see cref="EqualsValueClauseSyntax"/> that matches <paramref name="code"/>.
+        /// </summary>
+        public static EqualsValueClauseSyntax FindEqualsValueClause(this SyntaxTree tree, string code)
+        {
+            return tree.FindBestMatch<EqualsValueClauseSyntax>(code);
+        }
+
+        /// <summary>
+        /// Find a <see cref="AssignmentExpressionSyntax"/> that matches <paramref name="code"/>.
+        /// </summary>
+        public static AssignmentExpressionSyntax FindAssignmentExpression(this SyntaxTree tree, string code)
+        {
+            return tree.FindBestMatch<AssignmentExpressionSyntax>(code);
+        }
+
+        /// <summary>
+        /// Find a <see cref="StatementSyntax"/> that matches <paramref name="code"/>.
+        /// </summary>
+        public static StatementSyntax FindStatement(this SyntaxTree tree, string code)
+        {
+            return tree.FindBestMatch<StatementSyntax>(code);
+        }
+
+        /// <summary>
+        /// Find a <see cref="FindConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
+        {
+            foreach (var ctor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>())
+            {
+                if (ctor.ToFullString().Contains(signature))
+                {
+                    return ctor;
+                }
+            }
+
+            throw new InvalidOperationException($"The tree does not contain an {typeof(ConstructorDeclarationSyntax).Name} matching {signature}");
+        }
+
+        /// <summary>
+        /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
+        /// </summary>
+        public static T FindBestMatch<T>(this SyntaxTree tree, string code)
+            where T : SyntaxNode
+        {
+            SyntaxNode parent = null;
+            T best = null;
+            foreach (var node in tree.GetRoot()
+                                     .DescendantNodes()
+                                     .OfType<T>())
+            {
+                var statementSyntax = node.FirstAncestorOrSelf<StatementSyntax>();
+                if (statementSyntax?.ToFullString().Contains(code) == true)
+                {
+                    if (parent == null || statementSyntax.Span.Length < parent.Span.Length)
+                    {
+                        parent = statementSyntax;
+                        best = node;
+                    }
+                }
+
+                var member = node.FirstAncestorOrSelf<MemberDeclarationSyntax>();
+                if (member?.ToFullString().Contains(code) == true)
+                {
+                    if (parent == null || member.Span.Length < parent.Span.Length)
+                    {
+                        parent = member;
+                        best = node;
+                    }
+                }
+            }
+
+            if (best == null)
+            {
+                throw new InvalidOperationException($"The tree does not contain an {typeof(T).Name} matching the code.");
+            }
+
+            return best;
+        }
+    }
+}

@@ -39,6 +39,7 @@
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeReaderTests.FileName.cs" Link="CodeReaderTests.FileName.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\CodeReaderTests.FindDiagnosticsPositions.cs" Link="CodeReaderTests.FindDiagnosticsPositions.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\Sandbox.cs" Link="Sandbox.cs" />
+    <Compile Include="..\Gu.Roslyn.Asserts.Tests\SyntaxNodeExtTests.cs" Link="SyntaxNodeExtTests.cs" />
     <Compile Include="..\Gu.Roslyn.Asserts.Tests\TextAssertTests.cs" Link="TextAssertTests.cs" />
   </ItemGroup>
   <ItemGroup>

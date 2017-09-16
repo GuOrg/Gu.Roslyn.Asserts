@@ -29,9 +29,11 @@ Asserts for testing Roslyn analyzers.
   - [CreateSolution](#createsolution)
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
+- [SyntaxNodeExt](#syntaxnodeext)
 - [Usage with different test project types](#usage-with-different-test-project-types)
   - [Net461 new project type.](#net461-new-project-type)
   - [NetCoreApp2.0](#netcoreapp20)
+
 
 # Valid
 
@@ -445,6 +447,32 @@ public void CreateSolutionFromSolutionFile()
         new[] { new FieldNameMustNotBeginWithUnderscore(), },
         CreateMetadataReferences(typeof(object)));
 }
+```
+
+# SyntaxNodeExt
+```cs
+        [Test]
+        public void FindAssignmentExpressionDemo()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo
+    {
+        internal Foo()
+        {
+            var temp = 1;
+            temp = 2;
+        }
+    }
+}");
+            var compilation = CSharpCompilation.Create("test", new[] { syntaxTree }, new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location), });
+            var semanticModel = compilation.GetSemanticModel(syntaxTree);
+            var assignment = syntaxTree.FindAssignmentExpression("temp = 2");
+            Assert.AreEqual("temp = 2", assignment.ToString());
+            Assert.AreEqual("int", semanticModel.GetTypeInfo(assignment.Right).Type.ToDisplayString());
+        }
 ```
 
 # Usage with different test project types
