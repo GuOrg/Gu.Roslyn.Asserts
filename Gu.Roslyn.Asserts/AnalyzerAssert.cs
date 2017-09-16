@@ -71,6 +71,13 @@
                     error.AppendLine($"{errorInfo}");
                 }
 
+                error.AppendLine("First source file with error is:");
+                var first = introducedDiagnostics.First();
+                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
+                var idAndPosition = IdAndPosition.Create(first);
+                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == idAndPosition.Span.Path);
+                error.Append(match);
+                error.AppendLine();
                 throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
             }
         }

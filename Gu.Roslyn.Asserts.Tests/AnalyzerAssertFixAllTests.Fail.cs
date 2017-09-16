@@ -237,7 +237,15 @@ namespace RoslynSandbox
                                "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
                                "  at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
                                "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
-                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n";
+                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "First source file with error is:\r\n\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class Foo\r\n" +
+                               "    {\r\n" +
+                               "        public event EventHandler SomeEvent;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
         }
