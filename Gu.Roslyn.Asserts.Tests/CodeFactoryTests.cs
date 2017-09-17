@@ -119,7 +119,6 @@ namespace Project2
             {
                 "Gu.Roslyn.Asserts",
                 "Gu.Roslyn.Asserts.Tests",
-                "Gu.Roslyn.Asserts.Net461.Tests",
                 "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
                 "Gu.Roslyn.Asserts.XUnit"
             };
