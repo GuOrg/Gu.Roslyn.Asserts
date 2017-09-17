@@ -1,6 +1,7 @@
 Microsoft.CodeAnalysis.CSharp.Workspaces
 
-SourceLink.Create.CommandLine
+group Build
+  SourceLink.Create.CommandLine
 
 group Analyzers
   Gu.Analyzers

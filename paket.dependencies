@@ -6,14 +6,21 @@ redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
 
-nuget SourceLink.Create.CommandLine
-nuget Microsoft.NET.Test.Sdk
+group Build
+  storage: none
+  source http://www.nuget.org/api/v2/
+  nuget SourceLink.Create.CommandLine
 
-nuget NUnit
-nuget NUnit3TestAdapter
-
-nuget xunit prerelease
-nuget xunit.runner.visualstudio prerelease
+group Test
+  storage: none
+  source http://www.nuget.org/api/v2/
+  nuget Microsoft.NET.Test.Sdk
+  
+  nuget NUnit
+  nuget NUnit3TestAdapter
+  
+  nuget xunit prerelease
+  nuget xunit.runner.visualstudio prerelease
 
 group Analyzers
   storage: none
