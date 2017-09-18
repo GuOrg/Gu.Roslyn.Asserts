@@ -288,6 +288,17 @@ For specifying a batch of metadata references to be used in the tests.
 
 Calling `AnalyzerAssert.ResetMetadataReferences()` resets `AnalyzerAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
 
+## MetadataReferences
+
+For getting all metadata references specified with attributes use:
+
+```cs
+var compilation = CSharpCompilation.Create(
+    "TestProject",
+    new[] { syntaxTree },
+    MetadataReferences.FromAttributes());
+```
+
 ### Sample AssemblyInfo.cs (for the test project.)
 
 ```c#

@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>
     /// </summary>
-    internal static class MetadataReferences
+    public static class MetadataReferences
     {
 #pragma warning disable 169
         private static List<MetadataReference> metadataReferences;
@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assembly.
         /// </summary>
-        public static List<MetadataReference> GetMetadataReferences()
+        public static IReadOnlyList<MetadataReference> FromAttributes()
         {
             if (metadataReferences != null)
             {
