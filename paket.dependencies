@@ -2,7 +2,6 @@ storage: none
 strategy: min
 lowest_matching: true
 source https://www.nuget.org/api/v2/
-redirects: on
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
 
