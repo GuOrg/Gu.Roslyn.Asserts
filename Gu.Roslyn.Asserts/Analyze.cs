@@ -191,7 +191,7 @@ namespace Gu.Roslyn.Asserts
                         project.AnalyzerOptions,
                         CancellationToken.None);
                     var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                                            .ConfigureAwait(false);
+                                                         .ConfigureAwait(false);
                     fixableDiagnostics.AddRange(diagnostics.Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
                 }
             }
