@@ -7,6 +7,7 @@
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert
@@ -23,7 +24,15 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            NoFix(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated);
+            var analyzer = new TAnalyzer();
+            NoFixAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -38,7 +47,15 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            NoFix(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated);
+            var analyzer = new TAnalyzer();
+            NoFixAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -51,7 +68,14 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated)
         {
-            NoFixAsync(analyzer, codeFix, codeWithErrorsIndicated, MetadataReferences).GetAwaiter().GetResult();
+            NoFixAsync(
+                    analyzer,
+                    codeFix,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -62,12 +86,13 @@
         /// <param name="analyzer">The type of the analyzer.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, compilationOptions, metadataReferences).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();

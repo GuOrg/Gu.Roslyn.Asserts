@@ -60,7 +60,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            return CreateSolution(code, DefaultCompilationOptions(null, null), metadataReferences);
+            return CreateSolution(code, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>)null, null), metadataReferences);
         }
 
         /// <summary>
@@ -144,10 +144,29 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            CSharpCompilationOptions compilationOptions = DefaultCompilationOptions(analyzers, null);
-            return CreateSolution(code, analyzers, compilationOptions, metadataReferences);
+            var compilationOptions = DefaultCompilationOptions(analyzers, null);
+            return CreateSolution(code, compilationOptions, metadataReferences);
         }
 
+        /// <summary>
+        /// Create default compilation options for <paramref name="analyzer"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed)
+        {
+            return DefaultCompilationOptions(new[] { analyzer }, suppressed);
+        }
+
+        /// <summary>
+        /// Create default compilation options for <paramref name="analyzers"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="analyzers">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
         {
             return new CSharpCompilationOptions(
@@ -157,21 +176,20 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// Create a Solution.
         /// </summary>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file
         /// </param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, CompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
-                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, analyzers, metadataReferences);
+                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, compilationOptions, metadataReferences);
             }
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
@@ -262,7 +280,20 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Create diagnostic options that at least warns for <paramref name="analyzer"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="analyzer">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
+        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed)
+        {
+            return CreateSpecificDiagnosticOptions(new[] { analyzer }, suppressed);
+        }
+
+        /// <summary>
         /// Create diagnostic options that at least warns for <paramref name="analyzers"/>
+        /// AD0001 is reported as error.
         /// </summary>
         /// <param name="analyzers">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>

@@ -16,7 +16,7 @@
         /// <returns>A <see cref="StringBuilder"/></returns>
         internal static StringBuilder Borrow()
         {
-            return Cache.TryDequeue(out StringBuilder result)
+            return Cache.TryDequeue(out var result)
                     ? result
                     : new StringBuilder();
         }

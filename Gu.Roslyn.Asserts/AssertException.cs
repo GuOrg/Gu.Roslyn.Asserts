@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The exception.</returns>
         public static Exception Create(string message)
         {
-            if (TryGetExceptionType(out Type type))
+            if (TryGetExceptionType(out var type))
             {
                 return (Exception)Activator.CreateInstance(type, message);
             }
@@ -51,7 +51,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The exception.</returns>
         public static Exception Create(string message, Exception innerException)
         {
-            if (TryGetExceptionType(out Type type))
+            if (TryGetExceptionType(out var type))
             {
                 return (Exception)Activator.CreateInstance(type, message, innerException);
             }

@@ -77,6 +77,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
         /// </summary>
+        /// <typeparam name="T">The type of the node to find.</typeparam>
         public static T FindBestMatch<T>(this SyntaxTree tree, string code)
             where T : SyntaxNode
         {

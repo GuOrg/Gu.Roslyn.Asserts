@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert
@@ -18,7 +19,14 @@
         public static void Valid<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            ValidAsync(new TAnalyzer(), code, MetadataReferences).GetAwaiter().GetResult();
+            var analyzer = new TAnalyzer();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -29,7 +37,13 @@
         public static void Valid(Type analyzerType, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -39,7 +53,13 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -49,7 +69,13 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -59,9 +85,30 @@
         /// <param name="code">The code with error positions indicated.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
+            return ValidAsync(
+                analyzer,
+                code,
+                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                metadataReferences);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var diagnostics = await Analyze.GetDiagnosticsAsync(
+                                               analyzer,
+                                               code,
+                                               compilationOptions,
+                                               metadataReferences)
                                            .ConfigureAwait(false);
 
             if (diagnostics.SelectMany(x => x).Any())
@@ -78,7 +125,14 @@
         public static void Valid<TAnalyzer>(FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            ValidAsync(new TAnalyzer(), code, MetadataReferences).GetAwaiter().GetResult();
+            var analyzer = new TAnalyzer();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -92,7 +146,13 @@
         public static void Valid(Type analyzerType, FileInfo code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -105,7 +165,13 @@
         /// </param>
         public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code)
         {
-            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
+            ValidAsync(
+                    analyzer,
+                    code,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -116,11 +182,12 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file
         /// </param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, metadataReferences)
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, compilationOptions, metadataReferences)
                                            .ConfigureAwait(false);
 
             if (diagnostics.SelectMany(x => x).Any())

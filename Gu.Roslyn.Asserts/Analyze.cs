@@ -9,6 +9,7 @@ namespace Gu.Roslyn.Asserts
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -16,6 +17,22 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class Analyze
     {
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="sources">The sources as strings.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> references)
+        {
+            var sln = CodeFactory.CreateSolution(sources, compilationOptions, references);
+            var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            return new DiagnosticsWithMetadata(sln, results);
+        }
+
         /// <summary>
         /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
         /// Then compiles it and returns the diagnostics.
@@ -41,7 +58,25 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, metadataReferences);
+            return GetDiagnosticsAsync(
+                analyzer,
+                sources,
+                CodeFactory.DefaultCompilationOptions(analyzer, null),
+                metadataReferences);
+        }
+
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="sources">The sources as strings.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(sources, compilationOptions, metadataReferences);
             return GetDiagnosticsAsync(sln, analyzer);
         }
 
@@ -92,6 +127,24 @@ namespace Gu.Roslyn.Asserts
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, metadataReferences);
+            return GetDiagnosticsAsync(sln, analyzer);
+        }
+
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .solution file
+        /// </param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             return GetDiagnosticsAsync(sln, analyzer);
         }
 

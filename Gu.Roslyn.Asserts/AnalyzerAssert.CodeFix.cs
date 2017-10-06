@@ -8,6 +8,7 @@
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert
@@ -27,7 +28,18 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode, fixTitle, allowCompilationErrors);
+            var analyzer = new TAnalyzer();
+            CodeFixAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    fixedCode,
+                    fixTitle,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -44,7 +56,18 @@
         public static void CodeFix<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), new[] { codeWithErrorsIndicated }, fixedCode, fixTitle, allowCompilationErrors);
+            var analyzer = new PlaceholderAnalyzer(id);
+            CodeFixAsync(
+                analyzer,
+                new TCodeFix(),
+                new[] { codeWithErrorsIndicated },
+                fixedCode,
+                fixTitle,
+                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                MetadataReferences,
+                allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -62,7 +85,18 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new TAnalyzer(), new TCodeFix(), codeWithErrorsIndicated, fixedCode, fixTitle, allowCompilationErrors);
+            var analyzer = new TAnalyzer();
+            CodeFixAsync(
+                analyzer,
+                new TCodeFix(),
+                codeWithErrorsIndicated,
+                fixedCode,
+                fixTitle,
+                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                MetadataReferences,
+                allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -79,7 +113,18 @@
         public static void CodeFix<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
-            CodeFix(new PlaceholderAnalyzer(id), new TCodeFix(), codeWithErrorsIndicated, fixedCode, fixTitle, allowCompilationErrors);
+            var analyzer = new PlaceholderAnalyzer(id);
+            CodeFixAsync(
+                analyzer,
+                new TCodeFix(),
+                codeWithErrorsIndicated,
+                fixedCode,
+                fixTitle,
+                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                MetadataReferences,
+                allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -95,7 +140,17 @@
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            CodeFixAsync(analyzer, codeFix, codeWithErrorsIndicated, fixedCode, fixTitle, MetadataReferences, allowCompilationErrors).GetAwaiter().GetResult();
+            CodeFixAsync(
+                    analyzer,
+                    codeFix,
+                    codeWithErrorsIndicated,
+                    fixedCode,
+                    fixTitle,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -108,10 +163,11 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -121,7 +177,7 @@
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, metadataReferences).ConfigureAwait(false);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, compilationOptions, metadataReferences).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();

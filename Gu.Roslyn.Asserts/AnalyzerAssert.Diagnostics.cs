@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class AnalyzerAssert
@@ -20,7 +21,15 @@
         public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            DiagnosticsWithMetadataAsync(new TAnalyzer(), codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
+            var analyzer = new TAnalyzer();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -32,7 +41,15 @@
         public static void Diagnostics<TAnalyzer>(ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            DiagnosticsWithMetadataAsync(new TAnalyzer(), codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
+            var analyzer = new TAnalyzer();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    expectedMessage)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -43,7 +60,14 @@
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -55,7 +79,14 @@
         public static void Diagnostics(Type analyzerType, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    expectedMessage)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -65,7 +96,14 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -76,7 +114,14 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
         {
-            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    expectedMessage)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -87,7 +132,14 @@
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    codeWithErrorsIndicated,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    expectedMessage)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -99,7 +151,12 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task DiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            return DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage);
+            return DiagnosticsWithMetadataAsync(
+                analyzer,
+                codeWithErrorsIndicated,
+                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                MetadataReferences,
+                expectedMessage);
         }
 
         /// <summary>
@@ -107,10 +164,16 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>The meta data from the run..</returns>
-        public static async Task<DiagnosticsMetadata> DiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<MetadataReference> metadataReferences, ExpectedMessage expectedMessage = null)
+        public static async Task<DiagnosticsMetadata> DiagnosticsWithMetadataAsync(
+            DiagnosticAnalyzer analyzer,
+            IReadOnlyList<string> codeWithErrorsIndicated,
+            CSharpCompilationOptions compilationOptions,
+            IReadOnlyList<MetadataReference> metadataReferences,
+            ExpectedMessage expectedMessage = null)
         {
             var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
@@ -118,10 +181,15 @@
                 throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var data = await Analyze.GetDiagnosticsWithMetadataAsync(analyzer, expectedDiagnosticsAndSources.CleanedSources, metadataReferences)
+            var data = await Analyze.GetDiagnosticsWithMetadataAsync(
+                                        analyzer,
+                                        expectedDiagnosticsAndSources.CleanedSources,
+                                        compilationOptions,
+                                        metadataReferences)
                                     .ConfigureAwait(false);
 
-            var expecteds = new HashSet<IdAndPosition>(expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(IdAndPosition.Create));
+            var expecteds = new HashSet<IdAndPosition>(
+                expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(IdAndPosition.Create));
 
             var actuals = data.Diagnostics
                               .SelectMany(x => x)
@@ -138,7 +206,12 @@
                     }
                 }
 
-                return new DiagnosticsMetadata(codeWithErrorsIndicated, expectedDiagnosticsAndSources.CleanedSources, expectedDiagnosticsAndSources.ExpectedDiagnostics, data.Diagnostics, data.Solution);
+                return new DiagnosticsMetadata(
+                    codeWithErrorsIndicated,
+                    expectedDiagnosticsAndSources.CleanedSources,
+                    expectedDiagnosticsAndSources.ExpectedDiagnostics,
+                    data.Diagnostics,
+                    data.Solution);
             }
 
             var error = StringBuilderPool.Borrow();
