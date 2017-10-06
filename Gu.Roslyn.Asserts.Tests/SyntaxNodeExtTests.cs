@@ -100,5 +100,89 @@ namespace RoslynSandbox
             Assert.AreEqual("temp = 2", assignment.ToString());
             Assert.AreEqual("int", semanticModel.GetTypeInfo(assignment.Right).Type.ToDisplayString());
         }
+
+        [Test]
+        public void FindConstructorDeclarationSyntax()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo
+    {
+        internal Foo()
+        {
+        }
+    }
+}");
+            var expected = "internal Foo()\r\n        {\r\n        }";
+            var node = syntaxTree.FindConstructorDeclarationSyntax("internal Foo()");
+            Assert.AreEqual(expected, node.ToString());
+
+            node = syntaxTree.FindBestMatch<ConstructorDeclarationSyntax>("internal Foo()");
+            Assert.AreEqual(expected, node.ToString());
+        }
+
+        [Test]
+        public void FindMethodDeclaration()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo
+    {
+        internal void Bar()
+        {
+        }
+    }
+}");
+            var expected = "internal void Bar()\r\n        {\r\n        }";
+            var node = syntaxTree.FindMethodDeclaration("internal void Bar()");
+            Assert.AreEqual(expected, node.ToString());
+
+            node = syntaxTree.FindBestMatch<MethodDeclarationSyntax>("internal void Bar()");
+            Assert.AreEqual(expected, node.ToString());
+        }
+
+        [Test]
+        public void FindFieldDeclaration()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo
+    {
+        internal readonly int bar;
+    }
+}");
+            var expected = "internal readonly int bar;";
+            var node = syntaxTree.FindFieldDeclaration("bar");
+            Assert.AreEqual(expected, node.ToString());
+
+            node = syntaxTree.FindBestMatch<FieldDeclarationSyntax>("bar");
+            Assert.AreEqual(expected, node.ToString());
+        }
+
+        [Test]
+        public void FindPropertyDeclaration()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo
+    {
+        public int Bar { get; set; }
+    }
+}");
+            var expected = "public int Bar { get; set; }";
+            var node = syntaxTree.FindPropertyDeclaration("Bar");
+            Assert.AreEqual(expected, node.ToString());
+
+            node = syntaxTree.FindBestMatch<PropertyDeclarationSyntax>("Bar");
+            Assert.AreEqual(expected, node.ToString());
+        }
     }
 }
