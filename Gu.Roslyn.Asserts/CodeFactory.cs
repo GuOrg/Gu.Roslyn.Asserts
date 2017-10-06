@@ -86,9 +86,10 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
-            var specificDiagnosticOptions = GetSpecificDiagnosticOptions(analyzers);
-            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
-                .WithSpecificDiagnosticOptions(specificDiagnosticOptions);
+            var compilationOptions = new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                allowUnsafe: true,
+                specificDiagnosticOptions: GetSpecificDiagnosticOptions(analyzers, null));
             return CreateSolution(code, compilationOptions, metadataReferences);
         }
 
@@ -112,10 +113,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            var solution = new AdhocWorkspace()
-                .CurrentSolution;
+            var solution = new AdhocWorkspace().CurrentSolution;
             var byNamespaces = code.Select(c => new SourceMetadata(c))
                                    .GroupBy(c => c.Namespace);
             foreach (var byNamespace in byNamespaces)
@@ -149,6 +149,26 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
+            var compilationOptions = new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                allowUnsafe: true,
+                specificDiagnosticOptions: GetSpecificDiagnosticOptions(analyzers, null));
+            return CreateSolution(code, analyzers, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, CompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
                 return CreateSolution(new[] { File.ReadAllText(code.FullName) }, analyzers, metadataReferences);
@@ -162,8 +182,7 @@ namespace Gu.Roslyn.Asserts
                 solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
                                    .WithProjectCompilationOptions(
                                        projectId,
-                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
-                                           .WithSpecificDiagnosticOptions(GetSpecificDiagnosticOptions(analyzers)))
+                                       compilationOptions)
                                    .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
                 foreach (var file in GetCodeFilesInProject(code))
                 {
@@ -189,8 +208,7 @@ namespace Gu.Roslyn.Asserts
                     solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
                                        .WithProjectCompilationOptions(
                                            projectId,
-                                           new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true)
-                                               .WithSpecificDiagnosticOptions(GetSpecificDiagnosticOptions(analyzers)))
+                                           compilationOptions)
                                        .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
                     foreach (var file in GetCodeFilesInProject(new FileInfo(Path.Combine(code.DirectoryName, match.Groups["path"].Value))))
                     {
@@ -243,11 +261,34 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
-        private static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> GetSpecificDiagnosticOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers)
+        private static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> GetSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
         {
+            ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
+            {
+                switch (severity)
+                {
+                    case DiagnosticSeverity.Error:
+                        return ReportDiagnostic.Error;
+                    case DiagnosticSeverity.Hidden:
+                    case DiagnosticSeverity.Info:
+                    case DiagnosticSeverity.Warning:
+                        return ReportDiagnostic.Warn;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             var diagnosticOptions = analyzers.SelectMany(a => a.SupportedDiagnostics)
-                                             .ToDictionary(d => d.Id, d => ReportDiagnostic.Warn);
+                                             .ToDictionary(d => d.Id, d => WarnOrError(d.DefaultSeverity));
             diagnosticOptions.Add("AD0001", ReportDiagnostic.Error);
+            if (suppressed != null)
+            {
+                foreach (var id in suppressed)
+                {
+                    diagnosticOptions.Add(id, ReportDiagnostic.Suppress);
+                }
+            }
+
             return diagnosticOptions;
         }
 
