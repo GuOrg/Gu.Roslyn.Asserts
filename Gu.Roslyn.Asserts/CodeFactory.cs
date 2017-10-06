@@ -60,8 +60,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true);
-            return CreateSolution(code, compilationOptions, metadataReferences);
+            return CreateSolution(code, DefaultCompilationOptions(null, null), metadataReferences);
         }
 
         /// <summary>
@@ -86,11 +85,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
-            var compilationOptions = new CSharpCompilationOptions(
-                OutputKind.DynamicallyLinkedLibrary,
-                allowUnsafe: true,
-                specificDiagnosticOptions: GetSpecificDiagnosticOptions(analyzers, null));
-            return CreateSolution(code, compilationOptions, metadataReferences);
+            return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
         /// <summary>
@@ -149,11 +144,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var compilationOptions = new CSharpCompilationOptions(
+            CSharpCompilationOptions compilationOptions = DefaultCompilationOptions(analyzers, null);
+            return CreateSolution(code, analyzers, compilationOptions, metadataReferences);
+        }
+
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
+        {
+            return new CSharpCompilationOptions(
                 OutputKind.DynamicallyLinkedLibrary,
                 allowUnsafe: true,
-                specificDiagnosticOptions: GetSpecificDiagnosticOptions(analyzers, null));
-            return CreateSolution(code, analyzers, compilationOptions, metadataReferences);
+                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(analyzers, suppressed));
         }
 
         /// <summary>
@@ -261,7 +261,13 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
-        private static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> GetSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
+        /// <summary>
+        /// Create diagnostic options that at least warns for <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="analyzers">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
+        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
         {
             ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
             {
@@ -278,8 +284,15 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            var diagnosticOptions = analyzers.SelectMany(a => a.SupportedDiagnostics)
-                                             .ToDictionary(d => d.Id, d => WarnOrError(d.DefaultSeverity));
+            var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
+            if (analyzers != null)
+            {
+                foreach (var descriptor in analyzers.SelectMany(a => a.SupportedDiagnostics))
+                {
+                    diagnosticOptions.Add(descriptor.Id, WarnOrError(descriptor.DefaultSeverity));
+                }
+            }
+
             diagnosticOptions.Add("AD0001", ReportDiagnostic.Error);
             if (suppressed != null)
             {
