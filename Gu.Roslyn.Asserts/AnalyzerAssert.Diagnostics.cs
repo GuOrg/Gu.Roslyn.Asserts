@@ -20,7 +20,7 @@
         public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Diagnostics(new TAnalyzer(), null, codeWithErrorsIndicated);
+            DiagnosticsWithMetadataAsync(new TAnalyzer(), codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@
         public static void Diagnostics<TAnalyzer>(ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Diagnostics(new TAnalyzer(), codeWithErrorsIndicated, expectedMessage);
+            DiagnosticsWithMetadataAsync(new TAnalyzer(), codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -42,7 +42,8 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), null, codeWithErrorsIndicated);
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -53,7 +54,8 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(Type analyzerType, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedMessage, codeWithErrorsIndicated);
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -63,7 +65,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, codeWithErrorsIndicated, null);
+            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, null).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -74,7 +76,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedMessage expectedMessage, params string[] codeWithErrorsIndicated)
         {
-            Diagnostics(analyzer, codeWithErrorsIndicated, expectedMessage);
+            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -85,7 +87,7 @@
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, ExpectedMessage expectedMessage = null)
         {
-            DiagnosticsAsync(analyzer, codeWithErrorsIndicated, expectedMessage).GetAwaiter().GetResult();
+            DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, MetadataReferences, expectedMessage).GetAwaiter().GetResult();
         }
 
         /// <summary>

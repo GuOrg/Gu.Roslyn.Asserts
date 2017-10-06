@@ -18,7 +18,7 @@
         public static void Valid<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Valid(new TAnalyzer(), code);
+            ValidAsync(new TAnalyzer(), code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -28,7 +28,8 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void Valid(Type analyzerType, params string[] code)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -38,7 +39,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            Valid(analyzer, (IReadOnlyList<string>)code);
+            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -77,7 +78,7 @@
         public static void Valid<TAnalyzer>(FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            Valid(new TAnalyzer(), code);
+            ValidAsync(new TAnalyzer(), code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -90,7 +91,8 @@
         /// </param>
         public static void Valid(Type analyzerType, FileInfo code)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            ValidAsync(analyzer, code, MetadataReferences).GetAwaiter().GetResult();
         }
 
         /// <summary>
