@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 0.3.1.0-dev
+version 0.3.1.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
