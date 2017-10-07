@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using System.IO;
     using System.Linq;
     using Microsoft.CodeAnalysis;
@@ -21,6 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             AnalyzerAssert.MetadataReferences.Clear();
             AnalyzerAssert.AddTransitiveMetadataReferences(typeof(CSharpCompilationOptions).Assembly);
+#if NET461
             var expected = new[]
                            {
                                "Microsoft.CodeAnalysis.CSharp.dll",
@@ -108,7 +110,85 @@ namespace Gu.Roslyn.Asserts.Tests
                                "System.Linq.Expressions.dll",
                                "System.Threading.Tasks.Parallel.dll",
                            };
-
+#else
+            
+            var expected = new[]
+                           {
+                                "Microsoft.CodeAnalysis.CSharp.dll",
+                                "System.Runtime.dll",
+                                "System.Private.CoreLib.dll",
+                                "System.Private.Uri.dll",
+                                "System.Diagnostics.Debug.dll",
+                                "Microsoft.CodeAnalysis.dll",
+                                "System.Runtime.InteropServices.dll",
+                                "System.Reflection.Metadata.dll",
+                                "System.Resources.ResourceManager.dll",
+                                "System.Runtime.Extensions.dll",
+                                "System.Security.Principal.dll",
+                                "System.Collections.Immutable.dll",
+                                "System.Collections.dll",
+                                "System.Diagnostics.Tools.dll",
+                                "System.Linq.dll",
+                                "System.Threading.dll",
+                                "System.IO.Compression.dll",
+                                "System.Threading.Tasks.dll",
+                                "System.Buffers.dll",
+                                "System.IO.MemoryMappedFiles.dll",
+                                "System.IO.FileSystem.dll",
+                                "System.Threading.Overlapped.dll",
+                                "System.Text.Encoding.Extensions.dll",
+                                "System.IO.dll",
+                                "System.Text.Encoding.dll",
+                                "System.Reflection.Primitives.dll",
+                                "System.Reflection.dll",
+                                "System.Globalization.dll",
+                                "System.Runtime.Numerics.dll",
+                                "System.Collections.Concurrent.dll",
+                                "System.Diagnostics.Tracing.dll",
+                                "System.Xml.ReaderWriter.dll",
+                                "System.Private.Xml.dll",
+                                "System.Diagnostics.TraceSource.dll",
+                                "System.Collections.NonGeneric.dll",
+                                "System.Collections.Specialized.dll",
+                                "System.Text.RegularExpressions.dll",
+                                "System.Net.Primitives.dll",
+                                "Microsoft.Win32.Primitives.dll",
+                                "System.Net.Requests.dll",
+                                "System.Net.WebHeaderCollection.dll",
+                                "System.Net.Http.dll",
+                                "System.Security.Cryptography.X509Certificates.dll",
+                                "System.Security.Cryptography.Cng.dll",
+                                "System.Security.Cryptography.Encoding.dll",
+                                "System.Security.Cryptography.Primitives.dll",
+                                "System.Security.Cryptography.Algorithms.dll",
+                                "System.Security.Cryptography.Csp.dll",
+                                "System.Threading.Thread.dll",
+                                "System.Diagnostics.DiagnosticSource.dll",
+                                "System.Net.ServicePoint.dll",
+                                "System.Net.Security.dll",
+                                "System.Security.Principal.Windows.dll",
+                                "System.Security.Claims.dll",
+                                "System.Threading.ThreadPool.dll",
+                                "System.Net.Sockets.dll",
+                                "System.Net.NameResolution.dll",
+                                "System.Threading.Tasks.Extensions.dll",
+                                "System.Reflection.Emit.dll",
+                                "System.Reflection.Emit.ILGeneration.dll",
+                                "System.Reflection.Emit.Lightweight.dll",
+                                "System.ObjectModel.dll",
+                                "System.Console.dll",
+                                "System.Xml.XDocument.dll",
+                                "System.Private.Xml.Linq.dll",
+                                "System.Dynamic.Runtime.dll",
+                                "System.Linq.Expressions.dll",
+                                "System.Runtime.Serialization.Json.dll",
+                                "System.Private.DataContractSerialization.dll",
+                                "System.Runtime.Serialization.Primitives.dll",
+                                "System.Xml.XmlSerializer.dll",
+                                "System.Runtime.Serialization.Formatters.dll",
+                                "System.Threading.Tasks.Parallel.dll",
+                           };
+#endif
             var actual = AnalyzerAssert.MetadataReferences
                                        .Select(x => Path.GetFileName(x.Display))
                                        .ToArray();
