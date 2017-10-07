@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 0.3.0.0-dev
+version 0.3.1.0-dev
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,10 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  BREAKING: Remove obsolete NoDiagnostics
-  FEATURE: AnalyzerAssert.SuppressedDiagnostics
-  FEATURE: overloads with CSharpCompilationOptions.
-  FEATURE: Shallower stacks in exceptions.
+  FEATURE: Add transitive dependencies.
 
 dependencies
   framework: netstandard2.0

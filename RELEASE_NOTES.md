@@ -1,3 +1,6 @@
+#### 0.3.1
+* FEATURE: Add transitive dependencies.
+
 #### 0.3.0
 * BREAKING: Remove obsolete NoDiagnostics
 * FEATURE: AnalyzerAssert.SuppressedDiagnostics
