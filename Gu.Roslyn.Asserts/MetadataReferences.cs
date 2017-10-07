@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -13,6 +14,19 @@ namespace Gu.Roslyn.Asserts
 #pragma warning disable 169
         private static List<MetadataReference> metadataReferences;
 #pragma warning restore 169
+
+        /// <summary>
+        /// Get the <see cref="MetadataReference"/> for <paramref name="assembly"/> and all assemblies referenced by <paramref name="assembly"/>
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns><see cref="MetadataReference"/>s.</returns>
+        public static IEnumerable<MetadataReference> Transitive(Assembly assembly)
+        {
+            foreach (var a in RecursiveReferencedAssemblies(assembly))
+            {
+                yield return MetadataReference.CreateFromFile(a.Location);
+            }
+        }
 
         /// <summary>
         /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assembly.
@@ -56,6 +70,23 @@ namespace Gu.Roslyn.Asserts
             ////}
 
             return new List<MetadataReference>(metadataReferences);
+        }
+
+        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> assemblies = null)
+        {
+            assemblies = assemblies ?? new HashSet<Assembly>();
+            if (assemblies.Add(a))
+            {
+                foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
+                {
+                    var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                                                      .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
+                                             Assembly.Load(referencedAssemblyName);
+                    RecursiveReferencedAssemblies(referencedAssembly, assemblies);
+                }
+            }
+
+            return assemblies;
         }
     }
 }

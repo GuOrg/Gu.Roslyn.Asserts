@@ -32,27 +32,7 @@
         /// <param name="assembly">The <see cref="Assembly"/></param>
         public static void AddTransitiveMetadataReferences(Assembly assembly)
         {
-            HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> assemblies = null)
-            {
-                assemblies = assemblies ?? new HashSet<Assembly>();
-                if (assemblies.Add(a))
-                {
-                    foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
-                    {
-                        var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
-                                                          .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
-                                                 AppDomain.CurrentDomain.Load(referencedAssemblyName);
-                        RecursiveReferencedAssemblies(referencedAssembly, assemblies);
-                    }
-                }
-
-                return assemblies;
-            }
-
-            foreach (var assy in RecursiveReferencedAssemblies(assembly))
-            {
-                MetadataReferences.Add(MetadataReference.CreateFromFile(assy.Location));
-            }
+            MetadataReferences.AddRange(Asserts.MetadataReferences.Transitive(assembly));
         }
 
         /// <summary>
