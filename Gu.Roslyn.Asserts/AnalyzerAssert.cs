@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
@@ -26,6 +27,35 @@
         public static readonly List<string> SuppressedDiagnostics = DiagnosticSettings.AllowedErrorIds().ToList();
 
         /// <summary>
+        /// Add <paramref name="assembly"/> and all assemblies referenced by it.
+        /// </summary>
+        /// <param name="assembly">The <see cref="Assembly"/></param>
+        public static void AddTransitiveMetadataReferences(Assembly assembly)
+        {
+            HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> assemblies = null)
+            {
+                assemblies = assemblies ?? new HashSet<Assembly>();
+                if (assemblies.Add(a))
+                {
+                    foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
+                    {
+                        var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                                                          .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
+                                                 AppDomain.CurrentDomain.Load(referencedAssemblyName);
+                        RecursiveReferencedAssemblies(referencedAssembly, assemblies);
+                    }
+                }
+
+                return assemblies;
+            }
+
+            foreach (var assy in RecursiveReferencedAssemblies(assembly))
+            {
+                MetadataReferences.Add(MetadataReference.CreateFromFile(assy.Location));
+            }
+        }
+
+        /// <summary>
         /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.FromAttributes"/>
         /// </summary>
         public static void ResetMetadataReferences()
@@ -35,12 +65,21 @@
         }
 
         /// <summary>
-        /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.FromAttributes"/>
+        /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>
         /// </summary>
-        public static void ResetMetadataSuppressedDiagnostics()
+        public static void ResetSuppressedDiagnostics()
         {
             SuppressedDiagnostics.Clear();
             SuppressedDiagnostics.AddRange(DiagnosticSettings.AllowedErrorIds());
+        }
+
+        /// <summary>
+        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>
+        /// </summary>
+        public static void ResetAll()
+        {
+            ResetMetadataReferences();
+            ResetSuppressedDiagnostics();
         }
 
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
