@@ -58,16 +58,14 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            ////var displayNames = metadataReferences.Select(x => x.Display).ToArray();
-            ////var distinct = displayNames.Distinct().OrderBy(x => x).ToArray();
-            ////if (distinct.Length != displayNames.Length)
-            ////{
-            ////    var dupes = displayNames.Where(x => displayNames.Count(y => x == y) > 1);
-            ////    throw AssertException.Create(
-            ////        "Expected metadata references to be unique assemblies.\r\n" +
-            ////        "The following appear more than once.\r\n" +
-            ////        $"{string.Join(Environment.NewLine, dupes)}");
-            ////}
+            foreach (var assembly in assemblies)
+            {
+                var attribute = (TransitiveMetadataReferencesAttribute)Attribute.GetCustomAttribute(assembly, typeof(TransitiveMetadataReferencesAttribute));
+                if (attribute != null)
+                {
+                    metadataReferences.AddRange(attribute.MetadataReferences);
+                }
+            }
 
             return new List<MetadataReference>(metadataReferences);
         }
