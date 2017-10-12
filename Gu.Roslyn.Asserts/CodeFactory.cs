@@ -470,8 +470,8 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 return root.Descendants(XName.Get("ProjectReference"))
-                            .Select(e => e.Attribute("Include")?.Value)
-                            .Where(x => x != null)
+                           .Select(e => e.Attribute("Include")?.Value)
+                           .Where(x => x != null)
                            .Select(e => new FileInfo(Path.Combine(directory.FullName, e)))
                            .ToArray();
             }
