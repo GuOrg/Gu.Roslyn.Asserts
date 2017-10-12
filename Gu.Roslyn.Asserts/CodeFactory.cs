@@ -213,16 +213,13 @@ namespace Gu.Roslyn.Asserts
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
             {
                 var solution = new AdhocWorkspace().CurrentSolution;
-                var assemblyName = Path.GetFileNameWithoutExtension(code.FullName);
-                var projectId = ProjectId.CreateNewId(assemblyName);
-                solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
-                                   .WithProjectCompilationOptions(
-                                       projectId,
-                                       compilationOptions)
-                                   .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                foreach (var file in GetCodeFilesInProject(code))
+                var project = new ProjectFileMetadata(code, Path.GetFileNameWithoutExtension(code.FullName));
+                solution = solution.AddProject(project.Id, project.Name, project.Name, LanguageNames.CSharp)
+                                   .WithProjectCompilationOptions(project.Id, compilationOptions)
+                                   .AddMetadataReferences(project.Id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                foreach (var file in project.SourceFiles)
                 {
-                    var documentId = DocumentId.CreateNewId(projectId);
+                    var documentId = DocumentId.CreateNewId(project.Id);
                     using (var stream = File.OpenRead(file.FullName))
                     {
                         solution = solution.AddDocument(documentId, file.Name, SourceText.From(stream));
@@ -236,23 +233,36 @@ namespace Gu.Roslyn.Asserts
             {
                 var sln = File.ReadAllText(code.FullName);
                 var solution = new AdhocWorkspace().CurrentSolution;
-                var matches = Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture);
-                foreach (Match match in matches)
+                var projects = new List<ProjectFileMetadata>();
+                foreach (Match match in Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
                 {
                     var assemblyName = match.Groups["name"].Value;
-                    var projectId = ProjectId.CreateNewId(assemblyName);
-                    solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
-                                       .WithProjectCompilationOptions(
-                                           projectId,
-                                           compilationOptions)
-                                       .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                    foreach (var file in GetCodeFilesInProject(new FileInfo(Path.Combine(code.DirectoryName, match.Groups["path"].Value))))
+                    var projectFile = new FileInfo(Path.Combine(code.DirectoryName, match.Groups["path"].Value));
+                    projects.Add(new ProjectFileMetadata(projectFile, assemblyName));
+                }
+
+                foreach (var project in projects)
+                {
+                    solution = solution.AddProject(project.Id, project.Name, project.Name, LanguageNames.CSharp)
+                                       .WithProjectCompilationOptions(project.Id, compilationOptions)
+                                       .AddMetadataReferences(project.Id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                    foreach (var file in project.SourceFiles)
                     {
-                        var documentId = DocumentId.CreateNewId(projectId);
+                        var documentId = DocumentId.CreateNewId(project.Id);
                         using (var stream = File.OpenRead(file.FullName))
                         {
                             solution = solution.AddDocument(documentId, file.Name, SourceText.From(stream));
                         }
+                    }
+                }
+
+                foreach (var project in projects)
+                {
+                    if (project.ProjectReferences.Any())
+                    {
+                        solution = solution.WithProjectReferences(
+                            project.Id,
+                            project.ProjectReferences.Select(x => new ProjectReference(projects.Single(p => p.File.FullName == x.FullName).Id)));
                     }
                 }
 
@@ -354,53 +364,6 @@ namespace Gu.Roslyn.Asserts
             return diagnosticOptions;
         }
 
-        private static IEnumerable<FileInfo> GetCodeFilesInProject(FileInfo projectFile)
-        {
-            var doc = XDocument.Parse(File.ReadAllText(projectFile.FullName));
-            var directory = projectFile.DirectoryName;
-            var root = doc.Root;
-            if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
-            {
-                foreach (var csFile in projectFile.Directory
-                                                  .EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
-                {
-                    yield return csFile;
-                }
-
-                foreach (var dir in projectFile.Directory
-                                               .EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
-                                               .Where(dir => !string.Equals(dir.Name, "bin", StringComparison.OrdinalIgnoreCase))
-                                               .Where(dir => !string.Equals(dir.Name, "obj", StringComparison.OrdinalIgnoreCase)))
-                {
-                    foreach (var nestedFile in dir.EnumerateFiles("*.cs", SearchOption.AllDirectories))
-                    {
-                        yield return nestedFile;
-                    }
-                }
-            }
-            else
-            {
-                var compiles = doc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
-                                  .ToArray();
-                if (compiles.Length == 0)
-                {
-                    throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
-                }
-
-                foreach (var compile in compiles)
-                {
-                    var include = compile.Attribute("Include")?.Value;
-                    if (include == null)
-                    {
-                        throw new InvalidOperationException("Parsing failed, no Include found.");
-                    }
-
-                    var csFile = Path.Combine(directory, include);
-                    yield return new FileInfo(csFile);
-                }
-            }
-        }
-
         private struct SourceMetadata
         {
             public SourceMetadata(string code)
@@ -431,6 +394,80 @@ namespace Gu.Roslyn.Asserts
             internal ProjectId Id { get; }
 
             internal IReadOnlyList<SourceMetadata> Sources { get; }
+        }
+
+        private struct ProjectFileMetadata
+        {
+            public ProjectFileMetadata(FileInfo file, string name)
+            {
+                this.File = file;
+                this.Name = name;
+                this.Id = ProjectId.CreateNewId(name);
+                var xDoc = XDocument.Parse(System.IO.File.ReadAllText(file.FullName));
+                this.SourceFiles = GetSourceFiles(xDoc, file.Directory).ToArray();
+                this.ProjectReferences = GetProjectReferences(xDoc, file.Directory);
+            }
+
+            public FileInfo File { get; }
+
+            internal string Name { get; }
+
+            internal ProjectId Id { get; }
+
+            internal IReadOnlyList<FileInfo> SourceFiles { get; }
+
+            internal IReadOnlyList<FileInfo> ProjectReferences { get; }
+
+            private static IEnumerable<FileInfo> GetSourceFiles(XDocument xDoc, DirectoryInfo directory)
+            {
+                var root = xDoc.Root;
+                if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
+                {
+                    foreach (var csFile in directory.EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
+                    {
+                        yield return csFile;
+                    }
+
+                    foreach (var dir in directory.EnumerateDirectories("*", SearchOption.TopDirectoryOnly)
+                                                 .Where(dir => !string.Equals(dir.Name, "bin", StringComparison.OrdinalIgnoreCase))
+                                                 .Where(dir => !string.Equals(dir.Name, "obj", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        foreach (var nestedFile in dir.EnumerateFiles("*.cs", SearchOption.AllDirectories))
+                        {
+                            yield return nestedFile;
+                        }
+                    }
+                }
+                else
+                {
+                    var compiles = xDoc.Descendants(XName.Get("Compile", "http://schemas.microsoft.com/developer/msbuild/2003"))
+                                      .ToArray();
+                    if (compiles.Length == 0)
+                    {
+                        throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
+                    }
+
+                    foreach (var compile in compiles)
+                    {
+                        var include = compile.Attribute("Include")?.Value;
+                        if (include == null)
+                        {
+                            throw new InvalidOperationException("Parsing failed, no Include found.");
+                        }
+
+                        var csFile = Path.Combine(directory.FullName, include);
+                        yield return new FileInfo(csFile);
+                    }
+                }
+            }
+
+            private static IReadOnlyList<FileInfo> GetProjectReferences(XDocument xDoc, DirectoryInfo directory)
+            {
+                var root = xDoc.Root;
+                return root.Descendants(XName.Get("ProjectReference"))
+                           .Select(e => new FileInfo(Path.Combine(directory.FullName, e.Attribute("Include").Value)))
+                           .ToArray();
+            }
         }
     }
 }

@@ -76,15 +76,15 @@ namespace Gu.Roslyn.Asserts.Tests
                     solutionFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
-                var expectedSlns = new[]
-                {
-                "Gu.Roslyn.Asserts",
-                "Gu.Roslyn.Asserts.Tests",
-                "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
-                "Gu.Roslyn.Asserts.XUnit"
-            };
+                var expectedProjects = new[]
+                                   {
+                                       "Gu.Roslyn.Asserts",
+                                       "Gu.Roslyn.Asserts.Tests",
+                                       "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
+                                       "Gu.Roslyn.Asserts.XUnit"
+                                   };
 
-                CollectionAssert.AreEquivalent(expectedSlns, solution.Projects.Select(p => p.Name));
+                CollectionAssert.AreEquivalent(expectedProjects, solution.Projects.Select(p => p.Name));
 
                 var expected = solutionFile.Directory
                                            .EnumerateFiles("*.cs", SearchOption.AllDirectories)
@@ -108,6 +108,21 @@ namespace Gu.Roslyn.Asserts.Tests
                 //// ReSharper restore UnusedVariable
 
                 CollectionAssert.AreEqual(expected, actual);
+            }
+
+            [Test]
+            public void CreateSolutionFromSolutionFileAddsDependencies()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+                var sln = CodeFactory.CreateSolution(
+                    solutionFile,
+                    new[] { new FieldNameMustNotBeginWithUnderscore() },
+                    CreateMetadataReferences(typeof(object)));
+                var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
+                CollectionAssert.IsEmpty(assertsProject.AllProjectReferences);
+
+                var testProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Tests");
+                CollectionAssert.AreEqual(new[] { assertsProject.Id }, testProject.AllProjectReferences.Select(x => x.ProjectId).ToArray());
             }
 
             private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
