@@ -110,21 +110,39 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
+            IEnumerable<ProjectReference> FindReferences(ProjectMetadata project, IReadOnlyList<ProjectMetadata> allProjects)
+            {
+                var references = new List<ProjectReference>();
+                foreach (var projectMetadata in allProjects.Where(x => x.Id != project.Id))
+                {
+                    if (project.Sources.Any(x => x.Code.Contains($"using {projectMetadata.Name}")) ||
+                        project.Sources.Any(x => x.Code.Contains($"{projectMetadata.Name}.")))
+                    {
+                        references.Add(new ProjectReference(projectMetadata.Id));
+                    }
+                }
+
+                return references;
+            }
+
             var solution = new AdhocWorkspace().CurrentSolution;
             var byNamespaces = code.Select(c => new SourceMetadata(c))
-                                   .GroupBy(c => c.Namespace);
+                                   .GroupBy(c => c.Namespace)
+                                   .Select(x => new ProjectMetadata(x.Key, ProjectId.CreateNewId(x.Key), x.ToArray()))
+                                   .ToArray();
+
             foreach (var byNamespace in byNamespaces)
             {
-                var assemblyName = byNamespace.Key;
-                var projectId = ProjectId.CreateNewId(assemblyName);
-                solution = solution.AddProject(projectId, assemblyName, assemblyName, LanguageNames.CSharp)
-                                   .WithProjectCompilationOptions(
-                                       projectId,
-                                       compilationOptions)
-                                   .AddMetadataReferences(projectId, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                foreach (var file in byNamespace)
+                var assemblyName = byNamespace.Name;
+                var id = byNamespace.Id;
+                solution = solution.AddProject(id, assemblyName, assemblyName, LanguageNames.CSharp)
+                                   .WithProjectCompilationOptions(id, compilationOptions)
+                                   .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>())
+                                   .AddProjectReferences(id, FindReferences(byNamespace, byNamespaces));
+
+                foreach (var file in byNamespace.Sources)
                 {
-                    var documentId = DocumentId.CreateNewId(projectId);
+                    var documentId = DocumentId.CreateNewId(id);
                     solution = solution.AddDocument(documentId, file.FileName, file.Code);
                 }
             }
@@ -397,6 +415,22 @@ namespace Gu.Roslyn.Asserts
             internal string FileName { get; }
 
             internal string Namespace { get; }
+        }
+
+        private struct ProjectMetadata
+        {
+            public ProjectMetadata(string name, ProjectId id, IReadOnlyList<SourceMetadata> sources)
+            {
+                this.Name = name;
+                this.Id = id;
+                this.Sources = sources;
+            }
+
+            internal string Name { get; }
+
+            internal ProjectId Id { get; }
+
+            internal IReadOnlyList<SourceMetadata> Sources { get; }
         }
     }
 }
