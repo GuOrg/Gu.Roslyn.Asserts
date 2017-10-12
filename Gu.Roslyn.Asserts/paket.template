@@ -14,7 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  FEATURE: Add transitive dependencies.
+  FEATURE: Figure out intra project dependencies
 
 dependencies
   framework: netstandard2.0

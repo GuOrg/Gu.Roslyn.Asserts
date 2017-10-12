@@ -1,3 +1,6 @@
+#### 0.3.2
+* FEATURE: Figure out intra project dependencies
+
 #### 0.3.1
 * FEATURE: Add transitive dependencies.
 
