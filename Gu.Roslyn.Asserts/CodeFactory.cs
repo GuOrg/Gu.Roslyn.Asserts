@@ -464,8 +464,15 @@ namespace Gu.Roslyn.Asserts
             private static IReadOnlyList<FileInfo> GetProjectReferences(XDocument xDoc, DirectoryInfo directory)
             {
                 var root = xDoc.Root;
+                if (root == null)
+                {
+                    return new FileInfo[0];
+                }
+
                 return root.Descendants(XName.Get("ProjectReference"))
-                           .Select(e => new FileInfo(Path.Combine(directory.FullName, e.Attribute("Include").Value)))
+                            .Select(e => e.Attribute("Include")?.Value)
+                            .Where(x => x != null)
+                           .Select(e => new FileInfo(Path.Combine(directory.FullName, e)))
                            .ToArray();
             }
         }
