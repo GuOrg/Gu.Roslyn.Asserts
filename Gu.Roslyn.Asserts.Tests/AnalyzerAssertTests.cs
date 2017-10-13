@@ -110,7 +110,6 @@ namespace Gu.Roslyn.Asserts.Tests
                                "System.Threading.Tasks.Parallel.dll",
                            };
 #else
-            
             var expected = new[]
                            {
                                 "Microsoft.CodeAnalysis.CSharp.dll",

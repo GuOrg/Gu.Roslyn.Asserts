@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 var directory = ExecutingAssemblyDll.Directory;
                 var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, projectFileName, out FileInfo projectFile));
+                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, projectFileName, out var projectFile));
                 Assert.AreEqual(projectFileName, projectFile.Name);
             }
 
@@ -29,21 +29,29 @@ namespace Gu.Roslyn.Asserts.Tests
             public void TryFindSolutionFileInParentDirectory()
             {
                 var directory = ExecutingAssemblyDll.Directory;
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.sln", out FileInfo projectFile));
+                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.sln", out var projectFile));
                 Assert.AreEqual("Gu.Roslyn.Asserts.sln", projectFile.Name);
             }
 
             [Test]
-            public void TryFindProjectFile()
+            public void TryFindProjectFileFromDll()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out FileInfo projectFile));
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out var projectFile));
                 Assert.AreEqual(Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj", projectFile.Name);
+            }
+
+            [TestCase("Gu.Roslyn.Asserts.Tests.csproj")]
+            [TestCase("WpfApp1.csproj")]
+            public void TryFindProjectFileFromName(string name)
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(name, out var projectFile));
+                Assert.AreEqual(name, projectFile.Name);
             }
 
             [Test]
             public void CreateSolutionFromProjectFile()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out FileInfo projectFile));
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -69,15 +77,46 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
+            public void CreateSolutionFromWpfApp1()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("WpfApp1.csproj", out var projectFile));
+                var solution = CodeFactory.CreateSolution(
+                    projectFile,
+                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
+                    CreateMetadataReferences(typeof(object)));
+                Assert.AreEqual("WpfApp1", solution.Projects.Single().Name);
+                var expected = new[]
+                {
+                    "App.xaml.cs",
+                    "AssemblyInfo.cs",
+                    "Class1.cs",
+                    "MainWindow.xaml.cs",
+                    "Resources.Designer.cs",
+                    "Settings.Designer.cs"
+                };
+                var actual = solution.Projects
+                                     .SelectMany(p => p.Documents)
+                                     .Select(d => d.Name)
+                                     .OrderBy(x => x)
+                                     .ToArray();
+                //// ReSharper disable UnusedVariable for debug.
+                var expectedString = string.Join(Environment.NewLine, expected);
+                var actualString = string.Join(Environment.NewLine, actual);
+                //// ReSharper restore UnusedVariable
+                CollectionAssert.AreEqual(expected, actual);
+            }
+
+            [Test]
             public void CreateSolutionFromSolutionFile()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var solution = CodeFactory.CreateSolution(
                     solutionFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 var expectedProjects = new[]
                                    {
+                                       "WpfApp1",
                                        "Gu.Roslyn.Asserts",
                                        "Gu.Roslyn.Asserts.Tests",
                                        "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
@@ -113,7 +152,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromSolutionFileAddsDependencies()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var sln = CodeFactory.CreateSolution(
                     solutionFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore() },

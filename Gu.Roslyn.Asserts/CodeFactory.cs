@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using Gu.Roslyn.Asserts.Internals;
@@ -273,6 +274,37 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Searches parent directories for <paramref name="assembly"/> the first file matching *.sln
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <param name="sln">The <see cref="File"/> if found.</param>
+        /// <returns>A value indicating if a file was found.</returns>
+        public static bool TryFindSolutionFile(Assembly assembly, out FileInfo sln)
+        {
+            if (assembly?.CodeBase == null)
+            {
+                sln = null;
+                return false;
+            }
+
+            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
+            return TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
+        }
+
+        /// <summary>
+        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
+        /// </summary>
+        /// <param name="name">The assembly</param>
+        /// <param name="sln">The <see cref="File"/> if found.</param>
+        /// <returns>A value indicating if a file was found.</returns>
+        public static bool TryFindSolutionFile(string name, out FileInfo sln)
+        {
+            var assembly = Assembly.GetCallingAssembly();
+            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
+            return TryFindFileInParentDirectory(dll.Directory, name, out sln);
+        }
+
+        /// <summary>
         /// Searches parent directories for <paramref name="dllFile"/>
         /// </summary>
         /// <param name="dllFile">Ex Foo.dll</param>
@@ -280,8 +312,31 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindProjectFile(FileInfo dllFile, out FileInfo result)
         {
-            var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";
-            return TryFindFileInParentDirectory(dllFile.Directory, projectFileName, out result);
+            result = null;
+            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
+            {
+                var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";
+                result = sln.Directory.EnumerateFiles(projectFileName, SearchOption.AllDirectories).FirstOrDefault();
+            }
+
+            return result != null;
+        }
+
+        /// <summary>
+        /// Searches parent directories for <paramref name="projectFile"/>
+        /// </summary>
+        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <param name="result">The <see cref="File"/> if found.</param>
+        /// <returns>A value indicating if a file was found.</returns>
+        public static bool TryFindProjectFile(string projectFile, out FileInfo result)
+        {
+            result = null;
+            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
+            {
+                result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
+            }
+
+            return result != null;
         }
 
         /// <summary>

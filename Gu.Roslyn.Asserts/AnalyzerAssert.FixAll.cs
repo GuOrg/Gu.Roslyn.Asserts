@@ -325,7 +325,6 @@
                 .GetResult();
         }
 
-
         /// <summary>
         /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
