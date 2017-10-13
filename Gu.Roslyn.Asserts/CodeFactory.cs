@@ -295,6 +295,23 @@ namespace Gu.Roslyn.Asserts
         /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
         /// </summary>
         /// <param name="name">The assembly</param>
+        /// <returns>The solution file.</returns>
+        public static FileInfo FindSolutionFile(string name)
+        {
+            var assembly = Assembly.GetCallingAssembly();
+            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
+            if (TryFindFileInParentDirectory(dll.Directory, name, out var sln))
+            {
+                return sln;
+            }
+
+            throw new InvalidOperationException("Did not find a file named: " + name);
+        }
+
+        /// <summary>
+        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
+        /// </summary>
+        /// <param name="name">The assembly</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindSolutionFile(string name, out FileInfo sln)
@@ -320,6 +337,25 @@ namespace Gu.Roslyn.Asserts
             }
 
             return result != null;
+        }
+
+        /// <summary>
+        /// Searches parent directories for <paramref name="projectFile"/>
+        /// </summary>
+        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <returns>The project file.</returns>
+        public static FileInfo FindProjectFile(string projectFile)
+        {
+            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
+            {
+                var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
+                if (result == null)
+                {
+                    throw new InvalidOperationException("Did not find a file named: " + projectFile);
+                }
+            }
+
+            throw new InvalidOperationException("Did not find a sln for: " + Assembly.GetCallingAssembly());
         }
 
         /// <summary>
