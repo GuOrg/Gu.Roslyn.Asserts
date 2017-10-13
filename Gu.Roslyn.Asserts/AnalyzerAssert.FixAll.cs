@@ -101,34 +101,6 @@
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="id">The id of the expected diagnostic.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void FixAll<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-            where TCodeFix : CodeFixProvider, new()
-        {
-            var analyzer = new PlaceholderAnalyzer(id);
-            FixAllAsync(
-                    analyzer,
-                    new TCodeFix(),
-                    new[] { codeWithErrorsIndicated },
-                    new[] { fixedCode },
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    fixTitle,
-                    allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
@@ -145,6 +117,34 @@
                     new TCodeFix(),
                     codeWithErrorsIndicated,
                     fixedCode,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="id">The id of the expected diagnostic.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new PlaceholderAnalyzer(id);
+            FixAllAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    new[] { fixedCode },
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -266,6 +266,119 @@
                     await FixAllByScopeAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
                 }
             }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllInDocument<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new TAnalyzer();
+            FixAllByScopeAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    new[] { fixedCode },
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors,
+                    FixAllScope.Document)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="id">The id of the expected diagnostic.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllInDocument<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new PlaceholderAnalyzer(id);
+            FixAllByScopeAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    new[] { fixedCode },
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors,
+                    FixAllScope.Document)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new TAnalyzer();
+            FixAllOneByOneAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    new[] { fixedCode },
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="id">The id of the expected diagnostic.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllOneByOne<TCodeFix>(string id, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new PlaceholderAnalyzer(id);
+            FixAllOneByOneAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    new[] { codeWithErrorsIndicated },
+                    new[] { fixedCode },
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
