@@ -153,6 +153,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var expectedProjects = new[]
                                    {
                                        "WpfApp1",
+                                       "ClassLibrary1",
                                        "Gu.Roslyn.Asserts",
                                        "Gu.Roslyn.Asserts.Tests",
                                        "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
