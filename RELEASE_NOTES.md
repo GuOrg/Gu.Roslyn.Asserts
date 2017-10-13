@@ -1,4 +1,4 @@
-#### 0.3.3
+#### 0.3.4
 * FEATURE: Keep format for untouched parts in code fix.
 
 #### 0.3.3
