@@ -1,3 +1,7 @@
+#### 0.3.3
+* FEATURE: FixAllInDocument
+* FEATURE: FindProjectFile & FindSolutionFile
+
 #### 0.3.2
 * FEATURE: Figure out intra project dependencies
 
