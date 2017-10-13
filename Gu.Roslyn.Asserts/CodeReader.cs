@@ -38,9 +38,11 @@
         /// <summary>
         /// Get the code from the document.
         /// </summary>
-        public static string GetCode(this Document document)
+        /// <param name="document">The document.</param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
+        public static string GetCode(this Document document, SyntaxAnnotation format)
         {
-            return GetStringFromDocumentAsync(document, CancellationToken.None).GetAwaiter().GetResult();
+            return GetStringFromDocumentAsync(document, format, CancellationToken.None).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -234,12 +236,15 @@
         /// Gets the simplified and formatted text from the document.
         /// </summary>
         /// <param name="document">The document to extract the source code from.</param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
-        internal static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
+        internal static async Task<string> GetStringFromDocumentAsync(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)
         {
             var simplifiedDoc = await Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false);
-            var formatted = await Formatter.FormatAsync(simplifiedDoc, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var formatted = format == null
+                    ? await Formatter.FormatAsync(simplifiedDoc, cancellationToken: cancellationToken).ConfigureAwait(false)
+                    : await Formatter.FormatAsync(simplifiedDoc, format, cancellationToken: cancellationToken).ConfigureAwait(false);
             var sourceText = await formatted.GetTextAsync(cancellationToken).ConfigureAwait(false);
             return sourceText.ToString();
         }

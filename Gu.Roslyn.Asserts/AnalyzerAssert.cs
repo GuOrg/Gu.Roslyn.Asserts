@@ -10,6 +10,7 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Formatting;
 
     /// <summary>
     /// The AnalyzerAssert class contains a collection of static methods used for assertions on the behavior of analyzers and code fixes.
@@ -79,7 +80,7 @@
             {
                 for (var i = 0; i < project.DocumentIds.Count; i++)
                 {
-                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), CancellationToken.None).ConfigureAwait(false);
+                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
                     CodeAssert.AreEqual(expected[i], fixedSource, messageHeader);
                 }
             }
@@ -106,7 +107,7 @@
 
                 error.AppendLine("First source file with error is:");
                 var first = introducedDiagnostics.First();
-                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
+                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, Formatter.Annotation, CancellationToken.None)));
                 var idAndPosition = IdAndPosition.Create(first);
                 var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == idAndPosition.Span.Path);
                 error.Append(match);

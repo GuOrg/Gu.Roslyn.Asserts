@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [TearDown]
             public void TearDown()
             {
-                AnalyzerAssert.MetadataReferences.Clear();
+                AnalyzerAssert.ResetAll();
             }
 
             [Test]
@@ -57,6 +57,40 @@ namespace RoslynSandbox
 {
     public sealed class Foo
     {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                AnalyzerAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
+            }
+
+            [Test]
+            public void MakeSealedCorrectFixKeepsPoorFormat()
+            {
+                var code = @"
+namespace    RoslynSandbox
+{
+    ↓public class Foo
+    {
+private readonly int value;
+                
+            public Foo(int value)
+{
+        this.value  =  value;
+        }
+    }
+}";
+
+                var fixedCode = @"
+namespace    RoslynSandbox
+{
+    public sealed class Foo
+    {
+private readonly int value;
+                
+            public Foo(int value)
+{
+        this.value  =  value;
+        }
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));

@@ -10,6 +10,7 @@
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Formatting;
 
     public static partial class AnalyzerAssert
     {
@@ -207,6 +208,7 @@
 
             var fixedSource = await CodeReader.GetStringFromDocumentAsync(
                 fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id),
+                Formatter.Annotation,
                 CancellationToken.None).ConfigureAwait(false);
             CodeAssert.AreEqual(fixedCode, fixedSource);
 
