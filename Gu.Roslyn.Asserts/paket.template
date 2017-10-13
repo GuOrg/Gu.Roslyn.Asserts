@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 0.3.3.0
+version 0.3.4.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,8 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  FEATURE: FixAllInDocument
-  FEATURE: FindProjectFile & FindSolutionFile
+  FEATURE: Keep format for untouched parts in code fix.
 
 dependencies
   framework: netstandard2.0

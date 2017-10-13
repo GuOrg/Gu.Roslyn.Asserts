@@ -1,4 +1,7 @@
 #### 0.3.3
+* FEATURE: Keep format for untouched parts in code fix.
+
+#### 0.3.3
 * FEATURE: FixAllInDocument
 * FEATURE: FindProjectFile & FindSolutionFile
 
