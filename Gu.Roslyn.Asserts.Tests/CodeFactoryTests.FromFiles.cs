@@ -107,6 +107,33 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
+            public void CreateSolutionFromClassLibrary1()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("ClassLibrary1.csproj", out var projectFile));
+                var solution = CodeFactory.CreateSolution(
+                    projectFile,
+                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
+                    CreateMetadataReferences(typeof(object)));
+                Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
+                var expected = new[]
+                               {
+                                   "AllowCompilationErrors.cs",
+                                   "AssemblyInfo.cs",
+                                   "Class1.cs",
+                               };
+                var actual = solution.Projects
+                                     .SelectMany(p => p.Documents)
+                                     .Select(d => d.Name)
+                                     .OrderBy(x => x)
+                                     .ToArray();
+                //// ReSharper disable UnusedVariable for debug.
+                var expectedString = string.Join(Environment.NewLine, expected);
+                var actualString = string.Join(Environment.NewLine, actual);
+                //// ReSharper restore UnusedVariable
+                CollectionAssert.AreEqual(expected, actual);
+            }
+
+            [Test]
             public void CreateSolutionFromSolutionFile()
             {
                 Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var solutionFile));
