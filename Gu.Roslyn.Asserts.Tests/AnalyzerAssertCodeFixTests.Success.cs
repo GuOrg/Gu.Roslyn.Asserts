@@ -283,6 +283,42 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
+            public void TwoClassesDifferentProjectsInheritingCodeFixOnlyCorrectFix2()
+            {
+                var code1 = @"
+namespace RoslynSandbox.Core
+{
+    public class Foo1
+    {
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Client
+{
+    using System;
+
+    public class Foo2 : RoslynSandbox.Core.Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox.Client
+{
+    using System;
+
+    public class Foo2 : RoslynSandbox.Core.Foo1
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, fixedCode);
+            }
+
+            [Test]
             public void TwoClassesOneErrorCorrectFix()
             {
                 var barCode = @"
