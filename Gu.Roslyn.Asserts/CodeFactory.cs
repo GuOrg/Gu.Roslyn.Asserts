@@ -111,7 +111,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            IEnumerable<ProjectReference> FindReferences(ProjectMetadata project, IReadOnlyList<ProjectMetadata> allProjects)
+            IReadOnlyList<ProjectReference> FindReferences(ProjectMetadata project, IReadOnlyList<ProjectMetadata> allProjects)
             {
                 var references = new List<ProjectReference>();
                 foreach (var projectMetadata in allProjects.Where(x => x.Id != project.Id))
@@ -132,19 +132,27 @@ namespace Gu.Roslyn.Asserts
                                    .Select(x => new ProjectMetadata(x.Key, ProjectId.CreateNewId(x.Key), x.ToArray()))
                                    .ToArray();
 
-            foreach (var byNamespace in byNamespaces)
+            foreach (var project in byNamespaces)
             {
-                var assemblyName = byNamespace.Name;
-                var id = byNamespace.Id;
+                var assemblyName = project.Name;
+                var id = project.Id;
                 solution = solution.AddProject(id, assemblyName, assemblyName, LanguageNames.CSharp)
                                    .WithProjectCompilationOptions(id, compilationOptions)
-                                   .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>())
-                                   .AddProjectReferences(id, FindReferences(byNamespace, byNamespaces));
+                                   .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
 
-                foreach (var file in byNamespace.Sources)
+                foreach (var file in project.Sources)
                 {
                     var documentId = DocumentId.CreateNewId(id);
                     solution = solution.AddDocument(documentId, file.FileName, file.Code);
+                }
+            }
+
+            foreach (var project in byNamespaces)
+            {
+                var references = FindReferences(project, byNamespaces);
+                if (references.Any())
+                {
+                    solution = solution.AddProjectReferences(project.Id, references);
                 }
             }
 
@@ -455,6 +463,7 @@ namespace Gu.Roslyn.Asserts
             return diagnosticOptions;
         }
 
+        [System.Diagnostics.DebuggerDisplay("{FileName}")]
         private struct SourceMetadata
         {
             public SourceMetadata(string code)
@@ -471,6 +480,7 @@ namespace Gu.Roslyn.Asserts
             internal string Namespace { get; }
         }
 
+        [System.Diagnostics.DebuggerDisplay("{Name}")]
         private struct ProjectMetadata
         {
             public ProjectMetadata(string name, ProjectId id, IReadOnlyList<SourceMetadata> sources)
@@ -487,6 +497,7 @@ namespace Gu.Roslyn.Asserts
             internal IReadOnlyList<SourceMetadata> Sources { get; }
         }
 
+        [System.Diagnostics.DebuggerDisplay("{Name}")]
         private struct ProjectFileMetadata
         {
             public ProjectFileMetadata(FileInfo file, string name)
