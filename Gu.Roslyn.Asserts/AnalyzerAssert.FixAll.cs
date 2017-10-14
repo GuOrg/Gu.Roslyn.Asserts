@@ -57,37 +57,12 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            var fixedCodes = new List<string>(codeWithErrorsIndicated.Count);
-            var found = false;
-            foreach (var code in codeWithErrorsIndicated)
-            {
-                if (code.IndexOf('↓') >= 0)
-                {
-                    if (found)
-                    {
-                        throw AssertException.Create("Expected only one with errors indicated.");
-                    }
-
-                    fixedCodes.Add(fixedCode);
-                    found = true;
-                }
-                else
-                {
-                    fixedCodes.Add(code);
-                }
-            }
-
-            if (!found)
-            {
-                throw AssertException.Create("Expected one with errors indicated.");
-            }
-
             var analyzer = new TAnalyzer();
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
                     codeWithErrorsIndicated,
-                    fixedCodes,
+                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -145,6 +120,35 @@
                     new TCodeFix(),
                     new[] { codeWithErrorsIndicated },
                     new[] { fixedCode },
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <param name="id">The id of the expected diagnostic.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll<TCodeFix>(string id, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            var analyzer = new PlaceholderAnalyzer(id);
+            FixAllAsync(
+                    analyzer,
+                    new TCodeFix(),
+                    codeWithErrorsIndicated,
+                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -476,6 +480,35 @@
             }
 
             return data;
+        }
+
+        private static List<string> MergeFixedCode(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
+        {
+            var merged = new List<string>(codeWithErrorsIndicated.Count);
+            var found = false;
+            foreach (var code in codeWithErrorsIndicated)
+            {
+                if (code.IndexOf('↓') >= 0)
+                {
+                    if (found)
+                    {
+                        throw AssertException.Create("Expected only one with errors indicated.");
+                    }
+
+                    merged.Add(fixedCode);
+                    found = true;
+                }
+                else
+                {
+                    merged.Add(code);
+                }
+            }
+
+            if (!found)
+            {
+                throw AssertException.Create("Expected one with errors indicated.");
+            }
+            return merged;
         }
     }
 }

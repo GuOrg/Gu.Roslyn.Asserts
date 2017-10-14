@@ -76,12 +76,14 @@
 
         private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)
         {
+            var index = 0;
             foreach (var project in actual.Projects)
             {
                 for (var i = 0; i < project.DocumentIds.Count; i++)
                 {
                     var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
-                    CodeAssert.AreEqual(expected[i], fixedSource, messageHeader);
+                    CodeAssert.AreEqual(expected[index], fixedSource, messageHeader);
+                    index++;
                 }
             }
         }
