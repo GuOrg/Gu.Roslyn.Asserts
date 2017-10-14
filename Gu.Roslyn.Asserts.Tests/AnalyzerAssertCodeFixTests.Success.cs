@@ -211,6 +211,78 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoClassesDifferentProjectsCodeFixOnlyCorrectFix()
+            {
+                var code1 = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Client
+{
+    public class Foo2
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, fixedCode);
+            }
+
+            [Test]
+            public void TwoClassesDifferentProjectsInheritingCodeFixOnlyCorrectFix()
+            {
+                var code1 = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Client
+{
+    public class Foo2 : RoslynSandbox.Core.Foo1
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, fixedCode);
+            }
+
+            [Test]
             public void TwoClassesOneErrorCorrectFix()
             {
                 var barCode = @"
