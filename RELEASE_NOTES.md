@@ -1,3 +1,6 @@
+#### 0.3.5
+* BUGFIX: FixAll when multiple projects.
+
 #### 0.3.4
 * FEATURE: Keep format for untouched parts in code fix.
 
