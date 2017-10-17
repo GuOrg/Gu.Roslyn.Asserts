@@ -361,6 +361,8 @@ namespace Gu.Roslyn.Asserts
                 {
                     throw new InvalidOperationException("Did not find a file named: " + projectFile);
                 }
+
+                return result;
             }
 
             throw new InvalidOperationException("Did not find a sln for: " + Assembly.GetCallingAssembly());

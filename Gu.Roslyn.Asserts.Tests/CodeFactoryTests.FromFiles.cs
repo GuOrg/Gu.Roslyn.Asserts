@@ -55,6 +55,8 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, CodeFactory.TryFindProjectFile(name, out var projectFile));
                 Assert.AreEqual(name, projectFile.Name);
+                projectFile = CodeFactory.FindProjectFile(name);
+                Assert.AreEqual(name, projectFile.Name);
             }
 
             [Test]
