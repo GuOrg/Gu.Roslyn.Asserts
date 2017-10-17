@@ -28,8 +28,11 @@ namespace RoslynSandbox
             }
 
             [TestCase("IFoo", "IFoo.cs")]
+            [TestCase("↓IFoo", "IFoo.cs")]
             [TestCase("IFoo<T>", "IFoo{T}.cs")]
+            [TestCase("IFoo<↓T>", "IFoo{T}.cs")]
             [TestCase("IFoo<T1, T2>", "IFoo{T1,T2}.cs")]
+            [TestCase("↓IFoo<↓T1, ↓T2>", "IFoo{T1,T2}.cs")]
             public void FromInterface(string className, string expected)
             {
                 var code = @"using System;

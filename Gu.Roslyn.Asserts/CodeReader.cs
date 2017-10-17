@@ -104,20 +104,20 @@
                 return $"Empty.cs";
             }
 
-            var match = Regex.Match(code, @"(class|struct|enum|interface) (?<name>\w+)(<(?<type>\w+)(, ?(?<type>\w+))*>)?", RegexOptions.ExplicitCapture);
+            var match = Regex.Match(code, @"(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture);
             if (!match.Success)
             {
                 return "AssemblyInfo.cs";
             }
 
-            fileName = match.Groups["name"].Value;
+            fileName = match.Groups["name"].Value.Trim('↓');
             if (match.Groups["type"].Success)
             {
                 var args = string.Join(
                     ",",
                     match.Groups["type"]
                          .Captures.OfType<Capture>()
-                         .Select(c => c.Value.Trim()));
+                         .Select(c => c.Value.Trim(' ', '↓')));
                 fileName += $"{{{args}}}";
             }
 
