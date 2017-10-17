@@ -98,7 +98,6 @@
         /// <returns>The file name </returns>
         public static string FileName(string code)
         {
-            string fileName;
             if (string.IsNullOrEmpty(code))
             {
                 return $"Empty.cs";
@@ -110,7 +109,7 @@
                 return "AssemblyInfo.cs";
             }
 
-            fileName = match.Groups["name"].Value.Trim('↓');
+            var fileName = match.Groups["name"].Value.Trim('↓');
             if (match.Groups["type"].Success)
             {
                 var args = string.Join(
