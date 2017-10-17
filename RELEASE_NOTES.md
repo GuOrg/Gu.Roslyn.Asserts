@@ -1,3 +1,7 @@
+#### 0.3.6
+* BUGFIX: Parse filenames with error indicators.
+* FEATURE Benchmark API.
+
 #### 0.3.5
 * BUGFIX: FixAll when multiple projects.
 
