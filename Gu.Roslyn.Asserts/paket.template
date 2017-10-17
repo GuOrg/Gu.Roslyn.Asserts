@@ -14,7 +14,8 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  BUGFIX: FixAll when multiple projects.
+  BUGFIX: Parse filenames with error indicators.
+  FEATURE Benchmark API.
 
 dependencies
   framework: netstandard2.0
