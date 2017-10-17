@@ -467,14 +467,11 @@ Sample benchmark using BenchmarkDotNet.
 ```
 public class FieldNameMustNotBeginWithUnderscoreBenchmark
 {
-    private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
-
     private static readonly Solution Solution = CodeFactory.CreateSolution(
         CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"),
-        new[] { Analyzer },
         MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
 
-    private static readonly Benchmark Benchmark = Benchmark.Create(Solution, Analyzer);
+    private static readonly Benchmark Benchmark = Benchmark.Create(Solution, new FieldNameMustNotBeginWithUnderscore());
 
     [BenchmarkDotNet.Attributes.Benchmark]
     public void RunOnGuRoslynAssertsSln()

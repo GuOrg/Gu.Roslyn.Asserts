@@ -209,10 +209,27 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file
         /// </param>
-        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Solution CreateSolution(FileInfo code, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            return CreateSolution(
+                code,
+                DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>) null, null),
+                metadataReferences);
+        }
+
+        /// <summary>
+            /// Create a Solution.
+            /// </summary>
+            /// <param name="code">
+            /// The code to create the solution from.
+            /// Can be a .cs, .csproj or .sln file
+            /// </param>
+            /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
+            /// <param name="metadataReferences">The metadata references.</param>
+            /// <returns>A <see cref="Solution"/></returns>
+            public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {

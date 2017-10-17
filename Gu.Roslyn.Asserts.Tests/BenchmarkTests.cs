@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public class BenchmarkTests
@@ -13,7 +12,6 @@
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(
                 CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"),
-                new DiagnosticAnalyzer[] { analyzer },
                 MetadataReferences.Transitive(typeof(BenchmarkTests).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln, analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.ContextAndActions);
@@ -26,7 +24,6 @@
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(
                 CodeFactory.FindProjectFile("Gu.Roslyn.Asserts.csproj"),
-                new DiagnosticAnalyzer[] { analyzer },
                 MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.ContextAndActions);
