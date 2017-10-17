@@ -1,9 +1,7 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
-    using System.Dynamic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
