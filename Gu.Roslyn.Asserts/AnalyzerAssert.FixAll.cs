@@ -128,7 +128,6 @@
                 .GetResult();
         }
 
-
         /// <summary>
         /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
@@ -508,6 +507,7 @@
             {
                 throw AssertException.Create("Expected one with errors indicated.");
             }
+
             return merged;
         }
     }

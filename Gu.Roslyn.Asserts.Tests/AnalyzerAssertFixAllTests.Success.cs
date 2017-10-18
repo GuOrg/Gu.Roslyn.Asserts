@@ -415,8 +415,6 @@ namespace RoslynSandbox.Client
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>("CS0067", new[] { code2, code1 }, fixedCode);
             }
 
-
-
             [Test]
             public void SingleClassCodeFixOnlyCorrectFix()
             {
