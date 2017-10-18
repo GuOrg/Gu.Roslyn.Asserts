@@ -93,7 +93,7 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFi
 
                     // TODO: Wrap call to ComputeFixesAsync() below in IExtensionManager.PerformFunctionAsync() so that
                     // a buggy extension that throws can't bring down the host?
-                    var task = fixAllContext.CodeFixProvider.RegisterCodeFixesAsync(context) ?? Task.CompletedTask;
+                    var task = fixAllContext.CodeFixProvider.RegisterCodeFixesAsync(context) ?? Task.FromResult(true);
                     await task.ConfigureAwait(false);
 
                     cancellationToken.ThrowIfCancellationRequested();
