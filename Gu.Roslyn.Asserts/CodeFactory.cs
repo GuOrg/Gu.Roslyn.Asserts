@@ -524,8 +524,10 @@ namespace Gu.Roslyn.Asserts
                 this.File = file;
                 this.Name = name;
                 this.Id = ProjectId.CreateNewId(name);
-                var xDoc = XDocument.Parse(System.IO.File.ReadAllText(file.FullName));
-                this.SourceFiles = GetSourceFiles(xDoc, file.Directory).ToArray();
+                var csproj = System.IO.File.ReadAllText(file.FullName);
+                this.IsSdkType = GetIsSdkType(csproj);
+                var xDoc = XDocument.Parse(csproj);
+                this.SourceFiles = GetSourceFiles(xDoc, file.Directory, this.IsSdkType).ToArray();
                 this.ProjectReferences = GetProjectReferences(xDoc, file.Directory);
             }
 
@@ -535,14 +537,15 @@ namespace Gu.Roslyn.Asserts
 
             internal ProjectId Id { get; }
 
+            internal bool IsSdkType { get; }
+
             internal IReadOnlyList<FileInfo> SourceFiles { get; }
 
             internal IReadOnlyList<FileInfo> ProjectReferences { get; }
 
-            private static IEnumerable<FileInfo> GetSourceFiles(XDocument xDoc, DirectoryInfo directory)
+            private static IEnumerable<FileInfo> GetSourceFiles(XDocument xDoc, DirectoryInfo directory, bool isSdkType)
             {
-                var root = xDoc.Root;
-                if (root?.Name == "Project" && root.Attribute("Sdk")?.Value == "Microsoft.NET.Sdk")
+                if (isSdkType)
                 {
                     foreach (var csFile in directory.EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
                     {
@@ -595,6 +598,11 @@ namespace Gu.Roslyn.Asserts
                            .Where(x => x != null)
                            .Select(e => new FileInfo(Path.Combine(directory.FullName, e)))
                            .ToArray();
+            }
+
+            private static bool GetIsSdkType(string csproj)
+            {
+                return Regex.IsMatch(csproj, @"<TargetFrameworks?\b");
             }
         }
     }

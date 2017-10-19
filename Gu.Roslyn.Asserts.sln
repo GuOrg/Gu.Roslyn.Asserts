@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "TestApps\WpfApp1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\ClassLibrary1\ClassLibrary1.csproj", "{C6361E10-9E5E-445F-A042-55D115197EE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{C6361E10-9E5E-445F-A042-55D115197EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6361E10-9E5E-445F-A042-55D115197EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6361E10-9E5E-445F-A042-55D115197EE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0EF93D61-9DDB-454D-BC40-0E32C3F52B37} = {A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}
 		{C6361E10-9E5E-445F-A042-55D115197EE4} = {A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}
+		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92} = {A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AB4ABB55-CBF6-4808-9210-03BF3C92AAA4}
