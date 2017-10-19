@@ -78,6 +78,18 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolutionWithOneProject(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolutionWithOneProject(new[] { code }, analyzers, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
@@ -87,6 +99,19 @@ namespace Gu.Roslyn.Asserts
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
             return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolutionWithOneProject(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
         /// <summary>
@@ -103,6 +128,18 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolutionWithOneProject(string code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolutionWithOneProject(new[] { code }, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
@@ -111,7 +148,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            IReadOnlyList<ProjectReference> FindReferences(ProjectMetadata project, IReadOnlyList<ProjectMetadata> allProjects)
+            IReadOnlyList<ProjectReference> FindReferences(ProjectMetadata project, IEnumerable<ProjectMetadata> allProjects)
             {
                 var references = new List<ProjectReference>();
                 foreach (var projectMetadata in allProjects.Where(x => x.Id != project.Id))
@@ -160,19 +197,32 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
-        /// </param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            var compilationOptions = DefaultCompilationOptions(analyzers, null);
-            return CreateSolution(code, compilationOptions, metadataReferences);
+            var solution = new AdhocWorkspace().CurrentSolution;
+            var sources = code.Select(c => new SourceMetadata(c)).ToArray();
+            var assemblyName = sources.Where(x => !string.IsNullOrEmpty(x.Namespace))
+                                              .MinBy(x => x.Namespace.Length)
+                                              .Namespace;
+            var id = ProjectId.CreateNewId();
+            solution = solution.AddProject(id, assemblyName, assemblyName, LanguageNames.CSharp)
+                               .WithProjectCompilationOptions(id, compilationOptions)
+                               .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+
+            foreach (var file in sources)
+            {
+                var documentId = DocumentId.CreateNewId(id);
+                solution = solution.AddDocument(documentId, file.FileName, file.Code);
+            }
+
+            return solution;
         }
 
         /// <summary>
@@ -217,6 +267,22 @@ namespace Gu.Roslyn.Asserts
                 code,
                 DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>)null, null),
                 metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var compilationOptions = DefaultCompilationOptions(analyzers, null);
+            return CreateSolution(code, compilationOptions, metadataReferences);
         }
 
         /// <summary>

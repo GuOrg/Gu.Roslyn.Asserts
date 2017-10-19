@@ -138,6 +138,34 @@ namespace RoslynSandbox.Client
                     CollectionAssert.AreEqual(new[] { project1.Id }, project2.AllProjectReferences.Select(x => x.ProjectId));
                 }
             }
+
+            [Test]
+            public void CreateSolutionWithOneProject()
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    public class Foo1
+    {
+        private readonly int _value;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Bar
+{
+    public class Foo2 : RoslynSandbox.Core.Foo1
+    {
+    }
+}";
+                foreach (var sources in new[] { new[] { code1, code2 }, new[] { code2, code1 } })
+                {
+                    var sln = CodeFactory.CreateSolutionWithOneProject(sources, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                    var project = sln.Projects.Single();
+                    Assert.AreEqual("RoslynSandbox", project.AssemblyName);
+                    CollectionAssert.AreEquivalent(new[] { "Foo1.cs", "Foo2.cs" }, project.Documents.Select(x => x.Name));
+                }
+            }
         }
     }
 }
