@@ -3,6 +3,7 @@ strategy: min
 lowest_matching: true
 source https://www.nuget.org/api/v2/
 
+nuget IDisposableAnalyzers 0.1.0.2-dev dev
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
 
 group Build
@@ -13,6 +14,7 @@ group Build
 group Test
   storage: none
   source http://www.nuget.org/api/v2/
+  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
   nuget Microsoft.NET.Test.Sdk
   
   nuget NUnit
@@ -27,4 +29,4 @@ group Analyzers
   nuget Gu.Analyzers
   nuget StyleCop.Analyzers
   nuget AsyncUsageAnalyzers
-
+  nuget IDisposableAnalyzers

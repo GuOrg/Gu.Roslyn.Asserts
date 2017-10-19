@@ -2,9 +2,6 @@
 // ReSharper disable AssignNullToNotNullAttribute
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
-    using System.IO;
-    using System.Reflection;
     using NUnit.Framework;
 
     [TestFixture]

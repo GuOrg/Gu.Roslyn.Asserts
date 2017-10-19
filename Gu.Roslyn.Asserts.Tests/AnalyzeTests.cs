@@ -1,9 +1,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
@@ -11,13 +9,11 @@ namespace Gu.Roslyn.Asserts.Tests
     public class AnalyzeTests
     {
         private static readonly MetadataReference[] MetadataReferences = new MetadataReference[0];
-        private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
 
         [Test]
         public async Task AnalyzeProjectFile()
         {
-            var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, projectFileName, out FileInfo projectFile));
+            Assert.AreEqual(true, CodeFactory.TryFindProjectFile("Gu.Roslyn.Asserts.csproj", out FileInfo projectFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences)
                                            .ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
@@ -26,10 +22,15 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public async Task AnalyzeSolutionFile()
         {
-            Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
                                            .ConfigureAwait(false);
-            CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
+            var expected = new[]
+                           {
+                               "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
+                               "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
+                           };
+            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(x => x.ToString()));
         }
     }
 }

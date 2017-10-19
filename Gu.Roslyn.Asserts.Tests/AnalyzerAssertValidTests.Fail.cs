@@ -175,13 +175,11 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj")]
-            [TestCase("ClassLibrary2.csproj")]
-            public void ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled(string fileName)
+            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            public void ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
                 var csproj = CodeFactory.FindProjectFile(fileName);
-                var expected = "Class1.cs(7,21): warning SA1309: Field '_value' must not begin with an underscore";
-
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
                 Assert.AreEqual(expected, exception.Message);
 
@@ -197,13 +195,11 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj")]
-            [TestCase("ClassLibrary2.csproj")]
-            public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName)
+            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
                 var sln = CodeFactory.CreateSolution(CodeFactory.FindProjectFile(fileName), new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
-                var expected = "Class1.cs(7,21): warning SA1309: Field '_value' must not begin with an underscore";
-
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
                 Assert.AreEqual(expected, exception.Message);
 

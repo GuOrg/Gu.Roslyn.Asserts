@@ -1,5 +1,8 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using Microsoft.CodeAnalysis;
@@ -82,29 +85,32 @@ namespace Gu.Roslyn.Asserts.Tests
                                "System.Threading.Overlapped.dll",
                                "System.Xml.Linq.dll",
                                "System.Xml.XPath.XDocument.dll",
-                               "System.Diagnostics.Debug.dll",
                                "Microsoft.CodeAnalysis.dll",
-                               "System.Runtime.InteropServices.dll",
-                               "System.Reflection.Metadata.dll",
-                               "System.Collections.Immutable.dll",
-                               "System.IO.dll",
+                               "System.Diagnostics.Debug.dll",
                                "System.Collections.dll",
-                               "System.Text.Encoding.dll",
+                               "System.Collections.Immutable.dll",
                                "System.Threading.Tasks.dll",
-                               "System.Reflection.Primitives.dll",
+                               "System.IO.dll",
+                               "System.Text.Encoding.dll",
+                               "System.Reflection.Metadata.dll",
                                "System.Reflection.dll",
                                "System.Globalization.dll",
+                               "System.Threading.dll",
+                               "System.Collections.Concurrent.dll",
+                               "System.Linq.dll",
                                "System.Runtime.Extensions.dll",
+                               "System.Xml.XDocument.dll",
+                               "System.Runtime.InteropServices.dll",
+                               "System.IO.FileSystem.dll",
+                               "System.Reflection.Primitives.dll",
                                "System.Runtime.Numerics.dll",
                                "System.Diagnostics.Tools.dll",
                                "System.Resources.ResourceManager.dll",
-                               "System.Linq.dll",
-                               "System.Collections.Concurrent.dll",
+                               "System.IO.FileSystem.Primitives.dll",
                                "System.Xml.ReaderWriter.dll",
-                               "System.Xml.XDocument.dll",
-                               "System.Dynamic.Runtime.dll",
-                               "System.Threading.dll",
-                               "System.Runtime.Serialization.Json.dll",
+                               "System.Security.Cryptography.Primitives.dll",
+                               "System.Reflection.Extensions.dll",
+                               "System.Text.Encoding.CodePages.dll",
                                "System.Text.Encoding.Extensions.dll",
                                "System.Linq.Expressions.dll",
                                "System.Threading.Tasks.Parallel.dll",
@@ -190,7 +196,17 @@ namespace Gu.Roslyn.Asserts.Tests
             var actual = AnalyzerAssert.MetadataReferences
                                        .Select(x => Path.GetFileName(x.Display))
                                        .ToArray();
+            Dump(actual);
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [Conditional("DEBUG")]
+        private static void Dump(IEnumerable<string> references)
+        {
+            foreach (var reference in references)
+            {
+                Console.WriteLine($"\"{reference}\",");
+            }
         }
     }
 }

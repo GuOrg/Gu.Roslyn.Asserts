@@ -24,7 +24,7 @@ namespace RoslynSandbox
         private readonly int _value;
     }
 }";
-            Assert.AreEqual(false, CodeComparer.Equals(x, y));
+            Assert.AreEqual(true, CodeComparer.Equals(x, y));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace RoslynSandbox
     }
 }";
 
-            Assert.AreEqual(false, CodeComparer.Equals(x,y));
+            Assert.AreEqual(false, CodeComparer.Equals(x, y));
         }
     }
 }

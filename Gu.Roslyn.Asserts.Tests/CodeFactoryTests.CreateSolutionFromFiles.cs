@@ -85,7 +85,7 @@
                                {
                                    "AllowCompilationErrors.cs",
                                    "AssemblyInfo.cs",
-                                   "Class1.cs",
+                                   "ClassLibrary1Class1.cs",
                                };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
@@ -110,7 +110,7 @@
                 Assert.AreEqual("ClassLibrary2", solution.Projects.Single().Name);
                 var expected = new[]
                                {
-                                   "Class1.cs",
+                                   "ClassLibrary2Class1.cs",
                                };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
