@@ -175,6 +175,69 @@
         }
 
         /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        public static void Valid<TAnalyzer>(Solution solution)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            var analyzer = new TAnalyzer();
+            ValidAsync(
+                    analyzer,
+                    solution)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        public static void Valid(Type analyzerType, Solution solution)
+        {
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            ValidAsync(
+                    analyzer,
+                    solution)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
+        {
+            ValidAsync(
+                    analyzer,
+                    solution)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, Solution solution)
+        {
+            var diagnostics = await Analyze.GetDiagnosticsAsync(solution, analyzer)
+                                           .ConfigureAwait(false);
+
+            if (diagnostics.SelectMany(x => x).Any())
+            {
+                throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+            }
+        }
+
+
+        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>

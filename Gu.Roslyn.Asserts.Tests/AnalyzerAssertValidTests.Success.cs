@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Success
         {
             [Test]
-            public void SingleClassNoErrorGeneric()
+            public void SingleClassNoErrorAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -23,44 +23,40 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
-            }
-
-            [Test]
-            public void ProjectFileNoErrorGeneric()
-            {
-                var dllFile = new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath;
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(new DirectoryInfo(Path.GetDirectoryName(dllFile)), Path.GetFileNameWithoutExtension(dllFile) + ".csproj", out FileInfo projectFile));
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(projectFile);
-            }
-
-            [TestCase(typeof(NoErrorAnalyzer))]
-            public void SingleClassNoErrorType(Type type)
-            {
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-    }
-}";
-                AnalyzerAssert.Valid(type, code);
-            }
-
-            [Test]
-            public void SingleClassNoErrorPassingAnalyzer()
-            {
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-    }
-}";
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code);
                 AnalyzerAssert.Valid(new NoErrorAnalyzer(), code);
             }
 
             [Test]
-            public void TwoClassesNoError()
+            public void ProjectFileNoErrorAnalyzer()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("Gu.Roslyn.Asserts.csproj", out var csproj));
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(csproj);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), csproj);
+            }
+
+            [Test]
+            public void SolutionFileNoErrorAnalyzer()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var sln));
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(sln);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), sln);
+            }
+
+            [Test]
+            public void SolutionNoErrorAnalyzer()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var sln));
+                var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, AnalyzerAssert.MetadataReferences);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(solution);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), solution);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), solution);
+            }
+
+            [Test]
+            public void TwoClassesNoErrorAnalyzer()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -77,6 +73,30 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(code1, code2);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), code1, code2);
+            }
+
+            [Test]
+            public void TwoProjectsNoErrorAnalyzer()
+            {
+                var code1 = @"
+namespace Project1
+{
+    class Code1
+    {
+    }
+}";
+                var code2 = @"
+namespace Project2
+{
+    class Code2
+    {
+    }
+}";
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(code1, code2);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), code1, code2);
             }
         }
     }
