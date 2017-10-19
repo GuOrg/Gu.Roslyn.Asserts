@@ -1,5 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -22,17 +23,22 @@
         /// <param name="xs">The expected code.</param>
         /// <param name="ys">The actual code.</param>
         /// <returns>True if the code is found to be equal</returns>
+        [Obsolete("To be removed use CodeComparer.Equals")]
         public static bool AreEqual(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
-            for (var i = 0; i < xs.Count; i++)
-            {
-                if (!AreEqual(xs[i], ys[i]))
-                {
-                    return false;
-                }
-            }
+            return CodeComparer.Equals(xs, ys);
+        }
 
-            return true;
+        /// <summary>
+        /// Checks if two strings of code are equal. Agnostic to end of line characters.
+        /// </summary>
+        /// <param name="x">The expected code.</param>
+        /// <param name="y">The actual code.</param>
+        /// <returns>True if the code is found to be equal</returns>
+        [Obsolete("To be removed use CodeComparer.Equals")]
+        public static bool AreEqual(string x, string y)
+        {
+            return CodeComparer.Equals(x, y);
         }
 
         /// <summary>
@@ -43,52 +49,6 @@
         public static string GetCode(this Document document, SyntaxAnnotation format)
         {
             return GetStringFromDocumentAsync(document, format, CancellationToken.None).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
-        /// Checks if two strings of code are equal. Agnostic to end of line characters.
-        /// </summary>
-        /// <param name="x">The expected code.</param>
-        /// <param name="y">The actual code.</param>
-        /// <returns>True if the code is found to be equal</returns>
-        public static bool AreEqual(string x, string y)
-        {
-            var pos = 0;
-            var otherPos = 0;
-            while (pos < x.Length && otherPos < y.Length)
-            {
-                if (x[pos] == '\r')
-                {
-                    pos++;
-                    continue;
-                }
-
-                if (y[otherPos] == '\r')
-                {
-                    otherPos++;
-                    continue;
-                }
-
-                if (x[pos] != y[otherPos])
-                {
-                    return false;
-                }
-
-                pos++;
-                otherPos++;
-            }
-
-            while (pos < x.Length && x[pos] == '\r')
-            {
-                pos++;
-            }
-
-            while (otherPos < y.Length && y[otherPos] == '\r')
-            {
-                otherPos++;
-            }
-
-            return pos == x.Length && otherPos == y.Length;
         }
 
         /// <summary>
