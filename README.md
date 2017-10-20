@@ -102,21 +102,6 @@ namespace RoslynSandbox
     AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("Field '_value' must not begin with an underscore"), code);
 }
 
-[Test]
-public void CheckMessageViaArgsPassedToFormatString()
-{
-    var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
-    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create(new[] { "_value" }), code);
-}
-```
-
 # CodeFix
 Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix fixes it and produces the expected code.
 

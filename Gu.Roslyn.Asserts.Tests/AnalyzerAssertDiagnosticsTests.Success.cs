@@ -9,7 +9,7 @@
         public class Success
         {
             [Test]
-            public void OneErrorGeneric()
+            public void OneError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -20,6 +20,9 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
+
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("Field '_value' must not begin with an underscore"), code);
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create(new[] { "_value" }), code);
             }

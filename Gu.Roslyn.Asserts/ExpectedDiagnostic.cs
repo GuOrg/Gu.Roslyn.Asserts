@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
@@ -151,55 +150,6 @@
         }
 
         /// <summary>
-        /// Get the expected diagnostics and cleaned sources.
-        /// </summary>
-        /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
-        /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
-        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        internal static DiagnosticsAndSources CreateDiagnosticsAndSources(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
-        {
-            if (analyzer.SupportedDiagnostics.Length > 1)
-            {
-                throw new ArgumentException("This can only be used for analyzers with one SupportedDiagnostics", nameof(analyzer));
-            }
-
-            return CreateDiagnosticsAndSources(analyzer.SupportedDiagnostics[0].Id, null, codeWithErrorsIndicated);
-        }
-
-        /// <summary>
-        /// Get the expected diagnostics and cleaned sources.
-        /// </summary>
-        /// <param name="analyzerId">The analyzer diagnosticId that is expected to produce diagnostics.</param>
-        /// <param name="message">The expected message for the diagnostics, can be null.</param>
-        /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
-        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        internal static DiagnosticsAndSources CreateDiagnosticsAndSources(string analyzerId, string message, IReadOnlyList<string> codeWithErrorsIndicated)
-        {
-            if (analyzerId == null)
-            {
-                throw new ArgumentNullException(nameof(analyzerId));
-            }
-
-            var diagnostics = new List<ExpectedDiagnostic>();
-            var cleanedSources = new List<string>();
-            foreach (var source in codeWithErrorsIndicated)
-            {
-                var positions = CodeReader.FindDiagnosticsPositions(source).ToArray();
-                if (positions.Length == 0)
-                {
-                    cleanedSources.Add(source);
-                    continue;
-                }
-
-                cleanedSources.Add(source.Replace("↓", string.Empty));
-                var fileName = CodeReader.FileName(source);
-                diagnostics.AddRange(positions.Select(p => new ExpectedDiagnostic(analyzerId, message, new FileLinePositionSpan(fileName, p, p))));
-            }
-
-            return new DiagnosticsAndSources(diagnostics, codeWithErrorsIndicated, cleanedSources);
-        }
-
-        /// <summary>
         /// Writes the diagnostic and the offending code.
         /// </summary>
         /// <returns>A string for use in assert exception</returns>
@@ -210,44 +160,6 @@
             var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
             return $"{this.Id} {this.Message}\r\n" +
                    $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {this.Span.Path} | {line.TrimStart(' ')}";
-        }
-
-        /// <summary>
-        /// Expected diagnostics and code.
-        /// </summary>
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
-        internal class DiagnosticsAndSources
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="DiagnosticsAndSources"/> class.
-            /// </summary>
-            /// <param name="expectedDiagnostics">The expected diagnostics that were indicated in the code.</param>
-            /// <param name="codeWithErrorsIndicated">The code with positions for diagnostics indicated.</param>
-            /// <param name="cleanedSources">The <paramref name="codeWithErrorsIndicated"/> with indicators removed.</param>
-            public DiagnosticsAndSources(
-                IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
-                IReadOnlyList<string> codeWithErrorsIndicated,
-                IReadOnlyList<string> cleanedSources)
-            {
-                this.ExpectedDiagnostics = expectedDiagnostics;
-                this.CodeWithErrorsIndicated = codeWithErrorsIndicated;
-                this.CleanedSources = cleanedSources;
-            }
-
-            /// <summary>
-            /// Gets the expected diagnostics that were indicated in the code.
-            /// </summary>
-            public IReadOnlyList<ExpectedDiagnostic> ExpectedDiagnostics { get; }
-
-            /// <summary>
-            /// Gets the code with positions for diagnostics indicated.
-            /// </summary>
-            public IReadOnlyList<string> CodeWithErrorsIndicated { get; }
-
-            /// <summary>
-            /// Gets the <see cref="CodeWithErrorsIndicated"/> with indicators removed.
-            /// </summary>
-            public IReadOnlyList<string> CleanedSources { get; }
         }
     }
 }

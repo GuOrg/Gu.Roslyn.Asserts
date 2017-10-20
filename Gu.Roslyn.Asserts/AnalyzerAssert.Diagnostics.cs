@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
@@ -24,7 +25,99 @@
             var analyzer = new TAnalyzer();
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
+        {
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
+        {
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            var analyzer = new TAnalyzer();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        {
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        {
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
@@ -44,28 +137,10 @@
             var analyzer = new TAnalyzer();
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
-                    expectedMessage)
-                .GetAwaiter()
-                .GetResult();
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
-        {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    codeWithErrorsIndicated,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
+                    expectedMessage.Message)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -81,27 +156,10 @@
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
-                    expectedMessage)
-                .GetAwaiter()
-                .GetResult();
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
-        {
-            DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    codeWithErrorsIndicated,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
+                    expectedMessage.Message)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -116,10 +174,10 @@
         {
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
-                    expectedMessage)
+                    expectedMessage.Message)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -134,10 +192,10 @@
         {
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
-                    expectedMessage)
+                    expectedMessage.Message)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -153,42 +211,41 @@
         {
             return DiagnosticsWithMetadataAsync(
                 analyzer,
-                codeWithErrorsIndicated,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 MetadataReferences,
-                expectedMessage);
+                expectedMessage.Message);
         }
 
         /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// Verifies that <paramref name="sources"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="sources">The code with error positions indicated.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>The meta data from the run..</returns>
         public static async Task<DiagnosticsMetadata> DiagnosticsWithMetadataAsync(
             DiagnosticAnalyzer analyzer,
-            IReadOnlyList<string> codeWithErrorsIndicated,
+            DiagnosticsAndSources sources,
             CSharpCompilationOptions compilationOptions,
             IReadOnlyList<MetadataReference> metadataReferences,
-            ExpectedMessage expectedMessage = null)
+            string expectedMessage = null)
         {
-            var expectedDiagnosticsAndSources = ExpectedDiagnostic.CreateDiagnosticsAndSources(analyzer, codeWithErrorsIndicated);
-            if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
+            if (sources.ExpectedDiagnostics.Count == 0)
             {
                 throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
             }
 
             var data = await Analyze.GetDiagnosticsWithMetadataAsync(
                                         analyzer,
-                                        expectedDiagnosticsAndSources.CleanedSources,
+                                        sources.Code,
                                         compilationOptions,
                                         metadataReferences)
                                     .ConfigureAwait(false);
 
-            var expecteds = expectedDiagnosticsAndSources.ExpectedDiagnostics;
+            var expecteds = sources.ExpectedDiagnostics;
             var actuals = data.Diagnostics
                               .SelectMany(x => x)
                               .ToArray();
@@ -199,14 +256,14 @@
                 {
                     foreach (var actual in data.Diagnostics.SelectMany(x => x))
                     {
-                        expectedMessage.AssertIsMatch(actual);
+                        var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
+                        TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
                     }
                 }
 
                 return new DiagnosticsMetadata(
-                    codeWithErrorsIndicated,
-                    expectedDiagnosticsAndSources.CleanedSources,
-                    expectedDiagnosticsAndSources.ExpectedDiagnostics,
+                    sources.Code,
+                    sources.ExpectedDiagnostics,
                     data.Diagnostics,
                     data.Solution);
             }
@@ -222,7 +279,7 @@
                 }
 
                 var expected = missingExpected[i];
-                error.AppendLine(expected.ToString(expectedDiagnosticsAndSources.CleanedSources));
+                error.AppendLine(expected.ToString(sources.Code));
             }
 
             if (actuals.Length == 0)
@@ -244,7 +301,7 @@
                 }
 
                 var actual = missingActual[i];
-                error.AppendLine(actual.ToString(expectedDiagnosticsAndSources.CleanedSources));
+                error.AppendLine(actual.ToString(sources.Code));
             }
 
             throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
@@ -265,23 +322,16 @@
             /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
             /// <param name="solution">The solution the analysis was run on.</param>
             public DiagnosticsMetadata(
-                IReadOnlyList<string> codeWithErrorsIndicated,
                 IReadOnlyList<string> sources,
                 IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
                 IReadOnlyList<ImmutableArray<Diagnostic>> actualDiagnostics,
                 Solution solution)
             {
-                this.CodeWithErrorsIndicated = codeWithErrorsIndicated;
                 this.Sources = sources;
                 this.ExpectedDiagnostics = expectedDiagnostics;
                 this.ActualDiagnostics = actualDiagnostics;
                 this.Solution = solution;
             }
-
-            /// <summary>
-            /// Gets the code with errors indicated
-            /// </summary>
-            public IReadOnlyList<string> CodeWithErrorsIndicated { get; }
 
             /// <summary>
             /// Gets the code that was analyzed. This is <see cref="CodeWithErrorsIndicated"/> with indicators stripped.

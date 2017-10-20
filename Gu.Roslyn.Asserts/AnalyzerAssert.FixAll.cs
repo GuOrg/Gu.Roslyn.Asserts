@@ -463,7 +463,8 @@
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, codeWithErrorsIndicated, compilationOptions, metadataReference)
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference)
                 .ConfigureAwait(false);
 
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)

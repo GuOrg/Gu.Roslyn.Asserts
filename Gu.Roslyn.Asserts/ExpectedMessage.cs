@@ -37,17 +37,5 @@
         /// Create an expected message from the expected arguments to the format
         /// </summary>
         public static ExpectedMessage Create(IReadOnlyList<object> args) => new ExpectedMessage(null, args);
-
-        /// <summary>
-        /// Check that expected and diagnostic message matches.
-        /// </summary>
-        public void AssertIsMatch(Diagnostic diagnostic)
-        {
-            var expected = this.Message ??
-                           string.Format(CultureInfo.InvariantCulture, diagnostic.Descriptor.MessageFormat.ToString(CultureInfo.InvariantCulture), this.Args.ToArray());
-
-            var actual = diagnostic.GetMessage(CultureInfo.InvariantCulture);
-            TextAssert.AreEqual(expected, actual, $"Expected and actual diagnostic message for the diagnostic {diagnostic} does not match");
-        }
     }
 }
