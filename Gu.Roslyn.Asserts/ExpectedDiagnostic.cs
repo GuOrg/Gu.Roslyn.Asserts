@@ -15,6 +15,8 @@
     [DebuggerDisplay("{Id} {Message} {Span}")]
     public class ExpectedDiagnostic
     {
+        private static readonly FileLinePositionSpan NoPosition = new FileLinePositionSpan("MISSING", default(LinePosition), default(LinePosition));
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpectedDiagnostic"/> class.
         /// </summary>
@@ -58,10 +60,38 @@
         public FileLinePositionSpan Span { get; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance indicates error position.
+        /// </summary>
+        public bool HasPosition => this.Span.StartLinePosition != NoPosition.StartLinePosition ||
+                                   this.Span.EndLinePosition != NoPosition.EndLinePosition ||
+                                   this.Span.Path != NoPosition.Path;
+
+        /// <summary>
         /// Gets the analyzer that is expected to report a diagnostic.
         /// </summary>
         [Obsolete("To be removed.")]
         public DiagnosticAnalyzer Analyzer { get; }
+
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        public static ExpectedDiagnostic Create(string diagnosticId)
+        {
+            return new ExpectedDiagnostic(diagnosticId, null, NoPosition);
+        }
+
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="message">The expected message.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        public static ExpectedDiagnostic Create(string diagnosticId, string message)
+        {
+            return new ExpectedDiagnostic(diagnosticId, message, NoPosition);
+        }
 
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>
@@ -167,6 +197,11 @@
                 return false;
             }
 
+            if (!this.HasPosition)
+            {
+                return true;
+            }
+
             var actualSpan = actual.Location.GetMappedLineSpan();
             if (this.Span.StartLinePosition != actualSpan.StartLinePosition)
             {
@@ -193,11 +228,16 @@
         /// <returns>A string for use in assert exception</returns>
         internal string ToString(IReadOnlyList<string> sources)
         {
-            var path = this.Span.Path;
-            var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
-            var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
-            return $"{this.Id} {this.Message}\r\n" +
-                   $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {this.Span.Path} | {line.TrimStart(' ')}";
+            if (this.HasPosition)
+            {
+                var path = this.Span.Path;
+                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
+                var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
+                return $"{this.Id} {this.Message}\r\n" +
+                       $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {this.Span.Path} | {line.TrimStart(' ')}";
+            }
+
+            return $"{this.Id} {this.Message}";
         }
     }
 }

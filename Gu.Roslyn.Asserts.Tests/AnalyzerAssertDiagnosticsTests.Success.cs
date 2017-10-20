@@ -32,6 +32,27 @@ namespace RoslynSandbox
 {
     class Foo
     {
+        private readonly int _value1;
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309");
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
+            }
+
+            [Test]
+            public void OneErrorWithExpectedDiagnosticPositionFromIndicatedCode()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
         private readonly int ↓_value1;
     }
 }";

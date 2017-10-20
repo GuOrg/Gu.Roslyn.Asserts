@@ -99,7 +99,8 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(ExpectedMessage.Create("Field '_value' must not begin with an underscore"), code);
+    var expected = ExpectedDiagnostic.Create("SA1309", code, out code);
+    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expected, code);
 }
 
 # CodeFix
