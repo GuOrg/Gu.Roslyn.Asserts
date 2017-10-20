@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3F667CC4-0891-4FCB-A15F-BDCE00C4669A}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "TestApps\WpfApp1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\ClassLibrary1\ClassLibrary1.csproj", "{C6361E10-9E5E-445F-A042-55D115197EE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

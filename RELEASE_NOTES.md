@@ -1,3 +1,11 @@
+#### 0.4.0
+* BUGFIX: Better heuristics for determining if a csproj is new format
+* FEATURE: CodeFactory.CreateSolutionWithOneProject
+* FEATURE: CodeComparer
+* FEATURE ExpectedDiagnostic.
+* BREAKING: Change signature of AnalyzerAssert.DiagnosticsWithMetadataAsync
+* BREAKING: Move DiagnosticsAndSources to separate class.
+
 #### 0.3.6
 * BUGFIX: Parse filenames with error indicators.
 * FEATURE Benchmark API.
