@@ -25,6 +25,30 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoErrorsSamePosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+                var expectedDiagnostic1 = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(
+                    FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId1,
+                    code,
+                    out _);
+
+                var expectedDiagnostic2 = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(
+                    FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId2,
+                    code,
+                    out code);
+
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { expectedDiagnostic1, expectedDiagnostic2 }, code);
+            }
+
+            [Test]
             public void OneErrorWithExpectedDiagnostic()
             {
                 var code = @"
