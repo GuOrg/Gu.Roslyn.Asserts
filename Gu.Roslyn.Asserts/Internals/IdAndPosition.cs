@@ -53,7 +53,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>An instance of <see cref="IdAndPosition"/></returns>
         public static IdAndPosition Create(ExpectedDiagnostic x)
         {
-            return new IdAndPosition(x.Analyzer.SupportedDiagnostics[0].Id, x.Span);
+            return new IdAndPosition(x.Id, x.Span);
         }
 
         /// <inheritdoc />

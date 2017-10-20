@@ -16,13 +16,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="id">The id of the expected diagnostics.</param>
         public PlaceholderAnalyzer(string id)
         {
-            this.SupportedDiagnostics = ImmutableArray.Create(new DiagnosticDescriptor(
-                id: id,
-                title: "Placeholder",
-                messageFormat: "Placeholder",
-                category: "Placeholder",
-                defaultSeverity: DiagnosticSeverity.Warning,
-                isEnabledByDefault: true));
+            this.SupportedDiagnostics = ImmutableArray.Create(
+                new DiagnosticDescriptor(
+                    id: id,
+                    title: "Placeholder",
+                    messageFormat: "Placeholder",
+                    category: "Placeholder",
+                    defaultSeverity: DiagnosticSeverity.Warning,
+                    isEnabledByDefault: true));
         }
 
         /// <inheritdoc />

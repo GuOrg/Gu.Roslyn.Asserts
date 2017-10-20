@@ -37,6 +37,22 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Find a <see cref="MethodDeclarationSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
+        public static TypeDeclarationSyntax FindTypeDeclaration(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<TypeDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="MethodDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static ClassDeclarationSyntax FindClassDeclaration(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<ClassDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="MethodDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
         public static FieldDeclarationSyntax FindFieldDeclaration(this SyntaxTree tree, string signature)
         {
             return tree.FindBestMatch<FieldDeclarationSyntax>(signature);

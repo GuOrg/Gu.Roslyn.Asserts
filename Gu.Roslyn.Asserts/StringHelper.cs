@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts
     public static class StringHelper
     {
         /// <summary>
-        /// Call string.Replace(<paramref name="oldValue"/>, <paramref name="newValue"/>) but check that string contains oldvalue first.
+        /// Call string.Replace(<paramref name="oldValue"/>, <paramref name="newValue"/>) but check that string contains <paramref name="oldValue"/> first.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="oldValue">The text to replace.</param>

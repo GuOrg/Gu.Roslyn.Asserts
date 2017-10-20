@@ -1,5 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -19,12 +20,19 @@
         public ExpectedDiagnostic(DiagnosticAnalyzer analyzer, FileLinePositionSpan span)
         {
             this.Analyzer = analyzer;
+            this.Id = analyzer.SupportedDiagnostics[0].Id;
             this.Span = span;
         }
 
         /// <summary>
+        /// Gets the expected diagnostic ID.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
         /// Gets the analyzer that is expected to report a diagnostic.
         /// </summary>
+        [Obsolete("To be removed.")]
         public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
