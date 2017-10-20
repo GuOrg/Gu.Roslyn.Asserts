@@ -84,6 +84,5 @@
 
             return new DiagnosticsAndSources(diagnostics, cleanedSources);
         }
-
     }
 }

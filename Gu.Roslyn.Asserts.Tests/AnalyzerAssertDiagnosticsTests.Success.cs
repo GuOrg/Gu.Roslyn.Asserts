@@ -57,7 +57,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
 
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
@@ -79,7 +79,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
 
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);

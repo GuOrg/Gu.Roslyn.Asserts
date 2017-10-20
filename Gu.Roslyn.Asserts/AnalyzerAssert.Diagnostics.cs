@@ -252,7 +252,7 @@
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
-                    expectedMessage.Message)
+                    expectedMessage?.Message)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -271,7 +271,7 @@
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 MetadataReferences,
-                expectedMessage.Message);
+                expectedMessage?.Message);
         }
 
         /// <summary>
@@ -373,8 +373,7 @@
             /// <summary>
             /// Initializes a new instance of the <see cref="DiagnosticsMetadata"/> class.
             /// </summary>
-            /// <param name="codeWithErrorsIndicated">The code with errors indicated</param>
-            /// <param name="sources"><paramref name="codeWithErrorsIndicated"/> cleaned from indicators.</param>
+            /// <param name="sources">The code to analyze.</param>
             /// <param name="expectedDiagnostics">Info about the expected diagnostics.</param>
             /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
             /// <param name="solution">The solution the analysis was run on.</param>
@@ -391,7 +390,7 @@
             }
 
             /// <summary>
-            /// Gets the code that was analyzed. This is <see cref="CodeWithErrorsIndicated"/> with indicators stripped.
+            /// Gets the code that was analyzed.
             /// </summary>
             public IReadOnlyList<string> Sources { get; }
 

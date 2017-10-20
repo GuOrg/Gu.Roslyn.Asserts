@@ -37,11 +37,19 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
                                "Rename to: value\r\n";
+
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -67,12 +75,18 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzed code contained the following diagnostics: {SA1309, SA1309}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309}\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -181,7 +195,25 @@ namespace RoslynSandbox
             [Test]
             public void FixDoesNotMatchAnalyzer()
             {
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>((string)null, null));
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int bar;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309}";

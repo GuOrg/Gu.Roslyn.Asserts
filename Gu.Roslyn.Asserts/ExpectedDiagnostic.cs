@@ -123,12 +123,12 @@
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id</param>
-        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
-        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without error indicator.</param>
+        /// <param name="code">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
-        public static ExpectedDiagnostic Create(string diagnosticId, string codeWithErrorsIndicated, out string cleanedSources)
+        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string code, out string cleanedSources)
         {
-            return Create(diagnosticId, null, codeWithErrorsIndicated, out cleanedSources);
+            return CreateFromCodeWithErrorsIndicated(diagnosticId, null, code, out cleanedSources);
         }
 
         /// <summary>
@@ -136,24 +136,24 @@
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id</param>
         /// <param name="message">The expected message.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
-        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without error indicator.</param>
+        /// <param name="code">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
-        public static ExpectedDiagnostic Create(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
+        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string message, string code, out string cleanedSources)
         {
-            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            var positions = CodeReader.FindDiagnosticsPositions(code).ToArray();
             if (positions.Length == 0)
             {
-                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(code));
             }
 
             if (positions.Length > 1)
             {
-                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(codeWithErrorsIndicated));
+                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(code));
             }
 
-            cleanedSources = codeWithErrorsIndicated.Replace("↓", string.Empty);
-            var fileName = CodeReader.FileName(codeWithErrorsIndicated);
+            cleanedSources = code.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(code);
             var position = positions[0];
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, position, position));
         }
@@ -166,7 +166,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
-        public static IReadOnlyList<ExpectedDiagnostic> CreateMany(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
+        public static IReadOnlyList<ExpectedDiagnostic> CreateManyFromCodeWithErrorsIndicated(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
             var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
             if (positions.Length == 0)

@@ -2,9 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using Microsoft.CodeAnalysis;
 
     /// <summary>
     /// A type for validating against expected message for a diagnostic.
