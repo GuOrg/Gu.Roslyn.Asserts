@@ -32,7 +32,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    new[] { codeWithErrorsIndicated },
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
                     new[] { fixedCode },
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -61,7 +61,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -90,7 +90,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -118,7 +118,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    new[] { codeWithErrorsIndicated },
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
                     new[] { fixedCode },
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -146,7 +146,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -174,7 +174,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -201,7 +201,7 @@
             FixAllAsync(
                     analyzer,
                     codeFix,
-                    codeWithErrorsIndicated,
+                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     metadataReference,
@@ -229,7 +229,7 @@
             return FixAllAsync(
                 analyzer,
                 codeFix,
-                codeWithErrorsIndicated,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode,
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 metadataReference,
@@ -256,7 +256,41 @@
             var data = await CreateDiagnosticsMetadataAsync(
                 analyzer,
                 codeFix,
-                codeWithErrorsIndicated,
+               DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                compilationOptions,
+                metadataReference);
+            await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data).ConfigureAwait(false);
+
+            var fixAllProvider = codeFix.GetFixAllProvider();
+            if (fixAllProvider != null)
+            {
+                foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
+                {
+                    await FixAllByScopeAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="diagnosticsAndSources">The code and expected diagnostics</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static async Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
+        {
+            var data = await CreateDiagnosticsMetadataAsync(
+                analyzer,
+                codeFix,
+                diagnosticsAndSources,
                 compilationOptions,
                 metadataReference);
             await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data).ConfigureAwait(false);
@@ -401,7 +435,7 @@
             var data = await CreateDiagnosticsMetadataAsync(
                 analyzer,
                 codeFix,
-                codeWithErrorsIndicated,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated), 
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 metadataReference);
             await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data);
@@ -426,7 +460,7 @@
             var data = await CreateDiagnosticsMetadataAsync(
                 analyzer,
                 codeFix,
-                codeWithErrorsIndicated,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 metadataReference);
             await FixAllByScopeAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data, scope);
@@ -452,7 +486,7 @@
             }
         }
 
-        private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
+        private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
         {
             if (analyzer.SupportedDiagnostics.Length != 1)
             {
@@ -463,7 +497,6 @@
             }
 
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
             var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference)
                 .ConfigureAwait(false);
 
