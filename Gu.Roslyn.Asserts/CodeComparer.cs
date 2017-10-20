@@ -2,6 +2,9 @@
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Exposes methods for comparing code.
+    /// </summary>
     public static class CodeComparer
     {
         /// <summary>

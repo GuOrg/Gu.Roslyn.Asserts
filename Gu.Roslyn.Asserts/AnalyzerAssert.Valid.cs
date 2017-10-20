@@ -236,7 +236,6 @@
             }
         }
 
-
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>

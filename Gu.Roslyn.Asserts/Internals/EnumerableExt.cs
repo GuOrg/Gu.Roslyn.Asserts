@@ -35,11 +35,28 @@ namespace Gu.Roslyn.Asserts.Internals
             return single != null;
         }
 
+        /// <summary>
+        /// Return the item with minimum keyed by <paramref name="selector"/>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
+        /// <typeparam name="TKey">The type of the value to compare.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The single item.</param>
+        /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         {
             return source.MinBy(selector, null);
         }
 
+        /// <summary>
+        /// Return the item with minimum keyed by <paramref name="selector"/>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
+        /// <typeparam name="TKey">The type of the value to compare.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The single item.</param>
+        /// <param name="comparer">The <see cref="IComparer{TKey}"/></param>
+        /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
             if (source == null)
