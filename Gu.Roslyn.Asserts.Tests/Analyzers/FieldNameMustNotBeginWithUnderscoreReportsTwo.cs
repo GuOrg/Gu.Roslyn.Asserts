@@ -11,6 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
     internal class FieldNameMustNotBeginWithUnderscoreReportsTwo : DiagnosticAnalyzer
     {
         public const string DiagnosticId1 = "SA1309_1";
+        public const string DiagnosticId2 = "SA2309_2";
 
         private static readonly DiagnosticDescriptor Descriptor1 = new DiagnosticDescriptor(
             DiagnosticId1,
@@ -19,8 +20,6 @@ namespace Gu.Roslyn.Asserts.Tests
             "Naming",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
-
-        public const string DiagnosticId2 = "SA2309_2";
 
         private static readonly DiagnosticDescriptor Descriptor2 = new DiagnosticDescriptor(
             DiagnosticId2,
