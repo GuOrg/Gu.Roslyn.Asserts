@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Internals
     /// <summary>
     /// Helper class for applying code fixes
     /// </summary>
-    internal static class EnumerableExt
+    internal static partial class EnumerableExt
     {
         /// <summary>
         /// Return the single element or null

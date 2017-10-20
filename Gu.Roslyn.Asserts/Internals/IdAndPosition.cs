@@ -98,17 +98,5 @@ namespace Gu.Roslyn.Asserts.Internals
                        this.Span.StartLinePosition.GetHashCode();
             }
         }
-
-        /// <summary>
-        /// Writes the diagnostic and the offending code.
-        /// </summary>
-        /// <returns>A string for use in assert exception</returns>
-        internal string ToString(IReadOnlyList<string> sources)
-        {
-            var path = this.Span.Path;
-            var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
-            var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
-            return $"{this.Id} at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} |{line}";
-        }
     }
 }

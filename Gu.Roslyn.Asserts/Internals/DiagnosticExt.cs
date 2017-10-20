@@ -19,11 +19,11 @@
         /// <returns>A string for use in assert exception</returns>
         internal static string ToString(this Diagnostic diagnostic, IReadOnlyList<string> sources)
         {
-            var idAndPosition = IdAndPosition.Create(diagnostic);
-            var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == idAndPosition.Span.Path);
-            var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, idAndPosition.Span.StartLinePosition) : string.Empty;
+            var idAndPosition = diagnostic.Location.GetMappedLineSpan();
+            var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == idAndPosition.Path);
+            var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, idAndPosition.StartLinePosition) : string.Empty;
             return $"{diagnostic.Id} {diagnostic.GetMessage(CultureInfo.InvariantCulture)}\r\n" +
-                   $"  at line {idAndPosition.Span.StartLinePosition.Line} and character {idAndPosition.Span.StartLinePosition.Character} in file {idAndPosition.Span.Path} |{line}";
+                   $"  at line {idAndPosition.StartLinePosition.Line} and character {idAndPosition.StartLinePosition.Character} in file {idAndPosition.Path} | {line.TrimStart(' ')}";
         }
 
         /// <summary>

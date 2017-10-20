@@ -188,12 +188,9 @@
                                         metadataReferences)
                                     .ConfigureAwait(false);
 
-            var expecteds = new HashSet<IdAndPosition>(
-                expectedDiagnosticsAndSources.ExpectedDiagnostics.Select(IdAndPosition.Create));
-
+            var expecteds = expectedDiagnosticsAndSources.ExpectedDiagnostics;
             var actuals = data.Diagnostics
                               .SelectMany(x => x)
-                              .Select(IdAndPosition.Create)
                               .ToArray();
 
             if (expecteds.SetEquals(actuals))
@@ -216,29 +213,37 @@
 
             var error = StringBuilderPool.Borrow();
             error.AppendLine("Expected and actual diagnostics do not match.");
-            var unMatchedExpecteds = expecteds.Except(actuals).ToArray();
-            for (var i = 0; i < unMatchedExpecteds.Length; i++)
+            var missingExpected = expecteds.Except(actuals);
+            for (var i = 0; i < missingExpected.Count; i++)
             {
-                error.Append(i == 0 ? "Expected: " : "            ");
-                var expected = unMatchedExpecteds[i];
+                if (i == 0)
+                {
+                    error.Append("Expected:\r\n");
+                }
+
+                var expected = missingExpected[i];
                 error.AppendLine(expected.ToString(expectedDiagnosticsAndSources.CleanedSources));
             }
 
             if (actuals.Length == 0)
             {
-                error.AppendLine("Actual:   <no errors>");
+                error.AppendLine("Actual: <no errors>");
             }
 
-            var unmatchedActuals = actuals.Except(expecteds).ToArray();
-            if (actuals.Length > 0 && unmatchedActuals.Length == 0)
+            var missingActual = actuals.Except(expecteds);
+            if (actuals.Length > 0 && missingActual.Count == 0)
             {
-                error.AppendLine("Actual:   <missing>");
+                error.AppendLine("Actual: <missing>");
             }
 
-            for (var i = 0; i < unmatchedActuals.Length; i++)
+            for (var i = 0; i < missingActual.Count; i++)
             {
-                error.Append(i == 0 ? "Actual:   " : "            ");
-                var actual = unmatchedActuals[i];
+                if (i == 0)
+                {
+                    error.Append("Actual:\r\n");
+                }
+
+                var actual = missingActual[i];
                 error.AppendLine(actual.ToString(expectedDiagnosticsAndSources.CleanedSources));
             }
 

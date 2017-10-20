@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -10,6 +12,7 @@
     /// <summary>
     /// Info about an expected diagnostic.
     /// </summary>
+    [DebuggerDisplay("{Id} {Message} {Span}")]
     public class ExpectedDiagnostic
     {
         /// <summary>
@@ -76,6 +79,13 @@
             return FromCode(analyzer.SupportedDiagnostics[0].Id, null, codeWithErrorsIndicated);
         }
 
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="analyzerId">The analyzer id that is expected to produce diagnostics.</param>
+        /// <param name="message">The expected message for the diagnostics, can be null.</param>
+        /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources FromCode(string analyzerId, string message, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             if (analyzerId == null)
@@ -100,6 +110,51 @@
             }
 
             return new DiagnosticsAndSources(diagnostics, codeWithErrorsIndicated, cleanedSources);
+        }
+
+        /// <summary>
+        /// Check if Id, Span and Message matches.
+        /// If Message is nu it is not checked.
+        /// </summary>
+        public bool Matches(Diagnostic actual)
+        {
+            if (this.Id != actual.Id)
+            {
+                return false;
+            }
+
+            if (this.Message != null &&
+                this.Message != actual.GetMessage(CultureInfo.InvariantCulture))
+            {
+                return false;
+            }
+
+            var actualSpan = actual.Location.GetMappedLineSpan();
+            if (this.Span.StartLinePosition != actualSpan.StartLinePosition ||
+                this.Span.Path != actualSpan.Path)
+            {
+                return false;
+            }
+
+            if (this.Span.StartLinePosition != this.Span.EndLinePosition)
+            {
+                return this.Span.EndLinePosition == actualSpan.EndLinePosition;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Writes the diagnostic and the offending code.
+        /// </summary>
+        /// <returns>A string for use in assert exception</returns>
+        internal string ToString(IReadOnlyList<string> sources)
+        {
+            var path = this.Span.Path;
+            var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
+            var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
+            return $"{this.Id} {this.Message}\r\n" +
+                   $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {this.Span.Path} | {line.TrimStart(' ')}";
         }
 
         /// <summary>

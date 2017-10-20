@@ -25,7 +25,9 @@ namespace RoslynSandbox
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Actual:   SA1309 at line 6 and character 29 in file Foo.cs |        private readonly int ↓_value2;\r\n";
+                               "Actual:\r\n" +
+                               "SA1309 Field '_value2' must not begin with an underscore\r\n" +
+                               "  at line 6 and character 29 in file Foo.cs | private readonly int ↓_value2;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -71,8 +73,12 @@ namespace RoslynSandbox
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected: SA1309 at line 5 and character 16 in file Foo.cs |        private ↓readonly int _value1;\r\n" +
-                               "Actual:   SA1309 at line 5 and character 29 in file Foo.cs |        private readonly int ↓_value1;\r\n";
+                               "Expected:\r\n" +
+                               "SA1309 \r\n" +
+                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "Actual:\r\n" +
+                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -199,8 +205,12 @@ namespace RoslynSandbox
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected: SA1309 at line 5 and character 16 in file Foo.cs |        private ↓readonly int _value1;\r\n" +
-                               "Actual:   SA1309 at line 5 and character 29 in file Foo.cs |        private readonly int ↓_value1;\r\n";
+                               "Expected:\r\n" +
+                               "SA1309 \r\n" +
+                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "Actual:\r\n" +
+                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -227,17 +237,17 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;\r\n" +
                                "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
-                               "  at line 5 and character 21 in file Foo.cs |        public event ↓EventHandler SomeEvent;\r\n" +
+                               "  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;\r\n" +
                                "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "  at line 5 and character 34 in file Foo.cs | public event EventHandler ↓SomeEvent;\r\n" +
                                "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file Foo.cs |        public event EventHandler ↓SomeEvent;\r\n" +
+                               "  at line 5 and character 34 in file Foo.cs | public event EventHandler ↓SomeEvent;\r\n" +
                                "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
-                               "  at line 3 and character 10 in file Foo.cs |    class ↓Foo\r\n" +
+                               "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +
                                "First source file with error is:\r\n\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
