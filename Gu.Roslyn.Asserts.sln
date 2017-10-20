@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "TestApps\WpfApp1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\ClassLibrary1\ClassLibrary1.csproj", "{C6361E10-9E5E-445F-A042-55D115197EE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
