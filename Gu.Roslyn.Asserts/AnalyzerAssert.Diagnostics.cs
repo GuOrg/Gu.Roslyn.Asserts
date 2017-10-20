@@ -126,6 +126,63 @@
         }
 
         /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedDiagnostics">The expected diagnostics</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            var analyzer = new TAnalyzer();
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(expectedDiagnostics, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedDiagnostics">The expected diagnostics</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+        {
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(expectedDiagnostics, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="expectedDiagnostics">The expected diagnostics</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+        {
+            DiagnosticsWithMetadataAsync(
+                    analyzer,
+                    new DiagnosticsAndSources(expectedDiagnostics, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    null)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
         /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
