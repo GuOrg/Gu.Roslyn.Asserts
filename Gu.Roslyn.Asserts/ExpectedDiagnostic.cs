@@ -63,22 +63,52 @@
         [Obsolete("To be removed.")]
         public DiagnosticAnalyzer Analyzer { get; }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="line">The expected line number</param>
+        /// <param name="character">The expected character position.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static ExpectedDiagnostic Create(string diagnosticId, int line, int character)
         {
             return Create(diagnosticId, null, line, character);
         }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="message">The expected message.</param>
+        /// <param name="line">The expected line number</param>
+        /// <param name="character">The expected character position.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message, int line, int character)
         {
             var position = new LinePosition(line, character);
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(null, position, position));
         }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without error indicator.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string codeWithErrorsIndicated, out string cleanedSources)
         {
             return Create(diagnosticId, null, codeWithErrorsIndicated, out cleanedSources);
         }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="message">The expected message.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without error indicator.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
             var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
@@ -98,6 +128,14 @@
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, position, position));
         }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="message">The expected message.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static IReadOnlyList<ExpectedDiagnostic> CreateMany(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
             var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
