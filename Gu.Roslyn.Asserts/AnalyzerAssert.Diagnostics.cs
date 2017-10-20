@@ -175,7 +175,7 @@
             IReadOnlyList<MetadataReference> metadataReferences,
             ExpectedMessage expectedMessage = null)
         {
-            var expectedDiagnosticsAndSources = ExpectedDiagnostic.FromCode(analyzer, codeWithErrorsIndicated);
+            var expectedDiagnosticsAndSources = ExpectedDiagnostic.CreateDiagnosticsAndSources(analyzer, codeWithErrorsIndicated);
             if (expectedDiagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
                 throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");

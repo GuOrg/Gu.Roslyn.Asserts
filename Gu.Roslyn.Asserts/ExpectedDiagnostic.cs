@@ -8,6 +8,7 @@
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
     /// Info about an expected diagnostic.
@@ -63,30 +64,116 @@
         [Obsolete("To be removed.")]
         public DiagnosticAnalyzer Analyzer { get; }
 
+        public static ExpectedDiagnostic Create(string diagnosticId, int line, int character)
+        {
+            return Create(diagnosticId, null, line, character);
+        }
+
+        public static ExpectedDiagnostic Create(string diagnosticId, string message, int line, int character)
+        {
+            var position = new LinePosition(line, character);
+            return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(null, position, position));
+        }
+
+        public static ExpectedDiagnostic Create(string diagnosticId, string codeWithErrorsIndicated, out string cleanedSources)
+        {
+            return Create(diagnosticId, null, codeWithErrorsIndicated, out cleanedSources);
+        }
+
+        public static ExpectedDiagnostic Create(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
+        {
+            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            if (positions.Length == 0)
+            {
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
+            }
+
+            if (positions.Length > 1)
+            {
+                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(codeWithErrorsIndicated));
+            }
+
+            cleanedSources = codeWithErrorsIndicated.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(codeWithErrorsIndicated);
+            var position = positions[0];
+            return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, position, position));
+        }
+
+        public static IReadOnlyList<ExpectedDiagnostic> CreateMany(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
+        {
+            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            if (positions.Length == 0)
+            {
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
+            }
+
+            cleanedSources = codeWithErrorsIndicated.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(codeWithErrorsIndicated);
+            return positions.Select(p => new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, p, p)))
+                            .ToArray();
+        }
+
+        /// <summary>
+        /// Check if Id, Span and Message matches.
+        /// If Message is nu it is not checked.
+        /// </summary>
+        public bool Matches(Diagnostic actual)
+        {
+            if (this.Id != actual.Id)
+            {
+                return false;
+            }
+
+            if (this.Message != null &&
+                this.Message != actual.GetMessage(CultureInfo.InvariantCulture))
+            {
+                return false;
+            }
+
+            var actualSpan = actual.Location.GetMappedLineSpan();
+            if (this.Span.StartLinePosition != actualSpan.StartLinePosition)
+            {
+                return false;
+            }
+
+            if (this.Span.Path != null &&
+                this.Span.Path != actualSpan.Path)
+            {
+                return false;
+            }
+
+            if (this.Span.StartLinePosition != this.Span.EndLinePosition)
+            {
+                return this.Span.EndLinePosition == actualSpan.EndLinePosition;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
         /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
         /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
+        internal static DiagnosticsAndSources CreateDiagnosticsAndSources(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             if (analyzer.SupportedDiagnostics.Length > 1)
             {
                 throw new ArgumentException("This can only be used for analyzers with one SupportedDiagnostics", nameof(analyzer));
             }
 
-            return FromCode(analyzer.SupportedDiagnostics[0].Id, null, codeWithErrorsIndicated);
+            return CreateDiagnosticsAndSources(analyzer.SupportedDiagnostics[0].Id, null, codeWithErrorsIndicated);
         }
 
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
-        /// <param name="analyzerId">The analyzer id that is expected to produce diagnostics.</param>
+        /// <param name="analyzerId">The analyzer diagnosticId that is expected to produce diagnostics.</param>
         /// <param name="message">The expected message for the diagnostics, can be null.</param>
         /// <param name="codeWithErrorsIndicated">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        public static DiagnosticsAndSources FromCode(string analyzerId, string message, IReadOnlyList<string> codeWithErrorsIndicated)
+        internal static DiagnosticsAndSources CreateDiagnosticsAndSources(string analyzerId, string message, IReadOnlyList<string> codeWithErrorsIndicated)
         {
             if (analyzerId == null)
             {
@@ -113,38 +200,6 @@
         }
 
         /// <summary>
-        /// Check if Id, Span and Message matches.
-        /// If Message is nu it is not checked.
-        /// </summary>
-        public bool Matches(Diagnostic actual)
-        {
-            if (this.Id != actual.Id)
-            {
-                return false;
-            }
-
-            if (this.Message != null &&
-                this.Message != actual.GetMessage(CultureInfo.InvariantCulture))
-            {
-                return false;
-            }
-
-            var actualSpan = actual.Location.GetMappedLineSpan();
-            if (this.Span.StartLinePosition != actualSpan.StartLinePosition ||
-                this.Span.Path != actualSpan.Path)
-            {
-                return false;
-            }
-
-            if (this.Span.StartLinePosition != this.Span.EndLinePosition)
-            {
-                return this.Span.EndLinePosition == actualSpan.EndLinePosition;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Writes the diagnostic and the offending code.
         /// </summary>
         /// <returns>A string for use in assert exception</returns>
@@ -161,7 +216,7 @@
         /// Expected diagnostics and code.
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
-        public class DiagnosticsAndSources
+        internal class DiagnosticsAndSources
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="DiagnosticsAndSources"/> class.
