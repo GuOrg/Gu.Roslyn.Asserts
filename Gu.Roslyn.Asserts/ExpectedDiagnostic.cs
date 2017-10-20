@@ -17,10 +17,25 @@
         /// </summary>
         /// <param name="analyzer"> The analyzer that is expected to report a diagnostic.</param>
         /// <param name="span"> The position of the expected diagnostic.</param>
+        [Obsolete("To be removed")]
         public ExpectedDiagnostic(DiagnosticAnalyzer analyzer, FileLinePositionSpan span)
         {
             this.Analyzer = analyzer;
+            this.Message = null;
             this.Id = analyzer.SupportedDiagnostics[0].Id;
+            this.Span = span;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpectedDiagnostic"/> class.
+        /// </summary>
+        /// <param name="id">The expected diagnostic ID, required.</param>
+        /// <param name="message">The expected message, can be null. If null it is not checked in asserts.</param>
+        /// <param name="span"> The position of the expected diagnostic.</param>
+        public ExpectedDiagnostic(string id, string message, FileLinePositionSpan span)
+        {
+            this.Id = id ?? throw new ArgumentNullException(nameof(id));
+            this.Message = message;
             this.Span = span;
         }
 
@@ -30,15 +45,20 @@
         public string Id { get; }
 
         /// <summary>
-        /// Gets the analyzer that is expected to report a diagnostic.
+        /// Gets the expected message as text
         /// </summary>
-        [Obsolete("To be removed.")]
-        public DiagnosticAnalyzer Analyzer { get; }
+        public string Message { get; }
 
         /// <summary>
         /// Gets the position of the expected diagnostic.
         /// </summary>
         public FileLinePositionSpan Span { get; }
+
+        /// <summary>
+        /// Gets the analyzer that is expected to report a diagnostic.
+        /// </summary>
+        [Obsolete("To be removed.")]
+        public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
@@ -48,6 +68,21 @@
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources FromCode(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated)
         {
+            if (analyzer.SupportedDiagnostics.Length > 1)
+            {
+                throw new ArgumentException("This can only be used for analyzers with one SupportedDiagnostics", nameof(analyzer));
+            }
+
+            return FromCode(analyzer.SupportedDiagnostics[0].Id, null, codeWithErrorsIndicated);
+        }
+
+        public static DiagnosticsAndSources FromCode(string analyzerId, string message, IReadOnlyList<string> codeWithErrorsIndicated)
+        {
+            if (analyzerId == null)
+            {
+                throw new ArgumentNullException(nameof(analyzerId));
+            }
+
             var diagnostics = new List<ExpectedDiagnostic>();
             var cleanedSources = new List<string>();
             foreach (var source in codeWithErrorsIndicated)
@@ -61,7 +96,7 @@
 
                 cleanedSources.Add(source.Replace("↓", string.Empty));
                 var fileName = CodeReader.FileName(source);
-                diagnostics.AddRange(positions.Select(p => new ExpectedDiagnostic(analyzer, new FileLinePositionSpan(fileName, p, p))));
+                diagnostics.AddRange(positions.Select(p => new ExpectedDiagnostic(analyzerId, message, new FileLinePositionSpan(fileName, p, p))));
             }
 
             return new DiagnosticsAndSources(diagnostics, codeWithErrorsIndicated, cleanedSources);

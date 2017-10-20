@@ -10,6 +10,7 @@ namespace Gu.Roslyn.Asserts.Internals
     /// Metadata about a diagnostic
     /// </summary>
     [DebuggerDisplay("{this.Id} {this.Span}")]
+    [Obsolete("Use ExpectedDiagnostic")]
     internal struct IdAndPosition : IEquatable<IdAndPosition>
     {
         private IdAndPosition(string id, FileLinePositionSpan span)
@@ -84,7 +85,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 return false;
             }
 
-            return obj is IdAndPosition && this.Equals((IdAndPosition)obj);
+            return obj is IdAndPosition position && this.Equals(position);
         }
 
         /// <inheritdoc />
