@@ -30,6 +30,43 @@ namespace RoslynSandbox
         private readonly int _value;
     }
 }";
+
+            CodeAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void WhenEqualWhitespaceEnd()
+        {
+            var expected = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value;
+    }
+}
+
+a
+";
+
+            var actual = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value;
+    }
+}
+
+a
+";
+
+            CodeAssert.AreEqual(expected, actual);
+        }
+
+        [TestCase("\r\nExpected:\r\n\r\nnamespace RoslynSandbox", "\r\nExpected:\r\n\nnamespace RoslynSandbox")]
+        public void WhenEqualMixedNewLines(string expected, string actual)
+        {
             CodeAssert.AreEqual(expected, actual);
         }
 
@@ -45,7 +82,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var actualCode = @"
+            var actual = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -53,7 +90,8 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actualCode));
+
+            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
             var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
@@ -74,7 +112,18 @@ namespace RoslynSandbox
                            "        private readonly int bar;\r\n" +
                            "    }\r\n" +
                            "}\r\n";
-            Assert.AreEqual(expected, exception.Message);
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
+        public void WhenNotEqualEnd()
+        {
+            var expectedCode = "\r\na\r\n";
+            var actual = "\r\na\r\n\r\n";
+
+            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var expected = "Mismatch at end of file AssemblyInfo.cs";
+            CodeAssert.AreEqual(expected, exception.Message);
         }
 
         [Test]
