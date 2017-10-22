@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssetTargetFallback>net461</AssetTargetFallback>
+    <TargetFramework>net461</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.ruleset</CodeAnalysisRuleSet>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>

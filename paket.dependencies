@@ -1,7 +1,7 @@
 storage: none
 source https://www.nuget.org/api/v2/
 
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.0.0 strategy: min
 
 group Build
   storage: none
@@ -12,13 +12,8 @@ group Test
   storage: none
   source http://www.nuget.org/api/v2/
   nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-  nuget Microsoft.NET.Test.Sdk
-  
   nuget NUnit
-  nuget NUnit3TestAdapter
-  
   nuget xunit prerelease
-  nuget xunit.runner.visualstudio prerelease
 
 group Analyzers
   storage: none

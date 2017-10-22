@@ -22,16 +22,10 @@ releaseNotes
   BREAKING: Move DiagnosticsAndSources to separate class.
 
 dependencies
-  framework: netstandard2.0
-    Microsoft.CodeAnalysis.CSharp.Workspaces
-
   framework: net461
-    Microsoft.CodeAnalysis.CSharp.Workspaces
+    Microsoft.CodeAnalysis.CSharp.Workspaces ~> 2
 
 files
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.dll ==> lib/netstandard2.0
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.pdb ==> lib/netstandard2.0
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.xml ==> lib/netstandard2.0
   bin/Release/net461/Gu.Roslyn.Asserts.dll ==> lib/net461
   bin/Release/net461/Gu.Roslyn.Asserts.pdb ==> lib/net461
   bin/Release/net461/Gu.Roslyn.Asserts.xml ==> lib/net461 

@@ -1,8 +1,6 @@
 group Test
   Microsoft.CodeAnalysis.CSharp.Workspaces
-  Microsoft.NET.Test.Sdk
   NUnit
-  NUnit3TestAdapter
 
 group Analyzers
   Gu.Analyzers

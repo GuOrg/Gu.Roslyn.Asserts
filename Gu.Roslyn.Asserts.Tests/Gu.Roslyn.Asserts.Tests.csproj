@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
-    <AssetTargetFallback>net461</AssetTargetFallback>
+    <TargetFramework>net461</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.ruleset</CodeAnalysisRuleSet>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>    
@@ -11,7 +10,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj" />
   </ItemGroup>
