@@ -60,24 +60,29 @@ namespace Gu.Roslyn.Asserts
         /// <param name="messageHeader">The first line to add to the exception message on error.</param>
         internal static void AreEqual(string expected, string actual, string messageHeader)
         {
-            var pos = 0;
-            var otherPos = 0;
+            var expectedPos = 0;
+            var actualPos = 0;
             var line = 1;
-            while (pos < expected.Length && otherPos < actual.Length)
+            while (expectedPos < expected.Length && actualPos < actual.Length)
             {
-                if (expected[pos] == '\r')
+                var ec = expected[expectedPos];
+                var ac = actual[actualPos];
+                if (ec == '\r' || ac == '\r')
                 {
-                    pos++;
+                    if (ec == '\r')
+                    {
+                        expectedPos++;
+                    }
+
+                    if (ac == '\r')
+                    {
+                        actualPos++;
+                    }
+
                     continue;
                 }
 
-                if (actual[otherPos] == '\r')
-                {
-                    otherPos++;
-                    continue;
-                }
-
-                if (expected[pos] != actual[otherPos])
+                if (ec != ac)
                 {
                     var errorBuilder = StringBuilderPool.Borrow();
                     if (messageHeader != null)
@@ -111,26 +116,26 @@ namespace Gu.Roslyn.Asserts
                     throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
                 }
 
-                if (expected[pos] == '\n')
+                if (ec == '\n')
                 {
                     line++;
                 }
 
-                pos++;
-                otherPos++;
+                expectedPos++;
+                actualPos++;
             }
 
-            while (pos < expected.Length && expected[pos] == '\r')
+            while (expectedPos < expected.Length && expected[expectedPos] == '\r')
             {
-                pos++;
+                expectedPos++;
             }
 
-            while (otherPos < actual.Length && actual[otherPos] == '\r')
+            while (actualPos < actual.Length && actual[actualPos] == '\r')
             {
-                otherPos++;
+                actualPos++;
             }
 
-            if (pos == expected.Length && otherPos == actual.Length)
+            if (expectedPos == expected.Length && actualPos == actual.Length)
             {
                 return;
             }

@@ -34,42 +34,45 @@
         /// <returns>True if the code is found to be equal</returns>
         public static bool Equals(string x, string y)
         {
-            var pos = 0;
-            var otherPos = 0;
-            while (pos < x.Length && otherPos < y.Length)
+            var xPos = 0;
+            var yPos = 0;
+            while (xPos < x.Length && yPos < y.Length)
             {
-                if (x[pos] == '\r')
+                if (x[xPos] == '\r' || y[yPos] == '\r')
                 {
-                    pos++;
+                    if (x[xPos] == '\r')
+                    {
+                        xPos++;
+                    }
+
+                    if (y[yPos] == '\r')
+                    {
+                        yPos++;
+                    }
+
                     continue;
                 }
 
-                if (y[otherPos] == '\r')
-                {
-                    otherPos++;
-                    continue;
-                }
-
-                if (x[pos] != y[otherPos])
+                if (x[xPos] != y[yPos])
                 {
                     return false;
                 }
 
-                pos++;
-                otherPos++;
+                xPos++;
+                yPos++;
             }
 
-            while (pos < x.Length && x[pos] == '\r')
+            while (xPos < x.Length && x[xPos] == '\r')
             {
-                pos++;
+                xPos++;
             }
 
-            while (otherPos < y.Length && y[otherPos] == '\r')
+            while (yPos < y.Length && y[yPos] == '\r')
             {
-                otherPos++;
+                yPos++;
             }
 
-            return pos == x.Length && otherPos == y.Length;
+            return xPos == x.Length && yPos == y.Length;
         }
     }
 }
