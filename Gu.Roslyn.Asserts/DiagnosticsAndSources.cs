@@ -39,14 +39,16 @@
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
-        /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
+        /// <param name="analyzer">The descriptor that is expected to produce diagnostics.</param>
         /// <param name="code">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
             if (analyzer.SupportedDiagnostics.Length > 1)
             {
-                throw new ArgumentException("This can only be used for analyzers with one SupportedDiagnostics", nameof(analyzer));
+                var message = "This can only be used for analyzers with one SupportedDiagnostics\r\n" +
+                              "Prefer overload with ExpectedDiagnostic";
+                throw new ArgumentException(message, nameof(analyzer));
             }
 
             return CreateFromCodeWithErrorsIndicated(analyzer.SupportedDiagnostics[0].Id, null, code);
@@ -55,7 +57,18 @@
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
-        /// <param name="analyzerId">The analyzer diagnosticId that is expected to produce diagnostics.</param>
+        /// <param name="descriptor">The descriptor that is expected to produce diagnostics.</param>
+        /// <param name="code">The code with errors indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
+        {
+            return CreateFromCodeWithErrorsIndicated(descriptor.Id, null, code);
+        }
+
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="analyzerId">The descriptor diagnosticId that is expected to produce diagnostics.</param>
         /// <param name="message">The expected message for the diagnostics, can be null.</param>
         /// <param name="code">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
