@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 0.4.0.0
+version 1.0.0.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -22,17 +22,11 @@ releaseNotes
   BREAKING: Move DiagnosticsAndSources to separate class.
 
 dependencies
-  framework: netstandard2.0
-    Microsoft.CodeAnalysis.CSharp.Workspaces
-
-  framework: net461
-    Microsoft.CodeAnalysis.CSharp.Workspaces
+  framework: net452
+    Microsoft.CodeAnalysis.CSharp.Workspaces ~> 1
 
 files
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.dll ==> lib/netstandard2.0
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.pdb ==> lib/netstandard2.0
-  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.xml ==> lib/netstandard2.0
-  bin/Release/net461/Gu.Roslyn.Asserts.dll ==> lib/net461
-  bin/Release/net461/Gu.Roslyn.Asserts.pdb ==> lib/net461
-  bin/Release/net461/Gu.Roslyn.Asserts.xml ==> lib/net461 
+  bin/Release/net452/Gu.Roslyn.Asserts.dll ==> lib/net452
+  bin/Release/net452/Gu.Roslyn.Asserts.pdb ==> lib/net452
+  bin/Release/net452/Gu.Roslyn.Asserts.xml ==> lib/net452 
 
