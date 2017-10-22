@@ -9,6 +9,7 @@
 -->
 
 Asserts for testing Roslyn analyzers.
+Use 1.x for Microsoft.CodeAnalysis 1.x
 
 - [Valid](#valid)
 - [Diagnostics](#diagnostics)
