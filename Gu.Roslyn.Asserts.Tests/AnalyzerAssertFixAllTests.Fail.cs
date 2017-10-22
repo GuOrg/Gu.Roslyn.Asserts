@@ -152,7 +152,7 @@ namespace RoslynSandbox
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -206,7 +206,7 @@ namespace RoslynSandbox
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -274,7 +274,7 @@ namespace RoslynSandbox
                                "        public event EventHandler SomeEvent;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
         }
     }

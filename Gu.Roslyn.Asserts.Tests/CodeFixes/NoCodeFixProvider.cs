@@ -17,7 +17,7 @@
 
         public override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
     }
 }
