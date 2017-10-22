@@ -512,6 +512,18 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
         public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
         {
+            return CreateSpecificDiagnosticOptions(analyzers?.SelectMany(x => x.SupportedDiagnostics), suppressed);
+        }
+
+        /// <summary>
+        /// Create diagnostic options that at least warns for <paramref name="enabled"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="enabled">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The diagnostic IDs to suppress.</param>
+        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
+        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticDescriptor> enabled, IEnumerable<string> suppressed)
+        {
             ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
             {
                 switch (severity)
@@ -528,9 +540,9 @@ namespace Gu.Roslyn.Asserts
             }
 
             var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
-            if (analyzers != null)
+            if (enabled != null)
             {
-                foreach (var descriptor in analyzers.SelectMany(a => a.SupportedDiagnostics))
+                foreach (var descriptor in enabled)
                 {
                     diagnosticOptions.Add(descriptor.Id, WarnOrError(descriptor.DefaultSeverity));
                 }
