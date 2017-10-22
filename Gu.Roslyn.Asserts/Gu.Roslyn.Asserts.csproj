@@ -4,6 +4,7 @@
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>NU1701</NoWarn>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,11 +20,5 @@
     </When>
   </Choose>
   
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
-  </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
