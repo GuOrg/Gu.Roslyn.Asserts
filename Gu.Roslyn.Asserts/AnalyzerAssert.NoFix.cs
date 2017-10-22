@@ -102,6 +102,69 @@
 
         /// <summary>
         /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code)
+        {
+            NoFixAsync(
+                    analyzer,
+                    codeFix,
+                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { code }),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
+        {
+            NoFixAsync(
+                    analyzer,
+                    codeFix,
+                   new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="expectedDiagnostics">The expected diagnostic.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<string> code)
+        {
+            NoFixAsync(
+                    analyzer,
+                    codeFix,
+                    new DiagnosticsAndSources(expectedDiagnostics, code),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
