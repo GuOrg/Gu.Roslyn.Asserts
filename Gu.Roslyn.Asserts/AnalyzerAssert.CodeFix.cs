@@ -226,7 +226,7 @@
         /// </summary>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="id">The id of the expected diagnostic.</param>
-        /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -255,7 +255,7 @@
         /// </summary>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="id">The id of the expected diagnostic.</param>
-        /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>

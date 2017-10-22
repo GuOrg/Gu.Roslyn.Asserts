@@ -78,10 +78,11 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .GetAwaiter()

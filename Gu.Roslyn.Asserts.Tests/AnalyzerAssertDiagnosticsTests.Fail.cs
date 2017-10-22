@@ -230,15 +230,12 @@ namespace RoslynSandbox
 {
     class Foo
     {
-        private readonly int _value1;
+        private readonly int value;
     }
 }";
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected:\r\n" +
-                               "WRONG \r\n" +
-                               "Actual:\r\n" +
-                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID WRONG.\r\n" +
+                               "The analyzer produces the following diagnostics: {SA1309}\r\n" +
+                               "The expected diagnostic is: WRONG";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("WRONG");
 

@@ -70,7 +70,7 @@
             {
                 var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {diagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {diagnostic}";
+                              $"The expected diagnostic is: {diagnostic.Id}";
                 throw AssertException.Create(message);
             }
 
@@ -78,7 +78,7 @@
             {
                 var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {diagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {diagnostic}";
+                              $"The expected diagnostic is: {diagnostic.Id}";
                 throw AssertException.Create(message);
             }
 
