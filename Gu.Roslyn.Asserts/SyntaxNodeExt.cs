@@ -27,6 +27,14 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Find a <see cref="InvocationExpressionSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static InvocationExpressionSyntax FindInvocation(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<InvocationExpressionSyntax>(signature);
+        }
+
+        /// <summary>
         /// Find a <see cref="StatementSyntax"/> that matches <paramref name="code"/>.
         /// </summary>
         public static StatementSyntax FindStatement(this SyntaxTree tree, string code)

@@ -66,7 +66,7 @@
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, codeWithErrorsIndicated),
-                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                    MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -210,7 +210,7 @@
                     analyzer,
                     new TCodeFix(),
                     new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
-                    new[] { fixedCode },
+                    MergeFixedCode(code, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -296,7 +296,7 @@
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                    MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -610,7 +610,7 @@
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                    MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
@@ -754,13 +754,44 @@
             return data;
         }
 
-        private static List<string> MergeFixedCode(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
+        private static List<string> MergeFixedCodeWithErrorsIndicated(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
         {
             var merged = new List<string>(codeWithErrorsIndicated.Count);
             var found = false;
             foreach (var code in codeWithErrorsIndicated)
             {
                 if (code.IndexOf('↓') >= 0)
+                {
+                    if (found)
+                    {
+                        throw AssertException.Create("Expected only one with errors indicated.");
+                    }
+
+                    merged.Add(fixedCode);
+                    found = true;
+                }
+                else
+                {
+                    merged.Add(code);
+                }
+            }
+
+            if (!found)
+            {
+                throw AssertException.Create("Expected one with errors indicated.");
+            }
+
+            return merged;
+        }
+
+        private static List<string> MergeFixedCode(IReadOnlyList<string> codes, string fixedCode)
+        {
+            var merged = new List<string>(codes.Count);
+            var found = false;
+            var fileName = CodeReader.FileName(fixedCode);
+            foreach (var code in codes)
+            {
+                if (CodeReader.FileName(code) == fileName)
                 {
                     if (found)
                     {

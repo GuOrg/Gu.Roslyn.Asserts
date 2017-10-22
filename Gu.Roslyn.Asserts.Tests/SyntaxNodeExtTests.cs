@@ -139,10 +139,10 @@ namespace RoslynSandbox
 }");
             var expected = "internal void Bar()\r\n        {\r\n        }";
             var node = syntaxTree.FindMethodDeclaration("internal void Bar()");
-            Assert.AreEqual(expected, node.ToString());
+            CodeAssert.AreEqual(expected, node.ToString());
 
             node = syntaxTree.FindBestMatch<MethodDeclarationSyntax>("internal void Bar()");
-            Assert.AreEqual(expected, node.ToString());
+            CodeAssert.AreEqual(expected, node.ToString());
         }
 
         [Test]

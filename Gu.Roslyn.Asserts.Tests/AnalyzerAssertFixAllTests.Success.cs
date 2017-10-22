@@ -154,7 +154,7 @@ namespace RoslynSandbox
 
     public class Foo1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler Bar;
     }
 }";
 
@@ -165,7 +165,7 @@ namespace RoslynSandbox
 
     public class Foo2
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler Bar;
     }
 }";
 
@@ -309,6 +309,80 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoClassesDifferentProjectsCodeFixOnlyOneFix()
+            {
+                var code1 = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Client
+{
+    public class Foo2
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, new[] { code2, fixedCode });
+            }
+
+            [Test]
+            public void TwoClassesDifferentProjectsCodeFixOnlyOneFixPassingOnlyFixedCode()
+            {
+                var code1 = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox.Client
+{
+    public class Foo2
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox.Core
+{
+    using System;
+
+    public class Foo1
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+            }
+
+            [Test]
             public void TwoClassesDifferentProjectsCodeFixOnlyCorrectFix()
             {
                 var code1 = @"
@@ -340,7 +414,7 @@ namespace RoslynSandbox.Core
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
             }
@@ -377,7 +451,7 @@ namespace RoslynSandbox.Core
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
             }
@@ -414,7 +488,7 @@ namespace RoslynSandbox.Client
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code2, out code2);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
             }
@@ -443,7 +517,7 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code, out code);
                 AnalyzerAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, code, fixedCode);
             }
 
