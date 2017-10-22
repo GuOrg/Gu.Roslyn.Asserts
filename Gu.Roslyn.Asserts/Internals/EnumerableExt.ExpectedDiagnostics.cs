@@ -15,14 +15,19 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if expected matches actuals.</returns>
         internal static bool SetEquals(this IReadOnlyList<ExpectedDiagnostic> expecteds, IReadOnlyList<Diagnostic> actuals)
         {
-            if (expecteds.Count != actuals.Count)
-            {
-                return false;
-            }
-
             foreach (var actual in actuals)
             {
                 if (expecteds.Any(e => e.Matches(actual)))
+                {
+                    continue;
+                }
+
+                return false;
+            }
+
+            foreach (var expected in expecteds)
+            {
+                if (actuals.Any(a => expected.Matches(a)))
                 {
                     continue;
                 }
