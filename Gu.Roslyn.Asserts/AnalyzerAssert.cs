@@ -63,6 +63,40 @@
             ResetSuppressedDiagnostics();
         }
 
+        private static void AssertAnalyzerSupportsExpectedDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic diagnostic, out DiagnosticDescriptor descriptor)
+        {
+            var descriptors = analyzer.SupportedDiagnostics.Where(x => x.Id == diagnostic.Id).ToArray();
+            if (descriptors.Length == 0)
+            {
+                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {diagnostic.Id}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The expected diagnostic is: {diagnostic}";
+                throw AssertException.Create(message);
+            }
+
+            if (descriptors.Length > 1)
+            {
+                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {diagnostic.Id}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The expected diagnostic is: {diagnostic}";
+                throw AssertException.Create(message);
+            }
+
+            descriptor = descriptors[0];
+        }
+
+        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors)
+        {
+            var temp = new List<DiagnosticDescriptor>();
+            foreach (var expectedDiagnostic in expectedDiagnostics)
+            {
+                AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+                temp.Add(descriptor);
+            }
+
+            descriptors = temp;
+        }
+
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())

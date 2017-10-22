@@ -253,6 +253,36 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Create default compilation options for <paramref name="descriptor"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="descriptor">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string> suppressed)
+        {
+            return new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                allowUnsafe: true,
+                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
+        }
+
+        /// <summary>
+        /// Create default compilation options for <paramref name="descriptors"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="descriptors">The analyzers to report warning or error for.</param>
+        /// <param name="suppressed">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed)
+        {
+            return new CSharpCompilationOptions(
+                OutputKind.DynamicallyLinkedLibrary,
+                allowUnsafe: true,
+                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(descriptors, suppressed));
+        }
+
+        /// <summary>
         /// Create a Solution.
         /// </summary>
         /// <param name="code">
