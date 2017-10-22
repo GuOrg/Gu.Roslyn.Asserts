@@ -190,7 +190,7 @@ namespace Gu.Roslyn.Asserts
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);
-                    var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                    var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync()
                                                          .ConfigureAwait(false);
                     fixableDiagnostics.AddRange(diagnostics.Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
                 }
@@ -222,7 +222,7 @@ namespace Gu.Roslyn.Asserts
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);
-                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync()
                                                    .ConfigureAwait(false));
                 }
             }

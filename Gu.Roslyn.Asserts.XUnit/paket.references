@@ -1,8 +1,7 @@
+Microsoft.CodeAnalysis.CSharp.Workspaces
+
 group Test
-  Microsoft.CodeAnalysis.CSharp.Workspaces
-  Microsoft.NET.Test.Sdk
   xunit
-  xunit.runner.visualstudio
 
 group Analyzers
   Gu.Analyzers

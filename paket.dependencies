@@ -1,4 +1,6 @@
 storage: none
+lowest_matching: true
+strategy: min
 source https://www.nuget.org/api/v2/
 
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces
@@ -11,14 +13,8 @@ group Build
 group Test
   storage: none
   source http://www.nuget.org/api/v2/
-  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
-  nuget Microsoft.NET.Test.Sdk
-  
   nuget NUnit
-  nuget NUnit3TestAdapter
-  
   nuget xunit prerelease
-  nuget xunit.runner.visualstudio prerelease
 
 group Analyzers
   storage: none

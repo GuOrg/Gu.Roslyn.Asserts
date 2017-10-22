@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFramework>net452</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>NU1701</NoWarn>
@@ -12,13 +12,5 @@
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(TargetFramework)' == 'netstandard2.0'">
-      <PropertyGroup>
-        <AssetTargetFallback>net461</AssetTargetFallback>
-      </PropertyGroup>
-    </When>
-  </Choose>
-  
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

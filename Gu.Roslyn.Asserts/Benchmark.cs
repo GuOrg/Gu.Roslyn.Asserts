@@ -171,7 +171,6 @@
                                 new ContextAndAction(
                                     new SyntaxNodeAnalysisContext(
                                         node,
-                                        this.symbol,
                                         this.semanticModel,
                                         null,
                                         ReportDiagnostic,
@@ -192,7 +191,6 @@
                             new ContextAndAction(
                                 new SyntaxNodeAnalysisContext(
                                     node,
-                                    this.symbol,
                                     this.semanticModel,
                                     null,
                                     ReportDiagnostic,
@@ -281,14 +279,6 @@
             }
 
             public IReadOnlyDictionary<int, Action<SyntaxNodeAnalysisContext>> Actions => this.actions;
-
-            public override void EnableConcurrentExecution()
-            {
-            }
-
-            public override void ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags analysisMode)
-            {
-            }
 
             public override void RegisterSyntaxNodeAction<TLanguageKindEnum>(Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds)
             {
