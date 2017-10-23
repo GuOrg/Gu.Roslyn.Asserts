@@ -60,8 +60,8 @@ namespace Gu.Roslyn.Asserts
 
             foreach (var assembly in assemblies)
             {
-                var attribute = (TransitiveMetadataReferencesAttribute)Attribute.GetCustomAttribute(assembly, typeof(TransitiveMetadataReferencesAttribute));
-                if (attribute != null)
+                var attributes = Attribute.GetCustomAttributes(assembly, typeof(TransitiveMetadataReferencesAttribute));
+                foreach (var attribute in attributes.Cast<TransitiveMetadataReferencesAttribute>())
                 {
                     metadataReferences.AddRange(attribute.MetadataReferences);
                 }
