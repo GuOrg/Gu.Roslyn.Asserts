@@ -8,7 +8,7 @@
     /// <summary>
     /// Specify what default metadata reference to use.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class TransitiveMetadataReferencesAttribute : Attribute
     {
         /// <summary>
