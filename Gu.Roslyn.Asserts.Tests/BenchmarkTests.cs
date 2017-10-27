@@ -2,6 +2,8 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
     public class BenchmarkTests
@@ -14,7 +16,9 @@
                 CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"),
                 MetadataReferences.Transitive(typeof(BenchmarkTests).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln, analyzer).ConfigureAwait(false);
-            CollectionAssert.IsNotEmpty(benchmark.ContextAndActions);
+            CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
+            CollectionAssert.AllItemsAreInstancesOfType(benchmark.SyntaxNodeActions.Select(x => x.Context.Node), typeof(FieldDeclarationSyntax));
+            CollectionAssert.AllItemsAreInstancesOfType(benchmark.SyntaxNodeActions.Select(x => x.Context.ContainingSymbol), typeof(IFieldSymbol));
             benchmark.Run();
         }
 
@@ -26,7 +30,7 @@
                 CodeFactory.FindProjectFile("Gu.Roslyn.Asserts.csproj"),
                 MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
-            CollectionAssert.IsNotEmpty(benchmark.ContextAndActions);
+            CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
             benchmark.Run();
         }
     }
