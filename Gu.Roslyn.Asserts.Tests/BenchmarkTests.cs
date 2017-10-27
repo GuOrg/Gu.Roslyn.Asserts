@@ -19,6 +19,8 @@
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
             CollectionAssert.AllItemsAreInstancesOfType(benchmark.SyntaxNodeActions.Select(x => x.Context.Node), typeof(FieldDeclarationSyntax));
             CollectionAssert.AllItemsAreInstancesOfType(benchmark.SyntaxNodeActions.Select(x => x.Context.ContainingSymbol), typeof(IFieldSymbol));
+            Assert.AreSame(analyzer, benchmark.Analyzer);
+            benchmark.Run();
             benchmark.Run();
         }
 
@@ -31,6 +33,8 @@
                 MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
+            Assert.AreSame(analyzer, benchmark.Analyzer);
+            benchmark.Run();
             benchmark.Run();
         }
     }

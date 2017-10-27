@@ -237,13 +237,14 @@
         /// <summary>
         /// An instance where the analyzer registered and action.
         /// </summary>
+        /// <typeparam name="TContext">The type of the analysis context</typeparam>
         [DebuggerDisplay("{Context}")]
-        public class ContextAndAction<T> : IContextAndAction
+        public class ContextAndAction<TContext> : IContextAndAction
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="ContextAndAction{T}"/> class.
             /// </summary>
-            public ContextAndAction(T context, Action<T> action)
+            public ContextAndAction(TContext context, Action<TContext> action)
             {
                 this.Context = context;
                 this.Action = action;
@@ -252,12 +253,12 @@
             /// <summary>
             /// Gets the <see cref="SyntaxNodeAnalysisContext"/> to pass in when invoking <see cref="Action"/>
             /// </summary>
-            public T Context { get; }
+            public TContext Context { get; }
 
             /// <summary>
             /// Gets the action registered for <see cref="Context"/> by BenchmarkAnalysisContext.RegisterSyntaxNodeAction(action, syntaxKinds)"/>
             /// </summary>
-            public Action<T> Action { get; }
+            public Action<TContext> Action { get; }
 
             /// <summary>
             /// Calls this.Action(this.Context);
@@ -268,6 +269,7 @@
             }
         }
 
+        [DiagnosticAnalyzer(LanguageNames.CSharp)]
         private class BenchmarkAnalyzer : DiagnosticAnalyzer
         {
 #pragma warning disable SA1401 // Fields must be private
