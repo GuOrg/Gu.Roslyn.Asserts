@@ -231,6 +231,34 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        internal static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
+        {
+            var results = new List<ImmutableArray<Diagnostic>>();
+            var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                           .ConfigureAwait(false);
+            if (analyzer is PlaceholderAnalyzer)
+            {
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+            }
+            else
+            {
+                var withAnalyzers = compilation.WithAnalyzers(
+                    ImmutableArray.Create(analyzer),
+                    project.AnalyzerOptions,
+                    CancellationToken.None);
+                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
+                                               .ConfigureAwait(false));
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// The diagnostics and the solution the analysis was performed on.
         /// </summary>
         public class DiagnosticsWithMetadata
