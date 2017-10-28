@@ -223,6 +223,31 @@
         }
 
         /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position
+        /// </summary>
+        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
+        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        public ExpectedDiagnostic WithPositionFromCodeWithErrorsIndicated(string codeWithErrorsIndicated, out string cleanedSources)
+        {
+            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            if (positions.Length == 0)
+            {
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
+            }
+
+            if (positions.Length > 1)
+            {
+                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(codeWithErrorsIndicated));
+            }
+
+            cleanedSources = codeWithErrorsIndicated.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(codeWithErrorsIndicated);
+            var position = positions[0];
+            return new ExpectedDiagnostic(this.Id, this.Message, new FileLinePositionSpan(fileName, position, position));
+        }
+
+        /// <summary>
         /// Writes the diagnostic and the offending code.
         /// </summary>
         /// <returns>A string for use in assert exception</returns>
