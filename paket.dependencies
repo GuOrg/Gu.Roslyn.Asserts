@@ -18,7 +18,8 @@ group Test
 group Analyzers
   storage: none
   source http://www.nuget.org/api/v2/
-  nuget Gu.Analyzers
-  nuget StyleCop.Analyzers
   nuget AsyncUsageAnalyzers
   nuget IDisposableAnalyzers
+  nuget Gu.Analyzers
+  nuget StyleCop.Analyzers
+
