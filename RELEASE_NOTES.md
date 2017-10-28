@@ -1,3 +1,9 @@
+#### 2.0.0
+Use this version for Microsoft.CodeAnalysis.CSharp 2.x
+
+#### 1.0.0
+Use this version for Microsoft.CodeAnalysis.CSharp 1.x
+
 #### 0.4.0
 * BUGFIX: Better heuristics for determining if a csproj is new format
 * FEATURE: CodeFactory.CreateSolutionWithOneProject

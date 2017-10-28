@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 2.0.0.3
+version 2.0.1.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,12 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  BUGFIX: Better heuristics for determining if a csproj is new format
-  FEATURE: CodeFactory.CreateSolutionWithOneProject
-  FEATURE: CodeComparer
-  FEATURE ExpectedDiagnostic.
-  BREAKING: Change signature of AnalyzerAssert.DiagnosticsWithMetadataAsync
-  BREAKING: Move DiagnosticsAndSources to separate class.
+  FEATURE: Handle banchmarking of all the anaslyzers registering actions for symbols, semantic models, syntax trees etc.
 
 dependencies
   framework: net461
