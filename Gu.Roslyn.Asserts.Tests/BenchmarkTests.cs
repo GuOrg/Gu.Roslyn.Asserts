@@ -1,5 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -10,6 +11,10 @@
 
     public class BenchmarkTests
     {
+        private static readonly Solution SolutionWithClassLibrary1 = CodeFactory.CreateSolution(
+            CodeFactory.FindProjectFile("ClassLibrary1.csproj"),
+            MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
+
         [Test]
         public async Task Solution()
         {
@@ -44,10 +49,7 @@
         public async Task ClassLibrary1FieldNameMustNotBeginWithUnderscore()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(
-                CodeFactory.FindProjectFile("ClassLibrary1.csproj"),
-                MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
-            var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
+            var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
             var expected = new[] { "private int _value;" };
             CollectionAssert.AreEqual(expected, benchmark.SyntaxNodeActions.Select(x => x.Context.Node.ToString()));
 
@@ -62,10 +64,7 @@
         public async Task ClassLibrary1FieldDeclarations()
         {
             var analyzer = new SyntaxNodeAnalyzer(SyntaxKind.FieldDeclaration);
-            var sln = CodeFactory.CreateSolution(
-                CodeFactory.FindProjectFile("ClassLibrary1.csproj"),
-                MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
-            var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
+            var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
             var expected = new List<string> { "private int _value;" };
             CollectionAssert.AreEqual(expected, benchmark.SyntaxNodeActions.Select(x => x.Context.Node.ToString()));
             CollectionAssert.IsEmpty(analyzer.Contexts);
@@ -76,6 +75,38 @@
             expected.AddRange(expected);
             benchmark.Run();
             CollectionAssert.AreEqual(expected, analyzer.Contexts.Select(x => x.Node.ToString()));
+        }
+
+        [Test]
+        public async Task ClassLibrary1FieldSymbols()
+        {
+            var analyzer = new SymbolAnalyzer(SymbolKind.Field);
+            var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
+            var expected = new List<string>
+                           {
+                               "Gu.Roslyn.Asserts.AllowCompilationErrors.No",
+                               "Gu.Roslyn.Asserts.AllowCompilationErrors.Yes",
+                               "ClassLibrary1.ClassLibrary1Class1._value",
+                           };
+
+            CollectionAssert.AreEquivalent(expected, benchmark.SymbolActions.Select(x => x.Context.Symbol.ToString()));
+            CollectionAssert.IsEmpty(analyzer.Contexts);
+
+            benchmark.Run();
+            CollectionAssert.AreEquivalent(expected, analyzer.Contexts.Select(x => x.Symbol.ToString()));
+
+            expected.AddRange(expected);
+            benchmark.Run();
+            CollectionAssert.AreEquivalent(expected, analyzer.Contexts.Select(x => x.Symbol.ToString()));
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static void Dump(IEnumerable<string> strings)
+        {
+            foreach (var s in strings)
+            {
+                Console.WriteLine($"\"{s}\",");
+            }
         }
     }
 }

@@ -3,11 +3,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class SyntaxNodeAnalyzer : DiagnosticAnalyzer
+    internal class SymbolAnalyzer : DiagnosticAnalyzer
     {
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             "123",
@@ -17,29 +16,29 @@ namespace Gu.Roslyn.Asserts.Tests
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        private readonly SyntaxKind[] kinds;
-        private readonly List<SyntaxNodeAnalysisContext> contexts = new List<SyntaxNodeAnalysisContext>();
+        private readonly SymbolKind[] kinds;
+        private readonly List<SymbolAnalysisContext> contexts = new List<SymbolAnalysisContext>();
 
-        public SyntaxNodeAnalyzer(params SyntaxKind[] kinds)
+        public SymbolAnalyzer(params SymbolKind[] kinds)
         {
             this.kinds = kinds;
         }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
 
-        public IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
+        public IReadOnlyList<SymbolAnalysisContext> Contexts => this.contexts;
 
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(this.Handle, this.kinds);
+            context.RegisterSymbolAction(this.Handle, this.kinds);
         }
 
-        private void Handle(SyntaxNodeAnalysisContext context)
+        private void Handle(SymbolAnalysisContext context)
         {
-           this.contexts.Add(context);
+            this.contexts.Add(context);
         }
     }
 }
