@@ -98,6 +98,12 @@
             return new DiagnosticsAndSources(diagnostics, cleanedSources);
         }
 
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="expectedDiagnostic">The descriptor diagnosticId that is expected to produce diagnostics.</param>
+        /// <param name="code">The code with errors indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
             if (HasErrorsIndicated(code))
@@ -114,7 +120,7 @@
                 return CreateFromCodeWithErrorsIndicated(expectedDiagnostic.Id, expectedDiagnostic.Message, code);
             }
 
-            return new DiagnosticsAndSources(new[] {expectedDiagnostic}, code);
+            return new DiagnosticsAndSources(new[] { expectedDiagnostic }, code);
         }
 
         private static bool HasErrorsIndicated(IReadOnlyList<string> code)
