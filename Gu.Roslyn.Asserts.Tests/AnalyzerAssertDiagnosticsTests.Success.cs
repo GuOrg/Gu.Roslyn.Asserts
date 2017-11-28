@@ -106,11 +106,12 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
 
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
-                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                AnalyzerAssert.Diagnostics(analyzer.GetType(), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(analyzer.GetType(), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
             [Test]
@@ -128,11 +129,12 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("ID2", "Field '_value1' must not begin with an underscore", code, out code);
 
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic>(expectedDiagnostic, code);
-                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic), expectedDiagnostic, code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), expectedDiagnostic, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
+                AnalyzerAssert.Diagnostics(analyzer.GetType(), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(analyzer.GetType(), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
