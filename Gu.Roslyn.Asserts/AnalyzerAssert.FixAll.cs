@@ -34,7 +34,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, new[] { codeWithErrorsIndicated }),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                     new[] { fixedCode },
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
@@ -65,7 +65,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, codeWithErrorsIndicated),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
@@ -96,7 +96,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, codeWithErrorsIndicated),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
@@ -125,7 +125,7 @@
             FixAllAsync(
                     analyzer,
                     codeFix,
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, codeWithErrorsIndicated),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     metadataReference,
@@ -155,7 +155,7 @@
             return FixAllAsync(
                 analyzer,
                 codeFix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(descriptor, codeWithErrorsIndicated),
+                DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 fixedCode,
                 CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                 metadataReference,
@@ -181,7 +181,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { code }),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     new[] { fixedCode },
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -209,7 +209,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     MergeFixedCode(code, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
@@ -237,7 +237,7 @@
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     fixedCode,
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,

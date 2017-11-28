@@ -116,7 +116,7 @@
             CodeFixAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { code }),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     fixedCode,
                     fixTitle,
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
@@ -144,7 +144,7 @@
             CodeFixAsync(
                 analyzer,
                 new TCodeFix(),
-                new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
