@@ -1,3 +1,7 @@
+#### 1.1.0
+* FEATURE: handle error indicated in code with expected diagnostic
+* FEATURE: AnalyzerAssert.CodeFix<TAnalyzer, TCodeFix>with expected diagnostic
+
 #### 0.4.0
 * BUGFIX: Better heuristics for determining if a csproj is new format
 * FEATURE: CodeFactory.CreateSolutionWithOneProject
