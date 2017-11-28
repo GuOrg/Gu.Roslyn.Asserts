@@ -785,14 +785,6 @@
 
         private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
         {
-            if (analyzer.SupportedDiagnostics.Length != 1)
-            {
-                var message =
-                    $"The analyzer supports multiple diagnostics {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
-                    $"This method can only be used with analyzers that have exactly one SupportedDiagnostic";
-                throw AssertException.Create(message);
-            }
-
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference)
                 .ConfigureAwait(false);
