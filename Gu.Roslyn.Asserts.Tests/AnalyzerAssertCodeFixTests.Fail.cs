@@ -77,7 +77,7 @@ namespace RoslynSandbox
 }";
                 var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzed code contained the following diagnostics: {SA1309, SA1309}\r\n" +
-                               "The code fix supports the following diagnostics: {SA1309}\r\n" +
+                               "The code fix supports the following diagnostics: {SA1309, ID1, ID2}\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
@@ -216,7 +216,7 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
-                               "The code fix supports the following diagnostics: {SA1309}";
+                               "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
                 Assert.AreEqual(expected, exception.Message);
             }
 

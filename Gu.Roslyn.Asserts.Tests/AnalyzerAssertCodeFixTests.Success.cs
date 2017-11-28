@@ -182,7 +182,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyserSupposrtTwoDiagnostics()
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyserSupportsTwoDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -202,7 +202,7 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
                 AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
