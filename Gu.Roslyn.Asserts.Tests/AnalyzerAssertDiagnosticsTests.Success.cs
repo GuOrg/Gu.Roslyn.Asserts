@@ -113,6 +113,28 @@ namespace RoslynSandbox
                 AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
             }
 
+            [Test]
+            public void OneErrorWithExpectedDiagnosticWithMessageWhenAnalyzerSupportsTwoDiagnostics()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value1;
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("ID2", "Field '_value1' must not begin with an underscore", code, out code);
+
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic>(new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new[] { expectedDiagnostic }, code);
+            }
+
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
             public void SingleClassOneErrorType(Type type)
