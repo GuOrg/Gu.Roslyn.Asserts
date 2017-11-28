@@ -85,7 +85,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
-        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
+        public static ConstructorDeclarationSyntax FindConstructorDeclaration(this SyntaxTree tree, string signature)
         {
             foreach (var ctor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>())
             {
@@ -96,6 +96,15 @@ namespace Gu.Roslyn.Asserts
             }
 
             throw new InvalidOperationException($"The tree does not contain an {typeof(ConstructorDeclarationSyntax).Name} matching {signature}");
+        }
+
+        /// <summary>
+        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        [Obsolete("Use FindConstructorDeclaration")]
+        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
+        {
+            return FindConstructorDeclaration(tree, signature);
         }
 
         /// <summary>
