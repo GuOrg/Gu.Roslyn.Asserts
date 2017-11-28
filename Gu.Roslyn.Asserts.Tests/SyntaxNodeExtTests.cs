@@ -116,7 +116,7 @@ namespace RoslynSandbox
     }
 }");
             var expected = "internal Foo()\r\n        {\r\n        }";
-            var node = syntaxTree.FindConstructorDeclarationSyntax("internal Foo()");
+            var node = syntaxTree.FindConstructorDeclaration("internal Foo()");
             CodeAssert.AreEqual(expected, node.ToString());
 
             node = syntaxTree.FindBestMatch<ConstructorDeclarationSyntax>("internal Foo()");
