@@ -9,8 +9,10 @@
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DontUseUnderscoreCodeFixProvider))]
     internal class DontUseUnderscoreCodeFixProvider : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-            ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
+                FieldNameMustNotBeginWithUnderscore.DiagnosticId,
+                FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1,
+                FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
 
         public override FixAllProvider GetFixAllProvider()
         {

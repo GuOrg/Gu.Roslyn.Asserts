@@ -32,7 +32,7 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
-                               "The code fix supports the following diagnostics: {SA1309}";
+                               "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
                 Assert.AreEqual(expected, exception.Message);
             }
 
