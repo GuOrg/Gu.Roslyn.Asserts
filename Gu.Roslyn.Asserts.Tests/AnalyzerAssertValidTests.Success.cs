@@ -116,6 +116,27 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
                 AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
             }
+
+            [Test]
+            public void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value1;
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId1);
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(expectedDiagnostic, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), expectedDiagnostic, code);
+                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), expectedDiagnostic, code);
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), new[] { expectedDiagnostic }, code);
+            }
         }
     }
 }
