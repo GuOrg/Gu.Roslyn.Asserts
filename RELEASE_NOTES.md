@@ -1,3 +1,6 @@
+#### 2.1.1
+* BUGFIX: remove check for single diagnostic.
+
 #### 2.1.0
 * FEATURE: handle error indicated in code with expected diagnostic
 * FEATURE: AnalyzerAssert.CodeFix<TAnalyzer, TCodeFix>with expected diagnostic
