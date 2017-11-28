@@ -81,7 +81,7 @@
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
@@ -101,7 +101,7 @@
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
@@ -120,7 +120,7 @@
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
             DiagnosticsWithMetadataAsync(
                     analyzer,
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
                     MetadataReferences,
                     null)

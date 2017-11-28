@@ -97,5 +97,39 @@
 
             return new DiagnosticsAndSources(diagnostics, cleanedSources);
         }
+
+        public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
+        {
+            if (HasErrorsIndicated(code))
+            {
+                if (expectedDiagnostic.HasPosition)
+                {
+                    var message = "Expected diagnostic has position indicated and the code has error position indicated with ↓\r\n" +
+                                  "Use either:\r\n" +
+                                  "a) Diagnostic with position and no error indicated in the code.\r\n" +
+                                  "a) Diagnostic with position and no error indicated in the code.\r\n";
+                    throw new InvalidOperationException(message);
+                }
+
+                return CreateFromCodeWithErrorsIndicated(expectedDiagnostic.Id, expectedDiagnostic.Message, code);
+            }
+
+            return new DiagnosticsAndSources(new[] {expectedDiagnostic}, code);
+        }
+
+        private static bool HasErrorsIndicated(IReadOnlyList<string> code)
+        {
+            foreach (var doc in code)
+            {
+                if (HasErrorsIndicated(doc))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool HasErrorsIndicated(string code) => code.Contains('↓');
     }
 }
