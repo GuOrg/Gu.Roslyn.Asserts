@@ -100,6 +100,7 @@
 
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
+        /// Either the <paramref name="expectedDiagnostic"/> or <paramref name="code"/> can have position or error position indicated but not both.
         /// </summary>
         /// <param name="expectedDiagnostic">The descriptor diagnosticId that is expected to produce diagnostics.</param>
         /// <param name="code">The code with errors indicated.</param>
