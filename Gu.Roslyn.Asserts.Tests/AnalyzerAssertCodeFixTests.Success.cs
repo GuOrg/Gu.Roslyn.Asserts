@@ -125,6 +125,62 @@ namespace RoslynSandbox
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "Rename to: value");
             }
 
+            [Test]
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithErrorsIndicated()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+            }
+
+            [Test]
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, code, out code);
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+            }
+
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
             public void SingleClassOneErrorTwoFixesCorrectFix(string title, string expected)
