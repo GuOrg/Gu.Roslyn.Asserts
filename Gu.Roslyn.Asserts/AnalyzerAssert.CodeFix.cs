@@ -165,7 +165,7 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to run on the code..</param>
         /// <param name="codeFix">The code fix to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param> 
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -192,7 +192,7 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to run on the code..</param>
         /// <param name="codeFix">The code fix to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param> 
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>

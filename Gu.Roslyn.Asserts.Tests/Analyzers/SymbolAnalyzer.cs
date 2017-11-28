@@ -31,8 +31,6 @@ namespace Gu.Roslyn.Asserts.Tests
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)
         {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.EnableConcurrentExecution();
             context.RegisterSymbolAction(this.Handle, this.kinds);
         }
 

@@ -36,8 +36,6 @@ namespace Gu.Roslyn.Asserts.Tests
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)
         {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(FieldDeclarationAction, SyntaxKind.FieldDeclaration);
         }
 
@@ -69,7 +67,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
 
                 var name = identifier.ValueText;
-                if (context.ContainingSymbol.DeclaredAccessibility == Accessibility.Public)
+                if (context.SemanticModel.GetDeclaredSymbol(variableDeclarator, context.CancellationToken).DeclaredAccessibility == Accessibility.Public)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(Descriptor1, identifier.GetLocation(), name));
                 }
