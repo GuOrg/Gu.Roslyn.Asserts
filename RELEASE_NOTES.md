@@ -1,3 +1,7 @@
+#### 2.1.0
+* FEATURE: handle error indicated in code with expected diagnostic
+* FEATURE: AnalyzerAssert.CodeFix<TAnalyzer, TCodeFix>with expected diagnostic
+
 #### 2.0.0
 Use this version for Microsoft.CodeAnalysis.CSharp 2.x
 

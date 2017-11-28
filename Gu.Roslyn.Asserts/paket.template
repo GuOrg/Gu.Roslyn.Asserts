@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 2.0.1.0
+version 2.1.0.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,7 +14,8 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  FEATURE: Handle banchmarking of all the anaslyzers registering actions for symbols, semantic models, syntax trees etc.
+  FEATURE: handle error indicated in code with expected diagnostic
+  FEATURE: AnalyzerAssert.CodeFix<TAnalyzer, TCodeFix>with expected diagnostic
 
 dependencies
   framework: net461
