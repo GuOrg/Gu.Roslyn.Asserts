@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldNameMustNotBeginWithUnderscoreTwoDiagnostics : DiagnosticAnalyzer
+    internal class FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic : DiagnosticAnalyzer
     {
         public const string Id1 = "ID1";
         public const string Id2 = "ID2";
