@@ -113,7 +113,7 @@ namespace Gu.Roslyn.Asserts
                                 .Append(actual)
                                 .AppendLine();
 
-                    throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
+                    throw AssertException.Create(errorBuilder.Return());
                 }
 
                 if (ec == '\n')
@@ -142,11 +142,31 @@ namespace Gu.Roslyn.Asserts
 
             if (messageHeader != null)
             {
-                throw AssertException.Create($"{messageHeader}{Environment.NewLine}" +
-                                           $"Mismatch at end of file {CodeReader.FileName(expected)}");
+                var message = StringBuilderPool.Borrow()
+                                               .AppendLine(messageHeader)
+                                               .AppendLine($"Mismatch at end of file {CodeReader.FileName(expected)}")
+                                               .AppendLine("Expected:")
+                                               .Append(expected)
+                                               .AppendLine()
+                                               .AppendLine("Actual:")
+                                               .Append(actual)
+                                               .AppendLine()
+                                               .Return();
+                throw AssertException.Create(message);
             }
-
-            throw AssertException.Create($"Mismatch at end of file {CodeReader.FileName(expected)}");
+            else
+            {
+                var message = StringBuilderPool.Borrow()
+                                               .AppendLine($"Mismatch at end of file {CodeReader.FileName(expected)}")
+                                               .AppendLine("Expected:")
+                                               .Append(expected)
+                                               .AppendLine()
+                                               .AppendLine("Actual:")
+                                               .Append(actual)
+                                               .AppendLine()
+                                               .Return();
+                throw AssertException.Create(message);
+            }
         }
     }
 }

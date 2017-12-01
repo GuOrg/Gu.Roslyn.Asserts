@@ -72,7 +72,7 @@
                     error.AppendLine($"{errorInfo}");
                 }
 
-                throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
+                throw AssertException.Create(StringBuilderPool.Return(error));
             }
         }
     }

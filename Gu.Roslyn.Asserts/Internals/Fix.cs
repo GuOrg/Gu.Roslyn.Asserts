@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts.Internals
                         errorBuilder.AppendLine(codeAction.Title);
                     }
 
-                    throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
+                    throw AssertException.Create(StringBuilderPool.Return(errorBuilder));
                 }
 
                 actions.RemoveAll(x => x.Title != fixTitle);
