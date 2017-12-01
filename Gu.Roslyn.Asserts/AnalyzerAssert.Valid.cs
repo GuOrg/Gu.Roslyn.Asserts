@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -113,7 +114,13 @@
 
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
+                foreach (var diagnostic in diagnostics.SelectMany(x => x))
+                {
+                    builder.AppendLine(diagnostic.ToString(code));
+                }
+
+                throw AssertException.Create(builder.Return());
             }
         }
 
