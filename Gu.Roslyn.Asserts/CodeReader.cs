@@ -154,9 +154,9 @@
 
                 if (c == '\n')
                 {
-                    if (builder.Length != 0)
+                    if (!builder.IsEmpty)
                     {
-                        return StringBuilderPool.ReturnAndGetText(builder);
+                        return builder.Return();
                     }
 
                     line++;
@@ -177,14 +177,14 @@
                 character++;
             }
 
-            if (builder.Length != 0)
+            if (!builder.IsEmpty)
             {
                 if (position.Character == builder.Length)
                 {
                     builder.Append('↓');
                 }
 
-                return StringBuilderPool.ReturnAndGetText(builder);
+                return builder.Return();
             }
 
             StringBuilderPool.Return(builder);

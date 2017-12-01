@@ -67,7 +67,7 @@ namespace Gu.Roslyn.Asserts
                     errorBuilder.AppendLine($"Expected: {expectedLine}");
                     errorBuilder.AppendLine($"Actual:   {actualLine}");
                     errorBuilder.AppendLine($"          {new string(' ', diffPos)}^");
-                    throw AssertException.Create(StringBuilderPool.ReturnAndGetText(errorBuilder));
+                    throw AssertException.Create(errorBuilder.Return());
                 }
 
                 if (expected[pos] == '\n')

@@ -367,7 +367,7 @@
                 error.AppendLine(actual.ToString(sources.Code));
             }
 
-            throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
+            throw AssertException.Create(StringBuilderPool.Return(error));
         }
 
         /// <summary>

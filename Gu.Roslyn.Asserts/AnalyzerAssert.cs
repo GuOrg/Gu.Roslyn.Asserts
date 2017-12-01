@@ -86,7 +86,7 @@
             descriptor = descriptors[0];
         }
 
-        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors, out  IReadOnlyList<string> suppressed)
+        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors, out IReadOnlyList<string> suppressed)
         {
             var tempDescriptors = new List<DiagnosticDescriptor>();
             var tempSuppressed = new List<string>();
@@ -137,21 +137,21 @@
                                      .Except(DiagnosticSettings.AllowedErrorIds())
                                      .Any())
             {
-                var error = StringBuilderPool.Borrow();
-                error.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                var errorBuilder = StringBuilderPool.Borrow();
+                errorBuilder.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
                     var errorInfo = await introducedDiagnostic.ToStringAsync(fixedSolution).ConfigureAwait(false);
-                    error.AppendLine($"{errorInfo}");
+                    errorBuilder.AppendLine($"{errorInfo}");
                 }
 
-                error.AppendLine("First source file with error is:");
+                errorBuilder.AppendLine("First source file with error is:");
                 var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, Formatter.Annotation, CancellationToken.None)));
                 var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();
                 var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == lineSpan.Path);
-                error.Append(match);
-                error.AppendLine();
-                throw AssertException.Create(StringBuilderPool.ReturnAndGetText(error));
+                errorBuilder.Append(match);
+                errorBuilder.AppendLine();
+                throw AssertException.Create(errorBuilder.Return());
             }
         }
 

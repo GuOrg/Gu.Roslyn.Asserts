@@ -1,46 +1,81 @@
-﻿namespace Gu.Roslyn.Asserts.Internals
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace Gu.Roslyn.Asserts.Internals
 {
+    using System;
     using System.Collections.Concurrent;
     using System.Text;
 
-    /// <summary>
-    /// Cache for <see cref="StringBuilder"/>
-    /// </summary>
     internal static class StringBuilderPool
     {
-        private static readonly ConcurrentQueue<StringBuilder> Cache = new ConcurrentQueue<StringBuilder>();
+        private static readonly ConcurrentQueue<PooledStringBuilder> Cache = new ConcurrentQueue<PooledStringBuilder>();
 
-        /// <summary>
-        /// Get an instance from cache, remember to return it.
-        /// </summary>
-        /// <returns>A <see cref="StringBuilder"/></returns>
-        internal static StringBuilder Borrow()
+        internal static PooledStringBuilder Borrow()
         {
-            return Cache.TryDequeue(out var result)
-                    ? result
-                    : new StringBuilder();
+            if (Cache.TryDequeue(out var item))
+            {
+                return item;
+            }
+
+            return new PooledStringBuilder();
         }
 
-        /// <summary>
-        /// Return <paramref name="stringBuilder"/> to the cache.
-        /// </summary>
-        /// <param name="stringBuilder">The instance.</param>
-        internal static void Return(StringBuilder stringBuilder)
+        internal static string Return(this PooledStringBuilder stringBuilder)
         {
-            stringBuilder.Clear();
+            var text = stringBuilder.GetTextAndClear();
             Cache.Enqueue(stringBuilder);
+            return text;
         }
 
-        /// <summary>
-        /// Return <paramref name="stringBuilder"/> to the cache.
-        /// </summary>
-        /// <param name="stringBuilder">The instance.</param>
-        /// <returns>The contents of <paramref name="stringBuilder"/></returns>
-        internal static string ReturnAndGetText(StringBuilder stringBuilder)
+        internal class PooledStringBuilder
         {
-            var text = stringBuilder.ToString();
-            Return(stringBuilder);
-            return text;
+            private readonly StringBuilder inner = new StringBuilder();
+
+            public bool IsEmpty => this.inner.Length == 0;
+
+            public int Length => this.inner.Length;
+
+            public void Clear() => this.inner.Clear();
+
+            public PooledStringBuilder AppendLine(string text)
+            {
+                this.inner.AppendLine(text);
+                return this;
+            }
+
+            public PooledStringBuilder AppendLine()
+            {
+                this.inner.AppendLine();
+                return this;
+            }
+
+            public PooledStringBuilder Append(string value)
+            {
+                this.inner.Append(value);
+                return this;
+            }
+
+            public PooledStringBuilder Append(char value)
+            {
+                this.inner.Append(value);
+                return this;
+            }
+
+            public string Return()
+            {
+                return StringBuilderPool.Return(this);
+            }
+
+            [Obsolete("Use StringBuilderPool.Return", true)]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
+            public override string ToString() => throw new InvalidOperationException("Use StringBuilderPool.Return");
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
+
+            public string GetTextAndClear()
+            {
+                var text = this.inner.ToString();
+                this.inner.Clear();
+                return text;
+            }
         }
     }
 }
