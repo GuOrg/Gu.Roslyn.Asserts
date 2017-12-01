@@ -47,12 +47,12 @@
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     new TCodeFix(),
                     new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
                 .GetResult();
@@ -95,12 +95,12 @@
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     new TCodeFix(),
                     new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
                 .GetResult();
@@ -137,12 +137,12 @@
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     codeFix,
                     new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { code }),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
                 .GetResult();
@@ -159,12 +159,12 @@
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     codeFix,
                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
                 .GetResult();
@@ -181,12 +181,12 @@
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<string> code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors);
+            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     codeFix,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
                 .GetResult();
