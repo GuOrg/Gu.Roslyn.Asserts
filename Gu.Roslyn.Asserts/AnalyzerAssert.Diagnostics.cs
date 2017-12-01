@@ -78,11 +78,11 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()
@@ -98,11 +98,11 @@
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()
@@ -117,11 +117,11 @@
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()
@@ -138,11 +138,11 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors);
+            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()
@@ -158,11 +158,11 @@
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors);
+            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()
@@ -177,11 +177,11 @@
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors);
+            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
                 .GetAwaiter()

@@ -63,38 +63,42 @@
             ResetSuppressedDiagnostics();
         }
 
-        private static void AssertAnalyzerSupportsExpectedDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic diagnostic, out DiagnosticDescriptor descriptor)
+        private static void AssertAnalyzerSupportsExpectedDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, out DiagnosticDescriptor descriptor, out IReadOnlyList<string> suppressedDiagnostics)
         {
-            var descriptors = analyzer.SupportedDiagnostics.Where(x => x.Id == diagnostic.Id).ToArray();
+            var descriptors = analyzer.SupportedDiagnostics.Where(x => x.Id == expectedDiagnostic.Id).ToArray();
             if (descriptors.Length == 0)
             {
-                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {diagnostic.Id}.{Environment.NewLine}" +
+                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {diagnostic.Id}";
+                              $"The expected diagnostic is: {expectedDiagnostic.Id}";
                 throw AssertException.Create(message);
             }
 
             if (descriptors.Length > 1)
             {
-                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {diagnostic.Id}.{Environment.NewLine}" +
+                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {diagnostic.Id}";
+                              $"The expected diagnostic is: {expectedDiagnostic.Id}";
                 throw AssertException.Create(message);
             }
 
+            suppressedDiagnostics = analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedDiagnostic.Id).ToArray();
             descriptor = descriptors[0];
         }
 
-        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors)
+        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors, out  IReadOnlyList<string> suppressed)
         {
-            var temp = new List<DiagnosticDescriptor>();
+            var tempDescriptors = new List<DiagnosticDescriptor>();
+            var tempSuppressed = new List<string>();
             foreach (var expectedDiagnostic in expectedDiagnostics)
             {
-                AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor);
-                temp.Add(descriptor);
+                AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+                tempDescriptors.Add(descriptor);
+                tempSuppressed.AddRange(suppressedDiagnostics);
             }
 
-            descriptors = temp;
+            descriptors = tempDescriptors;
+            suppressed = tempSuppressed.Distinct().Except(descriptors.Select(x => x.Id)).ToArray();
         }
 
         private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
