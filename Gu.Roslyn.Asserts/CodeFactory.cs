@@ -359,6 +359,7 @@ namespace Gu.Roslyn.Asserts
                 foreach (Match match in Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
                 {
                     var assemblyName = match.Groups["name"].Value;
+                    //// ReSharper disable once AssignNullToNotNullAttribute
                     var projectFile = new FileInfo(Path.Combine(code.DirectoryName, match.Groups["path"].Value));
                     projects.Add(new ProjectFileMetadata(projectFile, assemblyName));
                 }
@@ -454,6 +455,7 @@ namespace Gu.Roslyn.Asserts
             if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
             {
                 var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";
+                //// ReSharper disable once PossibleNullReferenceException
                 result = sln.Directory.EnumerateFiles(projectFileName, SearchOption.AllDirectories).FirstOrDefault();
             }
 
@@ -469,6 +471,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
             {
+                // ReSharper disable once PossibleNullReferenceException
                 var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
                 if (result == null)
                 {
@@ -492,6 +495,7 @@ namespace Gu.Roslyn.Asserts
             result = null;
             if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
             {
+                // ReSharper disable once PossibleNullReferenceException
                 result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
             }
 

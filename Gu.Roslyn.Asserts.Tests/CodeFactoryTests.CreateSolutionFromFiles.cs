@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿// ReSharper disable PossibleNullReferenceException
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Generic;
