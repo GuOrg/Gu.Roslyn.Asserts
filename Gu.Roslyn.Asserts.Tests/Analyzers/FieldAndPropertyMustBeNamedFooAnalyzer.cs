@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -40,15 +41,17 @@ namespace Gu.Roslyn.Asserts.Tests
         private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
         {
             if (context.ContainingSymbol is IFieldSymbol field &&
-                field.Name != "foo")
+                field.Name != "foo" &&
+                context.Node is FieldDeclarationSyntax fieldDeclaration)
             {
-                context.ReportDiagnostic(Diagnostic.Create(FieldDescriptor, context.Node.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(FieldDescriptor, fieldDeclaration.Declaration.Variables[0].GetLocation()));
             }
 
             if (context.ContainingSymbol is IPropertySymbol property &&
-                property.Name != "foo")
+                property.Name != "foo" &&
+                context.Node is PropertyDeclarationSyntax propertyDeclaration)
             {
-                context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, context.Node.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, propertyDeclaration.Identifier.GetLocation()));
             }
         }
     }

@@ -275,7 +275,7 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code));
                 string expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
-                                  "  at line 5 and character 8 in file Foo.cs | ↓private readonly int wrongName;\r\n";
+                                  "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);

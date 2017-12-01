@@ -115,13 +115,14 @@
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             CodeFixAsync(
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
                 .GetAwaiter()
@@ -145,13 +146,14 @@
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             CodeFixAsync(
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
-                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                 MetadataReferences,
                 allowCompilationErrors)
                 .GetAwaiter()
@@ -172,13 +174,15 @@
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
+            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             CodeFixAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
                 .GetAwaiter()
@@ -199,13 +203,15 @@
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
+            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             CodeFixAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
                 .GetAwaiter()
@@ -255,13 +261,14 @@
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
+            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             CodeFixAsync(
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
-                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                 MetadataReferences,
                 allowCompilationErrors)
                 .GetAwaiter()

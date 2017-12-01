@@ -1,6 +1,7 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
+    using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
     [TestFixture]
@@ -300,6 +301,25 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.Diagnostics(type, foo1, foo2);
+            }
+
+            [Test]
+            public void WithExpectedDiagnosticWhenOneReportsError()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓wrongName;
+        
+        public int WrongName { get; set; }
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
+                AnalyzerAssert.Diagnostics<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
             }
         }
     }
