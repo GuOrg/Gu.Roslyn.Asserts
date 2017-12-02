@@ -1,3 +1,7 @@
+#### 2.2.0
+* BUGFIX: handle expected diagnostic when analyzer supports many.
+* BREAKING: Removed obsolete ErrorMessage
+
 #### 2.1.1
 * BUGFIX: remove check for single diagnostic.
 

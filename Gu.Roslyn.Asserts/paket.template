@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 2.1.1.0
+version 2.2.0.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,7 +14,8 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  BUGFIX: remove check for single diagnostic.
+  BUGFIX: handle expected diagnostic when analyzer supports many.
+  BREAKING: Removed obsolete ErrorMessage
 
 dependencies
   framework: net461
