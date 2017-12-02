@@ -40,16 +40,14 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (context.ContainingSymbol is IFieldSymbol field &&
-                field.Name != "foo" &&
-                context.Node is FieldDeclarationSyntax fieldDeclaration)
+            if (context.Node is FieldDeclarationSyntax fieldDeclaration &&
+                fieldDeclaration.Declaration.Variables[0].Identifier.ValueText != "foo")
             {
                 context.ReportDiagnostic(Diagnostic.Create(FieldDescriptor, fieldDeclaration.Declaration.Variables[0].GetLocation()));
             }
 
-            if (context.ContainingSymbol is IPropertySymbol property &&
-                property.Name != "foo" &&
-                context.Node is PropertyDeclarationSyntax propertyDeclaration)
+            if (context.Node is PropertyDeclarationSyntax propertyDeclaration &&
+                propertyDeclaration.Identifier.ValueText != "foo")
             {
                 context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, propertyDeclaration.Identifier.GetLocation()));
             }
