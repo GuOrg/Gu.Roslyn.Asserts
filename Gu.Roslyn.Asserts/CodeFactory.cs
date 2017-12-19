@@ -546,7 +546,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
         public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
         {
-            return CreateSpecificDiagnosticOptions(analyzers?.SelectMany(x => x.SupportedDiagnostics), suppressed);
+            return CreateSpecificDiagnosticOptions(analyzers?.SelectMany(x => x.SupportedDiagnostics).Distinct(), suppressed);
         }
 
         /// <summary>
