@@ -185,6 +185,33 @@ namespace Gu.Roslyn.Asserts.Tests
                 CollectionAssert.AreEqual(new[] { assertsProject.Id }, testProject.AllProjectReferences.Select(x => x.ProjectId).ToArray());
             }
 
+            [Test]
+            public void CreateSolutionWithTwoAnalyzersReportingSameDiagnostic()
+            {
+                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("ClassLibrary1.csproj", out var projectFile));
+                var solution = CodeFactory.CreateSolution(
+                    projectFile,
+                    new[] { new DummyAnalyzer(ID1234.Descriptor), new DummyAnalyzer(ID1234.Descriptor) },
+                    CreateMetadataReferences(typeof(object)));
+                Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
+                var expected = new[]
+                               {
+                                   "AllowCompilationErrors.cs",
+                                   "AssemblyInfo.cs",
+                                   "ClassLibrary1Class1.cs",
+                               };
+                var actual = solution.Projects
+                                     .SelectMany(p => p.Documents)
+                                     .Select(d => d.Name)
+                                     .OrderBy(x => x)
+                                     .ToArray();
+                //// ReSharper disable UnusedVariable for debug.
+                var expectedString = string.Join(Environment.NewLine, expected);
+                var actualString = string.Join(Environment.NewLine, actual);
+                //// ReSharper restore UnusedVariable
+                CollectionAssert.AreEqual(expected, actual);
+            }
+
             private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
             {
                 return types.Select(type => type.GetTypeInfo().Assembly)

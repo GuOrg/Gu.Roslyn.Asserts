@@ -10,9 +10,9 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             "123",
-            "SyntaxNodeAnalyzer",
-            "SyntaxNodeAnalyzer",
-            "SyntaxNodeAnalyzer",
+            "SymbolAnalyzer",
+            "SymbolAnalyzer",
+            "SymbolAnalyzer",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
