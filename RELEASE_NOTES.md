@@ -1,3 +1,6 @@
+#### 1.2.1
+* BUGFIX: handle many analyzers for same diagnostic.
+
 #### 1.2.0
 * BUGFIX: handle expected diagnostic when analyzer supports many.
 * BREAKING: Removed obsolete ErrorMessage
