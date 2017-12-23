@@ -19,6 +19,16 @@ namespace Gu.Roslyn.Asserts
     public static class CodeFactory
     {
         /// <summary>
+        /// The workspace used when creating solutions.
+        /// </summary>
+        public static readonly AdhocWorkspace Workspace = new AdhocWorkspace();
+
+        /// <summary>
+        /// An empty solution.
+        /// </summary>
+        public static readonly Solution EmptySolution = Workspace.CurrentSolution;
+
+        /// <summary>
         /// Creates a solution for <paramref name="code"/>
         /// </summary>
         /// <param name="code">The sources as strings.</param>
@@ -163,7 +173,7 @@ namespace Gu.Roslyn.Asserts
                 return references;
             }
 
-            var solution = new AdhocWorkspace().CurrentSolution;
+            var solution = EmptySolution;
             var byNamespaces = code.Select(c => new SourceMetadata(c))
                                    .GroupBy(c => c.Namespace)
                                    .Select(x => new ProjectMetadata(x.Key, ProjectId.CreateNewId(x.Key), x.ToArray()))
@@ -206,7 +216,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            var solution = new AdhocWorkspace().CurrentSolution;
+            var solution = EmptySolution;
             var sources = code.Select(c => new SourceMetadata(c)).ToArray();
             var assemblyName = sources.Where(x => !string.IsNullOrEmpty(x.Namespace))
                                               .MinBy(x => x.Namespace.Length)
@@ -334,7 +344,7 @@ namespace Gu.Roslyn.Asserts
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
             {
-                var solution = new AdhocWorkspace().CurrentSolution;
+                var solution = EmptySolution;
                 var project = new ProjectFileMetadata(code, Path.GetFileNameWithoutExtension(code.FullName));
                 solution = solution.AddProject(project.Id, project.Name, project.Name, LanguageNames.CSharp)
                                    .WithProjectCompilationOptions(project.Id, compilationOptions)
@@ -354,7 +364,7 @@ namespace Gu.Roslyn.Asserts
             if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
             {
                 var sln = File.ReadAllText(code.FullName);
-                var solution = new AdhocWorkspace().CurrentSolution;
+                var solution = EmptySolution;
                 var projects = new List<ProjectFileMetadata>();
                 foreach (Match match in Regex.Matches(sln, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
                 {
