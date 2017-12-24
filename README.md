@@ -103,6 +103,7 @@ namespace RoslynSandbox
     var expected = ExpectedDiagnostic.Create("SA1309", code, out code);
     AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expected, code);
 }
+```
 
 # CodeFix
 Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix fixes it and produces the expected code.
