@@ -1,3 +1,6 @@
+#### 1.2.2
+* FEATURE: Reuse shared workspace when creating solutions.
+
 #### 1.2.1
 * BUGFIX: handle many analyzers for same diagnostic.
 
