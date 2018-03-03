@@ -1,3 +1,7 @@
+#### 1.2.3
+* BREAKING: NoFix is stricter now, requires no registered code action
+* BUGFIX: Handle suppressing one of the diagnostics the analyzer supports.
+
 #### 1.2.2
 * FEATURE: Reuse shared workspace when creating solutions.
 
