@@ -9,30 +9,170 @@ namespace Gu.Roslyn.Asserts.Internals
     internal static partial class EnumerableExt
     {
         /// <summary>
-        /// Return the single element or null
+        /// Return the element at index if exists.
         /// </summary>
         /// <typeparam name="T">The type of the items in the collection.</typeparam>
         /// <param name="source">The source collection.</param>
-        /// <param name="single">The single item.</param>
-        /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TryGetSingle<T>(this IEnumerable<T> source, out T single)
-            where T : class
+        /// <param name="index">The index.</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains an item at the specified index.</returns>
+        internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, out T result)
         {
-            single = null;
-            foreach (var item in source)
+            result = default(T);
+            if (source == null)
             {
-                if (single == null)
+                return false;
+            }
+
+            var current = 0;
+            using (var e = source.GetEnumerator())
+            {
+                while (e.MoveNext())
                 {
-                    single = item;
-                }
-                else
-                {
-                    single = null;
-                    return false;
+                    if (current == index)
+                    {
+                        result = e.Current;
+                        return true;
+                    }
+
+                    current++;
                 }
             }
 
-            return single != null;
+            return false;
+        }
+
+        /// <summary>
+        /// Return the single element if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains exactly one non null item.</returns>
+        internal static bool TrySingle<T>(this IEnumerable<T> source, out T result)
+        {
+            result = default(T);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                if (e.MoveNext())
+                {
+                    result = e.Current;
+                    if (!e.MoveNext())
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                result = default(T);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the single element matching predicate if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The predicate</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains exactly one non null item.</returns>
+        internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
+        {
+            result = default(T);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    result = e.Current;
+                    if (selector(result))
+                    {
+                        while (e.MoveNext())
+                        {
+                            if (selector(e.Current))
+                            {
+                                result = default(T);
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            result = default(T);
+            return false;
+        }
+
+        /// <summary>
+        /// Return the first element if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains exactly one non null item.</returns>
+        internal static bool TryFirst<T>(this IEnumerable<T> source, out T result)
+        {
+            result = default(T);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                if (e.MoveNext())
+                {
+                    result = e.Current;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return the first element matching predicate if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The predicate</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains exactly one non null item.</returns>
+        internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
+        {
+            if (source == null)
+            {
+                result = default(T);
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    result = e.Current;
+                    if (selector(result))
+                    {
+                       return true;
+                    }
+                }
+            }
+
+            result = default(T);
+            return false;
         }
 
         /// <summary>

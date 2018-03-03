@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
@@ -37,6 +37,25 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void SingleClassOneErrorEmptyFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code));
+                var expected = "Expected code to have no fixable diagnostics.\r\n" +
+                               "The following actions were registered:\r\n" +
+                               "Rename to: value\r\n";
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void SingleClassOneErrorCodeFixFixedTheCode()
             {
                 var code = @"
@@ -49,27 +68,9 @@ namespace RoslynSandbox
 }";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
-                var expected = "Expected the code fix to not change any document.\r\n" +
-                               "Mismatch on line 6 of file Foo.cs\r\n" +
-                               "Expected:         private readonly int _value;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
-                               "{\r\n" +
-                               "    class Foo\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int _value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
-                               "{\r\n" +
-                               "    class Foo\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = "Expected code to have no fixable diagnostics.\r\n" +
+                               "The following actions were registered:\r\n" +
+                               "Rename to: value\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -95,27 +96,9 @@ namespace RoslynSandbox
 }";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
-                var expected = "Expected the code fix to not change any document.\r\n" +
-                               "Mismatch on line 6 of file Foo.cs\r\n" +
-                               "Expected:         private readonly int _value;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
-                               "{\r\n" +
-                               "    class Foo\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int _value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
-                               "{\r\n" +
-                               "    class Foo\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = "Expected code to have no fixable diagnostics.\r\n" +
+                               "The following actions were registered:\r\n" +
+                               "Rename to: value\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
         }

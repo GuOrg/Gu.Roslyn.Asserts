@@ -521,7 +521,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindFileInParentDirectory(DirectoryInfo directory, string fileName, out FileInfo result)
         {
-            if (directory.EnumerateFiles(fileName).TryGetSingle(out result))
+            if (directory.EnumerateFiles(fileName).TrySingle(out result))
             {
                 return true;
             }

@@ -23,14 +23,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<bool> IsRegisteringFixAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic)
         {
-            var document = solution.GetDocument(diagnostic.Location.SourceTree);
-            var actions = new List<CodeAction>();
-            var context = new CodeFixContext(
-                document,
-                diagnostic,
-                (a, d) => actions.Add(a),
-                CancellationToken.None);
-            await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            var actions = await GetActionsAsync(solution, codeFix, diagnostic);
             return actions.Count != 0;
         }
 
@@ -45,14 +38,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, string fixTitle, CancellationToken cancellationToken)
         {
-            var document = solution.GetDocument(diagnostic.Location.SourceTree);
-            var actions = new List<CodeAction>();
-            var context = new CodeFixContext(
-                document,
-                diagnostic,
-                (a, d) => actions.Add(a),
-                CancellationToken.None);
-            await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            var actions = await GetActionsAsync(solution, codeFix, diagnostic);
             var action = FindAction(actions, fixTitle);
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
@@ -133,10 +119,51 @@ namespace Gu.Roslyn.Asserts.Internals
             return fixedSolution;
         }
 
-        private static CodeAction FindAction(List<CodeAction> actions, string fixTitle)
+        /// <summary>
+        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>
+        /// </summary>
+        /// <param name="solution">The solution with the diagnostic.</param>
+        /// <param name="codeFix">The code fix.</param>
+        /// <param name="diagnostic">The diagnostic.</param>
+        /// <returns>The list of registered actions.</returns>
+        internal static async Task<IReadOnlyList<CodeAction>> GetActionsAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic)
         {
-            if (fixTitle != null)
+            var document = solution.GetDocument(diagnostic.Location.SourceTree);
+            var actions = new List<CodeAction>();
+            var context = new CodeFixContext(
+                document,
+                diagnostic,
+                (a, d) => actions.Add(a),
+                CancellationToken.None);
+            await codeFix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
+            return actions;
+        }
+
+        private static CodeAction FindAction(IReadOnlyList<CodeAction> actions, string fixTitle)
+        {
+            if (fixTitle == null)
             {
+                if (actions.TrySingle(out var action))
+                {
+                    return action;
+                }
+
+                if (actions.Count == 0)
+                {
+                    throw AssertException.Create("Expected one code fix, was 0.");
+                }
+
+                throw AssertException.Create($"Expected only one code fix, found {actions.Count}:\r\n" +
+                                             $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
+                                             "Use the overload that specifies title.");
+            }
+            else
+            {
+                if (actions.TrySingle(x => x.Title == fixTitle, out var action))
+                {
+                    return action;
+                }
+
                 if (actions.All(x => x.Title != fixTitle))
                 {
                     var errorBuilder = StringBuilderPool.Borrow();
@@ -149,22 +176,15 @@ namespace Gu.Roslyn.Asserts.Internals
                     throw AssertException.Create(StringBuilderPool.Return(errorBuilder));
                 }
 
-                actions.RemoveAll(x => x.Title != fixTitle);
-            }
+                if (actions.Count(x => x.Title == fixTitle) == 0)
+                {
+                    throw AssertException.Create("Expected one code fix, was 0.");
+                }
 
-            if (actions.Count == 0)
-            {
-                throw AssertException.Create("Expected one code fix, was 0.");
-            }
-
-            if (actions.Count > 1)
-            {
                 throw AssertException.Create($"Expected only one code fix, found {actions.Count}:\r\n" +
                                              $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
                                              "Use the overload that specifies title.");
             }
-
-            return actions[0];
         }
 
         /// <inheritdoc />
