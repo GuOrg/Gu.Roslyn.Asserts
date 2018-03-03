@@ -597,7 +597,7 @@ namespace Gu.Roslyn.Asserts
             {
                 foreach (var id in suppressed)
                 {
-                    diagnosticOptions.Add(id, ReportDiagnostic.Suppress);
+                    diagnosticOptions[id] = ReportDiagnostic.Suppress;
                 }
             }
 
