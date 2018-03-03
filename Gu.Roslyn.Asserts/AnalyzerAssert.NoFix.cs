@@ -1,8 +1,7 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
@@ -114,7 +113,7 @@
         /// <param name="analyzer">The type of the analyzer.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] codeWithErrorsIndicated)
         {
             NoFixAsync(
                     analyzer,
@@ -135,13 +134,13 @@
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             NoFixAsync(
                     analyzer,
                     codeFix,
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { code }),
+                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
@@ -179,7 +178,7 @@
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostics">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<string> code)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             NoFixAsync(
@@ -231,16 +230,22 @@
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
-            if (fixableDiagnostics.Length != 1)
+            foreach (var fixableDiagnostic in fixableDiagnostics)
             {
-                throw AssertException.Create("Expected code to have exactly one fixable diagnostic.");
-            }
+                var actions = await Fix.GetActionsAsync(data.Solution, codeFix, fixableDiagnostic);
+                if (actions.Any())
+                {
+                    var builder = StringBuilderPool.Borrow()
+                                                   .AppendLine("Expected code to have no fixable diagnostics.")
+                                                   .AppendLine("The following actions were registered:");
 
-            if (await Fix.IsRegisteringFixAsync(data.Solution, codeFix, fixableDiagnostics.Single()))
-            {
-                var fixedSolution = await Fix.ApplyAsync(data.Solution, codeFix, fixableDiagnostics.Single(), null, CancellationToken.None)
-                                             .ConfigureAwait(false);
-                await AreEqualAsync(data.Sources, fixedSolution, "Expected the code fix to not change any document.").ConfigureAwait(false);
+                    foreach (var action in actions)
+                    {
+                        builder.AppendLine(action.Title);
+                    }
+
+                    throw AssertException.Create(builder.Return());
+                }
             }
         }
     }
