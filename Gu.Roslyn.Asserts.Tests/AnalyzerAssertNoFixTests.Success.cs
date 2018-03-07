@@ -21,10 +21,13 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code);
+                AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(expectedDiagnostic, code);
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IReadOnlyList<string>)new[] { code });
                 AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), code);
+                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), expectedDiagnostic, code);
+                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), new[] { expectedDiagnostic.WithPositionFromCodeWithErrorsIndicated(code, out code) }, code);
             }
 
             [Test]
