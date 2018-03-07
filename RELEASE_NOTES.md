@@ -1,3 +1,6 @@
+#### 2.2.4
+* BUGFIX NoFix handles expected diagnostic with error indicated.
+
 #### 2.2.3
 * BREAKING: NoFix is stricter now, requires no registered code action
 * BUGFIX: Handle suppressing one of the diagnostics the analyzer supports.
