@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts
             NoFixAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
@@ -89,7 +89,7 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
+        public static void NoFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -98,7 +98,7 @@ namespace Gu.Roslyn.Asserts
             NoFixAsync(
                     analyzer,
                     new TCodeFix(),
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
@@ -140,7 +140,7 @@ namespace Gu.Roslyn.Asserts
             NoFixAsync(
                     analyzer,
                     codeFix,
-                    new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
@@ -162,7 +162,7 @@ namespace Gu.Roslyn.Asserts
             NoFixAsync(
                     analyzer,
                     codeFix,
-                   new DiagnosticsAndSources(new[] { expectedDiagnostic }, code),
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences)
                 .GetAwaiter()
