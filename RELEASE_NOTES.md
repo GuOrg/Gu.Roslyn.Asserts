@@ -1,3 +1,6 @@
+#### 1.2.5
+* FEATURE: Make more Analyze methods public.
+
 #### 1.2.4
 * BUGFIX NoFix handles expected diagnostic with error indicated.
 
