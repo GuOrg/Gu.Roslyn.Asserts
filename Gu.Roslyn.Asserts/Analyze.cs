@@ -153,7 +153,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        internal static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution)
+        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution)
         {
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in solution.Projects)
@@ -173,7 +173,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="codeFix">The code fix to use when filtering the diagnostics.</param>
         /// <returns>A list with all fixable diagnostics.</returns>
-        internal static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             var fixableDiagnostics = new List<Diagnostic>();
             foreach (var project in solution.Projects)
@@ -205,7 +205,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The analyzer.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        internal static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
+        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in solution.Projects)
@@ -225,6 +225,34 @@ namespace Gu.Roslyn.Asserts
                     results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync()
                                                    .ConfigureAwait(false));
                 }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
+        {
+            var results = new List<ImmutableArray<Diagnostic>>();
+            var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                           .ConfigureAwait(false);
+            if (analyzer is PlaceholderAnalyzer)
+            {
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+            }
+            else
+            {
+                var withAnalyzers = compilation.WithAnalyzers(
+                    ImmutableArray.Create(analyzer),
+                    project.AnalyzerOptions,
+                    CancellationToken.None);
+                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync()
+                                               .ConfigureAwait(false));
             }
 
             return results;
