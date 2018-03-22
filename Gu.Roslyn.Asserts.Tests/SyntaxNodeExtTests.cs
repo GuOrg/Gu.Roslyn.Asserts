@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -7,6 +7,38 @@
 
     internal class SyntaxNodeExtTests
     {
+        [Test]
+        public void FindClassDeclaration()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo { }
+}");
+            var node = syntaxTree.FindClassDeclaration("Foo");
+            Assert.AreEqual("internal class Foo { }", node.ToString());
+
+            node = syntaxTree.FindBestMatch<ClassDeclarationSyntax>("Foo");
+            Assert.AreEqual("internal class Foo { }", node.ToString());
+        }
+
+        [Test]
+        public void FindTypeDeclaration()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    internal class Foo { }
+}");
+            var node = syntaxTree.FindTypeDeclaration("Foo");
+            Assert.AreEqual("internal class Foo { }", node.ToString());
+
+            node = syntaxTree.FindBestMatch<TypeDeclarationSyntax>("Foo");
+            Assert.AreEqual("internal class Foo { }", node.ToString());
+        }
+
         [TestCase("var temp = 1;", "var temp = 1;")]
         [TestCase("var temp = 1;", "var temp = 1;")]
         [TestCase("temp = 2;", "temp = 2;")]
@@ -183,6 +215,101 @@ namespace RoslynSandbox
 
             node = syntaxTree.FindBestMatch<PropertyDeclarationSyntax>("Bar");
             Assert.AreEqual(expected, node.ToString());
+        }
+
+        [Test]
+        public void FindInvocation()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    using System;
+
+    internal class Foo
+    {
+        public Foo()
+        {
+            Console.WriteLine();
+        }
+    }
+}");
+            var node = syntaxTree.FindInvocation("WriteLine");
+            Assert.AreEqual("Console.WriteLine()", node.ToString());
+
+            node = syntaxTree.FindBestMatch<InvocationExpressionSyntax>("WriteLine");
+            Assert.AreEqual("Console.WriteLine()", node.ToString());
+        }
+
+        [Test]
+        public void FindArgument()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    using System;
+
+    internal class Foo
+    {
+        public Foo()
+        {
+            Console.WriteLine(string.Empty);
+        }
+    }
+}");
+            var node = syntaxTree.FindArgument("string.Empty");
+            Assert.AreEqual("string.Empty", node.ToString());
+
+            node = syntaxTree.FindBestMatch<ArgumentSyntax>("string.Empty");
+            Assert.AreEqual("string.Empty", node.ToString());
+        }
+
+        [TestCase("int i")]
+        [TestCase("int j")]
+        public void FindParameter(string parameter)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    using System;
+
+    internal class Foo
+    {
+        public Foo(int i, int j)
+        {
+        }
+    }
+}");
+            var node = syntaxTree.FindParameter(parameter);
+            Assert.AreEqual(parameter, node.ToString());
+
+            node = syntaxTree.FindBestMatch<ParameterSyntax>(parameter);
+            Assert.AreEqual(parameter, node.ToString());
+        }
+
+        [TestCase("get => this.value;")]
+        [TestCase("set => this.value = value;")]
+        public void FindAccessorDeclaration(string accessor)
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+        private int value;
+
+        public int Value
+        {
+            get => this.value;
+            set => this.value = value;
+        }
+    }
+}";
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            Assert.AreEqual(accessor, syntaxTree.FindAccessorDeclaration(accessor).ToString());
+            Assert.AreEqual(accessor, syntaxTree.FindBestMatch<AccessorDeclarationSyntax>(accessor).ToString());
         }
     }
 }
