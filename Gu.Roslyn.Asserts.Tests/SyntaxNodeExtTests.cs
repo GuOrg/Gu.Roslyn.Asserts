@@ -289,8 +289,8 @@ namespace RoslynSandbox
             Assert.AreEqual(parameter, node.ToString());
         }
 
-        [TestCase("get => this.value;")]
-        [TestCase("set => this.value = value;")]
+        [TestCase("get { return this.value; }")]
+        [TestCase("set { this.value = value; }")]
         public void FindAccessorDeclaration(string accessor)
         {
             var testCode = @"
@@ -302,8 +302,8 @@ namespace RoslynSandbox
 
         public int Value
         {
-            get => this.value;
-            set => this.value = value;
+            get { return this.value; }
+            set { this.value = value; }
         }
     }
 }";
