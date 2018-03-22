@@ -1,3 +1,6 @@
+#### 1.2.6
+* BUGFIXES: TryFind methods.
+
 #### 1.2.5
 * FEATURE: Make more Analyze methods public.
 
