@@ -29,8 +29,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -47,8 +46,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -64,8 +62,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -85,8 +82,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -105,8 +101,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -124,8 +119,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -145,8 +139,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -165,8 +158,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -184,8 +176,7 @@ namespace Gu.Roslyn.Asserts
                     CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     null)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>

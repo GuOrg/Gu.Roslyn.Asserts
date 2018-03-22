@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -187,7 +187,7 @@
                 return builder.Return();
             }
 
-            StringBuilderPool.Return(builder);
+            StringBuilderPool.Return(builder).IgnoreReturnValue();
             return $"Code dod not have position {position}";
         }
 
