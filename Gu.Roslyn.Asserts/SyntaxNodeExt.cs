@@ -147,6 +147,14 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Find a <see cref="ExpressionSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static ExpressionSyntax FindExpression(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<ExpressionSyntax>(signature);
+        }
+
+        /// <summary>
         /// Find a <see cref="MemberAccessExpressionSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
         public static MemberAccessExpressionSyntax FindMemberAccessExpression(this SyntaxTree tree, string signature)
@@ -168,6 +176,22 @@ namespace Gu.Roslyn.Asserts
         public static MethodDeclarationSyntax FindMethodDeclaration(this SyntaxTree tree, string signature)
         {
             return tree.FindBestMatch<MethodDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="AttributeSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static AttributeSyntax FindAttribute(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<AttributeSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="AttributeArgumentSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static AttributeArgumentSyntax FindAttributeArgument(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<AttributeArgumentSyntax>(signature);
         }
 
         /// <summary>

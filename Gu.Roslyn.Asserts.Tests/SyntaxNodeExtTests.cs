@@ -40,9 +40,8 @@ namespace RoslynSandbox
         }
 
         [TestCase("var temp = 1;", "var temp = 1;")]
-        [TestCase("var temp = 1;", "var temp = 1;")]
         [TestCase("temp = 2;", "temp = 2;")]
-        public void FindStatement(string text, string expected)
+        public void FindStatement(string statement, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -57,10 +56,10 @@ namespace RoslynSandbox
         }
     }
 }");
-            var node = syntaxTree.FindStatement(text);
+            var node = syntaxTree.FindStatement(statement);
             Assert.AreEqual(expected, node.ToString());
 
-            node = syntaxTree.FindBestMatch<StatementSyntax>(text);
+            node = syntaxTree.FindBestMatch<StatementSyntax>(statement);
             Assert.AreEqual(expected, node.ToString());
         }
 
@@ -310,6 +309,64 @@ namespace RoslynSandbox
             var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
             Assert.AreEqual(accessor, syntaxTree.FindAccessorDeclaration(accessor).ToString());
             Assert.AreEqual(accessor, syntaxTree.FindBestMatch<AccessorDeclarationSyntax>(accessor).ToString());
+        }
+
+        [Test]
+        public void FindExpression()
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+        private int value;
+
+        public int Value => this.value;
+    }
+}";
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            var expression = "this.value";
+            Assert.AreEqual(expression, syntaxTree.FindExpression(expression).ToString());
+            Assert.AreEqual(expression, syntaxTree.FindBestMatch<ExpressionSyntax>(expression).ToString());
+        }
+
+        [Test]
+        public void FindBinaryExpression()
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+        private int value;
+
+        public bool Bar => this.value == 1;
+    }
+}";
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            var expression = "this.value == 1";
+            Assert.AreEqual(expression, syntaxTree.FindBinaryExpression(expression).ToString());
+            Assert.AreEqual(expression, syntaxTree.FindBestMatch<BinaryExpressionSyntax>(expression).ToString());
+        }
+
+        [Test]
+        public void FindAttribute()
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public class Foo
+    {
+        [Obsolete]
+        public int Value { get; } = 1;
+    }
+}";
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            var attribute = "Obsolete";
+            Assert.AreEqual(attribute, syntaxTree.FindAttribute(attribute).ToString());
+            Assert.AreEqual(attribute, syntaxTree.FindBestMatch<AttributeSyntax>(attribute).ToString());
         }
     }
 }
