@@ -138,7 +138,7 @@ namespace RoslynSandbox
 }";
             var sln = CodeFactory.CreateSolution(testCode);
             var editor = await DocumentEditor.CreateAsync(sln.Projects.First().Documents.First()).ConfigureAwait(false);
-            var type = editor.OriginalRoot.SyntaxTree.FindBestMatch<ClassDeclarationSyntax>("Foo");
+            var type = editor.OriginalRoot.SyntaxTree.Find<ClassDeclarationSyntax>("Foo");
             var expected = @"
 namespace RoslynSandbox
 {

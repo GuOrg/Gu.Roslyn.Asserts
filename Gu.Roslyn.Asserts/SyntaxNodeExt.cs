@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static EqualsValueClauseSyntax FindEqualsValueClause(this SyntaxTree tree, string code)
         {
-            return tree.FindBestMatch<EqualsValueClauseSyntax>(code);
+            return tree.Find<EqualsValueClauseSyntax>(code);
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static AssignmentExpressionSyntax FindAssignmentExpression(this SyntaxTree tree, string code)
         {
-            return tree.FindBestMatch<AssignmentExpressionSyntax>(code);
+            return tree.Find<AssignmentExpressionSyntax>(code);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static InvocationExpressionSyntax FindInvocation(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<InvocationExpressionSyntax>(signature);
+            return tree.Find<InvocationExpressionSyntax>(signature);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static ParameterSyntax FindParameter(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<ParameterSyntax>(signature);
+            return tree.Find<ParameterSyntax>(signature);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static ArgumentSyntax FindArgument(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<ArgumentSyntax>(signature);
+            return tree.Find<ArgumentSyntax>(signature);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static LiteralExpressionSyntax FindLiteralExpression(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<LiteralExpressionSyntax>(signature);
+            return tree.Find<LiteralExpressionSyntax>(signature);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static StatementSyntax FindStatement(this SyntaxTree tree, string code)
         {
-            return tree.FindBestMatch<StatementSyntax>(code);
+            return tree.Find<StatementSyntax>(code);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static TypeDeclarationSyntax FindTypeDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<TypeDeclarationSyntax>(signature);
+            return tree.Find<TypeDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static ClassDeclarationSyntax FindClassDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<ClassDeclarationSyntax>(signature);
+            return tree.Find<ClassDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static StructDeclarationSyntax FindStructDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<StructDeclarationSyntax>(signature);
+            return tree.Find<StructDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static FieldDeclarationSyntax FindFieldDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<FieldDeclarationSyntax>(signature);
+            return tree.Find<FieldDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static EventFieldDeclarationSyntax FindEventFieldDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<EventFieldDeclarationSyntax>(signature);
+            return tree.Find<EventFieldDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static EventDeclarationSyntax FindEventDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<EventDeclarationSyntax>(signature);
+            return tree.Find<EventDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static BasePropertyDeclarationSyntax FindBasePropertyDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<BasePropertyDeclarationSyntax>(signature);
+            return tree.Find<BasePropertyDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static PropertyDeclarationSyntax FindPropertyDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<PropertyDeclarationSyntax>(signature);
+            return tree.Find<PropertyDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static IndexerDeclarationSyntax FindIndexerDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<IndexerDeclarationSyntax>(signature);
+            return tree.Find<IndexerDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static AccessorDeclarationSyntax FindAccessorDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<AccessorDeclarationSyntax>(signature);
+            return tree.Find<AccessorDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static VariableDeclarationSyntax FindVariableDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<VariableDeclarationSyntax>(signature);
+            return tree.Find<VariableDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static ExpressionSyntax FindExpression(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<ExpressionSyntax>(signature);
+            return tree.Find<ExpressionSyntax>(signature);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static MemberAccessExpressionSyntax FindMemberAccessExpression(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<MemberAccessExpressionSyntax>(signature);
+            return tree.Find<MemberAccessExpressionSyntax>(signature);
         }
 
         /// <summary>
@@ -200,7 +200,15 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static BinaryExpressionSyntax FindBinaryExpression(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<BinaryExpressionSyntax>(signature);
+            return tree.Find<BinaryExpressionSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="ObjectCreationExpressionSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static ObjectCreationExpressionSyntax FindObjectCreationExpression(this SyntaxTree tree, string signature)
+        {
+            return tree.Find<ObjectCreationExpressionSyntax>(signature);
         }
 
         /// <summary>
@@ -208,7 +216,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static MethodDeclarationSyntax FindMethodDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<MethodDeclarationSyntax>(signature);
+            return tree.Find<MethodDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -216,7 +224,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static AttributeSyntax FindAttribute(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<AttributeSyntax>(signature);
+            return tree.Find<AttributeSyntax>(signature);
         }
 
         /// <summary>
@@ -224,14 +232,25 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static AttributeArgumentSyntax FindAttributeArgument(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<AttributeArgumentSyntax>(signature);
+            return tree.Find<AttributeArgumentSyntax>(signature);
+        }
+
+        [Obsolete("Use Find<T>")]
+        /// <summary>
+        /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the node to find.</typeparam>
+        public static T FindBestMatch<T>(this SyntaxTree tree, string code)
+            where T : SyntaxNode
+        {
+            return Find<T>(tree, code);
         }
 
         /// <summary>
         /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
         /// </summary>
         /// <typeparam name="T">The type of the node to find.</typeparam>
-        public static T FindBestMatch<T>(this SyntaxTree tree, string code)
+        public static T Find<T>(this SyntaxTree tree, string code)
             where T : SyntaxNode
         {
             T best = null;
@@ -247,7 +266,7 @@ namespace Gu.Roslyn.Asserts
         /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
         /// </summary>
         /// <typeparam name="T">The type of the node to find.</typeparam>
-        public static T FindBestMatch<T>(this SyntaxNode root, string code)
+        public static T Find<T>(this SyntaxNode root, string code)
             where T : SyntaxNode
         {
             return FindBestMatchRecursive<T>(root, code) ?? throw new InvalidOperationException($"The tree does not contain an {typeof(T).Name} matching the code.");
@@ -259,7 +278,7 @@ namespace Gu.Roslyn.Asserts
             foreach (var node in root.DescendantNodes()
                                      .OfType<T>())
             {
-                var nodeText = node.ToFullString();
+                var nodeText = node.ToString();
                 if (nodeText == code)
                 {
                     return node;
@@ -270,7 +289,7 @@ namespace Gu.Roslyn.Asserts
                     var parent = node.Parent;
                     while (parent != null)
                     {
-                        if (parent.ToFullString() == code)
+                        if (parent.ToString() == code)
                         {
                             return node;
                         }
