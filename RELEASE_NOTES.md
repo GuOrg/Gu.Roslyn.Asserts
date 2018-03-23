@@ -1,3 +1,6 @@
+#### 2.2.8
+* FEATURE: Allow code to contain node code in Find methods.
+
 #### 2.2.7
 * BUGFIXES: TryFindInvocation when argument is invocation.
 
