@@ -241,6 +241,30 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public void FindInvocationWhenArgumentIsInvocation()
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+        public Foo()
+        {
+            var name = Id(nameof(Id));
+        }
+
+        private static string Id(string name) => name;
+    }
+}");
+            var node = syntaxTree.FindInvocation("Id(nameof(Id))");
+            Assert.AreEqual("Id(nameof(Id))", node.ToString());
+
+            node = syntaxTree.FindBestMatch<InvocationExpressionSyntax>("Id(nameof(Id))");
+            Assert.AreEqual("Id(nameof(Id))", node.ToString());
+        }
+
+        [Test]
         public void FindArgument()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
