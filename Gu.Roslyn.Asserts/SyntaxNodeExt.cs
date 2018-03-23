@@ -251,7 +251,13 @@ namespace Gu.Roslyn.Asserts
             foreach (var node in root.DescendantNodes()
                                      .OfType<T>())
             {
-                if (node.ToFullString().Contains(code) ||
+                var nodeText = node.ToFullString();
+                if (nodeText == code)
+                {
+                    return node;
+                }
+
+                if (nodeText.Contains(code) ||
                     node.FirstAncestorOrSelf<StatementSyntax>()?.ToFullString().Contains(code) == true)
                 {
                     return FindBestMatchRecursive<T>(node, code) ?? node;
