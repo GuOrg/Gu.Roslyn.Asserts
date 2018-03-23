@@ -39,8 +39,7 @@
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -68,8 +67,7 @@
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 MetadataReferences,
                 allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -94,8 +92,7 @@
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -125,8 +122,7 @@
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -156,8 +152,7 @@
                 CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                 MetadataReferences,
                 allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -185,8 +180,7 @@
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -214,8 +208,7 @@
                     CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -242,8 +235,7 @@
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -271,8 +263,7 @@
                 CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
                 MetadataReferences,
                 allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -358,8 +349,7 @@
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
 
         /// <summary>
@@ -387,8 +377,7 @@
                 CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                 MetadataReferences,
                 allowCompilationErrors)
-                .GetAwaiter()
-                .GetResult();
+                .IgnoreReturnValue();
         }
     }
 }
