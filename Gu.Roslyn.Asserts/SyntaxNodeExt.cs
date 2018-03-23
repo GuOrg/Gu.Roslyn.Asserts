@@ -235,11 +235,11 @@ namespace Gu.Roslyn.Asserts
             return tree.Find<AttributeArgumentSyntax>(signature);
         }
 
-        [Obsolete("Use Find<T>")]
         /// <summary>
         /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
         /// </summary>
         /// <typeparam name="T">The type of the node to find.</typeparam>
+        [Obsolete("Use Find<T>")]
         public static T FindBestMatch<T>(this SyntaxTree tree, string code)
             where T : SyntaxNode
         {

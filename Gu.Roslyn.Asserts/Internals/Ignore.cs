@@ -29,5 +29,16 @@ namespace Gu.Roslyn.Asserts.Internals
                        .GetResult()
                        .IgnoreReturnValue();
         }
+
+        /// <summary>
+        /// For suppressing GU0011 in a clear way.
+        /// </summary>
+        /// <param name="returnValue">The value.</param>
+        // ReSharper disable once UnusedParameter.Global
+        internal static void IgnoreReturnValue(this Task returnValue)
+        {
+            returnValue.GetAwaiter()
+                       .GetResult();
+        }
     }
 }
