@@ -64,6 +64,7 @@ namespace RoslynSandbox
         }
 
         [TestCase("temp = 1;", "= 1")]
+        [TestCase("var temp = 1;", "= 1")]
         public void FindEqualsValueClause(string text, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
@@ -73,6 +74,12 @@ namespace RoslynSandbox
     internal class Foo
     {
         internal Foo()
+        {
+            int temp = 1;
+            temp = 2;
+        }
+
+        internal Foo(int i)
         {
             var temp = 1;
             temp = 2;
@@ -240,11 +247,11 @@ namespace RoslynSandbox
             Assert.AreEqual("Console.WriteLine()", node.ToString());
         }
 
-        [Test]
-        public void FindInvocationWhenArgumentIsInvocation()
+        [TestCase("Id(nameof(Id))", "Id(nameof(Id))")]
+        [TestCase("this.Id(nameof(Id))", "this.Id(nameof(Id))")]
+        public void FindInvocationWhenArgumentIsInvocation(string invocation, string expected)
         {
-            var syntaxTree = CSharpSyntaxTree.ParseText(
-                @"
+            var testCode = @"
 namespace RoslynSandbox
 {
     public class Foo
@@ -254,14 +261,14 @@ namespace RoslynSandbox
             var name = Id(nameof(Id));
         }
 
-        private static string Id(string name) => name;
+        private string Id(string name) => name;
     }
-}");
-            var node = syntaxTree.FindInvocation("Id(nameof(Id))");
-            Assert.AreEqual("Id(nameof(Id))", node.ToString());
+}";
 
-            node = syntaxTree.FindBestMatch<InvocationExpressionSyntax>("Id(nameof(Id))");
-            Assert.AreEqual("Id(nameof(Id))", node.ToString());
+            testCode = testCode.AssertReplace("Id(nameof(Id))", invocation);
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            Assert.AreEqual(expected, syntaxTree.FindInvocation(invocation).ToString());
+            Assert.AreEqual(expected, syntaxTree.FindBestMatch<InvocationExpressionSyntax>(invocation).ToString());
         }
 
         [Test]
