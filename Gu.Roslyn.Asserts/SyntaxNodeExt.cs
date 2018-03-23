@@ -99,19 +99,28 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Find a <see cref="PropertyDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
-        public static PropertyDeclarationSyntax FindPropertyDeclaration(this SyntaxTree tree, string signature)
+        public static ConstructorDeclarationSyntax FindConstructorDeclaration(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<PropertyDeclarationSyntax>(signature);
+            foreach (var ctor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>())
+            {
+                if (ctor.ToFullString().Contains(signature))
+                {
+                    return ctor;
+                }
+            }
+
+            throw new InvalidOperationException($"The tree does not contain an {typeof(ConstructorDeclarationSyntax).Name} matching {signature}");
         }
 
         /// <summary>
-        /// Find a <see cref="IndexerDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
-        public static IndexerDeclarationSyntax FindIndexerDeclaration(this SyntaxTree tree, string signature)
+        [Obsolete("Use FindConstructorDeclaration")]
+        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
         {
-            return tree.FindBestMatch<IndexerDeclarationSyntax>(signature);
+            return FindConstructorDeclaration(tree, signature);
         }
 
         /// <summary>
@@ -128,6 +137,30 @@ namespace Gu.Roslyn.Asserts
         public static EventDeclarationSyntax FindEventDeclaration(this SyntaxTree tree, string signature)
         {
             return tree.FindBestMatch<EventDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="BasePropertyDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static BasePropertyDeclarationSyntax FindBasePropertyDeclaration(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<BasePropertyDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="PropertyDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static PropertyDeclarationSyntax FindPropertyDeclaration(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<PropertyDeclarationSyntax>(signature);
+        }
+
+        /// <summary>
+        /// Find a <see cref="IndexerDeclarationSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static IndexerDeclarationSyntax FindIndexerDeclaration(this SyntaxTree tree, string signature)
+        {
+            return tree.FindBestMatch<IndexerDeclarationSyntax>(signature);
         }
 
         /// <summary>
@@ -195,31 +228,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
-        /// </summary>
-        public static ConstructorDeclarationSyntax FindConstructorDeclaration(this SyntaxTree tree, string signature)
-        {
-            foreach (var ctor in tree.GetRoot().DescendantNodes().OfType<ConstructorDeclarationSyntax>())
-            {
-                if (ctor.ToFullString().Contains(signature))
-                {
-                    return ctor;
-                }
-            }
-
-            throw new InvalidOperationException($"The tree does not contain an {typeof(ConstructorDeclarationSyntax).Name} matching {signature}");
-        }
-
-        /// <summary>
-        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
-        /// </summary>
-        [Obsolete("Use FindConstructorDeclaration")]
-        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
-        {
-            return FindConstructorDeclaration(tree, signature);
-        }
-
-        /// <summary>
         /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
         /// </summary>
         /// <typeparam name="T">The type of the node to find.</typeparam>
@@ -255,6 +263,20 @@ namespace Gu.Roslyn.Asserts
                 if (nodeText == code)
                 {
                     return node;
+                }
+
+                if (code.Contains(nodeText))
+                {
+                    var parent = node.Parent;
+                    while (parent != null)
+                    {
+                        if (parent.ToFullString() == code)
+                        {
+                            return node;
+                        }
+
+                        parent = parent.Parent;
+                    }
                 }
 
                 if (nodeText.Contains(code) ||
