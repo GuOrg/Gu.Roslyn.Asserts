@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
@@ -390,10 +390,10 @@ namespace RoslynSandbox
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
-                               "SA1309 \r\n" +
+                               "SA13090 \r\n" +
                                "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
-                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "SA13090 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDisabled>(code));

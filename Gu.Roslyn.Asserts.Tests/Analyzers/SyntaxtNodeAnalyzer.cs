@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
     internal class SyntaxNodeAnalyzer : DiagnosticAnalyzer
     {
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            "123",
+            "12345",
             "SyntaxNodeAnalyzer",
             "SyntaxNodeAnalyzer",
             "SyntaxNodeAnalyzer",
