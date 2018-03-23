@@ -1,3 +1,6 @@
+#### 2.2.9
+* BUGFIX: Find with whitespace.
+
 #### 2.2.8
 * FEATURE: Allow code to contain node code in Find methods.
 
