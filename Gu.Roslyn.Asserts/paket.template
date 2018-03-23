@@ -1,7 +1,7 @@
 ﻿type file
 id Gu.Roslyn.Asserts
 title Gu.Roslyn.Asserts
-version 1.2.7.0
+version 1.2.8.0
 authors Johan Larsson
 owners Johan Larsson
 copyright Copyright Johan Larsson 2017
@@ -14,7 +14,7 @@ licenseUrl http://opensource.org/licenses/MIT
 tags Roslyn Diagnostic Analyzer Test
 
 releaseNotes
-  BUGFIXES: TryFindInvocation when argument is invocation.
+  FEATURE: Allow code to contain node code in Find methods.
 
 dependencies
   framework: net452
