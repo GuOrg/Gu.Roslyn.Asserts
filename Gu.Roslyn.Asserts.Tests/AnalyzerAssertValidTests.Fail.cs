@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
@@ -52,7 +52,7 @@ namespace RoslynSandbox
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
-                               "SA1309 Field \'_value\' must not begin with an underscore\r\n" +
+                               "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value = 1;\r\n";
 
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(code));
@@ -181,8 +181,8 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
-            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
             public void ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
                 var csproj = CodeFactory.FindProjectFile(fileName);
@@ -201,8 +201,8 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
-            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
+            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
             public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
                 var sln = CodeFactory.CreateSolution(CodeFactory.FindProjectFile(fileName), new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
