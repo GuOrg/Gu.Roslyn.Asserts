@@ -1,3 +1,6 @@
+#### 1.2.7
+* BUGFIXES: TryFindInvocation when argument is invocation.
+
 #### 1.2.6
 * BUGFIXES: TryFind methods.
 
