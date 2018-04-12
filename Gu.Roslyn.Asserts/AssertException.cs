@@ -5,6 +5,7 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// Thrown when an assertion failed.
     /// </summary>
+    [Serializable]
     public class AssertException : Exception
     {
         private static Type exceptionType;

@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.XUnit
+namespace Gu.Roslyn.Asserts.XUnit
 {
     using Xunit;
 
