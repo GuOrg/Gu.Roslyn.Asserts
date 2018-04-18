@@ -1,7 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.IO;
@@ -14,8 +13,6 @@ namespace Gu.Roslyn.Asserts
 
     public static class ProjectFile
     {
-        private static readonly ConcurrentDictionary<string, MetadataReference> Gac = new ConcurrentDictionary<string, MetadataReference>();
-
         /// <summary>
         /// Searches parent directories for <paramref name="dllFile"/>
         /// </summary>
@@ -212,21 +209,9 @@ namespace Gu.Roslyn.Asserts
                         {
                             yield return MetadataReference.CreateFromFile(fileName);
                         }
-                        else if (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Microsoft.NET\\assembly") is string dir &&
-                                 Directory.Exists(dir))
+                        else if (Gac.TryGet(include, out var reference))
                         {
-                            var gacReference = Gac.GetOrAdd(
-                                include,
-                                x =>
-                                {
-                                    var file = Directory.EnumerateFiles(dir, $"{x}.dll", SearchOption.AllDirectories)
-                                                    .FirstOrDefault();
-                                    return file != null ? MetadataReference.CreateFromFile(file) : null;
-                                });
-                            if (gacReference != null)
-                            {
-                                yield return gacReference;
-                            }
+                            yield return reference;
                         }
                     }
                 }
