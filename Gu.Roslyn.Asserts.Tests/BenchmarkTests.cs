@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@
     public class BenchmarkTests
     {
         private static readonly Solution SolutionWithClassLibrary1 = CodeFactory.CreateSolution(
-            CodeFactory.FindProjectFile("ClassLibrary1.csproj"),
+            ProjectFile.Find("ClassLibrary1.csproj"),
             MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
 
         [Test]
@@ -20,7 +20,7 @@
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(
-                CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"),
+                SolutionFile.Find("Gu.Roslyn.Asserts.sln"),
                 MetadataReferences.Transitive(typeof(BenchmarkTests).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln, analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
@@ -36,7 +36,7 @@
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(
-                CodeFactory.FindProjectFile("Gu.Roslyn.Asserts.csproj"),
+                ProjectFile.Find("Gu.Roslyn.Asserts.csproj"),
                 MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
             var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);

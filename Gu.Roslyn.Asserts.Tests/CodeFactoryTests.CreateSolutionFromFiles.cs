@@ -1,4 +1,4 @@
-﻿// ReSharper disable PossibleNullReferenceException
+// ReSharper disable PossibleNullReferenceException
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromProjectFile()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile(ExecutingAssemblyDll, out var projectFile));
+                Assert.AreEqual(true, ProjectFile.TryFind(ExecutingAssemblyDll, out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromWpfApp1()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("WpfApp1.csproj", out var projectFile));
+                Assert.AreEqual(true, ProjectFile.TryFind("WpfApp1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -76,7 +76,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromClassLibrary1()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("ClassLibrary1.csproj", out var projectFile));
+                Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -103,7 +103,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromClassLibrary2()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("ClassLibrary2.csproj", out var projectFile));
+                Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary2.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -128,7 +128,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromSolutionFile()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var solutionFile));
+                Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var solution = CodeFactory.CreateSolution(
                     solutionFile,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
@@ -188,7 +188,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionWithTwoAnalyzersReportingSameDiagnostic()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("ClassLibrary1.csproj", out var projectFile));
+                Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
                     new[] { new DummyAnalyzer(ID1234.Descriptor), new DummyAnalyzer(ID1234.Descriptor) },

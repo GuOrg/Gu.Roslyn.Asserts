@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public async Task AnalyzeProjectFile()
         {
-            Assert.AreEqual(true, CodeFactory.TryFindProjectFile("Gu.Roslyn.Asserts.csproj", out FileInfo projectFile));
+            Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out FileInfo projectFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences)
                                            .ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public async Task AnalyzeSolutionFile()
         {
-            Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
                                            .ConfigureAwait(false);
             var expected = new[]

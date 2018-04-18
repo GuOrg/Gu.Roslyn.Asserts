@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 // ReSharper disable AssignNullToNotNullAttribute
 namespace Gu.Roslyn.Asserts.Tests
 {
@@ -27,7 +27,7 @@ namespace RoslynSandbox
             [Test]
             public void ProjectFileNoErrorAnalyzer()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindProjectFile("Gu.Roslyn.Asserts.csproj", out var csproj));
+                Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out var csproj));
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(csproj);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
                 AnalyzerAssert.Valid(new NoErrorAnalyzer(), csproj);
@@ -36,7 +36,7 @@ namespace RoslynSandbox
             [Test]
             public void SolutionFileNoErrorAnalyzer()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var sln));
+                Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var sln));
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(sln);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
                 AnalyzerAssert.Valid(new NoErrorAnalyzer(), sln);
@@ -45,7 +45,7 @@ namespace RoslynSandbox
             [Test]
             public void SolutionNoErrorAnalyzer()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var sln));
+                Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var sln));
                 var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, AnalyzerAssert.MetadataReferences);
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(solution);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), solution);

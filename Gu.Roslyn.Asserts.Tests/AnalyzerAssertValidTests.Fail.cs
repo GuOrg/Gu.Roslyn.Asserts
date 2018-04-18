@@ -185,7 +185,7 @@ namespace Project2
             [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
             public void ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
-                var csproj = CodeFactory.FindProjectFile(fileName);
+                var csproj = ProjectFile.Find(fileName);
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
                 Assert.AreEqual(expected, exception.Message);
 
@@ -205,7 +205,7 @@ namespace Project2
             [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
             public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
-                var sln = CodeFactory.CreateSolution(CodeFactory.FindProjectFile(fileName), new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
+                var sln = CodeFactory.CreateSolution(ProjectFile.Find(fileName), new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
                 Assert.AreEqual(expected, exception.Message);
 
