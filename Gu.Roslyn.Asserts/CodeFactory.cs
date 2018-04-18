@@ -411,34 +411,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="assembly">The assembly</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFindSolutionFile(Assembly assembly, out FileInfo sln)
-        {
-            if (assembly?.CodeBase == null)
-            {
-                sln = null;
-                return false;
-            }
-
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            return TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
-        }
+        [Obsolete("Moved to SolutionFile.TryFind")]
+        public static bool TryFindSolutionFile(Assembly assembly, out FileInfo sln) => SolutionFile.TryFind(assembly, out sln);
 
         /// <summary>
         /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
         /// </summary>
         /// <param name="name">The assembly</param>
         /// <returns>The solution file.</returns>
-        public static FileInfo FindSolutionFile(string name)
-        {
-            var assembly = Assembly.GetCallingAssembly();
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            if (TryFindFileInParentDirectory(dll.Directory, name, out var sln))
-            {
-                return sln;
-            }
-
-            throw new InvalidOperationException("Did not find a file named: " + name);
-        }
+        [Obsolete("Moved to SolutionFile.Find")]
+        public static FileInfo FindSolutionFile(string name) => SolutionFile.Find(name);
 
         /// <summary>
         /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
@@ -446,12 +428,8 @@ namespace Gu.Roslyn.Asserts
         /// <param name="name">The assembly</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFindSolutionFile(string name, out FileInfo sln)
-        {
-            var assembly = Assembly.GetCallingAssembly();
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            return TryFindFileInParentDirectory(dll.Directory, name, out sln);
-        }
+        [Obsolete("Moved to SolutionFile.TryFind")]
+        public static bool TryFindSolutionFile(string name, out FileInfo sln) => SolutionFile.TryFind(name, out sln);
 
         /// <summary>
         /// Searches parent directories for <paramref name="dllFile"/>

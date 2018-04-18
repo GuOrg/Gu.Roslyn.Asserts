@@ -1,4 +1,4 @@
-﻿// ReSharper disable AssignNullToNotNullAttribute
+// ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable PossibleNullReferenceException
 namespace Gu.Roslyn.Asserts.Tests
 {
@@ -12,15 +12,6 @@ namespace Gu.Roslyn.Asserts.Tests
         public class FindFiles
         {
             private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
-
-            [Test]
-            public void FindSolutionFile()
-            {
-                Assert.AreEqual(true, CodeFactory.TryFindSolutionFile("Gu.Roslyn.Asserts.sln", out var sln));
-                Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
-                sln = CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln");
-                Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
-            }
 
             [Test]
             public void TryFindProjectFileInParentDirectory()
