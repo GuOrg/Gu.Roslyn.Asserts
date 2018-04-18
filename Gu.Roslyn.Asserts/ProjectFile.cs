@@ -1,6 +1,7 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.IO;
@@ -13,6 +14,8 @@ namespace Gu.Roslyn.Asserts
 
     public static class ProjectFile
     {
+        private static readonly ConcurrentDictionary<string, MetadataReference> Gac = new ConcurrentDictionary<string, MetadataReference>();
+
         /// <summary>
         /// Searches parent directories for <paramref name="dllFile"/>
         /// </summary>
@@ -124,12 +127,13 @@ namespace Gu.Roslyn.Asserts
                 name,
                 LanguageNames.CSharp,
                 csproj.FullName,
-                documents: GetDocuments());
+                documents: GetDocuments(),
+                metadataReferences: GetMetadataReferences());
 
+            bool IsSdk() => Regex.IsMatch(xml, @"<TargetFrameworks?\b");
             IEnumerable<DocumentInfo> GetDocuments()
             {
-                // Is Sdk project
-                if (Regex.IsMatch(xml, @"<TargetFrameworks?\b"))
+                if (IsSdk())
                 {
                     foreach (var csFile in csproj.Directory.EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
                     {
@@ -178,6 +182,54 @@ namespace Gu.Roslyn.Asserts
                     filePath: file.FullName,
                     isGenerated: file.Name.EndsWith(".g.cs"),
                     loader: new FileTextLoader(file.FullName, Encoding.UTF8));
+            }
+
+            IEnumerable<MetadataReference> GetMetadataReferences()
+            {
+                if (IsSdk())
+                {
+                }
+                else
+                {
+                    var compiles = xdoc.Descendants(XName.Get("Reference", "http://schemas.microsoft.com/developer/msbuild/2003"))
+                                       .ToArray();
+                    if (compiles.Length == 0)
+                    {
+                        throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
+                    }
+
+                    foreach (var compile in compiles)
+                    {
+                        var include = compile.Attribute("Include")?.Value;
+                        if (include == null)
+                        {
+                            throw new InvalidOperationException("Parsing failed, no Include found.");
+                        }
+
+                        if (include.Contains("\\") &&
+                            Path.Combine(csproj.Directory.FullName, include) is string fileName &&
+                            File.Exists(fileName))
+                        {
+                            yield return MetadataReference.CreateFromFile(fileName);
+                        }
+                        else if (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Microsoft.NET\\assembly") is string dir &&
+                                 Directory.Exists(dir))
+                        {
+                            var gacReference = Gac.GetOrAdd(
+                                include,
+                                x =>
+                                {
+                                    var file = Directory.EnumerateFiles(dir, $"{x}.dll", SearchOption.AllDirectories)
+                                                    .FirstOrDefault();
+                                    return file != null ? MetadataReference.CreateFromFile(file) : null;
+                                });
+                            if (gacReference != null)
+                            {
+                                yield return gacReference;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

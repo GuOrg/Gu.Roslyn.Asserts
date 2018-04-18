@@ -343,8 +343,12 @@ namespace Gu.Roslyn.Asserts
             {
                 var projectInfo = ProjectFile.ParseInfo(code);
                 return EmptySolution.AddProject(projectInfo)
-                                   .WithProjectCompilationOptions(projectInfo.Id, compilationOptions)
-                                   .AddMetadataReferences(projectInfo.Id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                                    .WithProjectCompilationOptions(
+                                        projectInfo.Id,
+                                        compilationOptions)
+                                    .AddMetadataReferences(
+                                        projectInfo.Id,
+                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
             }
 
             if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
@@ -352,11 +356,15 @@ namespace Gu.Roslyn.Asserts
                 var solutionInfo = SolutionFile.ParseInfo(code);
                 var solution = EmptySolution;
 
-                foreach (var project in solutionInfo.Projects)
+                foreach (var projectInfo in solutionInfo.Projects)
                 {
-                    solution = solution.AddProject(project)
-                                       .WithProjectCompilationOptions(project.Id, compilationOptions)
-                                       .AddMetadataReferences(project.Id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                    solution = solution.AddProject(projectInfo)
+                                       .WithProjectCompilationOptions(
+                                           projectInfo.Id,
+                                           compilationOptions)
+                                       .AddMetadataReferences(
+                                           projectInfo.Id,
+                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
                 }
 
                 return solution;
