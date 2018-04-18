@@ -437,58 +437,25 @@ namespace Gu.Roslyn.Asserts
         /// <param name="dllFile">Ex Foo.dll</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFindProjectFile(FileInfo dllFile, out FileInfo result)
-        {
-            result = null;
-            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
-            {
-                var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";
-                //// ReSharper disable once PossibleNullReferenceException
-                result = sln.Directory.EnumerateFiles(projectFileName, SearchOption.AllDirectories).FirstOrDefault();
-            }
-
-            return result != null;
-        }
+        [Obsolete("Moved to ProjectFile.TryFind")]
+        public static bool TryFindProjectFile(FileInfo dllFile, out FileInfo result) => ProjectFile.TryFind(dllFile, out result);
 
         /// <summary>
-        /// Searches parent directories for <paramref name="projectFile"/>
+        /// Searches parent directories for <paramref name="name"/>
         /// </summary>
-        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <param name="name">Ex Foo.csproj</param>
         /// <returns>The project file.</returns>
-        public static FileInfo FindProjectFile(string projectFile)
-        {
-            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
-            {
-                // ReSharper disable once PossibleNullReferenceException
-                var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
-                if (result == null)
-                {
-                    throw new InvalidOperationException("Did not find a file named: " + projectFile);
-                }
-
-                return result;
-            }
-
-            throw new InvalidOperationException("Did not find a sln for: " + Assembly.GetCallingAssembly());
-        }
+        [Obsolete("Moved to ProjectFile.Find")]
+        public static FileInfo FindProjectFile(string name) => ProjectFile.Find(name);
 
         /// <summary>
-        /// Searches parent directories for <paramref name="projectFile"/>
+        /// Searches parent directories for <paramref name="name"/>
         /// </summary>
-        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <param name="name">Ex Foo.csproj</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFindProjectFile(string projectFile, out FileInfo result)
-        {
-            result = null;
-            if (TryFindSolutionFile(Assembly.GetCallingAssembly(), out var sln))
-            {
-                // ReSharper disable once PossibleNullReferenceException
-                result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
-            }
-
-            return result != null;
-        }
+        [Obsolete("Moved to ProjectFile.TryFind")]
+        public static bool TryFindProjectFile(string name, out FileInfo result) => ProjectFile.TryFind(name, out result);
 
         /// <summary>
         /// Searches parent directories for <paramref name="fileName"/>
