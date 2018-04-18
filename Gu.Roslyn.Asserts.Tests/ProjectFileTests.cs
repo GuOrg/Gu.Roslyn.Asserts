@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using NUnit.Framework;
 
@@ -29,6 +30,24 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             var projectFile = ProjectFile.Find(name);
             Assert.AreEqual(name, projectFile.Name);
+        }
+
+        [Test]
+        public void ParseInfo()
+        {
+            var file = ProjectFile.Find("ClassLibrary1.csproj");
+            var csproj = ProjectFile.ParseInfo(file);
+            var expected = new[]
+                           {
+                               "AllowCompilationErrors.cs",
+                               "ClassLibrary1Class1.cs",
+                               "AssemblyInfo.cs"
+                           };
+            CollectionAssert.AreEquivalent(expected, csproj.Documents.Select(x => x.Name));
+            foreach (var document in csproj.Documents)
+            {
+                Assert.AreEqual(true, File.Exists(document.FilePath));
+            }
         }
     }
 }

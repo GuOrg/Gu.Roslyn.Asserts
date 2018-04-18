@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public async Task AnalyzeSolutionFile()
         {
-            Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out FileInfo solutionFile));
+            var solutionFile = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
                                            .ConfigureAwait(false);
             var expected = new[]
@@ -30,7 +30,13 @@ namespace Gu.Roslyn.Asserts.Tests
                                "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
                                "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
                            };
-            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(x => x.ToString()));
+            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
+        }
+
+        private static string SkipDirectory(Diagnostic diagnostic)
+        {
+            var text = diagnostic.ToString();
+            return text.Substring(text.LastIndexOf('\\') + 1);
         }
     }
 }

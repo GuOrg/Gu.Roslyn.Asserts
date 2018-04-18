@@ -173,9 +173,8 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public void CreateSolutionFromSolutionFileAddsDependencies()
             {
-                Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(ExecutingAssemblyDll.Directory, "Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var sln = CodeFactory.CreateSolution(
-                    solutionFile,
+                    SolutionFile.Find("Gu.Roslyn.Asserts.sln"),
                     new[] { new FieldNameMustNotBeginWithUnderscore() },
                     CreateMetadataReferences(typeof(object)));
                 var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");

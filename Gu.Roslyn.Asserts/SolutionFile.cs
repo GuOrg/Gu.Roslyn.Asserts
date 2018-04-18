@@ -1,8 +1,12 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Collections.Immutable;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
+    using System.Text.RegularExpressions;
+    using Microsoft.CodeAnalysis;
 
     public static class SolutionFile
     {
@@ -52,6 +56,25 @@ namespace Gu.Roslyn.Asserts
             }
 
             throw new InvalidOperationException("Did not find a file named: " + name);
+        }
+
+        public static SolutionInfo ParseInfo(FileInfo sln)
+        {
+            var contents = File.ReadAllText(sln.FullName);
+            var builder = ImmutableDictionary.CreateBuilder<ProjectId, FileInfo>();
+            foreach (Match match in Regex.Matches(contents, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
+            {
+                //// ReSharper disable once AssignNullToNotNullAttribute
+                var projectFile = new FileInfo(Path.Combine(sln.DirectoryName, match.Groups["path"].Value));
+                builder.Add(ProjectId.CreateNewId(projectFile.FullName), projectFile);
+            }
+
+            ImmutableDictionary<ProjectId, FileInfo> idFileMap = builder.ToImmutable();
+            return SolutionInfo.Create(
+                SolutionId.CreateNewId(sln.FullName),
+                VersionStamp.Create(sln.LastWriteTimeUtc),
+                sln.FullName,
+                idFileMap.Keys.Select(x => ProjectFile.ParseInfo(x, idFileMap)));
         }
     }
 }
