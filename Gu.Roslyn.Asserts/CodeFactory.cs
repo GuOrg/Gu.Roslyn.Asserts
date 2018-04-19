@@ -207,6 +207,22 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
+        internal static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressedDiagnostics)
+        {
+            AnalyzerAssert.AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedDiagnostic.Id);
+            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptor, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedDiagnostic.Id)));
+        }
+
+        internal static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string> suppressedDiagnostics)
+        {
+            AnalyzerAssert.AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
+            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
+        }
+
         /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// </summary>

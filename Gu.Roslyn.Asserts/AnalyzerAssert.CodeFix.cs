@@ -112,14 +112,14 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -142,14 +142,14 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
-                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                 MetadataReferences,
                 allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -169,15 +169,15 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -197,15 +197,15 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     fixedCode,
                     fixTitle,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -253,14 +253,14 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
-                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                 MetadataReferences,
                 allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -306,14 +306,14 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             CodeFixAsync(
                 analyzer,
                 fix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
                 fixTitle,
-                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                 MetadataReferences,
                 allowCompilationErrors)
                 .IgnoreReturnValue();
@@ -335,7 +335,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, string fixedCode, string fixTitle, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
         {
-            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReferences).ConfigureAwait(false);
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))

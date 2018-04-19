@@ -29,13 +29,13 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                     new[] { fixedCode },
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -60,13 +60,13 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -91,13 +91,13 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     fixedCode,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -120,13 +120,13 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string codeWithErrorsIndicated, string fixedCode, IReadOnlyList<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                     MergeFixedCodeWithErrorsIndicated(new[] { codeWithErrorsIndicated }, fixedCode),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     metadataReferences ?? MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -149,13 +149,13 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, IReadOnlyList<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     metadataReferences ?? MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -178,13 +178,13 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             FixAllAsync(
                     analyzer,
                     codeFix,
                     DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                     fixedCode,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     metadataReferences ?? MetadataReferences,
                     fixTitle,
                     allowCompilationErrors)
@@ -208,13 +208,13 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             return FixAllAsync(
                 analyzer,
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 fixedCode,
-                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                 metadataReference,
                 fixTitle,
                 allowCompilationErrors);
@@ -860,7 +860,7 @@ namespace Gu.Roslyn.Asserts
 
         private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
         {
-            AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference).ConfigureAwait(false);
 
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
@@ -935,7 +935,8 @@ namespace Gu.Roslyn.Asserts
 
             if (!found)
             {
-                throw AssertException.Create("Expected one with errors indicated.");
+                throw AssertException.Create("Failed merging expected one class to have same namespace and class name as fixedcode.\r\n" +
+                                             "Try specfiying a list with all fixed code.");
             }
 
             return merged;

@@ -75,11 +75,11 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();
@@ -94,11 +94,11 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();
@@ -112,11 +112,11 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();
@@ -132,11 +132,11 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();
@@ -151,11 +151,11 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();
@@ -169,11 +169,11 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
+            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
+                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
                 .IgnoreReturnValue();

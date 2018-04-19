@@ -63,10 +63,15 @@ namespace Gu.Roslyn.Asserts
             ResetSuppressedDiagnostics();
         }
 
-        private static void AssertAnalyzerSupportsExpectedDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, out DiagnosticDescriptor descriptor, out IReadOnlyList<string> suppressedDiagnostics)
+        /// <summary>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostic"/>
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
+        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/></param>
+        public static void AnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
-            var descriptors = analyzer.SupportedDiagnostics.Where(x => x.Id == expectedDiagnostic.Id).ToArray();
-            if (descriptors.Length == 0)
+            var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedDiagnostic.Id);
+            if (descriptors == 0)
             {
                 var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
@@ -74,34 +79,24 @@ namespace Gu.Roslyn.Asserts
                 throw AssertException.Create(message);
             }
 
-            if (descriptors.Length > 1)
+            if (descriptors > 1)
             {
                 var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedDiagnostic.Id}";
                 throw AssertException.Create(message);
             }
-
-            suppressedDiagnostics = analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedDiagnostic.Id).ToArray();
-            descriptor = descriptors[0];
         }
 
-        private static void AssertAnalyzerSupportsExpectedDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, out IReadOnlyList<DiagnosticDescriptor> descriptors, out IReadOnlyList<string> suppressed)
+        internal static void AnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
         {
-            var tempDescriptors = new List<DiagnosticDescriptor>();
-            var tempSuppressed = new List<string>();
             foreach (var expectedDiagnostic in expectedDiagnostics)
             {
-                AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-                tempDescriptors.Add(descriptor);
-                tempSuppressed.AddRange(suppressedDiagnostics);
+                AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             }
-
-            descriptors = tempDescriptors;
-            suppressed = tempSuppressed.Distinct().Except(descriptors.Select(x => x.Id)).ToArray();
         }
 
-        private static void AssertCodeFixCanFixDiagnosticsFromAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        private static void CodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
             {
@@ -114,20 +109,35 @@ namespace Gu.Roslyn.Asserts
 
         private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)
         {
-            var index = 0;
+            int actualCount = actual.Projects.SelectMany(x => x.Documents).Count();
+            if (expected.Count != actualCount)
+            {
+                throw AssertException.Create($"Expected {expected.Count} documents the fixed solution has {actualCount} documents.");
+            }
+
             foreach (var project in actual.Projects)
             {
                 foreach (var document in project.Documents)
                 {
                     var fixedSource = await CodeReader.GetStringFromDocumentAsync(document, Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
-                    if (expected.Count <= index)
-                    {
-                        throw AssertException.Create("The fixed code has more documents than expected");
-                    }
-
-                    CodeAssert.AreEqual(expected[index], fixedSource, messageHeader);
-                    index++;
+                    CodeAssert.AreEqual(FindExpected(fixedSource), fixedSource, messageHeader);
                 }
+            }
+
+            string FindExpected(string fixedSource)
+            {
+                var fixedNamespace = CodeReader.Namespace(fixedSource);
+                var fixedFileName = CodeReader.FileName(fixedSource);
+                foreach (var candidate in expected)
+                {
+                    if (CodeReader.Namespace(candidate) == fixedNamespace &&
+                        CodeReader.FileName(candidate) == fixedFileName)
+                    {
+                        return candidate;
+                    }
+                }
+
+                throw AssertException.Create($"The fixed solution contains a document {fixedFileName} in namespace {fixedNamespace} that is not in the expected documents.");
             }
         }
 
