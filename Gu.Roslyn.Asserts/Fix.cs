@@ -69,6 +69,7 @@ namespace Gu.Roslyn.Asserts
         internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, string fixTitle = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, codeFix).ConfigureAwait(false);
+            fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
             var fixedSolution = solution;
             int count;
             do
@@ -81,6 +82,7 @@ namespace Gu.Roslyn.Asserts
 
                 fixedSolution = await ApplyAsync(fixedSolution, codeFix, fixable[0], fixTitle, cancellationToken).ConfigureAwait(false);
                 fixable = await Analyze.GetFixableDiagnosticsAsync(fixedSolution, analyzer, codeFix).ConfigureAwait(false);
+                fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
             }
             while (fixable.Count < count);
             return fixedSolution;
