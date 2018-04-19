@@ -912,14 +912,16 @@ namespace Gu.Roslyn.Asserts
         {
             var merged = new List<string>(codes.Count);
             var found = false;
+            var @namespace = CodeReader.Namespace(fixedCode);
             var fileName = CodeReader.FileName(fixedCode);
             foreach (var code in codes)
             {
-                if (CodeReader.FileName(code) == fileName)
+                if (CodeReader.FileName(code) == fileName &&
+                    CodeReader.Namespace(code) == @namespace)
                 {
                     if (found)
                     {
-                        throw AssertException.Create("Expected only one with errors indicated.");
+                        throw AssertException.Create("Expected unique class names.");
                     }
 
                     merged.Add(fixedCode);
