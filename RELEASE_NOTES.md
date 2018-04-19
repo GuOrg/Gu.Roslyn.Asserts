@@ -1,3 +1,11 @@
+#### 2.3.0
+* FEATURE: Limited support for resolving references when parsing project & sln files.
+* FEATURE: Add more metadata when parsing files.
+* FEATURE: Expose fix methods.
+* BUGFIX: The project already transitively references the target project. #53
+* BUGFIX: Apply fixes one-by-one in document order. #51
+* FEATURE: More overloads to CodeFix & FixAll. #50
+
 #### 2.2.9
 * BUGFIX: Find with whitespace.
 

@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
@@ -122,7 +122,7 @@ namespace RoslynSandbox
             var actual = "\r\na\r\n\r\n";
 
             var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch at end of file AssemblyInfo.cs\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
+            var expected = "Mismatch at end of file Unknown.cs\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 
