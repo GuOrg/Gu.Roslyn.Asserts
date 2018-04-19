@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts
             var analyzer = new TAnalyzer();
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Gu.Roslyn.Asserts
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Gu.Roslyn.Asserts
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            AssertNoDiagnostics(code, diagnostics);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -389,20 +389,6 @@ namespace Gu.Roslyn.Asserts
                 foreach (var diagnostic in diagnostics.SelectMany(x => x))
                 {
                     builder.AppendLine(diagnostic.ToErrorString());
-                }
-
-                throw AssertException.Create(builder.Return());
-            }
-        }
-
-        private static void AssertNoDiagnostics(IReadOnlyList<string> code, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
-        {
-            if (diagnostics.SelectMany(x => x).Any())
-            {
-                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
-                foreach (var diagnostic in diagnostics.SelectMany(x => x))
-                {
-                    builder.AppendLine(diagnostic.ToString(code));
                 }
 
                 throw AssertException.Create(builder.Return());

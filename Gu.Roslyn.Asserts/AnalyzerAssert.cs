@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -141,8 +141,7 @@
                 errorBuilder.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
-                    var errorInfo = await introducedDiagnostic.ToStringAsync(fixedSolution).ConfigureAwait(false);
-                    errorBuilder.AppendLine($"{errorInfo}");
+                    errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
                 errorBuilder.AppendLine("First source file with error is:");

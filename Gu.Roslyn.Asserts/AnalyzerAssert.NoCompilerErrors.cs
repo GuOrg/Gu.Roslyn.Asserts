@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -68,8 +68,7 @@
                 error.AppendLine($"Found error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
-                    var errorInfo = await introducedDiagnostic.ToStringAsync(solution).ConfigureAwait(false);
-                    error.AppendLine($"{errorInfo}");
+                    error.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
                 throw AssertException.Create(StringBuilderPool.Return(error));

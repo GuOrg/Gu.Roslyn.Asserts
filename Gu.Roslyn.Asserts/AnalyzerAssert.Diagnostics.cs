@@ -263,7 +263,7 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 var actual = missingActual[i];
-                error.AppendLine(actual.ToString(sources.Code));
+                error.AppendLine(actual.ToErrorString());
             }
 
             throw AssertException.Create(StringBuilderPool.Return(error));
