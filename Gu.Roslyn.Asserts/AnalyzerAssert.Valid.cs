@@ -35,13 +35,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(Type analyzerType, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -51,13 +47,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -67,13 +59,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -83,13 +71,11 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            return ValidAsync(
-                analyzer,
-                code,
-                CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -102,9 +88,8 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, compilationOptions, metadataReferences)
-                                           .ConfigureAwait(false);
-
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer);
             AssertNoDiagnostics(code, diagnostics);
         }
 
@@ -117,13 +102,9 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -137,13 +118,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(Type analyzerType, FileInfo code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -156,13 +133,9 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code)
         {
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -176,13 +149,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -195,13 +164,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -213,13 +178,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -233,13 +194,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -252,13 +209,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -270,13 +223,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             AssertAnalyzerSupportsExpectedDiagnostics(analyzer, expectedDiagnostics, out var descriptors, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptors, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -288,13 +237,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -305,14 +250,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            return ValidAsync(
-                analyzer,
-                code,
-                CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -326,13 +269,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -348,13 +287,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -369,13 +304,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
         {
             AssertAnalyzerSupportsExpectedDiagnostic(analyzer, expectedDiagnostic, out var descriptor, out var suppressedDiagnostics);
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(descriptor, SuppressedDiagnostics.Concat(suppressedDiagnostics)), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -387,11 +318,8 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            ValidAsync(
-                    analyzer,
-                    solution)
-                .GetAwaiter()
-                .GetResult();
+            var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -402,11 +330,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(Type analyzerType, Solution solution)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            ValidAsync(
-                    analyzer,
-                    solution)
-                .GetAwaiter()
-                .GetResult();
+            var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -416,11 +341,8 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
         {
-            ValidAsync(
-                    analyzer,
-                    solution)
-                .GetAwaiter()
-                .GetResult();
+            var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
+            AssertNoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -456,9 +378,20 @@ namespace Gu.Roslyn.Asserts
             var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, compilationOptions, metadataReferences)
                                            .ConfigureAwait(false);
 
+            AssertNoDiagnostics(diagnostics);
+        }
+
+        private static void AssertNoDiagnostics(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
+        {
             if (diagnostics.SelectMany(x => x).Any())
             {
-                throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
+                foreach (var diagnostic in diagnostics.SelectMany(x => x))
+                {
+                    builder.AppendLine(diagnostic.ToErrorString());
+                }
+
+                throw AssertException.Create(builder.Return());
             }
         }
 

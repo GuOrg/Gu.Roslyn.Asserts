@@ -181,20 +181,21 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
-            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
-            public void ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
+            [Test]
+            public void ClassLibrary1ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
-                var csproj = ProjectFile.Find(fileName);
+                var csproj = ProjectFile.Find("ClassLibrary1.csproj");
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
+                              $"  at line 7 and character 20 in file {csproj.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
-                var skip = csproj.Directory.FullName.Length + 1;
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                StringAssert.Contains(expected, exception.Message);
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                StringAssert.Contains(expected, exception.Message);
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                StringAssert.Contains(expected, exception.Message);
 
                 if (Throw)
                 {
@@ -202,25 +203,71 @@ namespace Project2
                 }
             }
 
-            [TestCase("ClassLibrary1.csproj", "ClassLibrary1Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
-            [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
-            public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
+            [Test]
+            public void ClassLibrary2ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
-                var csproj = ProjectFile.Find(fileName);
-                var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
-                var skip = csproj.Directory.FullName.Length + 1;
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                var csproj = ProjectFile.Find("ClassLibrary2.csproj");
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
+                               $"  at line 7 and character 20 in file {csproj.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
+                StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
+                StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
-                Assert.AreEqual(expected, exception.Message.Substring(skip));
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
+                StringAssert.Contains(expected, exception.Message);
 
                 if (Throw)
                 {
-                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln);
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
+                }
+            }
+
+            [Test]
+            public void ClassLibrary1SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            {
+                var csproj = ProjectFile.Find("ClassLibrary1.csproj");
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
+                               $"  at line 7 and character 20 in file {csproj.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
+                var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                if (Throw)
+                {
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
+                }
+            }
+
+            [Test]
+            public void ClassLibrary2SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            {
+                var csproj = ProjectFile.Find("ClassLibrary2.csproj");
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
+                               $"  at line 7 and character 20 in file {csproj.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
+                var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
+                StringAssert.Contains(expected, exception.Message);
+
+                if (Throw)
+                {
+                    AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
                 }
             }
 
@@ -275,10 +322,11 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code));
                 string expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
                                   "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
