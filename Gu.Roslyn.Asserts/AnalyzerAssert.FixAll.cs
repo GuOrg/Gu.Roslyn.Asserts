@@ -306,6 +306,87 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
+            FixAllAsync(
+                    analyzer,
+                    fix,
+                    DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
+                    new[] { fixedCode },
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
+            FixAllAsync(
+                    analyzer,
+                    fix,
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                    MergeFixedCode(code, fixedCode),
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAll(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
+            FixAllAsync(
+                    analyzer,
+                    fix,
+                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                    fixedCode,
+                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                    MetadataReferences,
+                    fixTitle,
+                    allowCompilationErrors)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
