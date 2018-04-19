@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts
             var match = Regex.Match(code, @"(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture);
             if (!match.Success)
             {
-                return "AssemblyInfo.cs";
+                return code.Contains("assembly:") ? "AssemblyInfo.cs" : "Unknown.cs";
             }
 
             var fileName = match.Groups["name"].Value.Trim('↓');
