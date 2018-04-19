@@ -11,17 +11,13 @@ namespace Gu.Roslyn.Asserts.Tests
 
     public class BenchmarkTests
     {
-        private static readonly Solution SolutionWithClassLibrary1 = CodeFactory.CreateSolution(
-            ProjectFile.Find("ClassLibrary1.csproj"),
-            MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
+        private static readonly Solution SolutionWithClassLibrary1 = CodeFactory.CreateSolution(ProjectFile.Find("ClassLibrary1.csproj"));
 
         [Test]
         public async Task Solution()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(
-                SolutionFile.Find("Gu.Roslyn.Asserts.sln"),
-                MetadataReferences.Transitive(typeof(BenchmarkTests).Assembly).ToArray());
+            var sln = CodeFactory.CreateSolution(SolutionFile.Find("Gu.Roslyn.Asserts.sln"));
             var benchmark = await Benchmark.CreateAsync(sln, analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
             CollectionAssert.AllItemsAreInstancesOfType(benchmark.SyntaxNodeActions.Select(x => x.Context.Node), typeof(FieldDeclarationSyntax));
@@ -35,9 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public async Task Project()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(
-                ProjectFile.Find("Gu.Roslyn.Asserts.csproj"),
-                MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
+            var sln = CodeFactory.CreateSolution(ProjectFile.Find("Gu.Roslyn.Asserts.csproj"));
             var benchmark = await Benchmark.CreateAsync(sln.Projects.Single(), analyzer).ConfigureAwait(false);
             CollectionAssert.IsNotEmpty(benchmark.SyntaxNodeActions);
             Assert.AreSame(analyzer, benchmark.Analyzer);

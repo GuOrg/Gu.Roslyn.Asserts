@@ -187,13 +187,14 @@ namespace Project2
             {
                 var csproj = ProjectFile.Find(fileName);
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
-                Assert.AreEqual(expected, exception.Message);
+                var skip = csproj.Directory.FullName.Length + 1;
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
-                Assert.AreEqual(expected, exception.Message);
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
-                Assert.AreEqual(expected, exception.Message);
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 if (Throw)
                 {
@@ -205,15 +206,17 @@ namespace Project2
             [TestCase("ClassLibrary2.csproj", "ClassLibrary2Class1.cs(8,21): warning SA13090: Field '_value' must not begin with an underscore")]
             public void SolutionFieldNameMustNotBeginWithUnderscoreDisabled(string fileName, string expected)
             {
-                var sln = CodeFactory.CreateSolution(ProjectFile.Find(fileName), new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
+                var csproj = ProjectFile.Find(fileName);
+                var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, AnalyzerAssert.MetadataReferences);
+                var skip = csproj.Directory.FullName.Length + 1;
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
-                Assert.AreEqual(expected, exception.Message);
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
-                Assert.AreEqual(expected, exception.Message);
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
-                Assert.AreEqual(expected, exception.Message);
+                Assert.AreEqual(expected, exception.Message.Substring(skip));
 
                 if (Throw)
                 {

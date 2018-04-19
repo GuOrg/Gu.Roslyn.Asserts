@@ -1,4 +1,4 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
+#pragma warning disable SA1600 // Elements must be documented
 namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
