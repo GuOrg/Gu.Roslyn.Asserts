@@ -1,7 +1,8 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -21,13 +22,9 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            ValidAsync(
-                    analyzer,
-                    code,
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences)
-                .GetAwaiter()
-                .GetResult();
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -105,23 +102,10 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(
-                                               analyzer,
-                                               code,
-                                               compilationOptions,
-                                               metadataReferences)
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, compilationOptions, metadataReferences)
                                            .ConfigureAwait(false);
 
-            if (diagnostics.SelectMany(x => x).Any())
-            {
-                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
-                foreach (var diagnostic in diagnostics.SelectMany(x => x))
-                {
-                    builder.AppendLine(diagnostic.ToString(code));
-                }
-
-                throw AssertException.Create(builder.Return());
-            }
+            AssertNoDiagnostics(code, diagnostics);
         }
 
         /// <summary>
@@ -475,6 +459,20 @@
             if (diagnostics.SelectMany(x => x).Any())
             {
                 throw AssertException.Create(string.Join(Environment.NewLine, diagnostics.SelectMany(x => x)));
+            }
+        }
+
+        private static void AssertNoDiagnostics(IReadOnlyList<string> code, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
+        {
+            if (diagnostics.SelectMany(x => x).Any())
+            {
+                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
+                foreach (var diagnostic in diagnostics.SelectMany(x => x))
+                {
+                    builder.AppendLine(diagnostic.ToString(code));
+                }
+
+                throw AssertException.Create(builder.Return());
             }
         }
     }

@@ -74,6 +74,21 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(sources, compilationOptions, metadataReferences);
+            return GetDiagnostics(sln, analyzer);
+        }
+
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="sources">The sources as strings.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(sources, compilationOptions, metadataReferences);
@@ -233,6 +248,17 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution, DiagnosticAnalyzer analyzer)
+        {
+            return GetDiagnosticsAsync(solution, analyzer).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="analyzer">The analyzer.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -256,6 +282,17 @@ namespace Gu.Roslyn.Asserts
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
+        {
+            return GetDiagnosticsAsync(project, analyzer).GetAwaiter().GetResult();
         }
 
         /// <summary>
