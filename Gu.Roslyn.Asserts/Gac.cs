@@ -10,6 +10,17 @@ namespace Gu.Roslyn.Asserts
         private static readonly Lazy<ConcurrentDictionary<string, FileInfo>> Cache = new Lazy<ConcurrentDictionary<string, FileInfo>>(Create);
         private static readonly ConcurrentDictionary<string, MetadataReference> Cachedreferences = new ConcurrentDictionary<string, MetadataReference>();
 
+        public static bool TryGet(string name, out MetadataReference metadataReference)
+        {
+            if (Cache.Value.TryGetValue(name, out var fileInfo))
+            {
+                metadataReference = Cachedreferences.GetOrAdd(fileInfo.FullName, x => MetadataReference.CreateFromFile(x));
+            }
+
+            metadataReference = null;
+            return false;
+        }
+
         private static ConcurrentDictionary<string, FileInfo> Create()
         {
             var gac = new ConcurrentDictionary<string, FileInfo>();
@@ -27,17 +38,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             return gac;
-        }
-
-        public static bool TryGet(string name, out MetadataReference metadataReference)
-        {
-            if (Cache.Value.TryGetValue(name, out var fileInfo))
-            {
-                metadataReference = Cachedreferences.GetOrAdd(fileInfo.FullName, x => MetadataReference.CreateFromFile(x));
-            }
-
-            metadataReference = null;
-            return false;
         }
     }
 }

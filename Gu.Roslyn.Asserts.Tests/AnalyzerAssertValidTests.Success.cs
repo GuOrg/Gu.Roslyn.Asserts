@@ -160,6 +160,31 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { expectedDiagnostic }, code);
                 AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), new[] { expectedDiagnostic }, code);
             }
+
+            [Test]
+            public void Issue53()
+            {
+                var resourcesCode = @"
+namespace RoslynSandbox.Properties
+{
+    public class Resources
+    {
+    }
+}";
+
+                var testCode = @"
+namespace RoslynSandbox
+{
+    using RoslynSandbox.Properties;
+
+    public class Foo
+    {
+    }
+}";
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(resourcesCode, testCode);
+                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), resourcesCode, testCode);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, testCode);
+            }
         }
     }
 }

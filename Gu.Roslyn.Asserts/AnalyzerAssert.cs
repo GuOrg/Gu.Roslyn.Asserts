@@ -117,9 +117,14 @@ namespace Gu.Roslyn.Asserts
             var index = 0;
             foreach (var project in actual.Projects)
             {
-                for (var i = 0; i < project.DocumentIds.Count; i++)
+                foreach (var document in project.Documents)
                 {
-                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(project.GetDocument(project.DocumentIds[i]), Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
+                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(document, Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
+                    if (expected.Count <= index)
+                    {
+                        throw AssertException.Create("The fixed code has more documents than expected");
+                    }
+
                     CodeAssert.AreEqual(expected[index], fixedSource, messageHeader);
                     index++;
                 }

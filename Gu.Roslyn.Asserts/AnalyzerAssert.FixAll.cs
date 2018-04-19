@@ -575,12 +575,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         public static async Task FixAllAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
-            var data = await CreateDiagnosticsMetadataAsync(
-                analyzer,
-                codeFix,
-                diagnosticsAndSources,
-                compilationOptions,
-                metadataReference);
+            var data = await CreateDiagnosticsMetadataAsync(analyzer, codeFix, diagnosticsAndSources, compilationOptions, metadataReference);
             await FixAllOneByOneAsync(analyzer, codeFix, fixedCode, fixTitle, allowCompilationErrors, data).ConfigureAwait(false);
 
             var fixAllProvider = codeFix.GetFixAllProvider();
@@ -866,8 +861,7 @@ namespace Gu.Roslyn.Asserts
         private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
         {
             AssertCodeFixCanFixDiagnosticsFromAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference)
-                .ConfigureAwait(false);
+            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference).ConfigureAwait(false);
 
             var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))

@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
     using NUnit.Framework;
@@ -43,7 +43,11 @@ namespace Project2
         private readonly int _value;
     }
 }";
-                var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                var sln = CodeFactory.CreateSolution(new[] { code1, code2 });
+                CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
+                Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+
+                sln = CodeFactory.CreateSolution(new[] { code2, code1 });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
                 Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
             }
@@ -143,7 +147,7 @@ namespace RoslynSandbox.Client
             public void CreateSolutionWithOneProject()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace RoslynSandbox.Core
 {
     public class Foo1
     {
@@ -164,6 +168,35 @@ namespace RoslynSandbox.Bar
                     var project = sln.Projects.Single();
                     Assert.AreEqual("RoslynSandbox", project.AssemblyName);
                     CollectionAssert.AreEquivalent(new[] { "Foo1.cs", "Foo2.cs" }, project.Documents.Select(x => x.Name));
+                }
+            }
+
+            [Test]
+            public void CreateSolutionWhenNestedNamespaces()
+            {
+                var resourcesCode = @"
+namespace RoslynSandbox.Properties
+{
+    public class Resources
+    {
+    }
+}";
+
+                var testCode = @"
+namespace RoslynSandbox
+{
+    using RoslynSandbox.Properties;
+
+    public class Foo
+    {
+    }
+}";
+                foreach (var sources in new[] { new[] { resourcesCode, testCode }, new[] { resourcesCode, testCode } })
+                {
+                    var sln = CodeFactory.CreateSolution(sources);
+                    var project = sln.Projects.Single();
+                    Assert.AreEqual("RoslynSandbox", project.AssemblyName);
+                    CollectionAssert.AreEquivalent(new[] { "Resources.cs", "Foo.cs" }, project.Documents.Select(x => x.Name));
                 }
             }
         }

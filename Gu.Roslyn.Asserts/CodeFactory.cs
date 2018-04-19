@@ -5,10 +5,12 @@ namespace Gu.Roslyn.Asserts
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
     /// A helper for creating projects and solutions from strings of code.
@@ -72,6 +74,18 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
@@ -81,6 +95,116 @@ namespace Gu.Roslyn.Asserts
         public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
             return CreateSolution(new[] { code }, analyzers, metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        {
+            var solutionInfo = SolutionInfo.Create(
+                SolutionId.CreateNewId("Test.sln"),
+                VersionStamp.Default,
+                projects: GetProjectInfos());
+            var solution = EmptySolution;
+            foreach (var projectInfo in solutionInfo.Projects)
+            {
+                solution = solution.AddProject(projectInfo.WithProjectReferences(FindReferences(projectInfo)));
+            }
+
+            return solution;
+
+            IEnumerable<ProjectInfo> GetProjectInfos()
+            {
+                var byNamespace = new SortedDictionary<string, List<string>>();
+                foreach (var document in code)
+                {
+                    var ns = CodeReader.Namespace(document);
+                    if (byNamespace.TryGetValue(ns, out var doc))
+                    {
+                        doc.Add(document);
+                    }
+                    else
+                    {
+                        byNamespace[ns] = new List<string> { document };
+                    }
+                }
+
+                var byProject = new SortedDictionary<string, List<KeyValuePair<string, List<string>>>>();
+                foreach (var kvp in byNamespace)
+                {
+                    var last = byProject.Keys.LastOrDefault();
+                    var ns = kvp.Key;
+                    if (last != null &&
+                        ns.Contains(last))
+                    {
+                        byProject[last].Add(kvp);
+                    }
+                    else
+                    {
+                        byProject.Add(ns, new List<KeyValuePair<string, List<string>>> { kvp });
+                    }
+                }
+
+                foreach (var kvp in byProject)
+                {
+                    var assemblyName = kvp.Key;
+                    var projectId = ProjectId.CreateNewId(assemblyName);
+                    yield return ProjectInfo.Create(
+                        projectId,
+                        VersionStamp.Default,
+                        assemblyName,
+                        assemblyName,
+                        LanguageNames.CSharp,
+                        compilationOptions: compilationOptions,
+                        metadataReferences: metadataReferences,
+                        documents: kvp.Value.SelectMany(x => x.Value)
+                                      .Select(
+                                          x =>
+                                          {
+                                              var documentName = CodeReader.FileName(x);
+                                              return DocumentInfo.Create(
+                                                  DocumentId.CreateNewId(projectId, documentName),
+                                                  documentName,
+                                                  sourceCodeKind: SourceCodeKind.Regular,
+                                                  loader: new StringLoader(x));
+                                          }));
+                }
+            }
+
+            IEnumerable<ProjectReference> FindReferences(ProjectInfo projectInfo)
+            {
+                var references = new List<ProjectReference>();
+                foreach (var other in solutionInfo.Projects.Where(x => x.Id != projectInfo.Id))
+                {
+                    if (projectInfo.Documents.Any(x => x.TextLoader is StringLoader stringLoader &&
+                                                 (stringLoader.Code.Contains($"using {other.Name};") ||
+                                                  stringLoader.Code.Contains($"{other.Name}."))))
+                    {
+                        references.Add(new ProjectReference(other.Id));
+                    }
+                }
+
+                return references;
+            }
         }
 
         /// <summary>
@@ -103,34 +227,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
-        {
-            return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/></returns>
         public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
             return CreateSolutionWithOneProject(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences = null)
-        {
-            return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
         }
 
         /// <summary>
@@ -153,83 +252,59 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            IReadOnlyList<ProjectReference> FindReferences(ProjectMetadata project, IEnumerable<ProjectMetadata> allProjects)
+            var projectInfo = GetProjectInfo();
+            return EmptySolution.AddProject(projectInfo);
+
+            ProjectInfo GetProjectInfo()
             {
-                var references = new List<ProjectReference>();
-                foreach (var projectMetadata in allProjects.Where(x => x.Id != project.Id))
+                string projectName = null;
+                foreach (var doc in code)
                 {
-                    if (project.Sources.Any(x => x.Code.Contains($"using {projectMetadata.Name}")) ||
-                        project.Sources.Any(x => x.Code.Contains($"{projectMetadata.Name}.")))
+                    if (projectName == null)
                     {
-                        references.Add(new ProjectReference(projectMetadata.Id));
+                        projectName = CodeReader.Namespace(doc);
+                    }
+                    else
+                    {
+                        var ns = CodeReader.Namespace(doc);
+                        int indexOf = ns.IndexOf('.');
+                        if (indexOf > 0)
+                        {
+                            ns = ns.Substring(0, indexOf);
+                        }
+
+                        if (ns.Length < projectName.Length)
+                        {
+                            projectName = ns;
+                        }
                     }
                 }
 
-                return references;
+                var projectId = ProjectId.CreateNewId(projectName);
+                return ProjectInfo.Create(
+                    projectId,
+                    VersionStamp.Default,
+                    projectName,
+                    projectName,
+                    LanguageNames.CSharp,
+                    metadataReferences: metadataReferences,
+                    compilationOptions: compilationOptions,
+                    documents: code.Select(
+                        x =>
+                        {
+                            var documentName = CodeReader.FileName(x);
+                            return DocumentInfo.Create(
+                                DocumentId.CreateNewId(projectId, documentName),
+                                documentName,
+                                sourceCodeKind: SourceCodeKind.Regular,
+                                loader: TextLoader.From(
+                                    TextAndVersion.Create(
+                                        SourceText.From(x, (Encoding)null, SourceHashAlgorithm.Sha1),
+                                        VersionStamp.Default)));
+                        }));
             }
-
-            var solution = EmptySolution;
-            var byNamespaces = code.Select(c => new SourceMetadata(c))
-                                   .GroupBy(c => c.Namespace)
-                                   .Select(x => new ProjectMetadata(x.Key, ProjectId.CreateNewId(x.Key), x.ToArray()))
-                                   .ToArray();
-
-            foreach (var project in byNamespaces)
-            {
-                var assemblyName = project.Name;
-                var id = project.Id;
-                solution = solution.AddProject(id, assemblyName, assemblyName, LanguageNames.CSharp)
-                                   .WithProjectCompilationOptions(id, compilationOptions)
-                                   .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-
-                foreach (var file in project.Sources)
-                {
-                    var documentId = DocumentId.CreateNewId(id);
-                    solution = solution.AddDocument(documentId, file.FileName, file.Code);
-                }
-            }
-
-            foreach (var project in byNamespaces)
-            {
-                var references = FindReferences(project, byNamespaces);
-                if (references.Any())
-                {
-                    solution = solution.AddProjectReferences(project.Id, references);
-                }
-            }
-
-            return solution;
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
-        {
-            var solution = EmptySolution;
-            var sources = code.Select(c => new SourceMetadata(c)).ToArray();
-            var assemblyName = sources.Where(x => !string.IsNullOrEmpty(x.Namespace))
-                                              .MinBy(x => x.Namespace.Length)
-                                              .Namespace;
-            var id = ProjectId.CreateNewId();
-            solution = solution.AddProject(id, assemblyName, assemblyName, LanguageNames.CSharp)
-                               .WithProjectCompilationOptions(id, compilationOptions)
-                               .AddMetadataReferences(id, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-
-            foreach (var file in sources)
-            {
-                var documentId = DocumentId.CreateNewId(id);
-                solution = solution.AddDocument(documentId, file.FileName, file.Code);
-            }
-
-            return solution;
         }
 
         /// <summary>
@@ -353,9 +428,8 @@ namespace Gu.Roslyn.Asserts
 
             if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
             {
-                var solutionInfo = SolutionFile.ParseInfo(code);
                 var solution = EmptySolution;
-
+                var solutionInfo = SolutionFile.ParseInfo(code);
                 foreach (var projectInfo in solutionInfo.Projects)
                 {
                     solution = solution.AddProject(projectInfo)
@@ -515,40 +589,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             return diagnosticOptions;
-        }
-
-        [System.Diagnostics.DebuggerDisplay("{FileName}")]
-        private struct SourceMetadata
-        {
-            public SourceMetadata(string code)
-            {
-                this.Code = code;
-                this.FileName = CodeReader.FileName(code);
-                this.Namespace = CodeReader.Namespace(code);
-            }
-
-            internal string Code { get; }
-
-            internal string FileName { get; }
-
-            internal string Namespace { get; }
-        }
-
-        [System.Diagnostics.DebuggerDisplay("{Name}")]
-        private struct ProjectMetadata
-        {
-            public ProjectMetadata(string name, ProjectId id, IReadOnlyList<SourceMetadata> sources)
-            {
-                this.Name = name;
-                this.Id = id;
-                this.Sources = sources;
-            }
-
-            internal string Name { get; }
-
-            internal ProjectId Id { get; }
-
-            internal IReadOnlyList<SourceMetadata> Sources { get; }
         }
     }
 }

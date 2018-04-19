@@ -455,7 +455,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class FooCore
     {
         public event EventHandler ↓Bar;
     }
@@ -464,7 +464,7 @@ namespace RoslynSandbox.Core
                 var code2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2
+    public class FooClient
     {
     }
 }";
@@ -474,7 +474,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class FooCore
     {
     }
 }";
