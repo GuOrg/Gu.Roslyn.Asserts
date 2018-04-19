@@ -5,11 +5,20 @@ namespace Gu.Roslyn.Asserts
     using System.IO;
     using Microsoft.CodeAnalysis;
 
+    /// <summary>
+    /// For finding MetadataReferences in the GAC.
+    /// </summary>
     public static class Gac
     {
         private static readonly Lazy<ConcurrentDictionary<string, FileInfo>> Cache = new Lazy<ConcurrentDictionary<string, FileInfo>>(Create);
         private static readonly ConcurrentDictionary<string, MetadataReference> Cachedreferences = new ConcurrentDictionary<string, MetadataReference>();
 
+        /// <summary>
+        /// Try get a <see cref="MetadataReference"/> from the GAC.
+        /// </summary>
+        /// <param name="name">Example 'System'</param>
+        /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
+        /// <returns>A value indicating a reference was found.</returns>
         public static bool TryGet(string name, out MetadataReference metadataReference)
         {
             if (Cache.Value.TryGetValue(name, out var fileInfo))

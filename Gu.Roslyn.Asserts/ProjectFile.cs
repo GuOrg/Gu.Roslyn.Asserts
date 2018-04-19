@@ -72,6 +72,11 @@ namespace Gu.Roslyn.Asserts
             throw new InvalidOperationException("Did not find a sln for: " + Assembly.GetCallingAssembly());
         }
 
+        /// <summary>
+        /// Parse a <see cref="ProjectInfo"/> from <paramref name="csproj"/>
+        /// </summary>
+        /// <param name="csproj">The project file.</param>
+        /// <returns>A <see cref="ProjectInfo"/></returns>
         public static ProjectInfo ParseInfo(FileInfo csproj)
         {
             return ParseInfo(csproj, ProjectId.CreateNewId(csproj.FullName), out _);

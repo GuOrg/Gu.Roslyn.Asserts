@@ -6,10 +6,17 @@ namespace Gu.Roslyn.Asserts.Internals
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
+    /// <summary>
+    /// A <see cref="TextLoader"/> for documents passed as strings
+    /// </summary>
     internal class StringLoader : TextLoader
     {
         private readonly Task<TextAndVersion> textAndVersion;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringLoader"/> class.
+        /// </summary>
+        /// <param name="document">The code of the document.</param>
         internal StringLoader(string document)
         {
             this.Code = document;
@@ -19,12 +26,13 @@ namespace Gu.Roslyn.Asserts.Internals
                     VersionStamp.Default));
         }
 
+        /// <summary>
+        /// Gets the code in the document.
+        /// </summary>
         public string Code { get; }
 
-        public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken)
-        {
-            return this.textAndVersion;
-        }
+        /// <inheritdoc />
+        public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;
 
         internal static StringLoader Create(string document) => new StringLoader(document);
     }

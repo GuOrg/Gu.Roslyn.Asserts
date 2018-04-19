@@ -8,6 +8,9 @@ namespace Gu.Roslyn.Asserts
     using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis;
 
+    /// <summary>
+    /// Helper methods for working with .sln files.
+    /// </summary>
     public static class SolutionFile
     {
         /// <summary>
@@ -58,6 +61,11 @@ namespace Gu.Roslyn.Asserts
             throw new InvalidOperationException("Did not find a file named: " + name);
         }
 
+        /// <summary>
+        /// Parse a <see cref="SolutionInfo"/> from <paramref name="sln"/>
+        /// </summary>
+        /// <param name="sln">The solution file.</param>
+        /// <returns>A <see cref="SolutionInfo"/></returns>
         public static SolutionInfo ParseInfo(FileInfo sln)
         {
             var contents = File.ReadAllText(sln.FullName);

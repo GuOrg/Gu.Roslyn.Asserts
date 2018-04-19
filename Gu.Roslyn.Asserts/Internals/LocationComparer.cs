@@ -3,17 +3,22 @@ namespace Gu.Roslyn.Asserts.Internals
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
+    /// <inheritdoc />
     internal sealed class LocationComparer : IComparer<Location>
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         internal static readonly LocationComparer BySourceSpan = new LocationComparer();
 
         private LocationComparer()
         {
         }
 
+        /// <inheritdoc />
         public int Compare(Location x, Location y)
         {
-            if (object.ReferenceEquals(x, y))
+            if (ReferenceEquals(x, y))
             {
                 return 0;
             }
