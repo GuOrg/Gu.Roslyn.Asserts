@@ -239,7 +239,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed = null)
         {
             return DefaultCompilationOptions(new[] { analyzer }, suppressed);
         }
@@ -251,7 +251,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed = null)
         {
             return new CSharpCompilationOptions(
                 OutputKind.DynamicallyLinkedLibrary,
@@ -266,7 +266,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptor">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string> suppressed)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string> suppressed = null)
         {
             return new CSharpCompilationOptions(
                 OutputKind.DynamicallyLinkedLibrary,
@@ -281,7 +281,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptors">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed)
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed = null)
         {
             return new CSharpCompilationOptions(
                 OutputKind.DynamicallyLinkedLibrary,

@@ -26,6 +26,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [AllowedDiagnosticsAttribute](#alloweddiagnosticsattribute)
 - [Analyze](#analyze)
   - [GetDiagnosticsAsync](#getdiagnosticsasync)
+- [Fix](#fix)
 - [CodeFactory](#codefactory)
   - [CreateSolution](#createsolution)
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
@@ -365,7 +366,42 @@ public async Task GetDiagnosticsFromProjectOnDisk()
                                     .ConfigureAwait(false);
     ...
 }
-```` 
+```
+
+# Fix
+
+When dropping down to manual mode `Analyze` & `Fix` can be used like this:
+
+```cs
+        [Test]
+        public void SingleClassOneErrorCorrectFix()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value;
+    }
+}";
+
+            var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
+            var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
+            var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
+            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+        }
+```
 
 # CodeFactory
 
