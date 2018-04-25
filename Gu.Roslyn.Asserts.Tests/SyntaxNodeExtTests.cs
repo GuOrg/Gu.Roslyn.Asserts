@@ -442,6 +442,55 @@ namespace RoslynSandbox
             Assert.AreEqual(expression, syntaxTree.Find<ExpressionSyntax>(expression).ToString());
         }
 
+        [TestCase("foo.Get<IComparable>(1)")]
+        [TestCase("foo.Get<System.IComparable>(1)")]
+        [TestCase("foo.Get<int>(1)")]
+        [TestCase("this.foo.Get<int>(1)")]
+        [TestCase("this.foo.Inner.Get<int>(1)")]
+        [TestCase("this.foo.Inner.foo.Get<int>(1)")]
+        [TestCase("this.foo?.Get<int>(1)")]
+        [TestCase("this.foo?.foo.Get<int>(1)")]
+        [TestCase("this.Inner?.Inner.Get<int>(1)")]
+        [TestCase("this.Inner?.foo.Get<int>(1)")]
+        [TestCase("this.Inner?.foo?.Get<int>(1)")]
+        [TestCase("this.Inner.foo?.Get<int>(1)")]
+        [TestCase("this.Inner?.foo?.Inner?.Get<int>(1)")]
+        [TestCase("((Foo)meh).Get<int>(1)")]
+        [TestCase("((Foo)this.meh).Get<int>(1)")]
+        [TestCase("((Foo)this.Inner.meh).Get<int>(1)")]
+        [TestCase("(meh as Foo).Get<int>(1)")]
+        [TestCase("(this.meh as Foo).Get<int>(1)")]
+        [TestCase("(this.Inner.meh as Foo).Get<int>(1)")]
+        [TestCase("(this.Inner.meh as Foo)?.Get<int>(1)")]
+        [TestCase("(meh as Foo)?.Get<int>(1)")]
+        public void FindExpressionComplicated(string code)
+        {
+            var testCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public sealed class Foo : IDisposable
+    {
+        private readonly object meh;
+        private readonly Foo foo;
+
+        public Foo Inner => this.foo;
+
+        public void Dispose()
+        {
+            var temp = this.foo.Get<int>(1);
+        }
+
+        private T Get<T>(int value) => default(T);
+    }
+}";
+            testCode = testCode.AssertReplace("this.foo.Get<int>(1)", code);
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            var expression = syntaxTree.FindExpression(code);
+            Assert.AreEqual(code, expression.ToString());
+        }
+
         [Test]
         public void FindBinaryExpression()
         {

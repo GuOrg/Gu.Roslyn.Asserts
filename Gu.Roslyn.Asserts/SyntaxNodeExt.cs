@@ -298,10 +298,22 @@ namespace Gu.Roslyn.Asserts
                     }
                 }
 
-                if (nodeText.Contains(code) ||
-                    node.FirstAncestorOrSelf<StatementSyntax>()?.ToFullString().Contains(code) == true)
+                if (nodeText.Contains(code))
                 {
                     return FindBestMatchRecursive<T>(node, code) ?? node;
+                }
+
+                if (node.FirstAncestorOrSelf<StatementSyntax>() is StatementSyntax statement &&
+                    statement.ToFullString().Contains(code))
+                {
+                    foreach (var descendant in statement.DescendantNodes())
+                    {
+                        if (descendant is T candidate &&
+                            code.Contains(candidate.ToString()))
+                        {
+                            return candidate;
+                        }
+                    }
                 }
             }
 
