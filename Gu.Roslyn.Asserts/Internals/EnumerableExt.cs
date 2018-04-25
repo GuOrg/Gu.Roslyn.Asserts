@@ -117,6 +117,46 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
+        /// Return the single element matching predicate if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of the items in the collection.</typeparam>
+        /// <typeparam name="TResult">The type to find.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="result">The single item.</param>
+        /// <returns>True if the collection contains exactly one non null item.</returns>
+        internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, out TResult result)
+            where TResult : T
+        {
+            result = default(TResult);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    if (e.Current is TResult candidate)
+                    {
+                        while (e.MoveNext())
+                        {
+                            if (e.Current is TResult)
+                            {
+                                return false;
+                            }
+                        }
+
+                        result = candidate;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Return the first element if it exists.
         /// </summary>
         /// <typeparam name="T">The type of the items in the collection.</typeparam>

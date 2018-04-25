@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
@@ -57,9 +58,12 @@ namespace Gu.Roslyn.Asserts
             var action = FindAction(actions, fixTitle);
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
-            return operations.OfType<ApplyChangesOperation>()
-                             .Single()
-                             .ChangedSolution;
+            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            {
+                return operation.ChangedSolution;
+            }
+
+            throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
         /// <summary>
@@ -131,9 +135,12 @@ namespace Gu.Roslyn.Asserts
 
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
-            return operations.OfType<ApplyChangesOperation>()
-                             .Single()
-                             .ChangedSolution;
+            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            {
+                return operation.ChangedSolution;
+            }
+
+            throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
         /// <summary>
