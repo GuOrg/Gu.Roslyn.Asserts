@@ -1,7 +1,6 @@
-storage: none
 source https://www.nuget.org/api/v2/
-
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.0.0 strategy: min
+storage: none
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces ~> 2.0.0 strategy: min
 
 group Build
   storage: none
