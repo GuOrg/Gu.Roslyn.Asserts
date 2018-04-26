@@ -570,7 +570,7 @@ GROUP Build
 STORAGE: NONE
 NUGET
   remote: http://www.nuget.org/api/v2
-    SourceLink.Create.CommandLine (2.8)
+    SourceLink.Create.CommandLine (2.8.1)
 
 GROUP Test
 STORAGE: NONE
