@@ -1,3 +1,6 @@
+#### 2.3.1
+* BUGFIX: FindExpression
+
 #### 2.3.0
 * FEATURE: Limited support for resolving references when parsing project & sln files.
 * FEATURE: Add more metadata when parsing files.
