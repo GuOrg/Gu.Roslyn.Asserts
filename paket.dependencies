@@ -1,6 +1,7 @@
 source https://www.nuget.org/api/v2/
 storage: none
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces ~> 2.0.0 strategy: min
+lowest_matching: true
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces >= 2 strategy: min
 
 group Build
   storage: none

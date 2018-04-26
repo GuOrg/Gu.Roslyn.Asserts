@@ -1,4 +1,5 @@
 STORAGE: NONE
+LOWEST_MATCHING: TRUE
 NUGET
   remote: https://www.nuget.org/api/v2
     ManagedEsent (1.9.4) - restriction: >= net46
