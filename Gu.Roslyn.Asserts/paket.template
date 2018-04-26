@@ -1,27 +1,6 @@
-﻿type file
-id Gu.Roslyn.Asserts
-title Gu.Roslyn.Asserts
-version 2.3.0.0
-authors Johan Larsson
-owners Johan Larsson
-copyright Copyright Johan Larsson 2017
+﻿type project
+include-pdbs true
 
-description
-  Asserts for testing Roslyn analyzers and code fixes.
-projectUrl https://github.com/JohanLarsson/Gu.Roslyn.Asserts
-licenseUrl http://opensource.org/licenses/MIT
-
-tags Roslyn Diagnostic Analyzer Test
-
-releaseNotes
-  BUGFIX: Find with whitespace.
-
-dependencies
-  framework: net461
-    Microsoft.CodeAnalysis.CSharp.Workspaces ~> 2
-
-files
-  bin/Release/net461/Gu.Roslyn.Asserts.dll ==> lib/net461
-  bin/Release/net461/Gu.Roslyn.Asserts.pdb ==> lib/net461
-  bin/Release/net461/Gu.Roslyn.Asserts.xml ==> lib/net461 
+excludedgroups
+  Analyzers
 

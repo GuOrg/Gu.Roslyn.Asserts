@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>NU1701</NoWarn>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Gu.Roslyn.Asserts.xml</DocumentationFile>
   </PropertyGroup>
@@ -12,5 +11,21 @@
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
+  <PropertyGroup>
+    <Version>2.3.0.0</Version>
+    <Authors>Johan Larsson</Authors>
+    <Copyright>Johan Larsson 2017</Copyright>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JohanLarsson/Gu.Roslyn.Asserts</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JohanLarsson/Gu.Roslyn.Asserts</RepositoryUrl>
+    <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
+    <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Exec Command=".paket\paket.exe pack publish" WorkingDirectory="$(SolutionDir)" />
+  </Target>
+
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
