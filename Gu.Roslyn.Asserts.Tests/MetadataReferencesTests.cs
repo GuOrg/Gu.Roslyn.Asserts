@@ -30,9 +30,14 @@ namespace Gu.Roslyn.Asserts.Tests
                                "System.Xml.dll",
                                "System.Data.SqlXml.dll",
                                "System.Security.dll",
+                               "System.Core.dll",
                                "System.Numerics.dll",
                            };
             var type = typeof(Enumerable);
+            Dump(MetadataReferences.Transitive(type));
+            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
+            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
+        }
             CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
             CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
