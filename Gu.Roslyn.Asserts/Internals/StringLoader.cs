@@ -34,6 +34,11 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <inheritdoc />
         public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;
 
+        /// <summary>
+        /// Create a <see cref="StringLoader"/> for the document.
+        /// </summary>
+        /// <param name="document">The document text</param>
+        /// <returns>A <see cref="StringLoader"/></returns>
         internal static StringLoader Create(string document) => new StringLoader(document);
     }
 }
