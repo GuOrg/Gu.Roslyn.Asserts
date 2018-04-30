@@ -90,7 +90,7 @@ namespace Gu.Roslyn.Asserts
                 {
                     var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
                                                       .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
-                                             Assembly.ReflectionOnlyLoad(referencedAssemblyName.FullName);
+                                             Assembly.Load(referencedAssemblyName);
                     RecursiveReferencedAssemblies(referencedAssembly, assemblies).IgnoreReturnValue();
                 }
             }
