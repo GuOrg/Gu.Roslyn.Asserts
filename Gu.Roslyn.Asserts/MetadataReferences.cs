@@ -17,6 +17,16 @@ namespace Gu.Roslyn.Asserts
 #pragma warning restore 169
 
         /// <summary>
+        /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>
+        /// </summary>
+        /// <param name="typeInAssembly">A type in the assembly.</param>
+        /// <returns><see cref="MetadataReference"/>s.</returns>
+        public static IEnumerable<MetadataReference> Transitive(Type typeInAssembly)
+        {
+            return Transitive(typeInAssembly.Assembly);
+        }
+
+        /// <summary>
         /// Get the <see cref="MetadataReference"/> for <paramref name="assembly"/> and all assemblies referenced by <paramref name="assembly"/>
         /// </summary>
         /// <param name="assembly">The assembly.</param>
