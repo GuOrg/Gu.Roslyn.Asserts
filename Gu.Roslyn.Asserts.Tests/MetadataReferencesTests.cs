@@ -38,9 +38,6 @@ namespace Gu.Roslyn.Asserts.Tests
             CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
             CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
-        }
 
         // ReSharper disable once UnusedMember.Local
         private static void Dump(IEnumerable<MetadataReference> references)

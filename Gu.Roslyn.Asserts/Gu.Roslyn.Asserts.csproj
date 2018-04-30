@@ -12,7 +12,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>2.3.1.1</Version>
+    <Version>2.3.1.2</Version>
     <Authors>Johan Larsson</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
