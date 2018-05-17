@@ -935,8 +935,8 @@ namespace Gu.Roslyn.Asserts
 
             if (!found)
             {
-                throw AssertException.Create("Failed merging expected one class to have same namespace and class name as fixedcode.\r\n" +
-                                             "Try specfiying a list with all fixed code.");
+                throw AssertException.Create("Failed merging expected one class to have same namespace and class name as fixedCode.\r\n" +
+                                             "Try specifying a list with all fixed code.");
             }
 
             return merged;
