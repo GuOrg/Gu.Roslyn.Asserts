@@ -63,24 +63,20 @@ namespace Gu.Roslyn.Asserts
                 return $"Empty.cs";
             }
 
-            var match = Regex.Match(code, @"(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture);
-            if (!match.Success)
+            var match = Regex.Match(code, @"^ *((public|internal|static) )*(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+            if (match.Success)
             {
-                return code.Contains("assembly:") ? "AssemblyInfo.cs" : "Unknown.cs";
+                var fileName = match.Groups["name"].Value.Trim('↓');
+                if (match.Groups["type"].Success)
+                {
+                    var args = string.Join(",", match.Groups["type"].Captures.OfType<Capture>().Select(c => c.Value.Trim(' ', '↓')));
+                    fileName += $"{{{args}}}";
+                }
+
+                return $"{fileName}.cs";
             }
 
-            var fileName = match.Groups["name"].Value.Trim('↓');
-            if (match.Groups["type"].Success)
-            {
-                var args = string.Join(
-                    ",",
-                    match.Groups["type"]
-                         .Captures.OfType<Capture>()
-                         .Select(c => c.Value.Trim(' ', '↓')));
-                fileName += $"{{{args}}}";
-            }
-
-            return $"{fileName}.cs";
+            return code.Contains("assembly:") ? "AssemblyInfo.cs" : "Unknown.cs";
         }
 
         /// <summary>
