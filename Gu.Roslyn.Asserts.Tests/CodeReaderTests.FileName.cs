@@ -7,9 +7,12 @@ namespace Gu.Roslyn.Asserts.Tests
         public class FileName
         {
             [TestCase("class CodeReaderTests", "CodeReaderTests.cs")]
+            [TestCase("class ↓CodeReaderTests", "CodeReaderTests.cs")]
+            [TestCase("↓class CodeReaderTests", "CodeReaderTests.cs")]
             [TestCase("public class CodeReaderTests", "CodeReaderTests.cs")]
             [TestCase("internal class CodeReaderTests", "CodeReaderTests.cs")]
             [TestCase("internal static class CodeReaderTests", "CodeReaderTests.cs")]
+            [TestCase("internal ↓static class CodeReaderTests", "CodeReaderTests.cs")]
             [TestCase("class CodeReaderTests<T>", "CodeReaderTests{T}.cs")]
             [TestCase("class CodeReaderTests<T1, T2>", "CodeReaderTests{T1,T2}.cs")]
             public void Class(string className, string expected)

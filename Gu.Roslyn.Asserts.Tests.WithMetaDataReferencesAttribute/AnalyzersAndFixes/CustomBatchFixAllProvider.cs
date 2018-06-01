@@ -235,20 +235,17 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFi
                 ApplyChangesOperation singleApplyChangesOperation = null;
                 foreach (var operation in operations)
                 {
-                    ApplyChangesOperation applyChangesOperation = operation as ApplyChangesOperation;
-                    if (applyChangesOperation == null)
+                    if (operation is ApplyChangesOperation applyChangesOperation)
                     {
-                        continue;
-                    }
+                        if (singleApplyChangesOperation != null)
+                        {
+                            // Already had an ApplyChangesOperation; only one is supported.
+                            singleApplyChangesOperation = null;
+                            break;
+                        }
 
-                    if (singleApplyChangesOperation != null)
-                    {
-                        // Already had an ApplyChangesOperation; only one is supported.
-                        singleApplyChangesOperation = null;
-                        break;
+                        singleApplyChangesOperation = applyChangesOperation;
                     }
-
-                    singleApplyChangesOperation = applyChangesOperation;
                 }
 
                 if (singleApplyChangesOperation == null)
