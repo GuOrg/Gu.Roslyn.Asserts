@@ -76,7 +76,22 @@ namespace Gu.Roslyn.Asserts
                 return $"{fileName}.cs";
             }
 
-            return code.Contains("assembly:") ? "AssemblyInfo.cs" : "Unknown.cs";
+            if (code.Contains("assembly:"))
+            {
+                return "AssemblyInfo.cs";
+            }
+
+            if (code.StartsWith("<"))
+            {
+                if (code.Contains("<resheader name=\"resmimetype\">"))
+                {
+                    return "Resources.resx";
+                }
+
+                return "Unknown.xml";
+            }
+
+            return "Unknown.cs";
         }
 
         /// <summary>
