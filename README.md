@@ -373,10 +373,10 @@ public async Task GetDiagnosticsFromProjectOnDisk()
 When dropping down to manual mode `Analyze` & `Fix` can be used like this:
 
 ```cs
-        [Test]
-        public void SingleClassOneErrorCorrectFix()
-        {
-            var code = @"
+[Test]
+public void SingleClassOneErrorCorrectFix()
+{
+    var code = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -385,7 +385,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var fixedCode = @"
+    var fixedCode = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -393,14 +393,14 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-            var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
-            var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
-            var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
-            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
-        }
+    var analyzer = new FieldNameMustNotBeginWithUnderscore();
+    var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
+    var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
+    var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
+    var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+    var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
+    CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+}
 ```
 
 # CodeFactory
@@ -410,10 +410,10 @@ namespace RoslynSandbox
 ### Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.
 
 ```c#
-        [Test]
-        public void CreateSolutionFromSources()
-        {
-            var code = @"
+[Test]
+public void CreateSolutionFromSources()
+{
+    var code = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -421,15 +421,15 @@ namespace RoslynSandbox
         private readonly int _value;
     }
 }";
-            var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
-            Assert.AreEqual("RoslynSandbox", sln.Projects.Single().Name);
-            Assert.AreEqual("Foo.cs", sln.Projects.Single().Documents.Single().Name);
-        }
+    var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
+    Assert.AreEqual("RoslynSandbox", sln.Projects.Single().Name);
+    Assert.AreEqual("Foo.cs", sln.Projects.Single().Documents.Single().Name);
+}
 
-        [Test]
-        public void CreateSolutionFromSources()
-        {
-            var code1 = @"
+[Test]
+public void CreateSolutionFromSources()
+{
+    var code1 = @"
 namespace Project1
 {
     class Foo1
@@ -438,7 +438,7 @@ namespace Project1
     }
 }";
 
-            var code2 = @"
+    var code2 = @"
 namespace Project2
 {
     class Foo2
@@ -446,10 +446,10 @@ namespace Project2
         private readonly int _value;
     }
 }";
-            var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
-            CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
-            Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
-        }
+    var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
+    CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
+    Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+}
 ```
 
 ### Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.
@@ -488,7 +488,7 @@ public void CreateSolutionFromSolutionFile()
 
 Sample benchmark using BenchmarkDotNet.
 
-```
+```cs
 public class FieldNameMustNotBeginWithUnderscoreBenchmark
 {
     private static readonly Solution Solution = CodeFactory.CreateSolution(
@@ -507,11 +507,11 @@ public class FieldNameMustNotBeginWithUnderscoreBenchmark
 
 # SyntaxNodeExt
 ```cs
-        [Test]
-        public void FindAssignmentExpressionDemo()
-        {
-            var syntaxTree = CSharpSyntaxTree.ParseText(
-                @"
+[Test]
+public void FindAssignmentExpressionDemo()
+{
+    var syntaxTree = CSharpSyntaxTree.ParseText(
+        @"
 namespace RoslynSandbox
 {
     internal class Foo
@@ -523,12 +523,12 @@ namespace RoslynSandbox
         }
     }
 }");
-            var compilation = CSharpCompilation.Create("test", new[] { syntaxTree }, new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location), });
-            var semanticModel = compilation.GetSemanticModel(syntaxTree);
-            var assignment = syntaxTree.FindAssignmentExpression("temp = 2");
-            Assert.AreEqual("temp = 2", assignment.ToString());
-            Assert.AreEqual("int", semanticModel.GetTypeInfo(assignment.Right).Type.ToDisplayString());
-        }
+    var compilation = CSharpCompilation.Create("test", new[] { syntaxTree }, new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location), });
+    var semanticModel = compilation.GetSemanticModel(syntaxTree);
+    var assignment = syntaxTree.FindAssignmentExpression("temp = 2");
+    Assert.AreEqual("temp = 2", assignment.ToString());
+    Assert.AreEqual("int", semanticModel.GetTypeInfo(assignment.Right).Type.ToDisplayString());
+}
 ```
 
 # Usage with different test project types
