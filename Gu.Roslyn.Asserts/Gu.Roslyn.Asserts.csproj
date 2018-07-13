@@ -12,7 +12,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>2.3.1.3</Version>
+    <Version>2.3.2.0</Version>
     <Authors>Johan Larsson</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -21,7 +21,7 @@
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>BUGFIX: FindExpression</PackageReleaseNotes>
+    <PackageReleaseNotes>BUGFIX: ExpectedDiagnostic.Create without path should nolt throw.</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
