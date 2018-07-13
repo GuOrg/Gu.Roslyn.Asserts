@@ -30,6 +30,14 @@ namespace Gu.Roslyn.Asserts
             return ApplyAsync(solution, codeFix, diagnostic, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Fix the solution by applying the code fix.
+        /// </summary>
+        /// <param name="solution">The solution with the diagnostic.</param>
+        /// <param name="codeFix">The code fix.</param>
+        /// <param name="diagnostics">The diagnostics.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
+        /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider codeFix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string fixTitle = null)
         {
             var fixedSolution = solution;

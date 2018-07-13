@@ -25,7 +25,8 @@ namespace Gu.Roslyn.Asserts
             if (code.Count > 1 &&
                 expectedDiagnostics.Any(x => !x.HasPath))
             {
-                throw new InvalidOperationException("Expected diagnostic must specify path when more than one document is tested.");
+                throw new InvalidOperationException("Expected diagnostic must specify path when more than one document is tested.\r\n" +
+                                                    "Either specify path or indicate expected error position with ↓");
             }
 
             this.ExpectedDiagnostics = expectedDiagnostics;

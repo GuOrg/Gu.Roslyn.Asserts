@@ -397,7 +397,7 @@ namespace RoslynSandbox.Client
 
     public class Foo2 : RoslynSandbox.Core.Foo1
     {
-        public event EventHandler Bar;
+        public event EventHandler ↓Bar;
     }
 }";
 

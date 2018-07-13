@@ -354,7 +354,8 @@ namespace RoslynSandbox
     {
     }
 }";
-                var expected = "Expected diagnostic must specify path when more than one document is tested.";
+                var expected = "Expected diagnostic must specify path when more than one document is tested.\r\n" +
+                               "Either specify path or indicate expected error position with ↓";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "ANY", 1, 2);
 

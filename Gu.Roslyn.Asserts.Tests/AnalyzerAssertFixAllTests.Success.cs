@@ -218,7 +218,7 @@ namespace RoslynSandbox
 
     public class Foo1
     {
-        public event EventHandler Bar;
+        public event EventHandler ↓Bar;
     }
 }";
 
@@ -229,7 +229,7 @@ namespace RoslynSandbox
 
     public class Foo2
     {
-        public event EventHandler Bar;
+        public event EventHandler ↓Bar;
     }
 }";
 

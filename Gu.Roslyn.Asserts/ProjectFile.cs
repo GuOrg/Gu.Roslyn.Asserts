@@ -11,6 +11,9 @@ namespace Gu.Roslyn.Asserts
     using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
 
+    /// <summary>
+    /// Helper methods for working with .csproj files.
+    /// </summary>
     public static class ProjectFile
     {
         /// <summary>

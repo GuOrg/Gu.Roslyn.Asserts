@@ -259,8 +259,8 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The analyzer.</param>
+        /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
         {
