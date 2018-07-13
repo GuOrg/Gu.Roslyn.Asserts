@@ -22,6 +22,12 @@ namespace Gu.Roslyn.Asserts
             IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
             IReadOnlyList<string> code)
         {
+            if (code.Count > 1 &&
+                expectedDiagnostics.Any(x => !x.HasPath))
+            {
+                throw new InvalidOperationException("Expected diagnostic must specify path when more than one document is tested.");
+            }
+
             this.ExpectedDiagnostics = expectedDiagnostics;
             this.Code = code;
         }
@@ -119,11 +125,6 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 return CreateFromCodeWithErrorsIndicated(expectedDiagnostic.Id, expectedDiagnostic.Message, code);
-            }
-
-            if (!expectedDiagnostic.HasPath && code.Count > 1)
-            {
-                throw new InvalidOperationException("Expected diagnostic must specify path when more than one document is tested.");
             }
 
             return new DiagnosticsAndSources(new[] { expectedDiagnostic }, code);

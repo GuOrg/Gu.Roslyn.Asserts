@@ -60,7 +60,7 @@ namespace Gu.Roslyn.Asserts
         public FileLinePositionSpan Span { get; }
 
         /// <summary>
-        /// Gets if the <see cref="Span"/> has path specified.
+        /// Gets a value indicating whether the <see cref="Span"/> has path specified.
         /// If the test is for a single file path can be omitted and will be set to 'MISSING'
         /// </summary>
         public bool HasPath => this.Span.Path != null &&

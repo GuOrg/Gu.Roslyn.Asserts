@@ -40,7 +40,9 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         // ReSharper disable once UnusedParameter.Local
+#pragma warning disable SA1313 // Parameter names must begin with lower-case letter
         private static void Touch(object _)
+#pragma warning restore SA1313 // Parameter names must begin with lower-case letter
         {
         }
     }
