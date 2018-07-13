@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using NUnit.Framework;
@@ -49,7 +49,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnostic()
+            public void OneErrorWithExpectedDiagnosticIdOnly()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -61,6 +61,24 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309");
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+            }
+
+            [Test]
+            public void OneErrorWithExpectedDiagnosticIdAndPosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value1;
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", 5, 29);
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);

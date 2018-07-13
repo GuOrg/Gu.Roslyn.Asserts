@@ -298,6 +298,46 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void WithExpectedDiagnosticWithWrongPosition()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value1;
+    }
+}";
+                var expected = "Expected and actual diagnostics do not match.\r\n" +
+                               "Expected:\r\n" +
+                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "  at line 5 and character 8 in file Foo.cs | ↓private readonly int _value1;\r\n" +
+                               "Actual:\r\n" +
+                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore", 5, 8);
+
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithMessageWrongPosition()
             {
                 var code = @"

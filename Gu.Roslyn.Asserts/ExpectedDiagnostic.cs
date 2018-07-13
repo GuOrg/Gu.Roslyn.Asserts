@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -60,6 +60,13 @@
         public FileLinePositionSpan Span { get; }
 
         /// <summary>
+        /// Gets if the <see cref="Span"/> has path specified.
+        /// If the test is for a single file path can be omitted and will be set to 'MISSING'
+        /// </summary>
+        public bool HasPath => this.Span.Path != null &&
+                               this.Span.Path != NoPosition.Path;
+
+        /// <summary>
         /// Gets a value indicating whether this instance indicates error position.
         /// </summary>
         public bool HasPosition => this.Span.StartLinePosition != NoPosition.StartLinePosition ||
@@ -116,7 +123,7 @@
         public static ExpectedDiagnostic Create(string diagnosticId, string message, int line, int character)
         {
             var position = new LinePosition(line, character);
-            return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(null, position, position));
+            return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(NoPosition.Path, position, position));
         }
 
         /// <summary>
@@ -208,7 +215,7 @@
                 return false;
             }
 
-            if (this.Span.Path != null &&
+            if (this.HasPath &&
                 this.Span.Path != actualSpan.Path)
             {
                 return false;
@@ -255,11 +262,11 @@
         {
             if (this.HasPosition)
             {
-                var path = this.Span.Path;
+                var path = this.HasPath ? this.Span.Path : CodeReader.FileName(sources.Single());
                 var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
                 var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
                 return $"{this.Id} {this.Message}\r\n" +
-                       $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {this.Span.Path} | {line.TrimStart(' ')}";
+                       $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} | {line.TrimStart(' ')}";
             }
 
             return $"{this.Id} {this.Message}";
