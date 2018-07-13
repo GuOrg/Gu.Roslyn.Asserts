@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -119,6 +119,11 @@
                 }
 
                 return CreateFromCodeWithErrorsIndicated(expectedDiagnostic.Id, expectedDiagnostic.Message, code);
+            }
+
+            if (!expectedDiagnostic.HasPath && code.Count > 1)
+            {
+                throw new InvalidOperationException("Expected diagnostic must specify path when more than one document is tested.");
             }
 
             return new DiagnosticsAndSources(new[] { expectedDiagnostic }, code);

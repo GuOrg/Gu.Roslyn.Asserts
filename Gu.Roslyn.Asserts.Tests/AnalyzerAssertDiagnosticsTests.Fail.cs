@@ -338,6 +338,46 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoClassesExpectedDiagnosticWithoutPath()
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    class Code1
+    {
+    }
+}";
+                var code2 = @"
+namespace RoslynSandbox
+{
+    class Code2
+    {
+    }
+}";
+                var expected = "Expected diagnostic must specify path when more than one document is tested.";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "ANY", 1, 2);
+
+                var exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithMessageWrongPosition()
             {
                 var code = @"
