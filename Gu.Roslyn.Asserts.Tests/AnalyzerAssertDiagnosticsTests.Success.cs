@@ -67,6 +67,24 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void OneErrorWithExpectedDiagnosticIdAndMessage()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int _value1;
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+            }
+
+            [Test]
             public void OneErrorWithExpectedDiagnosticIdAndPosition()
             {
                 var code = @"

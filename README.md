@@ -20,6 +20,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 - [Attributes](#attributes)
   - [MetadataReferenceAttribute](#metadatareferenceattribute)
   - [MetadataReferencesAttribute](#metadatareferencesattribute)
+  - [MetadataReferences](#metadatareferences)
     - [Sample AssemblyInfo.cs (for the test project.)](#sample-assemblyinfocs-for-the-test-project)
   - [Exlicit set AnalyzerAssert.MetadataReferences](#exlicit-set-analyzerassertmetadatareferences)
   - [IgnoredErrorsAttribute](#ignorederrorsattribute)
@@ -31,6 +32,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [CreateSolution](#createsolution)
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
+- [Benchmark](#benchmark)
 - [SyntaxNodeExt](#syntaxnodeext)
 - [Usage with different test project types](#usage-with-different-test-project-types)
   - [Net461 new project type.](#net461-new-project-type)
@@ -101,8 +103,8 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-    var expected = ExpectedDiagnostic.Create("SA1309", code, out code);
-    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expected, code);
+    var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
+    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
 }
 ```
 
