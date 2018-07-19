@@ -10,18 +10,17 @@ namespace Gu.Roslyn.Asserts
 
     public static partial class AnalyzerAssert
     {
-        public static void Refactoring(CodeRefactoringProvider refactoring, string testCode, string fixedCode)
+        public static void Refactoring(CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string fixedCode)
         {
-            var sources = DiagnosticsAndSources.Create(ExpectedDiagnostic.Create("Refactoring"), new[] { testCode });
+            var position = codeWithPositionIndicated.IndexOf("↓");
+            var testCode = codeWithPositionIndicated.AssertReplace("↓", string.Empty);
             var sln = CodeFactory.CreateSolutionWithOneProject(
-                sources.Code,
+                testCode,
                 CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
                 MetadataReferences);
             var actions = new List<CodeAction>();
             var document = sln.Projects.Single().Documents.Single();
             var root = document.GetSyntaxRootAsync(CancellationToken.None).GetAwaiter().GetResult();
-            var position = root.SyntaxTree.GetText(CancellationToken.None)
-                               .Lines.GetPosition(sources.ExpectedDiagnostics.Single().Span.Span.Start);
             var token = root.FindToken(position);
             var context = new CodeRefactoringContext(document, token.Span, a => actions.Add(a), CancellationToken.None);
             refactoring.ComputeRefactoringsAsync(context).GetAwaiter().GetResult();
