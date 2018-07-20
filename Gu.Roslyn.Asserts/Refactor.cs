@@ -33,6 +33,32 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Apply the single refactoring registered at <paramref name="position"/>
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="testCode">The code to refactor.</param>
+        /// <param name="position">The position to pass in to the RefactoringContext.</param>
+        /// <param name="index">The index of the refactoring to apply.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>The refactored document.</returns>
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var actions = CodeActions(refactoring, testCode, position, metadataReferences);
+            if (actions.Count == 0)
+            {
+                throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
+            }
+
+            if (actions.Count < index)
+            {
+                throw new InvalidOperationException("The refactoring did not register a refactoring for the current index.");
+            }
+
+            var edit = actions[index].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+            return edit.ChangedSolution.Projects.Single().Documents.Single();
+        }
+
+        /// <summary>
         /// Apply the single refactoring registered at <paramref name="span"/>
         /// </summary>
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
@@ -81,7 +107,7 @@ namespace Gu.Roslyn.Asserts
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 
-        private static List<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IReadOnlyList<MetadataReference> metadataReferences)
+        private static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
@@ -92,6 +118,28 @@ namespace Gu.Roslyn.Asserts
             var context = new CodeRefactoringContext(document, span, a => actions.Add(a), CancellationToken.None);
             refactoring.ComputeRefactoringsAsync(context).GetAwaiter().GetResult();
             return actions;
+        }
+
+        private static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolutionWithOneProject(
+                testCode,
+                CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
+                metadataReferences);
+            var document = sln.Projects.Single().Documents.Single();
+            var context = new RefactoringContext(document, refactoring, position);
+            var token = context.SyntaxRoot.FindToken(position);
+            refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(token.Span)).GetAwaiter().GetResult();
+
+            var node = token.Parent;
+            while (node != null &&
+                   node.SpanStart == position)
+            {
+                refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(node.Span)).GetAwaiter().GetResult();
+                node = node.Parent;
+            }
+
+            return context.Actions;
         }
 
         private static CodeAction SingleAction(Document document, CodeRefactoringProvider refactoring, int position)
