@@ -166,6 +166,26 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix.</param>
         /// <param name="diagnostic">The diagnostic.</param>
         /// <returns>The list of registered actions.</returns>
+        internal static IReadOnlyList<CodeAction> GetActions(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic)
+        {
+            var document = solution.GetDocument(diagnostic.Location.SourceTree);
+            var actions = new List<CodeAction>();
+            var context = new CodeFixContext(
+                document,
+                diagnostic,
+                (a, d) => actions.Add(a),
+                CancellationToken.None);
+            codeFix.RegisterCodeFixesAsync(context).GetAwaiter().GetResult();
+            return actions;
+        }
+
+        /// <summary>
+        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>
+        /// </summary>
+        /// <param name="solution">The solution with the diagnostic.</param>
+        /// <param name="codeFix">The code fix.</param>
+        /// <param name="diagnostic">The diagnostic.</param>
+        /// <returns>The list of registered actions.</returns>
         internal static async Task<IReadOnlyList<CodeAction>> GetActionsAsync(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic)
         {
             var document = solution.GetDocument(diagnostic.Location.SourceTree);
