@@ -114,7 +114,7 @@ namespace Gu.Roslyn.Asserts
 
         private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)
         {
-            int actualCount = actual.Projects.SelectMany(x => x.Documents).Count();
+            var actualCount = actual.Projects.SelectMany(x => x.Documents).Count();
             if (expected.Count != actualCount)
             {
                 throw AssertException.Create($"Expected {expected.Count} documents the fixed solution has {actualCount} documents.");
