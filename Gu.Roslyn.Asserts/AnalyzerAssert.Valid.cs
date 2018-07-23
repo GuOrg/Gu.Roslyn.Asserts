@@ -21,10 +21,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), code);
         }
 
         /// <summary>
@@ -34,10 +31,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, params string[] code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
         }
 
         /// <summary>
@@ -99,10 +93,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), code);
         }
 
         /// <summary>
@@ -115,10 +106,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void Valid(Type analyzerType, FileInfo code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
         }
 
         /// <summary>
@@ -145,11 +133,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), expectedDiagnostic, code);
         }
 
         /// <summary>
@@ -160,11 +144,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostic, code);
         }
 
         /// <summary>
@@ -190,11 +170,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), expectedDiagnostics, code);
         }
 
         /// <summary>
@@ -205,11 +181,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostics, code);
         }
 
         /// <summary>

@@ -24,14 +24,10 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            var analyzer = new TAnalyzer();
-            var fix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, fix);
+            NoFix(
+                new TAnalyzer(),
+                new TCodeFix(),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -45,15 +41,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
             where TCodeFix : CodeFixProvider, new()
         {
-            var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var fix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, fix);
+            NoFix(new PlaceholderAnalyzer(expectedDiagnostic.Id), new TCodeFix(), DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -68,14 +56,10 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            var analyzer = new TAnalyzer();
-            var fix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, fix);
+            NoFix(
+                new TAnalyzer(),
+                new TCodeFix(),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -91,15 +75,7 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var fix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, fix);
+            NoFix(new TAnalyzer(), new TCodeFix(), DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -112,12 +88,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] codeWithErrorsIndicated)
         {
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, codeFix);
+            NoFix(
+                analyzer,
+                codeFix,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -131,13 +105,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, codeFix);
+            NoFix(analyzer, codeFix, DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -151,13 +119,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, codeFix);
+            NoFix(analyzer, codeFix, DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -171,9 +133,21 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            NoFix(analyzer, codeFix, new DiagnosticsAndSources(expectedDiagnostics, code));
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="diagnosticsAndSources">The code to analyze.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources)
+        {
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
