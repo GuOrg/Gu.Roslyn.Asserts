@@ -2,7 +2,6 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
@@ -859,29 +858,6 @@ namespace Gu.Roslyn.Asserts
             {
                 await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
-        }
-
-        [Obsolete("To be removed.")]
-        private static async Task<DiagnosticsMetadata> CreateDiagnosticsMetadataAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReference)
-        {
-            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-
-            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReference).ConfigureAwait(false);
-
-            var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
-                                         .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
-                                         .ToArray();
-            if (fixableDiagnostics.Length == 0)
-            {
-                var message =
-                    $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {codeFix}.{Environment.NewLine}" +
-                    $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                    $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
-            }
-
-            return data;
         }
 
         private static List<string> MergeFixedCodeWithErrorsIndicated(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
