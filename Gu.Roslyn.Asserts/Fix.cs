@@ -48,15 +48,28 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider codeFix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string fixTitle = null)
         {
-            var fixedSolution = solution;
-            foreach (var diagnostic in diagnostics.SelectMany(x => x))
+            var flatDiagnostics = diagnostics.SelectMany(x => x).ToArray();
+            if (flatDiagnostics.Length == 1)
             {
-                fixedSolution = ApplyAsync(fixedSolution, codeFix, diagnostic, fixTitle, CancellationToken.None)
-                                .GetAwaiter()
-                                .GetResult();
+                return Apply(solution, codeFix, flatDiagnostics[0], fixTitle);
             }
 
-            return fixedSolution;
+            var trees = flatDiagnostics.Select(x => x.Location.SourceTree).Distinct().ToArray();
+            if (trees.Length == 1)
+            {
+                var document = solution.Projects.SelectMany(x => x.Documents)
+                                       .Single(x => x.GetSyntaxTreeAsync().GetAwaiter().GetResult() == trees[0]);
+                var provider = TestDiagnosticProvider.CreateAsync(solution, codeFix, fixTitle, flatDiagnostics).GetAwaiter().GetResult();
+                var context = new FixAllContext(document, codeFix, FixAllScope.Document, provider.EquivalenceKey, flatDiagnostics.Select(x => x.Id), provider, CancellationToken.None);
+                var action = WellKnownFixAllProviders.BatchFixer.GetFixAsync(context).GetAwaiter().GetResult();
+                var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+                if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+                {
+                    return operation.ChangedSolution;
+                }
+            }
+
+            throw new InvalidOperationException($"Failed applying fix, bug in Gu.Roslyn.Asserts");
         }
 
         /// <summary>
