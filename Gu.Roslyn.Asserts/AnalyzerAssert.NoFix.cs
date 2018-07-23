@@ -235,14 +235,17 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReferences).ConfigureAwait(false);
-            var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            var fixableDiagnostics = diagnostics.SelectMany(x => x)
                                          .Where(x => codeFix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
             foreach (var fixableDiagnostic in fixableDiagnostics)
             {
-                var actions = await Fix.GetActionsAsync(data.Solution, codeFix, fixableDiagnostic);
+                var actions = await Fix.GetActionsAsync(sln, codeFix, fixableDiagnostic);
                 if (actions.Any())
                 {
                     var builder = StringBuilderPool.Borrow()

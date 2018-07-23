@@ -26,6 +26,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
+        [Obsolete("To be removed.")]
         public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, compilationOptions, references);
@@ -41,6 +42,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="sources">The sources as strings.</param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
+        [Obsolete("To be removed.")]
         public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
