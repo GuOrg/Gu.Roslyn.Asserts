@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -82,7 +82,7 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -97,7 +97,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -114,7 +114,7 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -130,7 +130,7 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -145,7 +145,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -312,6 +312,7 @@ namespace Gu.Roslyn.Asserts
         /// Meta data from a call to GetAnalyzerDiagnosticsAsync
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
+        [Obsolete("To be removed.")]
         public class DiagnosticsMetadata
         {
             /// <summary>

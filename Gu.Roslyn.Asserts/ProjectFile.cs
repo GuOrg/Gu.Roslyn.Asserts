@@ -85,6 +85,12 @@ namespace Gu.Roslyn.Asserts
             return ParseInfo(csproj, ProjectId.CreateNewId(csproj.FullName), out _);
         }
 
+        /// <summary>
+        /// Parse a <see cref="ProjectInfo"/> from <paramref name="idFileMap"/>
+        /// </summary>
+        /// <param name="projectId">The id to assign the project.</param>
+        /// <param name="idFileMap">A map with ids and csproj files.</param>
+        /// <returns>A <see cref="ProjectInfo"/></returns>
         internal static ProjectInfo ParseInfo(ProjectId projectId, ImmutableDictionary<ProjectId, FileInfo> idFileMap)
         {
             var csproj = idFileMap[projectId];

@@ -10,6 +10,9 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.Text;
 
+    /// <summary>
+    /// Helper methods for working with <see cref="CodeRefactoringProvider"/>
+    /// </summary>
     public static class Refactor
     {
         /// <summary>

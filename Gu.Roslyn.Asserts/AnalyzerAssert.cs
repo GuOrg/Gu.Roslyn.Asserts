@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/></param>
-        public static void AnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
+        public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
             var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedDiagnostic.Id);
             if (descriptors == 0)
@@ -93,15 +93,15 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
         /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/></param>
-        internal static void AnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
+        internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
         {
             foreach (var expectedDiagnostic in expectedDiagnostics)
             {
-                AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+                VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             }
         }
 
-        private static void CodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        private static void VerifyCodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
             {
