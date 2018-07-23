@@ -321,12 +321,28 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
         {
-            return GetDiagnosticsAsync(project, analyzer).GetAwaiter().GetResult();
+            var results = new List<ImmutableArray<Diagnostic>>();
+            var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
+            if (analyzer is PlaceholderAnalyzer)
+            {
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+            }
+            else
+            {
+                var withAnalyzers = compilation.WithAnalyzers(
+                    ImmutableArray.Create(analyzer),
+                    project.AnalyzerOptions,
+                    CancellationToken.None);
+                results.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
+            }
+
+            return results;
         }
 
         /// <summary>
         /// The diagnostics and the solution the analysis was performed on.
         /// </summary>
+        [Obsolete("To be removed, no idea how this class got the name it has. Guessing refactoring accident.")]
         public class DiagnosticsWithMetadata
         {
             /// <summary>

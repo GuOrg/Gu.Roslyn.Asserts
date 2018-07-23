@@ -1,6 +1,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
+    using System.Threading.Tasks;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     public class FixTests
     {
         [Test]
-        public void SingleClassOneErrorCorrectFix()
+        public async Task SingleClassOneErrorCorrectFix()
         {
             var code = @"
 namespace RoslynSandbox
@@ -31,8 +32,11 @@ namespace RoslynSandbox
             var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
             var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
             var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics.Single().Single());
+            var diagnostic = Analyze.GetDiagnostics(sln, analyzer).SelectMany(x => x).Single();
+            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic);
+            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+
+            fixedSln = await Fix.ApplyAsync(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic).ConfigureAwait(false);
             CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
         }
 
@@ -59,9 +63,9 @@ namespace RoslynSandbox
     }
 }";
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
+            var compilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
             var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
-            var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
             CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
