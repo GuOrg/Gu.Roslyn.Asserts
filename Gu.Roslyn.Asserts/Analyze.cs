@@ -29,8 +29,8 @@ namespace Gu.Roslyn.Asserts
         public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, compilationOptions, references);
-            var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            return new DiagnosticsWithMetadata(sln, results);
+            var diagnostics = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            return new DiagnosticsWithMetadata(sln, diagnostics);
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace Gu.Roslyn.Asserts
         public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IReadOnlyList<MetadataReference> references)
         {
             var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
-            var results = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            return new DiagnosticsWithMetadata(sln, results);
+            var diagnostics = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            return new DiagnosticsWithMetadata(sln, diagnostics);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution, DiagnosticAnalyzer analyzer)
         {
-            return GetDiagnosticsAsync(solution, analyzer).GetAwaiter().GetResult();
+            return GetDiagnostics(analyzer, solution);
         }
 
         /// <summary>
@@ -264,7 +264,25 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
         {
-            return GetDiagnosticsAsync(solution, analyzer).GetAwaiter().GetResult();
+            var results = new List<ImmutableArray<Diagnostic>>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
+                if (analyzer is PlaceholderAnalyzer)
+                {
+                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                }
+                else
+                {
+                    var withAnalyzers = compilation.WithAnalyzers(
+                        ImmutableArray.Create(analyzer),
+                        project.AnalyzerOptions,
+                        CancellationToken.None);
+                    results.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
+                }
+            }
+
+            return results;
         }
 
         /// <summary>

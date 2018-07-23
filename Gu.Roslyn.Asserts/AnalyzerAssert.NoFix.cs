@@ -115,6 +115,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] codeWithErrorsIndicated)
         {
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             NoFixAsync(
                     analyzer,
                     codeFix,
@@ -137,6 +138,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             NoFixAsync(
                     analyzer,
                     codeFix,
@@ -159,6 +161,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             NoFixAsync(
                     analyzer,
                     codeFix,
@@ -181,6 +184,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             NoFixAsync(
                     analyzer,
                     codeFix,
@@ -204,6 +208,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static Task NoFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
+            CodeFixSupportsAnalyzer(analyzer, codeFix);
             return NoFixAsync(
                 analyzer,
                 codeFix,
