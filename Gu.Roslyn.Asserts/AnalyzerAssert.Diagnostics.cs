@@ -22,11 +22,9 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                new TAnalyzer(),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -36,11 +34,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -50,10 +46,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                analyzer,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -65,12 +60,9 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                new TAnalyzer(),
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -81,12 +73,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -97,11 +86,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                analyzer,
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -113,12 +100,9 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                new TAnalyzer(),
+                new DiagnosticsAndSources(expectedDiagnostics, code));
         }
 
         /// <summary>
@@ -129,12 +113,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            Diagnostics(
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                new DiagnosticsAndSources(expectedDiagnostics, code));
         }
 
         /// <summary>
@@ -145,9 +126,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            Diagnostics(analyzer, new DiagnosticsAndSources(expectedDiagnostics, code));
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="diagnosticsAndSources"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="diagnosticsAndSources">The code to analyze.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, DiagnosticsAndSources diagnosticsAndSources)
+        {
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
