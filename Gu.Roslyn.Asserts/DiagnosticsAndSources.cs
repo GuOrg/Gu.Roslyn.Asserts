@@ -128,6 +128,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The descriptor diagnosticId that is expected to produce diagnostics.</param>
         /// <param name="code">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, string code)
+        {
+            return Create(expectedDiagnostic, new[] { code });
+        }
+
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// Either the <paramref name="expectedDiagnostic"/> or <paramref name="code"/> can have position or error position indicated but not both.
+        /// </summary>
+        /// <param name="expectedDiagnostic">The descriptor diagnosticId that is expected to produce diagnostics.</param>
+        /// <param name="code">The code with errors indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
             if (HasErrorsIndicated(code))
