@@ -322,6 +322,29 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics when analyzed.
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            CodeFixSupportsAnalyzer(analyzer, fix);
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code });
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            await VerifyFixAsync(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
         /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics when analyzed.
         /// 2. The code fix fixes the code.
         /// </summary>
@@ -337,45 +360,11 @@ namespace Gu.Roslyn.Asserts
         public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string fixedCode, string fixTitle, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
         {
             CodeFixSupportsAnalyzer(analyzer, fix);
-            var data = await DiagnosticsWithMetadataAsync(analyzer, diagnosticsAndSources, compilationOptions, metadataReferences).ConfigureAwait(false);
-            var fixableDiagnostics = data.ActualDiagnostics.SelectMany(x => x)
-                                         .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
-                                         .ToArray();
-            if (fixableDiagnostics.Length == 0)
-            {
-                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
-            }
-
-            if (fixableDiagnostics.Length > 1)
-            {
-                var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", data.ExpectedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
-                              $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw AssertException.Create(message);
-            }
-
-            var diagnostic = fixableDiagnostics.Single();
-            var fixedSolution = await Fix.ApplyAsync(data.Solution, fix, diagnostic, fixTitle, CancellationToken.None).ConfigureAwait(false);
-            if (ReferenceEquals(data.Solution, fixedSolution))
-            {
-                throw AssertException.Create($"{fix} did not change any document.");
-            }
-
-            var fixedSource = await CodeReader.GetStringFromDocumentAsync(
-                                                  fixedSolution.GetDocument(data.Solution.GetDocument(diagnostic.Location.SourceTree).Id),
-                                                  Formatter.Annotation,
-                                                  CancellationToken.None)
-                                              .ConfigureAwait(false);
-            CodeAssert.AreEqual(fixedCode, fixedSource);
-
-            if (allowCompilationErrors == AllowCompilationErrors.No)
-            {
-                await AssertNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false);
-            }
+            AnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, compilationOptions, metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            await VerifyFixAsync(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
@@ -434,6 +423,48 @@ namespace Gu.Roslyn.Asserts
                 allowCompilationErrors)
                 .GetAwaiter()
                 .GetResult();
+        }
+
+        private static async Task VerifyFixAsync(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var fixableDiagnostics = diagnostics.SelectMany(x => x)
+                                                .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
+                                                .ToArray();
+            if (fixableDiagnostics.Length == 0)
+            {
+                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
+                throw AssertException.Create(message);
+            }
+
+            if (fixableDiagnostics.Length > 1)
+            {
+                var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {fix}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
+                              $"Maybe you meant to call AnalyzerAssert.FixAll?";
+                throw AssertException.Create(message);
+            }
+
+            var diagnostic = fixableDiagnostics.Single();
+            var fixedSolution = await Fix.ApplyAsync(sln, fix, diagnostic, fixTitle).ConfigureAwait(false);
+            if (ReferenceEquals(sln, fixedSolution))
+            {
+                throw AssertException.Create($"{fix} did not change any document.");
+            }
+
+            var fixedSource = await CodeReader.GetStringFromDocumentAsync(
+                                                  fixedSolution.GetDocument(sln.GetDocument(diagnostic.Location.SourceTree).Id),
+                                                  Formatter.Annotation,
+                                                  CancellationToken.None)
+                                              .ConfigureAwait(false);
+            CodeAssert.AreEqual(fixedCode, fixedSource);
+
+            if (allowCompilationErrors == AllowCompilationErrors.No)
+            {
+                await AssertNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false);
+            }
         }
 
         private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
