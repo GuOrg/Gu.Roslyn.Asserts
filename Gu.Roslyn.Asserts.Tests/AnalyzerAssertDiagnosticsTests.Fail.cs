@@ -34,7 +34,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void NoErrorIndicatedFieldNameMustNotBeginWithUnderscore()
+            public void NoErrorIndicated()
             {
                 var code = @"
 namespace RoslynSandbox

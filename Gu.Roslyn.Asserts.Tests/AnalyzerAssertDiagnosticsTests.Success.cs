@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Success
         {
             [Test]
-            public void OneError()
+            public void OneErrorIndicatedPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -22,6 +22,11 @@ namespace RoslynSandbox
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code);
                 AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
             }
 
             [Test]
