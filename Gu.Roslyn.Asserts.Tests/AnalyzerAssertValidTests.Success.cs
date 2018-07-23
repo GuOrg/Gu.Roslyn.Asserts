@@ -40,6 +40,11 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(sln);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
                 AnalyzerAssert.Valid(new NoErrorAnalyzer(), sln);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
+                AnalyzerAssert.Valid(new NoErrorAnalyzer(), expectedDiagnostic, sln);
             }
 
             [Test]

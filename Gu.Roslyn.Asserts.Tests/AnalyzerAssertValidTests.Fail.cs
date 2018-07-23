@@ -197,6 +197,16 @@ namespace Project2
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
                 StringAssert.Contains(expected, exception.Message);
 
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDisabled.DiagnosticId);
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(expectedDiagnostic, csproj));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), expectedDiagnostic, csproj));
+                StringAssert.Contains(expected, exception.Message);
+
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), expectedDiagnostic, csproj));
+                StringAssert.Contains(expected, exception.Message);
+
                 if (Throw)
                 {
                     AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);

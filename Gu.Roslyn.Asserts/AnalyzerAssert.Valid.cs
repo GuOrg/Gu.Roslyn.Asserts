@@ -236,11 +236,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), expectedDiagnostic, code);
         }
 
         /// <summary>
@@ -254,11 +250,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void Valid(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostic, code);
         }
 
         /// <summary>
