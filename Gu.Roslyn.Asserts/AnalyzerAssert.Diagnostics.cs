@@ -23,14 +23,10 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -41,14 +37,10 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            _ = DiagnosticsWithMetadataAsync(
-                     analyzer,
-                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                     MetadataReferences,
-                     null)
-                 .GetAwaiter()
-                 .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -58,14 +50,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -79,14 +67,10 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -99,14 +83,10 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -118,14 +98,10 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                  .GetAwaiter()
-                  .GetResult();
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -139,14 +115,10 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -159,14 +131,10 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -178,14 +146,10 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            _ = DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    new DiagnosticsAndSources(expectedDiagnostics, code),
-                    CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .GetAwaiter()
-                .GetResult();
+            var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -197,6 +161,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
         /// <param name="expectedMessage">The expected message in the diagnostic produced by the analyzer.</param>
         /// <returns>The meta data from the run..</returns>
+        [Obsolete("To be removed.")]
         public static async Task<DiagnosticsMetadata> DiagnosticsWithMetadataAsync(
             DiagnosticAnalyzer analyzer,
             DiagnosticsAndSources sources,
@@ -276,6 +241,71 @@ namespace Gu.Roslyn.Asserts
             }
 
             throw AssertException.Create(StringBuilderPool.Return(error));
+        }
+
+        private static void DiagnosticsMatches(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)
+        {
+            DiagnosticsMatches(diagnosticsAndSources, actuals.SelectMany(x => x).ToArray(), expectedMessage);
+        }
+
+        private static void DiagnosticsMatches(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> actuals, string expectedMessage = null)
+        {
+            if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
+            {
+                throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
+            }
+
+            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(actuals))
+            {
+                if (expectedMessage != null)
+                {
+                    foreach (var actual in actuals)
+                    {
+                        var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
+                        TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
+                    }
+                }
+
+                return;
+            }
+
+            var error = StringBuilderPool.Borrow();
+            error.AppendLine("Expected and actual diagnostics do not match.");
+            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(actuals);
+            for (var i = 0; i < missingExpected.Count; i++)
+            {
+                if (i == 0)
+                {
+                    error.Append("Expected:\r\n");
+                }
+
+                var expected = missingExpected[i];
+                error.AppendLine(expected.ToString(diagnosticsAndSources.Code));
+            }
+
+            if (actuals.Count == 0)
+            {
+                error.AppendLine("Actual: <no errors>");
+            }
+
+            var missingActual = actuals.Except(diagnosticsAndSources.ExpectedDiagnostics);
+            if (actuals.Count > 0 && missingActual.Count == 0)
+            {
+                error.AppendLine("Actual: <missing>");
+            }
+
+            for (var i = 0; i < missingActual.Count; i++)
+            {
+                if (i == 0)
+                {
+                    error.Append("Actual:\r\n");
+                }
+
+                var actual = missingActual[i];
+                error.AppendLine(actual.ToErrorString());
+            }
+
+            throw AssertException.Create(error.Return());
         }
 
         /// <summary>

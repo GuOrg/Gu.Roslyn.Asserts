@@ -102,6 +102,11 @@ namespace Gu.Roslyn.Asserts
                 diagnostics.AddRange(positions.Select(p => new ExpectedDiagnostic(analyzerId, message, new FileLinePositionSpan(fileName, p, p))));
             }
 
+            if (diagnostics.Count == 0)
+            {
+                throw new InvalidOperationException("Expected code to have at least one error position indicated with '↓'");
+            }
+
             return new DiagnosticsAndSources(diagnostics, cleanedSources);
         }
 

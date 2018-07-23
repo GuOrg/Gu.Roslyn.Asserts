@@ -48,7 +48,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             if (context.ContainingSymbol is IPropertySymbol property &&
-                property.Name != "foo" &&
+                property.Name != "Foo" &&
                 context.Node is PropertyDeclarationSyntax propertyDeclaration)
             {
                 context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, propertyDeclaration.Identifier.GetLocation()));

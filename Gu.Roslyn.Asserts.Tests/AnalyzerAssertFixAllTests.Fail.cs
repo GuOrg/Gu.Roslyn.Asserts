@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
@@ -90,7 +90,7 @@ namespace RoslynSandbox
 {
     class Foo
     {
-        private readonly int _value;
+        private readonly int ↓_value;
     }
 }";
 

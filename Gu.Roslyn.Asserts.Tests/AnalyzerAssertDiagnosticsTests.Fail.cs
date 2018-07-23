@@ -34,7 +34,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void NoErrorIndicatedGeneric()
+            public void NoErrorIndicatedFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -43,29 +43,19 @@ namespace RoslynSandbox
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 var expected = "Expected code to have at least one error position indicated with '↓'";
+                var exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 Assert.AreEqual(expected, exception.Message);
-            }
 
-            [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
-            [TestCase(typeof(NoErrorAnalyzer))]
-            public void NoErrorIndicatedType(Type type)
-            {
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-    }
-}";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(type, code));
-                var expected = "Expected code to have at least one error position indicated with '↓'";
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void NoErrorIndicatedPassingAnalyzer()
+            public void NoErrorIndicatedNoErrorAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -74,8 +64,14 @@ namespace RoslynSandbox
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
                 var expected = "Expected code to have at least one error position indicated with '↓'";
+                var exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics<NoErrorAnalyzer>(code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(typeof(NoErrorAnalyzer), code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(new NoErrorAnalyzer(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -122,8 +118,15 @@ namespace RoslynSandbox
     {
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code1, code2));
                 var expected = "Expected code to have at least one error position indicated with '↓'";
+
+                var exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code1, code2));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<InvalidOperationException>(() => AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code1, code2));
                 Assert.AreEqual(expected, exception.Message);
             }
 

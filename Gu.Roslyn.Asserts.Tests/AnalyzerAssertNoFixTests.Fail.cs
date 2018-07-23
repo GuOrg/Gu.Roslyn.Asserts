@@ -17,7 +17,7 @@ namespace RoslynSandbox
 {
     class Foo
     {
-        private readonly int _value;
+        private readonly int ↓_value;
     }
 }";
 

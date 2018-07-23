@@ -294,7 +294,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesTwoErrorsGeneric()
+            public void TwoClassesTwoErrors()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -313,11 +313,12 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), foo1, foo2);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), foo1, foo2);
             }
 
-            [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
-            [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
-            public void TwoClassesTwoErrorsType(Type type)
+            [Test]
+            public void TwoClassesTwoErrorsDefaultDisabledAnalyzer()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -335,7 +336,9 @@ namespace RoslynSandbox
         private readonly int ↓_value = 1;
     }
 }";
-                AnalyzerAssert.Diagnostics(type, foo1, foo2);
+                AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDisabled>(foo1, foo2);
+                AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), foo1, foo2);
+                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDisabled(), foo1, foo2);
             }
 
             [Test]
@@ -348,12 +351,29 @@ namespace RoslynSandbox
     {
         private readonly int ↓wrongName;
         
-        public int WrongName { get; set; }
+        public int Foo { get; set; }
     }
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
                 AnalyzerAssert.Diagnostics<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
+
+                code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int foo;
+        
+        public int ↓WrongName { get; set; }
+    }
+}";
+
+                expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId);
+                AnalyzerAssert.Diagnostics<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
             }
         }
