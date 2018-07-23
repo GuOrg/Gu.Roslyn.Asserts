@@ -88,6 +88,11 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
+        /// <summary>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostics"/>
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
+        /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/></param>
         internal static void AnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
         {
             foreach (var expectedDiagnostic in expectedDiagnostics)

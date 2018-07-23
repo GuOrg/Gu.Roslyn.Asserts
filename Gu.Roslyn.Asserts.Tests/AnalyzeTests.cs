@@ -27,8 +27,8 @@ namespace Gu.Roslyn.Asserts.Tests
                                            .ConfigureAwait(false);
             var expected = new[]
                            {
-                               "ClassLibrary1Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
-                               "ClassLibrary2Class1.cs(8,21): warning SA1309: Field '_value' must not begin with an underscore",
+                               "ClassLibrary1Class1.cs(10,21): warning SA1309: Field '_value' must not begin with an underscore",
+                               "ClassLibrary2Class1.cs(10,21): warning SA1309: Field '_value' must not begin with an underscore",
                            };
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
         }
