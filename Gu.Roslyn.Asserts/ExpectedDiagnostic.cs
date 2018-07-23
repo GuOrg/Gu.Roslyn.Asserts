@@ -130,6 +130,21 @@ namespace Gu.Roslyn.Asserts
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="message">The expected message.</param>
+        /// <param name="path">The path of the file with the diagnostic.</param>
+        /// <param name="line">The expected line number</param>
+        /// <param name="character">The expected character position.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        public static ExpectedDiagnostic Create(string diagnosticId, string message, string path, int line, int character)
+        {
+            var position = new LinePosition(line, character);
+            return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(path, position, position));
+        }
+
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// </summary>
+        /// <param name="diagnosticId">The expected diagnostic id</param>
         /// <param name="code">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>

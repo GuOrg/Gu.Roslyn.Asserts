@@ -2,6 +2,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
+    using System.IO;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
@@ -234,8 +235,8 @@ namespace RoslynSandbox
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(code, fixedCode, title);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code }, fixedCode, title);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), code, fixedCode,  title);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode,  title);
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), code, fixedCode, title);
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode, title);
             }
 
             [Test]
@@ -504,6 +505,43 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
                 AnalyzerAssert.CodeFix<FieldAndPropertyMustBeNamedFooAnalyzer, RenameToFooCodeFixProvider>(expectedDiagnostic, code, fixedCode);
                 AnalyzerAssert.CodeFix(new FieldAndPropertyMustBeNamedFooAnalyzer(), new RenameToFooCodeFixProvider(), expectedDiagnostic, code, fixedCode);
+            }
+
+            [Test]
+            public void ProjectFromDisk()
+            {
+                var fixedCode = @"// ReSharper disable InconsistentNaming
+// ReSharper disable ArrangeThisQualifier
+// ReSharper disable NotAccessedField.Local
+#pragma warning disable IDE0009 // Member access should be qualified.
+#pragma warning disable IDE0044 // Add readonly modifier
+namespace ClassLibrary1
+{
+    public class ClassLibrary1Class1
+    {
+        private int value;
+
+        public ClassLibrary1Class1(int value)
+        {
+            this.value = value;
+        }
+    }
+}
+";
+                var csproj = ProjectFile.Find("ClassLibrary1.csproj");
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(
+                    FieldNameMustNotBeginWithUnderscore.DiagnosticId,
+                    "Field '_value' must not begin with an underscore",
+                    Path.Combine(csproj.DirectoryName, "ClassLibrary1Class1.cs"),
+                    9,
+                    20);
+                var sln = CodeFactory.CreateSolution(
+                    csproj,
+                    analyzer,
+                    expectedDiagnostic,
+                    metadataReferences: new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) });
+                AnalyzerAssert.CodeFix(analyzer, new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, sln, fixedCode);
             }
         }
     }

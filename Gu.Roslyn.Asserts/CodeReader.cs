@@ -210,7 +210,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             _ = StringBuilderPool.Return(builder);
-            return $"Code dod not have position {position}";
+            return $"Code did not have position {position}";
         }
 
         /// <summary>

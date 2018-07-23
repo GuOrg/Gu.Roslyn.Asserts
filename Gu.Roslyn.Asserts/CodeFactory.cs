@@ -430,6 +430,23 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzer"/>
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        /// <param name="analyzer">The analyzer to add diagnostic options for.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="suppressedDiagnostics">The suppressed diagnostics.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressedDiagnostics = null, IReadOnlyList<MetadataReference> metadataReferences = null)
+        {
+            return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressedDiagnostics), metadataReferences);
+        }
+
+        /// <summary>
         /// Create a Solution.
         /// </summary>
         /// <param name="code">
@@ -635,14 +652,7 @@ namespace Gu.Roslyn.Asserts
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,
-                DefaultCompilationOptions(
-                    analyzer.SupportedDiagnostics
-                            .Where(x => diagnosticsAndSources.ExpectedDiagnostics.Any(d => d.Id == x.Id))
-                            .ToArray(),
-                    analyzer.SupportedDiagnostics
-                            .Select(x => x.Id)
-                            .Where(x => diagnosticsAndSources.ExpectedDiagnostics.All(d => d.Id != x))
-                            .Concat(suppressedDiagnostics ?? Enumerable.Empty<string>())),
+                DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressedDiagnostics),
                 metadataReferences);
         }
     }

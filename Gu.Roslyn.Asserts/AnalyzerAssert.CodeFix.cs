@@ -108,6 +108,28 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
+        /// 1. <paramref name="solution"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="solution">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, Solution solution, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            CodeFixSupportsAnalyzer(analyzer, fix);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => CodeReader.GetCode(x, null)).ToArray());
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyFix(solution, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
