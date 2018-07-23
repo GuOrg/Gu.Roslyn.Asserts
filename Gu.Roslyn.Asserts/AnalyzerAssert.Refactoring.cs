@@ -62,9 +62,9 @@ namespace Gu.Roslyn.Asserts
 
         private static int GetPosition(string codeWithPositionIndicated, out string code)
         {
-            var position = codeWithPositionIndicated.IndexOf("↓");
+            var position = codeWithPositionIndicated.IndexOf("↓", StringComparison.Ordinal);
             if (position >= 0 &&
-                codeWithPositionIndicated.IndexOf("↓", position + 1) < 0)
+                codeWithPositionIndicated.IndexOf("↓", position + 1, StringComparison.Ordinal) < 0)
             {
                 code = codeWithPositionIndicated.AssertReplace("↓", string.Empty);
                 return position;
