@@ -10,7 +10,6 @@ namespace Gu.Roslyn.Asserts
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
     /// Helper methods for working with .csproj files.
@@ -193,12 +192,12 @@ namespace Gu.Roslyn.Asserts
                     sourceCodeKind: SourceCodeKind.Regular,
                     filePath: file.FullName,
                     isGenerated: file.Name.EndsWith(".g.cs"),
-#if NETFRAMEWORK
+#if NET46
                     loader: new FileTextLoader(file.FullName, Encoding.UTF8));
 #else
                     loader: TextLoader.From(
                         TextAndVersion.Create(
-                            text: SourceText.From(File.ReadAllText(file.FullName)),
+                            text: Microsoft.CodeAnalysis.Text.SourceText.From(File.ReadAllText(file.FullName)),
                             version: VersionStamp.Create(),
                             filePath: file.FullName)));
 #endif
