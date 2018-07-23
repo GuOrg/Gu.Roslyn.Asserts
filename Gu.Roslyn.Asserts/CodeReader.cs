@@ -129,7 +129,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the diagnostics from code as a string.
+        /// Get the line positions indicated with ↓ from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
         /// <returns>The positions of the expected diagnostics.</returns>
@@ -209,7 +209,7 @@ namespace Gu.Roslyn.Asserts
                 return builder.Return();
             }
 
-            StringBuilderPool.Return(builder).IgnoreReturnValue();
+            _ = StringBuilderPool.Return(builder);
             return $"Code dod not have position {position}";
         }
 

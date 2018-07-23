@@ -90,7 +90,7 @@ namespace Gu.Roslyn.Asserts
             var cleanedSources = new List<string>();
             foreach (var source in code)
             {
-                var positions = CodeReader.FindDiagnosticsPositions(source).ToArray();
+                var positions = CodeReader.FindLinePositions(source).ToArray();
                 if (positions.Length == 0)
                 {
                     cleanedSources.Add(source);

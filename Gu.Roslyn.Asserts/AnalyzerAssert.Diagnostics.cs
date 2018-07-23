@@ -23,13 +23,14 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
             var analyzer = new TAnalyzer();
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -40,13 +41,14 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            DiagnosticsWithMetadataAsync(
-                    analyzer,
-                    DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
-                    MetadataReferences,
-                    null)
-                .IgnoreReturnValue();
+            _ = DiagnosticsWithMetadataAsync(
+                     analyzer,
+                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                     MetadataReferences,
+                     null)
+                 .GetAwaiter()
+                 .GetResult();
         }
 
         /// <summary>
@@ -56,13 +58,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -76,13 +79,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -95,13 +99,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -113,13 +118,14 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     DiagnosticsAndSources.Create(expectedDiagnostic, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                  .GetAwaiter()
+                  .GetResult();
         }
 
         /// <summary>
@@ -133,13 +139,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -152,13 +159,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -170,13 +178,14 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             AnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            DiagnosticsWithMetadataAsync(
+            _ = DiagnosticsWithMetadataAsync(
                     analyzer,
                     new DiagnosticsAndSources(expectedDiagnostics, code),
                     CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics),
                     MetadataReferences,
                     null)
-                .IgnoreReturnValue();
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>

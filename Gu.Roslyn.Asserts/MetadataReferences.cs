@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -91,7 +90,7 @@ namespace Gu.Roslyn.Asserts
                     var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
                                                       .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
                                              Assembly.Load(referencedAssemblyName);
-                    RecursiveReferencedAssemblies(referencedAssembly, assemblies).IgnoreReturnValue();
+                    _ = RecursiveReferencedAssemblies(referencedAssembly, assemblies);
                 }
             }
 

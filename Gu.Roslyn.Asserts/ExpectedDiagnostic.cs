@@ -148,7 +148,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string message, string code, out string cleanedSources)
         {
-            var positions = CodeReader.FindDiagnosticsPositions(code).ToArray();
+            var positions = CodeReader.FindLinePositions(code).ToArray();
             if (positions.Length == 0)
             {
                 throw new ArgumentException("Expected one error position indicated, was zero.", nameof(code));
@@ -175,7 +175,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public static IReadOnlyList<ExpectedDiagnostic> CreateManyFromCodeWithErrorsIndicated(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
-            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
             if (positions.Length == 0)
             {
                 throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
@@ -237,7 +237,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
         public ExpectedDiagnostic WithPositionFromCodeWithErrorsIndicated(string codeWithErrorsIndicated, out string cleanedSources)
         {
-            var positions = CodeReader.FindDiagnosticsPositions(codeWithErrorsIndicated).ToArray();
+            var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
             if (positions.Length == 0)
             {
                 throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));

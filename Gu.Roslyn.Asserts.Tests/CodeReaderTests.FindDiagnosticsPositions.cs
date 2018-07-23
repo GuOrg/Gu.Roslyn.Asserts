@@ -1,11 +1,11 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
     public partial class CodeReaderTests
     {
-        public class FindDiagnosticsPositions
+        public class FindLinePositions
         {
             [Test]
             public void OneErrorInClass()
@@ -22,7 +22,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4) }, CodeReader.FindDiagnosticsPositions(code));
+                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4) }, CodeReader.FindLinePositions(code));
             }
 
             [Test]
@@ -40,7 +40,7 @@ namespace RoslynSandbox
     {
     }
 }";
-                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4), new LinePosition(8, 10) }, CodeReader.FindDiagnosticsPositions(code));
+                CollectionAssert.AreEqual(new[] { new LinePosition(8, 4), new LinePosition(8, 10) }, CodeReader.FindLinePositions(code));
             }
         }
     }
