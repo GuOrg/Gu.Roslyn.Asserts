@@ -351,7 +351,7 @@ namespace RoslynSandbox
     {
         private readonly int ↓wrongName;
         
-        public int Foo { get; set; }
+        public int WrongName { get; set; }
     }
 }";
 
@@ -365,7 +365,7 @@ namespace RoslynSandbox
 {
     class Foo
     {
-        private readonly int foo;
+        private readonly int wrongName;
         
         public int ↓WrongName { get; set; }
     }

@@ -49,6 +49,17 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The descriptor that is expected to produce diagnostics.</param>
         /// <param name="code">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, string code)
+        {
+            return CreateFromCodeWithErrorsIndicated(analyzer, new[] { code });
+        }
+
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="analyzer">The descriptor that is expected to produce diagnostics.</param>
+        /// <param name="code">The code with errors indicated.</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
             if (analyzer.SupportedDiagnostics.Length > 1)

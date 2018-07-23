@@ -233,6 +233,9 @@ namespace RoslynSandbox
                 fixedCode = fixedCode.AssertReplace("value", expected);
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(code, fixedCode, title);
+                AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code }, fixedCode, title);
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), code, fixedCode,  title);
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode,  title);
             }
 
             [Test]
@@ -262,6 +265,7 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, code, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, code, fixedCode);
                 AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code }, fixedCode);
             }
 

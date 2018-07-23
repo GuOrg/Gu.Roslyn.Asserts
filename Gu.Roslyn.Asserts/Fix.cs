@@ -27,7 +27,15 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider codeFix, Diagnostic diagnostic, string fixTitle = null)
         {
-            return ApplyAsync(solution, codeFix, diagnostic, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
+            var actions = GetActionsAsync(solution, codeFix, diagnostic).GetAwaiter().GetResult();
+            var action = FindAction(actions, fixTitle);
+            var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            {
+                return operation.ChangedSolution;
+            }
+
+            throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
         /// <summary>

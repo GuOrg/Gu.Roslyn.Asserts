@@ -587,21 +587,6 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
         public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticDescriptor> enabled, IEnumerable<string> suppressed)
         {
-            ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
-            {
-                switch (severity)
-                {
-                    case DiagnosticSeverity.Error:
-                        return ReportDiagnostic.Error;
-                    case DiagnosticSeverity.Hidden:
-                    case DiagnosticSeverity.Info:
-                    case DiagnosticSeverity.Warning:
-                        return ReportDiagnostic.Warn;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
             var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
             if (enabled != null)
             {
@@ -621,6 +606,44 @@ namespace Gu.Roslyn.Asserts
             }
 
             return diagnosticOptions;
+
+            ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
+            {
+                switch (severity)
+                {
+                    case DiagnosticSeverity.Error:
+                        return ReportDiagnostic.Error;
+                    case DiagnosticSeverity.Hidden:
+                    case DiagnosticSeverity.Info:
+                    case DiagnosticSeverity.Warning:
+                        return ReportDiagnostic.Warn;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="diagnosticsAndSources"/>
+        /// </summary>
+        /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
+        /// <param name="analyzer">The analyzer</param>
+        /// <param name="suppressedDiagnostics">The explicitly suppressed diagnostics.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/></returns>
+        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
+        {
+            return CreateSolution(
+                diagnosticsAndSources.Code,
+                DefaultCompilationOptions(
+                    analyzer.SupportedDiagnostics
+                            .Where(x => diagnosticsAndSources.ExpectedDiagnostics.Any(d => d.Id == x.Id))
+                            .ToArray(),
+                    analyzer.SupportedDiagnostics
+                            .Select(x => x.Id)
+                            .Where(x => diagnosticsAndSources.ExpectedDiagnostics.All(d => d.Id != x))
+                            .Concat(suppressedDiagnostics ?? Enumerable.Empty<string>())),
+                metadataReferences);
         }
     }
 }

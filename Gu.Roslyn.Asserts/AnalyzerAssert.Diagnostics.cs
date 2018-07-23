@@ -24,9 +24,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
         {
             var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -68,9 +68,9 @@ namespace Gu.Roslyn.Asserts
             var analyzer = new TAnalyzer();
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace Gu.Roslyn.Asserts
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace Gu.Roslyn.Asserts
         {
             AnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Gu.Roslyn.Asserts
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Gu.Roslyn.Asserts
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Gu.Roslyn.Asserts
             var diagnosticsAndSources = new DiagnosticsAndSources(expectedDiagnostics, code);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            DiagnosticsMatches(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
         }
 
         /// <summary>
@@ -243,12 +243,12 @@ namespace Gu.Roslyn.Asserts
             throw AssertException.Create(StringBuilderPool.Return(error));
         }
 
-        private static void DiagnosticsMatches(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)
         {
-            DiagnosticsMatches(diagnosticsAndSources, actuals.SelectMany(x => x).ToArray(), expectedMessage);
+            VerifyDiagnostics(diagnosticsAndSources, actuals.SelectMany(x => x).ToArray(), expectedMessage);
         }
 
-        private static void DiagnosticsMatches(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> actuals, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> actuals, string expectedMessage = null)
         {
             if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
