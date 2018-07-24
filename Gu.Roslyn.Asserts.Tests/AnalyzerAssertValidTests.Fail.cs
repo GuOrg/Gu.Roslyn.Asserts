@@ -192,13 +192,14 @@ namespace Project2
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                               $"  at line 9 and character 20 in file {csproj.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
                 StringAssert.Contains(expected, exception.Message);
 
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(analyzer, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDisabled.DiagnosticId);
@@ -208,9 +209,11 @@ namespace Project2
                 exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), expectedDiagnostic, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), expectedDiagnostic, csproj));
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences));
+                StringAssert.Contains(expected, exception.Message);
                 if (Throw)
                 {
                     AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);

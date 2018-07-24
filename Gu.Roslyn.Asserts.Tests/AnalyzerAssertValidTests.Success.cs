@@ -50,6 +50,7 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
+                AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
                 await AnalyzerAssert.ValidAsync(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
             }
 

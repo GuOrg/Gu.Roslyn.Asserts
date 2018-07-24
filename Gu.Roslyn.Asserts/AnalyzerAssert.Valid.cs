@@ -264,6 +264,37 @@ namespace Gu.Roslyn.Asserts
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
