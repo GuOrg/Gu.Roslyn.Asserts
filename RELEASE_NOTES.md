@@ -1,3 +1,10 @@
+#### 2.4.0
+* BREAKING: Mark async API obsolete.
+* FEATURE: Create sln from github url.
+* FEATURE: Support testing refactorings.
+* FEATURE: Multitarget net46 & netstandard2.0
+* BREAKING: Probably changed some overload.
+
 #### 2.3.1
 * BUGFIX: ExpectedDiagnostic.Create without path should nolt throw.
 
