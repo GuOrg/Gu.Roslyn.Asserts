@@ -21,18 +21,36 @@ namespace RoslynSandbox
     {
     }
 }";
+                var analyzer = new NoErrorAnalyzer();
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code);
-                AnalyzerAssert.Valid(new NoErrorAnalyzer(), code);
+                AnalyzerAssert.Valid(analyzer, code);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, code);
+                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
+
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
             }
 
             [Test]
-            public void ProjectFileNoErrorAnalyzer()
+            public async Task ProjectFileNoErrorAnalyzer()
             {
-                Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out var csproj));
+                var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
+                var analyzer = new NoErrorAnalyzer();
+
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(csproj);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
-                AnalyzerAssert.Valid(new NoErrorAnalyzer(), csproj);
+                AnalyzerAssert.Valid(analyzer, csproj);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, csproj);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
+                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
+                await AnalyzerAssert.ValidAsync(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
             }
 
             [Test]
