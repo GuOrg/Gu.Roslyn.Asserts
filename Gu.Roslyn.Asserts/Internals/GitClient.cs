@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// Clone a repository
         /// </summary>
         /// <param name="uri">Address of a repository</param>
-        /// <param name="cloneTargetPath">Path to target directory where to clone the repository. Must be empty</param>
+        /// <param name="cloneTargetPath">Path to target directory where to clone the repository. Directory must be empty</param>
         /// <param name="flags">Flags</param>
         /// <param name="branch">Check out to the specific branch</param>
         /// <param name="config">Configuration values of the cloned repository</param>
@@ -91,6 +91,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 foreach (var kvp in config)
                 {
                     parameters.Add("-c");
+                    parameters.Add($"{kvp.Key}={kvp.Value}");
                 }
             }
 
