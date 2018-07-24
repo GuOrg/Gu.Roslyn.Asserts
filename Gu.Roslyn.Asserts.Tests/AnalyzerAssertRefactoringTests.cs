@@ -21,7 +21,7 @@ class FOO
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             AnalyzerAssert.Refactoring(refactoring, testCode, fixedCode);
-            AnalyzerAssert.Refactoring(refactoring, testCode, 0, fixedCode);
+            AnalyzerAssert.Refactoring(refactoring, testCode, "To uppercase", fixedCode);
         }
 
         [Test]
@@ -39,7 +39,7 @@ class FOO
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             AnalyzerAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode);
-            AnalyzerAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), 0, fixedCode);
+            AnalyzerAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), "To uppercase", fixedCode);
         }
     }
 }

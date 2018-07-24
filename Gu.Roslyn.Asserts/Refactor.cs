@@ -41,6 +41,32 @@ namespace Gu.Roslyn.Asserts
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
+        /// <param name="title">The title of the refactoring to apply.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>The refactored document.</returns>
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var actions = CodeActions(refactoring, testCode, position, metadataReferences)
+                          .Where(x => x.Title == title)
+                          .ToArray();
+            switch (actions.Length)
+            {
+                case 0:
+                    throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
+                case 1:
+                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+                    return edit.ChangedSolution.Projects.Single().Documents.Single();
+                default:
+                    throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
+            }
+        }
+
+        /// <summary>
+        /// Apply the single refactoring registered at <paramref name="position"/>
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="testCode">The code to refactor.</param>
+        /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="index">The index of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
@@ -73,6 +99,32 @@ namespace Gu.Roslyn.Asserts
         {
             var actions = CodeActions(refactoring, testCode, span, metadataReferences);
             switch (actions.Count)
+            {
+                case 0:
+                    throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
+                case 1:
+                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+                    return edit.ChangedSolution.Projects.Single().Documents.Single();
+                default:
+                    throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
+            }
+        }
+
+        /// <summary>
+        /// Apply the single refactoring registered at <paramref name="span"/>
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="testCode">The code to refactor.</param>
+        /// <param name="span">The position to pass in to the RefactoringContext.</param>
+        /// <param name="title">The title of the refactoring to apply.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>The refactored document.</returns>
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var actions = CodeActions(refactoring, testCode, span, metadataReferences)
+                          .Where(x => x.Title == title)
+                          .ToArray();
+            switch (actions.Length)
             {
                 case 0:
                     throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
