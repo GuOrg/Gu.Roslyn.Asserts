@@ -3,7 +3,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
-    using System.Linq;
     using System.Reflection;
     using NUnit.Framework;
 
@@ -25,25 +24,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var assembly = typeof(Sandbox).GetTypeInfo().Assembly;
             var referencedAssemblies = assembly.GetReferencedAssemblies();
         }
-
-        [Test]
-        public void Test()
-        {
-            Touch(System.Data.AcceptRejectRule.None);
-            Touch(System.Drawing.Brushes.AliceBlue);
-            Touch(System.Runtime.Serialization.EmitTypeInformation.Always);
-            Touch(System.Numerics.BigInteger.MinusOne);
-            foreach (var assembly in typeof(Sandbox).Assembly.GetReferencedAssemblies().Select(Assembly.Load))
-            {
-                Console.WriteLine($"{assembly.GetName().Name} {assembly.ExportedTypes.First().FullName}");
-            }
-        }
-
-        // ReSharper disable once UnusedParameter.Local
 #pragma warning disable SA1313 // Parameter names must begin with lower-case letter
-        private static void Touch(object _)
 #pragma warning restore SA1313 // Parameter names must begin with lower-case letter
-        {
-        }
     }
 }

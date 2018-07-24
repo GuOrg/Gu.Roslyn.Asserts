@@ -1,5 +1,9 @@
 ﻿type project
-include-pdbs true
+
+files
+  bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
+  bin/Release/netstandard2.0/Gu.Roslyn.Asserts.* ==> lib/netstandard2.0
+  !bin/Release/netstandard2.0/Gu.Roslyn.Asserts.deps.json
 
 excludedgroups
   Analyzers
