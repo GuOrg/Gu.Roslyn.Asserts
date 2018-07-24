@@ -21,14 +21,16 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code);
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(expectedDiagnostic, code);
                 AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IReadOnlyList<string>)new[] { code });
-                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), code);
-                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), expectedDiagnostic, code);
-                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
-                AnalyzerAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), new[] { expectedDiagnostic.WithPositionFromCodeWithErrorsIndicated(code, out code) }, code);
+                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), code);
+                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, code);
+                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
+                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), new[] { expectedDiagnostic.WithPositionFromCodeWithErrorsIndicated(code, out code) }, code);
+                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
             }
 
             [Test]

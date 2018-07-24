@@ -190,6 +190,50 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The meta data references to use when compiling.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            if (diagnostics.SelectMany(x => x).All(d => !codeFix.FixableDiagnosticIds.Contains(d.Id)))
+            {
+                throw new InvalidOperationException("Analyzing the code did not produce any diagnostics fixable by the code fix.");
+            }
+
+            VerifyNoFix(sln, diagnostics, codeFix);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The meta data references to use when compiling.</param>
+        public static void NoFix(CodeFixProvider codeFix, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln);
+            if (diagnostics.SelectMany(x => x).All(d => !codeFix.FixableDiagnosticIds.Contains(d.Id)))
+            {
+                throw new InvalidOperationException("Analyzing the code did not produce any diagnostics fixable by the code fix.");
+            }
+
+            VerifyNoFix(sln, diagnostics, codeFix);
+        }
+
+        /// <summary>
+        /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
@@ -227,7 +271,7 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, metadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, compilationOptions, metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             var fixableDiagnostics = diagnostics.SelectMany(x => x)
