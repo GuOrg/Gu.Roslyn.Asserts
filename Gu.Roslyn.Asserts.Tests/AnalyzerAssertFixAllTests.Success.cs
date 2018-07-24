@@ -145,7 +145,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyserSupposrtTwoDiagnostics1()
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -177,7 +177,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyserSupposrtTwoDiagnostics2()
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -209,7 +209,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesCodeFixOnlyCorrectFix()
+            public void TwoClassesTwoErrorsTwoFixes()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -260,7 +260,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoClassesOneFixCorrectFix(string title, string expected)
+            public void TwoClassesOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -290,7 +290,11 @@ namespace RoslynSandbox
 
                 fixedCode = fixedCode.AssertReplace("value", expected);
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, new[] { fixedCode, code2 }, title);
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code1, code2 }, fixedCode, title);
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 }, title);
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode, title);
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -602,7 +606,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var code = @"
+                var testCode = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -620,7 +624,13 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode });
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, new[] { barCode, fixedCode });
+                AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, fixedCode);
+                AnalyzerAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { barCode, testCode }, fixedCode);
+                AnalyzerAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { barCode, testCode }, new[] { barCode, fixedCode });
+                AnalyzerAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { barCode, testCode }, fixedCode);
+                AnalyzerAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { barCode, testCode }, new[] { barCode, fixedCode });
             }
 
             [Test]
