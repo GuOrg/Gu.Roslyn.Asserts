@@ -61,8 +61,10 @@ namespace Gu.Roslyn.Asserts.Internals
             string branch = null,
             IReadOnlyDictionary<string, string> config = null)
         {
-            var parameters = new List<string>();
-            parameters.Add("clone");
+            var parameters = new List<string>
+                             {
+                                 "clone"
+                             };
             if (flags.HasFlag(CloneFlags.Recursive))
             {
                 parameters.Add("--recursive");
@@ -112,12 +114,6 @@ namespace Gu.Roslyn.Asserts.Internals
                     throw new InvalidOperationException(output);
                 }
             }
-        }
-
-        private static string CommandLineFromArgv(params string[] args)
-        {
-            IEnumerable<string> a = args;
-            return CommandLineFromArgv(a);
         }
 
         /// <summary>

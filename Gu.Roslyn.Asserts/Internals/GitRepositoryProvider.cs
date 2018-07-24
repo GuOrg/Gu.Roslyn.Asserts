@@ -1,10 +1,7 @@
 namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// Parses the URLs of various git repository host sites
