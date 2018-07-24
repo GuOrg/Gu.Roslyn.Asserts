@@ -25,6 +25,8 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code);
                 AnalyzerAssert.Valid(analyzer, code);
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
+                AnalyzerAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, code);
