@@ -29,7 +29,6 @@ namespace RoslynSandbox
                 AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), code);
                 AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, code);
                 AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
-                AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), new[] { expectedDiagnostic.WithPositionFromCodeWithErrorsIndicated(code, out code) }, code);
                 AnalyzerAssert.NoFix(analyzer, new NoCodeFixProvider(), new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
             }
 

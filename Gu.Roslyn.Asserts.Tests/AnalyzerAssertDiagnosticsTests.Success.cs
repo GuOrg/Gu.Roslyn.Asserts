@@ -19,14 +19,18 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code);
+                AnalyzerAssert.Diagnostics(analyzer, code);
+                AnalyzerAssert.Diagnostics(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
+                AnalyzerAssert.Diagnostics(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 AnalyzerAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
-                AnalyzerAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                AnalyzerAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
 
             [Test]
