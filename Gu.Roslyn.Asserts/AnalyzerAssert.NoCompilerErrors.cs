@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoCompilerErrors(params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, MetadataReferences);
-            NoCompilerErrorsAsync(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics()).GetAwaiter().GetResult();
+            NoCompilerErrors(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoCompilerErrors(IReadOnlyList<MetadataReference> metadataReferences, params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, metadataReferences);
-            NoCompilerErrorsAsync(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics()).GetAwaiter().GetResult();
+            NoCompilerErrors(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
         }
 
         /// <summary>
@@ -37,7 +38,32 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static void NoCompilerErrors(Solution solution)
         {
-            NoCompilerErrorsAsync(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics()).GetAwaiter().GetResult();
+            NoCompilerErrors(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
+        }
+
+        /// <summary>
+        /// Check the solution for compiler errors and warnings.
+        /// </summary>
+        public static void NoCompilerErrors(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
+        {
+            var diagnostics = Analyze.GetDiagnostics(solution);
+            var introducedDiagnostics = diagnostics
+                                        .SelectMany(x => x)
+                                        .Where(x => IsIncluded(x, allowedDiagnostics))
+                                        .ToArray();
+            if (introducedDiagnostics.Select(x => x.Id)
+                                     .Except(allowedIds ?? Enumerable.Empty<string>())
+                                     .Any())
+            {
+                var error = StringBuilderPool.Borrow();
+                error.AppendLine($"Found error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                foreach (var introducedDiagnostic in introducedDiagnostics)
+                {
+                    error.AppendLine($"{introducedDiagnostic.ToErrorString()}");
+                }
+
+                throw AssertException.Create(StringBuilderPool.Return(error));
+            }
         }
 
         /// <summary>
@@ -45,6 +71,7 @@ namespace Gu.Roslyn.Asserts
         /// DiagnosticSettings.AllowedErrorIds()
         /// DiagnosticSettings.AllowedDiagnostics()
         /// </summary>
+        [Obsolete("Use sync API.")]
         public static Task NoCompilerErrorsAsync(Solution solution)
         {
             return NoCompilerErrorsAsync(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
@@ -53,6 +80,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Check the solution for compiler errors and warnings, uses:
         /// </summary>
+        [Obsolete("Use sync API.")]
         public static async Task NoCompilerErrorsAsync(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(solution).ConfigureAwait(false);

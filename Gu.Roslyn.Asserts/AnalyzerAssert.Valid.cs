@@ -312,6 +312,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
@@ -326,6 +327,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
@@ -340,6 +342,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
@@ -353,6 +356,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, Solution solution)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(solution, analyzer)
@@ -371,6 +375,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);

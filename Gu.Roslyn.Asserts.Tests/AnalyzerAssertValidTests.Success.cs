@@ -3,7 +3,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using NUnit.Framework;
 
     [TestFixture]
@@ -39,7 +38,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public async Task ProjectFileNoErrorAnalyzer()
+            public void ProjectFileNoErrorAnalyzer()
             {
                 var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var analyzer = new NoErrorAnalyzer();
@@ -53,11 +52,10 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
-                await AnalyzerAssert.ValidAsync(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
             }
 
             [Test]
-            public async Task SolutionFileNoErrorAnalyzer()
+            public void SolutionFileNoErrorAnalyzer()
             {
                 var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
                 var analyzer = new NoErrorAnalyzer();
@@ -69,22 +67,20 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
                 AnalyzerAssert.Valid(analyzer, expectedDiagnostic, sln);
-                await AnalyzerAssert.ValidAsync(analyzer, sln, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
             }
 
             [Test]
-            public async Task SolutionNoErrorAnalyzer()
+            public void SolutionNoErrorAnalyzer()
             {
                 var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
                 var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, AnalyzerAssert.MetadataReferences);
                 AnalyzerAssert.Valid<NoErrorAnalyzer>(solution);
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), solution);
                 AnalyzerAssert.Valid(new NoErrorAnalyzer(), solution);
-                await AnalyzerAssert.ValidAsync(new NoErrorAnalyzer(), solution).ConfigureAwait(false);
             }
 
             [Test]
-            public async Task TwoClassesNoErrorAnalyzer()
+            public void TwoClassesNoErrorAnalyzer()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -106,8 +102,6 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(analyzer, code1, code2);
 
                 AnalyzerAssert.Valid(analyzer, new List<string> { code1, code2 });
-                await AnalyzerAssert.ValidAsync(analyzer, new[] { code1, code2 }, AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
-                await AnalyzerAssert.ValidAsync(analyzer, new[] { code1, code2 }, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
             }
 
             [Test]
@@ -133,7 +127,7 @@ namespace Project2
             }
 
             [Test]
-            public async Task WithExpectedDiagnostic()
+            public void WithExpectedDiagnostic()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -143,16 +137,15 @@ namespace RoslynSandbox
         private readonly int value1;
     }
 }";
-
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
                 AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
                 AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, new List<string> { code });
-                await AnalyzerAssert.ValidAsync(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, new List<string> { code }, AnalyzerAssert.MetadataReferences).ConfigureAwait(false);
+                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, new List<string> { code });
             }
 
             [Test]

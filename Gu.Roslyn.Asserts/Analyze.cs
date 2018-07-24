@@ -184,6 +184,23 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution)
+        {
+            var results = new List<ImmutableArray<Diagnostic>>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+            }
+
+            return results;
+        }
+
+        /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="codeFix"/>.
         /// </summary>
         /// <param name="solution">The solution.</param>

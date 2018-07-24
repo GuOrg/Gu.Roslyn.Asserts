@@ -400,6 +400,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
@@ -424,6 +425,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        [Obsolete("Use sync API.")]
         public static async Task CodeFixAsync(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string fixedCode, string fixTitle, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences, AllowCompilationErrors allowCompilationErrors)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
