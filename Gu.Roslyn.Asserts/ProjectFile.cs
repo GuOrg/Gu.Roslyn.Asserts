@@ -129,7 +129,7 @@ namespace Gu.Roslyn.Asserts
         private static ProjectInfo ParseInfo(FileInfo csproj, ProjectId projectId, out XDocument content)
         {
             var name = Path.GetFileNameWithoutExtension(csproj.FullName);
-            var xml = System.IO.File.ReadAllText(csproj.FullName);
+            var xml = File.ReadAllText(csproj.FullName);
             var xdoc = content = XDocument.Parse(xml);
             return ProjectInfo.Create(
                 projectId,
@@ -193,7 +193,7 @@ namespace Gu.Roslyn.Asserts
                     filePath: file.FullName,
                     isGenerated: file.Name.EndsWith(".g.cs"),
 #if NET46
-                    loader: new FileTextLoader(file.FullName, Encoding.UTF8));
+                    loader: new FileTextLoader(file.FullName, System.Text.Encoding.UTF8));
 #else
                     loader: TextLoader.From(
                         TextAndVersion.Create(
