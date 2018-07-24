@@ -6,16 +6,21 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public class FileName
         {
-            [TestCase("class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("class ↓CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("↓class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("public class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("internal class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("internal static class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("internal ↓static class CodeReaderTests", "CodeReaderTests.cs")]
-            [TestCase("class CodeReaderTests<T>", "CodeReaderTests{T}.cs")]
-            [TestCase("class CodeReaderTests<T1, T2>", "CodeReaderTests{T1,T2}.cs")]
-            public void Class(string className, string expected)
+            [TestCase("class Foo", "Foo.cs")]
+            [TestCase("struct Foo", "Foo.cs")]
+            [TestCase("enum Foo", "Foo.cs")]
+            [TestCase("class ↓Foo", "Foo.cs")]
+            [TestCase("↓class Foo", "Foo.cs")]
+            [TestCase("public class Foo", "Foo.cs")]
+            [TestCase("internal class Foo", "Foo.cs")]
+            [TestCase("internal static class Foo", "Foo.cs")]
+            [TestCase("internal ↓static class Foo", "Foo.cs")]
+            [TestCase("class Foo<T>", "Foo{T}.cs")]
+            [TestCase("sealed class Foo<T>", "Foo{T}.cs")]
+            [TestCase("public sealed class Foo<T>", "Foo{T}.cs")]
+            [TestCase("public abstract class Foo<T>", "Foo{T}.cs")]
+            [TestCase("class Foo<T1, T2>", "Foo{T1,T2}.cs")]
+            public void FromType(string className, string expected)
             {
                 var code = @"using System;
 using System.Collections.Generic;
@@ -25,11 +30,11 @@ using System.Threading.Tasks;
 
 namespace RoslynSandbox
 {
-    class CodeReaderTests
+    class Foo
     {
     }
 }";
-                code = code.AssertReplace("class CodeReaderTests", className);
+                code = code.AssertReplace("class Foo", className);
                 Assert.AreEqual(expected, CodeReader.FileName(code));
             }
 

@@ -63,7 +63,7 @@ namespace Gu.Roslyn.Asserts
                 return $"Empty.cs";
             }
 
-            var match = Regex.Match(code, @"^ *(↓?(public|internal|static) )*↓?(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+            var match = Regex.Match(code, @"^ *(↓?(public|internal|static|sealed|abstract) )*↓?(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline);
             if (match.Success)
             {
                 var fileName = match.Groups["name"].Value.Trim('↓');
