@@ -34,6 +34,7 @@ namespace Gu.Roslyn.Asserts
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                 new[] { fixedCode },
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -60,6 +61,7 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -82,13 +84,14 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             FixAll(
-                    new TAnalyzer(),
-                    new TCodeFix(),
-                    DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
-                    fixedCode,
-                    MetadataReferences,
-                    fixTitle,
-                    allowCompilationErrors);
+                new TAnalyzer(),
+                new TCodeFix(),
+                DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
+                fixedCode,
+                SuppressedDiagnostics,
+                MetadataReferences,
+                fixTitle,
+                allowCompilationErrors);
         }
 
         /// <summary>
@@ -111,6 +114,7 @@ namespace Gu.Roslyn.Asserts
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                 MergeFixedCodeWithErrorsIndicated(new[] { codeWithErrorsIndicated }, fixedCode),
+                SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -136,6 +140,7 @@ namespace Gu.Roslyn.Asserts
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -161,6 +166,7 @@ namespace Gu.Roslyn.Asserts
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 fixedCode,
+                SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -176,7 +182,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReference">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -215,6 +221,7 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                 new[] { fixedCode },
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -236,13 +243,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
-                    analyzer,
-                    new TCodeFix(),
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    MergeFixedCode(code, fixedCode),
-                    MetadataReferences,
-                    fixTitle,
-                    allowCompilationErrors);
+                analyzer,
+                new TCodeFix(),
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                MergeFixedCode(code, fixedCode),
+                SuppressedDiagnostics,
+                MetadataReferences,
+                fixTitle,
+                allowCompilationErrors);
         }
 
         /// <summary>
@@ -261,13 +269,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
-                    analyzer,
-                    new TCodeFix(),
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    fixedCode,
-                    MetadataReferences,
-                    fixTitle,
-                    allowCompilationErrors);
+                analyzer,
+                new TCodeFix(),
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode,
+                SuppressedDiagnostics,
+                MetadataReferences,
+                fixTitle,
+                allowCompilationErrors);
         }
 
         /// <summary>
@@ -289,6 +298,7 @@ namespace Gu.Roslyn.Asserts
                 fix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                 new[] { fixedCode },
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -309,13 +319,14 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
-                    analyzer,
-                    fix,
-                    DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                    MergeFixedCode(code, fixedCode),
-                    MetadataReferences,
-                    fixTitle,
-                    allowCompilationErrors);
+                analyzer,
+                fix,
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                MergeFixedCode(code, fixedCode),
+                SuppressedDiagnostics,
+                MetadataReferences,
+                fixTitle,
+                allowCompilationErrors);
         }
 
         /// <summary>
@@ -337,6 +348,7 @@ namespace Gu.Roslyn.Asserts
                 fix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -363,6 +375,7 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
                 new[] { fixedCode },
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -389,6 +402,7 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -415,6 +429,7 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode,
+                SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
                 allowCompilationErrors);
@@ -429,17 +444,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReference">The meta data references to use when compiling the code.</param>
+        /// <param name="metadataReferences">The meta data references to use when compiling the code.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReferences, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             FixAll(
                 analyzer,
                 codeFix,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode,
-                metadataReference,
+                SuppressedDiagnostics,
+                metadataReferences,
                 fixTitle,
                 allowCompilationErrors);
         }
@@ -453,14 +469,15 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="diagnosticsAndSources">The code and expected diagnostics</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="suppressedDiagnostics">The diagnostics to suppress when compiling.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, IReadOnlyList<MetadataReference> metadataReference, string fixTitle, AllowCompilationErrors allowCompilationErrors)
+        public static void FixAll(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, IEnumerable<string> suppressedDiagnostics, IReadOnlyList<MetadataReference> metadataReferences, string fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, suppressedDiagnostics, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             FixAllOneByOne(analyzer, codeFix, sln, fixedCode, fixTitle, allowCompilationErrors);
@@ -484,7 +501,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReference">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReference">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -512,7 +529,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -546,7 +563,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="diagnosticsAndSources">The code and expected diagnostics</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -634,7 +651,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReferences">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -658,7 +675,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="metadataReferences">The meta data metadataReference to add to the compilation.</param>
+        /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
@@ -824,7 +841,7 @@ namespace Gu.Roslyn.Asserts
             AreEqualAsync(fixedCode, fixedSolution, "Applying fixes one by one failed.").GetAwaiter().GetResult();
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false).GetAwaiter().GetResult();
+                VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false).GetAwaiter().GetResult();
             }
         }
 
@@ -834,7 +851,7 @@ namespace Gu.Roslyn.Asserts
             await AreEqualAsync(fixedCode, fixedSolution, "Applying fixes one by one failed.").ConfigureAwait(false);
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
+                await VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
         }
 
@@ -845,7 +862,7 @@ namespace Gu.Roslyn.Asserts
             AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").GetAwaiter().GetResult();
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                AssertNoCompilerErrorsAsync(codeFix, fixedSolution).GetAwaiter().GetResult();
+                VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).GetAwaiter().GetResult();
             }
         }
 
@@ -856,7 +873,7 @@ namespace Gu.Roslyn.Asserts
             await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                await AssertNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
+                await VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
         }
 

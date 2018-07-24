@@ -1,6 +1,7 @@
 // ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Collections.Generic;
     using NUnit.Framework;
 
     [TestFixture]
@@ -175,6 +176,9 @@ namespace Project2
                 StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
 
+                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new List<string> { foo1, foo2 }));
+                StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
+                StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
                 if (Throw)
                 {
                     AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);

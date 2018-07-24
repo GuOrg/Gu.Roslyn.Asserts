@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static async Task AssertNoCompilerErrorsAsync(CodeFixProvider codeFix, Solution fixedSolution)
+        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider codeFix, Solution fixedSolution)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics

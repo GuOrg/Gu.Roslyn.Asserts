@@ -530,7 +530,7 @@ namespace Gu.Roslyn.Asserts
 
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                await AssertNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false);
+                await VerifyNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false);
             }
         }
 
@@ -563,16 +563,15 @@ namespace Gu.Roslyn.Asserts
                 throw AssertException.Create($"{fix} did not change any document.");
             }
 
-            var fixedSource = CodeReader.GetStringFromDocumentAsync(
+            var fixedSource = CodeReader.GetStringFromDocument(
                                                   fixedSolution.GetDocument(sln.GetDocument(diagnostic.Location.SourceTree).Id),
                                                   Formatter.Annotation,
-                                                  CancellationToken.None)
-                                              .GetAwaiter().GetResult();
+                                                  CancellationToken.None);
             CodeAssert.AreEqual(fixedCode, fixedSource);
 
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                AssertNoCompilerErrorsAsync(fix, fixedSolution).GetAwaiter().GetResult();
+                VerifyNoCompilerErrorsAsync(fix, fixedSolution).GetAwaiter().GetResult();
             }
         }
     }

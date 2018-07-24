@@ -59,33 +59,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The analyzer.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
-            await ValidAsync(analyzer, sln);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The analyzer.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
-            await ValidAsync(analyzer, sln);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
@@ -213,21 +186,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The analyzer.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
-        {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), metadataReferences);
-            await ValidAsync(analyzer, sln);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
@@ -265,7 +223,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics));
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -278,9 +236,7 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(Solution solution)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
-            var analyzer = new TAnalyzer();
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics);
+            Valid(new TAnalyzer(), solution);
         }
 
         /// <summary>
@@ -290,9 +246,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(Type analyzerType, Solution solution)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), solution);
         }
 
         /// <summary>
@@ -304,6 +258,48 @@ namespace Gu.Roslyn.Asserts
         {
             var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
             NoDiagnostics(diagnostics);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
+            await ValidAsync(analyzer, sln);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            await ValidAsync(analyzer, sln);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), metadataReferences);
+            await ValidAsync(analyzer, sln);
         }
 
         /// <summary>
@@ -332,7 +328,8 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, code, compilationOptions, metadataReferences)
+            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer)
                                            .ConfigureAwait(false);
 
             NoDiagnostics(diagnostics);

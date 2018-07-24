@@ -229,5 +229,22 @@ namespace Gu.Roslyn.Asserts
             var sourceText = await formatted.GetTextAsync(cancellationToken).ConfigureAwait(false);
             return sourceText.ToString();
         }
+
+        /// <summary>
+        /// Gets the simplified and formatted text from the document.
+        /// </summary>
+        /// <param name="document">The document to extract the source code from.</param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
+        internal static string GetStringFromDocument(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)
+        {
+            var simplifiedDoc = Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+            var formatted = format == null
+                ? Formatter.FormatAsync(simplifiedDoc, cancellationToken: cancellationToken).GetAwaiter().GetResult()
+                : Formatter.FormatAsync(simplifiedDoc, format, cancellationToken: cancellationToken).GetAwaiter().GetResult();
+            var sourceText = formatted.GetTextAsync(cancellationToken).GetAwaiter().GetResult();
+            return sourceText.ToString();
+        }
     }
 }

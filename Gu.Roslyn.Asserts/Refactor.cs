@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts
                 metadataReferences);
             var document = sln.Projects.Single().Documents.Single();
             var action = SingleAction(document, refactoring, position);
-            var edit = action.GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+            var edit = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts
                 throw new InvalidOperationException("The refactoring did not register a refactoring for the current index.");
             }
 
-            var edit = actions[index].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+            var edit = actions[index].GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 
