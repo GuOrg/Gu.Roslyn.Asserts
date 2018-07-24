@@ -1,4 +1,5 @@
 ﻿type project
+projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46

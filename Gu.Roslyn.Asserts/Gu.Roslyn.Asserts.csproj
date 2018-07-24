@@ -16,8 +16,8 @@
     <Authors>Johan Larsson</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/JohanLarsson/Gu.Roslyn.Asserts</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/JohanLarsson/Gu.Roslyn.Asserts</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
