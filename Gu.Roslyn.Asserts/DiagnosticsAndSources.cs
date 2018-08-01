@@ -51,6 +51,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, string code)
         {
+            if (analyzer == null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateFromCodeWithErrorsIndicated(analyzer, new[] { code });
         }
 
@@ -62,6 +72,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
+            if (analyzer == null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             if (analyzer.SupportedDiagnostics.Length > 1)
             {
                 var message = "This can only be used for analyzers with one SupportedDiagnostics\r\n" +
@@ -80,6 +100,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
         {
+            if (descriptor == null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateFromCodeWithErrorsIndicated(descriptor.Id, null, code);
         }
 
@@ -95,6 +125,11 @@ namespace Gu.Roslyn.Asserts
             if (analyzerId == null)
             {
                 throw new ArgumentNullException(nameof(analyzerId));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
             }
 
             var diagnostics = new List<ExpectedDiagnostic>();
@@ -130,6 +165,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, string code)
         {
+            if (expectedDiagnostic == null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return Create(expectedDiagnostic, new[] { code });
         }
 
@@ -142,6 +187,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
+            if (expectedDiagnostic == null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             if (HasErrorsIndicated(code))
             {
                 if (expectedDiagnostic.HasPosition)
