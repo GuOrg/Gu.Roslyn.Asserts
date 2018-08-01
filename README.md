@@ -76,6 +76,7 @@ namespace RoslynSandbox
 # Diagnostics
 
 Use `AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
+With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
 ```c#
 [Test]
@@ -108,8 +109,11 @@ namespace RoslynSandbox
 }
 ```
 
+If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnsics other than the expected.
+
 # CodeFix
 Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix fixes it and produces the expected code.
+With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
 ```c#
 [Test]
@@ -162,6 +166,8 @@ namespace RoslynSandbox
     AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode, "Rename to value");
 }
 ```
+
+If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnsics other than the expected.
 
 ## Code fix only
 
@@ -228,6 +234,7 @@ namespace RoslynSandbox
 # NoFix
 
 Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix does not change the code.
+With an aplhanumeric keyboard `alt + 25` writes `↓`.
 This can happen if for example it is decided to not support rare edge cases with the code fix.
 
 ```c#
