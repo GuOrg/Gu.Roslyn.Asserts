@@ -82,20 +82,8 @@ namespace Gu.Roslyn.Asserts
                 throw new ArgumentNullException(nameof(code));
             }
 
-            if (analyzer.SupportedDiagnostics.Length == 0)
-            {
-                var message = $"The analyzer {analyzer}.SupportedDiagnostics returns an empty array.\r\n";
-                throw new ArgumentException(message, nameof(analyzer));
-            }
-
-            if (analyzer.SupportedDiagnostics.Length > 1)
-            {
-                var message = "This can only be used for analyzers with one SupportedDiagnostics\r\n" +
-                              "Prefer overload with ExpectedDiagnostic";
-                throw new ArgumentException(message, nameof(analyzer));
-            }
-
-            return CreateFromCodeWithErrorsIndicated(analyzer.SupportedDiagnostics[0].Id, null, code);
+            AnalyzerAssert.VerifySingleSupportedDiagnostic(analyzer, out var descriptor);
+            return CreateFromCodeWithErrorsIndicated(descriptor.Id, null, code);
         }
 
         /// <summary>

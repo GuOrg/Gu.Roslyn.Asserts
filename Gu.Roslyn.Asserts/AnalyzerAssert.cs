@@ -101,6 +101,34 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
+        /// <summary>
+        /// Check that the analyzer supports exactly one diagnostic.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
+        /// <param name="descriptor">The descriptor of the supported diagnostic</param>
+        internal static void VerifySingleSupportedDiagnostic(DiagnosticAnalyzer analyzer, out DiagnosticDescriptor descriptor)
+        {
+            if (analyzer.SupportedDiagnostics.Length == 0)
+            {
+                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics returns an empty array.\r\n";
+                throw new ArgumentException(message, nameof(analyzer));
+            }
+
+            if (analyzer.SupportedDiagnostics.Length > 1)
+            {
+                var message = "This can only be used for analyzers with one SupportedDiagnostics\r\n" +
+                              "Prefer overload with ExpectedDiagnostic";
+                throw new ArgumentException(message, nameof(analyzer));
+            }
+
+            descriptor = analyzer.SupportedDiagnostics[0];
+            if (descriptor == null)
+            {
+                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.\r\n";
+                throw new InvalidOperationException(message);
+            }
+        }
+
         private static void VerifyCodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
