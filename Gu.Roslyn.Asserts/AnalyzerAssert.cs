@@ -110,22 +110,22 @@ namespace Gu.Roslyn.Asserts
         {
             if (analyzer.SupportedDiagnostics.Length == 0)
             {
-                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics returns an empty array.\r\n";
-                throw new ArgumentException(message, nameof(analyzer));
+                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics returns an empty array.";
+                throw AssertException.Create(message);
             }
 
             if (analyzer.SupportedDiagnostics.Length > 1)
             {
-                var message = "This can only be used for analyzers with one SupportedDiagnostics\r\n" +
-                              "Prefer overload with ExpectedDiagnostic";
-                throw new ArgumentException(message, nameof(analyzer));
+                var message = "This can only be used for analyzers with one SupportedDiagnostics.\r\n" +
+                              "Prefer overload with ExpectedDiagnostic.";
+                throw AssertException.Create(message);
             }
 
             descriptor = analyzer.SupportedDiagnostics[0];
             if (descriptor == null)
             {
-                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.\r\n";
-                throw new InvalidOperationException(message);
+                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.";
+                throw AssertException.Create(message);
             }
         }
 

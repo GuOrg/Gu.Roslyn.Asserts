@@ -2,6 +2,10 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
+    using System.Collections.Immutable;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     [TestFixture]
@@ -540,6 +544,34 @@ namespace RoslynSandbox
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo1.cs | private readonly int ↓_value1;\r\n";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void WhenEmpty()
+            {
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray<DiagnosticDescriptor>.Empty), string.Empty));
+                var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics returns an empty array.";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void WhenSingleNull()
+            {
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray.Create((DiagnosticDescriptor)null)), string.Empty));
+                var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics[0] returns null.";
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void WhenMoreThanOne()
+            {
+                var analyzer = new SupportedDiagnosticsAnalyzer(ImmutableArray.Create(
+                    new DiagnosticDescriptor("ID1", "Title", "Message", "Category", DiagnosticSeverity.Warning, isEnabledByDefault: true),
+                    new DiagnosticDescriptor("ID2", "Title", "Message", "Category", DiagnosticSeverity.Warning, isEnabledByDefault: true)));
+                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.Diagnostics(analyzer, string.Empty));
+                var expected = "This can only be used for analyzers with one SupportedDiagnostics.\r\n" +
+                               "Prefer overload with ExpectedDiagnostic.";
                 Assert.AreEqual(expected, exception.Message);
             }
         }
