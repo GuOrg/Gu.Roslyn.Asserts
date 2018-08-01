@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 var segments = uri.Segments;
                 var path = string.Join(string.Empty, segments.Skip(5));
                 this.Provider = uri.Host;
-                var trim = new char[] { '/' };
+                var trim = new[] { '/' };
                 this.User = segments[1].TrimEnd(trim);
                 this.RepoName = segments[2].TrimEnd(trim);
                 this.RepositoryUrl = new Uri(uri, string.Join(string.Empty, segments.Take(3)));

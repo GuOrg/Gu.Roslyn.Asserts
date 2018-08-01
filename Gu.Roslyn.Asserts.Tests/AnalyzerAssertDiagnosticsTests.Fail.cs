@@ -4,8 +4,6 @@ namespace Gu.Roslyn.Asserts.Tests
     using System;
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     [TestFixture]
