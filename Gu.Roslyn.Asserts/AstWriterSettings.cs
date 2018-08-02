@@ -2,16 +2,24 @@ namespace Gu.Roslyn.Asserts
 {
     public class AstWriterSettings
     {
-        public static readonly AstWriterSettings EveryThing = new AstWriterSettings(writeNodeText: true, writeEmptyTrivia: true);
+        public static readonly AstWriterSettings Everything = new AstWriterSettings(json: false, writeEmptyTrivia: true);
 
-        public AstWriterSettings(bool writeNodeText, bool writeEmptyTrivia)
+        public static readonly AstWriterSettings EverythingJson = new AstWriterSettings(json: false, writeEmptyTrivia: true);
+
+        public AstWriterSettings(bool json, bool writeEmptyTrivia)
         {
-            this.WriteNodeText = writeNodeText;
+            this.Json = json;
             this.WriteEmptyTrivia = writeEmptyTrivia;
         }
 
-        public bool WriteNodeText { get; }
+        /// <summary>
+        /// If the dump should be formatted as JSON.
+        /// </summary>
+        public bool Json { get; }
 
+        /// <summary>
+        /// If empty trivia should be included.
+        /// </summary>
         public bool WriteEmptyTrivia { get; }
     }
 }

@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The node serialized into a string format.</returns>
         public static string Serialize(SyntaxNode node, AstWriterSettings settings = null)
         {
-            var writer = new AstWriter(settings ?? AstWriterSettings.EveryThing).Write(node);
+            var writer = new AstWriter(settings ?? AstWriterSettings.Everything).Write(node);
             return writer.ToString();
         }
 
@@ -104,14 +104,18 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter Write(SyntaxToken token)
         {
-            return this.WriteStartElement()
+            this.WriteStartElement()
                        .Write(" ")
                        .WriteProperty("Kind", token.Kind().ToString())
                        .Write(", ")
-                       .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"))
-                       .Write(", ")
-                       .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"))
-                       .WriteTrivia("LeadingTrivia", token.LeadingTrivia)
+                       .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
+            if (token.Text != token.ValueText)
+            {
+                this.Write(", ")
+                    .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
+            }
+
+            return this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
                        .WriteTrivia("TrailingTrivia", token.TrailingTrivia)
                        .Write(" ")
                        .WriteEndElement();
