@@ -1,8 +1,8 @@
 namespace Gu.Roslyn.Asserts
 {
-    public struct AstWriterSettings
+    public class AstWriterSettings
     {
-        public static readonly AstWriterSettings EveryThing = new AstWriterSettings(true, true);
+        public static readonly AstWriterSettings EveryThing = new AstWriterSettings(writeNodeText: true, writeEmptyTrivia: true);
 
         public AstWriterSettings(bool writeNodeText, bool writeEmptyTrivia)
         {
