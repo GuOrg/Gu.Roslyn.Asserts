@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer"> The analyzer that is expected to report a diagnostic.</param>
         /// <param name="span"> The position of the expected diagnostic.</param>
-        [Obsolete("To be removed")]
+        [Obsolete("To be removed use factory methods.")]
         public ExpectedDiagnostic(DiagnosticAnalyzer analyzer, FileLinePositionSpan span)
         {
             this.Analyzer = analyzer;
@@ -243,6 +243,13 @@ namespace Gu.Roslyn.Asserts
 
             return true;
         }
+
+        /// <summary>
+        /// Get a clone of this instance with updated <see cref="Message"/>
+        /// </summary>
+        /// <param name="message">The expected message.</param>
+        /// <returns>A new <see cref="ExpectedDiagnostic"/></returns>
+        public ExpectedDiagnostic WithMessage(string message) => new ExpectedDiagnostic(this.Id, message, this.Span);
 
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position
