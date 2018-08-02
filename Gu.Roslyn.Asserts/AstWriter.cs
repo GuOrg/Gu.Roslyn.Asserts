@@ -34,15 +34,26 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter Write(SyntaxNode node)
         {
-            return this.WriteStartElement()
-                       .Write(" ")
-                       .WriteProperty("Kind", node.Kind().ToString())
-                       .WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
-                       .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia())
-                       .WriteChildTokens(node.ChildTokens().ToList())
-                       .WriteChildNodes(node.ChildNodes().ToList())
-                       .Write(" ")
-                       .WriteEndElement();
+            this.WriteStartElement()
+                .Write(" ");
+            if (this.settings.Json)
+            {
+                this.WriteProperty("Kind", node.Kind().ToString());
+            }
+            else
+            {
+                this.Write(node.Kind().ToString());
+            }
+
+            this.indentation.Push();
+            this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
+                .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia())
+                .WriteChildTokens(node.ChildTokens().ToList())
+                .WriteChildNodes(node.ChildNodes().ToList())
+                .Write(" ")
+                .WriteEndElement();
+            this.indentation.Pop();
+            return this;
         }
 
         private AstWriter WriteChildNodes(IReadOnlyList<SyntaxNode> children)
@@ -51,7 +62,7 @@ namespace Gu.Roslyn.Asserts
             {
                 this.WriteLine(",")
                     .Write(this.indentation)
-                    .Write("\"ChildNodes\": [");
+                    .Write("\"ChildNodes\":  [ ");
                 this.indentation.PushChars(17);
                 for (var i = 0; i < children.Count; i++)
                 {
@@ -62,8 +73,12 @@ namespace Gu.Roslyn.Asserts
                     }
                     else
                     {
-                        this.WriteLine(",")
-                            .Write(this.indentation);
+                        if (this.settings.Json)
+                        {
+                            this.WriteLine(",");
+                        }
+
+                        this.Write(this.indentation);
                     }
                 }
 
@@ -77,10 +92,21 @@ namespace Gu.Roslyn.Asserts
         {
             if (children.Any())
             {
-                this.WriteLine(",")
+                if (this.settings.Json)
+                {
+                    this.WriteLine(",")
                     .Write(this.indentation)
                     .Write("\"ChildTokens\": [ ");
-                this.indentation.PushChars(17);
+                    this.indentation.PushChars(17);
+                }
+                else
+                {
+                    this.WriteLine()
+                        .Write(this.indentation)
+                        .Write("ChildTokens: [ ");
+                    this.indentation.PushChars(15);
+                }
+
                 for (var i = 0; i < children.Count; i++)
                 {
                     var token = children[i];
@@ -105,14 +131,30 @@ namespace Gu.Roslyn.Asserts
         private AstWriter Write(SyntaxToken token)
         {
             this.WriteStartElement()
-                       .Write(" ")
-                       .WriteProperty("Kind", token.Kind().ToString())
-                       .Write(", ")
-                       .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
-            if (token.Text != token.ValueText)
+                .Write(" ");
+            if (this.settings.Json)
             {
-                this.Write(", ")
-                    .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
+                this.WriteProperty("Kind", token.Kind().ToString())
+                    .Write(", ")
+                    .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
+                if (token.Text != token.ValueText)
+                {
+                    this.Write(", ")
+                        .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
+                }
+            }
+            else
+            {
+                if (token.IsKeyword())
+                {
+                    this.Write(token.Kind().ToString());
+                }
+                else
+                {
+                    this.Write(token.Kind().ToString())
+                        .Write(" ")
+                        .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
+                }
             }
 
             return this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
@@ -125,7 +167,15 @@ namespace Gu.Roslyn.Asserts
         {
             if (triviaList.Any())
             {
-                this.Write($", \"{name}\": [ ");
+                if (this.settings.Json)
+                {
+                    this.Write(", \"").Write(name).Write("\": [ ");
+                }
+                else
+                {
+                    this.Write(" ").Write(name).Write(": [ ");
+                }
+
                 for (var i = 0; i < triviaList.Count; i++)
                 {
                     var trivia = triviaList[i];
@@ -139,22 +189,46 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter Write(SyntaxTrivia trivia)
         {
+            if (this.settings.Json)
+            {
+                return this.Write("{ ")
+                       .WriteProperty("Kind", trivia.Kind().ToString())
+                       .Write(", ")
+                       .WriteProperty("Text", trivia.ToString().Replace("\r", "\\r").Replace("\n", "\\n"))
+                       .Write(" }");
+            }
+
+            if (trivia.IsKind(SyntaxKind.EndOfLineTrivia))
+            {
+                return this.Write(trivia.Kind().ToString());
+            }
+
             return this.Write("{ ")
-                         .WriteProperty("Kind", trivia.Kind().ToString())
-                         .Write(", ")
-                         .WriteProperty("Text", trivia.ToString().Replace("\r", "\\r").Replace("\n", "\\n"))
-                         .Write(" }");
+                       .Write(trivia.Kind().ToString())
+                       .Write(": \"")
+                       .Write(trivia.ToString().Replace("\r", "\\r").Replace("\n", "\\n"))
+                       .Write("\" }");
         }
 
         private AstWriter WriteProperty(string name, string value)
         {
-            this.builder.Append('"')
-                .Append(name)
-                .Append('"')
-                .Append(": ")
-                .Append('"')
-                .Append(value)
-                .Append('"');
+            if (this.settings.Json)
+            {
+                this.builder.Append('"')
+                    .Append(name)
+                    .Append('"')
+                    .Append(": ")
+                    .Append('"')
+                    .Append(value)
+                    .Append('"');
+            }
+            else
+            {
+                this.builder.Append(name)
+                            .Append(": ")
+                            .Append(value);
+            }
+
             return this;
         }
 
@@ -202,7 +276,7 @@ namespace Gu.Roslyn.Asserts
 
         private class Indentation
         {
-            private readonly Stack<string> stack = new Stack<string>(new[] { "  " });
+            private readonly Stack<string> stack = new Stack<string>(new[] { string.Empty });
 
             public string Current => this.stack.Peek();
 

@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts
     {
         public static readonly AstWriterSettings Everything = new AstWriterSettings(json: false, writeEmptyTrivia: true);
 
-        public static readonly AstWriterSettings EverythingJson = new AstWriterSettings(json: false, writeEmptyTrivia: true);
+        public static readonly AstWriterSettings EverythingJson = new AstWriterSettings(json: true, writeEmptyTrivia: true);
 
         public AstWriterSettings(bool json, bool writeEmptyTrivia)
         {
