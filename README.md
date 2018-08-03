@@ -1,6 +1,6 @@
 # Gu.Roslyn.Asserts
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/Gu.Roslyn.Asserts.svg)](https://www.nuget.org/packages/Gu.Roslyn.Asserts/)
 [![Build status](https://ci.appveyor.com/api/projects/status/a0976a1dmtcx387r/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-roslyn-asserts/branch/master)
 
@@ -17,6 +17,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
 - [NoFix](#nofix)
+- [AST](#ast)
 - [Attributes](#attributes)
   - [MetadataReferenceAttribute](#metadatareferenceattribute)
   - [MetadataReferencesAttribute](#metadatareferencesattribute)
@@ -251,6 +252,20 @@ namespace RoslynSandbox
 }";
 
     AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
+}
+```
+
+# AST
+
+For checking every node and token in the tree.
+
+```cs
+[Test]
+public void CheckAst()
+{
+    var actual = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("a"), SyntaxFactory.IdentifierName("b"));
+    var expected = CSharpSyntaxTree.ParseText("var c = a + b").FindAssignmentExpression("a + b");
+    AnalyzerAssert.Ast(expected, actual);
 }
 ```
 
