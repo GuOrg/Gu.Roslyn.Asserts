@@ -60,10 +60,10 @@ namespace Gu.Roslyn.Asserts
         {
             if (children.Any())
             {
-                this.WriteLine(",")
+                this.WriteLine(this.settings.Json ? "," : string.Empty)
                     .Write(this.indentation)
-                    .Write("\"ChildNodes\":  [ ");
-                this.indentation.PushChars(17);
+                    .Write(this.settings.Json ? "\"ChildNodes\":  [ " : "ChildNodes:  [ ");
+                this.indentation.PushChars(this.settings.Json ? 17 : 15);
                 for (var i = 0; i < children.Count; i++)
                 {
                     this.Write(children[i]);
@@ -73,12 +73,8 @@ namespace Gu.Roslyn.Asserts
                     }
                     else
                     {
-                        if (this.settings.Json)
-                        {
-                            this.WriteLine(",");
-                        }
-
-                        this.Write(this.indentation);
+                        this.WriteLine(this.settings.Json ? "," : string.Empty)
+                            .Write(this.indentation);
                     }
                 }
 
@@ -92,21 +88,10 @@ namespace Gu.Roslyn.Asserts
         {
             if (children.Any())
             {
-                if (this.settings.Json)
-                {
-                    this.WriteLine(",")
+                this.WriteLine(this.settings.Json ? "," : string.Empty)
                     .Write(this.indentation)
-                    .Write("\"ChildTokens\": [ ");
-                    this.indentation.PushChars(17);
-                }
-                else
-                {
-                    this.WriteLine()
-                        .Write(this.indentation)
-                        .Write("ChildTokens: [ ");
-                    this.indentation.PushChars(15);
-                }
-
+                    .Write(this.settings.Json ? "\"ChildTokens\": [ " : "ChildTokens: [ ");
+                this.indentation.PushChars(this.settings.Json ? 17 : 15);
                 for (var i = 0; i < children.Count; i++)
                 {
                     var token = children[i];
@@ -117,7 +102,7 @@ namespace Gu.Roslyn.Asserts
                     }
                     else
                     {
-                        this.WriteLine(",")
+                        this.WriteLine(this.settings.Json ? "," : string.Empty)
                             .Write(this.indentation);
                     }
                 }
@@ -216,31 +201,24 @@ namespace Gu.Roslyn.Asserts
             {
                 this.builder.Append('"')
                     .Append(name)
-                    .Append('"')
-                    .Append(": ")
-                    .Append('"')
-                    .Append(value)
                     .Append('"');
             }
             else
             {
-                this.builder.Append(name)
-                            .Append(": ")
-                            .Append(value);
+                this.builder.Append(name);
             }
 
+            this.builder
+                .Append(": ")
+                .Append('"')
+                .Append(value)
+                .Append('"');
             return this;
         }
 
-        private AstWriter Write(Indentation indentation)
+        private AstWriter Write(Indentation indent)
         {
-            this.builder.Append(indentation.Current);
-            return this;
-        }
-
-        private AstWriter Write(char c)
-        {
-            this.builder.Append(c);
+            this.builder.Append(indent.Current);
             return this;
         }
 
