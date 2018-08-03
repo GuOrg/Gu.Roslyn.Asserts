@@ -70,6 +70,14 @@ a
             CodeAssert.AreEqual(expected, actual);
         }
 
+        [TestCase("\\r\\n", "\\r\\n")]
+        [TestCase("\\r\\n", "\\n")]
+        [TestCase("\\n", "\\n")]
+        public void WhenCodeContainsNewLines(string x, string y)
+        {
+            CodeAssert.AreEqual(x, y);
+        }
+
         [Test]
         public void WhenNotEqual()
         {

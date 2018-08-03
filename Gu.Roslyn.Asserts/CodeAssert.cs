@@ -84,6 +84,22 @@ namespace Gu.Roslyn.Asserts
 
                 if (ec != ac)
                 {
+                    if (IsAt(expected, expectedPos, "\\r") ||
+                        IsAt(actual, actualPos, "\\r"))
+                    {
+                        if (IsAt(expected, expectedPos, "\\r"))
+                        {
+                            expectedPos += 2;
+                        }
+
+                        if (IsAt(actual, actualPos, "\\r"))
+                        {
+                            actualPos += 2;
+                        }
+
+                        continue;
+                    }
+
                     var errorBuilder = StringBuilderPool.Borrow();
                     if (messageHeader != null)
                     {
@@ -167,6 +183,30 @@ namespace Gu.Roslyn.Asserts
                                                .Return();
                 throw AssertException.Create(message);
             }
+        }
+
+        private static bool IsAt(string text, int pos, string toMatch)
+        {
+            if (text.Length <= pos)
+            {
+                return false;
+            }
+
+            var start = pos - toMatch.Length + 1;
+            if (start < 0)
+            {
+                return false;
+            }
+
+            for (var i = toMatch.Length - 1; i >= 0; i--)
+            {
+                if (text[start + i] != toMatch[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

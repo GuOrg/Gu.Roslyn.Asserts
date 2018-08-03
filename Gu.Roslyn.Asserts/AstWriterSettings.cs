@@ -3,17 +3,17 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// Settings for how <see cref="AstWriter"/> serializes the tree.
     /// </summary>
-    public class AstWriterSettings
+    public sealed class AstWriterSettings
     {
         /// <summary>
         /// For dumping all the things in light format.
         /// </summary>
-        public static readonly AstWriterSettings Everything = new AstWriterSettings(json: false);
+        public static readonly AstWriterSettings Default = new AstWriterSettings(json: false);
 
         /// <summary>
         /// For dumping all the things in JSON format.
         /// </summary>
-        public static readonly AstWriterSettings EverythingJson = new AstWriterSettings(json: true);
+        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(json: true);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AstWriterSettings"/> class.

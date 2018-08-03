@@ -40,7 +40,7 @@ namespace RoslynSandbox
     }
 }");
             var node = tree.FindClassDeclaration("Foo");
-            var actual = AstWriter.Serialize(node, AstWriterSettings.EverythingJson);
+            var actual = AstWriter.Serialize(node, AstWriterSettings.DefaultJson);
             var expected = "{ \"Kind\": \"ClassDeclaration\", \"LeadingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \"    \" } ], \"TrailingTrivia\": [ { \"Kind\": \"EndOfLineTrivia\", \"Text\": \"\\r\\n\" } ],\r\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"PublicKeyword\", \"Text\": \"public\", \"LeadingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \"    \" } ], \"TrailingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \" \" } ] },\r\n" +
                            "                   { \"Kind\": \"ClassKeyword\", \"Text\": \"class\", \"TrailingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \" \" } ] },\r\n" +
@@ -104,7 +104,7 @@ namespace RoslynSandbox
     }
 }");
             var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("Foo").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
-            var actual = AstWriter.Serialize(comment, AstWriterSettings.EverythingJson);
+            var actual = AstWriter.Serialize(comment, AstWriterSettings.DefaultJson);
             var expected = "{ \"Kind\": \"SingleLineDocumentationCommentTrivia\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"EndOfDocumentationCommentToken\", \"Text\": \"\" } ],\n" +
                            "  \"ChildNodes\":  [ { \"Kind\": \"XmlText\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
