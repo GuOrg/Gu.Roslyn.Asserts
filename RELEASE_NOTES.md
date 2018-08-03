@@ -1,3 +1,7 @@
+#### 2.4.2
+* FEATURE: AnalyzerAssert.Ast.
+* FEATURE: AstWriter.
+
 #### 2.4.0
 * BREAKING: Mark async API obsolete.
 * FEATURE: Create sln from github url.

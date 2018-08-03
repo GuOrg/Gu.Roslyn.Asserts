@@ -6,6 +6,9 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
+    /// <summary>
+    /// Helper for dumping recursive metadata for a SyntaxNode
+    /// </summary>
     public class AstWriter
     {
         private readonly StringBuilder builder = new StringBuilder();
@@ -95,7 +98,7 @@ namespace Gu.Roslyn.Asserts
                 for (var i = 0; i < children.Count; i++)
                 {
                     var token = children[i];
-                    this.Write(token);
+                    _ = this.Write(token);
                     if (i == children.Count - 1)
                     {
                         this.Write(" ]");
