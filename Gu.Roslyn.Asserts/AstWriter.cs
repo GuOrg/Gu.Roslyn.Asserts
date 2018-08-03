@@ -231,12 +231,6 @@ namespace Gu.Roslyn.Asserts
             return this;
         }
 
-        private AstWriter WriteLine()
-        {
-            this.builder.AppendLine();
-            return this;
-        }
-
         private AstWriter WriteLine(string text)
         {
             this.builder.AppendLine(text);
