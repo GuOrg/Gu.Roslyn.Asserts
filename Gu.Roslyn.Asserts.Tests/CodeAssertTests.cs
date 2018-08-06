@@ -100,7 +100,7 @@ namespace RoslynSandbox
 }";
 
             var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch on line 6 of file Foo.cs\r\n" +
+            var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
                            "                                       ^\r\n" +
@@ -124,13 +124,32 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public void WhenNotEqualUnknownFileName()
+        {
+            var expectedCode = @"        private readonly int _value;";
+
+            var actual = @"        private readonly int bar;";
+
+            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var expected = "Mismatch on line 1.\r\n" +
+                           "Expected:         private readonly int _value;\r\n" +
+                           "Actual:           private readonly int bar;\r\n" +
+                           "                                       ^\r\n" +
+                           "Expected:\r\n" +
+                           "        private readonly int _value;\r\n" +
+                           "Actual:\r\n" +
+                           "        private readonly int bar;\r\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
         public void WhenNotEqualEnd()
         {
             var expectedCode = "\r\na\r\n";
             var actual = "\r\na\r\n\r\n";
 
             var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch at end of file Unknown.cs\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
+            var expected = "Mismatch at end.\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 

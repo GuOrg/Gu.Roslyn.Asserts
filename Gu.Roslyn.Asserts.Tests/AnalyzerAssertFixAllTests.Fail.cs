@@ -132,7 +132,7 @@ namespace RoslynSandbox
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Applying fixes one by one failed.\r\n" +
-                               "Mismatch on line 6 of file Foo.cs\r\n" +
+                               "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
@@ -186,7 +186,7 @@ namespace RoslynSandbox
 }";
                 var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode }));
                 var expected = "Applying fixes one by one failed.\r\n" +
-                               "Mismatch on line 6 of file Foo.cs\r\n" +
+                               "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +

@@ -106,7 +106,11 @@ namespace Gu.Roslyn.Asserts
                         errorBuilder.AppendLine(messageHeader);
                     }
 
-                    errorBuilder.AppendLine($"Mismatch on line {line} of file {CodeReader.FileName(expected)}");
+                    errorBuilder.AppendLine(
+                        CodeReader.TryGetFileName(expected, out var fileName)
+                        ? $"Mismatch on line {line} of file {fileName}."
+                        : $"Mismatch on line {line}.");
+
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
                     var diffPos = Math.Min(expectedLine.Length, actualLine.Length);
@@ -156,33 +160,20 @@ namespace Gu.Roslyn.Asserts
                 return;
             }
 
+            var messageBuilder = StringBuilderPool.Borrow();
             if (messageHeader != null)
             {
-                var message = StringBuilderPool.Borrow()
-                                               .AppendLine(messageHeader)
-                                               .AppendLine($"Mismatch at end of file {CodeReader.FileName(expected)}")
-                                               .AppendLine("Expected:")
-                                               .Append(expected)
-                                               .AppendLine()
-                                               .AppendLine("Actual:")
-                                               .Append(actual)
-                                               .AppendLine()
-                                               .Return();
-                throw AssertException.Create(message);
+                messageBuilder.AppendLine(messageHeader);
             }
-            else
-            {
-                var message = StringBuilderPool.Borrow()
-                                               .AppendLine($"Mismatch at end of file {CodeReader.FileName(expected)}")
-                                               .AppendLine("Expected:")
-                                               .Append(expected)
-                                               .AppendLine()
-                                               .AppendLine("Actual:")
-                                               .Append(actual)
-                                               .AppendLine()
-                                               .Return();
-                throw AssertException.Create(message);
-            }
+
+            messageBuilder.AppendLine(CodeReader.TryGetFileName(expected, out var name) ? $"Mismatch at end of file {name}." : "Mismatch at end.")
+                          .AppendLine("Expected:")
+                          .Append(expected)
+                          .AppendLine()
+                          .AppendLine("Actual:")
+                          .Append(actual)
+                          .AppendLine();
+            throw AssertException.Create(messageBuilder.Return());
         }
 
         private static bool IsAt(string text, int pos, string toMatch)

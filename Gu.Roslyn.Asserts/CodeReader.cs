@@ -56,6 +56,53 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="code">The code to parse.</param>
         /// <returns>The file name </returns>
+        public static bool TryGetFileName(string code, out string fileName)
+        {
+            fileName = null;
+            if (string.IsNullOrEmpty(code))
+            {
+                return false;
+            }
+
+            var match = Regex.Match(code, @"^ *(↓?(public|internal|static|sealed|abstract) )*↓?(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+            if (match.Success)
+            {
+                fileName = match.Groups["name"].Value.Trim('↓');
+                if (match.Groups["type"].Success)
+                {
+                    var args = string.Join(",", match.Groups["type"].Captures.OfType<Capture>().Select(c => c.Value.Trim(' ', '↓')));
+                    fileName += $"{{{args}}}";
+                }
+
+                fileName = $"{fileName}.cs";
+                return true;
+            }
+
+            if (code.Contains("assembly:"))
+            {
+                fileName = "AssemblyInfo.cs";
+                return true;
+            }
+
+            if (code.StartsWith("<"))
+            {
+                if (code.Contains("<resheader name=\"resmimetype\">"))
+                {
+                    fileName = "Resources.resx";
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the filename from code as a string.
+        /// </summary>
+        /// <param name="code">The code to parse.</param>
+        /// <returns>The file name </returns>
         public static string FileName(string code)
         {
             if (string.IsNullOrEmpty(code))
@@ -63,35 +110,22 @@ namespace Gu.Roslyn.Asserts
                 return $"Empty.cs";
             }
 
-            var match = Regex.Match(code, @"^ *(↓?(public|internal|static|sealed|abstract) )*↓?(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-            if (match.Success)
+            if (TryGetFileName(code, out var fileName))
             {
-                var fileName = match.Groups["name"].Value.Trim('↓');
-                if (match.Groups["type"].Success)
-                {
-                    var args = string.Join(",", match.Groups["type"].Captures.OfType<Capture>().Select(c => c.Value.Trim(' ', '↓')));
-                    fileName += $"{{{args}}}";
-                }
-
-                return $"{fileName}.cs";
-            }
-
-            if (code.Contains("assembly:"))
-            {
-                return "AssemblyInfo.cs";
+                return fileName;
             }
 
             if (code.StartsWith("<"))
             {
-                if (code.Contains("<resheader name=\"resmimetype\">"))
-                {
-                    return "Resources.resx";
-                }
-
                 return "Unknown.xml";
             }
 
-            return "Unknown.cs";
+            if (code.StartsWith("{"))
+            {
+                return "Unknown.json";
+            }
+
+            return "Unknown";
         }
 
         /// <summary>
