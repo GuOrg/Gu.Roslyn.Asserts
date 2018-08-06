@@ -23,8 +23,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
                 CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
@@ -44,8 +54,23 @@ namespace Gu.Roslyn.Asserts
         /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             var actions = CodeActions(refactoring, testCode, position, metadataReferences)
                           .Where(x => x.Title == title)
                           .ToArray();
@@ -70,8 +95,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="index">The index of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
             var actions = CodeActions(refactoring, testCode, position, metadataReferences);
             if (actions.Count == 0)
             {
@@ -95,8 +130,23 @@ namespace Gu.Roslyn.Asserts
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
+            if (metadataReferences == null)
+            {
+                throw new ArgumentNullException(nameof(metadataReferences));
+            }
+
             var actions = CodeActions(refactoring, testCode, span, metadataReferences);
             switch (actions.Count)
             {
@@ -119,8 +169,23 @@ namespace Gu.Roslyn.Asserts
         /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             var actions = CodeActions(refactoring, testCode, span, metadataReferences)
                           .Where(x => x.Title == title)
                           .ToArray();
@@ -145,8 +210,18 @@ namespace Gu.Roslyn.Asserts
         /// <param name="index">The index of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IReadOnlyList<MetadataReference> metadataReferences)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IReadOnlyList<MetadataReference> metadataReferences = null)
         {
+            if (refactoring == null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode == null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
             var actions = CodeActions(refactoring, testCode, span, metadataReferences);
             if (actions.Count == 0)
             {

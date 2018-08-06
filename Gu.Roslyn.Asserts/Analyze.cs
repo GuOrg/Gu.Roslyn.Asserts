@@ -29,6 +29,11 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("To be removed.")]
         public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> references)
         {
+            if (analyzer == null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var sln = CodeFactory.CreateSolution(sources, compilationOptions, references);
             var diagnostics = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
             return new DiagnosticsWithMetadata(sln, diagnostics);
