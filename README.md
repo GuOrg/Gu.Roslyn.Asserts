@@ -17,6 +17,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
 - [NoFix](#nofix)
+- [Refactoring](#refactoring)
 - [AST](#ast)
 - [Attributes](#attributes)
   - [MetadataReferenceAttribute](#metadatareferenceattribute)
@@ -253,6 +254,25 @@ namespace RoslynSandbox
 
     AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
 }
+```
+
+# Refactoring
+```cs
+        [Test]
+        public void WithPositionIndicated()
+        {
+            var testCode = @"
+class ↓Foo
+{
+}";
+
+            var fixedCode = @"
+class FOO
+{
+}";
+
+            AnalyzerAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode);
+        }
 ```
 
 # AST

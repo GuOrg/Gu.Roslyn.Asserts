@@ -216,6 +216,20 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), resourcesCode, testCode);
                 AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, testCode);
             }
+
+            [Test]
+            public void AnalyzerWithTwoDiagnostics()
+            {
+                var testCode = @"
+namespace RoslynSandbox
+{
+    public class Foo
+    {
+        private int foo;
+    }
+}";
+                AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), testCode);
+            }
         }
     }
 }
