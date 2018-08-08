@@ -55,6 +55,7 @@ namespace Gu.Roslyn.Asserts
         /// Get the filename from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
+        /// <param name="fileName">The file to read from <paramref name="code"/></param>
         /// <returns>The file name </returns>
         public static bool TryGetFileName(string code, out string fileName)
         {
