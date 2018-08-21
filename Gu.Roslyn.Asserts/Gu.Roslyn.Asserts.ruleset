@@ -81,6 +81,5 @@
     <Rule Id="SA1633" Action="None" />
   </Rules>
   <Rules AnalyzerId="Gu.Analyzers" RuleNamespace="Gu.Analyzers">
-    <Rule Id="GU0012" Action="Warning" />
   </Rules>
 </RuleSet>
