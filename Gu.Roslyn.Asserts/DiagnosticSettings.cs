@@ -1,7 +1,8 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
 
     /// <summary>
     /// Helper for getting ignored errors from <see cref="IgnoredErrorsAttribute"/>.
@@ -28,7 +29,7 @@
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
-                var attribute = (IgnoredErrorsAttribute)Attribute.GetCustomAttribute(assembly, typeof(IgnoredErrorsAttribute));
+                var attribute = assembly.GetCustomAttribute<IgnoredErrorsAttribute>();
                 if (attribute?.ErrorIds != null)
                 {
                     errors.AddRange(attribute.ErrorIds);
@@ -51,7 +52,7 @@
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
-                var attribute = (AllowedDiagnosticsAttribute)Attribute.GetCustomAttribute(assembly, typeof(AllowedDiagnosticsAttribute));
+                var attribute = assembly.GetCustomAttribute<AllowedDiagnosticsAttribute>();
                 if (attribute != null)
                 {
                     staticAllowedDiagnostics = attribute.AllowedDiagnostics;

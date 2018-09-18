@@ -1,4 +1,4 @@
-﻿[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
+[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
 [assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "System" })]
 [assembly: Gu.Roslyn.Asserts.MetadataReferences(
     typeof(System.Linq.Enumerable), // System.Core

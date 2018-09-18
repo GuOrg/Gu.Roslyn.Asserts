@@ -48,35 +48,28 @@ namespace Gu.Roslyn.Asserts
                 return new List<MetadataReference>(metadataReferences);
             }
 
-            metadataReferences = new List<MetadataReference>();
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
+            var set = new HashSet<MetadataReference>(MetadataReferenceComparer.Default);
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 var attributes = Attribute.GetCustomAttributes(assembly, typeof(MetadataReferenceAttribute));
-                foreach (var attribute in attributes.Cast<MetadataReferenceAttribute>())
+                foreach (var single in attributes.Cast<MetadataReferenceAttribute>())
                 {
-                    metadataReferences.Add(attribute.MetadataReference);
+                    set.Add(single.MetadataReference);
+                }
+
+                attributes = Attribute.GetCustomAttributes(assembly, typeof(TransitiveMetadataReferencesAttribute));
+                foreach (var transitive in attributes.Cast<TransitiveMetadataReferencesAttribute>())
+                {
+                    set.UnionWith(transitive.MetadataReferences);
+                }
+
+                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is MetadataReferencesAttribute attribute)
+                {
+                    set.UnionWith(attribute.MetadataReferences);
                 }
             }
 
-            foreach (var assembly in assemblies)
-            {
-                var attribute = (MetadataReferencesAttribute)Attribute.GetCustomAttribute(assembly, typeof(MetadataReferencesAttribute));
-                if (attribute != null)
-                {
-                    metadataReferences.AddRange(attribute.MetadataReferences);
-                }
-            }
-
-            foreach (var assembly in assemblies)
-            {
-                var attributes = Attribute.GetCustomAttributes(assembly, typeof(TransitiveMetadataReferencesAttribute));
-                foreach (var attribute in attributes.Cast<TransitiveMetadataReferencesAttribute>())
-                {
-                    metadataReferences.AddRange(attribute.MetadataReferences);
-                }
-            }
-
+            metadataReferences = new List<MetadataReference>(set);
             return new List<MetadataReference>(metadataReferences);
         }
 
@@ -106,6 +99,43 @@ namespace Gu.Roslyn.Asserts
             }
 
             return recursiveAssemblies;
+        }
+
+        private class MetadataReferenceComparer : IEqualityComparer<MetadataReference>
+        {
+            public static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
+            private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
+
+            public bool Equals(MetadataReference x, MetadataReference y)
+            {
+                if (x == null && y == null)
+                {
+                    return true;
+                }
+
+                if (x == null || y == null)
+                {
+                    return false;
+                }
+
+                if (x is PortableExecutableReference xp &&
+                    y is PortableExecutableReference yp)
+                {
+                    return OrdinalIgnoreCase.Equals(xp.FilePath, yp.FilePath);
+                }
+
+                return object.Equals(x, y);
+            }
+
+            public int GetHashCode(MetadataReference obj)
+            {
+                if (obj is PortableExecutableReference portable)
+                {
+                    return OrdinalIgnoreCase.GetHashCode(portable);
+                }
+
+                return obj.GetHashCode();
+            }
         }
     }
 }
