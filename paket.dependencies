@@ -21,5 +21,6 @@ group Analyzers
   nuget AsyncUsageAnalyzers
   nuget IDisposableAnalyzers
   nuget Gu.Analyzers
+  nuget ReflectionAnalyzers
   nuget StyleCop.Analyzers
 

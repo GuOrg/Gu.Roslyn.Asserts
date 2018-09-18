@@ -3,7 +3,8 @@ group Test
   NUnit
 
 group Analyzers
-  Gu.Analyzers
-  StyleCop.Analyzers
   AsyncUsageAnalyzers
+  Gu.Analyzers
   IDisposableAnalyzers
+  ReflectionAnalyzers
+  StyleCop.Analyzers
