@@ -1,13 +1,6 @@
-[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
-[assembly: Gu.Roslyn.Asserts.MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "System" })]
-[assembly: Gu.Roslyn.Asserts.MetadataReferences(
-    typeof(System.Linq.Enumerable), // System.Core
-    typeof(System.Net.WebClient))] // System.Net
 namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
 {
-    using System.Collections.Immutable;
     using Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     public class AnalyzerAssertTests
@@ -15,21 +8,13 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
         [Test]
         public void ResetMetadataReferences()
         {
-            var expected = new[]
-                           {
-                               MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-                                                .WithAliases(ImmutableArray.Create("global", "mscorlib")),
-                               MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location)
-                                                .WithAliases(ImmutableArray.Create("global", "System")),
-                               MetadataReference.CreateFromFile(typeof(System.Linq.Enumerable).Assembly.Location),
-                               MetadataReference.CreateFromFile(typeof(System.Net.WebClient).Assembly.Location),
-                           };
-
-            CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences, MetadataReferenceComparer.Default);
+            CollectionAssert.IsNotEmpty(AnalyzerAssert.MetadataReferences);
 
             AnalyzerAssert.MetadataReferences.Clear();
+            CollectionAssert.IsEmpty(AnalyzerAssert.MetadataReferences);
+
             AnalyzerAssert.ResetMetadataReferences();
-            CollectionAssert.AreEqual(expected, AnalyzerAssert.MetadataReferences, MetadataReferenceComparer.Default);
+            CollectionAssert.IsNotEmpty(AnalyzerAssert.MetadataReferences);
         }
 
         [Test]
@@ -53,6 +38,38 @@ namespace RoslynSandbox
     }
 }";
             AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
+        }
+
+        [Test]
+        public void ProjectFileNoErrorAnalyzer()
+        {
+            var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
+            var analyzer = new NoErrorAnalyzer();
+
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(csproj);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
+            AnalyzerAssert.Valid(analyzer, csproj);
+
+            var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, csproj);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
+            AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
+            AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
+        }
+
+        [Test]
+        public void SolutionFileNoErrorAnalyzer()
+        {
+            var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
+            var analyzer = new NoErrorAnalyzer();
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(sln);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
+            AnalyzerAssert.Valid(analyzer, sln);
+
+            var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
+            AnalyzerAssert.Valid(analyzer, expectedDiagnostic, sln);
         }
     }
 }

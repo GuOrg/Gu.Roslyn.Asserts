@@ -3,6 +3,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Generic;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -10,6 +11,24 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public class Success
         {
+            [OneTimeSetUp]
+            public void OneTimeSetUp()
+            {
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(new[] { "global", "mscorlib" }));
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location).WithAliases(new[] { "global", "System" }));
+                AnalyzerAssert.MetadataReferences.AddRange(MetadataReferences.Transitive(
+                    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+                    typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
+                    typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute)));
+            }
+
+            [OneTimeTearDown]
+            public void OneTimeTearDown()
+            {
+                // Usually this is not needed but we want everything reset when testing the AnalyzerAssert.
+                AnalyzerAssert.MetadataReferences.Clear();
+            }
+
             [Test]
             public void SingleClassNoErrorAnalyzer()
             {
