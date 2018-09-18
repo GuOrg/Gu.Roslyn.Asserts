@@ -18,28 +18,28 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>
         /// </summary>
-        /// <param name="typeInAssembly">A type in the assembly.</param>
+        /// <param name="typeInAssembly">A type in the assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>
-        public static IEnumerable<MetadataReference> Transitive(Type typeInAssembly)
+        public static IEnumerable<MetadataReference> Transitive(params Type[] typeInAssembly)
         {
-            return Transitive(typeInAssembly.Assembly);
+            return Transitive(typeInAssembly.Select(x => x.Assembly).ToArray());
         }
 
         /// <summary>
-        /// Get the <see cref="MetadataReference"/> for <paramref name="assembly"/> and all assemblies referenced by <paramref name="assembly"/>
+        /// Get the <see cref="MetadataReference"/> for <paramref name="assemblies"/> and all assemblies referenced by <paramref name="assemblies"/>
         /// </summary>
-        /// <param name="assembly">The assembly.</param>
+        /// <param name="assemblies">The assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>
-        public static IEnumerable<MetadataReference> Transitive(Assembly assembly)
+        public static IEnumerable<MetadataReference> Transitive(params Assembly[] assemblies)
         {
-            foreach (var a in RecursiveReferencedAssemblies(assembly))
+            foreach (var a in RecursiveReferencedAssemblies(assemblies))
             {
                 yield return MetadataReference.CreateFromFile(a.Location);
             }
         }
 
         /// <summary>
-        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assembly.
+        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
         /// </summary>
         public static IReadOnlyList<MetadataReference> FromAttributes()
         {
@@ -80,21 +80,32 @@ namespace Gu.Roslyn.Asserts
             return new List<MetadataReference>(metadataReferences);
         }
 
-        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> assemblies = null)
+        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> recursiveAssemblies = null)
         {
-            assemblies = assemblies ?? new HashSet<Assembly>();
-            if (assemblies.Add(a))
+            recursiveAssemblies = recursiveAssemblies ?? new HashSet<Assembly>();
+            if (recursiveAssemblies.Add(a))
             {
                 foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
                 {
                     var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
                                                       .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
                                              Assembly.Load(referencedAssemblyName);
-                    _ = RecursiveReferencedAssemblies(referencedAssembly, assemblies);
+                    _ = RecursiveReferencedAssemblies(referencedAssembly, recursiveAssemblies);
                 }
             }
 
-            return assemblies;
+            return recursiveAssemblies;
+        }
+
+        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly[] assemblies, HashSet<Assembly> recursiveAssemblies = null)
+        {
+            recursiveAssemblies = recursiveAssemblies ?? new HashSet<Assembly>();
+            foreach (var assembly in assemblies)
+            {
+                RecursiveReferencedAssemblies(assembly, recursiveAssemblies);
+            }
+
+            return recursiveAssemblies;
         }
     }
 }
