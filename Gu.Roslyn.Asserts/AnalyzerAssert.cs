@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly List<MetadataReference> MetadataReferences = Asserts.MetadataReferences.FromAttributes().ToList();
+        public static readonly MetaDataReferencesCollection MetadataReferences = new MetaDataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
 
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.

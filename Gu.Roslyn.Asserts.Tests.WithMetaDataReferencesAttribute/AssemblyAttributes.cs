@@ -3,6 +3,8 @@ using Gu.Roslyn.Asserts;
 [assembly: MetadataReference(typeof(object), new[] { "global", "mscorlib" })]
 [assembly: MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "System" })]
 [assembly: TransitiveMetadataReferences(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation))]
+[assembly: TransitiveMetadataReferences(typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider))]
+[assembly: TransitiveMetadataReferences(typeof(System.Windows.Window))]
 [assembly: MetadataReferences(
     typeof(System.Linq.Enumerable),
     typeof(System.Net.WebClient),
@@ -10,4 +12,6 @@ using Gu.Roslyn.Asserts;
     typeof(System.Data.Common.DbConnection),
     typeof(System.Xml.Serialization.XmlSerializer),
     typeof(System.Runtime.Serialization.DataContractSerializer),
-    typeof(NUnit.Framework.Assert))]
+    typeof(NUnit.Framework.Assert),
+    typeof(Xunit.Assert),
+    typeof(Xunit.FactAttribute))]

@@ -44,6 +44,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -56,6 +57,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -95,6 +97,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -132,6 +135,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -169,6 +173,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -183,6 +188,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -223,9 +229,10 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics));
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -258,6 +265,7 @@ namespace Gu.Roslyn.Asserts
         {
             var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(solution);
         }
 
         /// <summary>
@@ -270,11 +278,12 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -284,11 +293,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -298,11 +308,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>
@@ -313,7 +324,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Obsolete("Use sync API.")]
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), metadataReferences);
             await ValidAsync(analyzer, sln);
@@ -328,7 +339,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Obsolete("Use sync API.")]
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             await ValidAsync(analyzer, sln);
@@ -343,7 +354,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Obsolete("Use sync API.")]
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), metadataReferences);
@@ -362,6 +373,7 @@ namespace Gu.Roslyn.Asserts
             var diagnostics = await Analyze.GetDiagnosticsAsync(solution, analyzer)
                                            .ConfigureAwait(false);
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(solution);
         }
 
         /// <summary>
@@ -376,13 +388,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Obsolete("Use sync API.")]
-        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static async Task ValidAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer)
                                            .ConfigureAwait(false);
 
             NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
         }
 
         /// <summary>

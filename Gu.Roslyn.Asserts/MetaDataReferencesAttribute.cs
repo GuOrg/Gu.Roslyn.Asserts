@@ -24,6 +24,6 @@
         /// <summary>
         /// Gets the metadata references to include in the workspaces used in tests.
         /// </summary>
-        public IReadOnlyList<MetadataReference> MetadataReferences { get; }
+        public IEnumerable<MetadataReference> MetadataReferences { get; }
     }
 }

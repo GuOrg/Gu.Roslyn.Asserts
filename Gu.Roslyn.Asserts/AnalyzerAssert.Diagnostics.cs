@@ -149,7 +149,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, string codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, string codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             Diagnostics(analyzer, new[] { codeWithErrorsIndicated }, compilationOptions, metadataReferences);
         }
@@ -161,7 +161,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference> metadataReferences)
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
@@ -184,7 +184,7 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             DiagnosticsAndSources sources,
             CSharpCompilationOptions compilationOptions,
-            IReadOnlyList<MetadataReference> metadataReferences,
+            IEnumerable<MetadataReference> metadataReferences,
             string expectedMessage = null)
         {
             if (sources.ExpectedDiagnostics.Count == 0)

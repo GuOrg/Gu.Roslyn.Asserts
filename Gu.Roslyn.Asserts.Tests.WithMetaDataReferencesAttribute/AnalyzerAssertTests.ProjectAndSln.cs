@@ -22,6 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
         }
 
+        [Explicit("Need to solve for WPF and InternalsVisibleTo")]
         [Test]
         public void SolutionFileNoErrorAnalyzer()
         {
@@ -35,6 +36,17 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
             AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
             AnalyzerAssert.Valid(analyzer, expectedDiagnostic, sln);
+        }
+
+        [Explicit("Need to solve for WPF and InternalsVisibleTo")]
+        [Test]
+        public void SolutionNoErrorAnalyzer()
+        {
+            var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
+            var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, AnalyzerAssert.MetadataReferences);
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(solution);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), solution);
+            AnalyzerAssert.Valid(new NoErrorAnalyzer(), solution);
         }
     }
 }

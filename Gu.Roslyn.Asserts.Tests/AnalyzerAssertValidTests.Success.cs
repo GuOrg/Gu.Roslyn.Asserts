@@ -19,7 +19,8 @@ namespace Gu.Roslyn.Asserts.Tests
                 AnalyzerAssert.MetadataReferences.AddRange(MetadataReferences.Transitive(
                     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
                     typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
-                    typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute)));
+                    typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute),
+                    typeof(NUnit.Framework.Assert)));
             }
 
             [OneTimeTearDown]
@@ -71,31 +72,6 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
                 AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
-            }
-
-            [Test]
-            public void SolutionFileNoErrorAnalyzer()
-            {
-                var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
-                var analyzer = new NoErrorAnalyzer();
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(sln);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
-                AnalyzerAssert.Valid(analyzer, sln);
-
-                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, sln);
-            }
-
-            [Test]
-            public void SolutionNoErrorAnalyzer()
-            {
-                var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
-                var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, AnalyzerAssert.MetadataReferences);
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(solution);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), solution);
-                AnalyzerAssert.Valid(new NoErrorAnalyzer(), solution);
             }
 
             [Test]

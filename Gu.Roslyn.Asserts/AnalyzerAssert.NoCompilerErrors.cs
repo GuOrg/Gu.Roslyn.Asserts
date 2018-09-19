@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts
         /// DiagnosticSettings.AllowedErrorIds()
         /// DiagnosticSettings.AllowedDiagnostics()
         /// </summary>
-        public static void NoCompilerErrors(IReadOnlyList<MetadataReference> metadataReferences, params string[] code)
+        public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, metadataReferences);
             NoCompilerErrors(solution, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());

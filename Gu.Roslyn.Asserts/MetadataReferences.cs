@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
         /// </summary>
-        public static IReadOnlyList<MetadataReference> FromAttributes()
+        public static IEnumerable<MetadataReference> FromAttributes()
         {
             if (metadataReferences != null)
             {
@@ -99,43 +99,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             return recursiveAssemblies;
-        }
-
-        private class MetadataReferenceComparer : IEqualityComparer<MetadataReference>
-        {
-            public static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
-            private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
-
-            public bool Equals(MetadataReference x, MetadataReference y)
-            {
-                if (x == null && y == null)
-                {
-                    return true;
-                }
-
-                if (x == null || y == null)
-                {
-                    return false;
-                }
-
-                if (x is PortableExecutableReference xp &&
-                    y is PortableExecutableReference yp)
-                {
-                    return OrdinalIgnoreCase.Equals(xp.FilePath, yp.FilePath);
-                }
-
-                return object.Equals(x, y);
-            }
-
-            public int GetHashCode(MetadataReference obj)
-            {
-                if (obj is PortableExecutableReference portable)
-                {
-                    return OrdinalIgnoreCase.GetHashCode(portable);
-                }
-
-                return obj.GetHashCode();
-            }
         }
     }
 }
