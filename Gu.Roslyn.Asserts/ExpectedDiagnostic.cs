@@ -218,8 +218,8 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public bool Matches(Diagnostic actual)
         {
-            return this.Id == actual.Id && 
-                   this.MessageMatches(actual) && 
+            return this.Id == actual.Id &&
+                   this.MessageMatches(actual) &&
                    this.PositionMatches(actual);
         }
 
@@ -230,10 +230,15 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if match.</returns>
         public bool MessageMatches(Diagnostic actual)
         {
-            return this.Message == null || 
+            return this.Message == null ||
                    this.Message == actual.GetMessage(CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Check if position matches if specified.
+        /// </summary>
+        /// <param name="actual">The actual diagnostic.</param>
+        /// <returns>True if match.</returns>
         public bool PositionMatches(Diagnostic actual)
         {
             if (!this.HasPosition)
