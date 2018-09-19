@@ -54,6 +54,18 @@ namespace Gu.Roslyn.Asserts.Internals
                 return this;
             }
 
+            public PooledStringBuilder Insert(int index, string value)
+            {
+                this.inner.Insert(index, value);
+                return this;
+            }
+
+            public PooledStringBuilder Insert(int index, char value)
+            {
+                this.inner.Insert(index, value);
+                return this;
+            }
+
             public PooledStringBuilder Append(char value)
             {
                 this.inner.Append(value);
