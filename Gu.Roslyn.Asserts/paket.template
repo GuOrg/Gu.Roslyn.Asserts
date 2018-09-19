@@ -1,9 +1,13 @@
 ﻿type project
 projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
+repositoryUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
+licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes:
-  FEATURE: AnalyzerAssert.Ast.
-  FEATURE: AstWriter.
+  BREAKING: Don't throw test framework exceptions.
+  BREAKING: Require no compiler errors in AnalyzerAssert.Valid.
+  FEATURE: CodeAssert better message when differ at end.
+  FEATURE: Better message when message differs.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46

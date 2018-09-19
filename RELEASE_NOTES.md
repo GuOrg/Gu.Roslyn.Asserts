@@ -1,3 +1,9 @@
+#### 2.5.0
+* BREAKING: Don't throw test framework exceptions.
+* BREAKING: Require no compiler errors in AnalyzerAssert.Valid.
+* FEATURE: CodeAssert better message when differ at end.
+* FEATURE: Better message when message differs.
+
 #### 2.4.2
 * FEATURE: AnalyzerAssert.Ast.
 * FEATURE: AstWriter.
