@@ -143,13 +143,32 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public void WhenNotEqualEndWhenExpectedHasNewLine()
+        {
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a\r\n", "a"));
+            var expected = "Mismatch at end.\r\n" +
+                           "Expected: a\\r\\n\r\n" +
+                           "Actual:   a\r\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
+        public void WhenNotEqualEndWhenActualHasNewLine()
+        {
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a", "a\r\n"));
+            var expected = "Mismatch at end.\r\n" +
+                           "Expected: a\r\n" +
+                           "Actual:   a\\r\\n\r\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
         public void WhenNotEqualEnd()
         {
-            var expectedCode = "\r\na\r\n";
-            var actual = "\r\na\r\n\r\n";
-
-            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch at end.\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("\r\na\r\n", "\r\na\r\n\r\n"));
+            var expected = "Mismatch at end.\r\n" +
+                           "Expected: a\\r\\n\r\n" +
+                           "Actual:   a\\r\\n\\r\\n\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 

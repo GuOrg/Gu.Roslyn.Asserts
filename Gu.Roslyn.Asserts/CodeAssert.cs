@@ -167,13 +167,43 @@ namespace Gu.Roslyn.Asserts
             }
 
             messageBuilder.AppendLine(CodeReader.TryGetFileName(expected, out var name) ? $"Mismatch at end of file {name}." : "Mismatch at end.")
-                          .AppendLine("Expected:")
-                          .Append(expected)
-                          .AppendLine()
-                          .AppendLine("Actual:")
-                          .Append(actual)
-                          .AppendLine();
+                          .Append("Expected: ").AppendLine(GetEnd(expected))
+                          .Append("Actual:   ").AppendLine(GetEnd(actual));
             throw new AssertException(messageBuilder.Return());
+
+            string GetEnd(string text)
+            {
+                bool lastLine = false;
+                var builder = StringBuilderPool.Borrow();
+                for (var i = text.Length - 1; i >= 0; i--)
+                {
+                    switch (text[i])
+                    {
+                        case '\r':
+                            if (lastLine)
+                            {
+                                return builder.Return();
+                            }
+
+                            builder.Insert(0, "\\r");
+                            break;
+                        case '\n':
+                            if (lastLine)
+                            {
+                                return builder.Return();
+                            }
+
+                            builder.Insert(0, "\\n");
+                            break;
+                        default:
+                            lastLine = true;
+                            builder.Insert(0, text[i]);
+                            break;
+                    }
+                }
+
+                return builder.Return();
+            }
         }
 
         private static bool IsAt(string text, int pos, string toMatch)
