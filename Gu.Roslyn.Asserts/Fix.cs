@@ -223,10 +223,10 @@ namespace Gu.Roslyn.Asserts
 
                 if (actions.Count == 0)
                 {
-                    throw AssertException.Create("Expected one code fix, was 0.");
+                    throw new AssertException("Expected one code fix, was 0.");
                 }
 
-                throw AssertException.Create($"Expected only one code fix, found {actions.Count}:\r\n" +
+                throw new AssertException($"Expected only one code fix, found {actions.Count}:\r\n" +
                                              $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
                                              "Use the overload that specifies title.");
             }
@@ -246,15 +246,15 @@ namespace Gu.Roslyn.Asserts
                         errorBuilder.AppendLine(codeAction.Title);
                     }
 
-                    throw AssertException.Create(StringBuilderPool.Return(errorBuilder));
+                    throw new AssertException(StringBuilderPool.Return(errorBuilder));
                 }
 
                 if (actions.Count(x => x.Title == fixTitle) == 0)
                 {
-                    throw AssertException.Create("Expected one code fix, was 0.");
+                    throw new AssertException("Expected one code fix, was 0.");
                 }
 
-                throw AssertException.Create($"Expected only one code fix, found {actions.Count}:\r\n" +
+                throw new AssertException($"Expected only one code fix, found {actions.Count}:\r\n" +
                                              $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
                                              "Use the overload that specifies title.");
             }

@@ -43,13 +43,13 @@ namespace RoslynSandbox
 
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, "WRONG"));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -80,13 +80,13 @@ namespace RoslynSandbox
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -103,7 +103,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
@@ -123,7 +123,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -147,7 +147,7 @@ namespace RoslynSandbox
 }";
 
                 var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, temp));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, temp));
                 var expected = "Expected one code fix, was 0.";
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -165,7 +165,7 @@ namespace RoslynSandbox
 }";
 
                 var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, temp));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, temp));
                 var expected = "Expected only one code fix, found 2:\r\n" +
                                "Rename to: value1\r\n" +
                                "Rename to: value2\r\n" +
@@ -186,7 +186,7 @@ namespace RoslynSandbox
 }";
 
                 var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code, temp));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code, temp));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.EmptyCodeFixProvider did not change any document.";
                 Console.Write(exception.Message);
                 Assert.AreEqual(expected, exception.Message);
@@ -213,7 +213,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
@@ -240,7 +240,7 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
@@ -293,7 +293,7 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode));
                 var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
@@ -336,7 +336,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +
@@ -400,7 +400,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +

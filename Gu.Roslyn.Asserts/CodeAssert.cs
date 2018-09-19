@@ -133,7 +133,7 @@ namespace Gu.Roslyn.Asserts
                                 .Append(actual)
                                 .AppendLine();
 
-                    throw AssertException.Create(errorBuilder.Return());
+                    throw new AssertException(errorBuilder.Return());
                 }
 
                 if (ec == '\n')
@@ -173,7 +173,7 @@ namespace Gu.Roslyn.Asserts
                           .AppendLine("Actual:")
                           .Append(actual)
                           .AppendLine();
-            throw AssertException.Create(messageBuilder.Return());
+            throw new AssertException(messageBuilder.Return());
         }
 
         private static bool IsAt(string text, int pos, string toMatch)

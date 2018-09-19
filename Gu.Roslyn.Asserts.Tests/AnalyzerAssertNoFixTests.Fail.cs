@@ -32,7 +32,7 @@ namespace RoslynSandbox
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -50,7 +50,7 @@ namespace RoslynSandbox
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code));
 
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -67,7 +67,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
@@ -95,7 +95,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";

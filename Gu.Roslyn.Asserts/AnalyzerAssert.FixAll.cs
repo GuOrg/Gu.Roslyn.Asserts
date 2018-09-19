@@ -965,7 +965,7 @@ namespace Gu.Roslyn.Asserts
                 {
                     if (found)
                     {
-                        throw AssertException.Create("Expected only one with errors indicated.");
+                        throw new AssertException("Expected only one with errors indicated.");
                     }
 
                     merged.Add(fixedCode);
@@ -979,7 +979,7 @@ namespace Gu.Roslyn.Asserts
 
             if (!found)
             {
-                throw AssertException.Create("Expected one with errors indicated.");
+                throw new AssertException("Expected one with errors indicated.");
             }
 
             return merged;
@@ -998,7 +998,7 @@ namespace Gu.Roslyn.Asserts
                 {
                     if (found)
                     {
-                        throw AssertException.Create("Expected unique class names.");
+                        throw new AssertException("Expected unique class names.");
                     }
 
                     merged.Add(fixedCode);
@@ -1012,7 +1012,7 @@ namespace Gu.Roslyn.Asserts
 
             if (!found)
             {
-                throw AssertException.Create("Failed merging expected one class to have same namespace and class name as fixedCode.\r\n" +
+                throw new AssertException("Failed merging expected one class to have same namespace and class name as fixedCode.\r\n" +
                                              "Try specifying a list with all fixed code.");
             }
 

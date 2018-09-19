@@ -62,7 +62,7 @@ namespace Gu.Roslyn.Asserts
                     error.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
-                throw AssertException.Create(StringBuilderPool.Return(error));
+                throw new AssertException(StringBuilderPool.Return(error));
             }
         }
 
@@ -99,7 +99,7 @@ namespace Gu.Roslyn.Asserts
                     error.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
-                throw AssertException.Create(StringBuilderPool.Return(error));
+                throw new AssertException(StringBuilderPool.Return(error));
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Diagnostics;
@@ -8,7 +8,6 @@
     /// <summary>
     /// Debug view for <see cref="MetaDataReferencesCollection"/>
     /// </summary>
-    /// <typeparam name="T">The type of items in the set.</typeparam>
     internal class MetaDataReferencesCollectionDebugView
     {
         private readonly MetaDataReferencesCollection metaDataReferences;

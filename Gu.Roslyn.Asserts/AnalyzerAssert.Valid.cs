@@ -412,7 +412,7 @@ namespace Gu.Roslyn.Asserts
                     builder.AppendLine(diagnostic.ToErrorString());
                 }
 
-                throw AssertException.Create(builder.Return());
+                throw new AssertException(builder.Return());
             }
         }
     }

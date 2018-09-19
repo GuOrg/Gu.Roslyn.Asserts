@@ -294,7 +294,7 @@ namespace Gu.Roslyn.Asserts
                         builder.AppendLine(action.Title);
                     }
 
-                    throw AssertException.Create(builder.Return());
+                    throw new AssertException(builder.Return());
                 }
             }
         }
@@ -319,7 +319,7 @@ namespace Gu.Roslyn.Asserts
                         builder.AppendLine(action.Title);
                     }
 
-                    throw AssertException.Create(builder.Return());
+                    throw new AssertException(builder.Return());
                 }
             }
         }

@@ -99,7 +99,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
             var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
@@ -130,7 +130,7 @@ namespace RoslynSandbox
 
             var actual = @"        private readonly int bar;";
 
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
             var expected = "Mismatch on line 1.\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
@@ -148,7 +148,7 @@ namespace RoslynSandbox
             var expectedCode = "\r\na\r\n";
             var actual = "\r\na\r\n\r\n";
 
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
             var expected = "Mismatch at end.\r\nExpected:\r\n\r\na\r\n\r\nActual:\r\n\r\na\r\n\r\n\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }

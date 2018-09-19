@@ -57,7 +57,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => AnalyzerAssert.NoCompilerErrors(code));
+            var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoCompilerErrors(code));
             var expected = "Found errors.\r\n" +
                            "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                            "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +

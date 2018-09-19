@@ -48,7 +48,7 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-            var exception = Assert.Throws<NUnit.Framework.AssertionException>(() => TextAssert.AreEqual(expectedCode, actualCode));
+            var exception = Assert.Throws<AssertException>(() => TextAssert.AreEqual(expectedCode, actualCode));
             var expected = "Mismatch on line 6\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +

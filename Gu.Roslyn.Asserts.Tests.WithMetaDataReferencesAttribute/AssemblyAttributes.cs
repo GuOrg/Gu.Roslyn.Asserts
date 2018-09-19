@@ -12,6 +12,4 @@ using Gu.Roslyn.Asserts;
     typeof(System.Data.Common.DbConnection),
     typeof(System.Xml.Serialization.XmlSerializer),
     typeof(System.Runtime.Serialization.DataContractSerializer),
-    typeof(NUnit.Framework.Assert),
-    typeof(Xunit.Assert),
-    typeof(Xunit.FactAttribute))]
+    typeof(NUnit.Framework.Assert))]

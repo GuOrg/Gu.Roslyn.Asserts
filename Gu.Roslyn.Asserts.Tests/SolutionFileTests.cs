@@ -28,7 +28,6 @@ namespace Gu.Roslyn.Asserts.Tests
             var sln = SolutionFile.ParseInfo(file);
             var expected = new[]
                            {
-                               "Gu.Roslyn.Asserts.XUnit",
                                "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
                                "Gu.Roslyn.Asserts",
                                "WpfApp1",

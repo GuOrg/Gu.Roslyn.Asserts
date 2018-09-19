@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D8C50F8A-9
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.XUnit", "Gu.Roslyn.Asserts.XUnit\Gu.Roslyn.Asserts.XUnit.csproj", "{F237D387-ED9B-457B-A871-B1FCFB5B9868}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute", "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute\Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.csproj", "{3FB66874-E38F-4CCE-8296-8C25C9C934E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}"
@@ -48,10 +46,6 @@ Global
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F237D387-ED9B-457B-A871-B1FCFB5B9868}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Release|Any CPU.ActiveCfg = Release|Any CPU

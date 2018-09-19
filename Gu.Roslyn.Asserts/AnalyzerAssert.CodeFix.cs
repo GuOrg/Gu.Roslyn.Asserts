@@ -528,7 +528,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             if (fixableDiagnostics.Length > 1)
@@ -537,14 +537,14 @@ namespace Gu.Roslyn.Asserts
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
                               $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             var diagnostic = fixableDiagnostics.Single();
             var fixedSolution = await Fix.ApplyAsync(sln, fix, diagnostic, fixTitle).ConfigureAwait(false);
             if (ReferenceEquals(sln, fixedSolution))
             {
-                throw AssertException.Create($"{fix} did not change any document.");
+                throw new AssertException($"{fix} did not change any document.");
             }
 
             var fixedSource = await CodeReader.GetStringFromDocumentAsync(
@@ -570,7 +570,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             if (fixableDiagnostics.Length > 1)
@@ -579,14 +579,14 @@ namespace Gu.Roslyn.Asserts
                               $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
                               $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             var diagnostic = fixableDiagnostics.Single();
             var fixedSolution = Fix.Apply(sln, fix, diagnostic, fixTitle);
             if (ReferenceEquals(sln, fixedSolution))
             {
-                throw AssertException.Create($"{fix} did not change any document.");
+                throw new AssertException($"{fix} did not change any document.");
             }
 
             var fixedSource = CodeReader.GetStringFromDocument(

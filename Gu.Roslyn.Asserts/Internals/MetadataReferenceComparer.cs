@@ -15,6 +15,12 @@ namespace Gu.Roslyn.Asserts
         public static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
         private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
+        /// <summary>
+        /// Suppressing this with Obsolete to it is not used by mistake.
+        /// </summary>
+        /// <param name="x">The first</param>
+        /// <param name="y">The other</param>
+        /// <returns>object.Equals()</returns>
         [Obsolete("Don't use this", error: true)]
         public new static bool Equals(object x, object y) => object.Equals(x, y);
 

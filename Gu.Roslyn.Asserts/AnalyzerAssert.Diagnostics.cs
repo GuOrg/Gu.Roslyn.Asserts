@@ -189,7 +189,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (sources.ExpectedDiagnostics.Count == 0)
             {
-                throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
+                throw new AssertException("Expected code to have at least one error position indicated with '↓'");
             }
 
             var data = await Analyze.GetDiagnosticsWithMetadataAsync(
@@ -258,7 +258,7 @@ namespace Gu.Roslyn.Asserts
                 error.AppendLine(actual.ToErrorString());
             }
 
-            throw AssertException.Create(StringBuilderPool.Return(error));
+            throw new AssertException(StringBuilderPool.Return(error));
         }
 
         private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)
@@ -270,7 +270,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
-                throw AssertException.Create("Expected code to have at least one error position indicated with '↓'");
+                throw new AssertException("Expected code to have at least one error position indicated with '↓'");
             }
 
             if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(actuals))
@@ -323,7 +323,7 @@ namespace Gu.Roslyn.Asserts
                 error.AppendLine(actual.ToErrorString());
             }
 
-            throw AssertException.Create(error.Return());
+            throw new AssertException(error.Return());
         }
 
         /// <summary>

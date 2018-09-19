@@ -76,7 +76,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedDiagnostic.Id}";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             if (descriptors > 1)
@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedDiagnostic.Id}";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
         }
 
@@ -111,21 +111,21 @@ namespace Gu.Roslyn.Asserts
             if (analyzer.SupportedDiagnostics.Length == 0)
             {
                 var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics returns an empty array.";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             if (analyzer.SupportedDiagnostics.Length > 1)
             {
                 var message = "This can only be used for analyzers with one SupportedDiagnostics.\r\n" +
                               "Prefer overload with ExpectedDiagnostic.";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
 
             descriptor = analyzer.SupportedDiagnostics[0];
             if (descriptor == null)
             {
                 var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Gu.Roslyn.Asserts
                 var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
                               $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
-                throw AssertException.Create(message);
+                throw new AssertException(message);
             }
         }
 
@@ -145,7 +145,7 @@ namespace Gu.Roslyn.Asserts
             var actualCount = actual.Projects.SelectMany(x => x.Documents).Count();
             if (expected.Count != actualCount)
             {
-                throw AssertException.Create($"Expected {expected.Count} documents the fixed solution has {actualCount} documents.");
+                throw new AssertException($"Expected {expected.Count} documents the fixed solution has {actualCount} documents.");
             }
 
             foreach (var project in actual.Projects)
@@ -170,7 +170,7 @@ namespace Gu.Roslyn.Asserts
                     }
                 }
 
-                throw AssertException.Create($"The fixed solution contains a document {fixedFileName} in namespace {fixedNamespace} that is not in the expected documents.");
+                throw new AssertException($"The fixed solution contains a document {fixedFileName} in namespace {fixedNamespace} that is not in the expected documents.");
             }
         }
 
@@ -198,7 +198,7 @@ namespace Gu.Roslyn.Asserts
                 var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == lineSpan.Path);
                 errorBuilder.Append(match);
                 errorBuilder.AppendLine();
-                throw AssertException.Create(errorBuilder.Return());
+                throw new AssertException(errorBuilder.Return());
             }
         }
 

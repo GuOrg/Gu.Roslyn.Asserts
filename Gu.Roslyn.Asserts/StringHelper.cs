@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (!text.Contains(oldValue))
             {
-                throw AssertException.Create($"AssertReplace failed, expected {oldValue} to be in {text}");
+                throw new AssertException($"AssertReplace failed, expected {oldValue} to be in {text}");
             }
 
             return text.Replace(oldValue, newValue);
