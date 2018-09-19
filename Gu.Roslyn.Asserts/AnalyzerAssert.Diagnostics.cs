@@ -288,6 +288,17 @@ namespace Gu.Roslyn.Asserts
             }
 
             var error = StringBuilderPool.Borrow();
+            if (actuals.Count == 1 &&
+                diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
+                diagnosticsAndSources.ExpectedDiagnostics[0].Id == actuals[0].Id)
+            {
+                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(actuals[0]) &&
+                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(actuals[0]))
+                {
+                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, actuals[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                }
+            }
+
             error.AppendLine("Expected and actual diagnostics do not match.");
             var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(actuals);
             for (var i = 0; i < missingExpected.Count; i++)

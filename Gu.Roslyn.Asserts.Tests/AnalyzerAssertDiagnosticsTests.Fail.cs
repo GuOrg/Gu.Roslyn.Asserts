@@ -22,15 +22,13 @@ namespace RoslynSandbox
         private int ↓_value;
     }
 }";
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected:\r\n" +
-                               "SA1309 WRONG\r\n" +
-                               "  at line 5 and character 20 in file Foo.cs | private int ↓_value;\r\n" +
-                               "Actual:\r\n" +
-                               "SA1309 Field '_value' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 20 in file Foo.cs | private int ↓_value;\r\n";
+                var expected = "Expected and actual messages do not match.\r\n" +
+                               "Mismatch on line 1.\r\n" +
+                               "Expected: WRONG\r\n" +
+                               "Actual:   Field '_value' must not begin with an underscore\r\n" +
+                               "          ^\r\n";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, "WRONG", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId, "WRONG");
                 var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -274,12 +272,11 @@ namespace RoslynSandbox
         private readonly int _value1;
     }
 }";
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected:\r\n" +
-                               "SA1309 WRONG MESSAGE\r\n" +
-                               "Actual:\r\n" +
-                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                var expected = "Expected and actual messages do not match.\r\n" +
+                               "Mismatch on line 1.\r\n" +
+                               "Expected: WRONG MESSAGE\r\n" +
+                               "Actual:   Field \'_value1\' must not begin with an underscore\r\n" +
+                               "          ^\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "WRONG MESSAGE");
 
@@ -424,20 +421,20 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithWrongMessage()
+            public void IndicatedAndActualPositionDoNotMatchWithWrongMessage()
             {
                 var code = @"
 namespace RoslynSandbox
 {
     class Foo
     {
-        private readonly int ↓_value1;
+        ↓private readonly int _value1;
     }
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 Wrong message\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n" +
+                               "  at line 5 and character 8 in file Foo.cs | ↓private readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";

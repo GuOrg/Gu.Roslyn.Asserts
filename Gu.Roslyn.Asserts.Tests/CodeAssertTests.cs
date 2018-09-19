@@ -134,11 +134,30 @@ namespace RoslynSandbox
             var expected = "Mismatch on line 1.\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
-                           "                                       ^\r\n" +
+                           "                                       ^\r\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
+        public void WhenManyLines()
+        {
+            var expectedCode = "line1\r\n" +
+                               "line2";
+
+            var actual = "line1WRONG\r\n" +
+                         "line2";
+
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
+            var expected = "Mismatch on line 1.\r\n" +
+                           "Expected: line1\r\n" +
+                           "Actual:   line1WRONG\r\n" +
+                           "               ^\r\n" +
                            "Expected:\r\n" +
-                           "        private readonly int _value;\r\n" +
+                           "line1\r\n" +
+                           "line2\r\n" +
                            "Actual:\r\n" +
-                           "        private readonly int bar;\r\n";
+                           "line1WRONG\r\n" +
+                           "line2\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 
@@ -148,7 +167,8 @@ namespace RoslynSandbox
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a\r\n", "a"));
             var expected = "Mismatch at end.\r\n" +
                            "Expected: a\\r\\n\r\n" +
-                           "Actual:   a\r\n";
+                           "Actual:   a\r\n" +
+                           "           ^\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 
@@ -158,7 +178,8 @@ namespace RoslynSandbox
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a", "a\r\n"));
             var expected = "Mismatch at end.\r\n" +
                            "Expected: a\r\n" +
-                           "Actual:   a\\r\\n\r\n";
+                           "Actual:   a\\r\\n\r\n" +
+                           "           ^\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 
@@ -168,7 +189,8 @@ namespace RoslynSandbox
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("\r\na\r\n", "\r\na\r\n\r\n"));
             var expected = "Mismatch at end.\r\n" +
                            "Expected: a\\r\\n\r\n" +
-                           "Actual:   a\\r\\n\\r\\n\r\n";
+                           "Actual:   a\\r\\n\\r\\n\r\n" +
+                           "               ^\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 

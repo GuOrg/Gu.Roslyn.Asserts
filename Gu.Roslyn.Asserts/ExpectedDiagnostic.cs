@@ -218,17 +218,24 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public bool Matches(Diagnostic actual)
         {
-            if (this.Id != actual.Id)
-            {
-                return false;
-            }
+            return this.Id == actual.Id && 
+                   this.MessageMatches(actual) && 
+                   this.PositionMatches(actual);
+        }
 
-            if (this.Message != null &&
-                this.Message != actual.GetMessage(CultureInfo.InvariantCulture))
-            {
-                return false;
-            }
+        /// <summary>
+        /// Check if message matches if <see cref="Message"/> is not null.
+        /// </summary>
+        /// <param name="actual">The actual diagnostic.</param>
+        /// <returns>True if match.</returns>
+        public bool MessageMatches(Diagnostic actual)
+        {
+            return this.Message == null || 
+                   this.Message == actual.GetMessage(CultureInfo.InvariantCulture);
+        }
 
+        public bool PositionMatches(Diagnostic actual)
+        {
             if (!this.HasPosition)
             {
                 return true;

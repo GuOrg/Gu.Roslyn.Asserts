@@ -113,25 +113,22 @@ namespace Gu.Roslyn.Asserts
 
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
-                    var diffPos = Math.Min(expectedLine.Length, actualLine.Length);
-                    for (var i = 0; i < Math.Min(expectedLine.Length, actualLine.Length); i++)
-                    {
-                        if (expectedLine[i] != actualLine[i])
-                        {
-                            diffPos = i;
-                            break;
-                        }
-                    }
+                    var diffPos = DiffPos(expectedLine, actualLine);
 
                     errorBuilder.AppendLine($"Expected: {expectedLine}")
                                 .AppendLine($"Actual:   {actualLine}")
-                                .AppendLine($"          {new string(' ', diffPos)}^")
-                                .AppendLine("Expected:")
-                                .Append(expected)
-                                .AppendLine()
-                                .AppendLine("Actual:")
-                                .Append(actual)
-                                .AppendLine();
+                                .AppendLine($"          {new string(' ', diffPos)}^");
+
+                    if (expectedLine != expected ||
+                        actualLine != actual)
+                    {
+                        errorBuilder.AppendLine("Expected:")
+                                    .Append(expected)
+                                    .AppendLine()
+                                    .AppendLine("Actual:")
+                                    .Append(actual)
+                                    .AppendLine();
+                    }
 
                     throw new AssertException(errorBuilder.Return());
                 }
@@ -168,8 +165,24 @@ namespace Gu.Roslyn.Asserts
 
             messageBuilder.AppendLine(CodeReader.TryGetFileName(expected, out var name) ? $"Mismatch at end of file {name}." : "Mismatch at end.")
                           .Append("Expected: ").AppendLine(GetEnd(expected))
-                          .Append("Actual:   ").AppendLine(GetEnd(actual));
+                          .Append("Actual:   ").AppendLine(GetEnd(actual))
+                          .AppendLine($"          {new string(' ', DiffPos(GetEnd(expected), GetEnd(actual)))}^");
             throw new AssertException(messageBuilder.Return());
+
+            int DiffPos(string expectedLine, string actualLine)
+            {
+                var diffPos = Math.Min(expectedLine.Length, actualLine.Length);
+                for (var i = 0; i < Math.Min(expectedLine.Length, actualLine.Length); i++)
+                {
+                    if (expectedLine[i] != actualLine[i])
+                    {
+                        diffPos = i;
+                        break;
+                    }
+                }
+
+                return diffPos;
+            }
 
             string GetEnd(string text)
             {
