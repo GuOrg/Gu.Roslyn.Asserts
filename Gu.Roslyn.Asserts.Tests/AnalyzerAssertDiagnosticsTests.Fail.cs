@@ -23,7 +23,6 @@ namespace RoslynSandbox
     }
 }";
                 var expected = "Expected and actual messages do not match.\r\n" +
-                               "Mismatch on line 1.\r\n" +
                                "Expected: WRONG\r\n" +
                                "Actual:   Field '_value' must not begin with an underscore\r\n" +
                                "          ^\r\n";
@@ -273,7 +272,6 @@ namespace RoslynSandbox
     }
 }";
                 var expected = "Expected and actual messages do not match.\r\n" +
-                               "Mismatch on line 1.\r\n" +
                                "Expected: WRONG MESSAGE\r\n" +
                                "Actual:   Field \'_value1\' must not begin with an underscore\r\n" +
                                "          ^\r\n";

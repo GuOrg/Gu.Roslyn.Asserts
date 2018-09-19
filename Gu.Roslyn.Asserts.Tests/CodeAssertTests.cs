@@ -131,8 +131,7 @@ namespace RoslynSandbox
             var actual = @"        private readonly int bar;";
 
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch on line 1.\r\n" +
-                           "Expected:         private readonly int _value;\r\n" +
+            var expected = "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
                            "                                       ^\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
@@ -190,7 +189,11 @@ namespace RoslynSandbox
             var expected = "Mismatch at end.\r\n" +
                            "Expected: a\\r\\n\r\n" +
                            "Actual:   a\\r\\n\\r\\n\r\n" +
-                           "               ^\r\n";
+                           "               ^\r\n" +
+                           "Expected:\r\n" +
+                           "\r\na\r\n\r\n" +
+                           "Actual:\r\n" +
+                           "\r\na\r\n\r\n\r\n";
             CodeAssert.AreEqual(expected, exception.Message);
         }
 

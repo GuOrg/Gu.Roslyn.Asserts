@@ -106,10 +106,14 @@ namespace Gu.Roslyn.Asserts
                         errorBuilder.AppendLine(messageHeader);
                     }
 
-                    errorBuilder.AppendLine(
-                        CodeReader.TryGetFileName(expected, out var fileName)
-                        ? $"Mismatch on line {line} of file {fileName}."
-                        : $"Mismatch on line {line}.");
+                    if (!IsSingleLine(expected) ||
+                        !IsSingleLine(actual))
+                    {
+                        errorBuilder.AppendLine(
+                            CodeReader.TryGetFileName(expected, out var fileName)
+                                ? $"Mismatch on line {line} of file {fileName}."
+                                : $"Mismatch on line {line}.");
+                    }
 
                     var expectedLine = expected.Split('\n')[line - 1].Trim('\r');
                     var actualLine = actual.Split('\n')[line - 1].Trim('\r');
@@ -119,8 +123,8 @@ namespace Gu.Roslyn.Asserts
                                 .AppendLine($"Actual:   {actualLine}")
                                 .AppendLine($"          {new string(' ', diffPos)}^");
 
-                    if (expectedLine != expected ||
-                        actualLine != actual)
+                    if (!IsSingleLine(expected) ||
+                        !IsSingleLine(actual))
                     {
                         errorBuilder.AppendLine("Expected:")
                                     .Append(expected)
@@ -167,7 +171,43 @@ namespace Gu.Roslyn.Asserts
                           .Append("Expected: ").AppendLine(GetEnd(expected))
                           .Append("Actual:   ").AppendLine(GetEnd(actual))
                           .AppendLine($"          {new string(' ', DiffPos(GetEnd(expected), GetEnd(actual)))}^");
+
+            if (!IsSingleLine(expected) ||
+                !IsSingleLine(actual))
+            {
+                messageBuilder.AppendLine("Expected:")
+                              .Append(expected)
+                              .AppendLine()
+                              .AppendLine("Actual:")
+                              .Append(actual)
+                              .AppendLine();
+            }
+
             throw new AssertException(messageBuilder.Return());
+
+            bool IsSingleLine(string text)
+            {
+                bool foundNewLine = false;
+                foreach (var c in text)
+                {
+                    switch (c)
+                    {
+                        case '\r':
+                        case '\n':
+                            foundNewLine = true;
+                            break;
+                        default:
+                            if (foundNewLine)
+                            {
+                                return false;
+                            }
+
+                            break;
+                    }
+                }
+
+                return true;
+            }
 
             int DiffPos(string expectedLine, string actualLine)
             {
