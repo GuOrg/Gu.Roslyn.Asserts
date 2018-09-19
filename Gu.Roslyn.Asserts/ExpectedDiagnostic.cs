@@ -80,6 +80,16 @@ namespace Gu.Roslyn.Asserts
         public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the id from <paramref name="descriptor"/>
+        /// </summary>
+        /// <param name="descriptor">The expected diagnostic id</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        public static ExpectedDiagnostic Create(DiagnosticDescriptor descriptor)
+        {
+            return new ExpectedDiagnostic(descriptor.Id, null, NoPosition);
+        }
+
+        /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id</param>
