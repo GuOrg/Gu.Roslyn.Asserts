@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Internals
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// A <see cref="TextLoader"/> for documents passed as strings
+    /// A <see cref="TextLoader"/> for documents passed as strings.
     /// </summary>
     internal class StringLoader : TextLoader
     {
@@ -37,8 +37,8 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <summary>
         /// Create a <see cref="StringLoader"/> for the document.
         /// </summary>
-        /// <param name="document">The document text</param>
-        /// <returns>A <see cref="StringLoader"/></returns>
+        /// <param name="document">The document text.</param>
+        /// <returns>A <see cref="StringLoader"/>.</returns>
         internal static StringLoader Create(string document) => new StringLoader(document);
     }
 }

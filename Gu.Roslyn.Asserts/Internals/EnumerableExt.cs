@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts.Internals
     using System.Collections.Generic;
 
     /// <summary>
-    /// Helper class for applying code fixes
+    /// Helper class for applying code fixes.
     /// </summary>
     internal static partial class EnumerableExt
     {
@@ -80,7 +80,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// </summary>
         /// <typeparam name="T">The type of the items in the collection.</typeparam>
         /// <param name="source">The source collection.</param>
-        /// <param name="selector">The predicate</param>
+        /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
         internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
@@ -188,7 +188,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// </summary>
         /// <typeparam name="T">The type of the items in the collection.</typeparam>
         /// <param name="source">The source collection.</param>
-        /// <param name="selector">The predicate</param>
+        /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
         internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
@@ -216,7 +216,7 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// Return the item with minimum keyed by <paramref name="selector"/>
+        /// Return the item with minimum keyed by <paramref name="selector"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
         /// <typeparam name="TKey">The type of the value to compare.</typeparam>
@@ -229,13 +229,13 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// Return the item with minimum keyed by <paramref name="selector"/>
+        /// Return the item with minimum keyed by <paramref name="selector"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
         /// <typeparam name="TKey">The type of the value to compare.</typeparam>
         /// <param name="source">The source collection.</param>
         /// <param name="selector">The single item.</param>
-        /// <param name="comparer">The <see cref="IComparer{TKey}"/></param>
+        /// <param name="comparer">The <see cref="IComparer{TKey}"/>.</param>
         /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {

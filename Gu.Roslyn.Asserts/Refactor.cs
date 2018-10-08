@@ -11,14 +11,14 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// Helper methods for working with <see cref="CodeRefactoringProvider"/>
+    /// Helper methods for working with <see cref="CodeRefactoringProvider"/>.
     /// </summary>
     public static class Refactor
     {
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="position"/>
+        /// Apply the single refactoring registered at <paramref name="position"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
@@ -46,9 +46,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="position"/>
+        /// Apply the single refactoring registered at <paramref name="position"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="title">The title of the refactoring to apply.</param>
@@ -87,9 +87,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="position"/>
+        /// Apply the single refactoring registered at <paramref name="position"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="index">The index of the refactoring to apply.</param>
@@ -123,9 +123,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="span"/>
+        /// Apply the single refactoring registered at <paramref name="span"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
@@ -161,9 +161,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="span"/>
+        /// Apply the single refactoring registered at <paramref name="span"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="title">The title of the refactoring to apply.</param>
@@ -202,9 +202,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Apply the single refactoring registered at <paramref name="span"/>
+        /// Apply the single refactoring registered at <paramref name="span"/>.
         /// </summary>
-        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/></param>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="index">The index of the refactoring to apply.</param>

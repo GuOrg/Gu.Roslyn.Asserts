@@ -10,16 +10,16 @@ namespace Gu.Roslyn.Asserts.Internals
     using System.Linq;
     using System.Text;
 
-    /// <summary>A minimalistic git client implementation based on launching an external process</summary>
+    /// <summary>A minimalistic git client implementation based on launching an external process.</summary>
     internal class GitClient
     {
         private readonly string gitPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitClient"/> class.
-        /// Creates a GitClient given an absolute path to the git executable
+        /// Creates a GitClient given an absolute path to the git executable.
         /// </summary>
-        /// <param name="path">Path to the git executable</param>
+        /// <param name="path">Path to the git executable.</param>
         public GitClient(string path)
         {
             this.gitPath = path ?? throw new ArgumentNullException(nameof(path));
@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// For specifying the kind of <see cref="Clone"/>
+        /// For specifying the kind of <see cref="Clone"/>.
         /// </summary>
         [Flags]
         public enum CloneFlags
@@ -47,13 +47,13 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// Clone a repository
+        /// Clone a repository.
         /// </summary>
-        /// <param name="uri">Address of a repository</param>
-        /// <param name="cloneTargetPath">Path to target directory where to clone the repository. Directory must be empty</param>
-        /// <param name="flags">Flags</param>
-        /// <param name="branch">Check out to the specific branch</param>
-        /// <param name="config">Configuration values of the cloned repository</param>
+        /// <param name="uri">Address of a repository.</param>
+        /// <param name="cloneTargetPath">Path to target directory where to clone the repository. Directory must be empty.</param>
+        /// <param name="flags">Flags.</param>
+        /// <param name="branch">Check out to the specific branch.</param>
+        /// <param name="config">Configuration values of the cloned repository.</param>
         public void Clone(
             Uri uri,
             string cloneTargetPath,
@@ -63,7 +63,7 @@ namespace Gu.Roslyn.Asserts.Internals
         {
             var parameters = new List<string>
                              {
-                                 "clone"
+                                 "clone",
                              };
             if (flags.HasFlag(CloneFlags.Recursive))
             {
@@ -103,7 +103,7 @@ namespace Gu.Roslyn.Asserts.Internals
             {
                 UseShellExecute = false,
                 RedirectStandardError = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
             using (var p = Process.Start(psi))
             {
@@ -118,10 +118,10 @@ namespace Gu.Roslyn.Asserts.Internals
 
         /// <summary>
         /// Does the inverse transformation as specified in
-        /// https://msdn.microsoft.com/en-us/library/ms880421
+        /// https://msdn.microsoft.com/en-us/library/ms880421.
         /// </summary>
-        /// <param name="args">Argument list</param>
-        /// <returns>A single commandline string usable with ProcessStartInfo.Arguments</returns>
+        /// <param name="args">Argument list.</param>
+        /// <returns>A single commandline string usable with ProcessStartInfo.Arguments.</returns>
         private static string CommandLineFromArgv(IEnumerable<string> args)
         {
             return string.Join(" ", args.Select(Escape));

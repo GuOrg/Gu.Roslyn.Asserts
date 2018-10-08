@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// Assert for testing if code equals
+    /// Assert for testing if code equals.
     /// </summary>
     public static class CodeAssert
     {

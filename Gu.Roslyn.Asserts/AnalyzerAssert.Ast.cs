@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="T">The node type.</typeparam>
         /// <param name="expected">The expected shape of the AST.</param>
         /// <param name="actual">The actual node.</param>
-        /// <param name="settings"><see cref="AstWriterSettings"/></param>
+        /// <param name="settings"><see cref="AstWriterSettings"/>.</param>
         public static void Ast<T>(T expected, T actual, AstWriterSettings settings = null)
             where T : SyntaxNode
         {

@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                "WpfApp1",
                                "Gu.Roslyn.Asserts.Tests",
                                "ClassLibrary2",
-                               "ClassLibrary1"
+                               "ClassLibrary1",
                            };
             CollectionAssert.AreEquivalent(expected, sln.Projects.Select(x => x.Name));
             var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");

@@ -22,5 +22,5 @@ group Analyzers
   nuget IDisposableAnalyzers
   nuget Gu.Analyzers
   nuget ReflectionAnalyzers
-  nuget StyleCop.Analyzers
+  nuget StyleCop.Analyzers prerelease
 

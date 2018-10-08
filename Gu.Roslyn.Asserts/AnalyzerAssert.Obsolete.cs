@@ -314,7 +314,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to run on the code..</param>
         /// <param name="codeFix">The code fix to apply.</param>
-        /// <param name="diagnosticsAndSources">The code and expected diagnostics</param>
+        /// <param name="diagnosticsAndSources">The code and expected diagnostics.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>
@@ -540,7 +540,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Check the solution for compiler errors and warnings, uses:
         /// DiagnosticSettings.AllowedErrorIds()
-        /// DiagnosticSettings.AllowedDiagnostics()
+        /// DiagnosticSettings.AllowedDiagnostics().
         /// </summary>
         [Obsolete("Use sync API.")]
         public static Task NoCompilerErrorsAsync(Solution solution)
@@ -549,7 +549,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Check the solution for compiler errors and warnings, uses:
+        /// Check the solution for compiler errors and warnings, uses:.
         /// </summary>
         [Obsolete("Use sync API.")]
         public static async Task NoCompilerErrorsAsync(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
@@ -756,7 +756,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         [Obsolete("Use overload with DiagnosticDescriptor")]
         public static void Valid(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
@@ -771,7 +771,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         [Obsolete("Use overload with DiagnosticDescriptor")]
         public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
@@ -849,7 +849,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
@@ -866,7 +866,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Meta data from a call to GetAnalyzerDiagnosticsAsync
+        /// Meta data from a call to GetAnalyzerDiagnosticsAsync.
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "For debugging.")]
         [Obsolete("To be removed.")]
@@ -877,7 +877,7 @@ namespace Gu.Roslyn.Asserts
             /// </summary>
             /// <param name="sources">The code to analyze.</param>
             /// <param name="expectedDiagnostics">Info about the expected diagnostics.</param>
-            /// <param name="actualDiagnostics">The diagnostics returned from Roslyn</param>
+            /// <param name="actualDiagnostics">The diagnostics returned from Roslyn.</param>
             /// <param name="solution">The solution the analysis was run on.</param>
             public DiagnosticsMetadata(
                 IReadOnlyList<string> sources,

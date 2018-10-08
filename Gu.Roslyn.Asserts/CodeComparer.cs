@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="xs">The expected code.</param>
         /// <param name="ys">The actual code.</param>
-        /// <returns>True if the code is found to be equal</returns>
+        /// <returns>True if the code is found to be equal.</returns>
         public static bool Equals(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
             for (var i = 0; i < xs.Count; i++)
@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="x">The expected code.</param>
         /// <param name="y">The actual code.</param>
-        /// <returns>True if the code is found to be equal</returns>
+        /// <returns>True if the code is found to be equal.</returns>
         public static bool Equals(string x, string y)
         {
             var xPos = 0;

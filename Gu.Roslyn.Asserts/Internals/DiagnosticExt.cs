@@ -6,14 +6,14 @@ namespace Gu.Roslyn.Asserts.Internals
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// Helper for working with <see cref="Diagnostic"/>
+    /// Helper for working with <see cref="Diagnostic"/>.
     /// </summary>
     internal static class DiagnosticExt
     {
         /// <summary>
         /// Writes the diagnostic and the offending code.
         /// </summary>
-        /// <returns>A string for use in assert exception</returns>
+        /// <returns>A string for use in assert exception.</returns>
         internal static string ToErrorString(this Diagnostic diagnostic)
         {
             SourceText text = diagnostic.Location.SourceTree.GetText(CancellationToken.None);

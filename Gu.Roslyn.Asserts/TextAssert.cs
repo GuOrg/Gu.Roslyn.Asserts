@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts
     using Gu.Roslyn.Asserts.Internals;
 
     /// <summary>
-    /// Assert for testing if code equals
+    /// Assert for testing if code equals.
     /// </summary>
     public static class TextAssert
     {

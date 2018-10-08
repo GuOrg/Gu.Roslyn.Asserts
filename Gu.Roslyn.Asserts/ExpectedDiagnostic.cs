@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts
         public string Id { get; }
 
         /// <summary>
-        /// Gets the expected message as text
+        /// Gets the expected message as text.
         /// </summary>
         public string Message { get; }
 
@@ -61,7 +61,7 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="Span"/> has path specified.
-        /// If the test is for a single file path can be omitted and will be set to 'MISSING'
+        /// If the test is for a single file path can be omitted and will be set to 'MISSING'.
         /// </summary>
         public bool HasPath => this.Span.Path != null &&
                                this.Span.Path != NoPosition.Path;
@@ -80,56 +80,56 @@ namespace Gu.Roslyn.Asserts
         public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the id from <paramref name="descriptor"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the id from <paramref name="descriptor"/>.
         /// </summary>
-        /// <param name="descriptor">The expected diagnostic id</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <param name="descriptor">The expected diagnostic id.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(DiagnosticDescriptor descriptor)
         {
             return new ExpectedDiagnostic(descriptor.Id, null, NoPosition);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId)
         {
             return new ExpectedDiagnostic(diagnosticId, null, NoPosition);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message)
         {
             return new ExpectedDiagnostic(diagnosticId, message, NoPosition);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
-        /// <param name="line">The expected line number</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
+        /// <param name="line">The expected line number.</param>
         /// <param name="character">The expected character position.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, int line, int character)
         {
             return Create(diagnosticId, null, line, character);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
-        /// <param name="line">The expected line number</param>
+        /// <param name="line">The expected line number.</param>
         /// <param name="character">The expected character position.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message, int line, int character)
         {
             var position = new LinePosition(line, character);
@@ -137,14 +137,14 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
         /// <param name="path">The path of the file with the diagnostic.</param>
-        /// <param name="line">The expected line number</param>
+        /// <param name="line">The expected line number.</param>
         /// <param name="character">The expected character position.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message, string path, int line, int character)
         {
             var position = new LinePosition(line, character);
@@ -152,25 +152,25 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="code">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string code, out string cleanedSources)
         {
             return CreateFromCodeWithErrorsIndicated(diagnosticId, null, code, out cleanedSources);
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
         /// <param name="code">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string message, string code, out string cleanedSources)
         {
             var positions = CodeReader.FindLinePositions(code).ToArray();
@@ -191,13 +191,13 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
-        /// <param name="diagnosticId">The expected diagnostic id</param>
+        /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
         /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static IReadOnlyList<ExpectedDiagnostic> CreateManyFromCodeWithErrorsIndicated(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
             var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
@@ -267,18 +267,18 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get a clone of this instance with updated <see cref="Message"/>
+        /// Get a clone of this instance with updated <see cref="Message"/>.
         /// </summary>
         /// <param name="message">The expected message.</param>
-        /// <returns>A new <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new <see cref="ExpectedDiagnostic"/>.</returns>
         public ExpectedDiagnostic WithMessage(string message) => new ExpectedDiagnostic(this.Id, message, this.Span);
 
         /// <summary>
-        /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position.
         /// </summary>
         /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
-        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/></returns>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public ExpectedDiagnostic WithPositionFromCodeWithErrorsIndicated(string codeWithErrorsIndicated, out string cleanedSources)
         {
             var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
@@ -301,7 +301,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Writes the diagnostic and the offending code.
         /// </summary>
-        /// <returns>A string for use in assert exception</returns>
+        /// <returns>A string for use in assert exception.</returns>
         internal string ToString(IReadOnlyList<string> sources)
         {
             if (this.HasPosition)

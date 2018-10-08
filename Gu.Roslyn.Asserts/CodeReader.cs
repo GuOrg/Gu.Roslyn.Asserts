@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="xs">The expected code.</param>
         /// <param name="ys">The actual code.</param>
-        /// <returns>True if the code is found to be equal</returns>
+        /// <returns>True if the code is found to be equal.</returns>
         [Obsolete("To be removed use CodeComparer.Equals")]
         public static bool AreEqual(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="x">The expected code.</param>
         /// <param name="y">The actual code.</param>
-        /// <returns>True if the code is found to be equal</returns>
+        /// <returns>True if the code is found to be equal.</returns>
         [Obsolete("To be removed use CodeComparer.Equals")]
         public static bool AreEqual(string x, string y)
         {
@@ -45,7 +45,7 @@ namespace Gu.Roslyn.Asserts
         /// Get the code from the document.
         /// </summary>
         /// <param name="document">The document.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
         public static string GetCode(this Document document, SyntaxAnnotation format)
         {
             return GetStringFromDocumentAsync(document, format, CancellationToken.None).GetAwaiter().GetResult();
@@ -55,8 +55,8 @@ namespace Gu.Roslyn.Asserts
         /// Get the filename from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
-        /// <param name="fileName">The file to read from <paramref name="code"/></param>
-        /// <returns>The file name </returns>
+        /// <param name="fileName">The file to read from <paramref name="code"/>.</param>
+        /// <returns>The file name. </returns>
         public static bool TryGetFileName(string code, out string fileName)
         {
             fileName = null;
@@ -103,7 +103,7 @@ namespace Gu.Roslyn.Asserts
         /// Get the filename from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
-        /// <returns>The file name </returns>
+        /// <returns>The file name. </returns>
         public static string FileName(string code)
         {
             if (string.IsNullOrEmpty(code))
@@ -133,7 +133,7 @@ namespace Gu.Roslyn.Asserts
         /// Get the namespace from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>
-        /// <returns>The namespace </returns>
+        /// <returns>The namespace. </returns>
         public static string Namespace(string code)
         {
             const string nameSpacePattern = @"(?<name>\w+(\.\w+)*)";
@@ -252,7 +252,7 @@ namespace Gu.Roslyn.Asserts
         /// Gets the simplified and formatted text from the document.
         /// </summary>
         /// <param name="document">The document to extract the source code from.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
         internal static async Task<string> GetStringFromDocumentAsync(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)
@@ -269,7 +269,7 @@ namespace Gu.Roslyn.Asserts
         /// Gets the simplified and formatted text from the document.
         /// </summary>
         /// <param name="document">The document to extract the source code from.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/></param>
+        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
         internal static string GetStringFromDocument(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)

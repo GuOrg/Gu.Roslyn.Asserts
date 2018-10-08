@@ -176,7 +176,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -202,7 +202,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -228,7 +228,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -254,7 +254,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -279,7 +279,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -304,7 +304,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -484,7 +484,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to run on the code..</param>
         /// <param name="codeFix">The code fix to apply.</param>
-        /// <param name="diagnosticsAndSources">The code and expected diagnostics</param>
+        /// <param name="diagnosticsAndSources">The code and expected diagnostics.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="suppressedDiagnostics">The diagnostics to suppress when compiling.</param>
         /// <param name="metadataReferences">The meta data metadataReferences to add to the compilation.</param>

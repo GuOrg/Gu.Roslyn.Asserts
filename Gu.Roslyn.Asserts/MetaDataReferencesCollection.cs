@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Add a collection of <see cref="MetadataReference"/>
+        /// Add a collection of <see cref="MetadataReference"/>.
         /// </summary>
         /// <param name="items">The references to add.</param>
         public void AddRange(IEnumerable<MetadataReference> items)

@@ -4,29 +4,29 @@ namespace Gu.Roslyn.Asserts.Internals
     using System.Linq;
 
     /// <summary>
-    /// Parses the URLs of various git repository host sites
+    /// Parses the URLs of various git repository host sites.
     /// </summary>
     internal static class GitRepositoryProvider
     {
         /// <summary>
-        /// Factory function for a GitFile
+        /// Factory function for a GitFile.
         /// </summary>
-        /// <param name="uri">The url</param>
-        /// <returns>Parsed <see cref="GitFile"/> object</returns>
+        /// <param name="uri">The url.</param>
+        /// <returns>Parsed <see cref="GitFile"/> object.</returns>
         public static GitFile ParseUrl(Uri uri)
         {
             return new GitFile(uri);
         }
 
         /// <summary>
-        /// A git file
+        /// A git file.
         /// </summary>
         public class GitFile
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="GitFile"/> class.
             /// </summary>
-            /// <param name="uri">The url</param>
+            /// <param name="uri">The url.</param>
             internal GitFile(Uri uri)
             {
                 // sample URL
@@ -44,32 +44,32 @@ namespace Gu.Roslyn.Asserts.Internals
             }
 
             /// <summary>
-            /// Gets the name of the provider, e.g. "github.com", "bitbucket.org"
+            /// Gets the name of the provider, e.g. "github.com", "bitbucket.org".
             /// </summary>
             public string Provider { get; }
 
             /// <summary>
-            /// Gets the user owns the repository
+            /// Gets the user owns the repository.
             /// </summary>
             public string User { get; }
 
             /// <summary>
-            /// Gets the name of the repository
+            /// Gets the name of the repository.
             /// </summary>
             public string RepoName { get; }
 
             /// <summary>
-            /// Gets the URL to the repository, usable with git clone
+            /// Gets the URL to the repository, usable with git clone.
             /// </summary>
             public Uri RepositoryUrl { get; }
 
             /// <summary>
-            /// Gets the name of a branch, or a commit SHA-1 hash
+            /// Gets the name of a branch, or a commit SHA-1 hash.
             /// </summary>
             public string Branch { get; }
 
             /// <summary>
-            /// Gets the path to the file in the repo
+            /// Gets the path to the file in the repo.
             /// </summary>
             public string Path { get; }
         }

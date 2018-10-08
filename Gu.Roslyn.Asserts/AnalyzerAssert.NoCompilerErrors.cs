@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Check the solution for compiler errors and warnings, uses:
         /// DiagnosticSettings.AllowedErrorIds()
-        /// MetadataReferences
+        /// MetadataReferences.
         /// </summary>
         public static void NoCompilerErrors(params string[] code)
         {
@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Check the solution for compiler errors and warnings, uses:
         /// DiagnosticSettings.AllowedErrorIds()
-        /// DiagnosticSettings.AllowedDiagnostics()
+        /// DiagnosticSettings.AllowedDiagnostics().
         /// </summary>
         public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Check the solution for compiler errors and warnings, uses:
         /// DiagnosticSettings.AllowedErrorIds()
-        /// DiagnosticSettings.AllowedDiagnostics()
+        /// DiagnosticSettings.AllowedDiagnostics().
         /// </summary>
         public static void NoCompilerErrors(Solution solution)
         {

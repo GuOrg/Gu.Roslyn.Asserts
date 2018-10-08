@@ -30,14 +30,14 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
         /// </summary>
-        /// <param name="assembly">The <see cref="Assembly"/></param>
+        /// <param name="assembly">The <see cref="Assembly"/>.</param>
         public static void AddTransitiveMetadataReferences(Assembly assembly)
         {
             MetadataReferences.AddRange(Asserts.MetadataReferences.Transitive(assembly));
         }
 
         /// <summary>
-        /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.FromAttributes"/>
+        /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.FromAttributes"/>.
         /// </summary>
         public static void ResetMetadataReferences()
         {
@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>
+        /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>.
         /// </summary>
         public static void ResetSuppressedDiagnostics()
         {
@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>
+        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>.
         /// </summary>
         public static void ResetAll()
         {
@@ -64,30 +64,30 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostic"/>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostic"/>.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/></param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/>.</param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic.Id);
         }
 
         /// <summary>
-        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptor"/>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptor"/>.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/></param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/>.</param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor.Id);
         }
 
         /// <summary>
-        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostics"/>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostics"/>.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/></param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/>.</param>
         internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
         {
             foreach (var expectedDiagnostic in expectedDiagnostics)
@@ -97,10 +97,10 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptors"/>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptors"/>.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        /// <param name="descriptors">The <see cref="DiagnosticDescriptor"/></param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="descriptors">The <see cref="DiagnosticDescriptor"/>.</param>
         internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors)
         {
             foreach (var expectedDiagnostic in descriptors)
@@ -110,10 +110,10 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Check that the analyzer supports exactly one diagnostic.
+        /// Check that the analyzer supports a diagnostic with <paramref name="descriptor"/>.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        /// <param name="descriptor">The descriptor of the supported diagnostic</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="descriptor">The descriptor of the supported diagnostic.</param>
         internal static void VerifySingleSupportedDiagnostic(DiagnosticAnalyzer analyzer, out DiagnosticDescriptor descriptor)
         {
             if (analyzer.SupportedDiagnostics.Length == 0)
@@ -137,6 +137,11 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
+        /// <summary>
+        /// Check that the analyzer supports a diagnostic with <paramref name="expectedId"/>.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="expectedId">The descriptor of the supported diagnostic.</param>
         internal static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, string expectedId)
         {
             if (analyzer.SupportedDiagnostics.Length > 0 &&

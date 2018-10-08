@@ -566,7 +566,7 @@ NUGET
     Gu.Analyzers (1.2.18.1-dev)
     IDisposableAnalyzers (2.0.3.3)
     ReflectionAnalyzers (0.1.13-dev)
-    StyleCop.Analyzers (1.0.2)
+    StyleCop.Analyzers (1.1.0-beta009)
 
 GROUP Build
 STORAGE: NONE

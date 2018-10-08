@@ -6,6 +6,6 @@ namespace Gu.Roslyn.Asserts
     public enum AllowCompilationErrors
     {
         No,
-        Yes
+        Yes,
     }
 }

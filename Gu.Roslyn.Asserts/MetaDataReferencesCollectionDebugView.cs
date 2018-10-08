@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// Debug view for <see cref="MetaDataReferencesCollection"/>
+    /// Debug view for <see cref="MetaDataReferencesCollection"/>.
     /// </summary>
     internal class MetaDataReferencesCollectionDebugView
     {

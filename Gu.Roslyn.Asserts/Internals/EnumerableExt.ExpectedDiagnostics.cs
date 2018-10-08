@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// A hack implementation for getting the elements in <paramref name="expecteds"/> that are not in <paramref name="actuals"/>
+        /// A hack implementation for getting the elements in <paramref name="expecteds"/> that are not in <paramref name="actuals"/>.
         /// </summary>
         /// <param name="expecteds">The expected diagnostics.</param>
         /// <param name="actuals">The actual diagnostics.</param>
@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
-        /// A hack implementation for getting the elements in <paramref name="actuals"/> that are not in <paramref name="expecteds"/>
+        /// A hack implementation for getting the elements in <paramref name="actuals"/> that are not in <paramref name="expecteds"/>.
         /// </summary>
         /// <param name="actuals">The actual diagnostics.</param>
         /// <param name="expecteds">The expected diagnostics.</param>

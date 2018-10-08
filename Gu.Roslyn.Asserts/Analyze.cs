@@ -114,7 +114,7 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file
+        /// Can be a .cs, .csproj or .solution file.
         /// </param>
         /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -131,7 +131,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzerType">The type of the analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file
+        /// Can be a .cs, .csproj or .solution file.
         /// </param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -147,7 +147,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file
+        /// Can be a .cs, .csproj or .solution file.
         /// </param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -164,7 +164,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file
+        /// Can be a .cs, .csproj or .solution file.
         /// </param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
@@ -368,6 +368,12 @@ namespace Gu.Roslyn.Asserts
             return results;
         }
 
+        /// <summary>
+        /// Get the diagnostics for <paramref name="analyzer"/> and compiler errors.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
+        /// <param name="solution">The <see cref="Solution"/>.</param>
+        /// <returns>The <see cref="DiagnosticsAndErrors"/>.</returns>
         internal static DiagnosticsAndErrors GetDiagnosticsAndErrors(DiagnosticAnalyzer analyzer, Solution solution)
         {
             var errors = new List<ImmutableArray<Diagnostic>>();
@@ -397,19 +403,6 @@ namespace Gu.Roslyn.Asserts
             return new DiagnosticsAndErrors(errors, analyzerDiagnstics);
         }
 
-        internal class DiagnosticsAndErrors
-        {
-            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> Errors;
-
-            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> AnalyzerDiagnostics;
-
-            public DiagnosticsAndErrors(IReadOnlyList<ImmutableArray<Diagnostic>> errors, IReadOnlyList<ImmutableArray<Diagnostic>> analyzerDiagnostics)
-            {
-                this.Errors = errors;
-                this.AnalyzerDiagnostics = analyzerDiagnostics;
-            }
-        }
-
         /// <summary>
         /// The diagnostics and the solution the analysis was performed on.
         /// </summary>
@@ -436,6 +429,35 @@ namespace Gu.Roslyn.Asserts
             /// Gets the diagnostics returned from Roslyn.
             /// </summary>
             public IReadOnlyList<ImmutableArray<Diagnostic>> Diagnostics { get; }
+        }
+
+        /// <summary>
+        /// Diagnostics for the analyzer and compiler errors.
+        /// </summary>
+        internal class DiagnosticsAndErrors
+        {
+#pragma warning disable SA1401 // Fields must be private
+            /// <summary>
+            /// Gets the compiler errors.
+            /// </summary>
+            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> Errors;
+
+            /// <summary>
+            /// Gets the diagnostics for the analyzer.
+            /// </summary>
+            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> AnalyzerDiagnostics;
+#pragma warning restore SA1401 // Fields must be private
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DiagnosticsAndErrors"/> class.
+            /// </summary>
+            /// <param name="errors">The compiler errors.</param>
+            /// <param name="analyzerDiagnostics">The diagnostics for the analyzer.</param>
+            public DiagnosticsAndErrors(IReadOnlyList<ImmutableArray<Diagnostic>> errors, IReadOnlyList<ImmutableArray<Diagnostic>> analyzerDiagnostics)
+            {
+                this.Errors = errors;
+                this.AnalyzerDiagnostics = analyzerDiagnostics;
+            }
         }
     }
 }

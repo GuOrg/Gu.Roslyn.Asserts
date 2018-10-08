@@ -74,7 +74,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzerType">The type of the analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         public static void Valid(Type analyzerType, FileInfo code)
         {
@@ -87,7 +87,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code)
         {
@@ -203,7 +203,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
         {
@@ -217,7 +217,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         public static void Valid(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, FileInfo code)
         {
@@ -265,7 +265,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer.</param>
         /// <param name="code">
         /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file
+        /// Can be a .cs, .csproj or .sln file.
         /// </param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>

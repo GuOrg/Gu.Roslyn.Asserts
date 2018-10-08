@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Specify what compiler errors to ignore when calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll
+    /// Specify what compiler errors to ignore when calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     public class IgnoredErrorsAttribute : Attribute

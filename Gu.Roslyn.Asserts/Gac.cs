@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Try get a <see cref="MetadataReference"/> from the GAC.
         /// </summary>
-        /// <param name="name">Example 'System'</param>
+        /// <param name="name">Example 'System'.</param>
         /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
         /// <returns>A value indicating a reference was found.</returns>
         public static bool TryGet(string name, out MetadataReference metadataReference)

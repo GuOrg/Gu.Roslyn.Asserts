@@ -14,9 +14,9 @@ namespace Gu.Roslyn.Asserts
     public static class SolutionFile
     {
         /// <summary>
-        /// Searches parent directories for <paramref name="assembly"/> the first file matching *.sln
+        /// Searches parent directories for <paramref name="assembly"/> the first file matching *.sln.
         /// </summary>
-        /// <param name="assembly">The assembly</param>
+        /// <param name="assembly">The assembly.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(Assembly assembly, out FileInfo sln)
@@ -32,9 +32,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
+        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln.
         /// </summary>
-        /// <param name="name">The assembly</param>
+        /// <param name="name">The assembly.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(string name, out FileInfo sln)
@@ -45,9 +45,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln
+        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln.
         /// </summary>
-        /// <param name="name">The assembly</param>
+        /// <param name="name">The assembly.</param>
         /// <returns>The solution file.</returns>
         public static FileInfo Find(string name)
         {
@@ -62,10 +62,10 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Parse a <see cref="SolutionInfo"/> from <paramref name="sln"/>
+        /// Parse a <see cref="SolutionInfo"/> from <paramref name="sln"/>.
         /// </summary>
         /// <param name="sln">The solution file.</param>
-        /// <returns>A <see cref="SolutionInfo"/></returns>
+        /// <returns>A <see cref="SolutionInfo"/>.</returns>
         public static SolutionInfo ParseInfo(FileInfo sln)
         {
             var contents = File.ReadAllText(sln.FullName);

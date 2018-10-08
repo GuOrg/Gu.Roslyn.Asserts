@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
-    /// Helper for dumping recursive metadata for a SyntaxNode
+    /// Helper for dumping recursive metadata for a SyntaxNode.
     /// </summary>
     public class AstWriter
     {
@@ -23,8 +23,8 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Dump the node recursively to a json format for diffing.
         /// </summary>
-        /// <param name="node">The <see cref="SyntaxNode"/></param>
-        /// <param name="settings">The <see cref="AstWriterSettings"/></param>
+        /// <param name="node">The <see cref="SyntaxNode"/>.</param>
+        /// <param name="settings">The <see cref="AstWriterSettings"/>.</param>
         /// <returns>The node serialized into a string format.</returns>
         public static string Serialize(SyntaxNode node, AstWriterSettings settings = null)
         {

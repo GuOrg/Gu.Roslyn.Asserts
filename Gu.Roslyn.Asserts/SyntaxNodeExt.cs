@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     /// <summary>
-    /// Helpers for finding things in SyntaxTrees
+    /// Helpers for finding things in SyntaxTrees.
     /// </summary>
     public static class SyntaxNodeExt
     {

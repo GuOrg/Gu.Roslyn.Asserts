@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>
+    /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
     /// </summary>
     public static class MetadataReferences
     {
@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
 #pragma warning restore 169
 
         /// <summary>
-        /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>
+        /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>.
         /// </summary>
         /// <param name="typeInAssembly">A type in the assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>
@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the <see cref="MetadataReference"/> for <paramref name="assemblies"/> and all assemblies referenced by <paramref name="assemblies"/>
+        /// Get the <see cref="MetadataReference"/> for <paramref name="assemblies"/> and all assemblies referenced by <paramref name="assemblies"/>.
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>

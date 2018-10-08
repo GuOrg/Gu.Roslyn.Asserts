@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts.Tests
                            {
                                "AllowCompilationErrors.cs",
                                "ClassLibrary1Class1.cs",
-                               "AssemblyInfo.cs"
+                               "AssemblyInfo.cs",
                            };
             CollectionAssert.AreEquivalent(expected, csproj.Documents.Select(x => x.Name));
             foreach (var document in csproj.Documents)

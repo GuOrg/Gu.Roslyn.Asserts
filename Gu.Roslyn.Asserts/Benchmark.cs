@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
-    /// A benchmark runner for a <see cref="DiagnosticAnalyzer"/>
+    /// A benchmark runner for a <see cref="DiagnosticAnalyzer"/>.
     /// </summary>
     public class Benchmark
     {
@@ -47,7 +47,7 @@
         public interface IContextAndAction
         {
             /// <summary>
-            /// Calls this.Action(this.Context);
+            /// Calls this.Action(this.Context);.
             /// </summary>
             void Run();
         }
@@ -168,7 +168,7 @@
 
         /// <summary>
         /// Run the benchmark.
-        /// This invokes all actions recorded for <see cref="Analyzer"/>
+        /// This invokes all actions recorded for <see cref="Analyzer"/>.
         /// </summary>
         public void Run()
         {
@@ -237,7 +237,7 @@
         /// <summary>
         /// An instance where the analyzer registered and action.
         /// </summary>
-        /// <typeparam name="TContext">The type of the analysis context</typeparam>
+        /// <typeparam name="TContext">The type of the analysis context.</typeparam>
         [DebuggerDisplay("{Context}")]
         public class ContextAndAction<TContext> : IContextAndAction
         {
@@ -251,17 +251,17 @@
             }
 
             /// <summary>
-            /// Gets the <see cref="SyntaxNodeAnalysisContext"/> to pass in when invoking <see cref="Action"/>
+            /// Gets the <see cref="SyntaxNodeAnalysisContext"/> to pass in when invoking <see cref="Action"/>.
             /// </summary>
             public TContext Context { get; }
 
             /// <summary>
-            /// Gets the action registered for <see cref="Context"/> by BenchmarkAnalysisContext.RegisterSyntaxNodeAction(action, syntaxKinds)"/>
+            /// Gets the action registered for <see cref="Context"/> by BenchmarkAnalysisContext.RegisterSyntaxNodeAction(action, syntaxKinds)"/>.
             /// </summary>
             public Action<TContext> Action { get; }
 
             /// <summary>
-            /// Calls this.Action(this.Context);
+            /// Calls this.Action(this.Context);.
             /// </summary>
             public void Run()
             {

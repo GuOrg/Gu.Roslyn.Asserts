@@ -16,9 +16,9 @@ namespace Gu.Roslyn.Asserts
     public static class ProjectFile
     {
         /// <summary>
-        /// Searches parent directories for <paramref name="dllFile"/>
+        /// Searches parent directories for <paramref name="dllFile"/>.
         /// </summary>
-        /// <param name="dllFile">Ex Foo.dll</param>
+        /// <param name="dllFile">Ex Foo.dll.</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(FileInfo dllFile, out FileInfo result)
@@ -35,9 +35,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Searches parent directories for <paramref name="projectFile"/>
+        /// Searches parent directories for <paramref name="projectFile"/>.
         /// </summary>
-        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <param name="projectFile">Ex Foo.csproj.</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(string projectFile, out FileInfo result)
@@ -53,9 +53,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Searches parent directories for <paramref name="projectFile"/>
+        /// Searches parent directories for <paramref name="projectFile"/>.
         /// </summary>
-        /// <param name="projectFile">Ex Foo.csproj</param>
+        /// <param name="projectFile">Ex Foo.csproj.</param>
         /// <returns>The project file.</returns>
         public static FileInfo Find(string projectFile)
         {
@@ -75,21 +75,21 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Parse a <see cref="ProjectInfo"/> from <paramref name="csproj"/>
+        /// Parse a <see cref="ProjectInfo"/> from <paramref name="csproj"/>.
         /// </summary>
         /// <param name="csproj">The project file.</param>
-        /// <returns>A <see cref="ProjectInfo"/></returns>
+        /// <returns>A <see cref="ProjectInfo"/>.</returns>
         public static ProjectInfo ParseInfo(FileInfo csproj)
         {
             return ParseInfo(csproj, ProjectId.CreateNewId(csproj.FullName), out _);
         }
 
         /// <summary>
-        /// Parse a <see cref="ProjectInfo"/> from <paramref name="idFileMap"/>
+        /// Parse a <see cref="ProjectInfo"/> from <paramref name="idFileMap"/>.
         /// </summary>
         /// <param name="projectId">The id to assign the project.</param>
         /// <param name="idFileMap">A map with ids and csproj files.</param>
-        /// <returns>A <see cref="ProjectInfo"/></returns>
+        /// <returns>A <see cref="ProjectInfo"/>.</returns>
         internal static ProjectInfo ParseInfo(ProjectId projectId, ImmutableDictionary<ProjectId, FileInfo> idFileMap)
         {
             var csproj = idFileMap[projectId];

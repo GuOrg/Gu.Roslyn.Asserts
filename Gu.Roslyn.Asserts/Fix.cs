@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
-    /// Helper class for applying code fixes
+    /// Helper class for applying code fixes.
     /// </summary>
     public static class Fix
     {
@@ -173,7 +173,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>
+        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>.
         /// </summary>
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="codeFix">The code fix.</param>
@@ -193,7 +193,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>
+        /// Get the code actions registered by <paramref name="codeFix"/> for <paramref name="solution"/>.
         /// </summary>
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="codeFix">The code fix.</param>
@@ -301,9 +301,9 @@ namespace Gu.Roslyn.Asserts
             }
 
             /// <summary>
-            /// Create an instance of <see cref="TestDiagnosticProvider"/>
+            /// Create an instance of <see cref="TestDiagnosticProvider"/>.
             /// </summary>
-            /// <returns>The <see cref="TestDiagnosticProvider"/></returns>
+            /// <returns>The <see cref="TestDiagnosticProvider"/>.</returns>
             internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider codeFix, string fixTitle, IReadOnlyList<Diagnostic> diagnostics)
             {
                 var actions = new List<CodeAction>();
