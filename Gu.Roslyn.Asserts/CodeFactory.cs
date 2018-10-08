@@ -117,8 +117,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to create the solution from.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
+        /// <param name="languageVersion">The <see cref="LanguageVersion"/></param>
         /// <returns>A <see cref="Solution"/></returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
         {
             var solutionInfo = SolutionInfo.Create(
                 SolutionId.CreateNewId("Test.sln"),
@@ -187,7 +188,7 @@ namespace Gu.Roslyn.Asserts
                                                                           sourceCodeKind: SourceCodeKind.Regular,
                                                                           loader: new StringLoader(x));
                                                                   }))
-                                            .WithParseOptions(CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Latest));
+                                            .WithParseOptions(CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
                 }
             }
 
