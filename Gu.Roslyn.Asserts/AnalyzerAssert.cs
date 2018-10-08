@@ -70,29 +70,17 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/></param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
-            if (analyzer.SupportedDiagnostics.Length > 0 &&
-                analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
-            {
-                var message = $"Analyzer {analyzer} has more than one diagnostic with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
-                throw new AssertException(message);
-            }
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic.Id);
+        }
 
-            var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedDiagnostic.Id);
-            if (descriptors == 0)
-            {
-                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedDiagnostic.Id}";
-                throw new AssertException(message);
-            }
-
-            if (descriptors > 1)
-            {
-                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedDiagnostic.Id}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedDiagnostic.Id}";
-                throw new AssertException(message);
-            }
+        /// <summary>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptor"/>
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
+        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/></param>
+        public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor.Id);
         }
 
         /// <summary>
@@ -104,7 +92,20 @@ namespace Gu.Roslyn.Asserts
         {
             foreach (var expectedDiagnostic in expectedDiagnostics)
             {
-                VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+                VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic.Id);
+            }
+        }
+
+        /// <summary>
+        /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptors"/>
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
+        /// <param name="descriptors">The <see cref="DiagnosticDescriptor"/></param>
+        internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors)
+        {
+            foreach (var expectedDiagnostic in descriptors)
+            {
+                VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic.Id);
             }
         }
 
@@ -132,6 +133,33 @@ namespace Gu.Roslyn.Asserts
             if (descriptor == null)
             {
                 var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.";
+                throw new AssertException(message);
+            }
+        }
+
+        internal static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, string expectedId)
+        {
+            if (analyzer.SupportedDiagnostics.Length > 0 &&
+                analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
+            {
+                var message = $"Analyzer {analyzer} has more than one diagnostic with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
+                throw new AssertException(message);
+            }
+
+            var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedId);
+            if (descriptors == 0)
+            {
+                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedId}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The expected diagnostic is: {expectedId}";
+                throw new AssertException(message);
+            }
+
+            if (descriptors > 1)
+            {
+                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedId}.{Environment.NewLine}" +
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
+                              $"The expected diagnostic is: {expectedId}";
                 throw new AssertException(message);
             }
         }

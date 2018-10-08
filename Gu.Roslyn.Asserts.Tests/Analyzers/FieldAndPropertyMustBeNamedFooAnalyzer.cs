@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public const string FieldDiagnosticId = "Field";
         public const string PropertyDiagnosticId = "Property";
 
-        private static readonly DiagnosticDescriptor FieldDescriptor = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor FieldDescriptor = new DiagnosticDescriptor(
             id: FieldDiagnosticId,
             title: "The field must be named foo.",
             messageFormat: "Message format.",
@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        private static readonly DiagnosticDescriptor PropertyDescriptor = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor PropertyDescriptor = new DiagnosticDescriptor(
             id: PropertyDiagnosticId,
             title: "The Property must be named Foo.",
             messageFormat: "Message format.",

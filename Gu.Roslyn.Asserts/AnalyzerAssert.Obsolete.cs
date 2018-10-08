@@ -639,6 +639,151 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            Valid(new TAnalyzer(), expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedDiagnostics">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            Valid(new TAnalyzer(), expectedDiagnostics, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedDiagnostics">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostics, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="expectedDiagnostics">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+        {
+            VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostics, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, FileInfo code)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+        {
+            Valid(new TAnalyzer(), expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file
+        /// </param>
+        [Obsolete("Use overload with DiagnosticDescriptor")]
+        public static void Valid(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, FileInfo code)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, SuppressedDiagnostics), MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
+            NoCompilerErrors(sln);
+        }
+
+        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>

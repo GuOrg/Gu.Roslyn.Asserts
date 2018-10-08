@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFi
     {
         public const string DiagnosticId = "NoError";
 
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,
             title: "This analyzer never reports an error.",
             messageFormat: "Message format.",

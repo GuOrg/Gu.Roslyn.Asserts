@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -10,7 +10,7 @@
     {
         public const string DiagnosticId = "NoError";
 
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,
             title: "This analyzer never reports an error.",
             messageFormat: "Message format.",

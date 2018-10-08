@@ -15,11 +15,11 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
             AnalyzerAssert.Valid(analyzer, csproj);
 
-            var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-            AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, csproj);
-            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
-            AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
-            AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
+            var descriptor = NoErrorAnalyzer.Descriptor;
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
         }
 
         [Explicit("Need to solve for WPF and InternalsVisibleTo")]
@@ -32,10 +32,10 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), sln);
             AnalyzerAssert.Valid(analyzer, sln);
 
-            var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-            AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, sln);
-            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, sln);
-            AnalyzerAssert.Valid(analyzer, expectedDiagnostic, sln);
+            var descriptor = NoErrorAnalyzer.Descriptor;
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, sln);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, sln);
+            AnalyzerAssert.Valid(analyzer, descriptor, sln);
         }
 
         [Explicit("Need to solve for WPF and InternalsVisibleTo")]

@@ -361,10 +361,20 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressedDiagnostics)
         {
-            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedDiagnostic.Id);
-            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptor, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedDiagnostic.Id)));
+            return DefaultCompilationOptions(analyzer, expectedDiagnostic.Id, suppressedDiagnostics);
+        }
+
+        /// <summary>
+        /// Create default compilation options for <paramref name="analyzer"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="analyzer">The analyzers to report warning or error for.</param>
+        /// <param name="descriptor">The diagnostics to check for.</param>
+        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string> suppressedDiagnostics)
+        {
+            return DefaultCompilationOptions(analyzer, descriptor.Id, suppressedDiagnostics);
         }
 
         /// <summary>
@@ -381,6 +391,21 @@ namespace Gu.Roslyn.Asserts
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
             suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
+        }
+
+        /// <summary>
+        /// Create default compilation options for <paramref name="analyzer"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="analyzer">The analyzers to report warning or error for.</param>
+        /// <param name="descriptors">The diagnostics to check for.</param>
+        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/></returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressedDiagnostics)
+        {
+            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
+            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
         /// <summary>
@@ -682,6 +707,14 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources.Code,
                 DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressedDiagnostics),
                 metadataReferences);
+        }
+
+        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string> suppressedDiagnostics)
+        {
+            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
+            var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
+            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptor, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
         }
     }
 }

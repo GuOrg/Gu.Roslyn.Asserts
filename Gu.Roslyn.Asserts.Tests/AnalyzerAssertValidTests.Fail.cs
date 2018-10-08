@@ -202,17 +202,17 @@ namespace Project2
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(analyzer, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDisabled.DiagnosticId);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(expectedDiagnostic, csproj));
+                var descriptor = FieldNameMustNotBeginWithUnderscoreDisabled.Descriptor;
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(descriptor, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), expectedDiagnostic, csproj));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), descriptor, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(analyzer, descriptor, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences));
                 StringAssert.Contains(expected, exception.Message);
                 if (Throw)
                 {
@@ -299,28 +299,28 @@ namespace RoslynSandbox
         private readonly int value1;
     }
 }";
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID WRONG.\r\n" +
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID NoError.\r\n" +
                                "The analyzer produces the following diagnostics: {SA1309}\r\n" +
                                "The expected diagnostic is: WRONG";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create("WRONG");
+                var descriptor = NoErrorAnalyzer.Descriptor;
 
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(descriptor, code));
                 CodeAssert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -338,22 +338,22 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
+                var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
                 var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
                                   "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -368,20 +368,20 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
+                var descriptor = DuplicateIdAnalyzer.Descriptor1;
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
 
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(expectedDiagnostic, code));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), expectedDiagnostic, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), new[] { expectedDiagnostic }, code));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

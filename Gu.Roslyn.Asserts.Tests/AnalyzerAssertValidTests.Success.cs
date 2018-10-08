@@ -47,14 +47,14 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
                 AnalyzerAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, code);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
+                var descriptor = NoErrorAnalyzer.Descriptor;
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+                AnalyzerAssert.Valid(analyzer, descriptor, code);
 
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { descriptor }, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
+                AnalyzerAssert.Valid(analyzer, new[] { descriptor }, code);
             }
 
             [Test]
@@ -75,14 +75,14 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
                 AnalyzerAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, code);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
+                var descriptor = NoErrorAnalyzer.Descriptor;
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+                AnalyzerAssert.Valid(analyzer, descriptor, code);
 
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { descriptor }, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
+                AnalyzerAssert.Valid(analyzer, new[] { descriptor }, code);
             }
 
             [Test]
@@ -95,11 +95,11 @@ namespace RoslynSandbox
                 AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), csproj);
                 AnalyzerAssert.Valid(analyzer, csproj);
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
-                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, csproj);
-                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, csproj);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, csproj);
-                AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, null), AnalyzerAssert.MetadataReferences);
+                var descriptor = NoErrorAnalyzer.Descriptor;
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
+                AnalyzerAssert.Valid(analyzer, descriptor, csproj);
+                AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
             }
 
             [Test]
@@ -161,14 +161,14 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
-                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
-                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, new List<string> { code });
+                var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(descriptor, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
+                AnalyzerAssert.Valid(analyzer, descriptor, code);
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { descriptor }, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code);
+                AnalyzerAssert.Valid(analyzer, new[] { descriptor }, code);
+                AnalyzerAssert.Valid(analyzer, descriptor, new List<string> { code });
             }
 
             [Test]
@@ -185,13 +185,13 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
-                AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
-                AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { expectedDiagnostic }, code);
+                var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
+                AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(descriptor, code);
+                AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code);
+                AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), descriptor, code);
+                AnalyzerAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { descriptor }, code);
+                AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { descriptor }, code);
+                AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { descriptor }, code);
             }
 
             [Test]
@@ -206,13 +206,13 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId1);
-                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(expectedDiagnostic, code);
-                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), expectedDiagnostic, code);
-                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), expectedDiagnostic, code);
-                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { expectedDiagnostic }, code);
-                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), new[] { expectedDiagnostic }, code);
+                var descriptor = FieldNameMustNotBeginWithUnderscoreReportsTwo.Descriptor1;
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(descriptor, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
+                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), descriptor, code);
+                AnalyzerAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { descriptor }, code);
+                AnalyzerAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { descriptor }, code);
+                AnalyzerAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), new[] { descriptor }, code);
             }
 
             [Test]
