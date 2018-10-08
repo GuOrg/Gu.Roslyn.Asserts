@@ -339,7 +339,7 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                string expected = "Expected no diagnostics, found:\r\n" +
+                var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
                                   "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
 
@@ -354,6 +354,34 @@ namespace RoslynSandbox
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { expectedDiagnostic }, code));
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void DuplicateId()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+    }
+}";
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
+
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid<DuplicateIdAnalyzer>(new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { expectedDiagnostic }, code));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.Valid(new DuplicateIdAnalyzer(), new[] { expectedDiagnostic }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

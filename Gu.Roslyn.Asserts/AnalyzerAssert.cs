@@ -70,6 +70,13 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/></param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
+            if (analyzer.SupportedDiagnostics.Length > 0 &&
+                analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
+            {
+                var message = $"Analyzer {analyzer} has more than one diagnostic with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
+                throw new AssertException(message);
+            }
+
             var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedDiagnostic.Id);
             if (descriptors == 0)
             {

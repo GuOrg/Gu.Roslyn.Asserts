@@ -25,7 +25,8 @@ namespace Gu.Roslyn.Asserts.Tests
             this.kinds = kinds;
         }
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
+            ImmutableArray.Create(Descriptor);
 
         public IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
 
@@ -39,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private void Handle(SyntaxNodeAnalysisContext context)
         {
-           this.contexts.Add(context);
+            this.contexts.Add(context);
         }
     }
 }
