@@ -169,24 +169,25 @@ namespace Gu.Roslyn.Asserts
                     var assemblyName = kvp.Key;
                     var projectId = ProjectId.CreateNewId(assemblyName);
                     yield return ProjectInfo.Create(
-                        projectId,
-                        VersionStamp.Default,
-                        assemblyName,
-                        assemblyName,
-                        LanguageNames.CSharp,
-                        compilationOptions: compilationOptions,
-                        metadataReferences: metadataReferences,
-                        documents: kvp.Value.SelectMany(x => x.Value)
-                                      .Select(
-                                          x =>
-                                          {
-                                              var documentName = CodeReader.FileName(x);
-                                              return DocumentInfo.Create(
-                                                  DocumentId.CreateNewId(projectId, documentName),
-                                                  documentName,
-                                                  sourceCodeKind: SourceCodeKind.Regular,
-                                                  loader: new StringLoader(x));
-                                          }));
+                                                projectId,
+                                                VersionStamp.Default,
+                                                assemblyName,
+                                                assemblyName,
+                                                LanguageNames.CSharp,
+                                                compilationOptions: compilationOptions,
+                                                metadataReferences: metadataReferences,
+                                                documents: kvp.Value.SelectMany(x => x.Value)
+                                                              .Select(
+                                                                  x =>
+                                                                  {
+                                                                      var documentName = CodeReader.FileName(x);
+                                                                      return DocumentInfo.Create(
+                                                                          DocumentId.CreateNewId(projectId, documentName),
+                                                                          documentName,
+                                                                          sourceCodeKind: SourceCodeKind.Regular,
+                                                                          loader: new StringLoader(x));
+                                                                  }))
+                                            .WithParseOptions(CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Latest));
                 }
             }
 
@@ -269,7 +270,7 @@ namespace Gu.Roslyn.Asserts
                     else
                     {
                         var ns = CodeReader.Namespace(doc);
-                        int indexOf = ns.IndexOf('.');
+                        var indexOf = ns.IndexOf('.');
                         if (indexOf > 0)
                         {
                             ns = ns.Substring(0, indexOf);

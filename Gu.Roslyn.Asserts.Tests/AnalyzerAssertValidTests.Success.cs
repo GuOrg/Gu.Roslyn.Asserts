@@ -58,6 +58,34 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void SevenPointThreeFeature()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo<T>
+        where T : struct, System.Enum
+    {
+    }
+}";
+                var analyzer = new NoErrorAnalyzer();
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), code);
+                AnalyzerAssert.Valid(analyzer, code);
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
+                AnalyzerAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), AnalyzerAssert.MetadataReferences);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(NoErrorAnalyzer.DiagnosticId);
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(expectedDiagnostic, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), expectedDiagnostic, code);
+                AnalyzerAssert.Valid(analyzer, expectedDiagnostic, code);
+
+                AnalyzerAssert.Valid<NoErrorAnalyzer>(new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), new[] { expectedDiagnostic }, code);
+                AnalyzerAssert.Valid(analyzer, new[] { expectedDiagnostic }, code);
+            }
+
+            [Test]
             public void ProjectFileNoErrorAnalyzer()
             {
                 var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
