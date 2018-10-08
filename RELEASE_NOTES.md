@@ -1,3 +1,9 @@
+#### 2.6.0
+* Compile valid code once.
+* Use DiagnosticDescriptor in Valid. Old API made [Obsolete]
+* Better error when two descriptors have the same ID.
+* Use LanguageVersion.Latest.
+
 #### 2.5.0
 * BREAKING: Don't throw test framework exceptions.
 * BREAKING: Require no compiler errors in AnalyzerAssert.Valid.

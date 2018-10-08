@@ -3,10 +3,10 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
- BREAKING: Don't throw test framework exceptions.
- BREAKING: Require no compiler errors in AnalyzerAssert.Valid.
- FEATURE: CodeAssert better message when differ at end.
- FEATURE: Better message when message differs.
+  Compile valid code once.
+  Use DiagnosticDescriptor in Valid. Old API made [Obsolete]
+  Better error when two descriptors have the same ID.
+  Use LanguageVersion.Latest.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
