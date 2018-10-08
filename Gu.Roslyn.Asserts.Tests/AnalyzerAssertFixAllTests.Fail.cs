@@ -1,7 +1,6 @@
 // ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;

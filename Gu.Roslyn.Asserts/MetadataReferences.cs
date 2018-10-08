@@ -80,14 +80,37 @@ namespace Gu.Roslyn.Asserts
             {
                 foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
                 {
-                    var referencedAssembly = AppDomain.CurrentDomain.GetAssemblies()
-                                                      .SingleOrDefault(x => x.GetName() == referencedAssemblyName) ??
-                                             Assembly.Load(referencedAssemblyName);
-                    _ = RecursiveReferencedAssemblies(referencedAssembly, recursiveAssemblies);
+                    if (TryGetOrLoad(referencedAssemblyName, out var referencedAssembly))
+                    {
+                        _ = RecursiveReferencedAssemblies(referencedAssembly, recursiveAssemblies);
+                    }
+                    else
+                    {
+                    }
                 }
             }
 
             return recursiveAssemblies;
+
+            bool TryGetOrLoad(AssemblyName name, out Assembly result)
+            {
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                result = assemblies.SingleOrDefault(x => AssemblyName.ReferenceMatchesDefinition(x.GetName(), name));
+                if (result != null)
+                {
+                    return true;
+                }
+
+                try
+                {
+                    result = Assembly.Load(name);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
 
         private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly[] assemblies, HashSet<Assembly> recursiveAssemblies = null)

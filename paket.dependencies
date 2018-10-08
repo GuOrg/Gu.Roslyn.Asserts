@@ -12,6 +12,7 @@ group Test
   storage: none
   source http://www.nuget.org/api/v2/
   nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+  nuget System.Runtime.CompilerServices.Unsafe 4.5.1
   nuget NUnit
 
 group Analyzers
