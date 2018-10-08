@@ -301,7 +301,7 @@ namespace RoslynSandbox
 }";
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID NoError.\r\n" +
                                "The analyzer produces the following diagnostics: {SA1309}\r\n" +
-                               "The expected diagnostic is: WRONG";
+                               "The expected diagnostic is: NoError";
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
 
