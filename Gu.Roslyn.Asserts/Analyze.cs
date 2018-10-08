@@ -368,6 +368,48 @@ namespace Gu.Roslyn.Asserts
             return results;
         }
 
+        internal static DiagnosticsAndErrors GetDiagnosticsAndErrors(DiagnosticAnalyzer analyzer, Solution solution)
+        {
+            var errors = new List<ImmutableArray<Diagnostic>>();
+            var analyzerDiagnstics = new List<ImmutableArray<Diagnostic>>();
+
+            foreach (var project in solution.Projects)
+            {
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
+
+                if (analyzer is PlaceholderAnalyzer placeholder)
+                {
+                    var diagnostics = compilation.GetDiagnostics(CancellationToken.None);
+                    errors.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id != x.Id)).ToImmutableArray());
+                    analyzerDiagnstics.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
+                }
+                else
+                {
+                    errors.Add(compilation.GetDiagnostics(CancellationToken.None));
+                    var withAnalyzers = compilation.WithAnalyzers(
+                        ImmutableArray.Create(analyzer),
+                        project.AnalyzerOptions,
+                        CancellationToken.None);
+                    analyzerDiagnstics.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
+                }
+            }
+
+            return new DiagnosticsAndErrors(errors, analyzerDiagnstics);
+        }
+
+        internal class DiagnosticsAndErrors
+        {
+            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> Errors;
+
+            internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> AnalyzerDiagnostics;
+
+            public DiagnosticsAndErrors(IReadOnlyList<ImmutableArray<Diagnostic>> errors, IReadOnlyList<ImmutableArray<Diagnostic>> analyzerDiagnostics)
+            {
+                this.Errors = errors;
+                this.AnalyzerDiagnostics = analyzerDiagnostics;
+            }
+        }
+
         /// <summary>
         /// The diagnostics and the solution the analysis was performed on.
         /// </summary>

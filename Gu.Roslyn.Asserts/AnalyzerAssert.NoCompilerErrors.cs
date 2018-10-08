@@ -1,6 +1,7 @@
 namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Linq;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
@@ -45,6 +46,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoCompilerErrors(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
         {
             var diagnostics = Analyze.GetDiagnostics(solution);
+            NoCompilerErrors(diagnostics, allowedIds, allowedDiagnostics);
+        }
+
+        private static void NoCompilerErrors(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
+        {
             var introducedDiagnostics = diagnostics
                                         .SelectMany(x => x)
                                         .Where(x => IsIncluded(x, allowedDiagnostics))

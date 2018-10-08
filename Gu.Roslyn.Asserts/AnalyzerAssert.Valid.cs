@@ -41,9 +41,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -54,9 +53,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -94,9 +92,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code)
         {
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -132,9 +129,8 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -170,9 +166,8 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptors, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -185,9 +180,8 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -229,9 +223,8 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -262,9 +255,8 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
         {
-            var diagnostics = Analyze.GetDiagnostics(solution, analyzer);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(solution);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -280,9 +272,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -295,9 +286,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -310,9 +300,8 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-            NoCompilerErrors(sln);
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>
@@ -331,6 +320,12 @@ namespace Gu.Roslyn.Asserts
 
                 throw new AssertException(builder.Return());
             }
+        }
+
+        private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
+        {
+            NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
+            NoCompilerErrors(diagnosticsAndErrors.Errors, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
         }
     }
 }
