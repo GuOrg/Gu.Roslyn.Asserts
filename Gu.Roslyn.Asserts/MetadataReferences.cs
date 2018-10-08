@@ -84,9 +84,6 @@ namespace Gu.Roslyn.Asserts
                     {
                         _ = RecursiveReferencedAssemblies(referencedAssembly, recursiveAssemblies);
                     }
-                    else
-                    {
-                    }
                 }
             }
 
