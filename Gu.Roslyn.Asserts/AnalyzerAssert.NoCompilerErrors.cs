@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts
             var introducedDiagnostics = diagnostics
                                         .SelectMany(x => x)
                                         .Where(x => IsIncluded(x, allowedDiagnostics))
-                                        .Where(x => IsExcluded(x))
+                                        .Where(x => !IsExcluded(x))
                                         .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
                                      .Except(allowedIds ?? Enumerable.Empty<string>())
@@ -75,7 +75,7 @@ namespace Gu.Roslyn.Asserts
             {
                 switch (diagnostic.Id)
                 {
-                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no extension method 'InitializeComponent' accepting a first argument of type"):
+                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type 'MainWindow' could be found (are you missing a using directive or an assembly reference?)"):
                             return true;
                 }
 
