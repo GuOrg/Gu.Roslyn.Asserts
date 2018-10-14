@@ -41,73 +41,145 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [NetCoreApp2.0](#netcoreapp20)
 
 
-# Valid
+# AnalyzerAssert.Valid
 
 Use `AnalyzerAssert.Valid<NoErrorAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
+The code is checked so that it does not have any compiler errors either.
+A typical test fixture looks like:
 
 ```c#
-[Test]
-public void TestThatNoDiagnosticsAreReportedForTheCode()
+public class ValidCode
 {
-    var code = @"
-namespace Gu.Roslyn.Asserts.Tests
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+
+    [Test]
+    public void SomeTest()
+    {
+        var code = @"
+namespace TestCode
 {
     class Foo
     {
     }
 }";
-    AnalyzerAssert.Valid<NoErrorAnalyzer>(code);
+        AnalyzerAssert.Valid(YourAnalyzer, code);
+    }
+    ...
 }
 ```
 
+If the analyzer produces many diagnostics you can pass in a descriptor so that only diagnostics matching it are checked.
+
 ```c#
-[TestCase(typeof(NoErrorAnalyzer))]
-public void SingleClassNoErrorType(Type type)
+public class ValidCode
 {
-    var code = @"
-namespace RoslynSandbox
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+    private static readonly DiagnosticDescriptor Descriptor = YourAnalyzer.SomeDescriptor;
+
+    [Test]
+    public void SomeTest()
+    {
+        var code = @"
+namespace TestCode
 {
     class Foo
     {
     }
 }";
-    AnalyzerAssert.Valid(type, code);
+        AnalyzerAssert.Valid(YourAnalyzer, Descriptor, code);
+    }
+    ...
 }
 ```
 
-# Diagnostics
+When testing all analyzers something like this can be used:
+
+```c#
+public class ValidCodeWithAllAnalyzers
+{
+    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(KnownSymbol)
+                                                                                .Assembly.GetTypes()
+                                                                                .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
+                                                                                .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t))
+                                                                                .ToArray();
+
+
+    private static readonly Solution ValidCodeProjectSln = CodeFactory.CreateSolution(
+        ProjectFile.Find("ValidCode.csproj"),
+        AllAnalyzers,
+        AnalyzerAssert.MetadataReferences);
+
+    [TestCaseSource(nameof(AllAnalyzers))]
+    public void ValidCodeProject(DiagnosticAnalyzer analyzer)
+    {
+        AnalyzerAssert.Valid(analyzer, ValidCodeProjectSln);
+    }
+}
+```
+
+# AnalyzerAssert.Diagnostics
 
 Use `AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
 With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
-```c#
-[Test]
-public void JustCheckPositionAndDiagnosticId()
-{
-    var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
-    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
-}
+A typical test fixture looks like:
 
-[Test]
-public void CheckMessageAlso()
+```c#
+public class Diagnostics
 {
-    var code = @"
-namespace RoslynSandbox
-{
-    class Foo
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
+
+    [Test]
+    public void SomeTest()
     {
-        private readonly int ↓_value;
+        var code = @"
+namespace TestCode
+{
+    class ↓Foo
+    {
     }
 }";
-    var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
-    AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
+        AnalyzerAssert.Diagnostics(YourAnalyzer, code);
+    }
+
+    [Test]
+    public void CheckMessageAlso()
+    {
+        var code = @"
+namespace TestCode
+{
+    class ↓Foo
+    {
+    }
+}";
+        AnalyzerAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
+    }
+    ...
+}
+```
+
+If the analyzer produces many diagnostics you can pass in a descriptor so that only diagnostics matching it are checked.
+
+```c#
+public class Diagnostics
+{
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
+
+    [Test]
+    public void SomeTest()
+    {
+        var code = @"
+namespace TestCode
+{
+    class ↓Foo
+    {
+    }
+}";
+        AnalyzerAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic, code);
+    }
+    ...
 }
 ```
 
@@ -142,13 +214,19 @@ namespace RoslynSandbox
 }
 ```
 
-With explicit title for the fix to apply. Useful when there are many candidate fixes.
+A typical test fixture looks like:
 
 ```c#
-[Test]
-public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+public class CodeFix
 {
-    var code = @"
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+    private static readonly CodeFixProvider Fix = new YorCodeFixProvider();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
+
+    [Test]
+    public void SomeTest()
+    {
+        var code = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -157,7 +235,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+        var fixedCode = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -165,9 +243,37 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-    AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode, "Rename to value");
+        AnalyzerAssert.CodeFix(Analyzer, Fix, code, fixedCode);
+    }
+
+    [Test]
+    public void ExplicitFixTitle()
+    {
+        var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+        var fixedCode = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int value;
+    }
+}";
+        AnalyzerAssert.CodeFix(Analyzer, Fix, code, fixedCode, fixTitle: "Don't use underscore prefix");
+    }
+    ...
 }
 ```
+
+With explicit title for the fix to apply. Useful when there are many candidate fixes.
+
 
 If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnsics other than the expected.
 
