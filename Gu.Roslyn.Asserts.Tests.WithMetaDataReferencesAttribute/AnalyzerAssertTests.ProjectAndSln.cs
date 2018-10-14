@@ -22,6 +22,30 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
         }
 
+        [Test]
+        public void ClassLibrary1NoErrorAnalyzer()
+        {
+            var analyzer = new NoErrorAnalyzer();
+            var csproj = ProjectFile.Find("ClassLibrary1.csproj");
+            var descriptor = NoErrorAnalyzer.Descriptor;
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
+        }
+
+        [Test]
+        public void WpfAppNoErrorAnalyzer()
+        {
+            var analyzer = new NoErrorAnalyzer();
+            var csproj = ProjectFile.Find("WpfApp1.csproj");
+            var descriptor = NoErrorAnalyzer.Descriptor;
+            AnalyzerAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
+            AnalyzerAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, descriptor, csproj);
+            AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
+        }
+
         [Explicit("Need to solve for WPF and InternalsVisibleTo")]
         [Test]
         public void SolutionFileNoErrorAnalyzer()

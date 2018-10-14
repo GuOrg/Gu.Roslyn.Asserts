@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Globalization;
     using System.Linq;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
@@ -54,6 +55,7 @@ namespace Gu.Roslyn.Asserts
             var introducedDiagnostics = diagnostics
                                         .SelectMany(x => x)
                                         .Where(x => IsIncluded(x, allowedDiagnostics))
+                                        .Where(x => IsExcluded(x))
                                         .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
                                      .Except(allowedIds ?? Enumerable.Empty<string>())
@@ -67,6 +69,17 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 throw new AssertException(StringBuilderPool.Return(error));
+            }
+
+            bool IsExcluded(Diagnostic diagnostic)
+            {
+                switch (diagnostic.Id)
+                {
+                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no extension method 'InitializeComponent' accepting a first argument of type"):
+                            return true;
+                }
+
+                return false;
             }
         }
     }
