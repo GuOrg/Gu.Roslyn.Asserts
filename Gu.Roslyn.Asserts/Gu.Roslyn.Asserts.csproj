@@ -12,7 +12,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>2.6.1.0</Version>
+    <Version>2.6.1.1</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>

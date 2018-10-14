@@ -60,6 +60,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     "MainWindow.xaml.cs",
                     "Resources.Designer.cs",
                     "Settings.Designer.cs",
+                    "UserControl1.xaml.cs",
                 };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
