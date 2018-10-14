@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), AnalyzerAssert.MetadataReferences);
         }
 
-        [Explicit("Need to solve for WPF and InternalsVisibleTo")]
+        [Explicit("Need to solve signing and InternalsVisibleTo")]
         [Test]
         public void SolutionFileNoErrorAnalyzer()
         {
@@ -62,7 +62,7 @@ namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
             AnalyzerAssert.Valid(analyzer, descriptor, sln);
         }
 
-        [Explicit("Need to solve for WPF and InternalsVisibleTo")]
+        [Explicit("Need to solve signing and InternalsVisibleTo")]
         [Test]
         public void SolutionNoErrorAnalyzer()
         {
