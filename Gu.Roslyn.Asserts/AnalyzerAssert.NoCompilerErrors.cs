@@ -75,7 +75,7 @@ namespace Gu.Roslyn.Asserts
             {
                 switch (diagnostic.Id)
                 {
-                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type 'MainWindow' could be found (are you missing a using directive or an assembly reference?)"):
+                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type"):
                             return true;
                 }
 

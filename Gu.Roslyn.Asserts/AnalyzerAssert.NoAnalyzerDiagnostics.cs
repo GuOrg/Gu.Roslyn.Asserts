@@ -220,8 +220,8 @@ namespace Gu.Roslyn.Asserts
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-            var diagnostics = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnostics);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -252,8 +252,8 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
         {
-            var diagnostics = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
-            NoDiagnosticsOrErrors(diagnostics);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -269,8 +269,8 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnostics);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -283,8 +283,8 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnostics);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
