@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
     public static class Gac
     {
         private static readonly Lazy<ConcurrentDictionary<string, FileInfo>> Cache = new Lazy<ConcurrentDictionary<string, FileInfo>>(Create);
-        private static readonly ConcurrentDictionary<string, MetadataReference> Cachedreferences = new ConcurrentDictionary<string, MetadataReference>();
+        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
 
         /// <summary>
         /// Try get a <see cref="MetadataReference"/> from the GAC.
@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (Cache.Value.TryGetValue(name, out var fileInfo))
             {
-                metadataReference = Cachedreferences.GetOrAdd(fileInfo.FullName, x => MetadataReference.CreateFromFile(x));
+                metadataReference = CachedReferences.GetOrAdd(fileInfo.FullName, x => MetadataReference.CreateFromFile(x));
             }
 
             metadataReference = null;
