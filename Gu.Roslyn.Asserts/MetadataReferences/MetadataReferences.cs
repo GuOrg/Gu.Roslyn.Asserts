@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts
         {
             foreach (var a in RecursiveReferencedAssemblies(assemblies))
             {
-                yield return MetadataReference.CreateFromFile(a.Location);
+                yield return CreateFromAssembly(a);
             }
         }
 

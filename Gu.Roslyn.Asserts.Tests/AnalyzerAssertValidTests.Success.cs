@@ -3,7 +3,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -14,8 +13,8 @@ namespace Gu.Roslyn.Asserts.Tests
             [OneTimeSetUp]
             public void OneTimeSetUp()
             {
-                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(new[] { "global", "mscorlib" }));
-                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location).WithAliases(new[] { "global", "System" }));
+                AnalyzerAssert.MetadataReferences.Add(Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly).WithAliases(new[] { "global", "mscorlib" }));
+                AnalyzerAssert.MetadataReferences.Add(Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(System.Diagnostics.Debug).Assembly).WithAliases(new[] { "global", "System" }));
                 AnalyzerAssert.MetadataReferences.AddRange(Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
                     typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),

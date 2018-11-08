@@ -228,7 +228,7 @@ namespace Gu.Roslyn.Asserts
                             Path.Combine(csproj.Directory.FullName, include) is string fileName &&
                             File.Exists(fileName))
                         {
-                            yield return MetadataReference.CreateFromFile(fileName);
+                            yield return MetadataReferences.CreateFromFile(fileName);
                         }
                         else if (Gac.TryGet(include, out var reference))
                         {
