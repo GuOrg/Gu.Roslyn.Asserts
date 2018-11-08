@@ -45,6 +45,24 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
+        /// <summary>
+        /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
+        /// </summary>
+        /// <param name="name">Example 'System'.</param>
+        /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
+        /// <returns>A value indicating a reference was found.</returns>
+        public static bool TryGet(string name, out MetadataReference metadataReference)
+        {
+            if (Cache.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var files))
+            {
+                metadataReference = CachedReferences.GetOrAdd(files.Last().FullName, x => MetadataReference.CreateFromFile(x));
+                return metadataReference != null;
+            }
+
+            metadataReference = null;
+            return false;
+        }
+
         private static ImmutableDictionary<string, ImmutableArray<FileInfo>> Create()
         {
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");

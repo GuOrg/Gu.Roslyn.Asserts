@@ -62,7 +62,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (obj is PortableExecutableReference portable)
             {
-                return OrdinalIgnoreCase.GetHashCode(portable);
+                return OrdinalIgnoreCase.GetHashCode(portable.FilePath);
             }
 
             return obj.GetHashCode();

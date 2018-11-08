@@ -16,6 +16,38 @@ namespace Gu.Roslyn.Asserts
 #pragma warning restore 169
 
         /// <summary>
+        /// Create a <see cref="MetadataReference"/> for the <paramref name="assembly"/>.
+        /// Checks reference assemblies first.
+        /// </summary>
+        /// <param name="assembly">An <see cref="Assembly"/>.</param>
+        /// <returns>A <see cref="MetadataReference"/>.</returns>
+        public static MetadataReference CreateFromAssembly(Assembly assembly)
+        {
+            if (ReferenceAssembly.TryGet(assembly, out var reference))
+            {
+                return reference;
+            }
+
+            return MetadataReference.CreateFromFile(assembly.Location);
+        }
+
+        /// <summary>
+        /// Create a <see cref="MetadataReference"/> for the <paramref name="assemblyFile"/>.
+        /// Checks reference assemblies first.
+        /// </summary>
+        /// <param name="assemblyFile">An <see cref="Assembly"/>.</param>
+        /// <returns>A <see cref="MetadataReference"/>.</returns>
+        public static MetadataReference CreateFromFile(string assemblyFile)
+        {
+            if (ReferenceAssembly.TryGet(assemblyFile, out var reference))
+            {
+                return reference;
+            }
+
+            return MetadataReference.CreateFromFile(assemblyFile);
+        }
+
+        /// <summary>
         /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>.
         /// </summary>
         /// <param name="typeInAssembly">A type in the assemblies.</param>
