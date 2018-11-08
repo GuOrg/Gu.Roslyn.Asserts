@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 {
     using System;
     using System.Collections.Generic;
@@ -14,8 +14,8 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             var expected = new[] { "mscorlib.dll" };
             var type = typeof(object);
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
+            CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
+            CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
 
         [Test]
@@ -33,8 +33,8 @@ namespace Gu.Roslyn.Asserts.Tests
                                "System.Numerics.dll",
                            };
             var type = typeof(Enumerable);
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
-            CollectionAssert.AreEqual(expected, MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
+            CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
+            CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
 
         // ReSharper disable once UnusedMember.Local

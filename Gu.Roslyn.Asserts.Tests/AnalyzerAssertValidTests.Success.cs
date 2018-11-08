@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location).WithAliases(new[] { "global", "mscorlib" }));
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Debug).Assembly.Location).WithAliases(new[] { "global", "System" }));
-                AnalyzerAssert.MetadataReferences.AddRange(MetadataReferences.Transitive(
+                AnalyzerAssert.MetadataReferences.AddRange(Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
                     typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
                     typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute),

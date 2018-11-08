@@ -2,7 +2,9 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Immutable;
     using System.IO;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -10,7 +12,7 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class Gac
     {
-        private static readonly Lazy<ConcurrentDictionary<string, FileInfo>> Cache = new Lazy<ConcurrentDictionary<string, FileInfo>>(Create);
+        private static readonly Lazy<ImmutableDictionary<string, FileInfo>> Cache = new Lazy<ImmutableDictionary<string, FileInfo>>(Create);
         private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
 
         /// <summary>
@@ -24,29 +26,26 @@ namespace Gu.Roslyn.Asserts
             if (Cache.Value.TryGetValue(name, out var fileInfo))
             {
                 metadataReference = CachedReferences.GetOrAdd(fileInfo.FullName, x => MetadataReference.CreateFromFile(x));
+                return metadataReference != null;
             }
 
             metadataReference = null;
             return false;
         }
 
-        private static ConcurrentDictionary<string, FileInfo> Create()
+        private static ImmutableDictionary<string, FileInfo> Create()
         {
-            var gac = new ConcurrentDictionary<string, FileInfo>();
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Microsoft.NET\\assembly");
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Microsoft.NET\\assembly\\GAC_MSIL");
             if (Directory.Exists(dir))
             {
-                var msil = Path.Combine(dir, "GAC_MSIL");
-                if (Directory.Exists(msil))
-                {
-                    foreach (var file in Directory.EnumerateFiles(dir, "*.dll", SearchOption.AllDirectories))
-                    {
-                        gac.TryAdd(Path.GetFileNameWithoutExtension(file), new FileInfo(file));
-                    }
-                }
+                return Directory.EnumerateFiles(dir, "*.dll", SearchOption.AllDirectories)
+                                .GroupBy(x => Path.GetFileNameWithoutExtension(x))
+                                .ToImmutableDictionary(
+                                    x => x.Key,
+                                    x => new FileInfo(x.Last()));
             }
 
-            return gac;
+            return ImmutableDictionary<string, FileInfo>.Empty;
         }
     }
 }
