@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using NUnit.Framework;
 
     public class AnalyzerAssertNoAnalyzerDiagnosticsTests
@@ -42,9 +41,18 @@ namespace RoslynSandbox
     {
     }
 }";
-                _ = Assert.Throws<NullReferenceException>(() => AnalyzerAssert.NoAnalyzerDiagnostics<ThrowingAnalyzer>(code));
-                _ = Assert.Throws<NullReferenceException>(() => AnalyzerAssert.NoAnalyzerDiagnostics(typeof(ThrowingAnalyzer), code));
-                _ = Assert.Throws<NullReferenceException>(() => AnalyzerAssert.NoAnalyzerDiagnostics(new ThrowingAnalyzer(), code));
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "AD0001 Analyzer 'Gu.Roslyn.Asserts.Tests.ThrowingAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.\r\n" +
+                               "  at line 0 and character 0 in file  | Code did not have position 0,0\r\n";
+
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoAnalyzerDiagnostics<ThrowingAnalyzer>(code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoAnalyzerDiagnostics(typeof(ThrowingAnalyzer), code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoAnalyzerDiagnostics(new ThrowingAnalyzer(), code));
+                Assert.AreEqual(expected, exception.Message);
             }
         }
     }
