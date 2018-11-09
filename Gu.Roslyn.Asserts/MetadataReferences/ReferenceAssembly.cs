@@ -57,10 +57,11 @@ namespace Gu.Roslyn.Asserts
             var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
             if (Directory.Exists(referenceAssemblies))
             {
-                var assemblyName = typeof(int).Assembly.GetName();
+                var expectedName = typeof(int).Assembly.GetName();
                 foreach (var mscorlib in Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories))
                 {
-                    if (assemblyName.FullName == AssemblyName.GetAssemblyName(mscorlib).FullName)
+                    var name = AssemblyName.GetAssemblyName(mscorlib);
+                    if (expectedName.FullName == name.FullName)
                     {
                         return Directory.EnumerateFiles(Path.GetDirectoryName(mscorlib), "*.dll", SearchOption.AllDirectories)
                                         .ToImmutableDictionary(
