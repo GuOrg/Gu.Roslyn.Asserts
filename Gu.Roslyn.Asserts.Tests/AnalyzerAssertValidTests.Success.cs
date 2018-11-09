@@ -3,6 +3,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Generic;
+    using System.Linq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -27,6 +28,37 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 // Usually this is not needed but we want everything reset when testing the AnalyzerAssert.
                 AnalyzerAssert.MetadataReferences.Clear();
+            }
+
+            [Test]
+            public void WithSingleMetadataReference()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+    }
+}";
+                var analyzer = new NoErrorAnalyzer();
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) });
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(object).Assembly));
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly).WithAliases(new[] { "global", "mscorlib" }) });
+            }
+
+            [Test]
+            public void WithTransitiveMetadataReference()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+    }
+}";
+                var analyzer = new NoErrorAnalyzer();
+                var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, AnalyzerAssert.SuppressedDiagnostics), metadataReferences);
             }
 
             [Test]
