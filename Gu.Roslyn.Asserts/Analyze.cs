@@ -377,7 +377,7 @@ namespace Gu.Roslyn.Asserts
         internal static DiagnosticsAndErrors GetDiagnosticsAndErrors(DiagnosticAnalyzer analyzer, Solution solution)
         {
             var errors = new List<ImmutableArray<Diagnostic>>();
-            var analyzerDiagnstics = new List<ImmutableArray<Diagnostic>>();
+            var analyzerDiagnostics = new List<ImmutableArray<Diagnostic>>();
 
             foreach (var project in solution.Projects)
             {
@@ -387,7 +387,7 @@ namespace Gu.Roslyn.Asserts
                 {
                     var diagnostics = compilation.GetDiagnostics(CancellationToken.None);
                     errors.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id != x.Id)).ToImmutableArray());
-                    analyzerDiagnstics.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
+                    analyzerDiagnostics.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
                 }
                 else
                 {
@@ -396,11 +396,11 @@ namespace Gu.Roslyn.Asserts
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);
-                    analyzerDiagnstics.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
+                    analyzerDiagnostics.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
                 }
             }
 
-            return new DiagnosticsAndErrors(errors, analyzerDiagnstics);
+            return new DiagnosticsAndErrors(errors, analyzerDiagnostics);
         }
 
         /// <summary>

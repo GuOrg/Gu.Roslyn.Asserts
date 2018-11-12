@@ -216,6 +216,75 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <summary>
+        /// Try getting the first element in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in <paramref name="source"/>.</typeparam>
+        /// <param name="source">The source collection, can be null.</param>
+        /// <param name="result">The first element, can be null.</param>
+        /// <returns>True if an element was found.</returns>
+        internal static bool TryLast<T>(this IEnumerable<T> source, out T result)
+        {
+            result = default(T);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                if (!e.MoveNext())
+                {
+                    return false;
+                }
+
+                while (e.MoveNext())
+                {
+                    result = e.Current;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Try getting the first element in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in <paramref name="source"/>.</typeparam>
+        /// <param name="source">The source collection, can be null.</param>
+        /// <param name="predicate">The filter.</param>
+        /// <param name="result">The first element, can be null.</param>
+        /// <returns>True if an element was found.</returns>
+        internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T result)
+        {
+            result = default(T);
+            if (source == null)
+            {
+                return false;
+            }
+
+            using (var e = source.GetEnumerator())
+            {
+                if (!e.MoveNext())
+                {
+                    return false;
+                }
+
+                var found = false;
+                do
+                {
+                    if (e.Current is T item &&
+                        predicate(item))
+                    {
+                        result = item;
+                        found = true;
+                    }
+                }
+                while (e.MoveNext());
+                return found;
+            }
+        }
+
+        /// <summary>
         /// Return the item with minimum keyed by <paramref name="selector"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the items in the collection.</typeparam>

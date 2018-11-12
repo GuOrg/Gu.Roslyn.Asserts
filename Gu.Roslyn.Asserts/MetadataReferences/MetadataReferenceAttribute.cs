@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -30,10 +30,10 @@
             this.Aliases = aliases ?? new string[0];
             if (this.Aliases == null || this.Aliases.Count == 0)
             {
-                this.MetadataReference = MetadataReference.CreateFromFile(type.Assembly.Location);
+                this.MetadataReference = MetadataReferences.CreateFromAssembly(type.Assembly);
             }
 
-            this.MetadataReference = MetadataReference.CreateFromFile(type.Assembly.Location).WithAliases(this.Aliases);
+            this.MetadataReference = MetadataReferences.CreateFromAssembly(type.Assembly).WithAliases(this.Aliases);
         }
 
         /// <summary>

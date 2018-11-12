@@ -9,11 +9,12 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// For finding MetadataReferences in the GAC.
+    /// For finding MetadataReferences in the Reference assemblies folder.
+    /// Everything in this class is cargo culted. Don't know if there are any docs for this.
     /// </summary>
     public static class ReferenceAssembly
     {
-        private static readonly Lazy<ImmutableDictionary<string, ImmutableArray<FileInfo>>> Cache = new Lazy<ImmutableDictionary<string, ImmutableArray<FileInfo>>>(Create);
+        private static readonly Lazy<ImmutableDictionary<string, FileInfo>> NameFileMap = new Lazy<ImmutableDictionary<string, FileInfo>>(Create);
         private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
 
         /// <summary>
@@ -24,20 +25,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating a reference was found.</returns>
         public static bool TryGet(Assembly assembly, out MetadataReference metadataReference)
         {
-            if (Cache.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var files))
+            if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var dllFile))
             {
-                var assemblyName = assembly.GetName();
-                foreach (var file in files)
-                {
-                    var candidate = AssemblyName.GetAssemblyName(file.FullName);
-                    if (assemblyName.FullName == candidate.FullName)
-                    {
-                        metadataReference = CachedReferences.GetOrAdd(file.FullName, x => MetadataReference.CreateFromFile(x));
-                        return metadataReference != null;
-                    }
-                }
-
-                metadataReference = CachedReferences.GetOrAdd(files.Last().FullName, x => MetadataReference.CreateFromFile(x));
+                metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
                 return metadataReference != null;
             }
 
@@ -53,9 +43,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating a reference was found.</returns>
         public static bool TryGet(string name, out MetadataReference metadataReference)
         {
-            if (Cache.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var files))
+            if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var dllFile))
             {
-                metadataReference = CachedReferences.GetOrAdd(files.Last().FullName, x => MetadataReference.CreateFromFile(x));
+                metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
                 return metadataReference != null;
             }
 
@@ -63,21 +53,26 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
-        private static ImmutableDictionary<string, ImmutableArray<FileInfo>> Create()
+        private static ImmutableDictionary<string, FileInfo> Create()
         {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
-            if (Directory.Exists(dir))
+            var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
+            if (Directory.Exists(referenceAssemblies))
             {
-                return Directory.EnumerateFiles(dir, "*.dll", SearchOption.AllDirectories)
-                                .GroupBy(x => Path.GetFileNameWithoutExtension(x))
-                                .ToImmutableDictionary(
-                                    x => x.Key,
-                                    x => x.Select(f => new FileInfo(f))
-                                          .OrderByDescending(f => f.CreationTimeUtc)
-                                          .ToImmutableArray());
+                var expectedName = typeof(int).Assembly.GetName();
+                foreach (var mscorlib in Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
+                {
+                    var name = AssemblyName.GetAssemblyName(mscorlib);
+                    if (expectedName.FullName == name.FullName)
+                    {
+                        return Directory.EnumerateFiles(Path.GetDirectoryName(mscorlib), "*.dll", SearchOption.AllDirectories)
+                                        .ToImmutableDictionary(
+                                            x => Path.GetFileNameWithoutExtension(x),
+                                            x => new FileInfo(x));
+                    }
+                }
             }
 
-            return ImmutableDictionary<string, ImmutableArray<FileInfo>>.Empty;
+            return ImmutableDictionary<string, FileInfo>.Empty;
         }
     }
 }

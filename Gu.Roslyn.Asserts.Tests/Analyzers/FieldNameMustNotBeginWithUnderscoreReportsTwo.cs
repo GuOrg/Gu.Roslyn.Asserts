@@ -29,17 +29,15 @@ namespace Gu.Roslyn.Asserts.Tests
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        private static readonly Action<SyntaxNodeAnalysisContext> FieldDeclarationAction = HandleFieldDeclaration;
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor1, Descriptor2);
 
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(FieldDeclarationAction, SyntaxKind.FieldDeclaration);
+            context.RegisterSyntaxNodeAction(c => Handle(c), SyntaxKind.FieldDeclaration);
         }
 
-        private static void HandleFieldDeclaration(SyntaxNodeAnalysisContext context)
+        private static void Handle(SyntaxNodeAnalysisContext context)
         {
             var syntax = (FieldDeclarationSyntax)context.Node;
             var variables = syntax.Declaration?.Variables;

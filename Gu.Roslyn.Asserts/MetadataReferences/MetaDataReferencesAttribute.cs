@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@
         /// <param name="types">Specify types in assemblies for which metadata references will be included.</param>
         public MetadataReferencesAttribute(params Type[] types)
         {
-            this.MetadataReferences = types.Select(x => MetadataReference.CreateFromFile(x.Assembly.Location))
+            this.MetadataReferences = types.Select(x => Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(x.Assembly))
                                            .ToArray();
         }
 

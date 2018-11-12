@@ -73,6 +73,11 @@ namespace Gu.Roslyn.Asserts
 
             bool IsExcluded(Diagnostic diagnostic)
             {
+                if (allowedIds.Contains(diagnostic.Id))
+                {
+                    return true;
+                }
+
                 switch (diagnostic.Id)
                 {
                         case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type"):
