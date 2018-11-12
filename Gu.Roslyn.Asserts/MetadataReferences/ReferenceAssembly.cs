@@ -14,8 +14,45 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class ReferenceAssembly
     {
-        private static readonly Lazy<ImmutableDictionary<string, FileInfo>> NameFileMap = new Lazy<ImmutableDictionary<string, FileInfo>>(Create);
         private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
+        private static DirectoryInfo directory;
+
+        /// <summary>
+        /// Gets or sets the reference assembly location to use.
+        /// </summary>
+        public static DirectoryInfo Directory
+        {
+            get
+            {
+                return directory ?? (directory = GetDefault());
+
+                DirectoryInfo GetDefault()
+                {
+                    var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
+                    if (System.IO.Directory.Exists(referenceAssemblies))
+                    {
+                        var expectedName = typeof(int).Assembly.GetName();
+                        foreach (var mscorlib in System.IO.Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
+                        {
+                            var name = AssemblyName.GetAssemblyName(mscorlib);
+                            if (expectedName.FullName == name.FullName)
+                            {
+                                return new DirectoryInfo(Path.GetDirectoryName(mscorlib));
+                            }
+                        }
+                    }
+
+                    return null;
+                }
+            }
+
+            set
+            {
+                CachedReferences.Clear();
+                NameFileMap.Clear();
+                directory = value;
+            }
+        }
 
         /// <summary>
         /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
@@ -53,26 +90,25 @@ namespace Gu.Roslyn.Asserts
             return false;
         }
 
-        private static ImmutableDictionary<string, FileInfo> Create()
+        private static class NameFileMap
         {
-            var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
-            if (Directory.Exists(referenceAssemblies))
+            private static ImmutableDictionary<string, FileInfo> value;
+
+            internal static ImmutableDictionary<string, FileInfo> Value => value ?? (value = Create());
+
+            internal static void Clear()
             {
-                var expectedName = typeof(int).Assembly.GetName();
-                foreach (var mscorlib in Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
-                {
-                    var name = AssemblyName.GetAssemblyName(mscorlib);
-                    if (expectedName.FullName == name.FullName)
-                    {
-                        return Directory.EnumerateFiles(Path.GetDirectoryName(mscorlib), "*.dll", SearchOption.AllDirectories)
-                                        .ToImmutableDictionary(
-                                            x => Path.GetFileNameWithoutExtension(x),
-                                            x => new FileInfo(x));
-                    }
-                }
+                value = null;
             }
 
-            return ImmutableDictionary<string, FileInfo>.Empty;
+            private static ImmutableDictionary<string, FileInfo> Create()
+            {
+                return Directory?.EnumerateFiles("*.dll", SearchOption.AllDirectories)
+                                                   .ToImmutableDictionary(
+                                                       x => Path.GetFileNameWithoutExtension(x.FullName),
+                                                       x => x) ??
+                       ImmutableDictionary<string, FileInfo>.Empty;
+            }
         }
     }
 }
