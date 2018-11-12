@@ -19,8 +19,8 @@ group Analyzers
   storage: none
   source http://www.nuget.org/api/v2/
   nuget AsyncUsageAnalyzers
-  nuget IDisposableAnalyzers
   nuget Gu.Analyzers
+  nuget IDisposableAnalyzers
+  nuget PublicApiAnalyzer prerelease
   nuget ReflectionAnalyzers
   nuget StyleCop.Analyzers prerelease
-
