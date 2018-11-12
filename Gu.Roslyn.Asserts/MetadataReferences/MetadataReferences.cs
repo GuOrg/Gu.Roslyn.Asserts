@@ -64,9 +64,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns><see cref="MetadataReference"/>s.</returns>
         public static IEnumerable<MetadataReference> Transitive(params Assembly[] assemblies)
         {
-            foreach (var a in RecursiveReferencedAssemblies(assemblies))
+            foreach (var assembly in RecursiveReferencedAssemblies(assemblies))
             {
-                yield return CreateFromAssembly(a);
+                yield return CreateFromAssembly(assembly);
             }
         }
 

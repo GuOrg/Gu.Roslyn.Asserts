@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using Microsoft.CodeAnalysis;
 
@@ -58,7 +59,7 @@ namespace Gu.Roslyn.Asserts
             if (Directory.Exists(referenceAssemblies))
             {
                 var expectedName = typeof(int).Assembly.GetName();
-                foreach (var mscorlib in Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories))
+                foreach (var mscorlib in Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
                 {
                     var name = AssemblyName.GetAssemblyName(mscorlib);
                     if (expectedName.FullName == name.FullName)
