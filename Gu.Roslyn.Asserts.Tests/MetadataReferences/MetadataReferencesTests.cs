@@ -190,7 +190,6 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         {
             var expected = new[]
             {
-
                 "Microsoft.CodeAnalysis.CSharp.dll",
                 "System.Runtime.dll",
                 "mscorlib.dll",

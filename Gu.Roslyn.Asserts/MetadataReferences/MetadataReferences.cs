@@ -48,9 +48,9 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the <see cref="MetadataReference"/> for <paramref name="typeInAssembly"/> and all assemblies referenced by <paramref name="typeInAssembly"/>.
+        /// Get the <see cref="MetadataReference"/> for <paramref name="typesInAssemblies"/> and all assemblies referenced by <paramref name="typesInAssemblies"/>.
         /// </summary>
-        /// <param name="typeInAssembly">A type in the assemblies.</param>
+        /// <param name="typesInAssemblies">A type in the assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>
         public static IEnumerable<MetadataReference> Transitive(params Type[] typesInAssemblies)
         {

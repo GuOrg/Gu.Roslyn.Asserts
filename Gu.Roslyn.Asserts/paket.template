@@ -3,10 +3,8 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  Compile valid code once.
-  Use DiagnosticDescriptor in Valid. Old API made [Obsolete]
-  Better error when two descriptors have the same ID.
-  Use LanguageVersion.Latest.
+  MetadataReferences.Transitive(type) handle generic types.
+  Use reference assemblies.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46

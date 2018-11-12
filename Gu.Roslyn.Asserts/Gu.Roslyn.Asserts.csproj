@@ -12,7 +12,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>2.6.1.1</Version>
+    <Version>2.6.2.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -21,10 +21,8 @@
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>Compile valid code once.
-Use DiagnosticDescriptor in Valid. Old API made [Obsolete]
-Better error when two descriptors have the same ID.
-Use LanguageVersion.Latest.</PackageReleaseNotes>
+    <PackageReleaseNotes>MetadataReferences.Transitive(type) handle generic types.
+Use reference assemblies.</PackageReleaseNotes>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

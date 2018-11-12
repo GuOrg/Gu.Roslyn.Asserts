@@ -1,3 +1,7 @@
+#### 2.6.2
+* MetadataReferences.Transitive(type) handle generic types.
+* Use reference assemblies.
+
 #### 2.6.0
 * Compile valid code once.
 * Use DiagnosticDescriptor in Valid. Old API made [Obsolete]
