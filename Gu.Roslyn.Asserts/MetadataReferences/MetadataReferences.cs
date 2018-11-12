@@ -52,9 +52,21 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="typeInAssembly">A type in the assemblies.</param>
         /// <returns><see cref="MetadataReference"/>s.</returns>
-        public static IEnumerable<MetadataReference> Transitive(params Type[] typeInAssembly)
+        public static IEnumerable<MetadataReference> Transitive(params Type[] typesInAssemblies)
         {
-            return Transitive(typeInAssembly.Select(x => x.Assembly).ToArray());
+            return Transitive(typesInAssemblies.SelectMany(t => Assemblies(t)).ToArray());
+
+            IEnumerable<Assembly> Assemblies(Type type)
+            {
+                yield return type.Assembly;
+                if (type.IsGenericType)
+                {
+                    foreach (var genericArgument in type.GetGenericArguments())
+                    {
+                        yield return genericArgument.Assembly;
+                    }
+                }
+            }
         }
 
         /// <summary>
