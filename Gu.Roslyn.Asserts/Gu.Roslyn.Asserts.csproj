@@ -1,16 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
-
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
   <PropertyGroup>
     <Version>2.6.2.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
@@ -24,15 +23,12 @@
     <PackageReleaseNotes>MetadataReferences.Transitive(type) handle generic types.
 Use reference assemblies.</PackageReleaseNotes>
   </PropertyGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Exec Command=".paket\paket.exe pack publish" WorkingDirectory="$(SolutionDir)" />
   </Target>
-
-  <Import Project="..\.paket\Paket.Restore.targets" />
-
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
