@@ -1,6 +1,6 @@
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable PossibleNullReferenceException
-namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.AnalyzersAndFixes
+namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
 {
     using System;
     using System.Collections.Concurrent;

@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D8C50F8A-9
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute", "Gu.Roslyn.Asserts.Tests.WithMetaDataReferencesAttribute\Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.csproj", "{3FB66874-E38F-4CCE-8296-8C25C9C934E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net46WithAttributes", "Gu.Roslyn.Asserts.Tests.Net46WithAttributes\Gu.Roslyn.Asserts.Tests.Net46WithAttributes.csproj", "{3FB66874-E38F-4CCE-8296-8C25C9C934E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}"
 EndProject

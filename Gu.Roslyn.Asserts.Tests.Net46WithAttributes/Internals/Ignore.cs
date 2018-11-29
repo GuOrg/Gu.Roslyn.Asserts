@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute
+namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes
 {
     /// <summary>
     /// For suppressing GU0011 in a clear way.

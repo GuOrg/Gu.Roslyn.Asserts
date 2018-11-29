@@ -141,7 +141,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                        "ClassLibrary2",
                                        "Gu.Roslyn.Asserts",
                                        "Gu.Roslyn.Asserts.Tests",
-                                       "Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute",
+                                       "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
                                    };
 
                 CollectionAssert.AreEquivalent(expectedProjects, solution.Projects.Select(p => p.Name));

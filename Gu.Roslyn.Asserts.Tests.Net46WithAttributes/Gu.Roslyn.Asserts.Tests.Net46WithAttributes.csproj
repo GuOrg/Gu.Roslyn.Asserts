@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
-    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.WithMetadataReferencesAttribute.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.Net46WithAttributes.ruleset</CodeAnalysisRuleSet>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
