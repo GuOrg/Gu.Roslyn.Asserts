@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472;netcoreapp2.0</TargetFrameworks>
-    <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.ruleset</CodeAnalysisRuleSet>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>

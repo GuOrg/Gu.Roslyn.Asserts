@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
                 var fixesBag = new List<CodeAction>[documents.Length];
                 var options = new ParallelOptions() { CancellationToken = fixAllContext.CancellationToken };
-                Parallel.ForEach(
+                _ = Parallel.ForEach(
                     documents,
                     options,
                     (document, state, index) =>
@@ -59,7 +59,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
                                 fixesBag[index].Add,
                                 fixAllContext)
                             .Wait(fixAllContext.CancellationToken);
-                    }).IgnoreReturnValue();
+                    });
 
                 if (fixesBag.Any(fixes => fixes.Count > 0))
                 {
@@ -133,7 +133,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
             {
                 var options = new ParallelOptions() { CancellationToken = fixAllContext.CancellationToken };
                 var fixesBag = new List<CodeAction>[projectsAndDiagnosticsToFixMap.Count];
-                Parallel.ForEach(
+                _ = Parallel.ForEach(
                             projectsAndDiagnosticsToFixMap.Keys,
                             options,
                             (project, state, index) =>
@@ -143,8 +143,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
                                 fixesBag[index] = new List<CodeAction>();
                                 this.AddProjectFixesAsync(project, diagnostics, fixesBag[index].Add, fixAllContext)
                                     .Wait(fixAllContext.CancellationToken);
-                            })
-                        .IgnoreReturnValue();
+                            });
 
                 if (fixesBag.Any(fixes => fixes.Count > 0))
                 {
