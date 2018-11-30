@@ -135,14 +135,15 @@ namespace Gu.Roslyn.Asserts.Tests
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 var expectedProjects = new[]
-                                   {
-                                       "WpfApp1",
-                                       "ClassLibrary1",
-                                       "ClassLibrary2",
-                                       "Gu.Roslyn.Asserts",
-                                       "Gu.Roslyn.Asserts.Tests",
-                                       "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
-                                   };
+                {
+                    "WpfApp1",
+                    "ClassLibrary1",
+                    "ClassLibrary2",
+                    "Gu.Roslyn.Asserts",
+                    "Gu.Roslyn.Asserts.Tests",
+                    "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
+                    "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
+                };
 
                 CollectionAssert.AreEquivalent(expectedProjects, solution.Projects.Select(p => p.Name));
 

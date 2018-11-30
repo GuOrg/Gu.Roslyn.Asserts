@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// Specify what default metadata reference to use.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Assembly)]
     public class MetadataReferencesAttribute : Attribute
     {
         /// <summary>

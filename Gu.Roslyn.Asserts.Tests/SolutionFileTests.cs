@@ -27,14 +27,15 @@ namespace Gu.Roslyn.Asserts.Tests
             var file = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var sln = SolutionFile.ParseInfo(file);
             var expected = new[]
-                           {
-                               "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
-                               "Gu.Roslyn.Asserts",
-                               "WpfApp1",
-                               "Gu.Roslyn.Asserts.Tests",
-                               "ClassLibrary2",
-                               "ClassLibrary1",
-                           };
+            {
+                "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
+                "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
+                "Gu.Roslyn.Asserts",
+                "WpfApp1",
+                "Gu.Roslyn.Asserts.Tests",
+                "ClassLibrary2",
+                "ClassLibrary1",
+            };
             CollectionAssert.AreEquivalent(expected, sln.Projects.Select(x => x.Name));
             var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
             CollectionAssert.IsEmpty(assertsProject.ProjectReferences);

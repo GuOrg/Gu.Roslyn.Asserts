@@ -16,6 +16,7 @@ group Test
   nuget NUnit
   nuget NUnit3TestAdapter
   nuget Microsoft.NET.Test.Sdk
+  nuget Microsoft.AspNetCore.All
 
 group Analyzers
   storage: none

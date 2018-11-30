@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes", "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.csproj", "{43974B67-929E-4211-B2CF-67699C7E0C63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43974B67-929E-4211-B2CF-67699C7E0C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43974B67-929E-4211-B2CF-67699C7E0C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43974B67-929E-4211-B2CF-67699C7E0C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43974B67-929E-4211-B2CF-67699C7E0C63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
