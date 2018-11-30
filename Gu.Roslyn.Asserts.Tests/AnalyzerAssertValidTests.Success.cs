@@ -308,6 +308,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(new[] { analyzer }), AnalyzerAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                AnalyzerAssert.Valid(analyzer, code, metadataReferences: AnalyzerAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
             }
 
             [Test]

@@ -1,1 +1,1 @@
-﻿Gu.Roslyn.Asserts.TransitiveMetadataReferencesAttribute.TransitiveMetadataReferencesAttribute(params System.Type[] types) -> void
+﻿
