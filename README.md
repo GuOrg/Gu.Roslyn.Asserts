@@ -4,7 +4,9 @@
 [![NuGet](https://img.shields.io/nuget/v/Gu.Roslyn.Asserts.svg)](https://www.nuget.org/packages/Gu.Roslyn.Asserts/)
 [![Build status](https://ci.appveyor.com/api/projects/status/a0976a1dmtcx387r/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-roslyn-asserts/branch/master)
 
-Microsoft are working on an official package for testing analyzers. [Microsoft.CodeAnalysis.CSharp.CodeFix.Testing](https://dotnet.myget.org/feed/roslyn-analyzers/package/nuget/Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit), with some luck this library will not be needed for long.
+Microsoft are working on an official package for testing analyzers: [Microsoft.CodeAnalysis.CSharp.CodeFix.Testing](https://dotnet.myget.org/feed/roslyn-analyzers/package/nuget/Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit).
+
+Hopefully this library will not be needed in the future.
 
 <!--
 [![Build status](https://ci.appveyor.com/api/projects/status/a0976a1dmtcx387r/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-roslyn-asserts/branch/master)
