@@ -30,7 +30,7 @@ namespace Gu.Roslyn.Asserts.Tests
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
             // ReSharper disable once PossibleNullReferenceException
-            SyntaxToken syntaxToken = (context.Node as ClassDeclarationSyntax).Identifier;
+            _ = (context.Node as ClassDeclarationSyntax).Identifier;
         }
     }
 }

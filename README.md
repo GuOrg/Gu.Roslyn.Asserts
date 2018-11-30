@@ -405,8 +405,19 @@ public void CheckAst()
 When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
 Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
 
+In most scenarios something like this in the test project is what you want:
+
+```c#
+using Gu.Roslyn.Asserts;
+
+[assembly: TransitiveMetadataReferences(
+    typeof(Microsoft.EntityFrameworkCore.DbContext),
+    typeof(Microsoft.AspNetCore.Mvc.Controller))]
+```
+
 ## MetadataReferenceAttribute
 For specifying a metadata reference to be used in the tests, with or without aliases.
+
 ```c#
 [assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
 ```

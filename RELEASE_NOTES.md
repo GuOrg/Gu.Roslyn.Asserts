@@ -1,3 +1,7 @@
+#### 2.6.3
+* FEATURE: MetadataReferences.CreateBinary()
+* BREAKING: Refactor overloads and use optional parameters.
+
 #### 2.6.2
 * MetadataReferences.Transitive(type) handle generic types.
 * Use reference assemblies.

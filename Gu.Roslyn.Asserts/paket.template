@@ -3,8 +3,8 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  MetadataReferences.Transitive(type) handle generic types.
-  Use reference assemblies.
+  FEATURE: MetadataReferences.CreateBinary()
+  BREAKING: Refactor overloads and use optional parameters.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
