@@ -82,21 +82,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The analyzer.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code)
-        {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
@@ -269,9 +254,12 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                code,
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
@@ -283,9 +271,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                code,
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }

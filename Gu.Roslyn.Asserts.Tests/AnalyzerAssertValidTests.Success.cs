@@ -284,6 +284,61 @@ namespace RoslynSandbox
 }";
                 AnalyzerAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), testCode);
             }
+
+            [Test]
+            public void BinaryStrings()
+            {
+                var binaryReferencedCode = @"
+namespace BinaryReferencedAssembly
+{
+    public class Base
+    {
+        private int _fieldName;
+    }
+}";
+                var code = @"
+namespace RoslynSandbox
+{
+    using System.Reflection;
+
+    public class C : BinaryReferencedAssembly.Base
+    {
+        private int f;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                AnalyzerAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(new[] { analyzer }), AnalyzerAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+            }
+
+            [Test]
+            public void BinarySolution()
+            {
+                var binaryReferencedCode = @"
+namespace BinaryReferencedAssembly
+{
+    public class Base
+    {
+        private int _fieldName;
+    }
+}";
+                var code = @"
+namespace RoslynSandbox
+{
+    using System.Reflection;
+
+    public class C : BinaryReferencedAssembly.Base
+    {
+        private int f;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var solution = CodeFactory.CreateSolution(
+                    code,
+                    CodeFactory.DefaultCompilationOptions(new[] { analyzer }),
+                    AnalyzerAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+
+                AnalyzerAssert.Valid(analyzer, solution);
+            }
         }
     }
 }

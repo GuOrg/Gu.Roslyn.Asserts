@@ -2,9 +2,11 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
     /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
@@ -45,6 +47,28 @@ namespace Gu.Roslyn.Asserts
             }
 
             return MetadataReference.CreateFromFile(assemblyFile);
+        }
+
+        /// <summary>
+        /// Create a binary reference from strings.
+        /// This is useful when testing for example deriving from a base class not in source.
+        /// </summary>
+        /// <param name="code">The code to create a dll project from.</param>
+        /// <returns>A <see cref="MetadataReference"/>.</returns>
+        public static MetadataReference CreateBinary(params string[] code)
+        {
+            var sln = CodeFactory.CreateSolutionWithOneProject(
+                code,
+                new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true),
+                AnalyzerAssert.MetadataReferences);
+            AnalyzerAssert.NoCompilerErrors(sln);
+
+            using (var ms = new MemoryStream())
+            {
+                _ = sln.Projects.Single().GetCompilationAsync().Result.Emit(ms);
+                ms.Position = 0;
+                return MetadataReference.CreateFromStream(ms);
+            }
         }
 
         /// <summary>

@@ -236,7 +236,7 @@ namespace RoslynSandbox
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(code, fixedCode, title);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code }, fixedCode, title);
                 AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), code, fixedCode, title);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode, title);
+                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode, fixTitle: title);
             }
 
             [Test]

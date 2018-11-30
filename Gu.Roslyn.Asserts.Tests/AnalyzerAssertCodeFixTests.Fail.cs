@@ -49,7 +49,7 @@ namespace RoslynSandbox
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, "WRONG"));
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
