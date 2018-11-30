@@ -13,6 +13,7 @@ Hopefully this library will not be needed in the future.
 -->
 
 Asserts for testing Roslyn analyzers.
+
 Use 1.x for Microsoft.CodeAnalysis 1.x
 
 - [Valid](#valid)
