@@ -16,8 +16,8 @@ Asserts for testing Roslyn analyzers.
 
 Use 1.x for Microsoft.CodeAnalysis 1.x
 
-- [Valid](#valid)
-- [Diagnostics](#diagnostics)
+- [Valid](#analyzerassertvalid)
+- [Diagnostics](#analyzerassertdiagnostics)
 - [CodeFix](#codefix)
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
@@ -37,8 +37,8 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 - [Fix](#fix)
 - [CodeFactory](#codefactory)
   - [CreateSolution](#createsolution)
-    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
-    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace-a-roslyn-solution-from-code)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace-a-roslyn-solution-from-a-file-on-disk)
 - [Benchmark](#benchmark)
 - [SyntaxNodeExt](#syntaxnodeext)
 - [Usage with different test project types](#usage-with-different-test-project-types)
