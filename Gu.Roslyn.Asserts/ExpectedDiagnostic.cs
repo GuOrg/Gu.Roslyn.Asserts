@@ -274,6 +274,13 @@ namespace Gu.Roslyn.Asserts
         public ExpectedDiagnostic WithMessage(string message) => new ExpectedDiagnostic(this.Id, message, this.Span);
 
         /// <summary>
+        /// Get a clone of this instance with updated <see cref="Span"/>.
+        /// </summary>
+        /// <param name="span">The expected position.</param>
+        /// <returns>A new <see cref="ExpectedDiagnostic"/>.</returns>
+        public ExpectedDiagnostic WithPosition(FileLinePositionSpan span) => new ExpectedDiagnostic(this.Id, this.Message, span);
+
+        /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position.
         /// </summary>
         /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
