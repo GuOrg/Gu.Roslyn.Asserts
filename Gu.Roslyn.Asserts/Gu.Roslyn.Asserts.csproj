@@ -6,10 +6,12 @@
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
+
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version>2.6.3.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
@@ -23,12 +25,17 @@
     <PackageReleaseNotes>FEATURE: MetadataReferences.CreateBinary()
 BREAKING: Refactor overloads and use optional parameters.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <!--
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Exec Command=".paket\paket.exe pack publish" WorkingDirectory="$(SolutionDir)" />
   </Target>
+  -->
+
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
+  
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
