@@ -442,7 +442,7 @@ namespace Gu.Roslyn.Asserts
                     analyzer,
                     new TCodeFix(),
                     DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                    MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                    MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                     CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
                     MetadataReferences,
                     fixTitle,

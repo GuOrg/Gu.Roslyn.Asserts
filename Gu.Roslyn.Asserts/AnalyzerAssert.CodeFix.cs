@@ -109,9 +109,9 @@ namespace Gu.Roslyn.Asserts
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => CodeReader.GetCode(x, null)).ToArray());
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(solution, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, fixedCode), fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, suppressedDiagnostics, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+            VerifyFix(sln, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, fixedCode), fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace Gu.Roslyn.Asserts
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+            VerifyFix(sln, diagnostics, analyzer, fix, MergeFixedCode(codeWithErrorsIndicated, fixedCode), fixTitle, allowCompilationErrors);
         }
 
         private static async Task VerifyFixAsync(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
@@ -432,7 +432,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             var fixableDiagnostics = diagnostics.SelectMany(x => x)
                                                 .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
@@ -461,12 +461,7 @@ namespace Gu.Roslyn.Asserts
                 throw new AssertException($"{fix} did not change any document.");
             }
 
-            var fixedSource = CodeReader.GetStringFromDocument(
-                                                  fixedSolution.GetDocument(sln.GetDocument(diagnostic.Location.SourceTree).Id),
-                                                  Formatter.Annotation,
-                                                  CancellationToken.None);
-            CodeAssert.AreEqual(fixedCode, fixedSource);
-
+            AreEqualAsync(fixedCode, fixedSolution, null).GetAwaiter().GetResult();
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
                 VerifyNoCompilerErrorsAsync(fix, fixedSolution).GetAwaiter().GetResult();

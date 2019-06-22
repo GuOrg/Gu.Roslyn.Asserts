@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts
                 new TAnalyzer(),
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
-                MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                 SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
@@ -111,7 +111,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
-                MergeFixedCodeWithErrorsIndicated(new[] { codeWithErrorsIndicated }, fixedCode),
+                MergeFixedCode(new[] { codeWithErrorsIndicated }, fixedCode),
                 SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences,
                 fixTitle,
@@ -137,7 +137,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
-                MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                 SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences,
                 fixTitle,
@@ -370,7 +370,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                 SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
@@ -421,7 +421,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 codeFix,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                MergeFixedCodeWithErrorsIndicated(codeWithErrorsIndicated, fixedCode),
+                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
                 SuppressedDiagnostics,
                 MetadataReferences,
                 fixTitle,
@@ -630,36 +630,6 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static List<string> MergeFixedCodeWithErrorsIndicated(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode)
-        {
-            var merged = new List<string>(codeWithErrorsIndicated.Count);
-            var found = false;
-            foreach (var code in codeWithErrorsIndicated)
-            {
-                if (code.IndexOf('↓') >= 0)
-                {
-                    if (found)
-                    {
-                        throw new AssertException("Expected only one with errors indicated.");
-                    }
-
-                    merged.Add(fixedCode);
-                    found = true;
-                }
-                else
-                {
-                    merged.Add(code);
-                }
-            }
-
-            if (!found)
-            {
-                throw new AssertException("Expected one with errors indicated.");
-            }
-
-            return merged;
-        }
-
         private static List<string> MergeFixedCode(IReadOnlyList<string> codes, string fixedCode)
         {
             var merged = new List<string>(codes.Count);
@@ -674,6 +644,16 @@ namespace Gu.Roslyn.Asserts
                     if (found)
                     {
                         throw new AssertException("Expected unique class names.");
+                    }
+
+                    merged.Add(fixedCode);
+                    found = true;
+                }
+                else if (code.IndexOf('↓') >= 0)
+                {
+                    if (found)
+                    {
+                        throw new AssertException("Expected only one with errors indicated.");
                     }
 
                     merged.Add(fixedCode);
