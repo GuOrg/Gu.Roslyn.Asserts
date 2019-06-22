@@ -317,9 +317,9 @@ namespace RoslynSandbox
                 AnalyzerAssert.CodeFix(fix, expectedDiagnostic, code, fixedCode);
                 AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, fixedCode);
                 AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
-                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, code, fixedCode, fixTitle: "Remove Bar");
-                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Remove Bar");
-                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Remove Bar");
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, code, fixedCode, fixTitle: "Remove public event EventHandler Bar;");
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Remove public event EventHandler Bar;");
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Remove public event EventHandler Bar;");
             }
 
             [Test]
