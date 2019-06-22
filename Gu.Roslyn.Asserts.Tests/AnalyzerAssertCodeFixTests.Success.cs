@@ -41,7 +41,13 @@ namespace RoslynSandbox
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode });
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
             }
 
             [Test]
@@ -65,7 +71,13 @@ namespace RoslynSandbox
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
                 AnalyzerAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(new[] { code }, fixedCode);
-                AnalyzerAssert.CodeFix(new ClassMustBeSealedAnalyzer(), new MakeSealedFixProvider(), new[] { code }, fixedCode);
+                var analyzer = new ClassMustBeSealedAnalyzer();
+                var fix = new MakeSealedFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode });
+                var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustBeSealedAnalyzer.DiagnosticId);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
             }
 
             [Test]
@@ -100,6 +112,13 @@ private readonly int value;
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
+                var analyzer = new ClassMustBeSealedAnalyzer();
+                var fix = new MakeSealedFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode });
+                var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustBeSealedAnalyzer.DiagnosticId);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
             }
 
             [Test]
@@ -124,6 +143,13 @@ namespace RoslynSandbox
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode });
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
             }
 
             [Test]
@@ -147,11 +173,17 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to: value");
             }
 
             [Test]
@@ -178,12 +210,16 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, code, out code);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to: value");
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyserSupportsTwoDiagnostics()
+            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -206,8 +242,12 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, code, fixedCode, "Rename to: value");
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, code, fixedCode, "Rename to: value");
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Rename to: value");
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to: value");
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -235,8 +275,15 @@ namespace RoslynSandbox
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(code, fixedCode, title);
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { code }, fixedCode, title);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), code, fixedCode, title);
-                AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreManyCodeFixProvider(), new[] { code }, fixedCode, fixTitle: title);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, code, fixedCode, title);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: title);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: title);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode, title);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: title);
+                AnalyzerAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: title);
             }
 
             [Test]
@@ -266,8 +313,13 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, code, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, code, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, code, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, code, fixedCode, fixTitle: "Remove Bar");
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, fixedCode, fixTitle: "Remove Bar");
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, fixTitle: "Remove Bar");
             }
 
             [Test]
