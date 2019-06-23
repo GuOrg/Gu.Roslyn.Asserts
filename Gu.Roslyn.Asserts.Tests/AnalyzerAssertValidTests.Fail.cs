@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly bool Throw = false; // for testing what the output is in the runner.
 
             [Test]
-            public void SingleClassFieldNameMustNotBeginWithUnderscore()
+            public void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -42,7 +42,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassFieldNameMustNotBeginWithUnderscoreDisabled()
+            public void SingleDocumentFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -72,7 +72,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneError()
+            public void TwoDocumentsOneError()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -109,7 +109,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesTwoErrors()
+            public void TwoDocumentsTwoErrors()
             {
                 var foo1 = @"
 namespace RoslynSandbox

@@ -37,7 +37,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorEmptyFix()
+            public void SingleDocumentOneErrorEmptyFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -56,7 +56,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCodeFixFixedTheCode()
+            public void SingleDocumentOneErrorCodeFixFixedTheCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -75,7 +75,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneErrorCodeFixFixedTheCode()
+            public void TwoDocumentsOneErrorCodeFixFixedTheCode()
             {
                 var barCode = @"
 namespace RoslynSandbox

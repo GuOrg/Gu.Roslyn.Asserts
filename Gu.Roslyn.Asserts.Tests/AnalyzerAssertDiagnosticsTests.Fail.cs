@@ -101,7 +101,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesNoErrorIndicated()
+            public void TwoDocumentsNoErrorIndicated()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -130,7 +130,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesNoErrorInCode()
+            public void TwoDocumentsNoErrorInCode()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -338,7 +338,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesExpectedDiagnosticWithoutPath()
+            public void TwoDocumentsExpectedDiagnosticWithoutPath()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -509,7 +509,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesIndicatedAndActualPositionDoNotMatch()
+            public void TwoDocumentsIndicatedAndActualPositionDoNotMatch()
             {
                 var code1 = @"
 namespace RoslynSandbox

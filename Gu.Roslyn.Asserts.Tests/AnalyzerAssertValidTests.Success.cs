@@ -62,7 +62,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassNoErrorAnalyzer()
+            public void SingleDocumentNoErrorAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -134,7 +134,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesNoErrorAnalyzer()
+            public void TwoDocumentsNoErrorAnalyzer()
             {
                 var code1 = @"
 namespace RoslynSandbox

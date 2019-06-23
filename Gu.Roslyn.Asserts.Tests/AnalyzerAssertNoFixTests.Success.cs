@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Success
         {
             [Test]
-            public void SingleClassOneErrorNoFix()
+            public void SingleDocumentOneErrorNoFix()
             {
                 var code = @"
 namespace RoslynSandbox

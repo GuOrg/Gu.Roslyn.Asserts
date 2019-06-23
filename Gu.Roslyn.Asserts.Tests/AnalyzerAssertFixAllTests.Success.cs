@@ -42,7 +42,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void SingleClassOneErrorTwoFixesCorrectFix(string title, string expected)
+            public void SingleDocumentOneErrorTwoFixesCorrectFix(string title, string expected)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -145,7 +145,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
+            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -177,7 +177,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
+            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -209,7 +209,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesTwoErrorsTwoFixes()
+            public void TwoDocumentsTwoErrorsTwoFixes()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -260,7 +260,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoClassesOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
+            public void TwoDocumentsOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -299,7 +299,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoClassesOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
+            public void TwoDocumentsOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -334,7 +334,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoClassesTwoFixesCorrectFix(string title, string expected)
+            public void TwoDocumentsTwoFixesCorrectFix(string title, string expected)
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -377,7 +377,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesDifferentProjectsCodeFixOnlyOneFix()
+            public void TwoDocumentsDifferentProjectsCodeFixOnlyOneFix()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -414,7 +414,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoClassesDifferentProjectsCodeFixOnlyOneFixPassingOnlyFixedCode()
+            public void TwoDocumentsDifferentProjectsCodeFixOnlyOneFixPassingOnlyFixedCode()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -452,7 +452,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoClassesDifferentProjectsCodeFixOnlyCorrectFix()
+            public void TwoDocumentsDifferentProjectsCodeFixOnlyCorrectFix()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -490,7 +490,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoClassesDifferentProjectsInheritingCodeFixOnlyCorrectFix()
+            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnlyCorrectFix()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -528,7 +528,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoClassesDifferentProjectsInheritingCodeFixOnlyCorrectFix2()
+            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnlyCorrectFix2()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -566,7 +566,7 @@ namespace RoslynSandbox.Client
             }
 
             [Test]
-            public void SingleClassCodeFixOnlyCorrectFix()
+            public void SingleDocumentCodeFixOnlyCorrectFix()
             {
                 var code = @"
 namespace RoslynSandbox

@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Fail
         {
             [Test]
-            public void SingleClassTwoErrorsOnlyOneIndicated()
+            public void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassExplicitTitle()
+            public void SingleDocumentExplicitTitle()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -60,7 +60,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorWrongPosition()
+            public void SingleDocumentOneErrorWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -111,7 +111,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorErrorInFix()
+            public void SingleDocumentOneErrorErrorInFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -156,7 +156,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneErrorErrorInFix()
+            public void TwoDocumentsOneErrorErrorInFix()
             {
                 var barCode = @"
 namespace RoslynSandbox

@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public class Fail
         {
             [Test]
-            public void SingleClassFieldNameMustNotBeginWithUnderscore()
+            public void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox

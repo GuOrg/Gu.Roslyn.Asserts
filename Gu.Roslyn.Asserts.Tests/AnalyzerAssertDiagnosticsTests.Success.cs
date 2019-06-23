@@ -238,7 +238,7 @@ namespace RoslynSandbox
 
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
-            public void SingleClassOneErrorType(Type type)
+            public void SingleDocumentOneErrorType(Type type)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -252,7 +252,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorPassingAnalyzer()
+            public void SingleDocumentOneErrorPassingAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -266,7 +266,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassTwoErrorsIndicated()
+            public void SingleDocumentTwoErrorsIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -282,7 +282,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneError()
+            public void TwoDocumentsOneError()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -303,7 +303,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesTwoErrors()
+            public void TwoDocumentsTwoErrors()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -327,7 +327,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesTwoErrorsDefaultDisabledAnalyzer()
+            public void TwoDocumentsTwoErrorsDefaultDisabledAnalyzer()
             {
                 var foo1 = @"
 namespace RoslynSandbox

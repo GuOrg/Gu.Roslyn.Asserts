@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void SingleClassExplicitTitle()
+            public void SingleDocumentExplicitTitle()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -49,12 +49,16 @@ namespace RoslynSandbox
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode, fixTitle: "WRONG"));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "WRONG"));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void SingleClassTwoIndicatedErrors()
+            public void SingleDocumentTwoIndicatedErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -86,12 +90,24 @@ namespace RoslynSandbox
                 exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { code }, fixedCode));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "Rename to value"));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to value"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void SingleClassTwoErrors()
+            public void SingleDocumentTwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -112,7 +128,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorWrongPosition()
+            public void SingleDocumentOneErrorWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -135,7 +151,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorNoFix()
+            public void SingleDocumentOneErrorNoFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -146,14 +162,13 @@ namespace RoslynSandbox
     }
 }";
 
-                var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, temp));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, string.Empty));
                 var expected = "Expected one code fix, was 0.";
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void SingleClassOneErrorTwoFixes()
+            public void SingleDocumentOneErrorTwoFixes()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -164,8 +179,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, temp));
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, string.Empty));
                 var expected = "Expected only one code fix, found 2:\r\n" +
                                "Rename to: value1\r\n" +
                                "Rename to: value2\r\n" +
@@ -174,7 +188,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleClassOneErrorEmptyFix()
+            public void SingleDocumentOneErrorEmptyFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -265,7 +279,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassesOneErrorWhenFixedCodeDoesNotMatchExpected()
+            public void TwoDocumentsOneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var barCode = @"
 namespace RoslynSandbox

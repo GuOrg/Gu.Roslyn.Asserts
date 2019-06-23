@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     public class FixTests
     {
         [Test]
-        public async Task SingleClassOneErrorCorrectFix()
+        public async Task SingleDocumentOneErrorCorrectFix()
         {
             var code = @"
 namespace RoslynSandbox
@@ -41,7 +41,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SingleClassTwoErrorCorrectFix()
+        public void SingleDocumentTwoErrorCorrectFix()
         {
             var code = @"
 namespace RoslynSandbox
@@ -72,7 +72,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SingleClassOneErrorCorrectFixAll()
+        public void SingleDocumentOneErrorCorrectFixAll()
         {
             var code = @"
 namespace RoslynSandbox
