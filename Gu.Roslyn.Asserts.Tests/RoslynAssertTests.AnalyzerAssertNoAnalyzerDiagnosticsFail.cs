@@ -2,9 +2,9 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
-    public class AnalyzerAssertNoAnalyzerDiagnosticsTests
+    public partial class RoslynAssertTests
     {
-        public class Fail
+        public class AnalyzerAssertNoAnalyzerDiagnosticsFail
         {
             [Test]
             public void SingleDocumentFieldNameMustNotBeginWithUnderscore()

@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
 
-    public class RoslynAssertTests
+    public partial class RoslynAssertTests
     {
         [Test]
         public void ResetMetadataReferences()

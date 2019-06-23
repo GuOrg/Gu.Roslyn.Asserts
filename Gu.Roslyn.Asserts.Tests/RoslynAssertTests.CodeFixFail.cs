@@ -7,9 +7,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class AnalyzerAssertCodeFixTests
+    public partial class RoslynAssertTests
     {
-        public class Fail
+        public class CodeFixFail
         {
             [TearDown]
             public void TearDown()

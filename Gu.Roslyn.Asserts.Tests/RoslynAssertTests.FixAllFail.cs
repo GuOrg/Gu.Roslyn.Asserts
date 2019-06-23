@@ -6,9 +6,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class AnalyzerAssertFixAllTests
+    public partial class AnalyzerAssertTests
     {
-        public class Fail
+        public class FixAllFail
         {
             [Test]
             public void SingleDocumentTwoErrorsOnlyOneIndicated()
