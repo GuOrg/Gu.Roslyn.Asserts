@@ -3,9 +3,7 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  FEATURE: RoslynAssert.CodeFix() supports fix changing multiple documents.
-  FEATURE: RoslynAssert.CodeFix() supports fix changing and or adding multiple documents.
-  OBSOLETE: Use RoslynAssert and not AnalyzerAssert. Ctrl + h refactor it.
+  BUGFIX: RoslynAssert.CodeFix() when partial classes in multiple documents.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46

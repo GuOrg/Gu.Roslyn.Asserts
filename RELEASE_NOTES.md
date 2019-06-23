@@ -1,3 +1,6 @@
+#### 2.7.1
+* BUGFIX: RoslynAssert.CodeFix() when partial classes in multiple documents.
+
 #### 2.7.0
 * FEATURE: RoslynAssert.CodeFix() supports fix changing multiple documents.
 * FEATURE: RoslynAssert.CodeFix() supports fix changing and or adding multiple documents.
