@@ -468,6 +468,146 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void CodeFixAddingDocument()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => ↓new C();
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => new C().Id();
+    }
+}";
+
+                var extensionMethodCode = @"namespace RoslynSandbox
+{
+    public static class Extensions
+    {
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var analyzer = new CallIdAnalyzer();
+                var fix = new CallIdFix();
+                var expected = "Mismatch on line 5 of file Extensions.cs.\r\n" +
+                               "Expected:     }\r\n" +
+                               "Actual:           public static T Id<T>(this T t) => t;\r\n" +
+                               "              ^\r\n" +
+                               "Expected:\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    public static class Extensions\r\n" +
+                               "    {\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    public static class Extensions\r\n" +
+                               "    {\r\n" +
+                               "        public static T Id<T>(this T t) => t;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
+
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }, fixTitle: "Call ID()"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }, fixTitle: "Call ID()"));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                extensionMethodCode = @"namespace RoslynSandbox
+{
+    public static class Extensions
+    {
+        public static T Id<T>(this T t) => t;
+    }
+}";
+                expected = "Mismatch on line 6 of file C.cs.\r\n" +
+                           "Expected:         public static C Create() => ↓new C();\r\n" +
+                           "Actual:           public static C Create() => new C().Id();\r\n" +
+                           "                                              ^\r\n" +
+                           "Expected:\r\n" +
+                           "\r\n" +
+                           "namespace RoslynSandbox\r\n" +
+                           "{\r\n" +
+                           "    class C\r\n" +
+                           "    {\r\n" +
+                           "        public static C Create() => ↓new C();\r\n" +
+                           "    }\r\n" +
+                           "}\r\n" +
+                           "Actual:\r\n" +
+                           "\r\n" +
+                           "namespace RoslynSandbox\r\n" +
+                           "{\r\n" +
+                           "    class C\r\n" +
+                           "    {\r\n" +
+                           "        public static C Create() => new C().Id();\r\n" +
+                           "    }\r\n" +
+                           "}\r\n";
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { code, extensionMethodCode }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { code, extensionMethodCode }));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { code, extensionMethodCode }, fixTitle: "Call ID()"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { code, extensionMethodCode }, fixTitle: "Call ID()"));
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void CodeFixAddingDocumentWhenExpectedAddedDocIsNotProvided()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => ↓new C();
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => new C().Id();
+    }
+}";
+
+                var extensionMethodCode = @"namespace RoslynSandbox
+{
+    public static class Extensions
+    {
+        public static T Id<T>(this T t) => t;
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var analyzer = new CallIdAnalyzer();
+                var fix = new CallIdFix();
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, code, fixedCode));
+                CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
+                CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }));
+                CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
+            }
+
+            [Test]
             public void WhenFixIntroducesCompilerErrors()
             {
                 var code = @"

@@ -604,6 +604,40 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void CodeFixAddingDocument()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => ↓new C();
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        public static C Create() => new C().Id();
+    }
+}";
+
+                var extensionMethodCode = @"namespace RoslynSandbox
+{
+    public static class Extensions
+    {
+        public static T Id<T>(this T t) => t;
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var analyzer = new CallIdAnalyzer();
+                var fix = new CallIdFix();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode });
+            }
+
+            [Test]
             public void WhenFixIntroducesCompilerErrorsThatAreAccepted()
             {
                 var code = @"

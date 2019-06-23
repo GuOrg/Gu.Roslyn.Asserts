@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
