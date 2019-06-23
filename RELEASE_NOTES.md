@@ -1,3 +1,8 @@
+#### 2.7.0
+* FEATURE: RoslynAssert.CodeFix() supports fix changing multiple documents.
+* FEATURE: RoslynAssert.CodeFix() supports fix changing and or adding multiple documents.
+* OBSOLETE: Use RoslynAssert and not AnalyzerAssert. Ctrl + h refactor it.
+
 #### 2.6.3
 * FEATURE: MetadataReferences.CreateBinary()
 * BREAKING: Refactor overloads and use optional parameters.

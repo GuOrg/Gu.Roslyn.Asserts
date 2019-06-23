@@ -3,8 +3,9 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  FEATURE: MetadataReferences.CreateBinary()
-  BREAKING: Refactor overloads and use optional parameters.
+  FEATURE: RoslynAssert.CodeFix() supports fix changing multiple documents.
+  FEATURE: RoslynAssert.CodeFix() supports fix changing and or adding multiple documents.
+  OBSOLETE: Use RoslynAssert and not AnalyzerAssert. Ctrl + h refactor it.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
