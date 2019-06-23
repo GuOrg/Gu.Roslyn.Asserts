@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void OneErrorCorrectFix()
+            public void OneError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -42,7 +42,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void SingleDocumentOneErrorTwoFixesCorrectFix(string title, string expected)
+            public void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -67,7 +67,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoErrorsCorrectFix()
+            public void TwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -93,7 +93,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void FixAllInDocumentTwoErrorsCorrectFix()
+            public void FixAllInDocumentTwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -119,7 +119,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void FixAllOneByOneTwoErrorsCorrectFix()
+            public void FixAllOneByOneTwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -334,7 +334,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoDocumentsTwoFixesCorrectFix(string title, string expected)
+            public void TwoDocumentsTwoFixes(string title, string expected)
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -452,7 +452,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsCodeFixOnlyCorrectFix()
+            public void TwoDocumentsDifferentProjectsCodeFixOnly()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -490,7 +490,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnlyCorrectFix()
+            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -566,7 +566,7 @@ namespace RoslynSandbox.Client
             }
 
             [Test]
-            public void SingleDocumentCodeFixOnlyCorrectFix()
+            public void SingleDocumentCodeFixOnly()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -595,7 +595,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassOneErrorCorrectFix()
+            public void TwoClassOneError()
             {
                 var barCode = @"
 namespace RoslynSandbox
