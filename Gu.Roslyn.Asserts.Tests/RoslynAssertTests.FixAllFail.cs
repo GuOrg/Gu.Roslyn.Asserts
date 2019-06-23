@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class AnalyzerAssertTests
+    public partial class RoslynAssertTests
     {
         public class FixAllFail
         {
