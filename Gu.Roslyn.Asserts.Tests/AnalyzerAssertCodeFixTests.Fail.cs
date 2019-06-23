@@ -307,7 +307,6 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode));
                 var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
@@ -328,6 +327,143 @@ namespace RoslynSandbox
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    class C1
+    {
+        public int ↓WrongName { get; }
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox
+{
+    class C2
+    {
+        public C2(C1 c1)
+        {
+            var x = c1.WrongName;
+        }
+    }
+}";
+
+                var fixedCode1 = @"
+namespace RoslynSandbox
+{
+    class C1
+    {
+        public int Foo { get; }
+    }
+}";
+
+                var fixedCode2 = @"
+namespace RoslynSandbox
+{
+    class C2
+    {
+        public C2(C1 c1)
+        {
+            var x = c1.Foo;
+        }
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var analyzer = new PropertyMustBeNamedFooAnalyzer();
+                var fix = new RenameToFooCodeFixProvider();
+                var expected = "Mismatch on line 6 of file C1.cs.\r\n" +
+                               "Expected:         public int ↓WrongName { get; }\r\n" +
+                               "Actual:           public int Foo { get; }\r\n" +
+                               "                             ^\r\n" +
+                               "Expected:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class C1\r\n" +
+                               "    {\r\n" +
+                               "        public int ↓WrongName { get; }\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    class C1\r\n" +
+                               "    {\r\n" +
+                               "        public int Foo { get; }\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
+
+                var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, fixedCode2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, fixedCode2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, code1 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, code1 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, fixedCode2 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, fixedCode2 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, code1 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, code1 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                expected = "Mismatch on line 8 of file C2.cs.\r\n" +
+                           "Expected:             var x = c1.WrongName;\r\n" +
+                           "Actual:               var x = c1.Foo;\r\n" +
+                           "                                 ^\r\n" +
+                           "Expected:\r\n" +
+                           "\r\n" +
+                           "namespace RoslynSandbox\r\n" +
+                           "{\r\n" +
+                           "    class C2\r\n" +
+                           "    {\r\n" +
+                           "        public C2(C1 c1)\r\n" +
+                           "        {\r\n" +
+                           "            var x = c1.WrongName;\r\n" +
+                           "        }\r\n" +
+                           "    }\r\n" +
+                           "}\r\n" +
+                           "Actual:\r\n" +
+                           "\r\n" +
+                           "namespace RoslynSandbox\r\n" +
+                           "{\r\n" +
+                           "    class C2\r\n" +
+                           "    {\r\n" +
+                           "        public C2(C1 c1)\r\n" +
+                           "        {\r\n" +
+                           "            var x = c1.Foo;\r\n" +
+                           "        }\r\n" +
+                           "    }\r\n" +
+                           "}\r\n";
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, code2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, code2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, fixedCode1 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, fixedCode1 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, code2 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, code2 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, fixedCode1 }, fixTitle: "Rename to: Foo"));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, fixedCode1 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 

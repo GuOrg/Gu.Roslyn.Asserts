@@ -546,6 +546,64 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void TwoDocumentsOneErrorFixTouchingBothDocuments()
+            {
+                var code1 = @"
+namespace RoslynSandbox
+{
+    class C1
+    {
+        public int ↓WrongName { get; }
+    }
+}";
+
+                var code2 = @"
+namespace RoslynSandbox
+{
+    class C2
+    {
+        public C2(C1 c1)
+        {
+            var x = c1.WrongName;
+        }
+    }
+}";
+
+                var fixedCode1 = @"
+namespace RoslynSandbox
+{
+    class C1
+    {
+        public int Foo { get; }
+    }
+}";
+
+                var fixedCode2 = @"
+namespace RoslynSandbox
+{
+    class C2
+    {
+        public C2(C1 c1)
+        {
+            var x = c1.Foo;
+        }
+    }
+}";
+                AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+                var analyzer = new PropertyMustBeNamedFooAnalyzer();
+                var fix = new RenameToFooCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, fixedCode2 });
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, fixedCode2 });
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, fixedCode1 });
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, fixedCode1 });
+
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, fixedCode2 }, fixTitle: "Rename to: Foo");
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, fixedCode2 }, fixTitle: "Rename to: Foo");
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, fixedCode1 }, fixTitle: "Rename to: Foo");
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, fixedCode1 }, fixTitle: "Rename to: Foo");
+            }
+
+            [Test]
             public void WhenFixIntroducesCompilerErrorsThatAreAccepted()
             {
                 var code = @"
