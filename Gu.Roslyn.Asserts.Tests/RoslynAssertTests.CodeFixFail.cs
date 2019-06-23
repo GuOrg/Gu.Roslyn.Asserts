@@ -396,6 +396,74 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void PartialTwoDocumentsFixOnly()
+            {
+                var part1 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public partial class Foo
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var part2 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public partial class Foo
+    {
+        // mismatch
+    }
+}";
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expected = "Mismatch on line 8.\r\n" +
+                               "Expected:         // mismatch\r\n" +
+                               "Actual:       }\r\n" +
+                               "              ^\r\n" +
+                               "Expected:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    using System;\r\n" +
+                               "\r\n" +
+                               "    public partial class Foo\r\n" +
+                               "    {\r\n" +
+                               "        // mismatch\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    using System;\r\n" +
+                               "\r\n" +
+                               "    public partial class Foo\r\n" +
+                               "    {\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+                var fix = new RemoveUnusedFixProvider();
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
             {
                 var code1 = @"
