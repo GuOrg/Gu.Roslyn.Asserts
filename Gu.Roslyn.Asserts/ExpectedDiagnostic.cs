@@ -5,6 +5,7 @@ namespace Gu.Roslyn.Asserts
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.Text;
@@ -314,7 +315,7 @@ namespace Gu.Roslyn.Asserts
             if (this.HasPosition)
             {
                 var path = this.HasPath ? this.Span.Path : CodeReader.FileName(sources.Single());
-                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == path);
+                var match = sources.FirstOrDefault(x => CodeReader.FileName(x) == path && this.Span.Span.ExistsIn(x));
                 var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
                 return $"{this.Id} {this.Message}\r\n" +
                        $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} | {line.TrimStart(' ')}";

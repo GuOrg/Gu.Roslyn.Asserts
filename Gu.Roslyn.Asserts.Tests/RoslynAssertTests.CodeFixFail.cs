@@ -464,6 +464,46 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void PartialTwoDocumentsFixOnlyWrongPosition()
+            {
+                var part1 = @"
+namespace RoslynSandbox
+{
+    public partial class ↓Foo
+    {
+        public event EventHandler Bar;
+    }
+}";
+
+                var part2 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+    }
+}";
+
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                var expected = "Expected and actual diagnostics do not match.\r\n" +
+                               "Expected:\r\n" +
+                               "CS0067 \r\n" +
+                               "  at line 3 and character 25 in file Unknown | public partial class ↓Foo\r\n" +
+                               "Actual:\r\n" +
+                               "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
+                               "  at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
+                               "CS0067 The event 'Foo.Bar' is never used\r\n" +
+                               "  at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part1, part2 }, string.Empty));
+                CodeAssert.AreEqual(expected, exception.Message);
+                var fix = new RemoveUnusedFixProvider();
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, string.Empty));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, Array.Empty<string>()));
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
             {
                 var code1 = @"
