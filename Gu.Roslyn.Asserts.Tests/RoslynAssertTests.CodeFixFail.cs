@@ -332,6 +332,70 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void PartialTwoDocumentsOneFix()
+            {
+                var part1 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var part2 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+        private readonly int wrong;
+    }
+}";
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                var expected = "Mismatch on line 6.\r\n" +
+                               "Expected:         private readonly int wrong;\r\n" +
+                               "Actual:           private readonly int value;\r\n" +
+                               "                                       ^\r\n" +
+                               "Expected:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    public partial class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int wrong;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n" +
+                               "Actual:\r\n" +
+                               "\r\n" +
+                               "namespace RoslynSandbox\r\n" +
+                               "{\r\n" +
+                               "    public partial class Foo\r\n" +
+                               "    {\r\n" +
+                               "        private readonly int value;\r\n" +
+                               "    }\r\n" +
+                               "}\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { part1, part2 }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                CodeAssert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }));
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
             {
                 var code1 = @"

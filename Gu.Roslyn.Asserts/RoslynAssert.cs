@@ -201,6 +201,12 @@ namespace Gu.Roslyn.Asserts
             {
                 var fixedNamespace = CodeReader.Namespace(fixedSource);
                 var fixedFileName = CodeReader.FileName(fixedSource);
+                var match = expected.FirstOrDefault(x => x == fixedSource);
+                if (match != null)
+                {
+                    return match;
+                }
+
                 foreach (var candidate in expected)
                 {
                     if (CodeReader.Namespace(candidate) == fixedNamespace &&

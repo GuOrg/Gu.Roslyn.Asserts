@@ -365,6 +365,92 @@ namespace RoslynSandbox
             }
 
             [Test]
+            public void PartialTwoDocumentsCodeFixOnly()
+            {
+                var part1 = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public partial class Foo
+    {
+        public event EventHandler ↓Bar;
+    }
+}";
+
+                var part2 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    public partial class Foo
+    {
+    }
+}";
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
+                RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part1, part2 }, fixedCode);
+                RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part2, part1 }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part2, part1 }, fixedCode);
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part2, part1 }, new[] { fixedCode, part2 });
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode);
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, fixedCode });
+            }
+
+            [Test]
+            public void PartialTwoDocumentsOneFix()
+            {
+                var part1 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+        private int ↓_value;
+    }
+}";
+
+                var part2 = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    public partial class Foo
+    {
+        private int value;
+    }
+}";
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { part1, part2 }, fixedCode);
+                RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { part2, part1 }, fixedCode);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { fixedCode, part2 });
+                RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { part2, fixedCode });
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { fixedCode, part2 });
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { part2, fixedCode });
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, fixedCode }, fixTitle: "Rename to: value");
+            }
+
+            [Test]
             public void TwoDocumentsDifferentProjectsCodeFixOnly()
             {
                 var code1 = @"

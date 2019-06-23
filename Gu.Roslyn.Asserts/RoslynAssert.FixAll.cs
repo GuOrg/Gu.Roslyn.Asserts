@@ -634,6 +634,30 @@ namespace Gu.Roslyn.Asserts
         {
             var merged = new List<string>(codes.Count);
             var found = false;
+            foreach (var code in codes)
+            {
+                if (code.IndexOf('↓') >= 0)
+                {
+                    if (found)
+                    {
+                        throw new AssertException("Expected only one with errors indicated.");
+                    }
+
+                    merged.Add(fixedCode);
+                    found = true;
+                }
+                else
+                {
+                    merged.Add(code);
+                }
+            }
+
+            if (found)
+            {
+                return merged;
+            }
+
+            merged.Clear();
             var @namespace = CodeReader.Namespace(fixedCode);
             var fileName = CodeReader.FileName(fixedCode);
             foreach (var code in codes)
@@ -644,16 +668,6 @@ namespace Gu.Roslyn.Asserts
                     if (found)
                     {
                         throw new AssertException("Expected unique class names.");
-                    }
-
-                    merged.Add(fixedCode);
-                    found = true;
-                }
-                else if (code.IndexOf('↓') >= 0)
-                {
-                    if (found)
-                    {
-                        throw new AssertException("Expected only one with errors indicated.");
                     }
 
                     merged.Add(fixedCode);
