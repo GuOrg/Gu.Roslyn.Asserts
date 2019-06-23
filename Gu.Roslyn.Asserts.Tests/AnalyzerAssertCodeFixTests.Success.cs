@@ -354,11 +354,14 @@ namespace RoslynSandbox
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code2, code1 }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
             }
 
             [Test]
@@ -393,10 +396,22 @@ namespace RoslynSandbox.Core
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
+
+                expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
             }
 
             [Test]
@@ -431,10 +446,22 @@ namespace RoslynSandbox.Core
     }
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
+
+                expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", code1, out code1);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code2 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code2 });
             }
 
             [Test]
@@ -472,7 +499,13 @@ namespace RoslynSandbox.Client
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code1, code2 }, fixedCode);
                 AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { code2, code1 }, fixedCode);
-                AnalyzerAssert.CodeFix(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                var fix = new RemoveUnusedFixProvider();
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, fixedCode);
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { fixedCode, code1 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code2, code1 }, new[] { code1, fixedCode });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { fixedCode, code1 });
+                AnalyzerAssert.CodeFix(fix, expectedDiagnostic, new[] { code1, code2 }, new[] { code1, fixedCode });
             }
 
             [Test]
@@ -506,6 +539,10 @@ namespace RoslynSandbox
 }";
                 AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { barCode, code }, fixedCode);
+                AnalyzerAssert.CodeFix(analyzer, fix, new[] { barCode, code }, new[] { barCode, fixedCode });
             }
 
             [Test]

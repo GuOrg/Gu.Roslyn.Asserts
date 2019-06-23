@@ -168,7 +168,6 @@ namespace Gu.Roslyn.Asserts
                 allowCompilationErrors);
         }
 
-
         /// <summary>
         /// Verifies that
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
