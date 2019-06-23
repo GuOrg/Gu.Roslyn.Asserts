@@ -9,10 +9,10 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class PropertyMustBeNamedFooAnalyzer : DiagnosticAnalyzer
     {
-        public const string PropertyDiagnosticId = "Property";
+        public const string DiagnosticId = "PropertyMustBeNamedFooAnalyzer";
 
         internal static readonly DiagnosticDescriptor PropertyDescriptor = new DiagnosticDescriptor(
-            id: PropertyDiagnosticId,
+            id: DiagnosticId,
             title: "The Property must be named Foo.",
             messageFormat: "Message format.",
             category: "Category",

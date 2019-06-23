@@ -1,15 +1,15 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public class AnalyzerAssertNoCompilerErrorsTests
+    public class RoslynAssertNoCompilerErrorsTests
     {
         [TearDown]
         public void TearDown()
         {
-            AnalyzerAssert.MetadataReferences.Clear();
+            RoslynAssert.MetadataReferences.Clear();
         }
 
         [Test]
@@ -22,8 +22,8 @@ namespace RoslynSandbox
     {
     }
 }";
-            AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            AnalyzerAssert.NoCompilerErrors(code);
+            RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            RoslynAssert.NoCompilerErrors(code);
         }
 
         [Test]
@@ -42,8 +42,8 @@ namespace RoslynSandbox
         }
     }
 }";
-            AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            AnalyzerAssert.NoCompilerErrors(code);
+            RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            RoslynAssert.NoCompilerErrors(code);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-            var exception = Assert.Throws<AssertException>(() => AnalyzerAssert.NoCompilerErrors(code));
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(code));
             var expected = "Found errors.\r\n" +
                            "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                            "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +

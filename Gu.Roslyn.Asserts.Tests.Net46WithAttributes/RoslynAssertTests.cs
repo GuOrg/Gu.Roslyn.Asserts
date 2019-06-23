@@ -3,18 +3,18 @@ namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes
     using Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes;
     using NUnit.Framework;
 
-    public partial class AnalyzerAssertTests
+    public partial class RoslynAssertTests
     {
         [Test]
         public void ResetMetadataReferences()
         {
-            CollectionAssert.IsNotEmpty(AnalyzerAssert.MetadataReferences);
+            CollectionAssert.IsNotEmpty(RoslynAssert.MetadataReferences);
 
-            AnalyzerAssert.MetadataReferences.Clear();
-            CollectionAssert.IsEmpty(AnalyzerAssert.MetadataReferences);
+            RoslynAssert.MetadataReferences.Clear();
+            CollectionAssert.IsEmpty(RoslynAssert.MetadataReferences);
 
-            AnalyzerAssert.ResetMetadataReferences();
-            CollectionAssert.IsNotEmpty(AnalyzerAssert.MetadataReferences);
+            RoslynAssert.ResetMetadataReferences();
+            CollectionAssert.IsNotEmpty(RoslynAssert.MetadataReferences);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-            AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
+            RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
         }
     }
 }

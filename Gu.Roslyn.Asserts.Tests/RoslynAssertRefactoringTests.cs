@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
-    public class AnalyzerAssertRefactoringTests
+    public class RoslynAssertRefactoringTests
     {
         [Test]
         public void WithPositionIndicated()
@@ -20,8 +20,8 @@ class FOO
 }";
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-            AnalyzerAssert.Refactoring(refactoring, testCode, fixedCode);
-            AnalyzerAssert.Refactoring(refactoring, testCode, "To uppercase", fixedCode);
+            RoslynAssert.Refactoring(refactoring, testCode, fixedCode);
+            RoslynAssert.Refactoring(refactoring, testCode, "To uppercase", fixedCode);
         }
 
         [Test]
@@ -38,8 +38,8 @@ class FOO
 }";
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-            AnalyzerAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode);
-            AnalyzerAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), "To uppercase", fixedCode);
+            RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode);
+            RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), "To uppercase", fixedCode);
         }
     }
 }

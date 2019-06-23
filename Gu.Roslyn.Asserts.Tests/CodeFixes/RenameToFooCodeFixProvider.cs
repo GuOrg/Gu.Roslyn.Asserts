@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -11,7 +11,8 @@
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId,
-            FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId);
+            FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId,
+            PropertyMustBeNamedFooAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {

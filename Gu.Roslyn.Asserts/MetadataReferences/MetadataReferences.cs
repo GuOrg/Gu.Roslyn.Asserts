@@ -60,8 +60,8 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 code,
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true),
-                AnalyzerAssert.MetadataReferences);
-            AnalyzerAssert.NoCompilerErrors(sln);
+                RoslynAssert.MetadataReferences);
+            RoslynAssert.NoCompilerErrors(sln);
 
             using (var ms = new MemoryStream())
             {

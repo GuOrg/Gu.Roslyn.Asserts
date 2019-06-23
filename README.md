@@ -16,8 +16,8 @@ Asserts for testing Roslyn analyzers.
 
 Use 1.x for Microsoft.CodeAnalysis 1.x
 
-- [Valid](#analyzerassertvalid)
-- [Diagnostics](#analyzerassertdiagnostics)
+- [AnalyzerAssert.Valid](#analyzerassertvalid)
+- [AnalyzerAssert.Diagnostics](#analyzerassertdiagnostics)
 - [CodeFix](#codefix)
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
@@ -37,8 +37,8 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 - [Fix](#fix)
 - [CodeFactory](#codefactory)
   - [CreateSolution](#createsolution)
-    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace-a-roslyn-solution-from-code)
-    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace-a-roslyn-solution-from-a-file-on-disk)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from code.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-code)
+    - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
 - [Benchmark](#benchmark)
 - [SyntaxNodeExt](#syntaxnodeext)
 - [Usage with different test project types](#usage-with-different-test-project-types)
@@ -46,9 +46,9 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
   - [NetCoreApp2.0](#netcoreapp20)
 
 
-# AnalyzerAssert.Valid
+# RoslynAssert.Valid
 
-Use `AnalyzerAssert.Valid<NoErrorAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
+Use `RoslynAssert.Valid<NoErrorAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
 The code is checked so that it does not have any compiler errors either.
 A typical test fixture looks like:
 
@@ -67,7 +67,7 @@ namespace TestCode
     {
     }
 }";
-        AnalyzerAssert.Valid(YourAnalyzer, code);
+        RoslynAssert.Valid(YourAnalyzer, code);
     }
     ...
 }
@@ -91,7 +91,7 @@ namespace TestCode
     {
     }
 }";
-        AnalyzerAssert.Valid(YourAnalyzer, Descriptor, code);
+        RoslynAssert.Valid(YourAnalyzer, Descriptor, code);
     }
     ...
 }
@@ -112,19 +112,19 @@ public class ValidCodeWithAllAnalyzers
     private static readonly Solution ValidCodeProjectSln = CodeFactory.CreateSolution(
         ProjectFile.Find("ValidCode.csproj"),
         AllAnalyzers,
-        AnalyzerAssert.MetadataReferences);
+        RoslynAssert.MetadataReferences);
 
     [TestCaseSource(nameof(AllAnalyzers))]
     public void ValidCodeProject(DiagnosticAnalyzer analyzer)
     {
-        AnalyzerAssert.Valid(analyzer, ValidCodeProjectSln);
+        RoslynAssert.Valid(analyzer, ValidCodeProjectSln);
     }
 }
 ```
 
-# AnalyzerAssert.Diagnostics
+# RoslynAssert.Diagnostics
 
-Use `AnalyzerAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
+Use `RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
 With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
 A typical test fixture looks like:
@@ -145,7 +145,7 @@ namespace TestCode
     {
     }
 }";
-        AnalyzerAssert.Diagnostics(YourAnalyzer, code);
+        RoslynAssert.Diagnostics(YourAnalyzer, code);
     }
 
     [Test]
@@ -158,7 +158,7 @@ namespace TestCode
     {
     }
 }";
-        AnalyzerAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
+        RoslynAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
     }
     ...
 }
@@ -182,7 +182,7 @@ namespace TestCode
     {
     }
 }";
-        AnalyzerAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic, code);
+        RoslynAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic, code);
     }
     ...
 }
@@ -215,7 +215,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-    AnalyzerAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+    RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
 }
 ```
 
@@ -248,7 +248,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        AnalyzerAssert.CodeFix(Analyzer, Fix, code, fixedCode);
+        RoslynAssert.CodeFix(Analyzer, Fix, code, fixedCode);
     }
 
     [Test]
@@ -271,7 +271,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        AnalyzerAssert.CodeFix(Analyzer, Fix, code, fixedCode, fixTitle: "Don't use underscore prefix");
+        RoslynAssert.CodeFix(Analyzer, Fix, code, fixedCode, fixTitle: "Don't use underscore prefix");
     }
     ...
 }
@@ -309,7 +309,7 @@ namespace RoslynSandbox
     {
     }
 }";
-    AnalyzerAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+    RoslynAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
 }
 ```
 
@@ -340,7 +340,7 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-    AnalyzerAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+    RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
 }
 ```
 
@@ -363,7 +363,7 @@ namespace RoslynSandbox
     }
 }";
 
-    AnalyzerAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
+    RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
 }
 ```
 
@@ -382,7 +382,7 @@ class FOO
 {
 }";
 
-            AnalyzerAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode);
+            RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode);
         }
 ```
 
@@ -396,7 +396,7 @@ public void CheckAst()
 {
     var actual = SyntaxFactory.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, SyntaxFactory.IdentifierName("a"), SyntaxFactory.IdentifierName("b"));
     var expected = CSharpSyntaxTree.ParseText("var c = a + b").FindAssignmentExpression("a + b");
-    AnalyzerAssert.Ast(expected, actual);
+    RoslynAssert.Ast(expected, actual);
 }
 ```
 
@@ -441,7 +441,7 @@ For specifying a batch of metadata references to be used in the tests.
     typeof(NUnit.Framework.Assert))]
 ```
 
-Calling `AnalyzerAssert.ResetMetadataReferences()` resets `AnalyzerAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
+Calling `RoslynAssert.ResetMetadataReferences()` resets `RoslynAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
 
 ## MetadataReferences
 
@@ -483,10 +483,10 @@ using Gu.Roslyn.Asserts;
     typeof(Microsoft.CodeAnalysis.Compilation),
     typeof(NUnit.Framework.Assert))]
 ```
-## Exlicit set AnalyzerAssert.MetadataReferences
+## Exlicit set RoslynAssert.MetadataReferences
 
 ```c#
-AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
 ```
 
 A helper like this can be used.
@@ -502,7 +502,7 @@ private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params 
 
 ## IgnoredErrorsAttribute
 
-For globally ignoring compiler warnings and errors introduced by code fixes when calling calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
+For globally ignoring compiler warnings and errors introduced by code fixes when calling calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
 
 ```c#
 [assembly: IgnoredErrors("CS1569", ...)]
@@ -510,7 +510,7 @@ For globally ignoring compiler warnings and errors introduced by code fixes when
 
 ## AllowedDiagnosticsAttribute
 
-For globally ignoring compiler warnings and errors introduced by code fixes when calling calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
+For globally ignoring compiler warnings and errors introduced by code fixes when calling calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
 
 ```c#
 [assembly: AllowedDiagnostics(AllowedDiagnostics.Warnings)]

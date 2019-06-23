@@ -2,7 +2,7 @@ namespace Gu.Roslyn.Asserts
 {
     using Microsoft.CodeAnalysis;
 
-    public static partial class AnalyzerAssert
+    public static partial class RoslynAssert
     {
         /// <summary>
         /// Serializes the syntax tree and compares the strings.

@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes
     using Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes;
     using NUnit.Framework;
 
-    public class AnalyzerAssertTests
+    public class RoslynAssertTests
     {
         [Test]
         public void ValidOrdersController()
@@ -57,7 +57,7 @@ namespace ValidCode
     }
 }";
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            AnalyzerAssert.Valid(analyzer, order, db, controller);
+            RoslynAssert.Valid(analyzer, order, db, controller);
         }
     }
 }

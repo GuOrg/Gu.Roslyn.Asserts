@@ -9,22 +9,22 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
 
-    public class AnalyzerAssertTests
+    public class RoslynAssertTests
     {
         [Test]
         public void ResetMetadataReferences()
         {
-            AnalyzerAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            AnalyzerAssert.ResetMetadataReferences();
-            CollectionAssert.IsEmpty(AnalyzerAssert.MetadataReferences);
+            RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            RoslynAssert.ResetMetadataReferences();
+            CollectionAssert.IsEmpty(RoslynAssert.MetadataReferences);
         }
 
         [Explicit("Started failing on AppVeyor, don't know why.")]
         [Test]
         public void AddTransitiveMetadataReferences()
         {
-            AnalyzerAssert.MetadataReferences.Clear();
-            AnalyzerAssert.AddTransitiveMetadataReferences(typeof(CSharpCompilationOptions).Assembly);
+            RoslynAssert.MetadataReferences.Clear();
+            RoslynAssert.AddTransitiveMetadataReferences(typeof(CSharpCompilationOptions).Assembly);
 #if NET461
             var expected = new[]
                            {
@@ -193,7 +193,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                 "System.Threading.Tasks.Parallel.dll",
                            };
 #endif
-            var actual = AnalyzerAssert.MetadataReferences
+            var actual = RoslynAssert.MetadataReferences
                                        .Select(x => Path.GetFileName(x.Display))
                                        .OrderBy(x => x)
                                        .ToArray();

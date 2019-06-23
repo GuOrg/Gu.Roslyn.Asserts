@@ -82,7 +82,7 @@ namespace Gu.Roslyn.Asserts
                 throw new ArgumentNullException(nameof(code));
             }
 
-            AnalyzerAssert.VerifySingleSupportedDiagnostic(analyzer, out var descriptor);
+            RoslynAssert.VerifySingleSupportedDiagnostic(analyzer, out var descriptor);
             return CreateFromCodeWithErrorsIndicated(descriptor.Id, null, code);
         }
 

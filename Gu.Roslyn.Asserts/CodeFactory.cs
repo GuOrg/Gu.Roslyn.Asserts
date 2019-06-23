@@ -387,7 +387,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string> suppressedDiagnostics)
         {
-            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
+            RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
             suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
@@ -403,7 +403,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressedDiagnostics)
         {
-            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
+            RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
             suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
@@ -711,7 +711,7 @@ namespace Gu.Roslyn.Asserts
 
         private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string> suppressedDiagnostics)
         {
-            AnalyzerAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
+            RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
             suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptor, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
