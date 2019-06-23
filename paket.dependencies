@@ -24,6 +24,6 @@ group Analyzers
   nuget AsyncUsageAnalyzers
   nuget Gu.Analyzers
   nuget IDisposableAnalyzers
-  nuget PublicApiAnalyzer prerelease
+  nuget Microsoft.CodeAnalysis.PublicApiAnalyzers
   nuget ReflectionAnalyzers
   nuget StyleCop.Analyzers prerelease

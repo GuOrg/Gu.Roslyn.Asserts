@@ -1,1 +1,1 @@
-﻿Gu.Roslyn.Asserts.ExpectedDiagnostic.WithPosition(Microsoft.CodeAnalysis.FileLinePositionSpan span) -> Gu.Roslyn.Asserts.ExpectedDiagnostic
+﻿

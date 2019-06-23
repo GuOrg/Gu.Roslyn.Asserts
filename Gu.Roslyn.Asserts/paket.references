@@ -4,6 +4,6 @@ group Analyzers
   AsyncUsageAnalyzers
   Gu.Analyzers
   IDisposableAnalyzers
-  PublicApiAnalyzer
+  Microsoft.CodeAnalysis.PublicApiAnalyzers
   ReflectionAnalyzers
   StyleCop.Analyzers
