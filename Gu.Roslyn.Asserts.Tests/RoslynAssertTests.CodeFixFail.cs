@@ -817,33 +817,6 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIsCorrectWithMetadataReferences()
-            {
-                var code = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    ↓class Foo
-    {
-    }
-}";
-
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    using System;
-
-    class Foo
-    {
-        public event EventHandler SomeEvent;
-    }
-}";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
-                RoslynAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode);
-            }
-
-            [Test]
             public void IndicatedAndActualPositionDoNotMatch()
             {
                 var code = @"
@@ -854,8 +827,6 @@ namespace RoslynSandbox
         private ↓readonly int _value1;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -863,6 +834,17 @@ namespace RoslynSandbox
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                Assert.AreEqual(expected, exception.Message);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { string.Empty }));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, string.Empty, fixTitle: "WRONG"));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { string.Empty }, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

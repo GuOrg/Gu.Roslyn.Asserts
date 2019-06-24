@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 var creation = (ObjectCreationExpressionSyntax)root.FindNode(diagnostic.Location.SourceSpan);
                 context.RegisterCodeFix(
                     CodeAction.Create(
-                        $"Call ID()",
+                        "Call ID()",
                         cancellationToken =>
                         {
                             var sln = context.Document.Project.Solution;

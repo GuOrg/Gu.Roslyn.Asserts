@@ -440,14 +440,17 @@ namespace RoslynSandbox
                 RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { part2, part1 }, fixedCode);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, fixedCode);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, fixedCode);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { fixedCode, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { part2, fixedCode });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { fixedCode, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { part2, fixedCode });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode, fixTitle: "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, fixedCode }, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }, fixTitle: "Rename to: value");
             }
 
             [Test]
@@ -721,6 +724,7 @@ namespace RoslynSandbox
                 var analyzer = new CallIdAnalyzer();
                 var fix = new CallIdFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode });
+                RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }, fixTitle: "Call ID()");
             }
 
             [Test]
@@ -743,6 +747,15 @@ namespace RoslynSandbox
     }
 }";
                 RoslynAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode, null, AllowCompilationErrors.Yes);
+                var analyzer = new ClassMustHaveEventAnalyzer();
+                var fix = new InsertEventFixProvider();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
+                RoslynAssert.CodeFix(analyzer, fix, code, fixedCode, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode }, allowCompilationErrors: AllowCompilationErrors.Yes);
             }
 
             [Test]
@@ -772,7 +785,43 @@ namespace RoslynSandbox
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
                 RoslynAssert.CodeFix<FieldAndPropertyMustBeNamedFooAnalyzer, RenameToFooCodeFixProvider>(expectedDiagnostic, code, fixedCode);
-                RoslynAssert.CodeFix(new FieldAndPropertyMustBeNamedFooAnalyzer(), new RenameToFooCodeFixProvider(), expectedDiagnostic, code, fixedCode);
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var fix = new RenameToFooCodeFixProvider();
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, code, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { code }, new[] { fixedCode });
+            }
+
+            [Test]
+            public void WithMetadataReferences()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    ↓class Foo
+    {
+    }
+}";
+
+                var fixedCode = @"
+namespace RoslynSandbox
+{
+    using System;
+
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}";
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
+                RoslynAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode);
+                var analyzer = new ClassMustHaveEventAnalyzer();
+                var fix = new InsertEventFixProvider();
+                RoslynAssert.CodeFix(analyzer, fix, code, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode });
             }
 
             [Test]
