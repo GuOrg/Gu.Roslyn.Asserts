@@ -198,6 +198,17 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public static void WhenNotEqualEndMissingNewLine()
+        {
+            var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("class C {}\n", "class C {}"));
+            var expected = "Mismatch at end of file C.cs.\n" +
+                           "Expected: class C {}\\n\n" +
+                           "Actual:   class C {}\n" +
+                           "                    ^\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
+
+        [Test]
         public static async Task MakeSealed()
         {
             var testCode = @"
