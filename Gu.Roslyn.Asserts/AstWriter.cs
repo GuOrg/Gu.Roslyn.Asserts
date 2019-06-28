@@ -162,8 +162,8 @@ namespace Gu.Roslyn.Asserts
             if (this.settings.Trivia.HasFlag(AstTrivia.Token) ||
                 this.settings.Trivia == AstTrivia.Unspecified)
             {
-                this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
-                    .WriteTrivia("TrailingTrivia", token.TrailingTrivia);
+                _ = this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
+                        .WriteTrivia("TrailingTrivia", token.TrailingTrivia);
             }
 
             return this.Write(" ")
@@ -172,6 +172,11 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter WriteTrivia(string name, SyntaxTriviaList triviaList)
         {
+            if (triviaList.All(x => IsIgnoredEmpty(x)))
+            {
+                return this;
+            }
+
             if (triviaList.Any())
             {
                 switch (this.settings.Format)
@@ -186,15 +191,35 @@ namespace Gu.Roslyn.Asserts
                         throw new ArgumentOutOfRangeException();
                 }
 
-                for (var i = 0; i < triviaList.Count; i++)
+                var wrote = false;
+                foreach (var trivia in triviaList)
                 {
-                    var trivia = triviaList[i];
-                    this.Write(trivia)
-                        .Write(i == triviaList.Count - 1 ? " ]" : ", ");
+                    if (!IsIgnoredEmpty(trivia))
+                    {
+                        if (wrote)
+                        {
+                            this.Write(", ");
+                        }
+
+                        wrote = true;
+                        _ = this.Write(trivia);
+                    }
+                }
+
+                if (wrote)
+                {
+                    this.Write(" ]");
                 }
             }
 
             return this;
+
+            bool IsIgnoredEmpty(SyntaxTrivia trivia)
+            {
+                return this.settings.IgnoreEmptyTriva &&
+                       trivia.IsKind(SyntaxKind.WhitespaceTrivia) &&
+                       trivia.Span.IsEmpty;
+            }
         }
 
         private AstWriter Write(SyntaxTrivia trivia)

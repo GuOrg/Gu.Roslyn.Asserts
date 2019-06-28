@@ -39,7 +39,7 @@ namespace RoslynSandbox
     }
 }");
             var node = tree.FindClassDeclaration("Foo");
-            var actual = AstWriter.Serialize(node, new AstWriterSettings(AstFormat.Light, AstTrivia.Node | AstTrivia.Token));
+            var actual = AstWriter.Serialize(node, new AstWriterSettings(AstFormat.Light, AstTrivia.Node | AstTrivia.Token, ignoreEmptyTriva: false));
             var expected = "{ ClassDeclaration LeadingTrivia: [ { WhitespaceTrivia: \"    \" } ] TrailingTrivia: [ EndOfLineTrivia ]\r\n" +
                            "  ChildTokens: [ { PublicKeyword LeadingTrivia: [ { WhitespaceTrivia: \"    \" } ] TrailingTrivia: [ { WhitespaceTrivia: \" \" } ] }\r\n" +
                            "                 { ClassKeyword TrailingTrivia: [ { WhitespaceTrivia: \" \" } ] }\r\n" +
@@ -81,7 +81,7 @@ namespace RoslynSandbox
     }
 }");
             var node = tree.FindClassDeclaration("Foo");
-            var actual = AstWriter.Serialize(node, new AstWriterSettings(AstFormat.Json, AstTrivia.Node | AstTrivia.Token));
+            var actual = AstWriter.Serialize(node, new AstWriterSettings(AstFormat.Json, AstTrivia.Node | AstTrivia.Token, ignoreEmptyTriva: false));
             var expected = "{ \"Kind\": \"ClassDeclaration\", \"LeadingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \"    \" } ], \"TrailingTrivia\": [ { \"Kind\": \"EndOfLineTrivia\", \"Text\": \"\\r\\n\" } ],\r\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"PublicKeyword\", \"Text\": \"public\", \"LeadingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \"    \" } ], \"TrailingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \" \" } ] },\r\n" +
                            "                   { \"Kind\": \"ClassKeyword\", \"Text\": \"class\", \"TrailingTrivia\": [ { \"Kind\": \"WhitespaceTrivia\", \"Text\": \" \" } ] },\r\n" +
@@ -145,7 +145,7 @@ namespace RoslynSandbox
     }
 }");
             var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("Foo").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
-            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Node | AstTrivia.Token));
+            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Node | AstTrivia.Token, ignoreEmptyTriva: false));
             var expected = "{ SingleLineDocumentationCommentTrivia LeadingTrivia: [ { DocumentationCommentExteriorTrivia: \"///\" } ]\n" +
                            "  ChildTokens: [ { EndOfDocumentationCommentToken Text: \"\" } ]\n" +
                            "  ChildNodes:  [ { XmlText LeadingTrivia: [ { DocumentationCommentExteriorTrivia: \"///\" } ]\n" +
@@ -185,7 +185,7 @@ namespace RoslynSandbox
     }
 }");
             var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("Foo").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
-            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Ignore));
+            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Ignore, ignoreEmptyTriva: false));
             var expected = "{ SingleLineDocumentationCommentTrivia\n" +
                            "  ChildTokens: [ { EndOfDocumentationCommentToken Text: \"\" } ]\n" +
                            "  ChildNodes:  [ { XmlText\n" +
@@ -265,7 +265,6 @@ namespace RoslynSandbox
     }
 }");
             var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("Foo").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
-            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Json, AstTrivia.Node | AstTrivia.Token));
             var expected = "{ \"Kind\": \"SingleLineDocumentationCommentTrivia\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"EndOfDocumentationCommentToken\", \"Text\": \"\" } ],\n" +
                            "  \"ChildNodes\":  [ { \"Kind\": \"XmlText\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
@@ -288,6 +287,27 @@ namespace RoslynSandbox
                            "                                                           \"ChildTokens\": [ { \"Kind\": \"IdentifierToken\", \"Text\": \"summary\" } ] } ] } ] },\n" +
                            "                   { \"Kind\": \"XmlText\",\n" +
                            "                     \"ChildTokens\": [ { \"Kind\": \"XmlTextLiteralNewLineToken\", \"Text\": \"\\r\\n\" } ] } ] }";
+            var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Json, AstTrivia.Node | AstTrivia.Token, ignoreEmptyTriva: false));
+            CodeAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public static void SyntaxFactoryArgumentListIgnoreEmptyTrivia()
+        {
+            var actual = AstWriter.Serialize(SyntaxFactory.ArgumentList(), new AstWriterSettings(AstFormat.Light, AstTrivia.Token | AstTrivia.Node, ignoreEmptyTriva: true));
+            var expected = "{ ArgumentList\n" +
+                           "  ChildTokens: [ { OpenParenToken Text: \"(\" }\n" +
+                           "                 { CloseParenToken Text: \")\" } ] }";
+            CodeAssert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public static void SyntaxFactoryArgumentListIncludeEmptyTrivia()
+        {
+            var actual = AstWriter.Serialize(SyntaxFactory.ArgumentList(), new AstWriterSettings(AstFormat.Light, AstTrivia.Token | AstTrivia.Node, ignoreEmptyTriva: false));
+            var expected = "{ ArgumentList LeadingTrivia: [ { WhitespaceTrivia: \"\" } ] TrailingTrivia: [ { WhitespaceTrivia: \"\" } ]\n" +
+                           "  ChildTokens: [ { OpenParenToken Text: \"(\" LeadingTrivia: [ { WhitespaceTrivia: \"\" } ] TrailingTrivia: [ { WhitespaceTrivia: \"\" } ] }\n" +
+                           "                 { CloseParenToken Text: \")\" LeadingTrivia: [ { WhitespaceTrivia: \"\" } ] TrailingTrivia: [ { WhitespaceTrivia: \"\" } ] } ] }";
             CodeAssert.AreEqual(expected, actual);
         }
     }
