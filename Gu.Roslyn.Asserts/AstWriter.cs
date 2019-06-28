@@ -56,8 +56,8 @@ namespace Gu.Roslyn.Asserts
 
             if (this.settings.Trivia.HasFlag(AstTrivia.Node))
             {
-                this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
-                    .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia());
+                _ = this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
+                     .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia());
             }
 
             this.WriteChildTokens(node.ChildTokens().ToList())

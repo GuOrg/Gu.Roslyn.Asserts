@@ -29,17 +29,17 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Specifies the format of the dump <see cref="AstFormat"/>.
+        /// Gets a value indicating the format of the dump <see cref="AstFormat"/>.
         /// </summary>
         public AstFormat Format { get; }
 
         /// <summary>
-        /// Specifies what trivia to include <see cref="AstTrivia"/>.
+        /// Gets a value indicating what trivia to include <see cref="AstTrivia"/>.
         /// </summary>
         public AstTrivia Trivia { get; }
 
         /// <summary>
-        /// Specifies if empty whitespace trivia should be ignored.
+        /// Gets a value indicating whether empty whitespace trivia should be ignored.
         /// SyntaxFactory.Whitespace(string.Empty).
         /// </summary>
         public bool IgnoreEmptyTriva { get; }

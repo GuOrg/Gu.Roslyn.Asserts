@@ -1,3 +1,8 @@
+#### 2.8.0
+* FEATURE: Make trivia configurable in AstWriter output.
+* BREAKING: AstWriterSettings(AstFormat) was AstWriterSettings(bool)
+* FEATURE: Setting for ignoring empty trivia.
+
 #### 2.7.1
 * BUGFIX: RoslynAssert.CodeFix() when partial classes in multiple documents.
 

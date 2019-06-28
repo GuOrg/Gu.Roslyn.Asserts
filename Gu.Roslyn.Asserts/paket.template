@@ -3,7 +3,9 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  BUGFIX: RoslynAssert.CodeFix() when partial classes in multiple documents.
+  FEATURE: Make trivia configurable in AstWriter output.
+  BREAKING: AstWriterSettings(AstFormat) was AstWriterSettings(bool)
+  FEATURE: Setting for ignoring empty trivia.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
