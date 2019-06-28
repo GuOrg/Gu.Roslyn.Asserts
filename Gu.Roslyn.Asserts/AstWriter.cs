@@ -54,9 +54,13 @@ namespace Gu.Roslyn.Asserts
 
             this.indentation.Push();
 
-            this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
-                .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia())
-                .WriteChildTokens(node.ChildTokens().ToList())
+            if (this.settings.Trivia.HasFlag(AstTrivia.Node))
+            {
+                this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
+                    .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia());
+            }
+
+            this.WriteChildTokens(node.ChildTokens().ToList())
                 .WriteChildNodes(node.ChildNodes().ToList())
                 .Write(" ")
                 .WriteEndElement();
@@ -155,9 +159,14 @@ namespace Gu.Roslyn.Asserts
                     throw new ArgumentOutOfRangeException();
             }
 
-            return this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
-                       .WriteTrivia("TrailingTrivia", token.TrailingTrivia)
-                       .Write(" ")
+            if (this.settings.Trivia.HasFlag(AstTrivia.Token) ||
+                this.settings.Trivia == AstTrivia.Unspecified)
+            {
+                this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
+                    .WriteTrivia("TrailingTrivia", token.TrailingTrivia);
+            }
+
+            return this.Write(" ")
                        .WriteEndElement();
         }
 
