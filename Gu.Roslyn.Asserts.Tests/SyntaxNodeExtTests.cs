@@ -5,10 +5,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
-    internal class SyntaxNodeExtTests
+    public static class SyntaxNodeExtTests
     {
         [Test]
-        public void FindClassDeclaration()
+        public static void FindClassDeclaration()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -24,7 +24,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindTypeDeclaration()
+        public static void FindTypeDeclaration()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -41,7 +41,7 @@ namespace RoslynSandbox
 
         [TestCase("var temp = 1;", "var temp = 1;")]
         [TestCase("temp = 2;", "temp = 2;")]
-        public void FindStatement(string statement, string expected)
+        public static void FindStatement(string statement, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -65,7 +65,7 @@ namespace RoslynSandbox
 
         [TestCase("temp = 1;", "= 1")]
         [TestCase("var temp = 1;", "= 1")]
-        public void FindEqualsValueClause(string text, string expected)
+        public static void FindEqualsValueClause(string text, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -94,7 +94,7 @@ namespace RoslynSandbox
         }
 
         [TestCase("temp = 2;", "temp = 2")]
-        public void FindAssignmentExpression(string text, string expected)
+        public static void FindAssignmentExpression(string text, string expected)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -117,7 +117,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindAssignmentExpressionDemo()
+        public static void FindAssignmentExpressionDemo()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -140,7 +140,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindConstructorDeclarationSyntax()
+        public static void FindConstructorDeclarationSyntax()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -162,7 +162,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindMethodDeclaration()
+        public static void FindMethodDeclaration()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -184,7 +184,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindFieldDeclaration()
+        public static void FindFieldDeclaration()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -204,7 +204,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindPropertyDeclaration()
+        public static void FindPropertyDeclaration()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -224,7 +224,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindInvocation()
+        public static void FindInvocation()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -250,7 +250,7 @@ namespace RoslynSandbox
         [TestCase("Id(\"abc\")")]
         [TestCase("Id(nameof(Id))")]
         [TestCase("this.Id(nameof(Id))")]
-        public void FindInvocationWhenArgumentIsInvocation(string invocation)
+        public static void FindInvocationWhenArgumentIsInvocation(string invocation)
         {
             var testCode = @"
 namespace RoslynSandbox
@@ -283,7 +283,7 @@ namespace RoslynSandbox
         [TestCase("this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Bar)))")]
         [TestCase("this.OnPropertyChanged(Cached)")]
         [TestCase("this.OnPropertyChanged(args)")]
-        public void FindOnPropertyChangedInvocation(string call)
+        public static void FindOnPropertyChangedInvocation(string call)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -353,7 +353,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindArgument()
+        public static void FindArgument()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -378,7 +378,7 @@ namespace RoslynSandbox
 
         [TestCase("int i")]
         [TestCase("int j")]
-        public void FindParameter(string parameter)
+        public static void FindParameter(string parameter)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
@@ -402,7 +402,7 @@ namespace RoslynSandbox
 
         [TestCase("get => this.value;")]
         [TestCase("set => this.value = value;")]
-        public void FindAccessorDeclaration(string accessor)
+        public static void FindAccessorDeclaration(string accessor)
         {
             var testCode = @"
 namespace RoslynSandbox
@@ -424,7 +424,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindExpression()
+        public static void FindExpression()
         {
             var testCode = @"
 namespace RoslynSandbox
@@ -463,7 +463,7 @@ namespace RoslynSandbox
         [TestCase("(this.Inner.meh as Foo).Get<int>(1)")]
         [TestCase("(this.Inner.meh as Foo)?.Get<int>(1)")]
         [TestCase("(meh as Foo)?.Get<int>(1)")]
-        public void FindExpressionComplicated(string code)
+        public static void FindExpressionComplicated(string code)
         {
             var testCode = @"
 namespace RoslynSandbox
@@ -492,7 +492,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindBinaryExpression()
+        public static void FindBinaryExpression()
         {
             var testCode = @"
 namespace RoslynSandbox
@@ -511,7 +511,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void FindAttribute()
+        public static void FindAttribute()
         {
             var testCode = @"
 namespace RoslynSandbox

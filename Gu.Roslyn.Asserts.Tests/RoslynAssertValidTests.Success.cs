@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertValidTests
+    public static partial class RoslynAssertValidTests
     {
         public class Success
         {

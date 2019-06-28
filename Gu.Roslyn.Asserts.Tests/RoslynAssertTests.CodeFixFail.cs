@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
         public class CodeFixFail
         {

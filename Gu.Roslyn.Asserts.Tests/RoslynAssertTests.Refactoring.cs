@@ -4,12 +4,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
-        public class Refactoring
+        public static class Refactoring
         {
             [Test]
-            public void WithPositionIndicated()
+            public static void WithPositionIndicated()
             {
                 var testCode = @"
 class ↓Foo
@@ -27,7 +27,7 @@ class FOO
             }
 
             [Test]
-            public void WithSpan()
+            public static void WithSpan()
             {
                 var testCode = @"
 class Foo

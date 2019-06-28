@@ -3,10 +3,10 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
-    public class TextAssertTests
+    public static class TextAssertTests
     {
         [Test]
-        public void WhenEqual()
+        public static void WhenEqual()
         {
             var expected = @"
 namespace RoslynSandbox
@@ -29,7 +29,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenNotEqual()
+        public static void WhenNotEqual()
         {
             var expectedCode = @"
 namespace RoslynSandbox

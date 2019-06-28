@@ -5,14 +5,14 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertValidTests
+    public static partial class RoslynAssertValidTests
     {
-        public class Fail
+        public static class Fail
         {
             private static readonly bool Throw = false; // for testing what the output is in the runner.
 
             [Test]
-            public void SingleDocumentFieldNameMustNotBeginWithUnderscore()
+            public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -42,7 +42,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void SingleDocumentFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -72,7 +72,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneError()
+            public static void TwoDocumentsOneError()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -109,7 +109,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsTwoErrors()
+            public static void TwoDocumentsTwoErrors()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -146,7 +146,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoProjectsTwoErrors()
+            public static void TwoProjectsTwoErrors()
             {
                 var foo1 = @"
 namespace Project1
@@ -186,7 +186,7 @@ namespace Project2
             }
 
             [Test]
-            public void ClassLibrary1ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void ClassLibrary1ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var csproj = ProjectFile.Find("ClassLibrary1.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -221,7 +221,7 @@ namespace Project2
             }
 
             [Test]
-            public void ClassLibrary2ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void ClassLibrary2ProjectFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var csproj = ProjectFile.Find("ClassLibrary2.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -243,7 +243,7 @@ namespace Project2
             }
 
             [Test]
-            public void ClassLibrary1SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void ClassLibrary1SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var csproj = ProjectFile.Find("ClassLibrary1.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -266,7 +266,7 @@ namespace Project2
             }
 
             [Test]
-            public void ClassLibrary2SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void ClassLibrary2SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var csproj = ProjectFile.Find("ClassLibrary2.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -289,7 +289,7 @@ namespace Project2
             }
 
             [Test]
-            public void WithExpectedDiagnosticWithWrongId()
+            public static void WithExpectedDiagnosticWithWrongId()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -325,7 +325,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -358,7 +358,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void DuplicateId()
+            public static void DuplicateId()
             {
                 var code = @"
 namespace RoslynSandbox

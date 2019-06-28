@@ -7,10 +7,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [Explicit("Sandbox")]
-    public class Sandbox
+    public static class Sandbox
     {
         [Test]
-        public void FindReferences()
+        public static void FindReferences()
         {
             foreach (var assembly in typeof(Sandbox).Assembly.GetReferencedAssemblies())
             {
@@ -19,12 +19,10 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public void References()
+        public static void References()
         {
             var assembly = typeof(Sandbox).GetTypeInfo().Assembly;
             var referencedAssemblies = assembly.GetReferencedAssemblies();
         }
-#pragma warning disable SA1313 // Parameter names must begin with lower-case letter
-#pragma warning restore SA1313 // Parameter names must begin with lower-case letter
     }
 }

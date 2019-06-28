@@ -9,14 +9,14 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public partial class CodeFactoryTests
+    public static partial class CodeFactoryTests
     {
-        public class CreateSolutionFromFiles
+        public static class CreateSolutionFromFiles
         {
             private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
 
             [Test]
-            public void CreateSolutionFromProjectFile()
+            public static void CreateSolutionFromProjectFile()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind(ExecutingAssemblyDll, out var projectFile));
                 var solution = CodeFactory.CreateSolution(
@@ -44,7 +44,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionFromWpfApp1()
+            public static void CreateSolutionFromWpfApp1()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("WpfApp1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
@@ -75,7 +75,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionFromClassLibrary1()
+            public static void CreateSolutionFromClassLibrary1()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
@@ -102,7 +102,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionFromClassLibrary2()
+            public static void CreateSolutionFromClassLibrary2()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary2.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
@@ -127,7 +127,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionFromSolutionFile()
+            public static void CreateSolutionFromSolutionFile()
             {
                 Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var solution = CodeFactory.CreateSolution(
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionFromSolutionFileAddsDependencies()
+            public static void CreateSolutionFromSolutionFileAddsDependencies()
             {
                 var sln = CodeFactory.CreateSolution(
                     SolutionFile.Find("Gu.Roslyn.Asserts.sln"),
@@ -186,7 +186,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void CreateSolutionWithTwoAnalyzersReportingSameDiagnostic()
+            public static void CreateSolutionWithTwoAnalyzersReportingSameDiagnostic()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(

@@ -1,12 +1,12 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
-    public partial class CodeReaderTests
+    public static partial class CodeReaderTests
     {
         [Test]
-        public void NamespaceFromClass()
+        public static void NamespaceFromClass()
         {
             var code = @"using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace RoslynSandbox
         [TestCase(1, 0, "↓using System.Collections.Generic;")]
         [TestCase(11, 0, "↓}")]
         [TestCase(11, 1, "}↓")]
-        public void GetLineWithErrorIndicated(int line, int character, string expected)
+        public static void GetLineWithErrorIndicated(int line, int character, string expected)
         {
             var code = @"using System;
 using System.Collections.Generic;

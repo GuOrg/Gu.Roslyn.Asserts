@@ -9,12 +9,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
-    public class BenchmarkTests
+    public static class BenchmarkTests
     {
         private static readonly Solution SolutionWithClassLibrary1 = CodeFactory.CreateSolution(ProjectFile.Find("ClassLibrary1.csproj"));
 
         [Test]
-        public async Task Solution()
+        public static async Task Solution()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(SolutionFile.Find("Gu.Roslyn.Asserts.sln"));
@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task Project()
+        public static async Task Project()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(ProjectFile.Find("Gu.Roslyn.Asserts.csproj"));
@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task ClassLibrary1FieldNameMustNotBeginWithUnderscore()
+        public static async Task ClassLibrary1FieldNameMustNotBeginWithUnderscore()
         {
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task ClassLibrary1FieldDeclarations()
+        public static async Task ClassLibrary1FieldDeclarations()
         {
             var analyzer = new SyntaxNodeAnalyzer(SyntaxKind.FieldDeclaration);
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
@@ -72,7 +72,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task ClassLibrary1FieldSymbols()
+        public static async Task ClassLibrary1FieldSymbols()
         {
             var analyzer = new SymbolAnalyzer(SymbolKind.Field);
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);

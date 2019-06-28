@@ -5,12 +5,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
-        public class NoFixFail
+        public static class NoFixFail
         {
             [Test]
-            public void FixDoesNotMatchAnalyzer()
+            public static void FixDoesNotMatchAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -37,7 +37,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorEmptyFix()
+            public static void SingleDocumentOneErrorEmptyFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -56,7 +56,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorCodeFixFixedTheCode()
+            public static void SingleDocumentOneErrorCodeFixFixedTheCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -75,7 +75,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneErrorCodeFixFixedTheCode()
+            public static void TwoDocumentsOneErrorCodeFixFixedTheCode()
             {
                 var barCode = @"
 namespace RoslynSandbox

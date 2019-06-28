@@ -8,10 +8,10 @@ namespace Gu.Roslyn.Asserts.Tests
     [TestFixture]
     public partial class RoslynAssertTests
     {
-        public class FixAllFail
+        public static class FixAllFail
         {
             [Test]
-            public void SingleDocumentTwoErrorsOnlyOneIndicated()
+            public static void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentExplicitTitle()
+            public static void SingleDocumentExplicitTitle()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -60,7 +60,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorWrongPosition()
+            public static void SingleDocumentOneErrorWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -83,7 +83,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void FixDoesNotMatchAnalyzer()
+            public static void FixDoesNotMatchAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -111,7 +111,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorErrorInFix()
+            public static void SingleDocumentOneErrorErrorInFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -156,7 +156,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneErrorErrorInFix()
+            public static void TwoDocumentsOneErrorErrorInFix()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -210,7 +210,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatch()
+            public static void IndicatedAndActualPositionDoNotMatch()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -233,7 +233,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIntroducesCompilerErrors()
+            public static void WhenFixIntroducesCompilerErrors()
             {
                 RoslynAssert.MetadataReferences.Clear();
                 var code = @"

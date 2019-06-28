@@ -4,14 +4,13 @@ namespace Gu.Roslyn.Asserts.Tests
     using Gu.Roslyn.Asserts.Internals;
     using NUnit.Framework;
 
-    [TestFixture]
-    public class GitClientTests
+    public static class GitClientTests
     {
         [Test]
-        public void Basic()
+        public static void Basic()
         {
             var git = new GitClient();
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var directoryInfo = Directory.CreateDirectory(tempDirectory);
             git.Clone(
                 new System.Uri("https://github.com/GuOrg/Gu.Inject"),

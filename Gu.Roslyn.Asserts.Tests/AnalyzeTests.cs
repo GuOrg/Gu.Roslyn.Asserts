@@ -6,12 +6,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public class AnalyzeTests
+    public static class AnalyzeTests
     {
         private static readonly MetadataReference[] MetadataReferences = new MetadataReference[0];
 
         [Test]
-        public async Task GetDiagnosticsAsyncProjectFile()
+        public static async Task GetDiagnosticsAsyncProjectFile()
         {
             Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out FileInfo projectFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences).ConfigureAwait(false);
@@ -19,7 +19,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task GetDiagnosticsAsyncSolutionFile()
+        public static async Task GetDiagnosticsAsyncSolutionFile()
         {
             var solutionFile = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public async Task GetDiagnosticsAsyncSolution()
+        public static async Task GetDiagnosticsAsyncSolution()
         {
             var solutionFile = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var expected = new[]

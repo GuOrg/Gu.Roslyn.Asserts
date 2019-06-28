@@ -6,10 +6,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Reflection;
     using NUnit.Framework;
 
-    public class ProjectFileTests
+    public static class ProjectFileTests
     {
         [Test]
-        public void TryFindFromDll()
+        public static void TryFindFromDll()
         {
             var dll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
             Assert.AreEqual(true, ProjectFile.TryFind(dll, out var projectFile));
@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         [TestCase("Gu.Roslyn.Asserts.Tests.csproj")]
         [TestCase("WpfApp1.csproj")]
-        public void TryFindByName(string name)
+        public static void TryFindByName(string name)
         {
             Assert.AreEqual(true, ProjectFile.TryFind(name, out var projectFile));
             Assert.AreEqual(name, projectFile.Name);
@@ -26,14 +26,14 @@ namespace Gu.Roslyn.Asserts.Tests
 
         [TestCase("Gu.Roslyn.Asserts.Tests.csproj")]
         [TestCase("WpfApp1.csproj")]
-        public void Find(string name)
+        public static void Find(string name)
         {
             var projectFile = ProjectFile.Find(name);
             Assert.AreEqual(name, projectFile.Name);
         }
 
         [Test]
-        public void ParseInfo()
+        public static void ParseInfo()
         {
             var file = ProjectFile.Find("ClassLibrary1.csproj");
             var csproj = ProjectFile.ParseInfo(file);

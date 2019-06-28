@@ -6,10 +6,10 @@ namespace Gu.Roslyn.Asserts.Tests
     [TestFixture]
     public partial class RoslynAssertTests
     {
-        public class DiagnosticsSuccess
+        public static class DiagnosticsSuccess
         {
             [Test]
-            public void OneErrorIndicatedPosition()
+            public static void OneErrorIndicatedPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -34,7 +34,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoErrorsSamePosition()
+            public static void TwoErrorsSamePosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -58,7 +58,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticIdOnly()
+            public static void OneErrorWithExpectedDiagnosticIdOnly()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -76,7 +76,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticIdAndMessage()
+            public static void OneErrorWithExpectedDiagnosticIdAndMessage()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -94,7 +94,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticIdAndPosition()
+            public static void OneErrorWithExpectedDiagnosticIdAndPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -112,7 +112,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnostics()
+            public static void OneErrorWithExpectedDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -130,7 +130,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticPositionFromIndicatedCode()
+            public static void OneErrorWithExpectedDiagnosticPositionFromIndicatedCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -152,7 +152,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticWithMessageAndPosition()
+            public static void OneErrorWithExpectedDiagnosticWithMessageAndPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -175,7 +175,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticWithMessageAndErrorIndicatedInCode()
+            public static void OneErrorWithExpectedDiagnosticWithMessageAndErrorIndicatedInCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -195,7 +195,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticsWithMessageAndErrorIndicatedInCode()
+            public static void OneErrorWithExpectedDiagnosticsWithMessageAndErrorIndicatedInCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -214,7 +214,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWithExpectedDiagnosticWithMessageWhenAnalyzerSupportsTwoDiagnostics()
+            public static void OneErrorWithExpectedDiagnosticWithMessageWhenAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -238,7 +238,7 @@ namespace RoslynSandbox
 
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscore))]
             [TestCase(typeof(FieldNameMustNotBeginWithUnderscoreDisabled))]
-            public void SingleDocumentOneErrorType(Type type)
+            public static void SingleDocumentOneErrorType(Type type)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -252,7 +252,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorPassingAnalyzer()
+            public static void SingleDocumentOneErrorPassingAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -266,7 +266,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentTwoErrorsIndicated()
+            public static void SingleDocumentTwoErrorsIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -282,7 +282,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneError()
+            public static void TwoDocumentsOneError()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -303,7 +303,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsTwoErrors()
+            public static void TwoDocumentsTwoErrors()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -327,7 +327,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsTwoErrorsDefaultDisabledAnalyzer()
+            public static void TwoDocumentsTwoErrorsDefaultDisabledAnalyzer()
             {
                 var foo1 = @"
 namespace RoslynSandbox
@@ -351,7 +351,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var code = @"
 namespace RoslynSandbox

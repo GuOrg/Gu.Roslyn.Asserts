@@ -6,10 +6,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public class FixTests
+    public static class FixTests
     {
         [Test]
-        public async Task SingleDocumentOneError()
+        public static async Task SingleDocumentOneError()
         {
             var code = @"
 namespace RoslynSandbox
@@ -41,7 +41,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SingleDocumentTwoError()
+        public static void SingleDocumentTwoErrors()
         {
             var code = @"
 namespace RoslynSandbox
@@ -72,7 +72,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SingleDocumentOneErrorCorrectFixAll()
+        public static void SingleDocumentOneErrorCorrectFixAll()
         {
             var code = @"
 namespace RoslynSandbox

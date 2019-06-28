@@ -2,12 +2,12 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
-        public class AnalyzerAssertNoAnalyzerDiagnosticsFail
+        public static class AnalyzerAssertNoAnalyzerDiagnosticsFail
         {
             [Test]
-            public void SingleDocumentFieldNameMustNotBeginWithUnderscore()
+            public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenAnalyzerThrows()
+            public static void WhenAnalyzerThrows()
             {
                 var code = @"
 namespace RoslynSandbox

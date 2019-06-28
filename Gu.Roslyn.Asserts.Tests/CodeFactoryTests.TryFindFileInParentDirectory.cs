@@ -7,14 +7,14 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Reflection;
     using NUnit.Framework;
 
-    public partial class CodeFactoryTests
+    public static partial class CodeFactoryTests
     {
-        public class TryFindFileInParentDirectory
+        public static class TryFindFileInParentDirectory
         {
             private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
 
             [Test]
-            public void TryFindProjectFileInParentDirectory()
+            public static void TryFindProjectFileInParentDirectory()
             {
                 var directory = ExecutingAssemblyDll.Directory;
                 var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
-            public void TryFindSolutionFileInParentDirectory()
+            public static void TryFindSolutionFileInParentDirectory()
             {
                 var directory = ExecutingAssemblyDll.Directory;
                 Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.sln", out var projectFile));

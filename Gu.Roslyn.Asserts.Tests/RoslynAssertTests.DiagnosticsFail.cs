@@ -7,12 +7,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
-        public class DiagnosticsFail
+        public static class DiagnosticsFail
         {
             [Test]
-            public void MessageDoNotMatch()
+            public static void MessageDoNotMatch()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -33,7 +33,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void NoErrorIndicated()
+            public static void NoErrorIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -54,7 +54,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void NoErrorIndicatedNoErrorAnalyzer()
+            public static void NoErrorIndicatedNoErrorAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -75,7 +75,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void NoErrorInCode()
+            public static void NoErrorInCode()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -101,7 +101,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsNoErrorIndicated()
+            public static void TwoDocumentsNoErrorIndicated()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -130,7 +130,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsNoErrorInCode()
+            public static void TwoDocumentsNoErrorInCode()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -156,7 +156,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscore()
+            public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -185,7 +185,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnostic()
+            public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnostic()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -225,7 +225,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWithWrongId()
+            public static void WithExpectedDiagnosticWithWrongId()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -261,7 +261,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWithWrongMessage()
+            public static void WithExpectedDiagnosticWithWrongMessage()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -298,7 +298,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWithWrongPosition()
+            public static void WithExpectedDiagnosticWithWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -338,7 +338,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsExpectedDiagnosticWithoutPath()
+            public static void TwoDocumentsExpectedDiagnosticWithoutPath()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -379,7 +379,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithMessageWrongPosition()
+            public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithMessageWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -419,7 +419,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchWithWrongMessage()
+            public static void IndicatedAndActualPositionDoNotMatchWithWrongMessage()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -459,7 +459,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreDisabled()
+            public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -488,7 +488,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoErrorsOnlyOneIndicated()
+            public static void TwoErrorsOnlyOneIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -509,7 +509,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsIndicatedAndActualPositionDoNotMatch()
+            public static void TwoDocumentsIndicatedAndActualPositionDoNotMatch()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -541,7 +541,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenEmpty()
+            public static void WhenEmpty()
             {
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray<DiagnosticDescriptor>.Empty), string.Empty));
                 var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics returns an empty array.";
@@ -549,7 +549,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenSingleNull()
+            public static void WhenSingleNull()
             {
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray.Create((DiagnosticDescriptor)null)), string.Empty));
                 var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics[0] returns null.";
@@ -557,7 +557,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenMoreThanOne()
+            public static void WhenMoreThanOne()
             {
                 var analyzer = new SupportedDiagnosticsAnalyzer(ImmutableArray.Create(
                     new DiagnosticDescriptor("ID1", "Title", "Message", "Category", DiagnosticSeverity.Warning, isEnabledByDefault: true),

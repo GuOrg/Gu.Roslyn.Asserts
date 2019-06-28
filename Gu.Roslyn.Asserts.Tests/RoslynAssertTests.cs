@@ -9,10 +9,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
 
-    public partial class RoslynAssertTests
+    public static partial class RoslynAssertTests
     {
         [Test]
-        public void ResetMetadataReferences()
+        public static void ResetMetadataReferences()
         {
             RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
             RoslynAssert.ResetMetadataReferences();
@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         [Explicit("Started failing on AppVeyor, don't know why.")]
         [Test]
-        public void AddTransitiveMetadataReferences()
+        public static void AddTransitiveMetadataReferences()
         {
             RoslynAssert.MetadataReferences.Clear();
             RoslynAssert.AddTransitiveMetadataReferences(typeof(CSharpCompilationOptions).Assembly);

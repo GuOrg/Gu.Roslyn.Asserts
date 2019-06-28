@@ -5,10 +5,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
-    public class AstWriterTests
+    public static class AstWriterTests
     {
         [Test]
-        public void SimpleClass()
+        public static void SimpleClass()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -29,7 +29,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SimpleClassAllTrivia()
+        public static void SimpleClassAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -50,7 +50,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SimpleClassJson()
+        public static void SimpleClassJson()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -71,7 +71,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void SimpleClassJsonAllTrivia()
+        public static void SimpleClassJsonAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -92,7 +92,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void Comment()
+        public static void Comment()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -132,7 +132,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void CommentAllTrivia()
+        public static void CommentAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -172,7 +172,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void CommentIgnoreTrivia()
+        public static void CommentIgnoreTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -212,7 +212,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void CommentJson()
+        public static void CommentJson()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
@@ -252,7 +252,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void CommentJsonAllTrivia()
+        public static void CommentJsonAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox

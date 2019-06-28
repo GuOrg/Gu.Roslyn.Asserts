@@ -3,12 +3,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Linq;
     using NUnit.Framework;
 
-    public partial class CodeFactoryTests
+    public static partial class CodeFactoryTests
     {
-        public class FromText
+        public static class FromText
         {
             [Test]
-            public void CreateSolutionFromSource()
+            public static void CreateSolutionFromSource()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -24,7 +24,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void CreateSolutionFromSources()
+            public static void CreateSolutionFromSources()
             {
                 var code1 = @"
 namespace Project1
@@ -53,7 +53,7 @@ namespace Project2
             }
 
             [Test]
-            public void CreateSolutionWithDependenciesFromUsings()
+            public static void CreateSolutionWithDependenciesFromUsings()
             {
                 var code1 = @"
 namespace Project1
@@ -84,7 +84,7 @@ namespace Project2
             }
 
             [Test]
-            public void CreateSolutionWithDependenciesFromQualified()
+            public static void CreateSolutionWithDependenciesFromQualified()
             {
                 var code1 = @"
 namespace Project1
@@ -113,7 +113,7 @@ namespace Project2
             }
 
             [Test]
-            public void CreateSolutionWithInheritQualified()
+            public static void CreateSolutionWithInheritQualified()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -144,7 +144,7 @@ namespace RoslynSandbox.Client
             }
 
             [Test]
-            public void CreateSolutionWithOneProject()
+            public static void CreateSolutionWithOneProject()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -172,7 +172,7 @@ namespace RoslynSandbox.Bar
             }
 
             [Test]
-            public void CreateSolutionWhenNestedNamespaces()
+            public static void CreateSolutionWhenNestedNamespaces()
             {
                 var resourcesCode = @"
 namespace RoslynSandbox.Properties

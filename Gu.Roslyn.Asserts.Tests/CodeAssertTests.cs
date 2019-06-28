@@ -8,10 +8,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Editing;
     using NUnit.Framework;
 
-    public class CodeAssertTests
+    public static class CodeAssertTests
     {
         [Test]
-        public void WhenEqual()
+        public static void WhenEqual()
         {
             var expected = @"
 namespace RoslynSandbox
@@ -35,7 +35,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenEqualWhitespaceEnd()
+        public static void WhenEqualWhitespaceEnd()
         {
             var expected = @"
 namespace RoslynSandbox
@@ -65,7 +65,7 @@ a
         }
 
         [TestCase("\r\nExpected:\r\n\r\nnamespace RoslynSandbox", "\r\nExpected:\r\n\nnamespace RoslynSandbox")]
-        public void WhenEqualMixedNewLines(string expected, string actual)
+        public static void WhenEqualMixedNewLines(string expected, string actual)
         {
             CodeAssert.AreEqual(expected, actual);
         }
@@ -73,13 +73,13 @@ a
         [TestCase("\\r\\n", "\\r\\n")]
         [TestCase("\\r\\n", "\\n")]
         [TestCase("\\n", "\\n")]
-        public void WhenCodeContainsNewLines(string x, string y)
+        public static void WhenCodeContainsNewLines(string x, string y)
         {
             CodeAssert.AreEqual(x, y);
         }
 
         [Test]
-        public void WhenNotEqual()
+        public static void WhenNotEqual()
         {
             var expectedCode = @"
 namespace RoslynSandbox
@@ -124,7 +124,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenNotEqualUnknownFileName()
+        public static void WhenNotEqualUnknownFileName()
         {
             var expectedCode = @"        private readonly int _value;";
 
@@ -138,7 +138,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenManyLines()
+        public static void WhenManyLines()
         {
             var expectedCode = "line1\r\n" +
                                "line2";
@@ -161,7 +161,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenNotEqualEndWhenExpectedHasNewLine()
+        public static void WhenNotEqualEndWhenExpectedHasNewLine()
         {
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a\r\n", "a"));
             var expected = "Mismatch at end.\r\n" +
@@ -172,7 +172,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenNotEqualEndWhenActualHasNewLine()
+        public static void WhenNotEqualEndWhenActualHasNewLine()
         {
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("a", "a\r\n"));
             var expected = "Mismatch at end.\r\n" +
@@ -183,7 +183,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenNotEqualEnd()
+        public static void WhenNotEqualEnd()
         {
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual("\r\na\r\n", "\r\na\r\n\r\n"));
             var expected = "Mismatch at end.\r\n" +
@@ -198,7 +198,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public async Task MakeSealed()
+        public static async Task MakeSealed()
         {
             var testCode = @"
 namespace RoslynSandbox

@@ -1,11 +1,11 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
-    public class CodeComparerTests
+    public static class CodeComparerTests
     {
         [Test]
-        public void WhenEqual()
+        public static void WhenEqual()
         {
             var x = @"
 namespace RoslynSandbox
@@ -28,7 +28,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public void WhenEqualWhitespaceEnd()
+        public static void WhenEqualWhitespaceEnd()
         {
             var x = @"
 namespace RoslynSandbox
@@ -58,13 +58,13 @@ a
         }
 
         [TestCase("\r\nExpected:\r\n\r\nnamespace RoslynSandbox", "\r\nExpected:\r\n\nnamespace RoslynSandbox")]
-        public void WhenEqualMixedNewLines(string x, string y)
+        public static void WhenEqualMixedNewLines(string x, string y)
         {
             Assert.AreEqual(true, CodeComparer.Equals(x, y));
         }
 
         [Test]
-        public void WhenNotEqual()
+        public static void WhenNotEqual()
         {
             var x = @"
 namespace RoslynSandbox

@@ -3,10 +3,10 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Linq;
     using NUnit.Framework;
 
-    public class SolutionFileTests
+    public static class SolutionFileTests
     {
         [Test]
-        public void TryFind()
+        public static void TryFind()
         {
             Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var sln));
             Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
@@ -15,14 +15,14 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
-        public void Find()
+        public static void Find()
         {
             var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
         }
 
         [Test]
-        public void ParseInfo()
+        public static void ParseInfo()
         {
             var file = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var sln = SolutionFile.ParseInfo(file);

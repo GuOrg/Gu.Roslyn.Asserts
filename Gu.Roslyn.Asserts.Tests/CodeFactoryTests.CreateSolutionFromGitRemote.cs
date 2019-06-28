@@ -4,12 +4,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Linq;
     using NUnit.Framework;
 
-    public partial class CodeFactoryTests
+    public static partial class CodeFactoryTests
     {
-        public class CreateSolutionFromGitRemote
+        public static class CreateSolutionFromGitRemote
         {
             [Test]
-            public void Basic()
+            public static void Basic()
             {
                 var sln = CodeFactory.CreateSolution(
                     new Uri("https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln"),

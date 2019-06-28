@@ -3,12 +3,12 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
-    public partial class CodeReaderTests
+    public static partial class CodeReaderTests
     {
-        public class FindLinePositions
+        public static class FindLinePositions
         {
             [Test]
-            public void OneErrorInClass()
+            public static void OneErrorInClass()
             {
                 var code = @"using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoErrorsInClass()
+            public static void TwoErrorsInClass()
             {
                 var code = @"using System;
 using System.Collections.Generic;
