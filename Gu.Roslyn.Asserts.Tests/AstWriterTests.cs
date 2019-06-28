@@ -1,7 +1,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
-    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public void SimpleClass()
         {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(@"
+            var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
 {
     public class Foo
@@ -32,7 +31,7 @@ namespace RoslynSandbox
         [Test]
         public void SimpleClassJson()
         {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(@"
+            var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
 {
     public class Foo
@@ -53,7 +52,7 @@ namespace RoslynSandbox
         [Test]
         public void Comment()
         {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(@"
+            var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
 {
     /// <summary>
@@ -93,7 +92,7 @@ namespace RoslynSandbox
         [Test]
         public void CommentJson()
         {
-            SyntaxTree tree = CSharpSyntaxTree.ParseText(@"
+            var tree = CSharpSyntaxTree.ParseText(@"
 namespace RoslynSandbox
 {
     /// <summary>

@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -21,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Dump the node recursively to a json format for diffing.
+        /// Dump the node recursively to a string for diffing.
         /// </summary>
         /// <param name="node">The <see cref="SyntaxNode"/>.</param>
         /// <param name="settings">The <see cref="AstWriterSettings"/>.</param>
@@ -39,16 +40,20 @@ namespace Gu.Roslyn.Asserts
         {
             this.WriteStartElement()
                 .Write(" ");
-            if (this.settings.Json)
+            switch (this.settings.Format)
             {
-                this.WriteProperty("Kind", node.Kind().ToString());
-            }
-            else
-            {
-                this.Write(node.Kind().ToString());
+                case AstFormat.Light:
+                    this.Write(node.Kind().ToString());
+                    break;
+                case AstFormat.Json:
+                    this.WriteProperty("Kind", node.Kind().ToString());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             this.indentation.Push();
+
             this.WriteTrivia("LeadingTrivia", node.GetLeadingTrivia())
                 .WriteTrivia("TrailingTrivia", node.GetTrailingTrivia())
                 .WriteChildTokens(node.ChildTokens().ToList())
@@ -63,10 +68,10 @@ namespace Gu.Roslyn.Asserts
         {
             if (children.Any())
             {
-                this.WriteLine(this.settings.Json ? "," : string.Empty)
+                this.WriteLine(this.settings.Format == AstFormat.Json ? "," : string.Empty)
                     .Write(this.indentation)
-                    .Write(this.settings.Json ? "\"ChildNodes\":  [ " : "ChildNodes:  [ ");
-                this.indentation.PushChars(this.settings.Json ? 17 : 15);
+                    .Write(this.settings.Format == AstFormat.Json ? "\"ChildNodes\":  [ " : "ChildNodes:  [ ");
+                this.indentation.PushChars(this.settings.Format == AstFormat.Json ? 17 : 15);
                 for (var i = 0; i < children.Count; i++)
                 {
                     this.Write(children[i]);
@@ -76,7 +81,7 @@ namespace Gu.Roslyn.Asserts
                     }
                     else
                     {
-                        this.WriteLine(this.settings.Json ? "," : string.Empty)
+                        this.WriteLine(this.settings.Format == AstFormat.Json ? "," : string.Empty)
                             .Write(this.indentation);
                     }
                 }
@@ -91,10 +96,10 @@ namespace Gu.Roslyn.Asserts
         {
             if (children.Any())
             {
-                this.WriteLine(this.settings.Json ? "," : string.Empty)
+                this.WriteLine(this.settings.Format == AstFormat.Json ? "," : string.Empty)
                     .Write(this.indentation)
-                    .Write(this.settings.Json ? "\"ChildTokens\": [ " : "ChildTokens: [ ");
-                this.indentation.PushChars(this.settings.Json ? 17 : 15);
+                    .Write(this.settings.Format == AstFormat.Json ? "\"ChildTokens\": [ " : "ChildTokens: [ ");
+                this.indentation.PushChars(this.settings.Format == AstFormat.Json ? 17 : 15);
                 for (var i = 0; i < children.Count; i++)
                 {
                     var token = children[i];
@@ -105,7 +110,7 @@ namespace Gu.Roslyn.Asserts
                     }
                     else
                     {
-                        this.WriteLine(this.settings.Json ? "," : string.Empty)
+                        this.WriteLine(this.settings.Format == AstFormat.Json ? "," : string.Empty)
                             .Write(this.indentation);
                     }
                 }
@@ -120,29 +125,34 @@ namespace Gu.Roslyn.Asserts
         {
             this.WriteStartElement()
                 .Write(" ");
-            if (this.settings.Json)
+            switch (this.settings.Format)
             {
-                this.WriteProperty("Kind", token.Kind().ToString())
-                    .Write(", ")
-                    .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
-                if (token.Text != token.ValueText)
-                {
-                    this.Write(", ")
-                        .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
-                }
-            }
-            else
-            {
-                if (token.IsKeyword())
-                {
-                    this.Write(token.Kind().ToString());
-                }
-                else
-                {
-                    this.Write(token.Kind().ToString())
-                        .Write(" ")
+                case AstFormat.Light:
+                    if (token.IsKeyword())
+                    {
+                        this.Write(token.Kind().ToString());
+                    }
+                    else
+                    {
+                        this.Write(token.Kind().ToString())
+                            .Write(" ")
+                            .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
+                    }
+
+                    break;
+                case AstFormat.Json:
+                    this.WriteProperty("Kind", token.Kind().ToString())
+                        .Write(", ")
                         .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
-                }
+                    if (token.Text != token.ValueText)
+                    {
+                        this.Write(", ")
+                            .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
@@ -155,13 +165,16 @@ namespace Gu.Roslyn.Asserts
         {
             if (triviaList.Any())
             {
-                if (this.settings.Json)
+                switch (this.settings.Format)
                 {
-                    this.Write(", \"").Write(name).Write("\": [ ");
-                }
-                else
-                {
-                    this.Write(" ").Write(name).Write(": [ ");
+                    case AstFormat.Light:
+                        this.Write(" ").Write(name).Write(": [ ");
+                        break;
+                    case AstFormat.Json:
+                        this.Write(", \"").Write(name).Write("\": [ ");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 for (var i = 0; i < triviaList.Count; i++)
@@ -177,7 +190,7 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter Write(SyntaxTrivia trivia)
         {
-            if (this.settings.Json)
+            if (this.settings.Format == AstFormat.Json)
             {
                 return this.Write("{ ")
                        .WriteProperty("Kind", trivia.Kind().ToString())
@@ -200,15 +213,18 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter WriteProperty(string name, string value)
         {
-            if (this.settings.Json)
+            switch (this.settings.Format)
             {
-                this.builder.Append('"')
-                    .Append(name)
-                    .Append('"');
-            }
-            else
-            {
-                this.builder.Append(name);
+                case AstFormat.Light:
+                    this.builder.Append(name);
+                    break;
+                case AstFormat.Json:
+                    this.builder.Append('"')
+                        .Append(name)
+                        .Append('"');
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             this.builder

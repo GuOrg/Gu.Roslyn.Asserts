@@ -8,25 +8,25 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// For dumping all the things in light format.
         /// </summary>
-        public static readonly AstWriterSettings Default = new AstWriterSettings(json: false);
+        public static readonly AstWriterSettings Default = new AstWriterSettings(AstFormat.Light);
 
         /// <summary>
         /// For dumping all the things in JSON format.
         /// </summary>
-        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(json: true);
+        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(AstFormat.Json);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AstWriterSettings"/> class.
         /// </summary>
         /// <param name="json">If the dump should be formatted as JSON.</param>
-        public AstWriterSettings(bool json)
+        public AstWriterSettings(AstFormat format)
         {
-            this.Json = json;
+            this.Format = format;
         }
 
         /// <summary>
         /// Gets a value indicating whether the dump should be formatted as JSON.
         /// </summary>
-        public bool Json { get; }
+        public AstFormat Format { get; }
     }
 }
