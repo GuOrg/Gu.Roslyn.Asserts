@@ -32,10 +32,10 @@ namespace Gu.Roslyn.Asserts.Tests
                            "            namespaceKeyword: SyntaxFactory.Token(default, SyntaxKind.NamespaceKeyword, SyntaxFactory.TriviaList(SyntaxFactory.Space)),\r\n" +
                            "            name: SyntaxFactory.QualifiedName(\r\n" +
                            "                left: SyntaxFactory.IdentifierName(\r\n" +
-                           "                    name: SyntaxFactory.Identifier(\"A\")),\r\n" +
+                           "                    identifier: SyntaxFactory.Identifier(\"A\")),\r\n" +
                            "                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),\r\n" +
                            "                right: SyntaxFactory.IdentifierName(\r\n" +
-                           "                    name: SyntaxFactory.Identifier(default, \"B\", SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),\r\n" +
+                           "                    identifier: SyntaxFactory.Identifier(default, \"B\", SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),\r\n" +
                            "            openBraceToken: SyntaxFactory.Token(default, SyntaxKind.OpenBraceToken, SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),\r\n" +
                            "            externs: default,\r\n" +
                            "            usings: default,\r\n" +

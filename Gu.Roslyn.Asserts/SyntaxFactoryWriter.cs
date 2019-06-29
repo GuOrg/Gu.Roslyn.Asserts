@@ -61,7 +61,7 @@ namespace Gu.Roslyn.Asserts
                 case IdentifierNameSyntax identifierName:
                     return this.AppendLine("SyntaxFactory.IdentifierName(")
                                .PushIndent()
-                               .WriteArgument("name", identifierName.Identifier, closeArgumentList: true)
+                               .WriteArgument("identifier", identifierName.Identifier, closeArgumentList: true)
                                .PopIndent();
                 case QualifiedNameSyntax qualifiedName:
                     return this.AppendLine("SyntaxFactory.QualifiedName(")
