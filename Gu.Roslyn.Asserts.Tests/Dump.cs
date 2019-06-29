@@ -14,23 +14,23 @@ namespace Gu.Roslyn.Asserts.Tests
     [Explicit("Script")]
     public static class Dump
     {
-        private static readonly Type[] NodeTypes = typeof(CompilationUnitSyntax)
-                                                   .Assembly.GetTypes()
-                                                   .Where(x => typeof(CSharpSyntaxNode).IsAssignableFrom(x) && x.IsPublic)
-                                                   .ToArray();
-
-        private static readonly Dictionary<Type, MethodInfo[]> Methods = typeof(SyntaxFactory)
+        private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap = typeof(SyntaxFactory)
                                                                                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                                                                                   .Where(x => NodeTypes.Contains(x.ReturnType))
+                                                                                   .Where(x => !x.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(typeof(CSharpSyntaxNode)))
                                                                                    .OrderBy(x => x.Name)
                                                                                    .GroupBy(x => x.ReturnType)
                                                                                    .ToDictionary(x => x.Key, x => x.ToArray());
 
-        [TestCaseSource(nameof(NodeTypes))]
-        public static void CodeGenNodes(Type type)
+        private static readonly Type[] NodeTypes = TypeFactoryMethodMap.Keys.ToArray();
+
+        [Test]
+        public static void CodeGenNodes()
         {
-            if (Methods.TryGetValue(type, out var candidates))
+            var stringBuilder = new StringBuilder();
+            foreach (var kvp in TypeFactoryMethodMap)
             {
+                var type = kvp.Key;
+                var candidates = kvp.Value;
                 var method = candidates.MaxBy(x => x.GetParameters().Length);
                 var parameters = method.GetParameters();
                 var variable = type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
@@ -39,23 +39,22 @@ namespace Gu.Roslyn.Asserts.Tests
                     variable = variable.Substring(0, variable.Length - 6);
                 }
 
-                var stringBuilder = new StringBuilder()
-                    .AppendLine($"                case {type.Name} {variable}:")
-                    .AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
-                    .AppendLine($"                               .PushIndent()");
-                foreach (var parameter in parameters)
+                stringBuilder.AppendLine($"                case {type.Name} {variable}:")
+                             .AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
+                             .AppendLine($"                               .PushIndent()");
+                for (var i = 0; i < parameters.Length; i++)
                 {
-                    var commaOrParen = ReferenceEquals(parameter, parameters.Last()) ? ")" : ",";
-                    stringBuilder.AppendLine($"                                .WriteArgument(\"{parameter.Name}\", {variable}.{parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1)}, \"{commaOrParen}\")");
+                    var parameter = parameters[i];
+                    var property = parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                    var closeArg = i == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
+                    stringBuilder.AppendLine($"                                .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
                 }
 
                 stringBuilder.AppendLine("                               .PopIndent();");
-                Console.Write(stringBuilder.ToString());
             }
-            else
-            {
-                Assert.Inconclusive();
-            }
+
+            var code = stringBuilder.ToString();
+            Console.Write(code);
         }
 
         [Test]
