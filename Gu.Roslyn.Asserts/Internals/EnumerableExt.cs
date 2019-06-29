@@ -342,5 +342,64 @@ namespace Gu.Roslyn.Asserts.Internals
                 return min;
             }
         }
+
+        /// <summary>
+        /// Return the item with minimum keyed by <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
+        /// <typeparam name="TKey">The type of the value to compare.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The single item.</param>
+        /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
+        internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return source.MaxBy(selector, null);
+        }
+
+        /// <summary>
+        /// Return the item with minimum keyed by <paramref name="selector"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the items in the collection.</typeparam>
+        /// <typeparam name="TKey">The type of the value to compare.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The single item.</param>
+        /// <param name="comparer">The <see cref="IComparer{TKey}"/>.</param>
+        /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
+        internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            comparer = comparer ?? Comparer<TKey>.Default;
+            using (var sourceIterator = source.GetEnumerator())
+            {
+                if (!sourceIterator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains no elements");
+                }
+
+                var max = sourceIterator.Current;
+                var maxKey = selector(max);
+                while (sourceIterator.MoveNext())
+                {
+                    var candidate = sourceIterator.Current;
+                    var candidateKey = selector(candidate);
+                    if (comparer.Compare(candidateKey, maxKey) > 0)
+                    {
+                        max = candidate;
+                        maxKey = candidateKey;
+                    }
+                }
+
+                return max;
+            }
+        }
     }
 }

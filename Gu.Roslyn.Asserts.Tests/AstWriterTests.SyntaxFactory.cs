@@ -15,29 +15,19 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                                .WithReferences(Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(SyntaxFactory)))
                                                                                .WithImports("Microsoft.CodeAnalysis.CSharp", "Microsoft.CodeAnalysis.CSharp.Syntax")
                                                                                .WithEmitDebugInformation(emitDebugInformation: true);
-
+            [Explicit("Fix")]
             [Test]
-            public static async Task SomeTest()
+            public static async Task GenerateSyntaxFactoryCallForSimpleClass()
             {
-                var expression = @"SyntaxFactory.CompilationUnit(
-                    externs: default,
-                    usings: default,
-                    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
-                        SyntaxFactory.ClassDeclaration(
-                            attributeLists: default,
-                            modifiers: default,
-                            keyword: SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.ClassKeyword, SyntaxFactory.TriviaList(SyntaxFactory.Space)),
-                            identifier: SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), ""C"", SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
-                            typeParameterList: default,
-                            baseList: default,
-                            constraintClauses: default,
-                            openBraceToken: SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.OpenBraceToken, SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
-                            members: default,
-                            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
-                            semicolonToken: SyntaxFactory.Token(SyntaxKind.None))),
-                    attributeLists: default)";
-                var result = await CSharpScript.EvaluateAsync<SyntaxNode>(expression, ScriptOptions);
-                CodeAssert.AreEqual("class C\n{\n}", result.ToString());
+                var code = "namespace A.B\n" +
+                           "{\n" +
+                           "    public class C\n" +
+                           "    {\n" +
+                           "    }\n" +
+                           "}\n";
+                var call = SyntaxFactoryWriter.Write(code);
+                var expected = "class C\n{\n}";
+                CodeAssert.AreEqual(expected, call);
             }
 
             private static async Task AssertRoundtrip(SyntaxNode node)
