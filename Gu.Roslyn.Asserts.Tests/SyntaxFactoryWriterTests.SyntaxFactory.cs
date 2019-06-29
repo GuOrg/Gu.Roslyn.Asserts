@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                            .WithEmitDebugInformation(emitDebugInformation: true);
 
         [Test]
-        public static void GenerateSyntaxFactoryCallForSimpleClass()
+        public static async Task GenerateSyntaxFactoryCallForSimpleClass()
         {
             var code = "namespace A.B\n" +
                        "{\n" +
@@ -31,8 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests
                            "        SyntaxFactory.NamespaceDeclaration(\r\n" +
                            "            namespaceKeyword: SyntaxFactory.Token(default, SyntaxKind.NamespaceKeyword, SyntaxFactory.TriviaList(SyntaxFactory.Space)),\r\n" +
                            "            name: SyntaxFactory.QualifiedName(\r\n" +
-                           "                left: SyntaxFactory.IdentifierName(\r\n" +
-                           "                    identifier: SyntaxFactory.Identifier(\"A\")),\r\n" +
+                           "                left: SyntaxFactory.IdentifierName(\"A\"),\r\n" +
                            "                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),\r\n" +
                            "                right: SyntaxFactory.IdentifierName(\r\n" +
                            "                    identifier: SyntaxFactory.Identifier(default, \"B\", SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),\r\n" +
@@ -57,13 +56,14 @@ namespace Gu.Roslyn.Asserts.Tests
                            "            semicolonToken: default)),\r\n" +
                            "    attributeLists: default)";
             CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
         }
 
-        private static async Task AssertRoundtrip(SyntaxNode node)
+        private static async Task AssertRoundtrip(string code)
         {
-            var code = AstWriter.Serialize(node, AstWriterSettings.Default);
-            var result = await CSharpScript.EvaluateAsync<SyntaxNode>(code, ScriptOptions);
-            CodeAssert.AreEqual(node.ToString(), result.ToString());
+            var call = SyntaxFactoryWriter.Write(code);
+            var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
+            CodeAssert.AreEqual(code, result.ToString());
         }
     }
 }

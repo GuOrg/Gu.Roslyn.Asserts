@@ -59,6 +59,14 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("semicolonToken", classDeclaration.SemicolonToken, closeArgumentList: true)
                                .PopIndent();
                 case IdentifierNameSyntax identifierName:
+                    if (!identifierName.Identifier.HasLeadingTrivia &&
+                        !identifierName.Identifier.HasTrailingTrivia)
+                    {
+                        return this.Append("SyntaxFactory.IdentifierName(\"")
+                                   .Append(identifierName.Identifier.Text)
+                                   .Append("\")");
+                    }
+
                     return this.AppendLine("SyntaxFactory.IdentifierName(")
                                .PushIndent()
                                .WriteArgument("identifier", identifierName.Identifier, closeArgumentList: true)
