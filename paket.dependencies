@@ -11,7 +11,8 @@ group Build
 group Test
   storage: none
   source http://www.nuget.org/api/v2/
-  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+  nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.10
+  nuget Microsoft.CodeAnalysis.CSharp.Scripting 2.10
   nuget System.Runtime.CompilerServices.Unsafe
   nuget NUnit
   nuget NUnit3TestAdapter
