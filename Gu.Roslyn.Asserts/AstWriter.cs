@@ -141,6 +141,11 @@ namespace Gu.Roslyn.Asserts
                         this.Write(token.Kind().ToString())
                             .Write(" ")
                             .WriteProperty("Text", token.Text.Replace("\r", "\\r").Replace("\n", "\\n"));
+                        if (token.Text != token.ValueText)
+                        {
+                            this.Write(" ")
+                                .WriteProperty("ValueText", token.ValueText.Replace("\r", "\\r").Replace("\n", "\\n"));
+                        }
                     }
 
                     break;
