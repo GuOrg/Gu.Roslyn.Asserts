@@ -6,6 +6,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Reflection;
     using System.Text;
     using Gu.Roslyn.Asserts.Internals;
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                                    .ToDictionary(x => x.Key, x => x.ToArray());
 
         [TestCaseSource(nameof(NodeTypes))]
-        public static void SomeTest(Type type)
+        public static void CodeGenNodes(Type type)
         {
             if (Methods.TryGetValue(type, out var candidates))
             {
@@ -35,7 +36,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var variable = type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
                 if (variable.EndsWith("Syntax"))
                 {
-                    variable = variable.Substring(variable.Length - 6);
+                    variable = variable.Substring(0, variable.Length - 6);
                 }
 
                 var stringBuilder = new StringBuilder()
@@ -44,7 +45,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     .AppendLine($"                               .PushIndent()");
                 foreach (var parameter in parameters)
                 {
-                    var commaOrParen = ReferenceEquals(parameter, parameters.Last()) ? ")" : ":";
+                    var commaOrParen = ReferenceEquals(parameter, parameters.Last()) ? ")" : ",";
                     stringBuilder.AppendLine($"                                .WriteArgument(\"{parameter.Name}\", {variable}.{parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1)}, \"{commaOrParen}\")");
                 }
 
@@ -54,6 +55,17 @@ namespace Gu.Roslyn.Asserts.Tests
             else
             {
                 Assert.Inconclusive();
+            }
+        }
+
+        [Test]
+        public static void MethodsReturningToken()
+        {
+            foreach (var method in typeof(SyntaxFactory).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                                                        .Where(x => x.ReturnType == typeof(SyntaxToken))
+                                                        .OrderBy(x => x.Name))
+            {
+                Console.WriteLine(method);
             }
         }
     }
