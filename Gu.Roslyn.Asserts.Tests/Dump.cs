@@ -6,7 +6,6 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Reflection;
     using System.Text;
     using Gu.Roslyn.Asserts.Internals;
-    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
