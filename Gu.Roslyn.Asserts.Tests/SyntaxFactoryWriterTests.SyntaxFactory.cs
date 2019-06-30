@@ -88,11 +88,16 @@ namespace Gu.Roslyn.Asserts.Tests
 
         [TestCase("int x = 1")]
         [TestCase("long x = 1")]
+        [TestCase("object x = null")]
+        [TestCase("var x = true")]
+        [TestCase("var x = false")]
         [TestCase("var x = 1")]
         [TestCase("var x = 1.2")]
+        [TestCase("string x = \"a\"")]
+        [TestCase("char x = 'a'")]
         public static async Task ClassWithTokenFields(string expression)
         {
-            var code = @"namespace A.B
+            var code = @"namespace A
 {
     class C
     {

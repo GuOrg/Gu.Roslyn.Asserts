@@ -223,7 +223,7 @@ namespace Gu.Roslyn.Asserts
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.CharacterLiteralToken when token.Text != token.ValueText:
@@ -231,7 +231,7 @@ namespace Gu.Roslyn.Asserts
                     return this.AppendLine("SyntaxFactory.Literal(")
                                .PushIndent()
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value, closeArgumentList: true)
+                               .WriteArgument("value", token.ValueText, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.CharacterLiteralToken:
                 case SyntaxKind.NumericLiteralToken:
@@ -241,7 +241,7 @@ namespace Gu.Roslyn.Asserts
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
@@ -249,14 +249,14 @@ namespace Gu.Roslyn.Asserts
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralToken when token.Text != token.ValueText:
                     return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
                                .PushIndent()
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value, closeArgumentList: true)
+                               .WriteArgument("value", token.ValueText, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralToken:
                     return this.Append($"SyntaxFactory.XmlTextLiteral({token.Value})");
@@ -265,7 +265,7 @@ namespace Gu.Roslyn.Asserts
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.Value)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralNewLineToken:
@@ -511,23 +511,6 @@ namespace Gu.Roslyn.Asserts
 
             return this.Append("\"")
                       .CloseArgument(closeArgumentList);
-        }
-
-        private SyntaxFactoryWriter WriteArgument(string parameter, object value, bool closeArgumentList = false)
-        {
-            switch (value)
-            {
-                case string text:
-                    return this.WriteArgument(parameter, text, closeArgumentList);
-                case SyntaxToken _:
-                case SyntaxNode _:
-                    throw new InvalidOperationException("You did not want this overload.");
-                default:
-                    return this.Append(parameter)
-                               .Append(": ")
-                               .Append(value.ToString())
-                               .CloseArgument(closeArgumentList);
-            }
         }
 
         private SyntaxFactoryWriter Append(string text)
