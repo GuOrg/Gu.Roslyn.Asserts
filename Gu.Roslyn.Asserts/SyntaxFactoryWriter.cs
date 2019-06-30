@@ -58,15 +58,104 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("closeBraceToken", classDeclaration.CloseBraceToken)
                                .WriteArgument("semicolonToken", classDeclaration.SemicolonToken, closeArgumentList: true)
                                .PopIndent();
+                case ConstructorDeclarationSyntax constructorDeclaration:
+                    return this.AppendLine("SyntaxFactory.ConstructorDeclaration(")
+                               .PushIndent()
+                               .WriteArgument("attributeLists", constructorDeclaration.AttributeLists)
+                               .WriteArgument("modifiers", constructorDeclaration.Modifiers)
+                               .WriteArgument("identifier", constructorDeclaration.Identifier)
+                               .WriteArgument("parameterList", constructorDeclaration.ParameterList)
+                               .WriteArgument("initializer", constructorDeclaration.Initializer)
+                               .WriteArgument("body", constructorDeclaration.Body)
+                               .WriteArgument("expressionBody", constructorDeclaration.ExpressionBody)
+                               .WriteArgument("semicolonToken", constructorDeclaration.SemicolonToken, closeArgumentList: true)
+                               .PopIndent();
+                case ParameterListSyntax parameterList:
+                    return this.AppendLine("SyntaxFactory.ParameterList(")
+                               .PushIndent()
+                               .WriteArgument("openParenToken", parameterList.OpenParenToken)
+                               .WriteArgument("parameters", parameterList.Parameters)
+                               .WriteArgument("closeParenToken", parameterList.CloseParenToken, closeArgumentList: true)
+                               .PopIndent();
+                case BlockSyntax block:
+                    return this.AppendLine("SyntaxFactory.Block(")
+                               .PushIndent()
+                               .WriteArgument("openBraceToken", block.OpenBraceToken)
+                               .WriteArgument("statements", block.Statements)
+                               .WriteArgument("closeBraceToken", block.CloseBraceToken, closeArgumentList: true)
+                               .PopIndent();
+                case LocalDeclarationStatementSyntax localDeclarationStatement:
+                    return this.AppendLine("SyntaxFactory.LocalDeclarationStatement(")
+                               .PushIndent()
+                               .WriteArgument("modifiers", localDeclarationStatement.Modifiers)
+                               .WriteArgument("declaration", localDeclarationStatement.Declaration)
+                               .WriteArgument("semicolonToken", localDeclarationStatement.SemicolonToken, closeArgumentList: true)
+                               .PopIndent();
+                case FieldDeclarationSyntax fieldDeclaration:
+                    return this.AppendLine("SyntaxFactory.FieldDeclaration(")
+                               .PushIndent()
+                               .WriteArgument("attributeLists", fieldDeclaration.AttributeLists)
+                               .WriteArgument("modifiers", fieldDeclaration.Modifiers)
+                               .WriteArgument("declaration", fieldDeclaration.Declaration)
+                               .WriteArgument("semicolonToken", fieldDeclaration.SemicolonToken, closeArgumentList: true)
+                               .PopIndent();
+                case VariableDeclarationSyntax variableDeclaration:
+                    return this.AppendLine("SyntaxFactory.VariableDeclaration(")
+                               .PushIndent()
+                               .WriteArgument("type", variableDeclaration.Type)
+                               .WriteArgument("variables", variableDeclaration.Variables, closeArgumentList: true)
+                               .PopIndent();
+                case VariableDeclaratorSyntax variableDeclarator:
+                    return this.AppendLine("SyntaxFactory.VariableDeclarator(")
+                               .PushIndent()
+                               .WriteArgument("identifier", variableDeclarator.Identifier)
+                               .WriteArgument("argumentList", variableDeclarator.ArgumentList)
+                               .WriteArgument("initializer", variableDeclarator.Initializer, closeArgumentList: true)
+                               .PopIndent();
+                case EqualsValueClauseSyntax equalsValueClause:
+                    return this.AppendLine("SyntaxFactory.EqualsValueClause(")
+                               .PushIndent()
+                               .WriteArgument("equalsToken", equalsValueClause.EqualsToken)
+                               .WriteArgument("value", equalsValueClause.Value, closeArgumentList: true)
+                               .PopIndent();
+                case LiteralExpressionSyntax literalExpression:
+                    return this.AppendLine("SyntaxFactory.LiteralExpression(")
+                               .PushIndent()
+                               .WriteArgument("kind", literalExpression.Kind())
+                               .WriteArgument("token", literalExpression.Token, closeArgumentList: true)
+                               .PopIndent();
+                case PredefinedTypeSyntax predefinedType:
+                    return this.AppendLine("SyntaxFactory.PredefinedType(")
+                               .PushIndent()
+                               .WriteArgument("keyword", predefinedType.Keyword, closeArgumentList: true)
+                               .PopIndent();
+                case InterpolatedStringExpressionSyntax interpolatedStringExpression:
+                    return this.AppendLine("SyntaxFactory.InterpolatedStringExpression(")
+                               .PushIndent()
+                               .WriteArgument("stringStartToken", interpolatedStringExpression.StringStartToken)
+                               .WriteArgument("contents", interpolatedStringExpression.Contents)
+                               .WriteArgument("stringEndToken", interpolatedStringExpression.StringEndToken, closeArgumentList: true)
+                               .PopIndent();
+                case InterpolatedStringTextSyntax interpolatedStringText:
+                    return this.AppendLine("SyntaxFactory.InterpolatedStringText(")
+                               .PushIndent()
+                               .WriteArgument("textToken", interpolatedStringText.TextToken, closeArgumentList: true)
+                               .PopIndent();
+                case InterpolationSyntax interpolation:
+                    return this.AppendLine("SyntaxFactory.Interpolation(")
+                               .PushIndent()
+                               .WriteArgument("openBraceToken", interpolation.OpenBraceToken)
+                               .WriteArgument("expression", interpolation.Expression)
+                               .WriteArgument("alignmentClause", interpolation.AlignmentClause)
+                               .WriteArgument("formatClause", interpolation.FormatClause)
+                               .WriteArgument("closeBraceToken", interpolation.CloseBraceToken, closeArgumentList: true)
+                               .PopIndent();
+                case IdentifierNameSyntax identifierName when !identifierName.Identifier.HasLeadingTrivia &&
+                                                              !identifierName.Identifier.HasTrailingTrivia:
+                    return this.Append("SyntaxFactory.IdentifierName(\"")
+                               .Append(identifierName.Identifier.Text)
+                               .Append("\")");
                 case IdentifierNameSyntax identifierName:
-                    if (!identifierName.Identifier.HasLeadingTrivia &&
-                        !identifierName.Identifier.HasTrailingTrivia)
-                    {
-                        return this.Append("SyntaxFactory.IdentifierName(\"")
-                                   .Append(identifierName.Identifier.Text)
-                                   .Append("\")");
-                    }
-
                     return this.AppendLine("SyntaxFactory.IdentifierName(")
                                .PushIndent()
                                .WriteArgument("identifier", identifierName.Identifier, closeArgumentList: true)
@@ -93,93 +182,122 @@ namespace Gu.Roslyn.Asserts
                 return this;
             }
 
-            //SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), "id", SyntaxFactory.TriviaList());
-            //SyntaxFactory.Token(SyntaxTriviaList.Empty, SyntaxKind.AbstractKeyword, SyntaxTriviaList.Empty);
-            //SyntaxFactory.Token(SyntaxTriviaList.Empty, SyntaxKind.IdentifierToken, "text", "valueText", SyntaxTriviaList.Empty);
-            if (!token.HasLeadingTrivia &&
-                !token.HasTrailingTrivia)
+            switch (token.Kind())
             {
-                switch (token.Kind())
-                {
-                    case SyntaxKind.IdentifierToken:
-                        this.writer.Append($"SyntaxFactory.Identifier(\"{token.Text}\")");
-                        break;
-                    default:
-                        this.writer.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
-                        break;
-                }
+                case SyntaxKind.BadToken:
+                    return this.AppendLine("SyntaxFactory.BadToken(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.IdentifierToken when token.IsContextualKeyword():
+                    return this.AppendLine("SyntaxFactory.Identifier(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("contextualKind", token.Kind())
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("valueText", token.ValueText)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.IdentifierToken when token.Text != token.ValueText:
+                    return this.AppendLine("SyntaxFactory.VerbatimIdentifier(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("valueText", token.ValueText)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.IdentifierToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                    return this.AppendLine("SyntaxFactory.Identifier(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.IdentifierToken:
+                    return this.Append($"SyntaxFactory.Identifier(\"{token.Text}\")");
+                case SyntaxKind.CharacterLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                case SyntaxKind.NumericLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                    return this.AppendLine("SyntaxFactory.Literal(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.CharacterLiteralToken when token.Text != token.ValueText:
+                case SyntaxKind.NumericLiteralToken when token.Text != token.ValueText:
+                    return this.AppendLine("SyntaxFactory.Literal(")
+                               .PushIndent()
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.CharacterLiteralToken:
+                case SyntaxKind.NumericLiteralToken:
+                    return this.Append($"SyntaxFactory.Literal({token.Value})");
+                case SyntaxKind.XmlEntityLiteralToken:
+                    return this.AppendLine("SyntaxFactory.XmlEntity(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.XmlTextLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                    return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.XmlTextLiteralToken when token.Text != token.ValueText:
+                    return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                               .PushIndent()
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.XmlTextLiteralToken:
+                    return this.Append($"SyntaxFactory.XmlTextLiteral({token.Value})");
+                case SyntaxKind.XmlTextLiteralNewLineToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                    return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.Value)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.XmlTextLiteralNewLineToken:
+                    return this.Append($"SyntaxFactory.XmlTextNewLine({token.Text})");
 
-                return this;
-            }
-
-            if (TryGetSingleLine(token.LeadingTrivia, out var leading) &&
-                TryGetSingleLine(token.TrailingTrivia, out var trailing))
-            {
-                switch (token.Kind())
-                {
-                    case SyntaxKind.IdentifierToken:
-                        this.writer.Append($"SyntaxFactory.Identifier({leading}, \"{token.Text}\", {trailing})");
-                        break;
-                    default:
-                        this.writer.Append($"SyntaxFactory.Token({leading}, SyntaxKind.{token.Kind()}, {trailing})");
-                        break;
-                }
-
-                return this;
-            }
-
-            throw new NotImplementedException();
-            //switch (token.Kind())
-            //{
-            //    case SyntaxKind.IdentifierToken:
-            //        this.AppendLine($"SyntaxFactory.Identifier(")
-            //            .PushIndent()
-            //            .WriteArgument("leading", token.LeadingTrivia, ",")
-            //            .WriteArgument("name", token.Text, ",")
-            //            .WriteArgument("leading", token.LeadingTrivia, ")")
-            //            .PopIndent();
-            //        break;
-            //    default:
-            //        this.AppendLine($"SyntaxFactory.Token(")
-            //            .PushIndent()
-            //            .WriteArgument("leading", token.LeadingTrivia, ",")
-            //            .WriteArgument("name", token.Text, ",")
-            //            .WriteArgument("leading", token.LeadingTrivia, ")")
-            //            .PopIndent();
-            //        break;
-            //}
-
-            return this;
-
-            bool TryGetSingleLine(SyntaxTriviaList triviaList, out string result)
-            {
-                if (!triviaList.Any())
-                {
-                    result = "default";
-                    return true;
-                }
-
-                if (triviaList.TrySingle(out var single))
-                {
-                    switch (single.Kind())
+                default:
+                    if (token.Text != token.ValueText)
                     {
-                        case SyntaxKind.WhitespaceTrivia:
-                            result = single.ToString() == " "
-                                ? "SyntaxFactory.TriviaList(SyntaxFactory.Space)"
-                                : $"SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(\"{single.ToString()}\"))";
-                            return true;
-                        case SyntaxKind.EndOfLineTrivia:
-                            result = "SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)";
-                            return true;
+                        return this.AppendLine("SyntaxFactory.Token(")
+                                   .PushIndent()
+                                   .WriteArgument("leading", token.LeadingTrivia)
+                                   .WriteArgument("kind", token.Kind())
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("valueText", token.ValueText)
+                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                   .PopIndent();
                     }
-                }
+                    else if (token.HasLeadingTrivia || token.HasTrailingTrivia)
+                    {
+                        return this.AppendLine("SyntaxFactory.Token(")
+                                   .PushIndent()
+                                   .WriteArgument("leading", token.LeadingTrivia)
+                                   .WriteArgument("kind", token.Kind())
+                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                   .PopIndent();
+                    }
 
-                result = null;
-                return false;
+                    return this.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
             }
         }
 
-        private SyntaxFactoryWriter Write(SyntaxTriviaList trivia)
+        private SyntaxFactoryWriter Write(SyntaxTrivia trivia)
         {
             throw new NotImplementedException("Not writing trivia yet.");
         }
@@ -220,7 +338,41 @@ namespace Gu.Roslyn.Asserts
                                .CloseArgument(closeArgumentList)
                                .PopIndent();
                 default:
-                    this.AppendLine($"SyntaxFactory.List<{typeof(T).Name}>(")
+                    this.AppendLine($"SyntaxFactory.List(")
+                        .PushIndent()
+                        .AppendLine($"new {typeof(T).Name}[]")
+                        .AppendLine("{")
+                        .PushIndent();
+                    foreach (var node in syntaxList)
+                    {
+                        _ = this.Write(node).AppendLine(",");
+                    }
+
+                    return this.PopIndent()
+                               .Append("})")
+                               .CloseArgument(closeArgumentList)
+                               .PopIndent();
+            }
+        }
+
+        private SyntaxFactoryWriter WriteArgument<T>(string parameter, SeparatedSyntaxList<T> syntaxList, bool closeArgumentList = false)
+            where T : SyntaxNode
+        {
+            this.writer.Append(parameter).Append(": ");
+            switch (syntaxList.Count)
+            {
+                case 0:
+                    this.Append("default").CloseArgument(closeArgumentList);
+                    return this;
+                case 1:
+                    return this.AppendLine($"SyntaxFactory.SingletonSeparatedList(")
+                               .PushIndent()
+                               .Write(syntaxList[0])
+                               .Append(")")
+                               .CloseArgument(closeArgumentList)
+                               .PopIndent();
+                default:
+                    this.AppendLine($"SyntaxFactory.SeparatedList<{typeof(T).Name}>(")
                         .PushIndent();
                     for (var i = 0; i < syntaxList.Count; i++)
                     {
@@ -270,6 +422,114 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
+        private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxTriviaList triviaList, bool closeArgumentList = false)
+        {
+            this.writer.Append(parameter).Append(": ");
+            switch (triviaList.Count)
+            {
+                case 0:
+                    this.Append("default").CloseArgument(closeArgumentList);
+                    return this;
+                case 1 when TryGetSingleLine(out var text):
+                    return this.Append(text)
+                               .CloseArgument(closeArgumentList);
+                default:
+                    this.AppendLine($"SyntaxFactory.TriviaList(")
+                        .PushIndent();
+                    for (var i = 0; i < triviaList.Count; i++)
+                    {
+                        _ = this.Write(triviaList[i]);
+                        if (i <= triviaList.Count - 1)
+                        {
+                            this.AppendLine(",");
+                        }
+                    }
+
+                    this.writer.Append(")");
+                    return this.CloseArgument(closeArgumentList)
+                               .PopIndent();
+            }
+
+            bool TryGetSingleLine(out string result)
+            {
+                if (!triviaList.Any())
+                {
+                    result = "default";
+                    return true;
+                }
+
+                if (triviaList.TrySingle(out var trivia))
+                {
+                    if (trivia.IsKind(SyntaxKind.None))
+                    {
+                        result = "default";
+                        return true;
+                    }
+
+                    switch (trivia.Kind())
+                    {
+                        case SyntaxKind.WhitespaceTrivia:
+                            result = trivia.ToString() == " "
+                                ? "SyntaxFactory.TriviaList(SyntaxFactory.Space)"
+                                : $"SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(\"{trivia.ToString()}\"))";
+                            return true;
+                        case SyntaxKind.EndOfLineTrivia:
+                            result = "SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)";
+                            return true;
+                    }
+                }
+
+                result = null;
+                return false;
+            }
+        }
+
+        private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxKind kind, bool closeArgumentList = false)
+        {
+            return this.Append(parameter)
+                       .Append(": ")
+                       .Append("SyntaxKind.")
+                       .Append(kind.ToString())
+                       .CloseArgument(closeArgumentList);
+        }
+
+        private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool closeArgumentList = false)
+        {
+            this.Append(parameter)
+                      .Append(": ")
+                      .Append("\"");
+            foreach (var c in text)
+            {
+                if (c == '\\' ||
+                    c == '"')
+                {
+                    this.writer.Append('\\');
+                }
+
+                this.writer.Append(c);
+            }
+
+            return this.Append("\"")
+                      .CloseArgument(closeArgumentList);
+        }
+
+        private SyntaxFactoryWriter WriteArgument(string parameter, object value, bool closeArgumentList = false)
+        {
+            switch (value)
+            {
+                case string text:
+                    return this.WriteArgument(parameter, text, closeArgumentList);
+                case SyntaxToken _:
+                case SyntaxNode _:
+                    throw new InvalidOperationException("You did not want this overload.");
+                default:
+                    return this.Append(parameter)
+                               .Append(": ")
+                               .Append(value.ToString())
+                               .CloseArgument(closeArgumentList);
+            }
+        }
+
         private SyntaxFactoryWriter Append(string text)
         {
             this.writer.Append(text);
@@ -282,9 +542,9 @@ namespace Gu.Roslyn.Asserts
             return this;
         }
 
-        private SyntaxFactoryWriter CloseArgument(bool last)
+        private SyntaxFactoryWriter CloseArgument(bool closeArgumentList)
         {
-            if (last)
+            if (closeArgumentList)
             {
                 this.writer.Append(")");
                 return this;
@@ -335,6 +595,18 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 this.builder.Append(text);
+                this.newLine = false;
+                return this;
+            }
+
+            public Writer Append(char c)
+            {
+                if (this.newLine)
+                {
+                    this.builder.Append(this.indentation);
+                }
+
+                this.builder.Append(c);
                 this.newLine = false;
                 return this;
             }
