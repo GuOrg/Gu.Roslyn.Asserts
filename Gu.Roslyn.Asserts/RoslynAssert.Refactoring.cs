@@ -24,9 +24,9 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="codeWithPositionIndicated">The code to refactor with position indicated with ↓.</param>
-        /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="fixedCode">The expected code produced by the refactoring.</param>
-        public static void Refactoring(CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string title, string fixedCode)
+        /// <param name="title">The title of the refactoring to apply.</param>
+        public static void Refactoring(CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string fixedCode, string title)
         {
             var position = GetPosition(codeWithPositionIndicated, out var testCode);
             var refactored = Refactor.Apply(refactoring, testCode, position, title, MetadataReferences);
@@ -52,9 +52,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="code">The code to refactor.</param>
         /// <param name="span">The position.</param>
-        /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="fixedCode">The expected code produced by the refactoring.</param>
-        public static void Refactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string title, string fixedCode)
+        /// <param name="title">The title of the refactoring to apply.</param>
+        public static void Refactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string fixedCode, string title)
         {
             var refactored = Refactor.Apply(refactoring, code, span, title, MetadataReferences);
             CodeAssert.AreEqual(fixedCode, refactored);
