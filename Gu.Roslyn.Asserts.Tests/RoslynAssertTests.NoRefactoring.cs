@@ -48,7 +48,6 @@ class ↓Foo
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, testCode, title: "To uppercase"));
                 Assert.AreEqual(expected, exception.Message);
-
             }
 
             [Test]

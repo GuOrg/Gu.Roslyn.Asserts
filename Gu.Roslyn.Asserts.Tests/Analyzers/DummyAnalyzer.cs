@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -18,6 +18,13 @@
 
         public override void Initialize(AnalysisContext context)
         {
+            if (context == null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(HandleIdentifierName, SyntaxKind.IdentifierName);
         }
 

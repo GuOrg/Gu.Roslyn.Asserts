@@ -104,9 +104,9 @@ namespace Gu.Roslyn.Asserts
             private static ImmutableDictionary<string, FileInfo> Create()
             {
                 return Directory?.EnumerateFiles("*.dll", SearchOption.AllDirectories)
-                                                   .ToImmutableDictionary(
-                                                       x => Path.GetFileNameWithoutExtension(x.FullName),
-                                                       x => x) ??
+                                 .ToImmutableDictionary(
+                                     x => Path.GetFileNameWithoutExtension(x.FullName),
+                                     x => x) ??
                        ImmutableDictionary<string, FileInfo>.Empty;
             }
         }

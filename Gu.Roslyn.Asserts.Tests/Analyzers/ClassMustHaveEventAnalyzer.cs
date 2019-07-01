@@ -24,6 +24,8 @@ namespace Gu.Roslyn.Asserts.Tests
 
         public override void Initialize(AnalysisContext context)
         {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.ClassDeclaration);
         }
 

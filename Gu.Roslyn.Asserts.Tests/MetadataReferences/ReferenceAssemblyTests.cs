@@ -9,15 +9,25 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
     {
         [TestCase(typeof(int))]
         [TestCase(typeof(System.Diagnostics.Debug))]
-        public void TryGet(Type type)
+        public void TryGetAssembly(Type type)
         {
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly, out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
+        }
 
-            Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly.Location, out metadataReference));
+        [TestCase(typeof(int))]
+        [TestCase(typeof(System.Diagnostics.Debug))]
+        public void TryGetLocation(Type type)
+        {
+            Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly.Location, out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
+        }
 
-            Assert.AreEqual(true, ReferenceAssembly.TryGet(Path.GetFileNameWithoutExtension(type.Assembly.Location), out metadataReference));
+        [TestCase(typeof(int))]
+        [TestCase(typeof(System.Diagnostics.Debug))]
+        public void TryGetFileName(Type type)
+        {
+            Assert.AreEqual(true, ReferenceAssembly.TryGet(Path.GetFileNameWithoutExtension(type.Assembly.Location), out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
         }
     }
