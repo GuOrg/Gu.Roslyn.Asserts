@@ -16,7 +16,12 @@ namespace Gu.Roslyn.Asserts
     {
         private readonly Writer writer = new Writer();
 
-        public static string Write(string code)
+        /// <summary>
+        /// Transforms the code passed in to a call to SyntaxFactory that creates the same code.
+        /// </summary>
+        /// <param name="code">For example class C { }. </param>
+        /// <returns>SyntaxFactory.Compilation(...)</returns>
+        public static string Transform(string code)
         {
             var compilationUnit = SyntaxFactory.ParseCompilationUnit(code);
             var writer = new SyntaxFactoryWriter().Write(compilationUnit);
@@ -173,7 +178,7 @@ namespace Gu.Roslyn.Asserts
                                .PopIndent();
                 default:
 #pragma warning disable GU0090 // Don't throw NotImplementedException.
-                    throw new NotImplementedException($"{nameof(SyntaxFactoryWriter)}.{nameof(this.Write)}({nameof(SyntaxNode)}) does not handle {node.Kind()}");
+                    throw new NotImplementedException($"{nameof(SyntaxFactoryWriter)}.{nameof(this.Transform)}({nameof(SyntaxNode)}) does not handle {node.Kind()}");
 #pragma warning restore GU0090 // Don't throw NotImplementedException.
             }
         }

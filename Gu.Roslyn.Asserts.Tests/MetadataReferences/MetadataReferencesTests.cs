@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 #if NET472
             var expected = new[] { "mscorlib.dll" };
 #elif NETCOREAPP2_0
-      var expected = new[] { "System.Private.CoreLib.dll" };
+            var expected = new[] { "System.Private.CoreLib.dll" };
 #else
             Assert.Inconclusive("Not handling this framework.");
 #endif
@@ -524,7 +524,6 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.Composition.Runtime.dll",
                 "System.Composition.TypedParts.dll",
                 "System.Composition.Hosting.dll",
-
             };
 #elif NETCOREAPP2_0
             var expected = new[]
