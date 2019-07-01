@@ -8,8 +8,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class Refactoring
         {
-            private static string expected;
-
             [Test]
             public static void WithPositionIndicated()
             {
@@ -43,7 +41,7 @@ class WRONG
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, fixedCode));
-                expected = @"Mismatch on line 2 of file WRONG.cs.
+                var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
 Actual:   class FOO
                 ^
@@ -96,7 +94,7 @@ class WRONG
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode));
-                expected = @"Mismatch on line 2 of file WRONG.cs.
+                var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
 Actual:   class FOO
                 ^

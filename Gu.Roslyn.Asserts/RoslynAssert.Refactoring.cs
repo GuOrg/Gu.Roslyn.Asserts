@@ -1,11 +1,74 @@
 namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Linq;
     using Microsoft.CodeAnalysis.CodeRefactorings;
     using Microsoft.CodeAnalysis.Text;
 
     public static partial class RoslynAssert
     {
+        /// <summary>
+        /// For testing a <see cref="CodeRefactoringProvider"/>.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="codeWithPositionIndicated">The code that is not supposed to trigger a refactoring with position indicated with ↓.</param>
+        public static void NoRefactoring(CodeRefactoringProvider refactoring, string codeWithPositionIndicated)
+        {
+            var position = GetPosition(codeWithPositionIndicated, out var testCode);
+            var actions = Refactor.CodeActions(refactoring, testCode, position, MetadataReferences);
+            if (actions.Any())
+            {
+                throw new AssertException("Expected the refactoring to not register any code actions.");
+            }
+        }
+
+        /// <summary>
+        /// For testing a <see cref="CodeRefactoringProvider"/>.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="codeWithPositionIndicated">The code that is not supposed to trigger a refactoring with position indicated with ↓.</param>
+        /// <param name="title">The title of the refactoring to apply.</param>
+        public static void NoRefactoring(CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string title)
+        {
+            var position = GetPosition(codeWithPositionIndicated, out var testCode);
+            var actions = Refactor.CodeActions(refactoring, testCode, position, MetadataReferences);
+            if (actions.Any(x => x.Title == title))
+            {
+                throw new AssertException("Expected the refactoring to not register any code actions.");
+            }
+        }
+
+        /// <summary>
+        /// For testing a <see cref="CodeRefactoringProvider"/>.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="code">The code that is not supposed to trigger a refactoring.</param>
+        /// <param name="span">The position.</param>
+        public static void NoRefactoring(CodeRefactoringProvider refactoring, string code, TextSpan span)
+        {
+            var actions = Refactor.CodeActions(refactoring, code, span, MetadataReferences);
+            if (actions.Any())
+            {
+                throw new AssertException("Expected the refactoring to not register any code actions.");
+            }
+        }
+
+        /// <summary>
+        /// For testing a <see cref="CodeRefactoringProvider"/>.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="code">The code that is not supposed to trigger a refactoring.</param>
+        /// <param name="span">The position.</param>
+        /// <param name="title">The title of the refactoring to apply.</param>
+        public static void NoRefactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string title)
+        {
+            var actions = Refactor.CodeActions(refactoring, code, span, MetadataReferences);
+            if (actions.Any(x => x.Title == title))
+            {
+                throw new AssertException("Expected the refactoring to not register any code actions.");
+            }
+        }
+
         /// <summary>
         /// For testing a <see cref="CodeRefactoringProvider"/>.
         /// </summary>

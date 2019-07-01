@@ -237,7 +237,7 @@ namespace Gu.Roslyn.Asserts
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 
-        private static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
@@ -250,7 +250,7 @@ namespace Gu.Roslyn.Asserts
             return actions;
         }
 
-        private static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
