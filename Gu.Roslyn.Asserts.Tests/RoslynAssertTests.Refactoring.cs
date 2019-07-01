@@ -85,7 +85,7 @@ class FOO
             public static void WithSpanWhenNotExpectedCode()
             {
                 var testCode = @"
-class ↓Foo
+class Foo
 {
 }";
 
