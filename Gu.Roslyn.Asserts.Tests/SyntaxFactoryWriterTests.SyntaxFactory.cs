@@ -87,19 +87,28 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [TestCase("int x = 1")]
+        [TestCase("int x = 1 ")]
         [TestCase("long x = 1")]
+        [TestCase("long x = 1 ")]
         [TestCase("double x = 1")]
+        [TestCase("double x = 1 ")]
         [TestCase("double x = 1.2")]
+        [TestCase("double x = 1.2 ")]
         [TestCase("object x = null")]
         [TestCase("var x = true")]
         [TestCase("var x = false")]
         [TestCase("var x = 1")]
         [TestCase("var x = 1.2")]
         [TestCase("string x = \"a\"")]
+        [TestCase("string x = \"a\" ")]
         [TestCase("string x = \"\\\"\"")]
+        [TestCase("string x = \"\\\"\" ")]
         [TestCase("string x = @\"a\"")]
+        [TestCase("string x = @\"a\" ")]
         [TestCase("char x = 'a'")]
+        [TestCase("char x = 'a' ")]
         [TestCase("char x = '\\\\'")]
+        [TestCase("char x = '\\\\' ")]
         public static async Task Token(string expression)
         {
             var code = @"namespace A

@@ -8,6 +8,9 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+    /// <summary>
+    /// For transforming code into the corresponding SyntaxFactory call.
+    /// </summary>
     [Obsolete("WIP not finished yet.")]
     public class SyntaxFactoryWriter
     {
@@ -236,7 +239,7 @@ namespace Gu.Roslyn.Asserts
                                .PopIndent();
                 case SyntaxKind.CharacterLiteralToken:
                 case SyntaxKind.NumericLiteralToken:
-                    return this.Append($"SyntaxFactory.Literal({token.Value})");
+                    return this.Append($"SyntaxFactory.Literal({token.ValueText})");
                 case SyntaxKind.XmlEntityLiteralToken:
                     return this.AppendLine("SyntaxFactory.XmlEntity(")
                                .PushIndent()
