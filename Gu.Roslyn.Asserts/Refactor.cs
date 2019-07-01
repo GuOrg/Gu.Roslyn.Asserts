@@ -237,6 +237,14 @@ namespace Gu.Roslyn.Asserts
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 
+        /// <summary>
+        /// Get the code actions registered at current position.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="testCode">The code to refactor.</param>
+        /// <param name="span">The position to pass in to the RefactoringContext.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
         public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
@@ -250,6 +258,14 @@ namespace Gu.Roslyn.Asserts
             return actions;
         }
 
+        /// <summary>
+        /// Get the code actions registered at current position.
+        /// </summary>
+        /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
+        /// <param name="testCode">The code to refactor.</param>
+        /// <param name="position">The position to pass in to the RefactoringContext.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
         public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference> metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
