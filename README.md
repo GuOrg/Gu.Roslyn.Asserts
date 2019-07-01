@@ -383,6 +383,8 @@ class FOO
 }";
 
             RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode);
+			// Or if you want to assert on title also
+			RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode, title: "Change to uppercase.");
         }
 ```
 
