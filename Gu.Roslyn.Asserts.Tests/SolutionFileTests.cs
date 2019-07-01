@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var sln = SolutionFile.ParseInfo(file);
             var expected = new[]
             {
-                "Gu.Roslyn.Asserts.Tests.Net46WithAttributes",
+                "Gu.Roslyn.Asserts.Tests.Net472WithAttributes",
                 "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
                 "Gu.Roslyn.Asserts",
                 "WpfApp1",

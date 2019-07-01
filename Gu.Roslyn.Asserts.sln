@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3F667CC4-0891-4FCB-A15F-BDCE00C4669A}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D8C50F8A-9
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net46WithAttributes", "Gu.Roslyn.Asserts.Tests.Net46WithAttributes\Gu.Roslyn.Asserts.Tests.Net46WithAttributes.csproj", "{3FB66874-E38F-4CCE-8296-8C25C9C934E5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "TestApps\WpfApp1\WpfApp1.csproj", "{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}"
@@ -32,7 +30,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes", "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.csproj", "{43974B67-929E-4211-B2CF-67699C7E0C63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes", "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.csproj", "{43974B67-929E-4211-B2CF-67699C7E0C63}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net472WithAttributes", "Gu.Roslyn.Asserts.Tests.Net472WithAttributes\Gu.Roslyn.Asserts.Tests.Net472WithAttributes.csproj", "{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,10 +48,6 @@ Global
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34E6A491-5742-40E1-B1BF-F210D43DEE1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FB66874-E38F-4CCE-8296-8C25C9C934E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,6 +64,10 @@ Global
 		{43974B67-929E-4211-B2CF-67699C7E0C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43974B67-929E-4211-B2CF-67699C7E0C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43974B67-929E-4211-B2CF-67699C7E0C63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

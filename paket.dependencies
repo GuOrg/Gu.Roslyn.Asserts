@@ -1,7 +1,7 @@
 source https://www.nuget.org/api/v2/
 storage: none
 lowest_matching: true
-nuget Microsoft.CodeAnalysis.CSharp.Workspaces >= 2 strategy: min
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces >= 3 strategy: min
 
 group Build
   storage: none
@@ -11,13 +11,12 @@ group Build
 group Test
   storage: none
   source http://www.nuget.org/api/v2/
-  nuget Microsoft.CodeAnalysis.CSharp.Workspaces 2.10
-  nuget Microsoft.CodeAnalysis.CSharp.Scripting 2.10
-  nuget System.Runtime.CompilerServices.Unsafe
   nuget NUnit
   nuget NUnit3TestAdapter
   nuget Microsoft.NET.Test.Sdk
   nuget Microsoft.AspNetCore.All
+  nuget Microsoft.CodeAnalysis.CSharp.Workspaces
+  nuget Microsoft.CodeAnalysis.CSharp.Scripting
 
 group Analyzers
   storage: none

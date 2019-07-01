@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.ruleset</CodeAnalysisRuleSet>
     <NoWarn>NU1701</NoWarn>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.8.0.0</Version>
+    <Version>2.9.0.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -22,13 +22,12 @@
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>FEATURE: RoslynAssert.NoRefactoring.
-BREAKING: Move title parameter in RoslynAssert.Refactoring.
-BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
+    <PackageReleaseNotes>
+      FEATURE: RoslynAssert.NoRefactoring.
+      BREAKING: Move title parameter in RoslynAssert.Refactoring.
+      BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
 
-</PackageReleaseNotes>
-    <AssemblyVersion>2.9.0.0</AssemblyVersion>
-    <FileVersion>2.9.0.0</FileVersion>
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <!--
@@ -41,6 +40,6 @@ BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
-  
+
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
