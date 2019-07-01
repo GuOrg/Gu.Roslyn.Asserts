@@ -1,12 +1,1 @@
-﻿Gu.Roslyn.Asserts.AstFormat
-Gu.Roslyn.Asserts.AstFormat.Json = 1 -> Gu.Roslyn.Asserts.AstFormat
-Gu.Roslyn.Asserts.AstFormat.Light = 0 -> Gu.Roslyn.Asserts.AstFormat
-Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstTrivia.Ignore = 4 -> Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstTrivia.Node = 2 -> Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstTrivia.Token = 1 -> Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstTrivia.Unspecified = 0 -> Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTriva) -> void
-Gu.Roslyn.Asserts.AstWriterSettings.Format.get -> Gu.Roslyn.Asserts.AstFormat
-Gu.Roslyn.Asserts.AstWriterSettings.IgnoreEmptyTriva.get -> bool
-Gu.Roslyn.Asserts.AstWriterSettings.Trivia.get -> Gu.Roslyn.Asserts.AstTrivia
+﻿

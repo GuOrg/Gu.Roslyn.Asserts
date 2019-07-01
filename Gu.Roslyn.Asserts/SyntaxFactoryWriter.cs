@@ -8,6 +8,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+    [Obsolete("WIP not finished yet.")]
     public class SyntaxFactoryWriter
     {
         private readonly Writer writer = new Writer();

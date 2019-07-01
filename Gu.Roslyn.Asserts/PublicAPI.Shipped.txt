@@ -23,10 +23,20 @@ Gu.Roslyn.Asserts.AnalyzerAssert.DiagnosticsMetadata.Sources.get -> System.Colle
 Gu.Roslyn.Asserts.AssertException
 Gu.Roslyn.Asserts.AssertException.AssertException(string message) -> void
 Gu.Roslyn.Asserts.AssertException.AssertException(string message, System.Exception innerException) -> void
+Gu.Roslyn.Asserts.AstFormat
+Gu.Roslyn.Asserts.AstFormat.Json = 1 -> Gu.Roslyn.Asserts.AstFormat
+Gu.Roslyn.Asserts.AstFormat.Light = 0 -> Gu.Roslyn.Asserts.AstFormat
+Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Ignore = 4 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Node = 2 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Token = 1 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Unspecified = 0 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstWriter
 Gu.Roslyn.Asserts.AstWriterSettings
-Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(bool json) -> void
-Gu.Roslyn.Asserts.AstWriterSettings.Json.get -> bool
+Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTriva) -> void
+Gu.Roslyn.Asserts.AstWriterSettings.Format.get -> Gu.Roslyn.Asserts.AstFormat
+Gu.Roslyn.Asserts.AstWriterSettings.IgnoreEmptyTriva.get -> bool
+Gu.Roslyn.Asserts.AstWriterSettings.Trivia.get -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.Benchmark
 Gu.Roslyn.Asserts.Benchmark.Analyzer.get -> Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer
 Gu.Roslyn.Asserts.Benchmark.CodeBlockActions.get -> System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.Benchmark.ContextAndAction<Microsoft.CodeAnalysis.Diagnostics.CodeBlockAnalysisContext>>
@@ -101,6 +111,8 @@ Gu.Roslyn.Asserts.ReferenceAssembly
 Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.SolutionFile
 Gu.Roslyn.Asserts.StringHelper
+Gu.Roslyn.Asserts.SyntaxFactoryWriter
+Gu.Roslyn.Asserts.SyntaxFactoryWriter.SyntaxFactoryWriter() -> void
 Gu.Roslyn.Asserts.SyntaxNodeExt
 Gu.Roslyn.Asserts.TextAssert
 Gu.Roslyn.Asserts.TransitiveMetadataReferencesAttribute
@@ -378,6 +390,8 @@ static Gu.Roslyn.Asserts.Refactor.Apply(Microsoft.CodeAnalysis.CodeRefactorings.
 static Gu.Roslyn.Asserts.Refactor.Apply(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string testCode, int position, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null) -> Microsoft.CodeAnalysis.Document
 static Gu.Roslyn.Asserts.Refactor.Apply(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string testCode, int position, int index, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null) -> Microsoft.CodeAnalysis.Document
 static Gu.Roslyn.Asserts.Refactor.Apply(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string testCode, int position, string title, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null) -> Microsoft.CodeAnalysis.Document
+static Gu.Roslyn.Asserts.Refactor.CodeActions(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string testCode, Microsoft.CodeAnalysis.Text.TextSpan span, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences) -> System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.CodeActions.CodeAction>
+static Gu.Roslyn.Asserts.Refactor.CodeActions(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string testCode, int position, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences) -> System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.CodeActions.CodeAction>
 static Gu.Roslyn.Asserts.ReferenceAssembly.Directory.get -> System.IO.DirectoryInfo
 static Gu.Roslyn.Asserts.ReferenceAssembly.Directory.set -> void
 static Gu.Roslyn.Asserts.ReferenceAssembly.TryGet(System.Reflection.Assembly assembly, out Microsoft.CodeAnalysis.MetadataReference metadataReference) -> bool
@@ -476,10 +490,14 @@ static Gu.Roslyn.Asserts.RoslynAssert.NoFix<TAnalyzer, TCodeFix>(Gu.Roslyn.Asser
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix<TAnalyzer, TCodeFix>(System.Collections.Generic.IReadOnlyList<string> codeWithErrorsIndicated) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix<TAnalyzer, TCodeFix>(params string[] codeWithErrorsIndicated) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix<TCodeFix>(Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, params string[] code) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoRefactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string code, Microsoft.CodeAnalysis.Text.TextSpan span) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoRefactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string code, Microsoft.CodeAnalysis.Text.TextSpan span, string title) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoRefactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string codeWithPositionIndicated) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoRefactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string title) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string code, Microsoft.CodeAnalysis.Text.TextSpan span, string fixedCode) -> void
-static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string code, Microsoft.CodeAnalysis.Text.TextSpan span, string title, string fixedCode) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string code, Microsoft.CodeAnalysis.Text.TextSpan span, string fixedCode, string title) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string fixedCode) -> void
-static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string title, string fixedCode) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string codeWithPositionIndicated, string fixedCode, string title) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.ResetAll() -> void
 static Gu.Roslyn.Asserts.RoslynAssert.ResetMetadataReferences() -> void
 static Gu.Roslyn.Asserts.RoslynAssert.ResetSuppressedDiagnostics() -> void
@@ -512,6 +530,7 @@ static Gu.Roslyn.Asserts.SolutionFile.ParseInfo(System.IO.FileInfo sln) -> Micro
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(System.Reflection.Assembly assembly, out System.IO.FileInfo sln) -> bool
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(string name, out System.IO.FileInfo sln) -> bool
 static Gu.Roslyn.Asserts.StringHelper.AssertReplace(this string text, string oldValue, string newValue) -> string
+static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Write(string code) -> string
 static Gu.Roslyn.Asserts.SyntaxNodeExt.Find<T>(this Microsoft.CodeAnalysis.SyntaxNode root, string code) -> T
 static Gu.Roslyn.Asserts.SyntaxNodeExt.Find<T>(this Microsoft.CodeAnalysis.SyntaxTree tree, string code) -> T
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindAccessorDeclaration(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.AccessorDeclarationSyntax

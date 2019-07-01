@@ -1,3 +1,8 @@
+#### 2.9.0
+* FEATURE: RoslynAssert.NoRefactoring.
+* BREAKING: Move title parameter in RoslynAssert.Refactoring.
+* BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
+
 #### 2.8.0
 * FEATURE: Make trivia configurable in AstWriter output.
 * BREAKING: AstWriterSettings(AstFormat) was AstWriterSettings(bool)

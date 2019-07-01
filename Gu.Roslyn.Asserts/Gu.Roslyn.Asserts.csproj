@@ -22,11 +22,13 @@
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>FEATURE: Make trivia configurable in AstWriter output.
-BREAKING: AstWriterSettings(AstFormat) was AstWriterSettings(bool)
-FEATURE: Setting for ignoring empty trivia.
+    <PackageReleaseNotes>FEATURE: RoslynAssert.NoRefactoring.
+BREAKING: Move title parameter in RoslynAssert.Refactoring.
+BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
 
 </PackageReleaseNotes>
+    <AssemblyVersion>2.9.0.0</AssemblyVersion>
+    <FileVersion>2.9.0.0</FileVersion>
   </PropertyGroup>
 
   <!--

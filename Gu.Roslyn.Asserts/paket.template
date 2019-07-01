@@ -3,9 +3,9 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  FEATURE: Make trivia configurable in AstWriter output.
-  BREAKING: AstWriterSettings(AstFormat) was AstWriterSettings(bool)
-  FEATURE: Setting for ignoring empty trivia.
+  FEATURE: RoslynAssert.NoRefactoring.
+  BREAKING: Move title parameter in RoslynAssert.Refactoring.
+  BUGFIX: Swap actual and expected in RoslynAssert.Refactoring.
 
 files
   bin/Release/net46/Gu.Roslyn.Asserts.* ==> lib/net46
