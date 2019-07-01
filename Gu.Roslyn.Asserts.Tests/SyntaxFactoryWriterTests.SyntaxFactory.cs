@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Scripting;
     using NUnit.Framework;
 
-    public static class SyntaxFactoryWriterTests
+    public static partial class SyntaxFactoryWriterTests
     {
         private static readonly ScriptOptions ScriptOptions = ScriptOptions.Default
                                                                            .WithReferences(Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(SyntaxFactory)))
