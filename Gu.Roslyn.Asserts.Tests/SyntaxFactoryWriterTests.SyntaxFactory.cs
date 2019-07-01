@@ -94,8 +94,11 @@ namespace Gu.Roslyn.Asserts.Tests
         [TestCase("var x = 1")]
         [TestCase("var x = 1.2")]
         [TestCase("string x = \"a\"")]
+        [TestCase("string x = \"\\\"\"")]
+        [TestCase("string x = @\"a\"")]
         [TestCase("char x = 'a'")]
-        public static async Task ClassWithTokenFields(string expression)
+        [TestCase("char x = '\\\\'")]
+        public static async Task Token(string expression)
         {
             var code = @"namespace A
 {

@@ -439,7 +439,7 @@ namespace Gu.Roslyn.Asserts
                     for (var i = 0; i < triviaList.Count; i++)
                     {
                         _ = this.Write(triviaList[i]);
-                        if (i <= triviaList.Count - 1)
+                        if (i < triviaList.Count - 1)
                         {
                             this.AppendLine(",");
                         }
