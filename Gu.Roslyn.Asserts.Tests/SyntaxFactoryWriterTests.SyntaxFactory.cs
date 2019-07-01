@@ -88,6 +88,8 @@ namespace Gu.Roslyn.Asserts.Tests
 
         [TestCase("int x = 1")]
         [TestCase("long x = 1")]
+        [TestCase("double x = 1")]
+        [TestCase("double x = 1.2")]
         [TestCase("object x = null")]
         [TestCase("var x = true")]
         [TestCase("var x = false")]
