@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         {
             var position = GetPosition(codeWithPositionIndicated, out var testCode);
             var refactored = Refactor.Apply(refactoring, testCode, position, MetadataReferences);
-            CodeAssert.AreEqual(refactored, fixedCode);
+            CodeAssert.AreEqual(fixedCode, refactored);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Gu.Roslyn.Asserts
         {
             var position = GetPosition(codeWithPositionIndicated, out var testCode);
             var refactored = Refactor.Apply(refactoring, testCode, position, title, MetadataReferences);
-            CodeAssert.AreEqual(refactored, fixedCode);
+            CodeAssert.AreEqual(fixedCode, refactored);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts
         public static void Refactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string fixedCode)
         {
             var refactored = Refactor.Apply(refactoring, code, span, MetadataReferences);
-            CodeAssert.AreEqual(refactored, fixedCode);
+            CodeAssert.AreEqual(fixedCode, refactored);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts
         public static void Refactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string title, string fixedCode)
         {
             var refactored = Refactor.Apply(refactoring, code, span, title, MetadataReferences);
-            CodeAssert.AreEqual(refactored, fixedCode);
+            CodeAssert.AreEqual(fixedCode, refactored);
         }
 
         private static int GetPosition(string codeWithPositionIndicated, out string code)
