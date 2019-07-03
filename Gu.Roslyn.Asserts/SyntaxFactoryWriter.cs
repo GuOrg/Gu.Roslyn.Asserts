@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="code">For example class C { }. </param>
         /// <returns>SyntaxFactory.Compilation(...)</returns>
-        public static string Transform(string code)
+        public static string Serialize(string code)
         {
             var compilationUnit = SyntaxFactory.ParseCompilationUnit(code);
             var writer = new SyntaxFactoryWriter().Write(compilationUnit);
@@ -178,7 +178,7 @@ namespace Gu.Roslyn.Asserts
                                .PopIndent();
                 default:
 #pragma warning disable GU0090 // Don't throw NotImplementedException.
-                    throw new NotImplementedException($"{nameof(SyntaxFactoryWriter)}.{nameof(this.Transform)}({nameof(SyntaxNode)}) does not handle {node.Kind()}");
+                    throw new NotImplementedException($"{nameof(SyntaxFactoryWriter)}.{nameof(this.Serialize)}({nameof(SyntaxNode)}) does not handle {node.Kind()}");
 #pragma warning restore GU0090 // Don't throw NotImplementedException.
             }
         }
@@ -200,53 +200,40 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-                case SyntaxKind.IdentifierToken when token.IsContextualKeyword():
-                    return this.AppendLine("SyntaxFactory.Identifier(")
-                               .PushIndent()
-                               .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("contextualKind", token.Kind())
-                               .WriteArgument("text", token.Text)
-                               .WriteArgument("valueText", token.ValueText)
-                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                               .PopIndent();
-                case SyntaxKind.IdentifierToken when token.Text != token.ValueText:
-                    return this.AppendLine("SyntaxFactory.VerbatimIdentifier(")
-                               .PushIndent()
-                               .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text)
-                               .WriteArgument("valueText", token.ValueText)
-                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                               .PopIndent();
-                case SyntaxKind.IdentifierToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
-                    return this.AppendLine("SyntaxFactory.Identifier(")
-                               .PushIndent()
-                               .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text)
-                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                               .PopIndent();
                 case SyntaxKind.IdentifierToken:
-                    return this.Append($"SyntaxFactory.Identifier(\"{token.Text}\")");
-                case SyntaxKind.CharacterLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
-                case SyntaxKind.NumericLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
-                    return this.AppendLine("SyntaxFactory.Literal(")
+                    if (token.IsContextualKeyword())
+                    {
+                        return this.AppendLine("SyntaxFactory.Identifier(")
+                                   .PushIndent()
+                                   .WriteArgument("leading", token.LeadingTrivia)
+                                   .WriteArgument("contextualKind", token.Kind())
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("valueText", token.ValueText)
+                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                   .PopIndent();
+                    }
+
+                    return this.AppendLine("SyntaxFactory.Identifier(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-                case SyntaxKind.CharacterLiteralToken when token.Text != token.ValueText:
-                case SyntaxKind.NumericLiteralToken when token.Text != token.ValueText:
-                    return this.AppendLine("SyntaxFactory.Literal(")
-                               .PushIndent()
-                               .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.ValueText, closeArgumentList: true)
-                               .PopIndent();
+
                 case SyntaxKind.CharacterLiteralToken:
                 case SyntaxKind.NumericLiteralToken:
-                    return this.Append($"SyntaxFactory.Literal({token.ValueText})");
-                case SyntaxKind.XmlEntityLiteralToken:
-                    return this.AppendLine("SyntaxFactory.XmlEntity(")
+                case SyntaxKind.StringLiteralToken:
+                    if (!token.HasLeadingTrivia &&
+                        !token.HasTrailingTrivia)
+                    {
+                        return this.AppendLine("SyntaxFactory.Literal(")
+                                   .PushIndent()
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("value", token.ValueText, closeArgumentList: true)
+                                   .PopIndent();
+                    }
+
+                    return this.AppendLine("SyntaxFactory.Literal(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
@@ -254,22 +241,38 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
-                    return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                    if (!token.HasLeadingTrivia &&
+                        !token.HasTrailingTrivia)
+                    {
+                        return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                                   .PushIndent()
+                                   .WriteArgument("leading", token.LeadingTrivia)
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("value", token.ValueText)
+                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                   .PopIndent();
+                    }
+
+                    return this.AppendLine("SyntaxFactory.XmlEntity(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("text", token.Text)
                                .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-                case SyntaxKind.XmlTextLiteralToken when token.Text != token.ValueText:
-                    return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
-                               .PushIndent()
-                               .WriteArgument("text", token.Text)
-                               .WriteArgument("value", token.ValueText, closeArgumentList: true)
-                               .PopIndent();
+
                 case SyntaxKind.XmlTextLiteralToken:
+                    if (token.Text != token.ValueText)
+                    {
+                        return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                                   .PushIndent()
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("value", token.ValueText, closeArgumentList: true)
+                                   .PopIndent();
+                    }
+
                     return this.Append($"SyntaxFactory.XmlTextLiteral({token.Value})");
-                case SyntaxKind.XmlTextLiteralNewLineToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
+                case SyntaxKind.XmlTextLiteralNewLineToken:
                     return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
@@ -277,8 +280,6 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-                case SyntaxKind.XmlTextLiteralNewLineToken:
-                    return this.Append($"SyntaxFactory.XmlTextNewLine({token.Text})");
 
                 default:
                     if (token.Text != token.ValueText)
@@ -520,6 +521,15 @@ namespace Gu.Roslyn.Asserts
 
             return this.Append("\"")
                       .CloseArgument(closeArgumentList);
+        }
+
+        private SyntaxFactoryWriter WriteArgument(string parameter, bool value, bool closeArgumentList = false)
+        {
+            return this.Append(parameter)
+                       .Append(": ")
+                       .Append("SyntaxKind.")
+                       .Append(value ? "true" : "false")
+                       .CloseArgument(closeArgumentList);
         }
 
         private SyntaxFactoryWriter Append(string text)

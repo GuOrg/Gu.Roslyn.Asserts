@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts.Tests
                        "    {\n" +
                        "    }\n" +
                        "}\n";
-            var call = SyntaxFactoryWriter.Transform(code);
+            var call = SyntaxFactoryWriter.Serialize(code);
             var expected = "SyntaxFactory.CompilationUnit(\r\n" +
                            "    externs: default,\r\n" +
                            "    usings: default,\r\n" +
@@ -126,7 +126,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private static async Task AssertRoundtrip(string code)
         {
-            var call = SyntaxFactoryWriter.Transform(code);
+            var call = SyntaxFactoryWriter.Serialize(code);
             var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
             CodeAssert.AreEqual(code, result.ToString());
         }

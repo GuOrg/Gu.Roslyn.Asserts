@@ -5,6 +5,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
@@ -19,6 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                                        .Where(x => !x.Name.StartsWith("Parse") &&
                                                                                                    typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType))
                                                                                        .OrderBy(x => x.Name)
+                                                                                       .ThenBy(x => x.GetParameters().Length)
                                                                                        .GroupBy(x => x.ReturnType)
                                                                                        .ToDictionary(x => x.Key, x => x.ToArray());
 
@@ -29,34 +31,77 @@ namespace Gu.Roslyn.Asserts.Tests
                 foreach (var kvp in TypeFactoryMethodMap)
                 {
                     var type = kvp.Key;
-                    var candidates = kvp.Value;
-                    //// var method = candidates.MaxBy(x => x.GetParameters().Length);
-                    foreach (var method in candidates)
+                    var variable = type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
+                    if (variable.EndsWith("Syntax"))
                     {
-                        var parameters = method.GetParameters();
-                        var variable = type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
-                        if (variable.EndsWith("Syntax"))
-                        {
-                            variable = variable.Substring(0, variable.Length - 6);
-                        }
+                        variable = variable.Substring(0, variable.Length - 6);
+                    }
 
-                        stringBuilder.AppendLine($"                case {type.Name} {variable}:")
-                                     .AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
+                    stringBuilder.AppendLine($"                case {type.Name} {variable}:");
+                    var candidates = kvp.Value;
+                    if (true)
+                    {
+                        var method = candidates.MaxBy(x => x.GetParameters().Length);
+                        var parameters = method.GetParameters();
+                        stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
                                      .AppendLine($"                               .PushIndent()");
-                        for (var i = 0; i < parameters.Length; i++)
+                        for (var j = 0; j < parameters.Length; j++)
                         {
-                            var parameter = parameters[i];
-                            var property = parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
-                            var closeArg = i == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
+                            var parameter = parameters[j];
+                            var property = Property(parameter);
+                            var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
                             stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
                         }
 
                         stringBuilder.AppendLine("                               .PopIndent();");
                     }
+                    else
+                    {
+                        for (var i = 0; i < candidates.Length; i++)
+                        {
+                            var method = candidates[i];
+                            var parameters = method.GetParameters();
+                            if (parameters.Length == 0)
+                            {
+                                stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}()\");");
+                            }
+                            else if (parameters.TrySingle(out var parameter))
+                            {
+                                var property = Property(parameter);
+                                stringBuilder.AppendLine($"                    return this.AppendLine($\"SyntaxFactory.{method.Name}({{{variable}.{property}}})\");");
+                            }
+                            else
+                            {
+                                stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
+                                             .AppendLine($"                               .PushIndent()");
+                                for (var j = 0; j < parameters.Length; j++)
+                                {
+                                    parameter = parameters[j];
+                                    var property = Property(parameter);
+                                    var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
+                                    stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
+                                }
+
+                                stringBuilder.AppendLine("                               .PopIndent();");
+                            }
+                        }
+                    }
                 }
 
                 var code = stringBuilder.ToString();
                 Console.Write(code);
+
+                string Property(ParameterInfo parameter)
+                {
+                    switch (parameter.Name)
+                    {
+                        case "quoteKind":
+                        case "kind":
+                            return "Kind()";
+                        default:
+                            return parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                    }
+                }
             }
 
             [Test]
@@ -67,7 +112,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                                             .Where(x => x.ReturnType == typeof(SyntaxToken))
                                                             .Distinct(MethodAndParameterNamesComparer.Default)
                                                             .OrderBy(x => x.Name)
-                                                            .ThenByDescending(x => x.GetParameters().Length))
+                                                            .ThenBy(x => x.GetParameters().Length))
                 {
                     stringBuilder.AppendLine($"                case SyntaxKind.{method.Name}{When(method)}:");
                     var parameters = method.GetParameters();
@@ -102,9 +147,9 @@ namespace Gu.Roslyn.Asserts.Tests
                         return " when token.Text != token.ValueText";
                     }
 
-                    if (method.GetParameters().Any(x => x.Name == "leading"))
+                    if (method.GetParameters().All(x => x.Name != "leading"))
                     {
-                        return " when token.HasLeadingTrivia || token.HasTrailingTrivia";
+                        return " when !token.HasLeadingTrivia && !token.HasTrailingTrivia";
                     }
 
                     return string.Empty;

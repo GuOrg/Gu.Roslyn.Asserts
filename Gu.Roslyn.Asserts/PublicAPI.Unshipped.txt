@@ -1,1 +1,1 @@
-﻿static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Transform(string code) -> string
+﻿static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(string code) -> string
