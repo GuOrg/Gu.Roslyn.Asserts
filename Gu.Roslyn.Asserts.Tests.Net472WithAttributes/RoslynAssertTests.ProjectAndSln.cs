@@ -1,6 +1,6 @@
-namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes
+namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
 {
-    using Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes;
+    using Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes;
     using NUnit.Framework;
 
     public partial class RoslynAssertTests

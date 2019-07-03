@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.Net46WithAttributes.AnalyzersAndFixes
+namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
 {
     using System.Threading;
     using System.Threading.Tasks;
