@@ -18,7 +18,8 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap = typeof(SyntaxFactory)
                                                                                        .GetMethods(BindingFlags.Public | BindingFlags.Static)
                                                                                        .Where(x => !x.Name.StartsWith("Parse") &&
-                                                                                                   typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType))
+                                                                                                   typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType) &&
+                                                                                                   x.ReturnType.Name.StartsWith(x.Name))
                                                                                        .OrderBy(x => x.Name)
                                                                                        .ThenBy(x => x.GetParameters().Length)
                                                                                        .GroupBy(x => x.ReturnType)
@@ -41,19 +42,21 @@ namespace Gu.Roslyn.Asserts.Tests
                     var candidates = kvp.Value;
                     if (true)
                     {
-                        var method = candidates.MaxBy(x => x.GetParameters().Length);
-                        var parameters = method.GetParameters();
-                        stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
-                                     .AppendLine($"                               .PushIndent()");
-                        for (var j = 0; j < parameters.Length; j++)
+                        if (TryFindMethod(candidates, out var method))
                         {
-                            var parameter = parameters[j];
-                            var property = Property(parameter);
-                            var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
-                            stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
-                        }
+                            var parameters = method.GetParameters();
+                            stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
+                                         .AppendLine($"                               .PushIndent()");
+                            for (var j = 0; j < parameters.Length; j++)
+                            {
+                                var parameter = parameters[j];
+                                var property = Property(parameter);
+                                var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
+                                stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
+                            }
 
-                        stringBuilder.AppendLine("                               .PopIndent();");
+                            stringBuilder.AppendLine("                               .PopIndent();");
+                        }
                     }
                     else
                     {
@@ -91,6 +94,20 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = stringBuilder.ToString();
                 Console.Write(code);
 
+                bool TryFindMethod(IEnumerable<MethodInfo> candidates, out MethodInfo result)
+                {
+                    candidates = candidates.Where(x => x.GetParameters()
+                                           .All(p => Property(p) != null));
+                    if (candidates.Any())
+                    {
+                        result = candidates.MaxBy(x => x.GetParameters().Length);
+                        return true;
+                    }
+
+                    result = null;
+                    return false;
+                }
+
                 string Property(ParameterInfo parameter)
                 {
                     switch (parameter.Name)
@@ -99,7 +116,7 @@ namespace Gu.Roslyn.Asserts.Tests
                         case "kind":
                             return "Kind()";
                         default:
-                            return parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                            return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
                     }
                 }
             }

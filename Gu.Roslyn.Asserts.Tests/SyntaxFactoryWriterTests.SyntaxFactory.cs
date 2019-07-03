@@ -27,6 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var expected = "SyntaxFactory.CompilationUnit(\r\n" +
                            "    externs: default,\r\n" +
                            "    usings: default,\r\n" +
+                           "    attributeLists: default,\r\n" +
                            "    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(\r\n" +
                            "        SyntaxFactory.NamespaceDeclaration(\r\n" +
                            "            namespaceKeyword: SyntaxFactory.Token(\r\n" +
@@ -34,7 +35,11 @@ namespace Gu.Roslyn.Asserts.Tests
                            "                kind: SyntaxKind.NamespaceKeyword,\r\n" +
                            "                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),\r\n" +
                            "            name: SyntaxFactory.QualifiedName(\r\n" +
-                           "                left: SyntaxFactory.IdentifierName(\"A\"),\r\n" +
+                           "                left: SyntaxFactory.IdentifierName(\r\n" +
+                           "                    identifier: SyntaxFactory.Identifier(\r\n" +
+                           "                        leading: default,\r\n" +
+                           "                        text: \"A\",\r\n" +
+                           "                        trailing: default)),\r\n" +
                            "                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),\r\n" +
                            "                right: SyntaxFactory.IdentifierName(\r\n" +
                            "                    identifier: SyntaxFactory.Identifier(\r\n" +
@@ -81,7 +86,7 @@ namespace Gu.Roslyn.Asserts.Tests
                            "                kind: SyntaxKind.CloseBraceToken,\r\n" +
                            "                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),\r\n" +
                            "            semicolonToken: default)),\r\n" +
-                           "    attributeLists: default)";
+                           "    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
             CodeAssert.AreEqual(expected, call);
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
