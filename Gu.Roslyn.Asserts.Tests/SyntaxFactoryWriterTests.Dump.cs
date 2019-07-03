@@ -245,7 +245,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public static void DumpTokenKinds()
             {
-                foreach (var name in Enum.GetNames(typeof(SyntaxKind))
+                foreach (var name in System.Enum.GetNames(typeof(SyntaxKind))
                                          .Where(x => x.EndsWith("LiteralToken"))
                                          .OrderBy(x => x))
                 {

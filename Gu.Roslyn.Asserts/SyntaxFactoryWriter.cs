@@ -1963,7 +1963,7 @@ namespace Gu.Roslyn.Asserts
                 case 0:
                     this.Append("default").CloseArgument(closeArgumentList);
                     return this;
-                case 1:
+                case 1 when syntaxList.SeparatorCount == 0:
                     return this.AppendLine($"SyntaxFactory.SingletonSeparatedList<{typeof(T).Name}>(")
                                .PushIndent()
                                .Write(syntaxList[0])
@@ -1971,18 +1971,31 @@ namespace Gu.Roslyn.Asserts
                                .CloseArgument(closeArgumentList)
                                .PopIndent();
                 default:
-                    this.AppendLine($"SyntaxFactory.SeparatedList<{typeof(T).Name}>(")
+                    this.AppendLine("SyntaxFactory.SeparatedList(")
+                        .PushIndent()
+                        .AppendLine($"new {typeof(T).Name}[]")
+                        .AppendLine("{")
                         .PushIndent();
-                    for (var i = 0; i < syntaxList.Count; i++)
+                    foreach (var node in syntaxList)
                     {
-                        _ = this.Write(syntaxList[i]);
-                        if (i < syntaxList.Count - 1)
-                        {
-                            this.writer.AppendLine(",");
-                        }
+                        _ = this.Write(node)
+                                .AppendLine(",");
                     }
 
-                    return this.Append(")")
+                    this.PopIndent()
+                        .AppendLine("},")
+                        .AppendLine($"new SyntaxToken[]")
+                        .AppendLine("{")
+                        .PushIndent();
+
+                    foreach (var token in syntaxList.GetSeparators())
+                    {
+                        _ = this.Write(token)
+                                .AppendLine(",");
+                    }
+
+                    return this.PopIndent()
+                               .Append("})")
                                .CloseArgument(closeArgumentList)
                                .PopIndent();
             }
