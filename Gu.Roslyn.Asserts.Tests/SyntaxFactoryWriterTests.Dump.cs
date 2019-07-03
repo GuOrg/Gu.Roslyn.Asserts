@@ -195,6 +195,30 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
+            public static void CodeGenTrivia()
+            {
+                var stringBuilder = new StringBuilder();
+                foreach (var method in typeof(SyntaxFactory).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                                                            .Where(x => !x.IsSpecialName && x.ReturnType == typeof(SyntaxTrivia))
+                                                            .OrderBy(x => x.Name))
+                {
+                    if (method.GetParameters().TrySingle(out var parameter) &&
+                        parameter.ParameterType == typeof(string))
+                    {
+                        var variable = method.Name.Substring(0, 1).ToLower() + method.Name.Substring(1);
+                        stringBuilder.AppendLine($"                case SyntaxKind.{method.Name}Trivia {variable}:");
+                        stringBuilder.AppendLine($"                    return this.Append($\"SyntaxFactory.{method.Name}({{{variable}.ToString()}}));");
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine(method.ToString());
+                    }
+                }
+
+                Console.WriteLine(stringBuilder.ToString());
+            }
+
+            [Test]
             public static void MethodsReturningToken()
             {
                 foreach (var method in typeof(SyntaxFactory).GetMethods(BindingFlags.Public | BindingFlags.Static)
