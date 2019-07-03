@@ -20,6 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests
         private static readonly IReadOnlyList<FileInfo> CSharpFiles = SolutionFile.Find("Gu.Roslyn.Asserts.sln")
                                                                                   .Directory.EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                                                                   .ToArray();
+
         [Explicit("Fix later.")]
         [TestCaseSource(nameof(CSharpFiles))]
         public static async Task Roundtrip(FileInfo file)
@@ -31,12 +32,12 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public static async Task ClassInNamespace()
         {
-            var code = "namespace A.B\n" +
-                       "{\n" +
-                       "    public class C\n" +
-                       "    {\n" +
-                       "    }\n" +
-                       "}\n";
+            var code = @"namespace A.B
+{
+    public class C
+    {
+    }
+}";
             var call = SyntaxFactoryWriter.Serialize(code);
             var expected = @"SyntaxFactory.CompilationUnit(
     externs: default,
@@ -90,6 +91,257 @@ namespace Gu.Roslyn.Asserts.Tests
                         kind: SyntaxKind.OpenBraceToken,
                         trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
                     members: default,
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
+        [Explicit("Fix later.")]
+        [Test]
+        public static async Task EnumInNamespace()
+        {
+            var code = @"namespace A.B
+{
+    public enum E
+    {
+        M1,
+        M2,
+    }
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.QualifiedName(
+                left: SyntaxFactory.IdentifierName(
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""A"",
+                        trailing: default)),
+                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),
+                right: SyntaxFactory.IdentifierName(
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""B"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.EnumDeclaration(
+                    attributeLists: default,
+                    modifiers: SyntaxFactory.TokenList(
+                        SyntaxFactory.Token(
+                            leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                            kind: SyntaxKind.PublicKeyword,
+                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                    enumKeyword: SyntaxFactory.Token(
+                        leading: default,
+                        kind: SyntaxKind.EnumKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""E"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    baseList: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: default,
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
+        [Explicit("Fix later.")]
+        [Test]
+        public static async Task EnumWithDocsInNamespace()
+        {
+            var code = @"namespace Gu.Roslyn.Asserts
+{
+    /// <summary>
+    /// Specifies if a code fix is allowed to introduce compiler errors.
+    /// </summary>
+    public enum AllowCompilationErrors
+    {
+        /// <summary>
+        /// Nope.
+        /// </summary>
+        No,
+
+        /// <summary>
+        /// Yes!
+        /// </summary>
+        Yes,
+    }
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.QualifiedName(
+                left: SyntaxFactory.QualifiedName(
+                    left: SyntaxFactory.IdentifierName(
+                        identifier: SyntaxFactory.Identifier(
+                            leading: default,
+                            text: ""Gu"",
+                            trailing: default)),
+                    dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),
+                    right: SyntaxFactory.IdentifierName(
+                        identifier: SyntaxFactory.Identifier(
+                            leading: default,
+                            text: ""Roslyn"",
+                            trailing: default))),
+                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),
+                right: SyntaxFactory.IdentifierName(
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""Asserts"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.EnumDeclaration(
+                    attributeLists: default,
+                    modifiers: SyntaxFactory.TokenList(
+                        SyntaxFactory.Token(
+                            leading: SyntaxFactory.TriviaList(
+                                SyntaxFactory.Whitespace(""    ""),
+                                SyntaxFactory.Trivia(
+                                    SyntaxFactory.DocumentationCommentTrivia(
+                                        kind: SyntaxKind.SingleLineDocumentationCommentTrivia,
+                                        content: SyntaxFactory.List(
+                                            new XmlNodeSyntax[]
+                                            {
+                                                SyntaxFactory.XmlText(
+                                                    textTokens: SyntaxFactory.TokenList(
+                                                        SyntaxFactory.XmlEntity(
+                                                            leading: SyntaxFactory.TriviaList(
+                                                                SyntaxFactory.DocumentationCommentExterior(""///"")),
+                                                            text: "" "",
+                                                            value: "" "",
+                                                            trailing: default))),
+                                                SyntaxFactory.XmlElement(
+                                                    startTag: SyntaxFactory.XmlElementStartTag(
+                                                        lessThanToken: SyntaxFactory.Token(SyntaxKind.LessThanToken),
+                                                        name: SyntaxFactory.XmlName(
+                                                            prefix: default,
+                                                            localName: SyntaxFactory.Identifier(
+                                                                leading: default,
+                                                                text: ""summary"",
+                                                                trailing: default)),
+                                                        attributes: default,
+                                                        greaterThanToken: SyntaxFactory.Token(SyntaxKind.GreaterThanToken)),
+                                                    content: SyntaxFactory.SingletonList<XmlNodeSyntax>(
+                                                        SyntaxFactory.XmlText(
+                                                            textTokens: SyntaxFactory.TokenList(
+                                                                SyntaxFactory.XmlTextNewLine(
+                                                                    leading: default,
+                                                                    text: ""\r\n"",
+                                                                    value: ""\r\n"",
+                                                                    trailing: default),
+                                                                SyntaxFactory.XmlEntity(
+                                                                    leading: SyntaxFactory.TriviaList(
+                                                                        SyntaxFactory.DocumentationCommentExterior(""    ///"")),
+                                                                    text: "" Specifies if a code fix is allowed to introduce compiler errors."",
+                                                                    value: "" Specifies if a code fix is allowed to introduce compiler errors."",
+                                                                    trailing: default),
+                                                                SyntaxFactory.XmlTextNewLine(
+                                                                    leading: default,
+                                                                    text: ""\r\n"",
+                                                                    value: ""\r\n"",
+                                                                    trailing: default),
+                                                                SyntaxFactory.XmlEntity(
+                                                                    leading: SyntaxFactory.TriviaList(
+                                                                        SyntaxFactory.DocumentationCommentExterior(""    ///"")),
+                                                                    text: "" "",
+                                                                    value: "" "",
+                                                                    trailing: default)))),
+                                                    endTag: SyntaxFactory.XmlElementEndTag(
+                                                        lessThanSlashToken: SyntaxFactory.Token(SyntaxKind.LessThanSlashToken),
+                                                        name: SyntaxFactory.XmlName(
+                                                            prefix: default,
+                                                            localName: SyntaxFactory.Identifier(
+                                                                leading: default,
+                                                                text: ""summary"",
+                                                                trailing: default)),
+                                                        greaterThanToken: SyntaxFactory.Token(SyntaxKind.GreaterThanToken))),
+                                                SyntaxFactory.XmlText(
+                                                    textTokens: SyntaxFactory.TokenList(
+                                                        SyntaxFactory.XmlTextNewLine(
+                                                            leading: default,
+                                                            text: ""\r\n"",
+                                                            value: ""\r\n"",
+                                                            trailing: default))),
+                                            }),
+                                        endOfComment: SyntaxFactory.Token(SyntaxKind.EndOfDocumentationCommentToken))),
+                                SyntaxFactory.Whitespace(""    "")),
+                            kind: SyntaxKind.PublicKeyword,
+                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                    enumKeyword: SyntaxFactory.Token(
+                        leading: default,
+                        kind: SyntaxKind.EnumKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""AllowCompilationErrors"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    baseList: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: SyntaxFactory.SeparatedList<EnumMemberDeclarationSyntax>(
+                        SyntaxFactory.EnumMemberDeclaration(
+                            attributeLists: default,
+                            identifier: SyntaxFactory.Identifier(
+                                leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                text: ""No"",
+                                trailing: default),
+                            equalsValue: default),
+                        SyntaxFactory.EnumMemberDeclaration(
+                            attributeLists: default,
+                            identifier: SyntaxFactory.Identifier(
+                                leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                text: ""Yes"",
+                                trailing: default),
+                            equalsValue: default)),
                     closeBraceToken: SyntaxFactory.Token(
                         leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
                         kind: SyntaxKind.CloseBraceToken,
