@@ -108,7 +108,7 @@ namespace Gu.Roslyn.Asserts.Internals
             using (var p = Process.Start(psi))
             {
                 p.WaitForExit();
-                string output = p.StandardError.ReadToEnd();
+                var output = p.StandardError.ReadToEnd();
                 if (p.ExitCode != 0)
                 {
                     throw new InvalidOperationException(output);

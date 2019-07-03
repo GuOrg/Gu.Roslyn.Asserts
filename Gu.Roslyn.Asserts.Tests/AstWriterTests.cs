@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
-    public static partial class AstWriterTests
+    public static class AstWriterTests
     {
         [Test]
         public static void SimpleClass()

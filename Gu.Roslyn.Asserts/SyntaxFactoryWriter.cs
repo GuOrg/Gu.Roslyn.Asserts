@@ -32,7 +32,6 @@ namespace Gu.Roslyn.Asserts
         {
             switch (node)
             {
-
                 case AccessorDeclarationSyntax accessorDeclaration:
                     return this.AppendLine("SyntaxFactory.AccessorDeclaration(")
                                .PushIndent()
