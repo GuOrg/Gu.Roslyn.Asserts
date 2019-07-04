@@ -1915,13 +1915,15 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxNode node, bool closeArgumentList = false)
         {
-            this.Append(parameter).Append(": ");
+            this.writer.Append(parameter).Append(": ");
             if (node == null)
             {
-                return this.Append("default").CloseArgument(closeArgumentList);
+                _ = this.writer.Append("default")
+                               .WriteArgumentEnd(closeArgumentList);
+                return this;
             }
 
-            return this.Write(node).CloseArgument(closeArgumentList);
+            return this.Write(node).WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxToken token, bool closeArgumentList = false)
@@ -1929,7 +1931,7 @@ namespace Gu.Roslyn.Asserts
             return this.Append(parameter)
                        .Append(": ")
                        .Write(token)
-                       .CloseArgument(closeArgumentList);
+                       .WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter WriteArgument<T>(string parameter, SyntaxList<T> syntaxList, bool closeArgumentList = false)
@@ -1939,14 +1941,14 @@ namespace Gu.Roslyn.Asserts
             switch (syntaxList.Count)
             {
                 case 0:
-                    this.Append("default").CloseArgument(closeArgumentList);
+                    this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1:
                     return this.AppendLine($"SyntaxFactory.SingletonList<{typeof(T).Name}>(")
                                .PushIndent()
                                .Write(syntaxList[0])
                                .Append(")")
-                               .CloseArgument(closeArgumentList)
+                               .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
                 default:
                     this.AppendLine($"SyntaxFactory.List(")
@@ -1961,7 +1963,7 @@ namespace Gu.Roslyn.Asserts
 
                     return this.PopIndent()
                                .Append("})")
-                               .CloseArgument(closeArgumentList)
+                               .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
             }
         }
@@ -1973,14 +1975,14 @@ namespace Gu.Roslyn.Asserts
             switch (syntaxList.Count)
             {
                 case 0:
-                    this.Append("default").CloseArgument(closeArgumentList);
+                    this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1 when syntaxList.SeparatorCount == 0:
                     return this.AppendLine($"SyntaxFactory.SingletonSeparatedList<{typeof(T).Name}>(")
                                .PushIndent()
                                .Write(syntaxList[0])
                                .Append(")")
-                               .CloseArgument(closeArgumentList)
+                               .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
                 default:
                     this.AppendLine("SyntaxFactory.SeparatedList(")
@@ -2008,7 +2010,7 @@ namespace Gu.Roslyn.Asserts
 
                     return this.PopIndent()
                                .Append("})")
-                               .CloseArgument(closeArgumentList)
+                               .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
             }
         }
@@ -2019,14 +2021,14 @@ namespace Gu.Roslyn.Asserts
             switch (tokenList.Count)
             {
                 case 0:
-                    this.Append("default").CloseArgument(closeArgumentList);
+                    this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1:
                     return this.AppendLine($"SyntaxFactory.TokenList(")
                                .PushIndent()
                                .Write(tokenList[0])
                                .Append(")")
-                               .CloseArgument(closeArgumentList)
+                               .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
                 default:
                     this.AppendLine($"SyntaxFactory.TokenList(")
@@ -2041,7 +2043,7 @@ namespace Gu.Roslyn.Asserts
                     }
 
                     this.writer.Append(")");
-                    return this.CloseArgument(closeArgumentList)
+                    return this.WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
             }
         }
@@ -2052,11 +2054,11 @@ namespace Gu.Roslyn.Asserts
             switch (triviaList.Count)
             {
                 case 0:
-                    this.Append("default").CloseArgument(closeArgumentList);
+                    this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1 when TryGetSingleLine(out var text):
                     return this.Append(text)
-                               .CloseArgument(closeArgumentList);
+                               .WriteArgumentEnd(closeArgumentList);
                 default:
                     this.AppendLine($"SyntaxFactory.TriviaList(")
                         .PushIndent();
@@ -2070,7 +2072,7 @@ namespace Gu.Roslyn.Asserts
                     }
 
                     this.writer.Append(")");
-                    return this.CloseArgument(closeArgumentList)
+                    return this.WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
             }
 
@@ -2111,7 +2113,7 @@ namespace Gu.Roslyn.Asserts
                        .Append(": ")
                        .Append("SyntaxKind.")
                        .Append(kind.ToString())
-                       .CloseArgument(closeArgumentList);
+                       .WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool escape, bool closeArgumentList = false)
@@ -2132,7 +2134,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             return this.Append("\"")
-                      .CloseArgument(closeArgumentList);
+                      .WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter WriteArgument(string parameter, bool value, bool closeArgumentList = false)
@@ -2141,7 +2143,7 @@ namespace Gu.Roslyn.Asserts
                        .Append(": ")
                        .Append("SyntaxKind.")
                        .Append(value ? "true" : "false")
-                       .CloseArgument(closeArgumentList);
+                       .WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter Append(string text)
@@ -2156,18 +2158,10 @@ namespace Gu.Roslyn.Asserts
             return this;
         }
 
-        private SyntaxFactoryWriter CloseArgument(bool closeArgumentList)
+        private SyntaxFactoryWriter WriteArgumentEnd(bool closeArgumentList)
         {
-            if (closeArgumentList)
-            {
-                this.writer.Append(")");
-                return this;
-            }
-            else
-            {
-                this.writer.AppendLine(",");
-                return this;
-            }
+            _ = this.writer.WriteArgumentEnd(closeArgumentList);
+            return this;
         }
 
         private SyntaxFactoryWriter PushIndent()
@@ -2223,6 +2217,18 @@ namespace Gu.Roslyn.Asserts
                 this.builder.Append(c);
                 this.newLine = false;
                 return this;
+            }
+
+            public Writer WriteArgumentEnd(bool closeArgumentList)
+            {
+                if (closeArgumentList)
+                {
+                    return this.Append(")");
+                }
+                else
+                {
+                    return this.AppendLine(",");
+                }
             }
 
             public Writer PushIndent()
