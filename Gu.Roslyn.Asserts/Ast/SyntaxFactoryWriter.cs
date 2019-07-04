@@ -24,8 +24,9 @@ namespace Gu.Roslyn.Asserts
         public static string Serialize(string code)
         {
             var compilationUnit = SyntaxFactory.ParseCompilationUnit(code);
-            var writer = new SyntaxFactoryWriter().Write(compilationUnit);
-            return writer.writer.ToString();
+            return new SyntaxFactoryWriter()
+                   .Write(compilationUnit)
+                   .ToString();
         }
 
         /// <summary>
@@ -37,9 +38,10 @@ namespace Gu.Roslyn.Asserts
         {
             return new SyntaxFactoryWriter()
                    .Write(node)
-                   .writer
                    .ToString();
         }
+
+        public override string ToString() => this.writer.ToString();
 
         private SyntaxFactoryWriter Write(SyntaxNode node)
         {
