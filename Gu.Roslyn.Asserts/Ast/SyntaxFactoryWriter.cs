@@ -1124,7 +1124,7 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("modifiers", parameter.Modifiers)
                                .WriteArgument("type", parameter.Type)
                                .WriteArgument("identifier", parameter.Identifier)
-                               .WriteArgument("@default", parameter.Default, closeArgumentList: true)
+                               .WriteArgument("default", parameter.Default, closeArgumentList: true)
                                .PopIndent();
                 case ParameterListSyntax parameterList:
                     return this.AppendLine("SyntaxFactory.ParameterList(")
@@ -1915,7 +1915,8 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxNode node, bool closeArgumentList = false)
         {
-            this.writer.Append(parameter).Append(": ");
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
             if (node == null)
             {
                 _ = this.writer.Append("default")
@@ -1928,16 +1929,17 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxToken token, bool closeArgumentList = false)
         {
-            return this.Append(parameter)
-                       .Append(": ")
-                       .Write(token)
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
+            return this.Write(token)
                        .WriteArgumentEnd(closeArgumentList);
         }
 
         private SyntaxFactoryWriter WriteArgument<T>(string parameter, SyntaxList<T> syntaxList, bool closeArgumentList = false)
             where T : SyntaxNode
         {
-            this.writer.Append(parameter).Append(": ");
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
             switch (syntaxList.Count)
             {
                 case 0:
@@ -1971,7 +1973,8 @@ namespace Gu.Roslyn.Asserts
         private SyntaxFactoryWriter WriteArgument<T>(string parameter, SeparatedSyntaxList<T> syntaxList, bool closeArgumentList = false)
             where T : SyntaxNode
         {
-            this.writer.Append(parameter).Append(": ");
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
             switch (syntaxList.Count)
             {
                 case 0:
@@ -2017,7 +2020,8 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxTokenList tokenList, bool closeArgumentList = false)
         {
-            this.writer.Append(parameter).Append(": ");
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
             switch (tokenList.Count)
             {
                 case 0:
@@ -2050,7 +2054,8 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxTriviaList triviaList, bool closeArgumentList = false)
         {
-            this.writer.Append(parameter).Append(": ");
+            _ = this.writer
+                    .WriteArgumentStart(parameter);
             switch (triviaList.Count)
             {
                 case 0:
@@ -2109,18 +2114,19 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, SyntaxKind kind, bool closeArgumentList = false)
         {
-            return this.Append(parameter)
-                       .Append(": ")
+            _ = this.writer
+                    .WriteArgumentStart(parameter)
                        .Append("SyntaxKind.")
                        .Append(kind.ToString())
                        .WriteArgumentEnd(closeArgumentList);
+            return this;
         }
 
         private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool escape, bool closeArgumentList = false)
         {
-            this.Append(parameter)
-                      .Append(": ")
-                      .Append("\"");
+            _ = this.writer
+                    .WriteArgumentStart(parameter)
+                    .Append("\"");
             foreach (var c in text)
             {
                 if (escape &&
@@ -2139,11 +2145,12 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter WriteArgument(string parameter, bool value, bool closeArgumentList = false)
         {
-            return this.Append(parameter)
-                       .Append(": ")
-                       .Append("SyntaxKind.")
-                       .Append(value ? "true" : "false")
-                       .WriteArgumentEnd(closeArgumentList);
+            _ = this.writer
+                    .WriteArgumentStart(parameter)
+                    .Append("SyntaxKind.")
+                    .Append(value ? "true" : "false")
+                    .WriteArgumentEnd(closeArgumentList);
+            return this;
         }
 
         private SyntaxFactoryWriter Append(string text)
@@ -2217,6 +2224,17 @@ namespace Gu.Roslyn.Asserts
                 this.builder.Append(c);
                 this.newLine = false;
                 return this;
+            }
+
+            public Writer WriteArgumentStart(string parameterName)
+            {
+                if (SyntaxFacts.GetContextualKeywordKind(parameterName) != SyntaxKind.None)
+                {
+                    this.Append("@");
+                }
+
+                return this.Append(parameterName)
+                           .Append(": ");
             }
 
             public Writer WriteArgumentEnd(bool closeArgumentList)
