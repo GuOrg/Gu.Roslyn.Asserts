@@ -46,27 +46,6 @@ namespace Gu.Roslyn.Asserts
 
         public override string ToString() => this.writer.ToString();
 
-        private SyntaxFactoryWriter Write(SyntaxNode node)
-        {
-            var method = typeof(SyntaxFactory)
-                         .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                         .Where(x => !x.Name.StartsWith("Parse") &&
-                                     x.ReturnType == node.GetType() &&
-                                     x.GetParameters().All(p => ArgumentWriters.GetOrAdd(p, CreateArgumentWriter) != null) &&
-                                     x.ReturnType.Name.StartsWith(x.Name))
-                         .MaxBy(x => x.GetParameters().Length);
-            this.writer.Append("SyntaxFactory.").Append(method.Name).AppendLine("(")
-                .PushIndent();
-            var parameters = method.GetParameters();
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                ArgumentWriters[parameters[i]].Invoke(this, node, i == parameters.Length - 1);
-            }
-
-            this.writer.PopIndent();
-            return this;
-        }
-
         private static Action<SyntaxFactoryWriter, SyntaxNode, bool> CreateArgumentWriter(ParameterInfo parameter)
         {
             switch (parameter.Name)
@@ -112,11 +91,32 @@ namespace Gu.Roslyn.Asserts
 
                 if (writeMethod != null)
                 {
-                    return (factoryWriter, syntaxNode, closeArgumentList) => writeMethod.Invoke(factoryWriter, new [] { parameter.Name, property.GetValue(syntaxNode), closeArgumentList });
+                    return (factoryWriter, syntaxNode, closeArgumentList) => writeMethod.Invoke(factoryWriter, new[] { parameter.Name, property.GetValue(syntaxNode), closeArgumentList });
                 }
             }
 
             return null;
+        }
+
+        private SyntaxFactoryWriter Write(SyntaxNode node)
+        {
+            var method = typeof(SyntaxFactory)
+                         .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                         .Where(x => !x.Name.StartsWith("Parse") &&
+                                     x.ReturnType == node.GetType() &&
+                                     x.GetParameters().All(p => ArgumentWriters.GetOrAdd(p, CreateArgumentWriter) != null) &&
+                                     x.ReturnType.Name.StartsWith(x.Name))
+                         .MaxBy(x => x.GetParameters().Length);
+            this.writer.Append("SyntaxFactory.").Append(method.Name).AppendLine("(")
+                .PushIndent();
+            var parameters = method.GetParameters();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                ArgumentWriters[parameters[i]].Invoke(this, node, i == parameters.Length - 1);
+            }
+
+            this.writer.PopIndent();
+            return this;
         }
 
         private SyntaxFactoryWriter Write(SyntaxToken token)
@@ -605,9 +605,17 @@ namespace Gu.Roslyn.Asserts
 
             public Writer WriteArgumentStart(string parameterName)
             {
-                if (SyntaxFacts.GetContextualKeywordKind(parameterName) != SyntaxKind.None)
+                switch (SyntaxFacts.GetKeywordKind(parameterName))
                 {
-                    this.Append("@");
+                    case SyntaxKind.None:
+                        break;
+                    case SyntaxKind.DefaultKeyword:
+                    case SyntaxKind.ElseKeyword:
+                        this.Append("@");
+                        break;
+                    default:
+                        this.Append("@");
+                        break;
                 }
 
                 return this.Append(parameterName)

@@ -104,6 +104,149 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
+        public static async Task ClassWithMethod()
+        {
+            var code = @"namespace A.B
+{
+    public class C
+    {
+        public static T Id<T>(T t) => t;
+    }
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.QualifiedName(
+                left: SyntaxFactory.IdentifierName(
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""A"",
+                        trailing: default)),
+                dotToken: SyntaxFactory.Token(SyntaxKind.DotToken),
+                right: SyntaxFactory.IdentifierName(
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""B"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.ClassDeclaration(
+                    attributeLists: default,
+                    modifiers: SyntaxFactory.TokenList(
+                        SyntaxFactory.Token(
+                            leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                            kind: SyntaxKind.PublicKeyword,
+                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                    keyword: SyntaxFactory.Token(
+                        leading: default,
+                        kind: SyntaxKind.ClassKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""C"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    typeParameterList: default,
+                    baseList: default,
+                    constraintClauses: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                        SyntaxFactory.MethodDeclaration(
+                            attributeLists: default,
+                            modifiers: SyntaxFactory.TokenList(
+                                SyntaxFactory.Token(
+                                    leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                    kind: SyntaxKind.PublicKeyword,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.StaticKeyword,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                            returnType: SyntaxFactory.IdentifierName(
+                                identifier: SyntaxFactory.Identifier(
+                                    leading: default,
+                                    text: ""T"",
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                            explicitInterfaceSpecifier: default,
+                            identifier: SyntaxFactory.Identifier(
+                                leading: default,
+                                text: ""Id"",
+                                trailing: default),
+                            typeParameterList: SyntaxFactory.TypeParameterList(
+                                lessThanToken: SyntaxFactory.Token(SyntaxKind.LessThanToken),
+                                parameters: SyntaxFactory.SingletonSeparatedList<TypeParameterSyntax>(
+                                    SyntaxFactory.TypeParameter(
+                                        attributeLists: default,
+                                        varianceKeyword: default,
+                                        identifier: SyntaxFactory.Identifier(
+                                            leading: default,
+                                            text: ""T"",
+                                            trailing: default))),
+                                greaterThanToken: SyntaxFactory.Token(SyntaxKind.GreaterThanToken)),
+                            parameterList: SyntaxFactory.ParameterList(
+                                openParenToken: SyntaxFactory.Token(SyntaxKind.OpenParenToken),
+                                parameters: SyntaxFactory.SingletonSeparatedList<ParameterSyntax>(
+                                    SyntaxFactory.Parameter(
+                                        attributeLists: default,
+                                        modifiers: default,
+                                        type: SyntaxFactory.IdentifierName(
+                                            identifier: SyntaxFactory.Identifier(
+                                                leading: default,
+                                                text: ""T"",
+                                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                        identifier: SyntaxFactory.Identifier(
+                                            leading: default,
+                                            text: ""t"",
+                                            trailing: default),
+                                        @default: default)),
+                                closeParenToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.CloseParenToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                            constraintClauses: default,
+                            body: default,
+                            expressionBody: SyntaxFactory.ArrowExpressionClause(
+                                arrowToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.EqualsGreaterThanToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                expression: SyntaxFactory.IdentifierName(
+                                    identifier: SyntaxFactory.Identifier(
+                                        leading: default,
+                                        text: ""t"",
+                                        trailing: default))),
+                            semicolonToken: SyntaxFactory.Token(
+                                leading: default,
+                                kind: SyntaxKind.SemicolonToken,
+                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)))),
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
+        [Test]
         public static async Task ClassWithDocs()
         {
             var code = @"namespace A.B
