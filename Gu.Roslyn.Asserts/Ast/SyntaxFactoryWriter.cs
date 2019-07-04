@@ -28,6 +28,19 @@ namespace Gu.Roslyn.Asserts
             return writer.writer.ToString();
         }
 
+        /// <summary>
+        /// Transforms the code passed in to a call to SyntaxFactory that creates the same code.
+        /// </summary>
+        /// <param name="node">For example class C { }. </param>
+        /// <returns>SyntaxFactory.Xxx(...)</returns>
+        public static string Serialize(SyntaxNode node)
+        {
+            return new SyntaxFactoryWriter()
+                   .Write(node)
+                   .writer
+                   .ToString();
+        }
+
         private SyntaxFactoryWriter Write(SyntaxNode node)
         {
             switch (node)
