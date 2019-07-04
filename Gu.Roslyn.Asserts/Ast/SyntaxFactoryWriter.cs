@@ -1124,7 +1124,7 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("modifiers", parameter.Modifiers)
                                .WriteArgument("type", parameter.Type)
                                .WriteArgument("identifier", parameter.Identifier)
-                               .WriteArgument("default", parameter.Default, closeArgumentList: true)
+                               .WriteArgument("@default", parameter.Default, closeArgumentList: true)
                                .PopIndent();
                 case ParameterListSyntax parameterList:
                     return this.AppendLine("SyntaxFactory.ParameterList(")
