@@ -40,54 +40,24 @@ namespace Gu.Roslyn.Asserts.Tests
 
                     stringBuilder.AppendLine($"                case {type.Name} {variable}:");
                     var candidates = kvp.Value;
-                    if (true)
+                    if (TryFindMethod(candidates, out var method))
                     {
-                        if (TryFindMethod(candidates, out var method))
+                        var parameters = method.GetParameters();
+                        stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
+                                     .AppendLine($"                               .PushIndent()");
+                        for (var j = 0; j < parameters.Length; j++)
                         {
-                            var parameters = method.GetParameters();
-                            stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
-                                         .AppendLine($"                               .PushIndent()");
-                            for (var j = 0; j < parameters.Length; j++)
-                            {
-                                var parameter = parameters[j];
-                                var property = Property(parameter);
-                                var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
-                                stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
-                            }
-
-                            stringBuilder.AppendLine("                               .PopIndent();");
+                            var parameter = parameters[j];
+                            var property = Property(parameter);
+                            var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
+                            stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
                         }
+
+                        stringBuilder.AppendLine("                               .PopIndent();");
                     }
                     else
                     {
-                        for (var i = 0; i < candidates.Length; i++)
-                        {
-                            var method = candidates[i];
-                            var parameters = method.GetParameters();
-                            if (parameters.Length == 0)
-                            {
-                                stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}()\");");
-                            }
-                            else if (parameters.TrySingle(out var parameter))
-                            {
-                                var property = Property(parameter);
-                                stringBuilder.AppendLine($"                    return this.AppendLine($\"SyntaxFactory.{method.Name}({{{variable}.{property}}})\");");
-                            }
-                            else
-                            {
-                                stringBuilder.AppendLine($"                    return this.AppendLine(\"SyntaxFactory.{method.Name}(\")")
-                                             .AppendLine($"                               .PushIndent()");
-                                for (var j = 0; j < parameters.Length; j++)
-                                {
-                                    parameter = parameters[j];
-                                    var property = Property(parameter);
-                                    var closeArg = j == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
-                                    stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", {variable}.{property}{closeArg})");
-                                }
-
-                                stringBuilder.AppendLine("                               .PopIndent();");
-                            }
-                        }
+                        stringBuilder.AppendLine("                    throw new NotSupportedException();");
                     }
                 }
 
