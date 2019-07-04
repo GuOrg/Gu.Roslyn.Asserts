@@ -1902,12 +1902,7 @@ namespace Gu.Roslyn.Asserts
 
                     return this.Append($"SyntaxFactory.Whitespace(\"{trivia.ToString()}\")");
                 case SyntaxKind.EndOfLineTrivia:
-                    if (trivia.Span.Length == 1)
-                    {
-                        return this.Append("SyntaxFactory.LineFeed");
-                    }
-
-                    return this.Append("SyntaxFactory.CarriageReturnLineFeed");
+                    return this.Append("SyntaxFactory.LineFeed");
                 default:
                     throw new NotImplementedException($"Not handling {trivia.Kind()} yet.");
             }
