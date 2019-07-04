@@ -823,15 +823,29 @@ namespace Gu.Roslyn.Asserts.Tests
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
 
-        [Explicit("Fix later.")]
         [Test]
-        public static async Task Deep()
+        public static async Task DeepNesting()
         {
             var code = @"namespace A
 {
     class C
     {
         static string M() => typeof(C).ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
+                                      .ToString()
                                       .ToString()
                                       .ToString()
                                       .ToString()
