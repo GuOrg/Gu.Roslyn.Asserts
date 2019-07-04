@@ -24,39 +24,25 @@ namespace Gu.Roslyn.Asserts
         public static string Serialize(string code)
         {
             var compilationUnit = SyntaxFactory.ParseCompilationUnit(code);
-            var writer = new SyntaxFactoryWriter();
-            writer.Write(compilationUnit);
+            var writer = new SyntaxFactoryWriter().Write(compilationUnit);
             return writer.writer.ToString();
         }
 
-        /// <summary>
-        /// Transforms the code passed in to a call to SyntaxFactory that creates the same code.
-        /// </summary>
-        /// <param name="node">For example class C { }. </param>
-        /// <returns>SyntaxFactory.Xxx(...)</returns>
-        public static string Serialize(SyntaxNode node)
-        {
-            var writer = new SyntaxFactoryWriter();
-            writer.Write(node);
-            return writer.writer.ToString();
-        }
-
-        private void Write(SyntaxNode node)
+        private SyntaxFactoryWriter Write(SyntaxNode node)
         {
             switch (node)
             {
                 case AccessorDeclarationSyntax accessorDeclaration:
-                    this.writer.AppendLine("SyntaxFactory.AccessorDeclaration(");
-                    this.writer.PushIndent();
-                    this.WriteArgument("kind", accessorDeclaration.Kind());
-                    this.WriteArgument("attributeLists", accessorDeclaration.AttributeLists);
-                    this.WriteArgument("modifiers", accessorDeclaration.Modifiers);
-                    this.WriteArgument("keyword", accessorDeclaration.Keyword);
-                    this.WriteArgument("body", accessorDeclaration.Body);
-                    this.WriteArgument("expressionBody", accessorDeclaration.ExpressionBody);
-                    this.WriteArgument("semicolonToken", accessorDeclaration.SemicolonToken, closeArgumentList: true);
-                    this.writer.PopIndent();
-                    break;
+                    return this.AppendLine("SyntaxFactory.AccessorDeclaration(")
+                               .PushIndent()
+                               .WriteArgument("kind", accessorDeclaration.Kind())
+                               .WriteArgument("attributeLists", accessorDeclaration.AttributeLists)
+                               .WriteArgument("modifiers", accessorDeclaration.Modifiers)
+                               .WriteArgument("keyword", accessorDeclaration.Keyword)
+                               .WriteArgument("body", accessorDeclaration.Body)
+                               .WriteArgument("expressionBody", accessorDeclaration.ExpressionBody)
+                               .WriteArgument("semicolonToken", accessorDeclaration.SemicolonToken, closeArgumentList: true)
+                               .PopIndent();
                 case AccessorListSyntax accessorList:
                     return this.AppendLine("SyntaxFactory.AccessorList(")
                                .PushIndent()
