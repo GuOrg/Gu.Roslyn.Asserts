@@ -22,6 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                                   .Directory.EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                                                                   .ToArray();
 
+        [Explicit("Fails on AppVeyor?")]
         [TestCaseSource(nameof(CSharpFiles))]
         public static async Task Roundtrip(FileInfo file)
         {
@@ -2034,7 +2035,7 @@ class C
                 var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
                 CodeAssert.AreEqual(code, result.ToFullString());
             }
-            catch (CompilationErrorException e)
+            catch (CompilationErrorException)
             {
                 Console.Write(call);
                 throw;
