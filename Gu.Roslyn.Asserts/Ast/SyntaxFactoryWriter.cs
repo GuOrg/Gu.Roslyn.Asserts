@@ -286,9 +286,6 @@ namespace Gu.Roslyn.Asserts
 
             switch (trivia.Kind())
             {
-                case SyntaxKind.None:
-                    return this.Append("default");
-
                 case SyntaxKind.DisabledTextTrivia:
                     this.writer.Append($"SyntaxFactory.DisabledText(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
@@ -297,8 +294,13 @@ namespace Gu.Roslyn.Asserts
                     return this;
                 case SyntaxKind.EndOfLineTrivia:
                     return this.Append("SyntaxFactory.LineFeed");
-                case SyntaxKind.SingleLineCommentTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
+                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
+                case SyntaxKind.PreprocessingMessageTrivia:
+                    this.writer.Append($"SyntaxFactory.PreprocessingMessage(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
+                case SyntaxKind.SingleLineCommentTrivia:
                     this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.WhitespaceTrivia:
@@ -309,6 +311,8 @@ namespace Gu.Roslyn.Asserts
                     }
 
                     return this.Append($"SyntaxFactory.Whitespace(\"{text}\")");
+                case SyntaxKind.None:
+                    return this.Append("default");
                 default:
                     throw new NotImplementedException($"Not handling {trivia.Kind()} yet.");
             }

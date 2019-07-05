@@ -1878,6 +1878,101 @@ class C
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
 
+        [Test]
+        public static async Task ClassInRegion()
+        {
+            var code = @"namespace A
+{
+#region meh
+    public class C
+    {
+    }
+#endregion
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.IdentifierName(
+                identifier: SyntaxFactory.Identifier(
+                    leading: default,
+                    text: ""A"",
+                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.ClassDeclaration(
+                    attributeLists: default,
+                    modifiers: SyntaxFactory.TokenList(
+                        SyntaxFactory.Token(
+                            leading: SyntaxFactory.TriviaList(
+                                SyntaxFactory.Trivia(
+                                    SyntaxFactory.RegionDirectiveTrivia(
+                                        hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                                        regionKeyword: SyntaxFactory.Token(
+                                            leading: default,
+                                            kind: SyntaxKind.RegionKeyword,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                        endOfDirectiveToken: SyntaxFactory.Token(
+                                            leading: SyntaxFactory.TriviaList(
+                                                SyntaxFactory.PreprocessingMessage(""meh"")),
+                                            kind: SyntaxKind.EndOfDirectiveToken,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                                        isActive: true)),
+                                SyntaxFactory.Whitespace(""    "")),
+                            kind: SyntaxKind.PublicKeyword,
+                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                    keyword: SyntaxFactory.Token(
+                        leading: default,
+                        kind: SyntaxKind.ClassKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""C"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    typeParameterList: default,
+                    baseList: default,
+                    constraintClauses: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: default,
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(
+                leading: SyntaxFactory.TriviaList(
+                    SyntaxFactory.Trivia(
+                        SyntaxFactory.EndRegionDirectiveTrivia(
+                            hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                            endRegionKeyword: SyntaxFactory.Token(SyntaxKind.EndRegionKeyword),
+                            endOfDirectiveToken: SyntaxFactory.Token(
+                                leading: default,
+                                kind: SyntaxKind.EndOfDirectiveToken,
+                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                            isActive: true))),
+                kind: SyntaxKind.CloseBraceToken,
+                trailing: default),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
         [TestCase("int x = 1")]
         [TestCase("int x = 1 ")]
         [TestCase("long x = 1")]

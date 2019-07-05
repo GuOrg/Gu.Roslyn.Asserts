@@ -175,9 +175,9 @@ namespace Gu.Roslyn.Asserts.Tests
                     if (method.GetParameters().TrySingle(out var parameter) &&
                         parameter.ParameterType == typeof(string))
                     {
-                        var variable = method.Name.Substring(0, 1).ToLower() + method.Name.Substring(1);
-                        stringBuilder.AppendLine($"                case SyntaxKind.{method.Name}Trivia {variable}:");
-                        stringBuilder.AppendLine($"                    return this.Append($\"SyntaxFactory.{method.Name}({{{variable}.ToString()}}));");
+                        stringBuilder.AppendLine($"                case SyntaxKind.{method.Name}Trivia:")
+                                     .AppendLine($"                    this.writer.Append($\"SyntaxFactory.{method.Name}(\").AppendQuotedEscaped(trivia.ToString()).Append(\")\");")
+                                     .AppendLine($"                    return this;");
                     }
                     else
                     {
@@ -216,10 +216,10 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void DumpTokenKinds()
             {
                 foreach (var name in System.Enum.GetNames(typeof(SyntaxKind))
-                                         .Where(x => x.EndsWith("LiteralToken"))
+                                         .Where(x => x.EndsWith("Trivia"))
                                          .OrderBy(x => x))
                 {
-                    Console.WriteLine($"case {name}:");
+                    Console.WriteLine($"case SyntaxKind.{name}:");
                 }
             }
 
