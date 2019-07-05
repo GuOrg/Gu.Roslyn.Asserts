@@ -6,6 +6,7 @@ namespace Gu.Roslyn.Asserts
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using System.Threading;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -26,9 +27,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns>SyntaxFactory.Compilation(...)</returns>
         public static string Serialize(string code)
         {
-            var compilationUnit = SyntaxFactory.ParseCompilationUnit(code);
+            var root = CSharpSyntaxTree.ParseText(code).GetRoot(CancellationToken.None);
             return new SyntaxFactoryWriter()
-                   .Write(compilationUnit)
+                   .Write(root)
                    .ToString();
         }
 
