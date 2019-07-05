@@ -44,6 +44,7 @@ namespace Gu.Roslyn.Asserts
                    .ToString();
         }
 
+        /// <inheritdoc/>
         public override string ToString() => this.writer.ToString();
 
         private static Action<SyntaxFactoryWriter, SyntaxNode, bool> CreateArgumentWriter(ParameterInfo parameter)
@@ -64,8 +65,8 @@ namespace Gu.Roslyn.Asserts
 
             if (property.PropertyType.IsGenericType)
             {
-                foreach (var candidate in (typeof(SyntaxFactoryWriter)).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                                                                       .Where(x => x.Name == "WriteArgument" && x.IsGenericMethod))
+                foreach (var candidate in typeof(SyntaxFactoryWriter).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                                                                     .Where(x => x.Name == "WriteArgument" && x.IsGenericMethod))
                 {
                     var parameters = candidate.GetParameters();
                     if (parameters.Length == 3 &&
@@ -80,8 +81,7 @@ namespace Gu.Roslyn.Asserts
             }
             else
             {
-                var writeMethod = (typeof(SyntaxFactoryWriter))
-                    .GetMethod(
+                var writeMethod = typeof(SyntaxFactoryWriter).GetMethod(
                         nameof(WriteArgument),
                         BindingFlags.NonPublic | BindingFlags.Instance,
                         null,
@@ -314,7 +314,7 @@ namespace Gu.Roslyn.Asserts
                 case SyntaxKind.None:
                     return this.Append("default");
                 default:
-                    throw new NotImplementedException($"Not handling {trivia.Kind()} yet.");
+                    throw new NotSupportedException($"Not handling {trivia.Kind()} yet.");
             }
         }
 

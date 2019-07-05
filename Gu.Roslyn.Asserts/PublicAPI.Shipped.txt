@@ -112,7 +112,6 @@ Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.SolutionFile
 Gu.Roslyn.Asserts.StringHelper
 Gu.Roslyn.Asserts.SyntaxFactoryWriter
-Gu.Roslyn.Asserts.SyntaxFactoryWriter.SyntaxFactoryWriter() -> void
 Gu.Roslyn.Asserts.SyntaxNodeExt
 Gu.Roslyn.Asserts.TextAssert
 Gu.Roslyn.Asserts.TransitiveMetadataReferencesAttribute

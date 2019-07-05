@@ -1,2 +1,3 @@
-﻿static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(Microsoft.CodeAnalysis.SyntaxNode node) -> string
+﻿override Gu.Roslyn.Asserts.SyntaxFactoryWriter.ToString() -> string
+static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(Microsoft.CodeAnalysis.SyntaxNode node) -> string
 static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(string code) -> string
