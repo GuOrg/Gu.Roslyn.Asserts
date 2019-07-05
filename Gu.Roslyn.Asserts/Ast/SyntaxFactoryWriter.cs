@@ -197,7 +197,10 @@ namespace Gu.Roslyn.Asserts
 
                     if (new System.Xml.Linq.XText(token.ValueText).ToString() == token.Text)
                     {
-                        return this.Append($"SyntaxFactory.XmlTextLiteral(\"{token.Text}\")");
+                        this.writer.Append($"SyntaxFactory.XmlTextLiteral(")
+                            .AppendQuotedEscaped(token.Text)
+                            .Append(")");
+                        return this;
                     }
 
                     return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
@@ -508,29 +511,10 @@ namespace Gu.Roslyn.Asserts
         private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool closeArgumentList = false)
         {
             _ = this.writer
-                    .WriteArgumentStart(parameter)
-                    .Append("\"");
-            foreach (var c in text)
-            {
-                switch (c)
-                {
-                    case '\r':
-                        this.writer.Append("\\r");
-                        continue;
-                    case '\n':
-                        this.writer.Append("\\n");
-                        continue;
-                    case '\\':
-                    case '"':
-                        this.writer.Append('\\');
-                        break;
-                }
-
-                this.writer.Append(c);
-            }
-
-            return this.Append("\"")
-                      .WriteArgumentEnd(closeArgumentList);
+                       .WriteArgumentStart(parameter)
+                       .AppendQuotedEscaped(text)
+                       .WriteArgumentEnd(closeArgumentList);
+            return this;
         }
 
         private SyntaxFactoryWriter WriteArgument(string parameter, bool value, bool closeArgumentList = false)
@@ -598,8 +582,40 @@ namespace Gu.Roslyn.Asserts
                     this.builder.Append(this.indentation);
                 }
 
-                this.builder.Append(text);
                 this.newLine = false;
+                this.builder.Append(text);
+                return this;
+            }
+
+            public Writer AppendQuotedEscaped(string text)
+            {
+                if (this.newLine)
+                {
+                    this.builder.Append(this.indentation);
+                }
+
+                this.newLine = false;
+                this.builder.Append("\"");
+                foreach (var c in text)
+                {
+                    switch (c)
+                    {
+                        case '\r':
+                            this.builder.Append("\\r");
+                            continue;
+                        case '\n':
+                            this.builder.Append("\\n");
+                            continue;
+                        case '\\':
+                        case '"':
+                            this.builder.Append('\\');
+                            break;
+                    }
+
+                    this.builder.Append(c);
+                }
+
+                this.builder.Append("\"");
                 return this;
             }
 
