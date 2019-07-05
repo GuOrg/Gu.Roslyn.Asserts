@@ -249,7 +249,8 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public static async Task ClassWithDocs()
         {
-            var code = @"namespace A.B
+            var code = @"// ReSharper disable InconsistentNaming
+namespace A.B
 {
     /// <summary>
     /// Extension methods for <see cref=""Gu.Inject.Container{T}"" />.
@@ -269,7 +270,9 @@ namespace Gu.Roslyn.Asserts.Tests
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
             namespaceKeyword: SyntaxFactory.Token(
-                leading: default,
+                leading: SyntaxFactory.TriviaList(
+                    SyntaxFactory.Comment(""// ReSharper disable InconsistentNaming""),
+                    SyntaxFactory.LineFeed),
                 kind: SyntaxKind.NamespaceKeyword,
                 trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
             name: SyntaxFactory.QualifiedName(
@@ -1078,7 +1081,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             var call = SyntaxFactoryWriter.Serialize(code);
             var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
-            CodeAssert.AreEqual(code, result.ToString());
+            CodeAssert.AreEqual(code, result.ToFullString());
         }
     }
 }
