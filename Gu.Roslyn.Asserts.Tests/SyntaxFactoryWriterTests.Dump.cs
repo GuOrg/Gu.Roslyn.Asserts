@@ -213,6 +213,22 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [Test]
+            public static void DumpFactoryMethods()
+            {
+                foreach (var kvp in TypeFactoryMethodMap)
+                {
+                    Console.WriteLine(kvp.Key.Name);
+                    foreach (var method in kvp.Value)
+                    {
+                        Console.Write(" ");
+                        Console.WriteLine($"SyntaxFactory.{method.Name}({string.Join(", ", method.GetParameters().Select(x => x.Name))})");
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+
+            [Test]
             public static void DumpTokenKinds()
             {
                 foreach (var name in System.Enum.GetNames(typeof(SyntaxKind))
