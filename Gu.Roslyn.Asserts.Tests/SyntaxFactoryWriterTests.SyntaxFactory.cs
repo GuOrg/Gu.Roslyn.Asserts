@@ -1780,6 +1780,104 @@ namespace A.B
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
 
+        [Test]
+        public static async Task IfDirectiveNoNamespace()
+        {
+            var code = @"// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
+﻿#if NET40PLUS && !NET45PLUS
+
+using System.Runtime.CompilerServices;
+
+[assembly: TypeForwardedTo(typeof(AwaitExtensions))]
+
+#else
+class C
+{
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.ClassDeclaration(
+            attributeLists: default,
+            modifiers: default,
+            keyword: SyntaxFactory.Token(
+                leading: SyntaxFactory.TriviaList(
+                    SyntaxFactory.Comment(""// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.""),
+                    SyntaxFactory.LineFeed,
+                    SyntaxFactory.Comment(""// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.""),
+                    SyntaxFactory.LineFeed,
+                    SyntaxFactory.LineFeed,
+                    SyntaxFactory.Whitespace(""﻿""),
+                    SyntaxFactory.Trivia(
+                        SyntaxFactory.IfDirectiveTrivia(
+                            hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                            ifKeyword: SyntaxFactory.Token(
+                                leading: default,
+                                kind: SyntaxKind.IfKeyword,
+                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                            condition: SyntaxFactory.BinaryExpression(
+                                kind: SyntaxKind.LogicalAndExpression,
+                                left: SyntaxFactory.IdentifierName(
+                                    identifier: SyntaxFactory.Identifier(
+                                        leading: default,
+                                        text: ""NET40PLUS"",
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                operatorToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.AmpersandAmpersandToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                right: SyntaxFactory.PrefixUnaryExpression(
+                                    kind: SyntaxKind.LogicalNotExpression,
+                                    operatorToken: SyntaxFactory.Token(SyntaxKind.ExclamationToken),
+                                    operand: SyntaxFactory.IdentifierName(
+                                        identifier: SyntaxFactory.Identifier(
+                                            leading: default,
+                                            text: ""NET45PLUS"",
+                                            trailing: default)))),
+                            endOfDirectiveToken: SyntaxFactory.Token(
+                                leading: default,
+                                kind: SyntaxKind.EndOfDirectiveToken,
+                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                            isActive: true,
+                            branchTaken: false,
+                            conditionValue: false)),
+                    SyntaxFactory.DisabledText(""\r\nusing System.Runtime.CompilerServices;\r\n\r\n[assembly: TypeForwardedTo(typeof(AwaitExtensions))]\r\n\r\n""),
+                    SyntaxFactory.Trivia(
+                        SyntaxFactory.ElseDirectiveTrivia(
+                            hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                            elseKeyword: SyntaxFactory.Token(SyntaxKind.ElseKeyword),
+                            endOfDirectiveToken: SyntaxFactory.Token(
+                                leading: default,
+                                kind: SyntaxKind.EndOfDirectiveToken,
+                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                            isActive: true,
+                            branchTaken: true))),
+                kind: SyntaxKind.ClassKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            identifier: SyntaxFactory.Identifier(
+                leading: default,
+                text: ""C"",
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            typeParameterList: default,
+            baseList: default,
+            constraintClauses: default,
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            members: default,
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
         [TestCase("int x = 1")]
         [TestCase("int x = 1 ")]
         [TestCase("long x = 1")]

@@ -14,7 +14,6 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// For transforming code into the corresponding SyntaxFactory call.
     /// </summary>
-    [Obsolete("WIP not finished yet.")]
     public class SyntaxFactoryWriter
     {
         private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>>();
@@ -289,25 +288,27 @@ namespace Gu.Roslyn.Asserts
             {
                 case SyntaxKind.None:
                     return this.Append("default");
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
-                    return this;
+
                 case SyntaxKind.DisabledTextTrivia:
                     this.writer.Append($"SyntaxFactory.DisabledText(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.DocumentationCommentExteriorTrivia:
                     this.writer.Append($"SyntaxFactory.DocumentationCommentExterior(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
+                case SyntaxKind.EndOfLineTrivia:
+                    return this.Append("SyntaxFactory.LineFeed");
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
                 case SyntaxKind.WhitespaceTrivia:
-                    if (trivia.Span.Length == 1)
+                    var text = trivia.ToString();
+                    if (text == " ")
                     {
                         return this.Append("SyntaxFactory.Space");
                     }
 
-                    return this.Append($"SyntaxFactory.Whitespace(\"{trivia.ToString()}\")");
-                case SyntaxKind.EndOfLineTrivia:
-                    return this.Append("SyntaxFactory.LineFeed");
+                    return this.Append($"SyntaxFactory.Whitespace(\"{text}\")");
                 default:
                     throw new NotImplementedException($"Not handling {trivia.Kind()} yet.");
             }
