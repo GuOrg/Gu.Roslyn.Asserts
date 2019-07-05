@@ -525,7 +525,6 @@ namespace Gu.Roslyn.Asserts
         {
             _ = this.writer
                     .WriteArgumentStart(parameter)
-                    .Append("SyntaxKind.")
                     .Append(value ? "true" : "false")
                     .WriteArgumentEnd(closeArgumentList);
             return this;
