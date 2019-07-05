@@ -134,7 +134,7 @@ namespace Gu.Roslyn.Asserts
                     return this.AppendLine("SyntaxFactory.BadToken(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text, escape: true)
+                               .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.IdentifierToken:
@@ -144,8 +144,8 @@ namespace Gu.Roslyn.Asserts
                                    .PushIndent()
                                    .WriteArgument("leading", token.LeadingTrivia)
                                    .WriteArgument("contextualKind", token.Kind())
-                                   .WriteArgument("text", token.Text, escape: true)
-                                   .WriteArgument("valueText", token.ValueText, escape: true)
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("valueText", token.ValueText)
                                    .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                    .PopIndent();
                     }
@@ -153,7 +153,7 @@ namespace Gu.Roslyn.Asserts
                     return this.AppendLine("SyntaxFactory.Identifier(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text, escape: true)
+                               .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
 
@@ -170,16 +170,16 @@ namespace Gu.Roslyn.Asserts
 
                         return this.AppendLine("SyntaxFactory.Literal(")
                                    .PushIndent()
-                                   .WriteArgument("text", token.Text, escape: true)
-                                   .WriteArgument("value", token.ValueText, escape: true, closeArgumentList: true)
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("value", token.ValueText, closeArgumentList: true)
                                    .PopIndent();
                     }
 
                     return this.AppendLine("SyntaxFactory.Literal(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text, escape: true)
-                               .WriteArgument("value", token.ValueText, escape: true)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralToken:
@@ -189,28 +189,28 @@ namespace Gu.Roslyn.Asserts
                         return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
                                    .PushIndent()
                                    .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("text", token.Text, escape: true)
-                                   .WriteArgument("value", token.ValueText, escape: true)
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgument("value", token.ValueText)
                                    .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                    .PopIndent();
                     }
 
                     if (new System.Xml.Linq.XText(token.ValueText).ToString() == token.Text)
                     {
-                        return this.Append($"SyntaxFactory.XmlTextLiteral(\"{token.ValueText}\")");
+                        return this.Append($"SyntaxFactory.XmlTextLiteral(\"{token.Text}\")");
                     }
 
                     return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
                                .PushIndent()
-                               .WriteArgument("text", token.Text, escape: true)
-                               .WriteArgument("value", token.ValueText, escape: true, closeArgumentList: true)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.ValueText, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlEntityLiteralToken:
                     return this.AppendLine("SyntaxFactory.XmlEntity(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", token.Text, escape: true)
-                               .WriteArgument("value", token.ValueText, escape: true)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
                 case SyntaxKind.XmlTextLiteralNewLineToken:
@@ -219,8 +219,8 @@ namespace Gu.Roslyn.Asserts
                         return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
                                    .PushIndent()
                                    .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("text", "\\n", escape: false)
-                                   .WriteArgument("value", "\\n", escape: false)
+                                   .WriteArgument("text", "\n")
+                                   .WriteArgument("value", "\n")
                                    .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                    .PopIndent();
                     }
@@ -228,8 +228,8 @@ namespace Gu.Roslyn.Asserts
                     return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
-                               .WriteArgument("text", "\\r\\n", escape: false)
-                               .WriteArgument("value", "\\r\\n", escape: false)
+                               .WriteArgument("text", "\r\n")
+                               .WriteArgument("value", "\r\n")
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
 
@@ -253,8 +253,8 @@ namespace Gu.Roslyn.Asserts
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
                                .WriteArgument("kind", token.Kind())
-                               .WriteArgument("text", token.Text, escape: true)
-                               .WriteArgument("valueText", token.ValueText, escape: true)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("valueText", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
             }
@@ -505,18 +505,25 @@ namespace Gu.Roslyn.Asserts
             return this;
         }
 
-        private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool escape, bool closeArgumentList = false)
+        private SyntaxFactoryWriter WriteArgument(string parameter, string text, bool closeArgumentList = false)
         {
             _ = this.writer
                     .WriteArgumentStart(parameter)
                     .Append("\"");
             foreach (var c in text)
             {
-                if (escape &&
-                    (c == '\\' ||
-                     c == '"'))
+                switch (c)
                 {
-                    this.writer.Append('\\');
+                    case '\r':
+                        this.writer.Append("\\r");
+                        continue;
+                    case '\n':
+                        this.writer.Append("\\n");
+                        continue;
+                    case '\\':
+                    case '"':
+                        this.writer.Append('\\');
+                        break;
                 }
 
                 this.writer.Append(c);
