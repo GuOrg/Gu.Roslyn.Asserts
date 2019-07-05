@@ -255,7 +255,8 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         private readonly int i = 1;
         private readonly string s1 = ""abc"";
-        private readonly string s1 = $""abc{1}"";
+        private readonly string s2 = ""abc\\r\\n"";
+        private readonly string s3 = $""abc{1}"";
     }
 }";
             var call = SyntaxFactoryWriter.Serialize(code);
@@ -397,7 +398,45 @@ namespace Gu.Roslyn.Asserts.Tests
                                         SyntaxFactory.VariableDeclarator(
                                             identifier: SyntaxFactory.Identifier(
                                                 leading: default,
-                                                text: ""s1"",
+                                                text: ""s2"",
+                                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                            argumentList: default,
+                                            initializer: SyntaxFactory.EqualsValueClause(
+                                                equalsToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EqualsToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                value: SyntaxFactory.LiteralExpression(
+                                                    kind: SyntaxKind.StringLiteralExpression,
+                                                    token: SyntaxFactory.Literal(
+                                                        text: ""\""abc\\\\r\\\\n\"""",
+                                                        value: ""abc\\r\\n"")))))),
+                                semicolonToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.SemicolonToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                            SyntaxFactory.FieldDeclaration(
+                                attributeLists: default,
+                                modifiers: SyntaxFactory.TokenList(
+                                    SyntaxFactory.Token(
+                                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                        kind: SyntaxKind.PrivateKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                    SyntaxFactory.Token(
+                                        leading: default,
+                                        kind: SyntaxKind.ReadOnlyKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                declaration: SyntaxFactory.VariableDeclaration(
+                                    type: SyntaxFactory.PredefinedType(
+                                        keyword: SyntaxFactory.Token(
+                                            leading: default,
+                                            kind: SyntaxKind.StringKeyword,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                    variables: SyntaxFactory.SingletonSeparatedList<VariableDeclaratorSyntax>(
+                                        SyntaxFactory.VariableDeclarator(
+                                            identifier: SyntaxFactory.Identifier(
+                                                leading: default,
+                                                text: ""s3"",
                                                 trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
                                             argumentList: default,
                                             initializer: SyntaxFactory.EqualsValueClause(
