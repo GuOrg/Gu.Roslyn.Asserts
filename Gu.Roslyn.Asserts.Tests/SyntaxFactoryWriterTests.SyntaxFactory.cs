@@ -1467,8 +1467,14 @@ namespace A.B
         [TestCase("var x = 1.2 ")]
         [TestCase("string x = \"a\"")]
         [TestCase("string x = \"a\" ")]
+        [TestCase("string x = \"a\\n\"")]
+        [TestCase("string x = \"a\\n\" ")]
+        [TestCase("string x = \"a\\r\\n\"")]
+        [TestCase("string x = \"a\\r\\n\" ")]
         [TestCase("string x = $\"a{1}\"")]
         [TestCase("string x = $\"a{1}\" ")]
+        [TestCase("string x = \"1\\u00A0mm\"")]
+        [TestCase("string x = \"1\\u00A0mm\" ")]
         [TestCase("string x = \"\\\"\"")]
         [TestCase("string x = \"\\\"\" ")]
         [TestCase("string x = @\"a\"")]
@@ -1477,6 +1483,8 @@ namespace A.B
         [TestCase("char x = 'a' ")]
         [TestCase("char x = '\\\\'")]
         [TestCase("char x = '\\\\' ")]
+        [TestCase("char x = '\\u00A0'")]
+        [TestCase("char x = '\\u00A0' ")]
         public static async Task Token(string expression)
         {
             var code = @"namespace A
@@ -1505,6 +1513,21 @@ namespace A.B
                 Console.Write(call);
                 throw;
             }
+        }
+
+#pragma warning disable IDE0051 // Remove unused private members Run by Roundtrip()
+        private static void Samples()
+#pragma warning restore IDE0051 // Remove unused private members
+        {
+#pragma warning disable IDE0059 // Value assigned to symbol is never used
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+            // ReSharper disable UnusedVariable
+            const string s1 = "1\u0040mm";
+            const string s2 = "1\r\n";
+            const string s3 = @"1""";
+            //// ReSharper restore UnusedVariable
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
+#pragma warning restore IDE0059 // Value assigned to symbol is never used
         }
     }
 }
