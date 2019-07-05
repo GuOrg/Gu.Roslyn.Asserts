@@ -156,18 +156,29 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-
-                case SyntaxKind.CharacterLiteralToken:
                 case SyntaxKind.NumericLiteralToken:
+                    if (!token.HasLeadingTrivia &&
+                        !token.HasTrailingTrivia)
+                    {
+                        return this.AppendLine("SyntaxFactory.Literal(")
+                                   .PushIndent()
+                                   .WriteArgument("text", token.Text)
+                                   .WriteArgumentValue("value", token.ValueText, closeArgumentList: true)
+                                   .PopIndent();
+                    }
+
+                    return this.AppendLine("SyntaxFactory.Literal(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", token.Text)
+                               .WriteArgumentValue("value", token.ValueText)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.CharacterLiteralToken:
                 case SyntaxKind.StringLiteralToken:
                     if (!token.HasLeadingTrivia &&
                         !token.HasTrailingTrivia)
                     {
-                        if (token.Text == token.ValueText)
-                        {
-                            return this.Append($"SyntaxFactory.Literal({token.Text})");
-                        }
-
                         return this.AppendLine("SyntaxFactory.Literal(")
                                    .PushIndent()
                                    .WriteArgument("text", token.Text)
@@ -514,6 +525,15 @@ namespace Gu.Roslyn.Asserts
                        .WriteArgumentStart(parameter)
                        .AppendQuotedEscaped(text)
                        .WriteArgumentEnd(closeArgumentList);
+            return this;
+        }
+
+        private SyntaxFactoryWriter WriteArgumentValue(string parameter, string value, bool closeArgumentList = false)
+        {
+            _ = this.writer
+                    .WriteArgumentStart(parameter)
+                    .Append(value)
+                    .WriteArgumentEnd(closeArgumentList);
             return this;
         }
 

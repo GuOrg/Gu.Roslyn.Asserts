@@ -335,7 +335,9 @@ namespace Gu.Roslyn.Asserts.Tests
                                                     trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
                                                 value: SyntaxFactory.LiteralExpression(
                                                     kind: SyntaxKind.NumericLiteralExpression,
-                                                    token: SyntaxFactory.Literal(1)))))),
+                                                    token: SyntaxFactory.Literal(
+                                                        text: ""1"",
+                                                        value: 1)))))),
                                 semicolonToken: SyntaxFactory.Token(
                                     leading: default,
                                     kind: SyntaxKind.SemicolonToken,
@@ -461,7 +463,9 @@ namespace Gu.Roslyn.Asserts.Tests
                                                                 openBraceToken: SyntaxFactory.Token(SyntaxKind.OpenBraceToken),
                                                                 expression: SyntaxFactory.LiteralExpression(
                                                                     kind: SyntaxKind.NumericLiteralExpression,
-                                                                    token: SyntaxFactory.Literal(1)),
+                                                                    token: SyntaxFactory.Literal(
+                                                                        text: ""1"",
+                                                                        value: 1)),
                                                                 alignmentClause: default,
                                                                 formatClause: default,
                                                                 closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken)),
@@ -886,6 +890,166 @@ namespace A.B
                         kind: SyntaxKind.OpenBraceToken,
                         trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
                     members: default,
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
+        [Test]
+        public static async Task ClassWithLineDirective()
+        {
+            var code = @"namespace A
+{
+    class C 
+    {
+        void InitializeComponent()
+        {
+            #line 1 ""..\..\MainWindow.xaml""
+            
+            #line default
+            #line hidden
+        }
+    }
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.IdentifierName(
+                identifier: SyntaxFactory.Identifier(
+                    leading: default,
+                    text: ""A"",
+                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.ClassDeclaration(
+                    attributeLists: default,
+                    modifiers: default,
+                    keyword: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.ClassKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""C"",
+                        trailing: SyntaxFactory.TriviaList(
+                            SyntaxFactory.Space,
+                            SyntaxFactory.LineFeed)),
+                    typeParameterList: default,
+                    baseList: default,
+                    constraintClauses: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                        SyntaxFactory.MethodDeclaration(
+                            attributeLists: default,
+                            modifiers: default,
+                            returnType: SyntaxFactory.PredefinedType(
+                                keyword: SyntaxFactory.Token(
+                                    leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                    kind: SyntaxKind.VoidKeyword,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                            explicitInterfaceSpecifier: default,
+                            identifier: SyntaxFactory.Identifier(
+                                leading: default,
+                                text: ""InitializeComponent"",
+                                trailing: default),
+                            typeParameterList: default,
+                            parameterList: SyntaxFactory.ParameterList(
+                                openParenToken: SyntaxFactory.Token(SyntaxKind.OpenParenToken),
+                                parameters: default,
+                                closeParenToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.CloseParenToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                            constraintClauses: default,
+                            body: SyntaxFactory.Block(
+                                openBraceToken: SyntaxFactory.Token(
+                                    leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                    kind: SyntaxKind.OpenBraceToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                                statements: default,
+                                closeBraceToken: SyntaxFactory.Token(
+                                    leading: SyntaxFactory.TriviaList(
+                                        SyntaxFactory.Whitespace(""            ""),
+                                        SyntaxFactory.Trivia(
+                                            SyntaxFactory.LineDirectiveTrivia(
+                                                hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                                                lineKeyword: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.LineKeyword,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                line: SyntaxFactory.Literal(
+                                                    leading: default,
+                                                    text: ""1"",
+                                                    value: 1,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                file: SyntaxFactory.Literal(
+                                                    text: ""\""..\\..\\MainWindow.xaml\"""",
+                                                    value: ""..\\..\\MainWindow.xaml""),
+                                                endOfDirectiveToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EndOfDirectiveToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                                                isActive: true)),
+                                        SyntaxFactory.Whitespace(""            ""),
+                                        SyntaxFactory.LineFeed,
+                                        SyntaxFactory.Whitespace(""            ""),
+                                        SyntaxFactory.Trivia(
+                                            SyntaxFactory.LineDirectiveTrivia(
+                                                hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                                                lineKeyword: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.LineKeyword,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                line: SyntaxFactory.Token(SyntaxKind.DefaultKeyword),
+                                                file: default,
+                                                endOfDirectiveToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EndOfDirectiveToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                                                isActive: true)),
+                                        SyntaxFactory.Whitespace(""            ""),
+                                        SyntaxFactory.Trivia(
+                                            SyntaxFactory.LineDirectiveTrivia(
+                                                hashToken: SyntaxFactory.Token(SyntaxKind.HashToken),
+                                                lineKeyword: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.LineKeyword,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                line: SyntaxFactory.Token(SyntaxKind.HiddenKeyword),
+                                                file: default,
+                                                endOfDirectiveToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EndOfDirectiveToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                                                isActive: true)),
+                                        SyntaxFactory.Whitespace(""        "")),
+                                    kind: SyntaxKind.CloseBraceToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                            expressionBody: default,
+                            semicolonToken: default)),
                     closeBraceToken: SyntaxFactory.Token(
                         leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
                         kind: SyntaxKind.CloseBraceToken,
