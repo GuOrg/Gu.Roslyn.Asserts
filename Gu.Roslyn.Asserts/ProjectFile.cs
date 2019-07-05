@@ -191,15 +191,11 @@ namespace Gu.Roslyn.Asserts
                     sourceCodeKind: SourceCodeKind.Regular,
                     filePath: file.FullName,
                     isGenerated: file.Name.EndsWith(".g.cs"),
-#if NET46
-                    loader: new FileTextLoader(file.FullName, System.Text.Encoding.UTF8));
-#else
                     loader: TextLoader.From(
                         TextAndVersion.Create(
                             text: Microsoft.CodeAnalysis.Text.SourceText.From(File.ReadAllText(file.FullName)),
                             version: VersionStamp.Create(),
                             filePath: file.FullName)));
-#endif
             }
 
             IEnumerable<MetadataReference> GetMetadataReferences()
