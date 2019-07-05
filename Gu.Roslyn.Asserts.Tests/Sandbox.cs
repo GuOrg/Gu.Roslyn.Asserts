@@ -4,15 +4,20 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Reflection;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
     [Explicit("Sandbox")]
     public static class Sandbox
     {
-        [Test]
-        public static void FindReferences()
+        [TestCase(typeof(SyntaxTriviaList))]
+        [TestCase(typeof(CSharpSyntaxNode))]
+        [TestCase(typeof(CompilationUnitSyntax))]
+        public static void FindReferences(Type type)
         {
-            foreach (var assembly in typeof(Sandbox).Assembly.GetReferencedAssemblies())
+            foreach (var assembly in type.Assembly.GetReferencedAssemblies())
             {
                 Console.WriteLine(assembly);
             }
