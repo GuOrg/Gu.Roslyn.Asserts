@@ -3,7 +3,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
-    using System.Reflection;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,13 +20,6 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Console.WriteLine(assembly);
             }
-        }
-
-        [Test]
-        public static void References()
-        {
-            var assembly = typeof(Sandbox).GetTypeInfo().Assembly;
-            var referencedAssemblies = assembly.GetReferencedAssemblies();
         }
     }
 }
