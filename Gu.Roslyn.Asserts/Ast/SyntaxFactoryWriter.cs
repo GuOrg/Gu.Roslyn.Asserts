@@ -291,11 +291,14 @@ namespace Gu.Roslyn.Asserts
                     return this.Append("default");
                 case SyntaxKind.SingleLineCommentTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
-                    return this.Append($"SyntaxFactory.Comment(\"{trivia.ToString()}\")");
+                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
                 case SyntaxKind.DisabledTextTrivia:
-                    return this.Append($"SyntaxFactory.DisabledText(\"{trivia.ToString()}\")");
+                    this.writer.Append($"SyntaxFactory.DisabledText(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
                 case SyntaxKind.DocumentationCommentExteriorTrivia:
-                    return this.Append($"SyntaxFactory.DocumentationCommentExterior(\"{trivia.ToString()}\")");
+                    this.writer.Append($"SyntaxFactory.DocumentationCommentExterior(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    return this;
                 case SyntaxKind.WhitespaceTrivia:
                     if (trivia.Span.Length == 1)
                     {
