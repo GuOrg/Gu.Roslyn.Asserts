@@ -182,9 +182,9 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("value", token.ValueText, escape: true)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-                case SyntaxKind.XmlTextLiteralToken when token.HasLeadingTrivia || token.HasTrailingTrivia:
-                    if (!token.HasLeadingTrivia &&
-                        !token.HasTrailingTrivia)
+                case SyntaxKind.XmlTextLiteralToken:
+                    if (token.HasLeadingTrivia ||
+                        token.HasTrailingTrivia)
                     {
                         return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
                                    .PushIndent()
@@ -195,6 +195,17 @@ namespace Gu.Roslyn.Asserts
                                    .PopIndent();
                     }
 
+                    if (new System.Xml.Linq.XText(token.ValueText).ToString() == token.Text)
+                    {
+                        return this.Append($"SyntaxFactory.XmlTextLiteral(\"{token.ValueText}\")");
+                    }
+
+                    return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
+                               .PushIndent()
+                               .WriteArgument("text", token.Text, escape: true)
+                               .WriteArgument("value", token.ValueText, escape: true, closeArgumentList: true)
+                               .PopIndent();
+                case SyntaxKind.XmlEntityLiteralToken:
                     return this.AppendLine("SyntaxFactory.XmlEntity(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
@@ -202,18 +213,6 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgument("value", token.ValueText, escape: true)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
-
-                case SyntaxKind.XmlTextLiteralToken:
-                    if (token.Text != token.ValueText)
-                    {
-                        return this.AppendLine("SyntaxFactory.XmlTextLiteral(")
-                                   .PushIndent()
-                                   .WriteArgument("text", token.Text, escape: true)
-                                   .WriteArgument("value", token.ValueText, escape: true, closeArgumentList: true)
-                                   .PopIndent();
-                    }
-
-                    return this.Append($"SyntaxFactory.XmlTextLiteral(\"{token.Value}\")");
                 case SyntaxKind.XmlTextLiteralNewLineToken:
                     if (token.Text.Length == 1)
                     {
