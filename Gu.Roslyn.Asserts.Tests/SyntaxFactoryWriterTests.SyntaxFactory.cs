@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -1319,8 +1320,16 @@ namespace A.B
         private static async Task AssertRoundtrip(string code)
         {
             var call = SyntaxFactoryWriter.Serialize(code);
-            var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
-            CodeAssert.AreEqual(code, result.ToFullString());
+            try
+            {
+                var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
+                CodeAssert.AreEqual(code, result.ToFullString());
+            }
+            catch (CompilationErrorException e)
+            {
+                Console.Write(call);
+                throw;
+            }
         }
     }
 }
