@@ -247,6 +247,204 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Test]
+        public static async Task ClassWithFields()
+        {
+            var code = @"namespace A
+{
+    class C
+    {
+        private readonly int i = 1;
+        private readonly string s1 = ""abc"";
+        private readonly string s1 = $""abc{1}"";
+    }
+}";
+            var call = SyntaxFactoryWriter.Serialize(code);
+            var expected = @"SyntaxFactory.CompilationUnit(
+    externs: default,
+    usings: default,
+    attributeLists: default,
+    members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+        SyntaxFactory.NamespaceDeclaration(
+            namespaceKeyword: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.NamespaceKeyword,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+            name: SyntaxFactory.IdentifierName(
+                identifier: SyntaxFactory.Identifier(
+                    leading: default,
+                    text: ""A"",
+                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+            openBraceToken: SyntaxFactory.Token(
+                leading: default,
+                kind: SyntaxKind.OpenBraceToken,
+                trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+            externs: default,
+            usings: default,
+            members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
+                SyntaxFactory.ClassDeclaration(
+                    attributeLists: default,
+                    modifiers: default,
+                    keyword: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.ClassKeyword,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                    identifier: SyntaxFactory.Identifier(
+                        leading: default,
+                        text: ""C"",
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    typeParameterList: default,
+                    baseList: default,
+                    constraintClauses: default,
+                    openBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.OpenBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    members: SyntaxFactory.List(
+                        new MemberDeclarationSyntax[]
+                        {
+                            SyntaxFactory.FieldDeclaration(
+                                attributeLists: default,
+                                modifiers: SyntaxFactory.TokenList(
+                                    SyntaxFactory.Token(
+                                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                        kind: SyntaxKind.PrivateKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                    SyntaxFactory.Token(
+                                        leading: default,
+                                        kind: SyntaxKind.ReadOnlyKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                declaration: SyntaxFactory.VariableDeclaration(
+                                    type: SyntaxFactory.PredefinedType(
+                                        keyword: SyntaxFactory.Token(
+                                            leading: default,
+                                            kind: SyntaxKind.IntKeyword,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                    variables: SyntaxFactory.SingletonSeparatedList<VariableDeclaratorSyntax>(
+                                        SyntaxFactory.VariableDeclarator(
+                                            identifier: SyntaxFactory.Identifier(
+                                                leading: default,
+                                                text: ""i"",
+                                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                            argumentList: default,
+                                            initializer: SyntaxFactory.EqualsValueClause(
+                                                equalsToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EqualsToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                value: SyntaxFactory.LiteralExpression(
+                                                    kind: SyntaxKind.NumericLiteralExpression,
+                                                    token: SyntaxFactory.Literal(1)))))),
+                                semicolonToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.SemicolonToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                            SyntaxFactory.FieldDeclaration(
+                                attributeLists: default,
+                                modifiers: SyntaxFactory.TokenList(
+                                    SyntaxFactory.Token(
+                                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                        kind: SyntaxKind.PrivateKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                    SyntaxFactory.Token(
+                                        leading: default,
+                                        kind: SyntaxKind.ReadOnlyKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                declaration: SyntaxFactory.VariableDeclaration(
+                                    type: SyntaxFactory.PredefinedType(
+                                        keyword: SyntaxFactory.Token(
+                                            leading: default,
+                                            kind: SyntaxKind.StringKeyword,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                    variables: SyntaxFactory.SingletonSeparatedList<VariableDeclaratorSyntax>(
+                                        SyntaxFactory.VariableDeclarator(
+                                            identifier: SyntaxFactory.Identifier(
+                                                leading: default,
+                                                text: ""s1"",
+                                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                            argumentList: default,
+                                            initializer: SyntaxFactory.EqualsValueClause(
+                                                equalsToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EqualsToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                value: SyntaxFactory.LiteralExpression(
+                                                    kind: SyntaxKind.StringLiteralExpression,
+                                                    token: SyntaxFactory.Literal(
+                                                        text: ""\""abc\"""",
+                                                        value: ""abc"")))))),
+                                semicolonToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.SemicolonToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                            SyntaxFactory.FieldDeclaration(
+                                attributeLists: default,
+                                modifiers: SyntaxFactory.TokenList(
+                                    SyntaxFactory.Token(
+                                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
+                                        kind: SyntaxKind.PrivateKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                    SyntaxFactory.Token(
+                                        leading: default,
+                                        kind: SyntaxKind.ReadOnlyKeyword,
+                                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                declaration: SyntaxFactory.VariableDeclaration(
+                                    type: SyntaxFactory.PredefinedType(
+                                        keyword: SyntaxFactory.Token(
+                                            leading: default,
+                                            kind: SyntaxKind.StringKeyword,
+                                            trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space))),
+                                    variables: SyntaxFactory.SingletonSeparatedList<VariableDeclaratorSyntax>(
+                                        SyntaxFactory.VariableDeclarator(
+                                            identifier: SyntaxFactory.Identifier(
+                                                leading: default,
+                                                text: ""s1"",
+                                                trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                            argumentList: default,
+                                            initializer: SyntaxFactory.EqualsValueClause(
+                                                equalsToken: SyntaxFactory.Token(
+                                                    leading: default,
+                                                    kind: SyntaxKind.EqualsToken,
+                                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.Space)),
+                                                value: SyntaxFactory.InterpolatedStringExpression(
+                                                    stringStartToken: SyntaxFactory.Token(SyntaxKind.InterpolatedStringStartToken),
+                                                    contents: SyntaxFactory.List(
+                                                        new InterpolatedStringContentSyntax[]
+                                                        {
+                                                            SyntaxFactory.InterpolatedStringText(
+                                                                textToken: SyntaxFactory.Token(
+                                                                    leading: default,
+                                                                    kind: SyntaxKind.InterpolatedStringTextToken,
+                                                                    text: ""abc"",
+                                                                    valueText: ""abc"",
+                                                                    trailing: default)),
+                                                            SyntaxFactory.Interpolation(
+                                                                openBraceToken: SyntaxFactory.Token(SyntaxKind.OpenBraceToken),
+                                                                expression: SyntaxFactory.LiteralExpression(
+                                                                    kind: SyntaxKind.NumericLiteralExpression,
+                                                                    token: SyntaxFactory.Literal(1)),
+                                                                alignmentClause: default,
+                                                                formatClause: default,
+                                                                closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken)),
+                                                        }),
+                                                    stringEndToken: SyntaxFactory.Token(SyntaxKind.InterpolatedStringEndToken)))))),
+                                semicolonToken: SyntaxFactory.Token(
+                                    leading: default,
+                                    kind: SyntaxKind.SemicolonToken,
+                                    trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
+                        }),
+                    closeBraceToken: SyntaxFactory.Token(
+                        leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""    "")),
+                        kind: SyntaxKind.CloseBraceToken,
+                        trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
+                    semicolonToken: default)),
+            closeBraceToken: SyntaxFactory.Token(SyntaxKind.CloseBraceToken),
+            semicolonToken: default)),
+    endOfFileToken: SyntaxFactory.Token(SyntaxKind.EndOfFileToken))";
+            CodeAssert.AreEqual(expected, call);
+            await AssertRoundtrip(code).ConfigureAwait(false);
+        }
+
+        [Test]
         public static async Task ClassWithDocs()
         {
             var code = @"// ReSharper disable InconsistentNaming
