@@ -1054,6 +1054,8 @@ namespace A.B
         [TestCase("var x = 1.2 ")]
         [TestCase("string x = \"a\"")]
         [TestCase("string x = \"a\" ")]
+        [TestCase("string x = $\"a{1}\"")]
+        [TestCase("string x = $\"a{1}\" ")]
         [TestCase("string x = \"\\\"\"")]
         [TestCase("string x = \"\\\"\" ")]
         [TestCase("string x = @\"a\"")]

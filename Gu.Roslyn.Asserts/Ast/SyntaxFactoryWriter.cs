@@ -163,6 +163,11 @@ namespace Gu.Roslyn.Asserts
                     if (!token.HasLeadingTrivia &&
                         !token.HasTrailingTrivia)
                     {
+                        if (token.Text == token.ValueText)
+                        {
+                            return this.Append($"SyntaxFactory.Literal({token.Text})");
+                        }
+
                         return this.AppendLine("SyntaxFactory.Literal(")
                                    .PushIndent()
                                    .WriteArgument("text", token.Text, escape: true)
@@ -230,28 +235,29 @@ namespace Gu.Roslyn.Asserts
                                .PopIndent();
 
                 default:
-                    if (token.Text != token.ValueText)
+                    if (SyntaxFacts.GetText(token.Kind()) == token.Text)
                     {
-                        return this.AppendLine("SyntaxFactory.Token(")
-                                   .PushIndent()
-                                   .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("kind", token.Kind())
-                                   .WriteArgument("text", token.Text, escape: true)
-                                   .WriteArgument("valueText", token.ValueText, escape: true)
-                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                                   .PopIndent();
-                    }
-                    else if (token.HasLeadingTrivia || token.HasTrailingTrivia)
-                    {
-                        return this.AppendLine("SyntaxFactory.Token(")
-                                   .PushIndent()
-                                   .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("kind", token.Kind())
-                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                                   .PopIndent();
+                        if (token.HasLeadingTrivia || token.HasTrailingTrivia)
+                        {
+                            return this.AppendLine("SyntaxFactory.Token(")
+                                       .PushIndent()
+                                       .WriteArgument("leading", token.LeadingTrivia)
+                                       .WriteArgument("kind", token.Kind())
+                                       .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                       .PopIndent();
+                        }
+
+                        return this.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
                     }
 
-                    return this.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
+                    return this.AppendLine("SyntaxFactory.Token(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("kind", token.Kind())
+                               .WriteArgument("text", token.Text, escape: true)
+                               .WriteArgument("valueText", token.ValueText, escape: true)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
             }
         }
 
