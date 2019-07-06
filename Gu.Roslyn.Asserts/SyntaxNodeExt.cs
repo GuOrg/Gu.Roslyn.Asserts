@@ -115,15 +115,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Find a <see cref="ConstructorDeclarationSyntax"/> that matches <paramref name="signature"/>.
-        /// </summary>
-        [Obsolete("Use FindConstructorDeclaration")]
-        public static ConstructorDeclarationSyntax FindConstructorDeclarationSyntax(this SyntaxTree tree, string signature)
-        {
-            return FindConstructorDeclaration(tree, signature);
-        }
-
-        /// <summary>
         /// Find a <see cref="EventFieldDeclarationSyntax"/> that matches <paramref name="signature"/>.
         /// </summary>
         public static EventFieldDeclarationSyntax FindEventFieldDeclaration(this SyntaxTree tree, string signature)
@@ -233,17 +224,6 @@ namespace Gu.Roslyn.Asserts
         public static AttributeArgumentSyntax FindAttributeArgument(this SyntaxTree tree, string signature)
         {
             return tree.Find<AttributeArgumentSyntax>(signature);
-        }
-
-        /// <summary>
-        /// Find a <typeparamref name="T"/> that matches <paramref name="code"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the node to find.</typeparam>
-        [Obsolete("Use Find<T>")]
-        public static T FindBestMatch<T>(this SyntaxTree tree, string code)
-            where T : SyntaxNode
-        {
-            return Find<T>(tree, code);
         }
 
         /// <summary>

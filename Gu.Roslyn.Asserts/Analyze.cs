@@ -23,44 +23,6 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
         /// <param name="sources">The sources as strings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        [Obsolete("To be removed.")]
-        public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> references)
-        {
-            if (analyzer == null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            var sln = CodeFactory.CreateSolution(sources, compilationOptions, references);
-            var diagnostics = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            return new DiagnosticsWithMetadata(sln, diagnostics);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="sources">The sources as strings.</param>
-        /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        [Obsolete("To be removed.")]
-        public static async Task<DiagnosticsWithMetadata> GetDiagnosticsWithMetadataAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IEnumerable<MetadataReference> references)
-        {
-            var sln = CodeFactory.CreateSolution(sources, new[] { analyzer }, references);
-            var diagnostics = await GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
-            return new DiagnosticsWithMetadata(sln, diagnostics);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="sources">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IEnumerable<MetadataReference> metadataReferences)
@@ -401,34 +363,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             return new DiagnosticsAndErrors(errors, analyzerDiagnostics);
-        }
-
-        /// <summary>
-        /// The diagnostics and the solution the analysis was performed on.
-        /// </summary>
-        [Obsolete("To be removed, no idea how this class got the name it has. Guessing refactoring accident.")]
-        public class DiagnosticsWithMetadata
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="DiagnosticsWithMetadata"/> class.
-            /// </summary>
-            /// <param name="solution">The solution the analysis was performed on.</param>
-            /// <param name="diagnostics">The diagnostics returned from Roslyn.</param>
-            public DiagnosticsWithMetadata(Solution solution, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
-            {
-                this.Solution = solution;
-                this.Diagnostics = diagnostics;
-            }
-
-            /// <summary>
-            /// Gets the solution the analysis was performed on.
-            /// </summary>
-            public Solution Solution { get; }
-
-            /// <summary>
-            /// Gets the diagnostics returned from Roslyn.
-            /// </summary>
-            public IReadOnlyList<ImmutableArray<Diagnostic>> Diagnostics { get; }
         }
 
         /// <summary>

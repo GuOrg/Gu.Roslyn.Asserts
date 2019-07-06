@@ -153,17 +153,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Get the diagnostics from code as a string.
-        /// </summary>
-        /// <param name="code">The code to parse.</param>
-        /// <returns>The positions of the expected diagnostics.</returns>
-        [Obsolete("Renamed to FindLinePositions")]
-        public static IEnumerable<LinePosition> FindDiagnosticsPositions(string code)
-        {
-            return FindLinePositions(code);
-        }
-
-        /// <summary>
         /// Get the line positions indicated with ↓ from code as a string.
         /// </summary>
         /// <param name="code">The code to parse.</param>

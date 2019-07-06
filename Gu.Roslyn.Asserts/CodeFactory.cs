@@ -550,58 +550,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Searches parent directories for <paramref name="assembly"/> the first file matching *.sln.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        /// <param name="sln">The <see cref="File"/> if found.</param>
-        /// <returns>A value indicating if a file was found.</returns>
-        [Obsolete("Moved to SolutionFile.TryFind")]
-        public static bool TryFindSolutionFile(Assembly assembly, out FileInfo sln) => SolutionFile.TryFind(assembly, out sln);
-
-        /// <summary>
-        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln.
-        /// </summary>
-        /// <param name="name">The assembly.</param>
-        /// <returns>The solution file.</returns>
-        [Obsolete("Moved to SolutionFile.Find")]
-        public static FileInfo FindSolutionFile(string name) => SolutionFile.Find(name);
-
-        /// <summary>
-        /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln.
-        /// </summary>
-        /// <param name="name">The assembly.</param>
-        /// <param name="sln">The <see cref="File"/> if found.</param>
-        /// <returns>A value indicating if a file was found.</returns>
-        [Obsolete("Moved to SolutionFile.TryFind")]
-        public static bool TryFindSolutionFile(string name, out FileInfo sln) => SolutionFile.TryFind(name, out sln);
-
-        /// <summary>
-        /// Searches parent directories for <paramref name="dllFile"/>.
-        /// </summary>
-        /// <param name="dllFile">Ex Foo.dll.</param>
-        /// <param name="result">The <see cref="File"/> if found.</param>
-        /// <returns>A value indicating if a file was found.</returns>
-        [Obsolete("Moved to ProjectFile.TryFind")]
-        public static bool TryFindProjectFile(FileInfo dllFile, out FileInfo result) => ProjectFile.TryFind(dllFile, out result);
-
-        /// <summary>
-        /// Searches parent directories for <paramref name="name"/>.
-        /// </summary>
-        /// <param name="name">Ex Foo.csproj.</param>
-        /// <returns>The project file.</returns>
-        [Obsolete("Moved to ProjectFile.Find")]
-        public static FileInfo FindProjectFile(string name) => ProjectFile.Find(name);
-
-        /// <summary>
-        /// Searches parent directories for <paramref name="name"/>.
-        /// </summary>
-        /// <param name="name">Ex Foo.csproj.</param>
-        /// <param name="result">The <see cref="File"/> if found.</param>
-        /// <returns>A value indicating if a file was found.</returns>
-        [Obsolete("Moved to ProjectFile.TryFind")]
-        public static bool TryFindProjectFile(string name, out FileInfo result) => ProjectFile.TryFind(name, out result);
-
-        /// <summary>
         /// Searches parent directories for <paramref name="fileName"/>.
         /// </summary>
         /// <param name="directory">The directory to start in.</param>
