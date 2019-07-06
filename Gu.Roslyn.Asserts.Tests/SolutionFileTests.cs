@@ -31,6 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 "Gu.Roslyn.Asserts.Tests.Net472WithAttributes",
                 "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
                 "Gu.Roslyn.Asserts",
+                "AstView",
                 "WpfApp1",
                 "Gu.Roslyn.Asserts.Tests",
                 "ClassLibrary2",
