@@ -11,11 +11,10 @@ namespace Gu.Roslyn.Asserts
         /// <typeparam name="T">The node type.</typeparam>
         /// <param name="expected">The expected shape of the AST.</param>
         /// <param name="actual">The actual node.</param>
-        /// <param name="settings"><see cref="AstWriterSettings"/>.</param>
-        public static void Ast<T>(T expected, T actual, AstWriterSettings settings = null)
+        public static void Ast<T>(T expected, T actual)
             where T : SyntaxNode
         {
-            CodeAssert.AreEqual(AstWriter.Serialize(expected, settings), AstWriter.Serialize(actual, settings));
+            CodeAssert.AreEqual(SyntaxFactoryWriter.Serialize(expected), SyntaxFactoryWriter.Serialize(actual));
         }
     }
 }
