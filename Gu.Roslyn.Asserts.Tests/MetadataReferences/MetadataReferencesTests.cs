@@ -26,6 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
 
+        [Explicit("Depends on what is installed.")]
         [Test]
         public void TransitiveMscorlibFullNames()
         {
@@ -78,6 +79,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
 
+        [Explicit("Depends on what is installed.")]
         [Test]
         public void TransitiveGenericFullNames()
         {
@@ -212,6 +214,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => x.Display));
         }
 
+        [Explicit("Depends on what is installed.")]
         [Test]
         public void TransitiveSystemCoreFullNames()
         {
