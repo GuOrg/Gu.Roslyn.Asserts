@@ -1,3 +1,7 @@
+#### 3.0
+* BREAKING: Microsoft.CodeAnalysis >= 3.
+* BREAKING: Drop net46 support.
+
 #### 2.9.0
 * FEATURE: RoslynAssert.NoRefactoring.
 * BREAKING: Move title parameter in RoslynAssert.Refactoring.
