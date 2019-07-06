@@ -20,8 +20,8 @@
         <TextBox Grid.Column="0"
                  AcceptsReturn="True"
                  FontFamily="Courier New"
-                 VerticalScrollBarVisibility="Auto"
-                 Text="{Binding Source}" />
+                 Text="{Binding Source}"
+                 VerticalScrollBarVisibility="Auto" />
         <GridSplitter Grid.Column="1"
                       HorizontalAlignment="Stretch"
                       ResizeBehavior="PreviousAndNext"
@@ -30,7 +30,7 @@
                  FontFamily="Courier New"
                  IsReadOnly="True"
                  IsReadOnlyCaretVisible="True"
-                 VerticalScrollBarVisibility="Auto"
-                 Text="{Binding Generation, Mode=OneWay}" />
+                 Text="{Binding Generation, Mode=OneWay}"
+                 VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>

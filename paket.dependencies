@@ -1,5 +1,4 @@
 source https://www.nuget.org/api/v2/
-storage: none
 lowest_matching: true
 nuget Microsoft.CodeAnalysis.CSharp.Workspaces >= 3 strategy: min
 
@@ -19,7 +18,6 @@ group Test
   nuget Microsoft.CodeAnalysis.CSharp.Scripting
 
 group Analyzers
-  storage: none
   source http://www.nuget.org/api/v2/
   nuget AsyncUsageAnalyzers
   nuget Gu.Analyzers

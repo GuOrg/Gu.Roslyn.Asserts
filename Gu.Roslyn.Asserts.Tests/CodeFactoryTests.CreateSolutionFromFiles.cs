@@ -136,6 +136,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     CreateMetadataReferences(typeof(object)));
                 var expectedProjects = new[]
                 {
+                    "AstView",
                     "WpfApp1",
                     "ClassLibrary1",
                     "ClassLibrary2",
