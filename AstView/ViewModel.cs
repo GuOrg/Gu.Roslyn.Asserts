@@ -60,6 +60,47 @@ namespace AstView
             }
         }
 
+        public bool TrySelect(int pos, out int start, out int length)
+        {
+            start = 0;
+            length = 0;
+            return this.generation is string text &&
+                   TryFindStart(text, out start) &&
+                   TryFindLength(text, start, out length);
+
+            bool TryFindStart(string code, out int result)
+            {
+                result = code.LastIndexOf("SyntaxFactory.", pos + 15);
+                return result >= 0;
+            }
+
+            bool TryFindLength(string code, int from, out int result)
+            {
+                int level = 0;
+                for (var i = from; i < code.Length; i++)
+                {
+                    switch (code[i])
+                    {
+                        case '(':
+                            level++;
+                            break;
+                        case ')':
+                            level--;
+                            if (level == 0)
+                            {
+                                result = i - from + 1;
+                                return true;
+                            }
+
+                            break;
+                    }
+                }
+
+                result = 0;
+                return false;
+            }
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

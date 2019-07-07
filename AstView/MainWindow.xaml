@@ -30,6 +30,7 @@
                  FontFamily="Courier New"
                  IsReadOnly="True"
                  IsReadOnlyCaretVisible="True"
+                 MouseDoubleClick="OnDoubleClick"
                  Text="{Binding Generation, Mode=OneWay}"
                  VerticalScrollBarVisibility="Auto" />
     </Grid>
