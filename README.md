@@ -41,6 +41,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
     - [Create a Microsoft.CodeAnalysis.AdhocWorkspace, a Roslyn Solution from a file on disk.](#create-a-microsoftcodeanalysisadhocworkspace--a-roslyn-solution-from-a-file-on-disk)
 - [Benchmark](#benchmark)
 - [SyntaxNodeExt](#syntaxnodeext)
+- [AstView](#astview)
 - [Usage with different test project types](#usage-with-different-test-project-types)
   - [Net461 new project type.](#net461-new-project-type)
   - [NetCoreApp2.0](#netcoreapp20)
@@ -699,8 +700,11 @@ namespace RoslynSandbox
 }
 ```
 
+# AstView
+![Animation](https://user-images.githubusercontent.com/1640096/60766676-77ba5f80-a0ad-11e9-95c2-1b789d5490be.gif)
+
 # Usage with different test project types
-## Net461 new project type.
+## Net472 new project type.
 ```xml
 <PropertyGroup>
   <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
