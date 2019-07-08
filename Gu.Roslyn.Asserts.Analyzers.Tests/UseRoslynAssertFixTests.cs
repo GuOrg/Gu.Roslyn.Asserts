@@ -80,5 +80,44 @@ namespace RoslynSandbox
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS0234");
             RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after);
         }
+
+        [Test]
+        public static void AssertTests()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            ↓AnalyzerAssert.Valid(null, string.Empty);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.Valid(null, string.Empty);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.Create("CS0103");
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, suppressedDiagnostics: new[] { "CS8019" });
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { before }, after, suppressedDiagnostics: new[] { "CS8019" });
+        }
     }
 }

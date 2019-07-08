@@ -22,40 +22,30 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            string codeWithErrorsIndicated,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode: new[] { fixedCode },
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="solution"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
-        /// <param name="fix">The code fix to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="solution">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, Solution solution, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-        {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, fixedCode), fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
@@ -67,18 +57,28 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="compilationOptions">The compilation options.</param>
-        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            IReadOnlyList<string> codeWithErrorsIndicated,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode: MergeFixedCode(codeWithErrorsIndicated, fixedCode),
-                suppressedDiagnostics: null,
+                suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
                 compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
@@ -94,18 +94,28 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="compilationOptions">The compilation options.</param>
-        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            IReadOnlyList<string> codeWithErrorsIndicated,
+            IReadOnlyList<string> fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode: fixedCode,
-                suppressedDiagnostics: null,
+                suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
                 compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
@@ -124,16 +134,29 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            string code,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode: new[] { fixedCode },
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors);
         }
@@ -150,16 +173,29 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> code,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode: MergeFixedCode(code, fixedCode),
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors);
         }
@@ -176,16 +212,29 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> code,
+            IReadOnlyList<string> fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode: fixedCode,
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors);
         }
@@ -204,7 +253,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No, IEnumerable<string> suppressedDiagnostics = null, IEnumerable<MetadataReference> metadataReferences = null, CSharpCompilationOptions compilationOptions = null)
+        public static void CodeFix(
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            string code,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
@@ -229,16 +287,28 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> code,
+            string fixedCode,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode: MergeFixedCode(code, fixedCode),
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors);
         }
@@ -295,6 +365,28 @@ namespace Gu.Roslyn.Asserts
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="solution"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="solution">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, Solution solution, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, fixedCode), fixTitle, allowCompilationErrors);
         }
 
         private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
