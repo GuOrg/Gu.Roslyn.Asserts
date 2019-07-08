@@ -550,11 +550,9 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 new[] { codeWithErrorsIndicated },
                 new[] { fixedCode },
+                FixAllScope.Document,
                 fixTitle,
-                SuppressedDiagnostics,
-                MetadataReferences,
-                allowCompilationErrors,
-                FixAllScope.Document);
+                allowCompilationErrors);
         }
 
         /// <summary>
