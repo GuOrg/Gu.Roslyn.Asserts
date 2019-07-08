@@ -1,0 +1,18 @@
+﻿type project
+developmentDependency true
+
+releasenotes
+  BUGFIX: NRE in exception analyzer.
+
+projectUrl https://github.com/GuOrg/Gu.Analyzers
+licenseUrl http://opensource.org/licenses/MIT
+
+excludedgroups
+  Main
+  Analyzers
+
+files
+  bin/Release/Gu.Roslyn.Extensions.dll ==> analyzers/dotnet/cs
+  ../.paket/tools/*.ps1 ==> tools
+
+

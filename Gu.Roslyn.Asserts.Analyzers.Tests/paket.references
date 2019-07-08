@@ -1,0 +1,12 @@
+group Test
+  Microsoft.NET.Test.Sdk
+  NUnit
+  NUnit3TestAdapter
+  Microsoft.CodeAnalysis.CSharp.Workspaces
+
+group Analyzers
+  AsyncUsageAnalyzers
+  Gu.Analyzers
+  IDisposableAnalyzers
+  ReflectionAnalyzers
+  StyleCop.Analyzers

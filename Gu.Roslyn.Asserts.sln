@@ -36,6 +36,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstView", "AstView\AstView.csproj", "{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.Analyzers", "Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj", "{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Roslyn.Asserts.Analyzers.Tests", "Gu.Roslyn.Asserts.Analyzers.Tests\Gu.Roslyn.Asserts.Analyzers.Tests.csproj", "{F6D2B2D9-50BA-4C60-9737-427E35DE360C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +78,14 @@ Global
 		{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D2B2D9-50BA-4C60-9737-427E35DE360C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D2B2D9-50BA-4C60-9737-427E35DE360C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D2B2D9-50BA-4C60-9737-427E35DE360C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D2B2D9-50BA-4C60-9737-427E35DE360C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
