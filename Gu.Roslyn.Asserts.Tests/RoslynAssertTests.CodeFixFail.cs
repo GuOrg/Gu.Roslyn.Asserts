@@ -42,16 +42,9 @@ namespace RoslynSandbox
                                "Rename to: value\r\n";
 
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode, "WRONG"));
-                Assert.AreEqual(expected, exception.Message);
-
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "WRONG"));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
@@ -84,16 +77,10 @@ namespace RoslynSandbox
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode));
-                Assert.AreEqual(expected, exception.Message);
-
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "Rename to value"));
@@ -181,8 +168,9 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, TwoFixProvider>(code, string.Empty));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new TwoFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
                 var expected = "Expected only one code fix, found 2:\r\n" +
                                "Rename to: value1\r\n" +
                                "Rename to: value2\r\n" +
@@ -202,8 +190,9 @@ namespace RoslynSandbox
     }
 }";
 
-                var temp = code.AssertReplace("↓", string.Empty);
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code, temp));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new EmptyCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.EmptyCodeFixProvider did not change any document.";
                 Console.Write(exception.Message);
                 Assert.AreEqual(expected, exception.Message);

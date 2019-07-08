@@ -168,13 +168,7 @@ namespace RoslynSandbox
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -199,19 +193,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -235,19 +217,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("WRONG");
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -272,19 +242,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "WRONG MESSAGE");
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -312,19 +270,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore", 5, 8);
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -353,19 +299,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "ANY", 1, 2);
 
-                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code1, code2));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code1, code2));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code1, code2));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code1, code2));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code1, code2));
+                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code1, code2));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code1, code2));
@@ -393,19 +327,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -433,19 +355,7 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Wrong message", code, out code);
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code));
@@ -471,13 +381,7 @@ namespace RoslynSandbox
                                "SA13090 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDisabled>(code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDisabled(), code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDisabled(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 

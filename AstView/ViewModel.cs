@@ -106,7 +106,9 @@ namespace AstView
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void UpdateGeneration()
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             this.Exception = null;
             this.Generation = null;
