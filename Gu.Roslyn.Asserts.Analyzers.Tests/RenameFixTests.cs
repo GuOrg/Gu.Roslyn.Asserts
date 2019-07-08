@@ -3,9 +3,9 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
     using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;
 
-    public static class UseRoslynAssertFixTests
+    public static class RenameFixTests
     {
-        private static readonly CodeFixProvider Fix = new UseRoslynAssertFix();
+        private static readonly CodeFixProvider Fix = new RenameFix();
 
         [Test]
         public static void ChangeToRoslynAssert()
@@ -78,6 +78,84 @@ namespace RoslynSandbox
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS0234");
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after);
+        }
+
+        [TestCase("code")]
+        [TestCase("codeWithErrorsIndicated")]
+        public static void ChangeParameterNameToBefore(string name)
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(analyzer: null, fix: null, code: string.Empty, after: string.Empty);
+        }
+    }
+}".AssertReplace("code", name);
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(analyzer: null, fix: null, before: string.Empty, after: string.Empty);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after);
+        }
+
+        [TestCase("fixedCode")]
+        [TestCase("fixedcode")]
+        public static void ChangeParameterNameToAfter(string name)
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(analyzer: null, fix: null, before: string.Empty, fixedCode: string.Empty);
+        }
+    }
+}".AssertReplace("fixedCode", name);
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(analyzer: null, fix: null, before: string.Empty, after: string.Empty);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
             RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after);
         }
 
