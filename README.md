@@ -69,7 +69,7 @@ namespace TestCode
     {
     }
 }";
-        RoslynAssert.Valid(YourAnalyzer, code);
+        RoslynAssert.Valid(Analyzer, code);
     }
     ...
 }
@@ -93,7 +93,7 @@ namespace TestCode
     {
     }
 }";
-        RoslynAssert.Valid(YourAnalyzer, Descriptor, code);
+        RoslynAssert.Valid(Analyzer, Descriptor, code);
     }
     ...
 }
@@ -147,7 +147,7 @@ namespace TestCode
     {
     }
 }";
-        RoslynAssert.Diagnostics(YourAnalyzer, code);
+        RoslynAssert.Diagnostics(Analyzer, code);
     }
 
     [Test]
@@ -160,7 +160,7 @@ namespace TestCode
     {
     }
 }";
-        RoslynAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
+        RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
     }
     ...
 }
@@ -184,7 +184,7 @@ namespace TestCode
     {
     }
 }";
-        RoslynAssert.Diagnostics(YourAnalyzer, ExpectedDiagnostic, code);
+        RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, code);
     }
     ...
 }
@@ -200,7 +200,7 @@ With an aplhanumeric keyboard `alt + 25` writes `↓`.
 [Test]
 public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
 {
-    var code = @"
+    var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -209,7 +209,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+    var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -217,7 +217,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-    RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+    RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(before, after);
 }
 ```
 
@@ -242,7 +242,7 @@ namespace RoslynSandbox
     }
 }";
 
-        var fixedCode = @"
+        var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -250,7 +250,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        RoslynAssert.CodeFix(Analyzer, Fix, code, fixedCode);
+        RoslynAssert.CodeFix(Analyzer, Fix, code, after);
     }
 
     [Test]
@@ -265,7 +265,7 @@ namespace RoslynSandbox
     }
 }";
 
-        var fixedCode = @"
+        var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -273,7 +273,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        RoslynAssert.CodeFix(Analyzer, Fix, code, fixedCode, fixTitle: "Don't use underscore prefix");
+        RoslynAssert.CodeFix(Analyzer, Fix, code, after, fixTitle: "Don't use underscore prefix");
     }
     ...
 }
@@ -302,7 +302,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+    var after = @"
 namespace RoslynSandbox
 {
     using System;
@@ -311,7 +311,7 @@ namespace RoslynSandbox
     {
     }
 }";
-    RoslynAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, fixedCode);
+    RoslynAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, after);
 }
 ```
 
@@ -333,7 +333,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+    var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -342,7 +342,7 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-    RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, fixedCode);
+    RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, after);
 }
 ```
 
@@ -379,14 +379,13 @@ class ↓Foo
 {
 }";
 
-            var fixedCode = @"
+            var after = @"
 class FOO
 {
 }";
-
-            RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode);
+            RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, after);
 			// Or if you want to assert on title also
-			RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, fixedCode, title: "Change to uppercase.");
+			RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, after, title: "Change to uppercase.");
         }
 ```
 
@@ -569,7 +568,7 @@ namespace RoslynSandbox
     }
 }";
 
-    var fixedCode = @"
+    var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -583,7 +582,7 @@ namespace RoslynSandbox
     var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
     var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
     var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
-    CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+    CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 }
 ```
 
