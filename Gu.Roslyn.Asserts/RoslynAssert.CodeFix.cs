@@ -4,13 +4,10 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
-    using Microsoft.CodeAnalysis.Formatting;
 
     public static partial class RoslynAssert
     {
@@ -31,14 +28,15 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             CodeFix(
-                analyzer,
-                new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -58,14 +56,15 @@ namespace Gu.Roslyn.Asserts
         {
             var analyzer = new TAnalyzer();
             CodeFix(
-                analyzer,
-                new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                fixedCode: MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -82,14 +81,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -131,14 +131,15 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
-                new TAnalyzer(),
-                new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new TAnalyzer(),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -158,14 +159,15 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
-                new TAnalyzer(),
-                new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                MergeFixedCode(code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new TAnalyzer(),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: MergeFixedCode(code, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -184,14 +186,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                fixedCode: MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -210,14 +213,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                fixedCode: fixedCode,
+                suppressedDiagnostics: null,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -235,14 +239,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -260,14 +265,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                MergeFixedCode(code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: MergeFixedCode(code, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -285,14 +291,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: fixedCode,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -310,14 +317,15 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
-                new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -335,14 +343,15 @@ namespace Gu.Roslyn.Asserts
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
-                new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                MergeFixedCode(code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: MergeFixedCode(code, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -359,14 +368,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: new[] { fixedCode },
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -383,14 +393,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                MergeFixedCode(code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: MergeFixedCode(code, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -407,14 +418,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                fix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: fix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                fixedCode: fixedCode,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -431,14 +443,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                diagnosticsAndSources,
-                MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: diagnosticsAndSources,
+                fixedCode: MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -457,14 +470,15 @@ namespace Gu.Roslyn.Asserts
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string fixedCode, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
-                analyzer,
-                fix,
-                diagnosticsAndSources,
-                MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
-                suppressedDiagnostics,
-                metadataReferences,
-                fixTitle,
-                allowCompilationErrors);
+                analyzer: analyzer,
+                fix: fix,
+                diagnosticsAndSources: diagnosticsAndSources,
+                fixedCode: MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: null,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors);
         }
 
         /// <summary>
@@ -480,56 +494,19 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> fixedCode, IEnumerable<string> suppressedDiagnostics = null, IEnumerable<MetadataReference> metadataReferences = null, CSharpCompilationOptions compilationOptions = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, suppressedDiagnostics, metadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                diagnosticsAndSources: diagnosticsAndSources,
+                analyzer: analyzer,
+                compilationOptions: compilationOptions,
+                suppressedDiagnostics: suppressedDiagnostics ?? SuppressedDiagnostics,
+                metadataReferences: metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(sln, diagnostics, analyzer, fix, fixedCode, fixTitle, allowCompilationErrors);
-        }
-
-        private static async Task VerifyFixAsync(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-        {
-            var fixableDiagnostics = diagnostics.SelectMany(x => x)
-                                                .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
-                                                .ToArray();
-            if (fixableDiagnostics.Length == 0)
-            {
-                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
-                throw new AssertException(message);
-            }
-
-            if (fixableDiagnostics.Length > 1)
-            {
-                var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
-                              $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw new AssertException(message);
-            }
-
-            var diagnostic = fixableDiagnostics.Single();
-            var fixedSolution = await Fix.ApplyAsync(sln, fix, diagnostic, fixTitle).ConfigureAwait(false);
-            if (ReferenceEquals(sln, fixedSolution))
-            {
-                throw new AssertException($"{fix} did not change any document.");
-            }
-
-            var fixedSource = await CodeReader.GetStringFromDocumentAsync(
-                                                  fixedSolution.GetDocument(sln.GetDocument(diagnostic.Location.SourceTree).Id),
-                                                  Formatter.Annotation,
-                                                  CancellationToken.None)
-                                              .ConfigureAwait(false);
-            CodeAssert.AreEqual(fixedCode, fixedSource);
-
-            if (allowCompilationErrors == AllowCompilationErrors.No)
-            {
-                await VerifyNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false);
-            }
         }
 
         private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)

@@ -648,11 +648,11 @@ namespace Gu.Roslyn.Asserts
         /// <param name="suppressedDiagnostics">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
+        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions compilationOptions, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,
-                DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressedDiagnostics),
+                compilationOptions ?? DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressedDiagnostics),
                 metadataReferences);
         }
 
