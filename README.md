@@ -16,20 +16,21 @@ Asserts for testing Roslyn analyzers.
 
 Use 1.x for Microsoft.CodeAnalysis 1.x
 
-- [AnalyzerAssert.Valid](#analyzerassertvalid)
-- [AnalyzerAssert.Diagnostics](#analyzerassertdiagnostics)
+- [RoslynAssert.Valid](#roslynassertvalid)
+- [RoslynAssert.Diagnostics](#roslynassertdiagnostics)
 - [CodeFix](#codefix)
   - [Code fix only](#code-fix-only)
 - [FixAll](#fixall)
 - [NoFix](#nofix)
 - [Refactoring](#refactoring)
 - [AST](#ast)
+  - [SyntaxFactoryWriter](#syntaxfactorywriter)
 - [Attributes](#attributes)
   - [MetadataReferenceAttribute](#metadatareferenceattribute)
   - [MetadataReferencesAttribute](#metadatareferencesattribute)
   - [MetadataReferences](#metadatareferences)
     - [Sample AssemblyInfo.cs (for the test project.)](#sample-assemblyinfocs-for-the-test-project)
-  - [Exlicit set AnalyzerAssert.MetadataReferences](#exlicit-set-analyzerassertmetadatareferences)
+  - [Exlicit set RoslynAssert.MetadataReferences](#exlicit-set-roslynassertmetadatareferences)
   - [IgnoredErrorsAttribute](#ignorederrorsattribute)
   - [AllowedDiagnosticsAttribute](#alloweddiagnosticsattribute)
 - [Analyze](#analyze)
@@ -43,7 +44,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 - [SyntaxNodeExt](#syntaxnodeext)
 - [AstView](#astview)
 - [Usage with different test project types](#usage-with-different-test-project-types)
-  - [Net461 new project type.](#net461-new-project-type)
+  - [Net472 new project type.](#net472-new-project-type)
   - [NetCoreApp2.0](#netcoreapp20)
 
 
@@ -401,6 +402,20 @@ public void CheckAst()
     var expected = CSharpSyntaxTree.ParseText("var c = a + b").FindAssignmentExpression("a + b");
     RoslynAssert.Ast(expected, actual);
 }
+```
+
+## SyntaxFactoryWriter
+
+Get a string with a call to SyntaxFactory for generating the code passed in.
+
+```cs
+var code = @"namespace A.B
+{
+    public class C
+    {
+    }
+}";
+var call = SyntaxFactoryWriter.Serialize(code);
 ```
 
 # Attributes
