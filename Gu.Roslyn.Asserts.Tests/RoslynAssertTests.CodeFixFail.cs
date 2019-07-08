@@ -118,8 +118,9 @@ namespace RoslynSandbox
         private readonly int _value2;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
@@ -138,8 +139,9 @@ namespace RoslynSandbox
         private ↓readonly int _value1;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -161,8 +163,9 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code, string.Empty));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new NoCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
                 var expected = "Expected one code fix, was 0.";
                 Assert.AreEqual(expected, exception.Message);
             }

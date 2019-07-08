@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Globalization;
@@ -12,31 +11,6 @@ namespace Gu.Roslyn.Asserts
 
     public static partial class RoslynAssert
     {
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Diagnostics(
-                new TAnalyzer(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated));
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
-        {
-            Diagnostics(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), codeWithErrorsIndicated));
-        }
-
         /// <summary>
         /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
         /// </summary>
@@ -52,33 +26,6 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Diagnostics<TAnalyzer>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Diagnostics(
-                new TAnalyzer(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code));
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
-        {
-            Diagnostics(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code));
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
-        /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
@@ -87,33 +34,6 @@ namespace Gu.Roslyn.Asserts
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code));
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="expectedDiagnostics">The expected diagnostics.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Diagnostics<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Diagnostics(
-                new TAnalyzer(),
-                new DiagnosticsAndSources(expectedDiagnostics, code));
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="expectedDiagnostics">The expected diagnostics.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
-        {
-            Diagnostics(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
-                new DiagnosticsAndSources(expectedDiagnostics, code));
         }
 
         /// <summary>

@@ -13,27 +13,6 @@ namespace Gu.Roslyn.Asserts
     public static partial class RoslynAssert
     {
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid<TAnalyzer>(params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid(Type analyzerType, params string[] code)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
@@ -55,42 +34,6 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid<TAnalyzer>(FileInfo code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        public static void Valid(Type analyzerType, FileInfo code)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="descriptor">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid<TAnalyzer>(DiagnosticDescriptor descriptor, params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), descriptor, code);
         }
 
         /// <summary>
@@ -116,29 +59,6 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="descriptors">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid<TAnalyzer>(IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), descriptors, code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="descriptors">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid(Type analyzerType, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptors, code);
         }
 
         /// <summary>
@@ -170,32 +90,6 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="descriptor">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid<TAnalyzer>(DiagnosticDescriptor descriptor, FileInfo code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), descriptor, code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="descriptor">The expected diagnostic.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptor, code);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The analyzer.</param>
@@ -210,27 +104,6 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
-        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
-        public static void Valid<TAnalyzer>(Solution solution)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), solution);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
-        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
-        public static void Valid(Type analyzerType, Solution solution)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), solution);
         }
 
         /// <summary>
@@ -311,6 +184,64 @@ namespace Gu.Roslyn.Asserts
 
                 throw new AssertException(builder.Return());
             }
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Valid(Type analyzerType, params string[] code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        public static void Valid(Type analyzerType, Solution solution)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), solution);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="descriptor">The expected diagnostic.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptor, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="descriptors">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void Valid(Type analyzerType, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptors, code);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        public static void Valid(Type analyzerType, FileInfo code)
+        {
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
         }
 
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
