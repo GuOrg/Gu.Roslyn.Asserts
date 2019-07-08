@@ -107,7 +107,6 @@ private readonly int value;
     }
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                RoslynAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
                 var analyzer = new ClassMustBeSealedAnalyzer();
                 var fix = new MakeSealedFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
