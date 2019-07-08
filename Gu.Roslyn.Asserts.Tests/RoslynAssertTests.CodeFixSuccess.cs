@@ -39,8 +39,6 @@ namespace RoslynSandbox
     }
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
-                RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { code }, fixedCode);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
@@ -69,8 +67,6 @@ namespace RoslynSandbox
     }
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-                RoslynAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(code, fixedCode);
-                RoslynAssert.CodeFix<ClassMustBeSealedAnalyzer, MakeSealedFixProvider>(new[] { code }, fixedCode);
                 var analyzer = new ClassMustBeSealedAnalyzer();
                 var fix = new MakeSealedFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);

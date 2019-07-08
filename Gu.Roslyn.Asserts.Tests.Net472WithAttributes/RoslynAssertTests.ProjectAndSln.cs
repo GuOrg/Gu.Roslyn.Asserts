@@ -11,12 +11,10 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
             var analyzer = new NoErrorAnalyzer();
 
-            RoslynAssert.Valid<NoErrorAnalyzer>(csproj);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj);
             RoslynAssert.Valid(analyzer, csproj);
 
             var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
             RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
@@ -28,7 +26,6 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var analyzer = new NoErrorAnalyzer();
             var csproj = ProjectFile.Find("ClassLibrary1.csproj");
             var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
             RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
@@ -40,7 +37,6 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var analyzer = new NoErrorAnalyzer();
             var csproj = ProjectFile.Find("WpfApp1.csproj");
             var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
             RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
@@ -52,12 +48,10 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
         {
             var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var analyzer = new NoErrorAnalyzer();
-            RoslynAssert.Valid<NoErrorAnalyzer>(sln);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), sln);
             RoslynAssert.Valid(analyzer, sln);
 
             var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, sln);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, sln);
             RoslynAssert.Valid(analyzer, descriptor, sln);
         }
@@ -68,7 +62,6 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
         {
             var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, RoslynAssert.MetadataReferences);
-            RoslynAssert.Valid<NoErrorAnalyzer>(solution);
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), solution);
             RoslynAssert.Valid(new NoErrorAnalyzer(), solution);
         }

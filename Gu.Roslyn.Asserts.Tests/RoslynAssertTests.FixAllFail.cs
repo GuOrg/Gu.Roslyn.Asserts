@@ -220,8 +220,9 @@ namespace RoslynSandbox
         private ↓readonly int _value1;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -283,9 +284,7 @@ namespace RoslynSandbox
                 var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<DuplicateIdAnalyzer, DuplicateIdFix>(expectedDiagnostic, string.Empty, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(new DuplicateIdAnalyzer(), new DuplicateIdFix(), expectedDiagnostic, string.Empty, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(new DuplicateIdAnalyzer(), new DuplicateIdFix(), expectedDiagnostic, string.Empty, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

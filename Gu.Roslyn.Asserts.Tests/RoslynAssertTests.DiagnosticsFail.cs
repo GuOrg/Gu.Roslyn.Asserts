@@ -64,13 +64,7 @@ namespace RoslynSandbox
     }
 }";
                 var expected = "Expected code to have at least one error position indicated with '↓'";
-                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics<NoErrorAnalyzer>(code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(typeof(NoErrorAnalyzer), code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new NoErrorAnalyzer(), code));
+                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new NoErrorAnalyzer(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 

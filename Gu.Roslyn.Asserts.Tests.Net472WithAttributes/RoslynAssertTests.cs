@@ -37,7 +37,9 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-            RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode);
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DontUseUnderscoreCodeFixProvider();
+            RoslynAssert.CodeFix(analyzer, fix, code, fixedCode);
         }
     }
 }

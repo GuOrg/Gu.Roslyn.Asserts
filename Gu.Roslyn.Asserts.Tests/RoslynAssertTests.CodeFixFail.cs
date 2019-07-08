@@ -386,11 +386,9 @@ namespace RoslynSandbox
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { part1, part2 }, fixedCode));
-                CodeAssert.AreEqual(expected, exception.Message);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, fixedCode));
                 CodeAssert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
                 CodeAssert.AreEqual(expected, exception.Message);
