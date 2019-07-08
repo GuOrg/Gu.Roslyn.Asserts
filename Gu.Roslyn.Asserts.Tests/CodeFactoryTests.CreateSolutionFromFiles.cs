@@ -141,6 +141,8 @@ namespace Gu.Roslyn.Asserts.Tests
                     "ClassLibrary1",
                     "ClassLibrary2",
                     "Gu.Roslyn.Asserts",
+                    "Gu.Roslyn.Asserts.Analyzers",
+                    "Gu.Roslyn.Asserts.Analyzers.Tests",
                     "Gu.Roslyn.Asserts.Tests",
                     "Gu.Roslyn.Asserts.Tests.Net472WithAttributes",
                     "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
