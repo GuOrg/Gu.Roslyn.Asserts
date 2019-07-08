@@ -301,10 +301,10 @@ namespace Gu.Roslyn.Asserts
                 codeFix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
                 new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -329,10 +329,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 MergeFixedCode(codeWithErrorsIndicated, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -357,10 +357,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
                 fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -384,10 +384,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
                 new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -411,10 +411,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 MergeFixedCode(code, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -438,10 +438,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -466,10 +466,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
                 new[] { fixedCode },
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -494,10 +494,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 MergeFixedCode(codeWithErrorsIndicated, fixedCode),
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
@@ -522,10 +522,10 @@ namespace Gu.Roslyn.Asserts
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 fixedCode,
-                SuppressedDiagnostics,
-                MetadataReferences,
                 fixTitle,
-                allowCompilationErrors);
+                allowCompilationErrors,
+                SuppressedDiagnostics,
+                MetadataReferences);
         }
 
         /// <summary>
