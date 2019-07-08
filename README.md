@@ -197,34 +197,41 @@ Test that the analyzer reports an error or warning at position indicated with �
 With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
 ```c#
-[Test]
-public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+public class CodeFixTests
 {
-    var before = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
+    private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
+    private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
-    var after = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-    RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(before, after);
+	[Test]
+	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+	{
+		var before = @"
+	namespace RoslynSandbox
+	{
+		class Foo
+		{
+			private readonly int ↓_value;
+		}
+	}";
+
+		var after = @"
+	namespace RoslynSandbox
+	{
+		class Foo
+		{
+			private readonly int value;
+		}
+	}";
+		RoslynAssert.CodeFix(Analyzer, Fix, before, after);
+	}
 }
+
 ```
 
 A typical test fixture looks like:
 
 ```c#
-public class CodeFix
+public class CodeFixTests
 {
     private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
     private static readonly CodeFixProvider Fix = new YorCodeFixProvider();
@@ -233,7 +240,7 @@ public class CodeFix
     [Test]
     public void SomeTest()
     {
-        var code = @"
+        var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -250,13 +257,13 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        RoslynAssert.CodeFix(Analyzer, Fix, code, after);
+        RoslynAssert.CodeFix(Analyzer, Fix, before, after);
     }
 
     [Test]
     public void ExplicitFixTitle()
     {
-        var code = @"
+        var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -273,7 +280,7 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-        RoslynAssert.CodeFix(Analyzer, Fix, code, after, fixTitle: "Don't use underscore prefix");
+        RoslynAssert.CodeFix(Analyzer, Fix, before, after, fixTitle: "Don't use underscore prefix");
     }
     ...
 }
@@ -288,61 +295,76 @@ If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic`
 
 When the code fix is for a warning produced by an analyzer that you do not own, for example a built in analyzer in Visual Studio.
 ```c#
-[Test]
-public void TestThatCodeFixProducesExpectedCode()
+public class CodeFixTests
 {
-    var code = @"
-namespace RoslynSandbox
-{
-    using System;
+    private static readonly CodeFixProvider Fix = new RemoveUnusedFixProvider();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
 
-    public class Foo
-    {
-        public event EventHandler ↓Bar;
-    }
-}";
+	[Test]
+	public void TestThatCodeFixProducesExpectedCode()
+	{
+		var before = @"
+	namespace RoslynSandbox
+	{
+		using System;
 
-    var after = @"
-namespace RoslynSandbox
-{
-    using System;
+		public class Foo
+		{
+			public event EventHandler ↓Bar;
+		}
+	}";
 
-    public class Foo
-    {
-    }
-}";
-    RoslynAssert.CodeFix<RemoveUnusedFixProvider>("CS0067", code, after);
+		var after = @"
+	namespace RoslynSandbox
+	{
+		using System;
+
+		public class Foo
+		{
+		}
+	}";
+		RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, before, after);
+	}
 }
 ```
 
 # FixAll
 
 When there are many isses that will be fixed:
+RoslynAssert.FixAll does:
+- Fix all diagnostcs one by one
+- Fix all diagnostics in all supported scopes.
 
 ```c#
-[Test]
-public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+public class CodeFixTests
 {
-    var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
-    }
-}";
+    private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
+    private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
-    var after = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value1;
-        private readonly int value2;
-    }
-}";
-    RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code, after);
+	[Test]
+	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+	{
+		var before = @"
+	namespace RoslynSandbox
+	{
+		class Foo
+		{
+			private readonly int ↓_value1;
+			private readonly int ↓_value2;
+		}
+	}";
+
+		var after = @"
+	namespace RoslynSandbox
+	{
+		class Foo
+		{
+			private readonly int value1;
+			private readonly int value2;
+		}
+	}";
+		RoslynAssert.FixAll(Analyzer, Fix, before, after);
+	}
 }
 ```
 
@@ -353,40 +375,51 @@ With an aplhanumeric keyboard `alt + 25` writes `↓`.
 This can happen if for example it is decided to not support rare edge cases with the code fix.
 
 ```c#
-[Test]
-public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixDoesNothing()
+public class CodeFixTests
 {
-    var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int ↓_value;
-    }
-}";
+    private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
+    private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
-    RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, SA1309CodeFixProvider>(code);
+	[Test]
+	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixDoesNothing()
+	{
+		var code = @"
+	namespace RoslynSandbox
+	{
+		class Foo
+		{
+			private readonly int ↓_value;
+		}
+	}";
+
+		RoslynAssert.NoFix(Analyzer, Fix, code);
+	}
 }
 ```
 
 # Refactoring
 ```cs
-        [Test]
-        public void WithPositionIndicated()
-        {
-            var testCode = @"
+public class CodeFixTests
+{
+	private static readonly CodeRefactoringProvider Refactoring = new ClassNameToUpperCaseRefactoringProvider();
+
+    [Test]
+    public void WithPositionIndicated()
+    {
+        var before = @"
 class ↓Foo
 {
 }";
 
-            var after = @"
+        var after = @"
 class FOO
 {
 }";
-            RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, after);
-			// Or if you want to assert on title also
-			RoslynAssert.Refactoring(new ClassNameToUpperCaseRefactoringProvider(), testCode, after, title: "Change to uppercase.");
-        }
+        RoslynAssert.Refactoring(Refactoring, before, after);
+		// Or if you want to assert on title also
+		RoslynAssert.Refactoring(Refactoring, before, after, title: "Change to uppercase.");
+    }
+}
 ```
 
 # AST
