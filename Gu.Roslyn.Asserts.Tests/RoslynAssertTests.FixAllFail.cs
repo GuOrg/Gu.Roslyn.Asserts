@@ -276,6 +276,18 @@ namespace RoslynSandbox
                                "}\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public static void DuplicateId()
+            {
+                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
+
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<DuplicateIdAnalyzer, DuplicateIdFix>(expectedDiagnostic, string.Empty, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(new DuplicateIdAnalyzer(), new DuplicateIdFix(), expectedDiagnostic, string.Empty, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }

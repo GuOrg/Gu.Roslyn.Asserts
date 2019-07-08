@@ -101,6 +101,18 @@ namespace RoslynSandbox
                                "Rename to: value\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public static void DuplicateId()
+            {
+                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
+
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<DuplicateIdAnalyzer, DuplicateIdFix>(expectedDiagnostic, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(new DuplicateIdAnalyzer(), new DuplicateIdFix(), expectedDiagnostic, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }

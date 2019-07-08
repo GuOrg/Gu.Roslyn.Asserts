@@ -360,28 +360,20 @@ namespace RoslynSandbox
             [Test]
             public static void DuplicateId()
             {
-                var code = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-    }
-}";
-
                 var descriptor = DuplicateIdAnalyzer.Descriptor1;
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(descriptor, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), descriptor, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), descriptor, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(new[] { descriptor }, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { descriptor }, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), new[] { descriptor }, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
         }
