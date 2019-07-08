@@ -444,10 +444,8 @@ namespace RoslynSandbox
                                "    {\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part1, part2 }, fixedCode));
-                CodeAssert.AreEqual(expected, exception.Message);
                 var fix = new RemoveUnusedFixProvider();
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
                 CodeAssert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
@@ -484,10 +482,8 @@ namespace RoslynSandbox
                                "  at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
                                "CS0067 The event 'Foo.Bar' is never used\r\n" +
                                "  at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { part1, part2 }, string.Empty));
-                CodeAssert.AreEqual(expected, exception.Message);
                 var fix = new RemoveUnusedFixProvider();
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, string.Empty));
                 CodeAssert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, Array.Empty<string>()));
                 CodeAssert.AreEqual(expected, exception.Message);

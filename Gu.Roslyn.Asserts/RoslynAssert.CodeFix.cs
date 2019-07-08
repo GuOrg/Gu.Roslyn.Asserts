@@ -41,11 +41,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
                 after: new[] { after },
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -78,11 +78,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
                 after: MergeFixedCode(before, after),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -115,11 +115,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
                 after: after,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -154,11 +154,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: new[] { after },
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -193,11 +193,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: MergeFixedCode(before, after),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -232,11 +232,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: after,
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -269,11 +269,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: new[] { after },
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -306,11 +306,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: MergeFixedCode(before, after),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -324,18 +324,30 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void CodeFix(
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> before,
+            IReadOnlyList<string> after,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: after,
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -352,7 +364,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        private static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<string> after, IEnumerable<string> suppressedDiagnostics = null, IEnumerable<MetadataReference> metadataReferences = null, CSharpCompilationOptions compilationOptions = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        private static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            DiagnosticsAndSources diagnosticsAndSources,
+            IReadOnlyList<string> after,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
@@ -379,12 +400,21 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, Solution solution, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            Solution solution,
+            string after,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(
+                expectedDiagnostic,
+                solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }
