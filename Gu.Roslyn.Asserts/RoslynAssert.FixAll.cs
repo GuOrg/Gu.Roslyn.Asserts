@@ -2,7 +2,6 @@ namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Threading;
-    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -97,7 +96,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
@@ -123,7 +122,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
@@ -149,7 +148,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
@@ -409,7 +408,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -433,7 +432,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -457,7 +456,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -481,7 +480,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -506,7 +505,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="diagnosticsAndSources">The code and expected diagnostics.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -566,7 +565,55 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllInDocument(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            FixAllByScope(
+                analyzer,
+                codeFix,
+                new[] { codeWithErrorsIndicated },
+                new[] { fixedCode },
+                fixTitle,
+                SuppressedDiagnostics,
+                MetadataReferences,
+                allowCompilationErrors,
+                FixAllScope.Document);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllInDocument(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
+            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            FixAllByScope(analyzer, codeFix, sln, new[] { fixedCode }, fixTitle, allowCompilationErrors, FixAllScope.Document);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
         /// <param name="codeFix">The code fix to apply.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
@@ -612,6 +659,51 @@ namespace Gu.Roslyn.Asserts
             FixAllOneByOne(analyzer, codeFix, sln, new[] { fixedCode }, fixTitle, allowCompilationErrors);
         }
 
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
+            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            FixAllOneByOne(analyzer, codeFix, sln, new[] { fixedCode }, fixTitle, allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to run on the code.</param>
+        /// <param name="codeFix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        public static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(expectedDiagnostic, code);
+            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
+            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, SuppressedDiagnostics, MetadataReferences);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            FixAllOneByOne(analyzer, codeFix, sln, new[] { fixedCode }, fixTitle, allowCompilationErrors);
+        }
+
         private static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, Solution solution, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
             var fixedSolution = Fix.ApplyAllFixableOneByOneAsync(solution, analyzer, codeFix, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
@@ -619,16 +711,6 @@ namespace Gu.Roslyn.Asserts
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
                 VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false).GetAwaiter().GetResult();
-            }
-        }
-
-        private static async Task FixAllOneByOneAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, Solution solution)
-        {
-            var fixedSolution = await Fix.ApplyAllFixableOneByOneAsync(solution, analyzer, codeFix, fixTitle, CancellationToken.None).ConfigureAwait(false);
-            await AreEqualAsync(fixedCode, fixedSolution, "Applying fixes one by one failed.").ConfigureAwait(false);
-            if (allowCompilationErrors == AllowCompilationErrors.No)
-            {
-                await VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
         }
 
@@ -640,17 +722,6 @@ namespace Gu.Roslyn.Asserts
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
                 VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).GetAwaiter().GetResult();
-            }
-        }
-
-        private static async Task FixAllByScopeAsync(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> fixedCode, string fixTitle, AllowCompilationErrors allowCompilationErrors, Solution solution, FixAllScope scope)
-        {
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var fixedSolution = await Fix.ApplyAllFixableScopeByScopeAsync(solution, analyzer, codeFix, scope, fixTitle, CancellationToken.None).ConfigureAwait(false);
-            await AreEqualAsync(fixedCode, fixedSolution, $"Applying fixes for {scope} failed.").ConfigureAwait(false);
-            if (allowCompilationErrors == AllowCompilationErrors.No)
-            {
-                await VerifyNoCompilerErrorsAsync(codeFix, fixedSolution).ConfigureAwait(false);
             }
         }
 
