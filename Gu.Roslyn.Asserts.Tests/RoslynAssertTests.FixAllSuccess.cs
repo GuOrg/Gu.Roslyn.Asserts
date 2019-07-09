@@ -42,7 +42,9 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, before, after);
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -65,9 +67,11 @@ namespace RoslynSandbox
     {
         private readonly int value;
     }
-}";
-                after = after.AssertReplace("value", expected);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(before, after, title);
+}".AssertReplace("value", expected);
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, before, after, title);
             }
 
             [Test]
@@ -92,7 +96,9 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, before, after);
             }
 
             [Test]
@@ -117,7 +123,9 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.FixAllInDocument<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAllInDocument(analyzer, fix, before, after);
             }
 
             [Test]
@@ -142,7 +150,9 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.FixAllOneByOne<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAllOneByOne(analyzer, fix, before, after);
             }
 
             [Test]
@@ -289,10 +299,12 @@ namespace RoslynSandbox
 
                 after = after.AssertReplace("value", expected);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, new[] { after, before2 }, title);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, after, title);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 }, title);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(expectedDiagnostic, new[] { before1, before2 }, after, title);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, new[] { after, before2 }, title);
+                RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, after, title);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 }, title);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before1, before2 }, after, title);
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -326,7 +338,9 @@ namespace RoslynSandbox
 }";
 
                 after = after.AssertReplace("value", expected);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, after, title);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, after, title);
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -369,7 +383,9 @@ namespace RoslynSandbox
 }";
                 after1 = after1.AssertReplace("value", expected);
                 after2 = after2.AssertReplace("value", expected);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, new[] { after1, after2 }, title);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 }, title);
             }
 
             [Test]
@@ -620,8 +636,10 @@ namespace RoslynSandbox
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, new[] { barCode, after });
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, after);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, new[] { barCode, after });
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, after);
                 RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { barCode, testCode }, after);
                 RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), new[] { barCode, testCode }, new[] { barCode, after });
                 RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscore(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { barCode, testCode }, after);

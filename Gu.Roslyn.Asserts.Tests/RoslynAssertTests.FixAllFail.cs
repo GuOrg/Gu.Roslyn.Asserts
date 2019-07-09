@@ -35,11 +35,13 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
                                "  at line 6 and character 29 in file Foo.cs | private readonly int ↓_value2;\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -55,18 +57,12 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
-namespace RoslynSandbox
-{
-    class Foo
-    {
-        private readonly int value;
-    }
-}";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
                                "Rename to: value\r\n";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, string.Empty, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -81,8 +77,9 @@ namespace RoslynSandbox
         private ↓readonly int _value1;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -141,7 +138,9 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, fixedCode));
                 var expected = "Applying fixes one by one failed.\r\n" +
                                "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
@@ -195,7 +194,9 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, new[] { barCode, fixedCode }));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, new[] { barCode, code }, new[] { barCode, fixedCode }));
                 var expected = "Applying fixes one by one failed.\r\n" +
                                "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
