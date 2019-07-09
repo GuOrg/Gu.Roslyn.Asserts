@@ -176,14 +176,12 @@ namespace RoslynSandbox
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, before, after);
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after, "Rename to: value");
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after, "Rename to: value");
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, before, after, fixTitle: "Rename to: value");
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: value");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
             }
 
             [Test]
@@ -207,14 +205,12 @@ namespace RoslynSandbox
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, before, after);
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after, "Rename to: value");
-                RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after, "Rename to: value");
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, before, after, fixTitle: "Rename to: value");
-                RoslynAssert.FixAll(new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic(), new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: value");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
             }
 
             [Test]
@@ -263,8 +259,9 @@ namespace RoslynSandbox
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, new[] { fixed1, fixed2 });
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, new[] { fixed2, fixed1 });
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { fixed1, fixed2 });
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { fixed2, fixed1 });
             }
 
             [TestCase("Rename to: value1", "value1")]
@@ -421,8 +418,9 @@ namespace RoslynSandbox.Core
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, new[] { before2, after });
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { before2, after });
             }
 
             [Test]
@@ -458,8 +456,9 @@ namespace RoslynSandbox.Core
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, after);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, after);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
                 RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { before2, before1 }, after);
             }
 
@@ -496,9 +495,9 @@ namespace RoslynSandbox.Core
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, after);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, after);
-                RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { before2, before1 }, after);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
             }
 
             [Test]
@@ -534,8 +533,9 @@ namespace RoslynSandbox.Core
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, after);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, after);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
                 RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { before2, before1 }, after);
             }
 
@@ -572,9 +572,9 @@ namespace RoslynSandbox.Client
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before2, out before2);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before1, before2 }, after);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, new[] { before2, before1 }, after);
-                RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { before2, before1 }, after);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
+                RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
             }
 
             [Test]
@@ -602,8 +602,8 @@ namespace RoslynSandbox
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before, out before);
-                RoslynAssert.FixAll<RemoveUnusedFixProvider>(expectedDiagnostic, before, after);
-                RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, before, after);
+                var fix = new RemoveUnusedFixProvider();
+                RoslynAssert.FixAll(fix, expectedDiagnostic, before, after);
             }
 
             [Test]

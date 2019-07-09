@@ -111,7 +111,9 @@ namespace RoslynSandbox
     }
 }";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var analyzer = new NoErrorAnalyzer();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
