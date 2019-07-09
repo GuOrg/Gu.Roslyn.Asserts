@@ -223,8 +223,9 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var analyzer = new NoErrorAnalyzer();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
@@ -251,7 +252,9 @@ namespace RoslynSandbox
         private readonly int bar;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
                 var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
@@ -324,7 +327,9 @@ namespace RoslynSandbox
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, code }, fixedCode));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, code }, fixedCode));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -780,7 +785,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
+
                 var expected = @"Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
   at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;
@@ -794,6 +799,9 @@ namespace RoslynSandbox
     }
 }
 ";
+                var analyzer = new ClassMustHaveEventAnalyzer();
+                var fix = new InsertEventFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -815,11 +823,9 @@ namespace RoslynSandbox
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, null));
-                Assert.AreEqual(expected, exception.Message);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { string.Empty }));
                 Assert.AreEqual(expected, exception.Message);
