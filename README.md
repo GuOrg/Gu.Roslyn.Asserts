@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/Gu.Roslyn.Asserts.svg)](https://www.nuget.org/packages/Gu.Roslyn.Asserts/)
 [![Build status](https://ci.appveyor.com/api/projects/status/a0976a1dmtcx387r/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-roslyn-asserts/branch/master)
+[![Join the chat at https://gitter.im/GuOrg/Gu.Roslyn.Asserts](https://badges.gitter.im/GuOrg/Gu.Roslyn.Asserts.svg)]
 
 Microsoft are working on an official package for testing analyzers: [Microsoft.CodeAnalysis.CSharp.CodeFix.Testing](https://dotnet.myget.org/feed/roslyn-analyzers/package/nuget/Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit).
 
