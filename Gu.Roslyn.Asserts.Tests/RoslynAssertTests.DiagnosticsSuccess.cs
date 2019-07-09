@@ -21,15 +21,9 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code);
                 RoslynAssert.Diagnostics(analyzer, code);
                 RoslynAssert.Diagnostics(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
                 RoslynAssert.Diagnostics(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, expectedDiagnostic, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
-
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
 
@@ -53,8 +47,8 @@ namespace RoslynSandbox
                     FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId2,
                     code,
                     out code);
-
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { expectedDiagnostic1, expectedDiagnostic2 }, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
+                RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic1, expectedDiagnostic2 }, code);
             }
 
             [Test]
@@ -86,7 +80,8 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
 
             [Test]
@@ -102,7 +97,8 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", 5, 29);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
 
             [Test]
@@ -118,7 +114,9 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
+                RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
             [Test]
@@ -134,13 +132,9 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
-
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), new[] { expectedDiagnostic }, code);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), new[] { expectedDiagnostic }, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
+                RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
             [Test]
@@ -157,12 +151,9 @@ namespace RoslynSandbox
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
 
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(expectedDiagnostic, code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer.GetType(), expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(new[] { expectedDiagnostic }, code);
-                RoslynAssert.Diagnostics(analyzer.GetType(), new[] { expectedDiagnostic }, code);
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, new[] { code });
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
