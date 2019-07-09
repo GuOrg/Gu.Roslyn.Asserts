@@ -144,7 +144,6 @@ namespace RoslynSandbox
                 var analyzer = new NoErrorAnalyzer();
                 RoslynAssert.Valid(analyzer, code1, code2);
                 RoslynAssert.Valid(analyzer, code2, code1);
-                RoslynAssert.Valid(analyzer, new [] { code1, code2 });
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
             }
 
@@ -186,7 +185,6 @@ namespace RoslynSandbox
                 var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
-                RoslynAssert.Valid(analyzer, descriptor, new [] { code });
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code);
             }

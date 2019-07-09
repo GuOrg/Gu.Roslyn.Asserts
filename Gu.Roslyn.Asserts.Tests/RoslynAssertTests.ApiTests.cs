@@ -1,6 +1,7 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Globalization;
     using System.Linq;
@@ -32,6 +33,7 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly ImmutableArray<IMethodSymbol> DiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Diagnostics));
             private static readonly ImmutableArray<IMethodSymbol> FixAllMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.FixAll));
             private static readonly ImmutableArray<IMethodSymbol> NoCompilerErrorsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoCompilerErrors));
+            private static readonly ImmutableArray<IMethodSymbol> NoFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoFix));
             private static readonly ImmutableArray<IMethodSymbol> ValidMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Valid));
 
             [TestCaseSource(nameof(CodeFixMethods))]
@@ -75,21 +77,52 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
                 else
                 {
-                    Assert.AreEqual(true, method.Parameters.Last().IsParams);
+                    Assert.AreEqual(true, method.Parameters.Last().IsParams || method.GetAttributes().Any());
+                }
+            }
+
+            [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(DiagnosticsMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            public static void SuppressedDiagnosticsParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<IEnumerable<string>>(method.Parameters, out var parameter))
+                {
+                    Assert.AreEqual(true, parameter.IsOptional);
+                    Assert.AreEqual(null, parameter.ExplicitDefaultValue);
+                    Assert.AreEqual("suppressedDiagnostics", parameter.MetadataName);
+                    Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning no warnings or errors are suppressed.", GetComment(parameter));
+                    Assert.AreEqual("allowCompilationErrors", method.Parameters[parameter.Ordinal - 1].Name);
+                }
+                else
+                {
+                    Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any());
                 }
             }
 
             private static ImmutableArray<IMethodSymbol> GetMethods(INamedTypeSymbol containingType, string name)
             {
-                return ImmutableArray.CreateRange(RoslynAssertType
-                                                  .GetMembers(name)
-                                                  .Cast<IMethodSymbol>()
-                                                  .Where(x => x.DeclaredAccessibility == Accessibility.Public &&
-                                                              !x.IsGenericMethod));
+                return ImmutableArray.CreateRange(
+                    containingType
+                        .GetMembers(name)
+                        .Cast<IMethodSymbol>()
+                        .Where(x => x.DeclaredAccessibility == Accessibility.Public &&
+                                    !x.IsGenericMethod &&
+                                    !IsObsolete(x)));
             }
 
             private static bool TryFindByType<T>(ImmutableArray<IParameterSymbol> parameters, out IParameterSymbol parameter)
             {
+                if (typeof(T).IsGenericType)
+                {
+                    return parameters.TrySingle(
+                        x => x.Type is INamedTypeSymbol namedType &&
+                             namedType.IsGenericType &&
+                             namedType.MetadataName == typeof(T).Name &&
+                             namedType.TypeArguments[0].MetadataName == typeof(T).GenericTypeArguments[0].Name,
+                        out parameter);
+                }
+
                 return parameters.TrySingle(x => x.Type.MetadataName == typeof(T).Name, out parameter);
             }
 
@@ -98,6 +131,8 @@ namespace Gu.Roslyn.Asserts.Tests
                 var xml = parameter.ContainingSymbol.GetDocumentationCommentXml(CultureInfo.InvariantCulture);
                 return Regex.Match(xml, $"<param name=\"{parameter.Name}\">(?<text>.+)</param>").Groups["text"].Value;
             }
+
+            private static bool IsObsolete(IMethodSymbol method) => method.GetAttributes().Any(x => x.AttributeClass.MetadataName == "ObsoleteAttribute");
         }
     }
 }

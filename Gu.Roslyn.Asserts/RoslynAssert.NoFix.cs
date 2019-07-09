@@ -95,7 +95,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
         {

@@ -183,7 +183,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Conditional("DEBUG")]
         private static void Dump(IEnumerable<string> references)
         {
-            foreach (var reference in references)
+            foreach (var reference in references.OrderBy(x => x))
             {
                 Console.WriteLine($"                                \"{reference}\",");
             }

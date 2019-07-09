@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -60,7 +60,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -99,7 +99,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -137,7 +137,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -175,7 +175,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -213,7 +213,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -251,7 +251,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -288,7 +288,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -325,7 +325,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -362,7 +362,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAll(
@@ -409,7 +409,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllInDocument(
@@ -448,7 +448,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllInDocument(
@@ -488,7 +488,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllOneByOne(
@@ -528,7 +528,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllOneByOne(
@@ -568,7 +568,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllOneByOne(
@@ -609,7 +609,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="scope">The scope to apply fixes for.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllByScope(
@@ -651,7 +651,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="scope">The scope to apply fixes for.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllByScope(
@@ -693,7 +693,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="scope">The scope to apply fixes for.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void FixAllByScope(
