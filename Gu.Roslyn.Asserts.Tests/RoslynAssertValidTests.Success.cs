@@ -40,9 +40,7 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new NoErrorAnalyzer();
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) });
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(object).Assembly));
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly).WithAliases(new[] { "global", "mscorlib" }) });
+                RoslynAssert.Valid(analyzer, code, metadataReferences: new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) }, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
             }
 
             [Test]
@@ -57,7 +55,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new NoErrorAnalyzer();
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), metadataReferences);
+                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
             }
 
             [Test]
@@ -72,8 +70,6 @@ namespace RoslynSandbox
 }";
                 var analyzer = new NoErrorAnalyzer();
                 RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
-                RoslynAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
@@ -81,7 +77,6 @@ namespace RoslynSandbox
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
 
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
             }
 
             [Test]
@@ -97,8 +92,6 @@ namespace RoslynSandbox
 }";
                 var analyzer = new NoErrorAnalyzer();
                 RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
-                RoslynAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
@@ -106,7 +99,6 @@ namespace RoslynSandbox
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
 
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
             }
 
             [Test]
@@ -120,7 +112,6 @@ namespace RoslynSandbox
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, csproj);
-                RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             }
 
@@ -186,7 +177,6 @@ namespace RoslynSandbox
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code);
             }
 
             [Test]
@@ -208,7 +198,6 @@ namespace RoslynSandbox
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code);
-                RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { descriptor }, code);
             }
 
             [Test]
@@ -228,7 +217,6 @@ namespace RoslynSandbox
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { descriptor }, code);
             }
 
             [Test]
@@ -294,7 +282,7 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(new[] { analyzer }), RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                RoslynAssert.Valid(analyzer, code, metadataReferences: RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)), compilationOptions: CodeFactory.DefaultCompilationOptions(new[] { analyzer }));
                 RoslynAssert.Valid(analyzer, code, metadataReferences: RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
             }
 

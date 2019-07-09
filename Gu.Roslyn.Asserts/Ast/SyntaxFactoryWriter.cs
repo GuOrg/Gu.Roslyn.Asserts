@@ -647,18 +647,6 @@ namespace Gu.Roslyn.Asserts
                 return this;
             }
 
-            public Writer Append(char c)
-            {
-                if (this.newLine)
-                {
-                    this.builder.Append(this.indentation);
-                }
-
-                this.builder.Append(c);
-                this.newLine = false;
-                return this;
-            }
-
             public Writer WriteArgumentStart(string parameterName)
             {
                 switch (SyntaxFacts.GetKeywordKind(parameterName))
