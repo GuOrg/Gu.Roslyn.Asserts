@@ -72,20 +72,17 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new NoErrorAnalyzer();
-                RoslynAssert.Valid<NoErrorAnalyzer>(code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
                 RoslynAssert.Valid(analyzer, code);
                 RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
                 RoslynAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-                RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
                 RoslynAssert.Valid(analyzer, descriptor, code);
-
-                RoslynAssert.Valid<NoErrorAnalyzer>(new[] { descriptor }, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
+
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
             }
 
             [Test]
@@ -100,20 +97,17 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new NoErrorAnalyzer();
-                RoslynAssert.Valid<NoErrorAnalyzer>(code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
                 RoslynAssert.Valid(analyzer, code);
                 RoslynAssert.Valid(analyzer, code, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
                 RoslynAssert.Valid(analyzer, new[] { code }, CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-                RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
                 RoslynAssert.Valid(analyzer, descriptor, code);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
 
-                RoslynAssert.Valid<NoErrorAnalyzer>(new[] { descriptor }, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), new[] { descriptor }, code);
             }
 
             [Test]
@@ -122,15 +116,13 @@ namespace RoslynSandbox
                 var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var analyzer = new NoErrorAnalyzer();
 
-                RoslynAssert.Valid<NoErrorAnalyzer>(csproj);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj);
                 RoslynAssert.Valid(analyzer, csproj);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-                RoslynAssert.Valid<NoErrorAnalyzer>(descriptor, csproj);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
                 RoslynAssert.Valid(analyzer, descriptor, csproj);
                 RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             }
 
             [Test]
@@ -150,12 +142,11 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.Valid<NoErrorAnalyzer>(code1, code2);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
                 var analyzer = new NoErrorAnalyzer();
                 RoslynAssert.Valid(analyzer, code1, code2);
-
-                RoslynAssert.Valid(analyzer, new List<string> { code1, code2 });
+                RoslynAssert.Valid(analyzer, code2, code1);
+                RoslynAssert.Valid(analyzer, new [] { code1, code2 });
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
             }
 
             [Test]
@@ -175,9 +166,10 @@ namespace Project2
     {
     }
 }";
-                RoslynAssert.Valid<NoErrorAnalyzer>(code1, code2);
+                var analyzer = new NoErrorAnalyzer();
+                RoslynAssert.Valid(analyzer, code1, code2);
+                RoslynAssert.Valid(analyzer, code2, code1);
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
-                RoslynAssert.Valid(new NoErrorAnalyzer(), code1, code2);
             }
 
             [Test]
@@ -193,13 +185,11 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
-                RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(descriptor, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { descriptor }, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code);
                 RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
-                RoslynAssert.Valid(analyzer, descriptor, new List<string> { code });
+                RoslynAssert.Valid(analyzer, descriptor, new [] { code });
+                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
+                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code);
             }
 
             [Test]
@@ -217,12 +207,11 @@ namespace RoslynSandbox
 }";
 
                 var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
-                RoslynAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(descriptor, code);
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                RoslynAssert.Valid(analyzer, descriptor, code);
+                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code);
-                RoslynAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), descriptor, code);
-                RoslynAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { descriptor }, code);
-                RoslynAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { descriptor }, code);
             }
 
             [Test]
@@ -238,12 +227,11 @@ namespace RoslynSandbox
 }";
 
                 var descriptor = FieldNameMustNotBeginWithUnderscoreReportsTwo.Descriptor1;
-                RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(descriptor, code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
+                RoslynAssert.Valid(analyzer, descriptor, code);
+                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
-                RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), descriptor, code);
-                RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), new[] { descriptor }, code);
-                RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), new[] { descriptor }, code);
             }
 
             [Test]
@@ -266,8 +254,9 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreReportsTwo>(resourcesCode, testCode);
-                RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreReportsTwo(), resourcesCode, testCode);
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
+                RoslynAssert.Valid(analyzer, resourcesCode, testCode);
+                RoslynAssert.Valid(analyzer, testCode, resourcesCode);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, testCode);
             }
 
@@ -282,7 +271,8 @@ namespace RoslynSandbox
         private int foo;
     }
 }";
-                RoslynAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), testCode);
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                RoslynAssert.Valid(analyzer, testCode);
             }
 
             [Test]

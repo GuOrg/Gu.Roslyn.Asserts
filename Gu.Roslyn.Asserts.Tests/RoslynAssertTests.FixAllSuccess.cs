@@ -536,7 +536,6 @@ namespace RoslynSandbox.Core
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
-                RoslynAssert.FixAll(new RemoveUnusedFixProvider(), expectedDiagnostic, new[] { before2, before1 }, after);
             }
 
             [Test]
