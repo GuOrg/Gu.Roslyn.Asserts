@@ -263,8 +263,8 @@ namespace RoslynSandbox
         private readonly int ↓_value2;
     }
 }";
-
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, code);
             }
 
             [Test]
