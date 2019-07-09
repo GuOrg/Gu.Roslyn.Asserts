@@ -463,7 +463,7 @@ namespace Gu.Roslyn.Asserts
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
         /// <param name="analyzer">The analyzer to add diagnostic options for.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="suppressedDiagnostics">The suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>

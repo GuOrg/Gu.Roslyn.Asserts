@@ -169,13 +169,13 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static void VerifyCodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        private static void VerifyCodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider fix)
         {
-            if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(codeFix.FixableDiagnosticIds).Any())
+            if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(fix.FixableDiagnosticIds).Any())
             {
-                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {codeFix}.{Environment.NewLine}" +
+                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {fix}.{Environment.NewLine}" +
                               $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", codeFix.FixableDiagnosticIds)}}}";
+                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
                 throw new AssertException(message);
             }
         }
@@ -220,7 +220,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider codeFix, Solution fixedSolution)
+        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution)
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
@@ -232,7 +232,7 @@ namespace Gu.Roslyn.Asserts
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();
-                errorBuilder.AppendLine($"{codeFix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                errorBuilder.AppendLine($"{fix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
                     errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");

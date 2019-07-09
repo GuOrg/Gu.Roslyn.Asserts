@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             private static readonly Project Project = CodeFactory.CreateSolution(
                                                                      ProjectFile.Find("Gu.Roslyn.Asserts.csproj"),
-                                                                     Asserts.MetadataReferences.Transitive(typeof(CSharpCompilation)))
+                                                                     Asserts.MetadataReferences.Transitive(typeof(CodeFixProvider)))
                                                                  .Projects
                                                                  .Single();
 
@@ -85,7 +85,32 @@ namespace Gu.Roslyn.Asserts.Tests
 
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                 Assert.AreEqual("fix", parameter.MetadataName);
-                Assert.AreEqual("The <see cref=\"!:CodeFixProvider\"/> to apply on the <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/> reported.", GetComment(parameter));
+                Assert.AreEqual("The <see cref=\"T:Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider\"/> to apply on the <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/> reported.", GetComment(parameter));
+            }
+
+            [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(DiagnosticsMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
+            public static void ExpectedDiagnosticParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<ExpectedDiagnostic>(method.Parameters, out var parameter))
+                {
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    Assert.AreEqual("expectedDiagnostic", parameter.MetadataName);
+                    if (TryFindByType<DiagnosticAnalyzer>(method.Parameters, out _))
+                    {
+                        Assert.AreEqual("The <see cref=\"T:Gu.Roslyn.Asserts.ExpectedDiagnostic\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"analyzer\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.", GetComment(parameter));
+                    }
+                    else
+                    {
+                        Assert.AreEqual("The <see cref=\"T:Gu.Roslyn.Asserts.ExpectedDiagnostic\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>.", GetComment(parameter));
+                    }
+                }
+                else
+                {
+                    Assert.AreEqual(true, TryFindByType<DiagnosticAnalyzer>(method.Parameters, out _));
+                }
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
