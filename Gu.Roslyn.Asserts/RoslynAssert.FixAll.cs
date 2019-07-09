@@ -474,8 +474,7 @@ namespace Gu.Roslyn.Asserts
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllByScope(analyzer, codeFix, sln, new[] { after }, fixTitle, allowCompilationErrors,
-                FixAllScope.Document);
+            FixAllByScope(analyzer, codeFix, sln, new[] { after }, fixTitle, allowCompilationErrors, FixAllScope.Document);
         }
 
         /// <summary>
@@ -572,7 +571,8 @@ namespace Gu.Roslyn.Asserts
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        public static void FixAllOneByOne(CodeFixProvider codeFix,
+        public static void FixAllOneByOne(
+            CodeFixProvider codeFix,
             ExpectedDiagnostic expectedDiagnostic,
             string code,
             string after,

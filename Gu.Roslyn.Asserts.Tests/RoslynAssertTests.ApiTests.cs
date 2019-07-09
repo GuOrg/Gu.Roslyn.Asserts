@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     Assert.AreEqual("analyzerType", parameter.MetadataName);
                     StringAssert.IsMatch("The type of <see cref=\"T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer\"/> to check <paramref name=\"\\w+\"/> with.", GetComment(parameter));
                 }
-                else if(method.Name != nameof(RoslynAssert.NoCompilerErrors))
+                else if (method.Name != nameof(RoslynAssert.NoCompilerErrors))
                 {
                     Assert.AreEqual(typeof(CodeFixProvider).Name, method.Parameters[0].Type.MetadataName);
                 }
