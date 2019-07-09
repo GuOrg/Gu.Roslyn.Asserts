@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, params string[] code)
@@ -189,7 +189,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, params string[] code)
         {
@@ -199,7 +199,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(Type analyzerType, Solution solution)
         {
@@ -209,7 +209,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">
         /// The code to create the solution from.
@@ -223,7 +223,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptors">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         public static void Valid(Type analyzerType, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
@@ -234,7 +234,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.

@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution and adds the <typeparamref name="TAnalyzer"/> as analyzer.
         /// Then compiles it and returns the diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .solution file.
@@ -90,7 +90,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution and adds the <paramref name="analyzerType"/> as analyzer.
         /// Then compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .solution file.
@@ -173,13 +173,13 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="codeFix"/>.
+        /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="fix"/>.
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The code fix to use when filtering the diagnostics.</param>
+        /// <param name="fix">The code fix to use when filtering the diagnostics.</param>
         /// <returns>A list with all fixable diagnostics.</returns>
-        public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
+        public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
         {
             var fixableDiagnostics = new List<Diagnostic>();
             foreach (var project in solution.Projects)
@@ -188,7 +188,7 @@ namespace Gu.Roslyn.Asserts
                                                .ConfigureAwait(false);
                 if (analyzer is PlaceholderAnalyzer)
                 {
-                    fixableDiagnostics.AddRange(compilation.GetDiagnostics(CancellationToken.None).Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
+                    fixableDiagnostics.AddRange(compilation.GetDiagnostics(CancellationToken.None).Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
                 }
                 else
                 {
@@ -198,7 +198,7 @@ namespace Gu.Roslyn.Asserts
                         CancellationToken.None);
                     var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
                                                          .ConfigureAwait(false);
-                    fixableDiagnostics.AddRange(diagnostics.Where(d => codeFix.FixableDiagnosticIds.Contains(d.Id)));
+                    fixableDiagnostics.AddRange(diagnostics.Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
                 }
             }
 

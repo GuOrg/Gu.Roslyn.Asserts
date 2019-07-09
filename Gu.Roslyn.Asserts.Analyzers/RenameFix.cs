@@ -73,6 +73,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 case "The best overload for 'FixAll' does not have a parameter named 'fixedcode'":
                                     text = "after";
                                     return true;
+                                case "The best overload for 'NoFix' does not have a parameter named 'codeFix'":
+                                    text = "fix";
+                                    return true;
                             }
 
                             break;

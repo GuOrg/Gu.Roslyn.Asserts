@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
         public static void Diagnostics<TAnalyzer>(params string[] codeWithErrorsIndicated)
@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="expectedDiagnostics">The expected diagnostics.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
@@ -58,8 +58,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -75,11 +75,11 @@ namespace Gu.Roslyn.Asserts
                 fix: new TCodeFix(),
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 after: new[] { fixedCode },
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: null,
                 metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -104,11 +104,40 @@ namespace Gu.Roslyn.Asserts
                 fix: new TCodeFix(),
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 after: MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: null,
                 metadataReferences: null,
-                compilationOptions: null,
+                compilationOptions: null);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="before"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        [Obsolete("Use overload taking analyzer & fix as arguments.")]
+        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TAnalyzer : DiagnosticAnalyzer, new()
+            where TCodeFix : CodeFixProvider, new()
+        {
+            CodeFix(
+                analyzer: new TAnalyzer(),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                after: new[] { after },
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -116,15 +145,15 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -132,95 +161,66 @@ namespace Gu.Roslyn.Asserts
                 analyzer: new TAnalyzer(),
                 fix: new TCodeFix(),
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                after: new[] { fixedCode },
+                after: MergeFixedCode(code, after),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: null,
                 metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: null);
         }
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-            where TCodeFix : CodeFixProvider, new()
-        {
-            CodeFix(
-                analyzer: new TAnalyzer(),
-                fix: new TCodeFix(),
-                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                after: MergeFixedCode(code, fixedCode),
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code to analyze.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking fix as argument.")]
-        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            where TCodeFix : CodeFixProvider, new()
+        {
+            CodeFix(
+                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
+                fix: new TCodeFix(),
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                after: new[] { after },
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
+        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        [Obsolete("Use overload taking fix as argument.")]
+        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: new TCodeFix(),
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                after: new[] { fixedCode },
+                after: MergeFixedCode(code, after),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: null,
                 metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        [Obsolete("Use overload taking fix as argument.")]
-        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-            where TCodeFix : CodeFixProvider, new()
-        {
-            CodeFix(
-                analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
-                fix: new TCodeFix(),
-                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                after: MergeFixedCode(code, fixedCode),
-                suppressedDiagnostics: null,
-                metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -242,11 +242,11 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: diagnosticsAndSources,
                 after: MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: null,
                 metadataReferences: null,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="fixedCode">The expected code produced by the code fix.</param>
         /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
@@ -270,65 +270,63 @@ namespace Gu.Roslyn.Asserts
                 fix: fix,
                 diagnosticsAndSources: diagnosticsAndSources,
                 after: MergeFixedCode(diagnosticsAndSources.Code, fixedCode),
+                fixTitle: fixTitle,
+                allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
                 metadataReferences: metadataReferences,
-                compilationOptions: null,
-                fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors);
+                compilationOptions: null);
         }
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            var codeFix = new TCodeFix();
+            var fix = new TCodeFix();
             FixAll(
                 analyzer,
-                codeFix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, new[] { codeWithErrorsIndicated }),
-                new[] { fixedCode },
+                fix,
+                DiagnosticsAndSources.Create(expectedDiagnostic, new[] { before }),
+                new[] { after },
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                allowCompilationErrors);
         }
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
             FixAll(
                 new TAnalyzer(),
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
-                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -337,26 +335,26 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
             FixAll(
                 new TAnalyzer(),
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, codeWithErrorsIndicated),
-                fixedCode,
+                DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                after,
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -365,25 +363,25 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code to analyze.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, new[] { code }),
-                new[] { fixedCode },
+                DiagnosticsAndSources.Create(expectedDiagnostic, new[] { before }),
+                new[] { after },
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -392,25 +390,25 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code to analyze.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                MergeFixedCode(code, fixedCode),
+                DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -419,25 +417,25 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="before">The code to analyze.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                fixedCode,
+                DiagnosticsAndSources.Create(expectedDiagnostic, before),
+                after,
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -449,14 +447,14 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -465,7 +463,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 new TCodeFix(),
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
-                new[] { fixedCode },
+                new[] { after },
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -474,17 +472,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -492,8 +490,8 @@ namespace Gu.Roslyn.Asserts
             FixAll(
                 analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                MergeFixedCode(codeWithErrorsIndicated, fixedCode),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -502,17 +500,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, IReadOnlyList<string> fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -520,8 +518,8 @@ namespace Gu.Roslyn.Asserts
             FixAll(
                 analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
-                fixedCode,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                after,
                 fixTitle,
                 allowCompilationErrors,
                 SuppressedDiagnostics,
@@ -530,17 +528,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAllInDocument<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAllInDocument<TAnalyzer, TCodeFix>(string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -548,8 +546,8 @@ namespace Gu.Roslyn.Asserts
             FixAllByScope(
                 analyzer,
                 new TCodeFix(),
-                new[] { codeWithErrorsIndicated },
-                new[] { fixedCode },
+                new[] { before },
+                new[] { after },
                 FixAllScope.Document,
                 fixTitle,
                 allowCompilationErrors);
@@ -557,35 +555,35 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="fixedCode">The expected code produced by the code fix.</param>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
+        /// <param name="before">The code with error positions indicated.</param>
+        /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string fixedCode, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new TAnalyzer();
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
+            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            var codeFix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            var fix = new TCodeFix();
+            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllOneByOne(analyzer, codeFix, sln, new[] { fixedCode }, fixTitle, allowCompilationErrors);
+            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
         }
 
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void NoAnalyzerDiagnostics<TAnalyzer>(params string[] code)
@@ -597,7 +595,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
@@ -610,7 +608,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptors">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
@@ -623,7 +621,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
@@ -636,7 +634,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void NoAnalyzerDiagnostics<TAnalyzer>(FileInfo code)
@@ -648,7 +646,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</typeparam>
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void NoAnalyzerDiagnostics<TAnalyzer>(Solution solution)
@@ -662,8 +660,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void NoFix<TAnalyzer, TCodeFix>(params string[] codeWithErrorsIndicated)
@@ -682,7 +680,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
@@ -700,8 +698,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void NoFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated)
@@ -719,8 +717,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The type of the code fix.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
@@ -737,7 +735,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
@@ -750,7 +748,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
@@ -764,7 +762,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostics">The expected diagnostics.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
@@ -778,7 +776,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
         public static void Valid<TAnalyzer>(params string[] code)
@@ -790,7 +788,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
         public static void Valid<TAnalyzer>(FileInfo code)
@@ -802,7 +800,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptors">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
@@ -815,7 +813,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
@@ -828,7 +826,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptor">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
@@ -841,7 +839,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</typeparam>
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
         public static void Valid<TAnalyzer>(Solution solution)

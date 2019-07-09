@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
             private static readonly ImmutableArray<IMethodSymbol> CodeFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.CodeFix));
             private static readonly ImmutableArray<IMethodSymbol> DiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Diagnostics));
-            private static readonly ImmutableArray<IMethodSymbol> FixAllMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.FixAll));
+            private static readonly ImmutableArray<IMethodSymbol> FixAllMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.FixAll), nameof(RoslynAssert.FixAllInDocument), nameof(RoslynAssert.FixAllByScope), nameof(RoslynAssert.FixAllOneByOne));
             private static readonly ImmutableArray<IMethodSymbol> NoCompilerErrorsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoCompilerErrors));
             private static readonly ImmutableArray<IMethodSymbol> NoFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoFix));
             private static readonly ImmutableArray<IMethodSymbol> ValidMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Valid));
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 if (TryFindByType<DiagnosticAnalyzer>(method.Parameters, out var parameter))
                 {
                     Assert.AreEqual(0, parameter.Ordinal);
-                    Assert.AreEqual(false, parameter.IsOptional);
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                     Assert.AreEqual("analyzer", parameter.MetadataName);
                     StringAssert.IsMatch("The <see cref=\"T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer\"/> to check <paramref name=\"\\w+\"/> with.", GetComment(parameter));
                 }
@@ -62,6 +62,30 @@ namespace Gu.Roslyn.Asserts.Tests
                 {
                     Assert.AreEqual(typeof(CodeFixProvider).Name, method.Parameters[0].Type.MetadataName);
                 }
+            }
+
+            [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
+            public static void CodeFixParameter(IMethodSymbol method)
+            {
+                Assert.AreEqual(true, TryFindByType<CodeFixProvider>(method.Parameters, out var parameter), "Missing.");
+                switch (parameter.Ordinal)
+                {
+                    case 0:
+                        Assert.AreEqual(typeof(ExpectedDiagnostic).Name, method.Parameters[1].Type.MetadataName);
+                        break;
+                    case 1:
+                        Assert.AreEqual(typeof(DiagnosticAnalyzer).Name, method.Parameters[0].Type.MetadataName);
+                        break;
+                    default:
+                        Assert.Fail("Position");
+                        break;
+                }
+
+                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual("fix", parameter.MetadataName);
+                Assert.AreEqual("The <see cref=\"!:CodeFixProvider\"/> to apply on the <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/> reported.", GetComment(parameter));
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
@@ -103,15 +127,15 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
             }
 
-            private static ImmutableArray<IMethodSymbol> GetMethods(INamedTypeSymbol containingType, string name)
+            private static ImmutableArray<IMethodSymbol> GetMethods(INamedTypeSymbol containingType, string name, params string[] names)
             {
+                names = new[] { name }.Concat(names ?? Enumerable.Empty<string>()).ToArray();
                 return ImmutableArray.CreateRange(
-                    containingType
-                        .GetMembers(name)
-                        .Cast<IMethodSymbol>()
-                        .Where(x => x.DeclaredAccessibility == Accessibility.Public &&
-                                    !x.IsGenericMethod &&
-                                    !IsObsolete(x)));
+                    names.SelectMany(x => containingType.GetMembers(x))
+                         .Cast<IMethodSymbol>()
+                         .Where(x => x.DeclaredAccessibility == Accessibility.Public &&
+                                     !x.IsGenericMethod &&
+                                     !IsObsolete(x)));
             }
 
             private static bool TryFindByType<T>(ImmutableArray<IParameterSymbol> parameters, out IParameterSymbol parameter)

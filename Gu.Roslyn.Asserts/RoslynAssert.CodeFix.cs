@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -56,7 +56,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -94,7 +94,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
@@ -132,7 +132,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -212,7 +212,7 @@ namespace Gu.Roslyn.Asserts
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
-        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -251,7 +251,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -289,7 +289,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -327,7 +327,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
         /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
@@ -365,7 +365,7 @@ namespace Gu.Roslyn.Asserts
         /// 2. The code fix fixes the code.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
-        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="solution">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>

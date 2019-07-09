@@ -16,14 +16,14 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="code">The code with error positions indicated.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] code)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, params string[] code)
         {
             NoFix(
                 analyzer,
-                codeFix,
+                fix,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code));
         }
 
@@ -32,15 +32,15 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             NoFix(
                 analyzer,
-                codeFix,
+                fix,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
@@ -49,8 +49,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
@@ -59,7 +59,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
-            CodeFixProvider codeFix,
+            CodeFixProvider fix,
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
@@ -69,7 +69,7 @@ namespace Gu.Roslyn.Asserts
         {
             NoFix(
                 analyzer: analyzer,
-                codeFix: codeFix,
+                fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
@@ -82,15 +82,15 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostics">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             NoFix(
                 analyzer: analyzer,
-                codeFix: codeFix,
+                fix: fix,
                 diagnosticsAndSources: new DiagnosticsAndSources(expectedDiagnostics, code));
         }
 
@@ -99,8 +99,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
@@ -108,7 +108,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
-            CodeFixProvider codeFix,
+            CodeFixProvider fix,
             IReadOnlyList<string> code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
             IEnumerable<string> suppressedDiagnostics = null,
@@ -117,7 +117,7 @@ namespace Gu.Roslyn.Asserts
         {
             NoFix(
                 analyzer: analyzer,
-                codeFix: codeFix,
+                fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
                 allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
@@ -130,7 +130,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic"></param>
         /// <param name="code">The code to analyze.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
@@ -138,7 +138,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void NoFix(
-            CodeFixProvider codeFix,
+            CodeFixProvider fix,
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
@@ -149,7 +149,7 @@ namespace Gu.Roslyn.Asserts
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             NoFix(
                 analyzer: analyzer,
-                codeFix: codeFix,
+                fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
                 allowCompilationErrors: allowCompilationErrors,
                 suppressedDiagnostics: suppressedDiagnostics,
@@ -162,8 +162,8 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
@@ -171,7 +171,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
-            CodeFixProvider codeFix,
+            CodeFixProvider fix,
             DiagnosticsAndSources diagnosticsAndSources,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
             IEnumerable<string> suppressedDiagnostics = null,
@@ -179,7 +179,7 @@ namespace Gu.Roslyn.Asserts
             CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
+            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(
                 diagnosticsAndSources,
                 analyzer,
@@ -193,7 +193,7 @@ namespace Gu.Roslyn.Asserts
                 NoCompilerErrors(sln);
             }
 
-            VerifyNoFix(sln, diagnostics, codeFix);
+            VerifyNoFix(sln, diagnostics, fix);
         }
 
         private static void VerifyNoFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, CodeFixProvider fix)
