@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution and adds the <typeparamref name="TAnalyzer"/> as analyzer.
         /// Then compiles it and returns the diagnostics.
         /// </summary>
-        /// <typeparam name="TAnalyzer">The type of the analyzer.</typeparam>
+        /// <typeparam name="TAnalyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .solution file.
@@ -90,7 +90,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution and adds the <paramref name="analyzerType"/> as analyzer.
         /// Then compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="analyzerType">The type of the analyzer.</param>
+        /// <param name="analyzerType">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .solution file.
@@ -176,7 +176,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="codeFix"/>.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The code fix to use when filtering the diagnostics.</param>
         /// <returns>A list with all fixable diagnostics.</returns>
         public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider codeFix)
@@ -209,7 +209,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
@@ -240,7 +240,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution, DiagnosticAnalyzer analyzer)
         {
@@ -250,7 +250,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
@@ -280,7 +280,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
         {
@@ -308,7 +308,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
         {

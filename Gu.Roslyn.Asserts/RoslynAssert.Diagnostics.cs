@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code with error positions indicated.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
@@ -30,7 +30,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostics">The expected diagnostics.</param>
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
@@ -64,9 +64,9 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code with error positions indicated.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -90,9 +90,9 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code with error positions indicated.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -116,9 +116,9 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Verifies that <paramref name="diagnosticsAndSources"/> produces the expected diagnostics.
         /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>

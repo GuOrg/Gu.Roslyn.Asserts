@@ -644,7 +644,7 @@ namespace Gu.Roslyn.Asserts
         /// Create a <see cref="Solution"/> for <paramref name="diagnosticsAndSources"/>.
         /// </summary>
         /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
-        /// <param name="analyzer">The analyzer.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="suppressedDiagnostics">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>

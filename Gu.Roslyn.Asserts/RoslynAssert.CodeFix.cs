@@ -13,15 +13,16 @@ namespace Gu.Roslyn.Asserts
     {
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The code fix to apply.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -50,15 +51,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -87,15 +89,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -124,16 +127,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -163,16 +167,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -202,16 +207,17 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</param>
         /// <param name="fix">The code fix to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -241,15 +247,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing <paramref name="expectedDiagnostic"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -278,15 +285,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing <paramref name="expectedDiagnostic"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -315,15 +323,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
+        /// 1. <paramref name="fix"/> supports fixing <paramref name="expectedDiagnostic"/>.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -352,18 +361,35 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
+        /// 1. <paramref name="solution"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
-        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply.</param>
-        /// <param name="diagnosticsAndSources">The code to analyze.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
+        /// <param name="fix">The code fix to apply.</param>
+        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
+        /// <param name="solution">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by the code fix.</param>
-        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
-        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        public static void CodeFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider fix,
+            ExpectedDiagnostic expectedDiagnostic,
+            Solution solution,
+            string after,
+            string fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
+            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
+            var diagnosticsAndSources = DiagnosticsAndSources.Create(
+                expectedDiagnostic,
+                solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
+        }
+
         private static void CodeFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
@@ -386,37 +412,6 @@ namespace Gu.Roslyn.Asserts
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, allowCompilationErrors);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="solution"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to run on the code..</param>
-        /// <param name="fix">The code fix to apply.</param>
-        /// <param name="expectedDiagnostic">The expected diagnostic.</param>
-        /// <param name="solution">The code with error positions indicated.</param>
-        /// <param name="after">The expected code produced by the code fix.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one.</param>
-        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
-        public static void CodeFix(
-            DiagnosticAnalyzer analyzer,
-            CodeFixProvider fix,
-            ExpectedDiagnostic expectedDiagnostic,
-            Solution solution,
-            string after,
-            string fixTitle = null,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-        {
-            VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            var diagnosticsAndSources = DiagnosticsAndSources.Create(
-                expectedDiagnostic,
-                solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }
 
         private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)

@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] codeWithErrorsIndicated)
@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
@@ -54,7 +54,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostics">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
@@ -92,7 +92,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
@@ -112,7 +112,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of the analyzer.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
