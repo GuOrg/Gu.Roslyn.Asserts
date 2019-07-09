@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
@@ -17,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="code">The code with error positions indicated.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] code)
@@ -25,9 +24,7 @@ namespace Gu.Roslyn.Asserts
             NoFix(
                 analyzer,
                 codeFix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code));
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
@@ -44,9 +41,7 @@ namespace Gu.Roslyn.Asserts
             NoFix(
                 analyzer,
                 codeFix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -54,18 +49,32 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostic">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void NoFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider codeFix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> code,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             NoFix(
-                analyzer,
-                codeFix,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                analyzer: analyzer,
+                codeFix: codeFix,
+                diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -73,18 +82,79 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="expectedDiagnostics">The expected diagnostic.</param>
         /// <param name="code">The code to analyze.</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             NoFix(
-                analyzer,
-                codeFix,
-                new DiagnosticsAndSources(expectedDiagnostics, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                analyzer: analyzer,
+                codeFix: codeFix,
+                diagnosticsAndSources: new DiagnosticsAndSources(expectedDiagnostics, code));
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void NoFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider codeFix,
+            IReadOnlyList<string> code,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
+        {
+            NoFix(
+                analyzer: analyzer,
+                codeFix: codeFix,
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="codeFix">The type of the code fix.</param>
+        /// <param name="expectedDiagnostic"></param>
+        /// <param name="code">The code to analyze.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void NoFix(
+            CodeFixProvider codeFix,
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> code,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
+        {
+            var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
+            NoFix(
+                analyzer: analyzer,
+                codeFix: codeFix,
+                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -92,63 +162,35 @@ namespace Gu.Roslyn.Asserts
         /// 1. <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
+        /// <param name="analyzer">The <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning no warnings or errors are suppressed.</param>
         /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, DiagnosticsAndSources diagnosticsAndSources, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void NoFix(
+            DiagnosticAnalyzer analyzer,
+            CodeFixProvider codeFix,
+            DiagnosticsAndSources diagnosticsAndSources,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, suppressedDiagnostics, metadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                diagnosticsAndSources,
+                analyzer,
+                compilationOptions,
+                suppressedDiagnostics ?? SuppressedDiagnostics,
+                metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyNoFix(sln, diagnostics, codeFix);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
-        /// 2. The code fix does not change the code.
-        /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
-        /// <param name="codeFix">The type of the code fix.</param>
-        /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data references to use when compiling.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
-            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            VerifyCodeFixSupportsAnalyzer(analyzer, codeFix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            if (diagnostics.SelectMany(x => x).All(d => !codeFix.FixableDiagnosticIds.Contains(d.Id)))
+            if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                throw new InvalidOperationException("Analyzing the code did not produce any diagnostics fixable by the code fix.");
-            }
-
-            VerifyNoFix(sln, diagnostics, codeFix);
-        }
-
-        /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
-        /// 2. The code fix does not change the code.
-        /// </summary>
-        /// <param name="codeFix">The type of the code fix.</param>
-        /// <param name="codeWithErrorsIndicated">The code to analyze.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data references to use when compiling.</param>
-        public static void NoFix(CodeFixProvider codeFix, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new PlaceholderAnalyzer("None"), codeWithErrorsIndicated);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources.Code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(sln);
-            if (diagnostics.SelectMany(x => x).All(d => !codeFix.FixableDiagnosticIds.Contains(d.Id)))
-            {
-                throw new InvalidOperationException("Analyzing the code did not produce any diagnostics fixable by the code fix.");
+                NoCompilerErrors(sln);
             }
 
             VerifyNoFix(sln, diagnostics, codeFix);

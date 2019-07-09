@@ -670,12 +670,11 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            var analyzer = new TAnalyzer();
             NoFix(
-                new TAnalyzer(),
+                analyzer,
                 new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -693,9 +692,7 @@ namespace Gu.Roslyn.Asserts
             NoFix(
                 new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>
@@ -714,9 +711,7 @@ namespace Gu.Roslyn.Asserts
             NoFix(
                 new TAnalyzer(),
                 new TCodeFix(),
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(new TAnalyzer(), codeWithErrorsIndicated));
         }
 
         /// <summary>
@@ -736,9 +731,7 @@ namespace Gu.Roslyn.Asserts
             NoFix(
                 new TAnalyzer(),
                 new TCodeFix(),
-                DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                SuppressedDiagnostics,
-                MetadataReferences);
+                DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
         /// <summary>

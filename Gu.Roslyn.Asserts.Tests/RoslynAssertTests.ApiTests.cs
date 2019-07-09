@@ -40,6 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
             [TestCaseSource(nameof(NoCompilerErrorsMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
             [TestCaseSource(nameof(ValidMethods))]
             public static void AnalyzerParameter(IMethodSymbol method)
             {
@@ -66,29 +67,31 @@ namespace Gu.Roslyn.Asserts.Tests
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
             public static void AllowCompilationErrorsParameter(IMethodSymbol method)
             {
                 if (TryFindByType<AllowCompilationErrors>(method.Parameters, out var parameter))
                 {
-                    Assert.AreEqual(true, parameter.IsOptional);
+                    Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
                     Assert.AreEqual(AllowCompilationErrors.No, (AllowCompilationErrors)parameter.ExplicitDefaultValue);
                     Assert.AreEqual("allowCompilationErrors", parameter.MetadataName);
                     Assert.AreEqual("Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref=\"F:Gu.Roslyn.Asserts.AllowCompilationErrors.No\"/>.", GetComment(parameter));
                 }
                 else
                 {
-                    Assert.AreEqual(true, method.Parameters.Last().IsParams || method.GetAttributes().Any());
+                    Assert.AreEqual(true, method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
                 }
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
             public static void SuppressedDiagnosticsParameter(IMethodSymbol method)
             {
                 if (TryFindByType<IEnumerable<string>>(method.Parameters, out var parameter))
                 {
-                    Assert.AreEqual(true, parameter.IsOptional);
+                    Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
                     Assert.AreEqual(null, parameter.ExplicitDefaultValue);
                     Assert.AreEqual("suppressedDiagnostics", parameter.MetadataName);
                     Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning no warnings or errors are suppressed.", GetComment(parameter));
@@ -96,7 +99,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
                 else
                 {
-                    Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any());
+                    Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
                 }
             }
 
