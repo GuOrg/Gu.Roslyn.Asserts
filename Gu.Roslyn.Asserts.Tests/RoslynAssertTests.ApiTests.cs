@@ -31,11 +31,13 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly ImmutableArray<IMethodSymbol> CodeFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.CodeFix));
             private static readonly ImmutableArray<IMethodSymbol> DiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Diagnostics));
             private static readonly ImmutableArray<IMethodSymbol> FixAllMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.FixAll));
+            private static readonly ImmutableArray<IMethodSymbol> NoCompilerErrorsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoCompilerErrors));
             private static readonly ImmutableArray<IMethodSymbol> ValidMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Valid));
 
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoCompilerErrorsMethods))]
             [TestCaseSource(nameof(ValidMethods))]
             public static void AnalyzerParameter(IMethodSymbol method)
             {
@@ -53,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     Assert.AreEqual("analyzerType", parameter.MetadataName);
                     StringAssert.IsMatch("The type of <see cref=\"T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer\"/> to check <paramref name=\"\\w+\"/> with.", GetComment(parameter));
                 }
-                else
+                else if(method.Name != nameof(RoslynAssert.NoCompilerErrors))
                 {
                     Assert.AreEqual(typeof(CodeFixProvider).Name, method.Parameters[0].Type.MetadataName);
                 }
