@@ -58,6 +58,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             switch (message)
                             {
                                 case "The best overload for 'Diagnostics' does not have a parameter named 'codeWithErrorsIndicated'":
+                                case "The best overload for 'NoFix' does not have a parameter named 'codeWithErrorsIndicated'":
                                     text = "code";
                                     return true;
                                 case "The best overload for 'CodeFix' does not have a parameter named 'code'":

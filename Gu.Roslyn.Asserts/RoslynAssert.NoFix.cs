@@ -14,18 +14,18 @@ namespace Gu.Roslyn.Asserts
     {
         /// <summary>
         /// Verifies that
-        /// 1. <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics
+        /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
         /// </summary>
-        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="codeWithErrorsIndicated"/> with.</param>
+        /// <param name="analyzer">The type of <see cref="T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="codeFix">The type of the code fix.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] codeWithErrorsIndicated)
+        /// <param name="code">The code with error positions indicated.</param>
+        public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFix, params string[] code)
         {
             NoFix(
                 analyzer,
                 codeFix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
                 SuppressedDiagnostics,
                 MetadataReferences);
         }
