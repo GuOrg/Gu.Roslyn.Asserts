@@ -6,16 +6,22 @@ namespace Gu.Roslyn.Asserts.Tests
 
     public partial class RoslynAssertTests
     {
-        public class NoCompilerErrors
+        public static class NoCompilerErrors
         {
-            [TearDown]
-            public void TearDown()
+            [SetUp]
+            public static void SetUp()
             {
-                RoslynAssert.MetadataReferences.Clear();
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [TearDown]
+            public static void TearDown()
+            {
+                RoslynAssert.ResetAll();
             }
 
             [Test]
-            public void WhenCodeNoCompilerErrors()
+            public static void WhenCodeNoCompilerErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -24,12 +30,11 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
                 RoslynAssert.NoCompilerErrors(code);
             }
 
             [Test]
-            public void WhenCodeNoCompilerErrorsCollectionInitializer()
+            public static void WhenCodeNoCompilerErrorsCollectionInitializer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -44,12 +49,11 @@ namespace RoslynSandbox
         }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
                 RoslynAssert.NoCompilerErrors(code);
             }
 
             [Test]
-            public void WhenCodeHasCompilerErrors()
+            public static void WhenCodeHasCompilerErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -59,6 +63,7 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
+                RoslynAssert.ResetAll();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(code));
                 var expected = "Found errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +

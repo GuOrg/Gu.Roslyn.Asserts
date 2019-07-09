@@ -3,34 +3,28 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
+    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
     public static partial class RoslynAssertValidTests
     {
-        public class Success
+        public static class Success
         {
             [OneTimeSetUp]
-            public void OneTimeSetUp()
+            public static void OneTimeSetUp()
             {
-                RoslynAssert.MetadataReferences.Add(Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly).WithAliases(new[] { "global", "mscorlib" }));
-                RoslynAssert.MetadataReferences.Add(Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(System.Diagnostics.Debug).Assembly).WithAliases(new[] { "global", "System" }));
-                RoslynAssert.MetadataReferences.AddRange(Gu.Roslyn.Asserts.MetadataReferences.Transitive(
-                    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-                    typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
-                    typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute),
-                    typeof(NUnit.Framework.Assert)));
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
             }
 
             [OneTimeTearDown]
-            public void OneTimeTearDown()
+            public static void OneTimeTearDown()
             {
-                // Usually this is not needed but we want everything reset when testing the AnalyzerAssert.
-                RoslynAssert.MetadataReferences.Clear();
+                RoslynAssert.ResetAll();
             }
 
             [Test]
-            public void WithSingleMetadataReference()
+            public static void WithSingleMetadataReference()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -44,7 +38,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithTransitiveMetadataReference()
+            public static void WithTransitiveMetadataReference()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -59,7 +53,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentNoErrorAnalyzer()
+            public static void SingleDocumentNoErrorAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -80,7 +74,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SevenPointThreeFeature()
+            public static void SevenPointThreeFeature()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -102,21 +96,24 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void ProjectFileNoErrorAnalyzer()
+            public static void ProjectFileNoErrorAnalyzer()
             {
                 var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var analyzer = new NoErrorAnalyzer();
 
-                RoslynAssert.Valid(analyzer, csproj);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj);
+                var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
+                    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+                    typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider));
+                RoslynAssert.Valid(analyzer, csproj, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj, metadataReferences: metadataReferences);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-                RoslynAssert.Valid(analyzer, descriptor, csproj);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
+                RoslynAssert.Valid(analyzer, descriptor, csproj, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj, metadataReferences: metadataReferences);
             }
 
             [Test]
-            public void TwoDocumentsNoErrorAnalyzer()
+            public static void TwoDocumentsNoErrorAnalyzer()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -139,7 +136,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoProjectsNoErrorAnalyzer()
+            public static void TwoProjectsNoErrorAnalyzer()
             {
                 var code1 = @"
 namespace Project1
@@ -162,7 +159,7 @@ namespace Project2
             }
 
             [Test]
-            public void WithExpectedDiagnostic()
+            public static void WithExpectedDiagnostic()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -180,7 +177,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenOtherReportsError()
+            public static void WithExpectedDiagnosticWhenOtherReportsError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -201,7 +198,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
+            public static void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -220,7 +217,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void Issue53()
+            public static void Issue53()
             {
                 var resourcesCode = @"
 namespace RoslynSandbox.Properties
@@ -246,7 +243,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void AnalyzerWithTwoDiagnostics()
+            public static void AnalyzerWithTwoDiagnostics()
             {
                 var testCode = @"
 namespace RoslynSandbox
@@ -261,7 +258,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void BinaryStrings()
+            public static void BinaryStrings()
             {
                 var binaryReferencedCode = @"
 namespace BinaryReferencedAssembly
@@ -287,7 +284,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void BinarySolution()
+            public static void BinarySolution()
             {
                 var binaryReferencedCode = @"
 namespace BinaryReferencedAssembly
