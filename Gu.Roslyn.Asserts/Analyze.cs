@@ -176,7 +176,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="fix"/>.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <param name="fix">The code fix to use when filtering the diagnostics.</param>
         /// <returns>A list with all fixable diagnostics.</returns>
         public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
@@ -209,7 +209,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
@@ -240,7 +240,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution, DiagnosticAnalyzer analyzer)
         {
@@ -250,7 +250,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
@@ -280,7 +280,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
         {
@@ -308,7 +308,7 @@ namespace Gu.Roslyn.Asserts
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
         {

@@ -645,6 +645,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="suppressedDiagnostics">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>

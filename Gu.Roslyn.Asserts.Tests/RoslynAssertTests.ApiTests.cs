@@ -143,7 +143,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
                     Assert.AreEqual(null, parameter.ExplicitDefaultValue);
                     Assert.AreEqual("suppressedDiagnostics", parameter.MetadataName);
-                    Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning no warnings or errors are suppressed.", GetComment(parameter));
+                    Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics\"/> are used.", GetComment(parameter));
                     Assert.AreEqual("allowCompilationErrors", method.Parameters[parameter.Ordinal - 1].Name);
                 }
                 else
