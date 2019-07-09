@@ -124,6 +124,26 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            public static void BeforeParameter(IMethodSymbol method)
+            {
+                if (!TryFindByType<DiagnosticsAndSources>(method.Parameters, out _) &&
+                    !TryFindByType<Solution>(method.Parameters, out _))
+                {
+                    Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "before", out var parameter));
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    if (TryFindByType<DiagnosticAnalyzer>(method.Parameters, out _))
+                    {
+                        Assert.AreEqual("The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                    }
+                    else
+                    {
+                        Assert.AreEqual("The code to analyze for <paramref name=\"expectedDiagnostic\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                    }
+                }
+            }
+
+            [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
             [TestCaseSource(nameof(NoFixMethods))]

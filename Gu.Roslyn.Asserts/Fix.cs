@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="fix">The code fix.</param>
         /// <param name="diagnostic">The diagnostic.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null)
         {
@@ -44,7 +44,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="fix">The code fix.</param>
         /// <param name="diagnostics">The diagnostics.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string fixTitle = null)
         {
@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The solution with the diagnostic.</param>
         /// <param name="fix">The code fix.</param>
         /// <param name="diagnostic">The diagnostic.</param>
-        /// <param name="fixTitle">The title of the fix to apply if more than one. If only one pass null.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null, CancellationToken cancellationToken = default(CancellationToken))
