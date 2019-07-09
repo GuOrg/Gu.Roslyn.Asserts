@@ -465,7 +465,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public static void WhenCompilationError()
+            public static void WhenSyntaxError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -490,7 +490,7 @@ CS1729 'object' does not contain a constructor that takes 0 arguments
   at line 3 and character 10 in file Foo.cs | class ↓Foo
 ";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
         }
     }
