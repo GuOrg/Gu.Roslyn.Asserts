@@ -32,7 +32,9 @@ namespace RoslynSandbox
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<NoErrorAnalyzer, DontUseUnderscoreCodeFixProvider>(code, fixedCode));
+                var analyzer = new NoErrorAnalyzer();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -50,8 +52,9 @@ namespace RoslynSandbox
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, EmptyCodeFixProvider>(code));
-
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -66,8 +69,9 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
@@ -94,8 +98,9 @@ namespace RoslynSandbox
         private readonly int ↓_value;
     }
 }";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(barCode, code));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DontUseUnderscoreCodeFixProvider();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, barCode, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
@@ -107,10 +112,9 @@ namespace RoslynSandbox
             {
                 var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix<DuplicateIdAnalyzer, DuplicateIdFix>(expectedDiagnostic, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(new DuplicateIdAnalyzer(), new DuplicateIdFix(), expectedDiagnostic, string.Empty));
+                var analyzer = new DuplicateIdAnalyzer();
+                var fix = new DuplicateIdFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

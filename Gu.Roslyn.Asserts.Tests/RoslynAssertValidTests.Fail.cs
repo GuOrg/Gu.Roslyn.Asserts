@@ -9,8 +9,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class Fail
         {
-            private static readonly bool Throw = false; // for testing what the output is in the runner.
-
             [Test]
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
@@ -25,20 +23,12 @@ namespace RoslynSandbox
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA1309 Field '_value' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value = 1;\r\n";
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(code));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), code));
                 Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), code));
-                Assert.AreEqual(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(code);
-                }
             }
 
             [Test]
@@ -56,19 +46,12 @@ namespace RoslynSandbox
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value = 1;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(code));
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), code));
                 Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), code));
-                Assert.AreEqual(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(code);
-                }
             }
 
             [Test]
@@ -93,19 +76,12 @@ namespace RoslynSandbox
                                "SA1309 Field '_value' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file Foo1.cs | private readonly int ↓_value = 1;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, foo1, foo2));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), foo1, foo2));
                 Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), foo1, foo2));
-                Assert.AreEqual(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
-                }
             }
 
             [Test]
@@ -127,22 +103,14 @@ namespace RoslynSandbox
         private readonly int _value2 = 2;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, foo1, foo2));
                 StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), foo1, foo2));
                 StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), foo1, foo2));
-                StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
-                StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
-                }
             }
 
             [Test]
@@ -164,25 +132,18 @@ namespace Project2
         private readonly int _value2 = 2;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, foo1, foo2));
+                StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
+                StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new List<string> { foo1, foo2 }));
                 StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), foo1, foo2));
                 StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
                 StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), foo1, foo2));
-                StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
-                StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new List<string> { foo1, foo2 }));
-                StringAssert.Contains("SA1309 Field '_value1' must not begin with an underscore", exception.Message);
-                StringAssert.Contains("SA1309 Field '_value2' must not begin with an underscore", exception.Message);
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
-                }
             }
 
             [Test]
@@ -193,18 +154,14 @@ namespace Project2
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                               $"  at line 9 and character 20 in file {csproj.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
+
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj));
-                StringAssert.Contains(expected, exception.Message);
-
                 var descriptor = FieldNameMustNotBeginWithUnderscoreDisabled.Descriptor;
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(descriptor, csproj));
-                StringAssert.Contains(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), descriptor, csproj));
                 StringAssert.Contains(expected, exception.Message);
@@ -214,10 +171,6 @@ namespace Project2
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences));
                 StringAssert.Contains(expected, exception.Message);
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
-                }
             }
 
             [Test]
@@ -227,19 +180,12 @@ namespace Project2
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                $"  at line 9 and character 20 in file {csproj.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj));
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), csproj));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), csproj));
                 StringAssert.Contains(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), csproj));
-                StringAssert.Contains(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
-                }
             }
 
             [Test]
@@ -250,19 +196,12 @@ namespace Project2
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                $"  at line 9 and character 20 in file {csproj.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
                 var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, RoslynAssert.MetadataReferences);
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, sln));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), sln));
                 StringAssert.Contains(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
-                StringAssert.Contains(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
-                }
             }
 
             [Test]
@@ -273,19 +212,12 @@ namespace Project2
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                $"  at line 9 and character 20 in file {csproj.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
                 var sln = CodeFactory.CreateSolution(csproj, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, RoslynAssert.MetadataReferences);
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(sln));
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, sln));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), sln));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), sln));
                 StringAssert.Contains(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscoreDisabled(), sln));
-                StringAssert.Contains(expected, exception.Message);
-
-                if (Throw)
-                {
-                    RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscoreDisabled>(csproj);
-                }
             }
 
             [Test]
@@ -304,23 +236,17 @@ namespace RoslynSandbox
                                "The expected diagnostic is: NoError";
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(descriptor, code));
-                CodeAssert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code));
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), descriptor, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldNameMustNotBeginWithUnderscore>(new[] { descriptor }, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), new[] { descriptor }, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -342,18 +268,17 @@ namespace RoslynSandbox
                 var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
                                   "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
+                Assert.AreEqual(expected, exception.Message);
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(descriptor, code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), descriptor, code));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<FieldAndPropertyMustBeNamedFooAnalyzer>(new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldAndPropertyMustBeNamedFooAnalyzer(), new[] { descriptor }, code));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -362,18 +287,18 @@ namespace RoslynSandbox
             {
                 var descriptor = DuplicateIdAnalyzer.Descriptor1;
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
+                var analyzer = new DuplicateIdAnalyzer();
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(descriptor, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), descriptor, string.Empty));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), descriptor, string.Empty));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid<DuplicateIdAnalyzer>(new[] { descriptor }, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(DuplicateIdAnalyzer), new[] { descriptor }, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new DuplicateIdAnalyzer(), new[] { descriptor }, string.Empty));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

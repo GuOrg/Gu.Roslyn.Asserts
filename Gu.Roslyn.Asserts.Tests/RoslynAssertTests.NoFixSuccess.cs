@@ -23,9 +23,6 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(code);
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(expectedDiagnostic, code);
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>((IReadOnlyList<string>)new[] { code });
                 RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), code);
                 RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, code);
                 RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
@@ -53,13 +50,11 @@ namespace RoslynSandbox
     }
 }";
 
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(barCode, code);
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(new List<string> { barCode, code });
-                RoslynAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), barCode, code);
-
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new NoCodeFixProvider();
+                RoslynAssert.NoFix(analyzer, fix, barCode, code);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                RoslynAssert.NoFix<FieldNameMustNotBeginWithUnderscore, NoCodeFixProvider>(expectedDiagnostic, barCode, code);
-                RoslynAssert.NoFix(new FieldNameMustNotBeginWithUnderscore(), new NoCodeFixProvider(), expectedDiagnostic, barCode, code);
+                RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, barCode, code);
             }
         }
     }

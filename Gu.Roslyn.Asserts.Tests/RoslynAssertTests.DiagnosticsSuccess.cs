@@ -285,7 +285,8 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
             }
 
             [Test]
@@ -307,9 +308,8 @@ namespace RoslynSandbox
         private readonly int ↓_value = 1;
     }
 }";
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(foo1, foo2);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscore), foo1, foo2);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), foo1, foo2);
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
             }
 
             [Test]
@@ -331,9 +331,8 @@ namespace RoslynSandbox
         private readonly int ↓_value = 1;
     }
 }";
-                RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscoreDisabled>(foo1, foo2);
-                RoslynAssert.Diagnostics(typeof(FieldNameMustNotBeginWithUnderscoreDisabled), foo1, foo2);
-                RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscoreDisabled(), foo1, foo2);
+                var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
             }
 
             [Test]
@@ -351,9 +350,8 @@ namespace RoslynSandbox
 }";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                RoslynAssert.Diagnostics<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
 
                 code = @"
 namespace RoslynSandbox
@@ -367,9 +365,7 @@ namespace RoslynSandbox
 }";
 
                 expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId);
-                RoslynAssert.Diagnostics<FieldAndPropertyMustBeNamedFooAnalyzer>(expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), expectedDiagnostic, code);
-                RoslynAssert.Diagnostics(new FieldAndPropertyMustBeNamedFooAnalyzer(), expectedDiagnostic, code);
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
         }
     }
