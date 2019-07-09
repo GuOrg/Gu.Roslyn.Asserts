@@ -664,7 +664,9 @@ namespace RoslynSandbox
         public event EventHandler SomeEvent;
     }
 }";
-                RoslynAssert.FixAll<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
+                var analyzer = new ClassMustHaveEventAnalyzer();
+                var fix = new InsertEventFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
             }
 
             [Test]
@@ -692,8 +694,9 @@ namespace RoslynSandbox
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                RoslynAssert.FixAll<FieldAndPropertyMustBeNamedFooAnalyzer, RenameToFooCodeFixProvider>(expectedDiagnostic, before, after);
-                RoslynAssert.FixAll(new FieldAndPropertyMustBeNamedFooAnalyzer(), new RenameToFooCodeFixProvider(), expectedDiagnostic, before, after);
+                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var fix = new RenameToFooCodeFixProvider();
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
             }
         }
     }

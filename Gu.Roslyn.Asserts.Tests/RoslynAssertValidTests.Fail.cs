@@ -169,7 +169,7 @@ namespace Project2
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, csproj));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, csproj, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null)));
                 StringAssert.Contains(expected, exception.Message);
             }
 
@@ -245,9 +245,6 @@ namespace RoslynSandbox
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -277,9 +274,6 @@ namespace RoslynSandbox
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -293,9 +287,6 @@ namespace RoslynSandbox
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, string.Empty));

@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var descriptor = NoErrorAnalyzer.Descriptor;
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
-            RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
+            RoslynAssert.Valid(analyzer, csproj, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var descriptor = NoErrorAnalyzer.Descriptor;
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
-            RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
+            RoslynAssert.Valid(analyzer, csproj, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var descriptor = NoErrorAnalyzer.Descriptor;
             RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj);
             RoslynAssert.Valid(analyzer, descriptor, csproj);
-            RoslynAssert.Valid(analyzer, csproj, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null), RoslynAssert.MetadataReferences);
+            RoslynAssert.Valid(analyzer, csproj, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Explicit("Need to solve signing and InternalsVisibleTo")]

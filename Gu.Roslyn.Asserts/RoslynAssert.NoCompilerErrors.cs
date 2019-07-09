@@ -14,6 +14,7 @@ namespace Gu.Roslyn.Asserts
         /// DiagnosticSettings.AllowedErrorIds()
         /// MetadataReferences.
         /// </summary>
+        /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, MetadataReferences);
@@ -25,6 +26,8 @@ namespace Gu.Roslyn.Asserts
         /// DiagnosticSettings.AllowedErrorIds()
         /// DiagnosticSettings.AllowedDiagnostics().
         /// </summary>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, metadataReferences);

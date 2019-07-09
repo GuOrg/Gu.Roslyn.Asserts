@@ -29,9 +29,20 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            IReadOnlyList<string> code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                code,
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
@@ -81,10 +92,22 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            DiagnosticDescriptor descriptor,
+            IReadOnlyList<string> code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                code,
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
@@ -98,10 +121,22 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void Valid(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, FileInfo code)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            DiagnosticDescriptor descriptor,
+            FileInfo code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(
+                code,
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
@@ -125,13 +160,19 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            FileInfo code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             var sln = CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
@@ -142,48 +183,22 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            string code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
             var sln = CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences);
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">The code to analyze.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
-        /// </summary>
-        /// <param name="diagnostics">The diagnostics.</param>
-        public static void NoDiagnostics(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
-        {
-            if (diagnostics.Any(x => x.Any()))
-            {
-                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
-                foreach (var diagnostic in diagnostics.SelectMany(x => x))
-                {
-                    builder.AppendLine(diagnostic.ToErrorString());
-                }
-
-                throw new AssertException(builder.Return());
-            }
         }
 
         /// <summary>
@@ -210,38 +225,73 @@ namespace Gu.Roslyn.Asserts
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
         /// </summary>
         /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            Type analyzerType,
+            FileInfo code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
+        {
+            Valid(
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                code,
+                suppressedDiagnostics,
+                metadataReferences,
+                compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// </summary>
+        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzerType"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Valid(
+            Type analyzerType,
+            DiagnosticDescriptor descriptor,
+            FileInfo code,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptor, code);
+            Valid(
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                descriptor,
+                code,
+                suppressedDiagnostics,
+                metadataReferences,
+                compilationOptions);
         }
 
         /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
+        /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
         /// </summary>
-        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="descriptors">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzerType"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze.</param>
-        public static void Valid(Type analyzerType, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
+        /// <param name="diagnostics">The diagnostics.</param>
+        public static void NoDiagnostics(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptors, code);
-        }
+            if (diagnostics.Any(x => x.Any()))
+            {
+                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
+                foreach (var diagnostic in diagnostics.SelectMany(x => x))
+                {
+                    builder.AppendLine(diagnostic.ToErrorString());
+                }
 
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzerType"/>.
-        /// </summary>
-        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        public static void Valid(Type analyzerType, FileInfo code)
-        {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+                throw new AssertException(builder.Return());
+            }
         }
 
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)

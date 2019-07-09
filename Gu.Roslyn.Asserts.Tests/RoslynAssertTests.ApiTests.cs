@@ -152,6 +152,32 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
             }
 
+            [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(DiagnosticsMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(NoCompilerErrorsMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
+            [TestCaseSource(nameof(ValidMethods))]
+            public static void MetadataReferencesParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<IEnumerable<MetadataReference>>(method.Parameters, out var parameter))
+                {
+                    if (!method.Parameters.Last().IsParams)
+                    {
+                        Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
+                        Assert.AreEqual(null, parameter.ExplicitDefaultValue);
+                        Assert.AreEqual("suppressedDiagnostics", method.Parameters[parameter.Ordinal - 1].Name);
+                    }
+
+                    Assert.AreEqual("metadataReferences", parameter.MetadataName);
+                    Assert.AreEqual("A collection of <see cref=\"T:Microsoft.CodeAnalysis.MetadataReference\"/> to use when compiling. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences\"/> are used.", GetComment(parameter));
+                }
+                else
+                {
+                    Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
+                }
+            }
+
             private static ImmutableArray<IMethodSymbol> GetMethods(INamedTypeSymbol containingType, string name, params string[] names)
             {
                 names = new[] { name }.Concat(names ?? Enumerable.Empty<string>()).ToArray();
