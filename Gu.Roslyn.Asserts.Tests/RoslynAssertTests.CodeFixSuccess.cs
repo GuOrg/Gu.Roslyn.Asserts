@@ -10,16 +10,22 @@ namespace Gu.Roslyn.Asserts.Tests
     [TestFixture]
     public static partial class RoslynAssertTests
     {
-        public class CodeFixSuccess
+        public static class CodeFixSuccess
         {
-            [TearDown]
-            public void TearDown()
+            [OneTimeSetUp]
+            public static void OneTimeSetUp()
+            {
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [OneTimeTearDown]
+            public static void OneTimeTearDown()
             {
                 RoslynAssert.ResetAll();
             }
 
             [Test]
-            public void SingleDocumentOneError()
+            public static void SingleDocumentOneError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -38,7 +44,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
@@ -49,7 +54,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void MakeSealed()
+            public static void MakeSealed()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -66,7 +71,6 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new ClassMustBeSealedAnalyzer();
                 var fix = new MakeSealedFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
@@ -77,7 +81,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void MakeSealedCorrectFixKeepsPoorFormat()
+            public static void MakeSealedCorrectFixKeepsPoorFormat()
             {
                 var code = @"
 namespace    RoslynSandbox
@@ -106,7 +110,6 @@ private readonly int value;
         }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new ClassMustBeSealedAnalyzer();
                 var fix = new MakeSealedFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
@@ -117,7 +120,7 @@ private readonly int value;
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitle()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitle()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -136,7 +139,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode);
@@ -147,7 +149,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithErrorsIndicated()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithErrorsIndicated()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -166,7 +168,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
@@ -179,7 +180,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPosition()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -198,7 +199,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
@@ -209,7 +209,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -228,7 +228,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 var fix = new DontUseUnderscoreCodeFixProvider();
@@ -240,7 +239,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void SingleDocumentOneErrorTwoFixes(string title, string expected)
+            public static void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var code = @"
 namespace RoslynSandbox
@@ -260,7 +259,6 @@ namespace RoslynSandbox
     }
 }";
                 fixedCode = fixedCode.AssertReplace("value", expected);
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, code, fixedCode, title);
@@ -273,7 +271,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentCodeFixOnly()
+            public static void SingleDocumentCodeFixOnly()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -307,7 +305,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsCodeFixOnly()
+            public static void TwoDocumentsCodeFixOnly()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -347,7 +345,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsCodeFixOnly()
+            public static void PartialTwoDocumentsCodeFixOnly()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -387,7 +385,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsOneFix()
+            public static void PartialTwoDocumentsOneFix()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -432,7 +430,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsOneFixWhenSpansMatch()
+            public static void PartialTwoDocumentsOneFixWhenSpansMatch()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -478,7 +476,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsCodeFixOnly()
+            public static void TwoDocumentsDifferentProjectsCodeFixOnly()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -524,7 +522,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
+            public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -570,7 +568,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnly2()
+            public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnly2()
             {
                 var code1 = @"
 namespace RoslynSandbox.Core
@@ -612,7 +610,7 @@ namespace RoslynSandbox.Client
             }
 
             [Test]
-            public void TwoDocumentsOneError()
+            public static void TwoDocumentsOneError()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -640,7 +638,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, code }, fixedCode);
@@ -648,7 +645,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneErrorFixTouchingBothDocuments()
+            public static void TwoDocumentsOneErrorFixTouchingBothDocuments()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -691,7 +688,6 @@ namespace RoslynSandbox
         }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new PropertyMustBeNamedFooAnalyzer();
                 var fix = new RenameToFooCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, fixedCode2 });
@@ -706,7 +702,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void CodeFixAddingDocument()
+            public static void CodeFixAddingDocument()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -733,7 +729,6 @@ namespace RoslynSandbox
         public static T Id<T>(this T t) => t;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new CallIdAnalyzer();
                 var fix = new CallIdFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode });
@@ -741,7 +736,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIntroducesCompilerErrorsThatAreAccepted()
+            public static void WhenFixIntroducesCompilerErrorsThatAreAccepted()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -771,7 +766,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -794,7 +789,6 @@ namespace RoslynSandbox
         public int WrongName { get; set; }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
                 var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
                 var fix = new RenameToFooCodeFixProvider();
@@ -804,7 +798,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithMetadataReferences()
+            public static void WithMetadataReferences()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -835,7 +829,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void ProjectFromDisk()
+            public static void ProjectFromDisk()
             {
                 var fixedCode = @"// ReSharper disable InconsistentNaming
 // ReSharper disable ArrangeThisQualifier

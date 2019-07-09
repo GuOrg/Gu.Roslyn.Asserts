@@ -9,16 +9,22 @@ namespace Gu.Roslyn.Asserts.Tests
     [TestFixture]
     public static partial class RoslynAssertTests
     {
-        public class CodeFixFail
+        public static class CodeFixFail
         {
-            [TearDown]
-            public void TearDown()
+            [OneTimeSetUp]
+            public static void OneTimeSetUp()
             {
-                RoslynAssert.MetadataReferences.Clear();
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [OneTimeTearDown]
+            public static void OneTimeTearDown()
+            {
+                RoslynAssert.ResetAll();
             }
 
             [Test]
-            public void SingleDocumentExplicitTitle()
+            public static void SingleDocumentExplicitTitle()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -41,7 +47,6 @@ namespace RoslynSandbox
                                "Found:\r\n" +
                                "Rename to: value\r\n";
 
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "WRONG"));
@@ -51,7 +56,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentTwoIndicatedErrors()
+            public static void SingleDocumentTwoIndicatedErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -94,7 +99,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentTwoErrors()
+            public static void SingleDocumentTwoErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -116,7 +121,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorWrongPosition()
+            public static void SingleDocumentOneErrorWrongPosition()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -140,7 +145,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorNoFix()
+            public static void SingleDocumentOneErrorNoFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -158,7 +163,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorTwoFixes()
+            public static void SingleDocumentOneErrorTwoFixes()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -179,7 +184,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorEmptyFix()
+            public static void SingleDocumentOneErrorEmptyFix()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -199,7 +204,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void FixDoesNotMatchAnalyzer()
+            public static void FixDoesNotMatchAnalyzer()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -227,7 +232,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void OneErrorWhenFixedCodeDoesNotMatchExpected()
+            public static void OneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -271,7 +276,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneErrorWhenFixedCodeDoesNotMatchExpected()
+            public static void TwoDocumentsOneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -324,7 +329,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsOneFix()
+            public static void PartialTwoDocumentsOneFix()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -386,7 +391,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsFixOnly()
+            public static void PartialTwoDocumentsFixOnly()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -452,7 +457,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void PartialTwoDocumentsFixOnlyWrongPosition()
+            public static void PartialTwoDocumentsFixOnlyWrongPosition()
             {
                 var part1 = @"
 namespace RoslynSandbox
@@ -490,7 +495,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
+            public static void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
             {
                 var code1 = @"
 namespace RoslynSandbox
@@ -626,7 +631,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void CodeFixAddingDocument()
+            public static void CodeFixAddingDocument()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -652,7 +657,6 @@ namespace RoslynSandbox
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new CallIdAnalyzer();
                 var fix = new CallIdFix();
                 var expected = "Mismatch on line 5 of file Extensions.cs.\r\n" +
@@ -727,7 +731,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void CodeFixAddingDocumentWhenExpectedAddedDocIsNotProvided()
+            public static void CodeFixAddingDocumentWhenExpectedAddedDocIsNotProvided()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -747,7 +751,6 @@ namespace RoslynSandbox
     }
 }";
 
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new CallIdAnalyzer();
                 var fix = new CallIdFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
@@ -759,7 +762,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIntroducesCompilerErrors()
+            public static void WhenFixIntroducesSyntaxErrors()
             {
                 var code = @"
 namespace RoslynSandbox
@@ -778,32 +781,24 @@ namespace RoslynSandbox
     }
 }";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix<ClassMustHaveEventAnalyzer, InsertEventFixProvider>(code, fixedCode));
-                var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
-                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +
-                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;\r\n" +
-                               "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
-                               "  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;\r\n" +
-                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file Foo.cs | public event EventHandler ↓SomeEvent;\r\n" +
-                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file Foo.cs | public event EventHandler ↓SomeEvent;\r\n" +
-                               "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
-                               "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +
-                               "First source file with error is:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
-                               "{\r\n" +
-                               "    class Foo\r\n" +
-                               "    {\r\n" +
-                               "        public event EventHandler SomeEvent;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = @"Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax error.
+CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
+  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;
+First source file with error is:
+
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        public event EventHandler SomeEvent;
+    }
+}
+";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
-            public void IndicatedAndActualPositionDoNotMatch()
+            public static void IndicatedAndActualPositionDoNotMatch()
             {
                 var code = @"
 namespace RoslynSandbox

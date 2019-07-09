@@ -463,6 +463,35 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public static void WhenCompilationError()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value = 1;
+        INCOMPLETE
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var expected = @"Found errors.
+CS1519 Invalid token '}' in class, struct, or interface member declaration
+  at line 7 and character 4 in file Foo.cs | ↓}
+CS0518 Predefined type 'System.Object' is not defined or imported
+  at line 3 and character 10 in file Foo.cs | class ↓Foo
+CS0518 Predefined type 'System.Int32' is not defined or imported
+  at line 5 and character 25 in file Foo.cs | private readonly ↓int _value = 1;
+CS0518 Predefined type 'System.Int32' is not defined or imported
+  at line 5 and character 38 in file Foo.cs | private readonly int _value = ↓1;
+CS1729 'object' does not contain a constructor that takes 0 arguments
+  at line 3 and character 10 in file Foo.cs | class ↓Foo
+";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }

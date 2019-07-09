@@ -12,15 +12,19 @@ namespace Gu.Roslyn.Asserts
     public static partial class RoslynAssert
     {
         /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] codeWithErrorsIndicated)
+        /// <param name="code">The code with error positions indicated.</param>
+        public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
             Diagnostics(
                 analyzer,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated));
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                allowCompilationErrors: AllowCompilationErrors.No,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -33,7 +37,11 @@ namespace Gu.Roslyn.Asserts
         {
             Diagnostics(
                 analyzer,
-                DiagnosticsAndSources.Create(expectedDiagnostic, code));
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                allowCompilationErrors: AllowCompilationErrors.No,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null);
         }
 
         /// <summary>
@@ -44,7 +52,65 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
-            Diagnostics(analyzer, new DiagnosticsAndSources(expectedDiagnostics, code));
+            Diagnostics(
+                analyzer,
+                new DiagnosticsAndSources(expectedDiagnostics, code),
+                allowCompilationErrors: AllowCompilationErrors.No,
+                suppressedDiagnostics: null,
+                metadataReferences: null,
+                compilationOptions: null);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Diagnostics(
+            DiagnosticAnalyzer analyzer,
+            string code,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
+        {
+            Diagnostics(
+                analyzer,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to apply.</param>
+        /// <param name="code">The code with error positions indicated.</param>
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Diagnostics(
+            DiagnosticAnalyzer analyzer,
+            IReadOnlyList<string> code,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
+        {
+            Diagnostics(
+                analyzer,
+                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                allowCompilationErrors: allowCompilationErrors,
+                suppressedDiagnostics: suppressedDiagnostics,
+                metadataReferences: metadataReferences,
+                compilationOptions: compilationOptions);
         }
 
         /// <summary>
@@ -52,43 +118,31 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzer to apply.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, DiagnosticsAndSources diagnosticsAndSources)
+        /// <param name="allowCompilationErrors">If compilation errors are accepted in the fixed code.</param>
+        /// <param name="suppressedDiagnostics">Ids of diagnostics to suppress.</param>
+        /// <param name="metadataReferences">Collection of <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public static void Diagnostics(
+            DiagnosticAnalyzer analyzer,
+            DiagnosticsAndSources diagnosticsAndSources,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<MetadataReference> metadataReferences = null,
+            CSharpCompilationOptions compilationOptions = null)
         {
-            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, string codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
-        {
-            Diagnostics(analyzer, new[] { codeWithErrorsIndicated }, compilationOptions, metadataReferences);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="codeWithErrorsIndicated"/> produces the expected diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to apply.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The meta data metadataReferences to use when compiling.</param>
-        public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> codeWithErrorsIndicated, CSharpCompilationOptions compilationOptions = null, IEnumerable<MetadataReference> metadataReferences = null)
-        {
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var sln = CodeFactory.CreateSolution(
-                diagnosticsAndSources.Code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics),
+                diagnosticsAndSources,
+                analyzer,
+                compilationOptions,
+                suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            if (allowCompilationErrors == AllowCompilationErrors.No)
+            {
+                NoCompilerErrors(sln);
+            }
         }
 
         private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)

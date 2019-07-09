@@ -57,6 +57,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             string message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
                             switch (message)
                             {
+                                case "The best overload for 'Diagnostics' does not have a parameter named 'codeWithErrorsIndicated'":
+                                    text = "code";
+                                    return true;
                                 case "The best overload for 'CodeFix' does not have a parameter named 'code'":
                                 case "The best overload for 'FixAll' does not have a parameter named 'code'":
                                 case "The best overload for 'CodeFix' does not have a parameter named 'codeWithErrorsIndicated'":

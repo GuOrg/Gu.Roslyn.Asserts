@@ -10,6 +10,18 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class FixAllFail
         {
+            [OneTimeSetUp]
+            public static void OneTimeSetUp()
+            {
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [OneTimeTearDown]
+            public static void OneTimeTearDown()
+            {
+                RoslynAssert.ResetAll();
+            }
+
             [Test]
             public static void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
@@ -51,7 +63,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(code, fixedCode, "WRONG"));
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +

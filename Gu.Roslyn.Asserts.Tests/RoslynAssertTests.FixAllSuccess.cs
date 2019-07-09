@@ -8,16 +8,22 @@ namespace Gu.Roslyn.Asserts.Tests
     [TestFixture]
     public partial class RoslynAssertTests
     {
-        public class FixAllSuccess
+        public static class FixAllSuccess
         {
-            [TearDown]
-            public void TearDown()
+            [OneTimeSetUp]
+            public static void OneTimeSetUp()
             {
-                RoslynAssert.MetadataReferences.Clear();
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [OneTimeTearDown]
+            public static void OneTimeTearDown()
+            {
+                RoslynAssert.ResetAll();
             }
 
             [Test]
-            public void OneError()
+            public static void OneError()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -36,13 +42,12 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
             }
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void SingleDocumentOneErrorTwoFixes(string title, string expected)
+            public static void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var before = @"
 namespace RoslynSandbox
@@ -62,12 +67,11 @@ namespace RoslynSandbox
     }
 }";
                 after = after.AssertReplace("value", expected);
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(before, after, title);
             }
 
             [Test]
-            public void TwoErrors()
+            public static void TwoErrors()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -88,12 +92,11 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
             }
 
             [Test]
-            public void FixAllInDocumentTwoErrors()
+            public static void FixAllInDocumentTwoErrors()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -114,12 +117,11 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAllInDocument<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
             }
 
             [Test]
-            public void FixAllOneByOneTwoErrors()
+            public static void FixAllOneByOneTwoErrors()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -140,12 +142,11 @@ namespace RoslynSandbox
         private readonly int value2;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAllOneByOne<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(before, after);
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -164,7 +165,6 @@ namespace RoslynSandbox
         public readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after);
@@ -177,7 +177,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
+            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -196,7 +196,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, before, after);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic, DontUseUnderscoreCodeFixProvider>(expectedDiagnostic, new[] { before }, after);
@@ -209,7 +208,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoDocumentsTwoErrorsTwoFixes()
+            public static void TwoDocumentsTwoErrorsTwoFixes()
             {
                 var before1 = @"
 namespace RoslynSandbox
@@ -260,7 +259,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoDocumentsOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
+            public static void TwoDocumentsOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
             {
                 var before1 = @"
 namespace RoslynSandbox
@@ -289,7 +288,6 @@ namespace RoslynSandbox
 }";
 
                 after = after.AssertReplace("value", expected);
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, new[] { after, before2 }, title);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, after, title);
@@ -299,7 +297,7 @@ namespace RoslynSandbox
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoDocumentsOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
+            public static void TwoDocumentsOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
             {
                 var before1 = @"
 namespace RoslynSandbox
@@ -328,13 +326,12 @@ namespace RoslynSandbox
 }";
 
                 after = after.AssertReplace("value", expected);
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, after, title);
             }
 
             [TestCase("Rename to: value1", "value1")]
             [TestCase("Rename to: value2", "value2")]
-            public void TwoDocumentsTwoFixes(string title, string expected)
+            public static void TwoDocumentsTwoFixes(string title, string expected)
             {
                 var before1 = @"
 namespace RoslynSandbox
@@ -372,12 +369,11 @@ namespace RoslynSandbox
 }";
                 after1 = after1.AssertReplace("value", expected);
                 after2 = after2.AssertReplace("value", expected);
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreManyCodeFixProvider>(new[] { before1, before2 }, new[] { after1, after2 }, title);
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsCodeFixOnlyOneFix()
+            public static void TwoDocumentsDifferentProjectsCodeFixOnlyOneFix()
             {
                 var before1 = @"
 namespace RoslynSandbox.Core
@@ -414,7 +410,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsCodeFixOnlyOneFixPassingOnlyFixedCode()
+            public static void TwoDocumentsDifferentProjectsCodeFixOnlyOneFixPassingOnlyFixedCode()
             {
                 var before1 = @"
 namespace RoslynSandbox.Core
@@ -452,7 +448,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsCodeFixOnly()
+            public static void TwoDocumentsDifferentProjectsCodeFixOnly()
             {
                 var before1 = @"
 namespace RoslynSandbox.Core
@@ -490,7 +486,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
+            public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
             {
                 var before1 = @"
 namespace RoslynSandbox.Core
@@ -528,7 +524,7 @@ namespace RoslynSandbox.Core
             }
 
             [Test]
-            public void TwoDocumentsDifferentProjectsInheritingCodeFixOnlyCorrectFix2()
+            public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnlyCorrectFix2()
             {
                 var before1 = @"
 namespace RoslynSandbox.Core
@@ -566,7 +562,7 @@ namespace RoslynSandbox.Client
             }
 
             [Test]
-            public void SingleDocumentCodeFixOnly()
+            public static void SingleDocumentCodeFixOnly()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -595,7 +591,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void TwoClassOneError()
+            public static void TwoClassOneError()
             {
                 var barCode = @"
 namespace RoslynSandbox
@@ -623,7 +619,6 @@ namespace RoslynSandbox
         private readonly int value;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, new[] { barCode, after });
                 RoslynAssert.FixAll<FieldNameMustNotBeginWithUnderscore, DontUseUnderscoreCodeFixProvider>(new[] { barCode, testCode }, after);
@@ -634,7 +629,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WhenFixIntroducesCompilerErrorsThatAreAccepted()
+            public static void WhenFixIntroducesCompilerErrorsThatAreAccepted()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -656,7 +651,7 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var before = @"
 namespace RoslynSandbox
@@ -679,7 +674,6 @@ namespace RoslynSandbox
         public int WrongName { get; set; }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
                 RoslynAssert.FixAll<FieldAndPropertyMustBeNamedFooAnalyzer, RenameToFooCodeFixProvider>(expectedDiagnostic, before, after);
                 RoslynAssert.FixAll(new FieldAndPropertyMustBeNamedFooAnalyzer(), new RenameToFooCodeFixProvider(), expectedDiagnostic, before, after);
