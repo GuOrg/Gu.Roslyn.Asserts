@@ -240,9 +240,6 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
-
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -269,9 +266,6 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, code));
-                Assert.AreEqual(expected, exception.Message);
-
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -284,9 +278,6 @@ namespace RoslynSandbox
                 var analyzer = new DuplicateIdAnalyzer();
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, new[] { descriptor }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, string.Empty));

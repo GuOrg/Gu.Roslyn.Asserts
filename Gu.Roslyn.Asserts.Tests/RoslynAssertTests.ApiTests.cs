@@ -112,6 +112,17 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
             }
 
+            [TestCaseSource(nameof(ValidMethods))]
+            public static void DiagnosticDescriptorParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<DiagnosticDescriptor>(method.Parameters, out var parameter))
+                {
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    Assert.AreEqual("descriptor", parameter.MetadataName);
+                    StringAssert.IsMatch("The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"\\w+\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.", GetComment(parameter));
+                }
+            }
+
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]

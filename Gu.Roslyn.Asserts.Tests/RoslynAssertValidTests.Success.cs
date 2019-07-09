@@ -68,8 +68,6 @@ namespace RoslynSandbox
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
-
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
             }
 
@@ -91,8 +89,6 @@ namespace RoslynSandbox
                 var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
-
-                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
             }
 
             [Test]
@@ -172,7 +168,6 @@ namespace RoslynSandbox
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
             }
 
@@ -193,7 +188,6 @@ namespace RoslynSandbox
                 var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
                 var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code);
             }
 
@@ -212,7 +206,6 @@ namespace RoslynSandbox
                 var descriptor = FieldNameMustNotBeginWithUnderscoreReportsTwo.Descriptor1;
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(analyzer, new[] { descriptor }, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
             }
 

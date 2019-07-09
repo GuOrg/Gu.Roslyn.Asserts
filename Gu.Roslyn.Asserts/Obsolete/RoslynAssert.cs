@@ -801,19 +801,6 @@ namespace Gu.Roslyn.Asserts
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
-        /// <param name="descriptors">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>.</param>
-        /// <param name="code">The code to analyze.</param>
-        [Obsolete("Use overload taking analyzer as argument.")]
-        public static void Valid<TAnalyzer>(IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            Valid(new TAnalyzer(), descriptors, code);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
         /// <param name="descriptor">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>.</param>
         /// <param name="code">The code to analyze.</param>
         [Obsolete("Use overload taking analyzer as argument.")]
