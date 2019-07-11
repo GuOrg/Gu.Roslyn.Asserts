@@ -390,6 +390,21 @@ namespace Gu.Roslyn.Asserts
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }
 
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="fix"/> supports fixing diagnostics reported by <paramref name="analyzer"/>.
+        /// 2. <paramref name="diagnosticsAndSources"/> produces diagnostics fixable by <paramref name="fix"/>.
+        /// 3. Applying <paramref name="fix"/> results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
+        /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void CodeFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
