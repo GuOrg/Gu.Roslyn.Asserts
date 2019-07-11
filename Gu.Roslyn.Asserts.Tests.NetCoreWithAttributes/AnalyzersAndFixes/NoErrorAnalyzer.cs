@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class NoErrorAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "NoError";
+        internal const string DiagnosticId = "NoError";
 
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,

@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// </summary>
         /// <param name="uri">The url.</param>
         /// <returns>Parsed <see cref="GitFile"/> object.</returns>
-        public static GitFile ParseUrl(Uri uri)
+        internal static GitFile ParseUrl(Uri uri)
         {
             return new GitFile(uri);
         }
@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <summary>
         /// A git file.
         /// </summary>
-        public class GitFile
+        internal class GitFile
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="GitFile"/> class.
@@ -46,32 +46,32 @@ namespace Gu.Roslyn.Asserts.Internals
             /// <summary>
             /// Gets the name of the provider, e.g. "github.com", "bitbucket.org".
             /// </summary>
-            public string Provider { get; }
+            internal string Provider { get; }
 
             /// <summary>
             /// Gets the user owns the repository.
             /// </summary>
-            public string User { get; }
+            internal string User { get; }
 
             /// <summary>
             /// Gets the name of the repository.
             /// </summary>
-            public string RepoName { get; }
+            internal string RepoName { get; }
 
             /// <summary>
             /// Gets the URL to the repository, usable with git clone.
             /// </summary>
-            public Uri RepositoryUrl { get; }
+            internal Uri RepositoryUrl { get; }
 
             /// <summary>
             /// Gets the name of a branch, or a commit SHA-1 hash.
             /// </summary>
-            public string Branch { get; }
+            internal string Branch { get; }
 
             /// <summary>
             /// Gets the path to the file in the repo.
             /// </summary>
-            public string Path { get; }
+            internal string Path { get; }
         }
     }
 }

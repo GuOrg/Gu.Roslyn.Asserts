@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// Creates a GitClient given an absolute path to the git executable.
         /// </summary>
         /// <param name="path">Path to the git executable.</param>
-        public GitClient(string path)
+        internal GitClient(string path)
         {
             this.gitPath = path ?? throw new ArgumentNullException(nameof(path));
         }
@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// Initializes a new instance of the <see cref="GitClient"/> class.
         /// Creates a GitClient by finding it on a best-effort basis.
         /// </summary>
-        public GitClient()
+        internal GitClient()
             : this("git")
         {
         }
@@ -38,7 +38,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// For specifying the kind of <see cref="Clone"/>.
         /// </summary>
         [Flags]
-        public enum CloneFlags
+        internal enum CloneFlags
         {
             None = 0,
             Recursive = 1 << 0,
@@ -54,7 +54,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="flags">Flags.</param>
         /// <param name="branch">Check out to the specific branch.</param>
         /// <param name="config">Configuration values of the cloned repository.</param>
-        public void Clone(
+        internal void Clone(
             Uri uri,
             string cloneTargetPath,
             CloneFlags flags = CloneFlags.None,

@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <summary>
         /// Gets the code in the document.
         /// </summary>
-        public string Code { get; }
+        internal string Code { get; }
 
         /// <inheritdoc />
         public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;

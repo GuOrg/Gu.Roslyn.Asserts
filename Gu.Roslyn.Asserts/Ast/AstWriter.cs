@@ -308,13 +308,13 @@ namespace Gu.Roslyn.Asserts
         {
             private readonly Stack<string> stack = new Stack<string>(new[] { string.Empty });
 
-            public string Current => this.stack.Peek();
+            internal string Current => this.stack.Peek();
 
-            public void Push() => this.stack.Push(this.stack.Peek() + "  ");
+            internal void Push() => this.stack.Push(this.stack.Peek() + "  ");
 
-            public void PushChars(int n) => this.stack.Push(this.stack.Peek() + new string(' ', n));
+            internal void PushChars(int n) => this.stack.Push(this.stack.Peek() + new string(' ', n));
 
-            public void Pop(int count = 1)
+            internal void Pop(int count = 1)
             {
                 for (var i = 0; i < count; i++)
                 {

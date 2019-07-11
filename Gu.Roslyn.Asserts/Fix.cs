@@ -275,12 +275,12 @@ namespace Gu.Roslyn.Asserts
             /// <summary>
             /// Gets the document from the first diagnostic.
             /// </summary>
-            public Document Document { get; }
+            internal Document Document { get; }
 
             /// <summary>
             /// Gets the equivalence key for the first registered action.
             /// </summary>
-            public string EquivalenceKey { get; }
+            internal string EquivalenceKey { get; }
 
             /// <inheritdoc />
             public override Task<IEnumerable<Diagnostic>> GetAllDiagnosticsAsync(Project project, CancellationToken cancellationToken)

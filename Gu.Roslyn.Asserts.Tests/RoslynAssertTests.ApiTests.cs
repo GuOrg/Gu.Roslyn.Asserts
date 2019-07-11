@@ -32,6 +32,7 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly ImmutableArray<IMethodSymbol> DiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Diagnostics));
             private static readonly ImmutableArray<IMethodSymbol> FixAllMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.FixAll), nameof(RoslynAssert.FixAllInDocument), nameof(RoslynAssert.FixAllByScope), nameof(RoslynAssert.FixAllOneByOne));
             private static readonly ImmutableArray<IMethodSymbol> NoCompilerErrorsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoCompilerErrors));
+            private static readonly ImmutableArray<IMethodSymbol> NoAnalyzerDiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoAnalyzerDiagnostics));
             private static readonly ImmutableArray<IMethodSymbol> NoFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoFix));
             private static readonly ImmutableArray<IMethodSymbol> ValidMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Valid));
 
@@ -39,6 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
             [TestCaseSource(nameof(NoCompilerErrorsMethods))]
+            [TestCaseSource(nameof(NoAnalyzerDiagnosticsMethods))]
             [TestCaseSource(nameof(NoFixMethods))]
             [TestCaseSource(nameof(ValidMethods))]
             public static void AnalyzerParameter(IMethodSymbol method)
@@ -154,6 +156,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [TestCaseSource(nameof(ValidMethods))]
+            [TestCaseSource(nameof(NoAnalyzerDiagnosticsMethods))]
             public static void ValidCodeParameter(IMethodSymbol method)
             {
                 if (TryFindByType<Solution>(method.Parameters, out var sln))
@@ -178,6 +181,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [TestCaseSource(nameof(DiagnosticsMethods))]
+            [TestCaseSource(nameof(NoCompilerErrorsMethods))]
             [TestCaseSource(nameof(NoFixMethods))]
             public static void CodeParameter(IMethodSymbol method)
             {
@@ -199,7 +203,22 @@ namespace Gu.Roslyn.Asserts.Tests
                         case "Solution":
                             break;
                         default:
-                            Assert.AreEqual($"The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                            switch (method.Parameters[0].Name)
+                            {
+                                case "analyzer":
+                                    Assert.AreEqual($"The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                                    break;
+                                case "analyzerType":
+                                    Assert.AreEqual($"The code to analyze with <paramref name=\"analyzerType\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                                    break;
+                                case "fix":
+                                    Assert.AreEqual($"The code to analyze. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                                    break;
+                                default:
+                                    Assert.Inconclusive($"Not handling {method.Parameters[0]}");
+                                    break;
+                            }
+
                             break;
                     }
                 }

@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         /// Initializes a new instance of the <see cref="MetaDataReferencesCollectionDebugView"/> class.
         /// </summary>
         /// <param name="set">The set.</param>
-        public MetaDataReferencesCollectionDebugView(MetaDataReferencesCollection set)
+        internal MetaDataReferencesCollectionDebugView(MetaDataReferencesCollection set)
         {
             this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
         }
@@ -25,6 +25,6 @@ namespace Gu.Roslyn.Asserts
         /// Gets the items.
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public MetadataReference[] Items => this.metaDataReferences.ToArray();
+        internal MetadataReference[] Items => this.metaDataReferences.ToArray();
     }
 }

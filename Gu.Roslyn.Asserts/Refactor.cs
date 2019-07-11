@@ -328,7 +328,7 @@ namespace Gu.Roslyn.Asserts
         {
             private readonly List<CodeAction> actions;
 
-            public RefactoringContext(Document document, CodeRefactoringProvider refactoring, int position)
+            internal RefactoringContext(Document document, CodeRefactoringProvider refactoring, int position)
             {
                 this.Document = document;
                 this.Refactoring = refactoring;
@@ -337,17 +337,17 @@ namespace Gu.Roslyn.Asserts
                 this.actions = new List<CodeAction>();
             }
 
-            public Document Document { get; }
+            internal Document Document { get; }
 
-            public CodeRefactoringProvider Refactoring { get; }
+            internal CodeRefactoringProvider Refactoring { get; }
 
-            public int Position { get; }
+            internal int Position { get; }
 
-            public SyntaxNode SyntaxRoot { get; }
+            internal SyntaxNode SyntaxRoot { get; }
 
-            public IReadOnlyList<CodeAction> Actions => this.actions;
+            internal IReadOnlyList<CodeAction> Actions => this.actions;
 
-            public CodeRefactoringContext CreateRefactoringContext(TextSpan span)
+            internal CodeRefactoringContext CreateRefactoringContext(TextSpan span)
             {
                 return new CodeRefactoringContext(this.Document, span, a => this.actions.Add(a), CancellationToken.None);
             }

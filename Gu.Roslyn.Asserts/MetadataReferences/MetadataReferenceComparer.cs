@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The default instance.
         /// </summary>
-        public static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
+        internal static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
         private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="y">The other.</param>
         /// <returns>object.Equals().</returns>
         [Obsolete("Don't use this", error: true)]
-        public new static bool Equals(object x, object y) => object.Equals(x, y);
+        internal new static bool Equals(object x, object y) => object.Equals(x, y);
 
         /// <summary>
         /// Compare two <see cref="MetadataReference"/>.
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="x">The first <see cref="MetadataReference"/>.</param>
         /// <param name="y">The other <see cref="MetadataReferences"/>.</param>
         /// <returns>True if x and y are found equal.</returns>
-        public static bool Equals(MetadataReference x, MetadataReference y)
+        internal static bool Equals(MetadataReference x, MetadataReference y)
         {
             if (x == null && y == null)
             {

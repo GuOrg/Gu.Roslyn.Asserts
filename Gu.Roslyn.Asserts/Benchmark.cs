@@ -288,7 +288,7 @@
 
             private readonly DiagnosticAnalyzer inner;
 
-            public BenchmarkAnalyzer(DiagnosticAnalyzer inner)
+            internal BenchmarkAnalyzer(DiagnosticAnalyzer inner)
             {
                 this.inner = inner;
             }
@@ -306,7 +306,7 @@
                 private readonly BenchmarkAnalyzer analyzer;
                 private readonly AnalysisContext context;
 
-                public BenchmarkAnalysisContext(BenchmarkAnalyzer analyzer, AnalysisContext context)
+                internal BenchmarkAnalysisContext(BenchmarkAnalyzer analyzer, AnalysisContext context)
                 {
                     this.analyzer = analyzer;
                     this.context = context;

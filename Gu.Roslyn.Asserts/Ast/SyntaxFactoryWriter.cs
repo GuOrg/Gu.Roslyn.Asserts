@@ -590,6 +590,8 @@ namespace Gu.Roslyn.Asserts
             private string indentation = string.Empty;
             private bool newLine = true;
 
+            public override string ToString() => this.builder.ToString();
+
             internal Writer AppendLine(string text)
             {
                 Debug.Assert(text != ")", "Probably a bug here, don't think we ever want newline after )");
@@ -689,8 +691,6 @@ namespace Gu.Roslyn.Asserts
                 this.indentation = this.indentation.Substring(0, this.indentation.Length - 4);
                 return this;
             }
-
-            public override string ToString() => this.builder.ToString();
         }
     }
 }

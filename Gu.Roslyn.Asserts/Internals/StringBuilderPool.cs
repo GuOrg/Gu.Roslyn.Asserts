@@ -30,59 +30,59 @@ namespace Gu.Roslyn.Asserts.Internals
         {
             private readonly StringBuilder inner = new StringBuilder();
 
-            public bool IsEmpty => this.inner.Length == 0;
+            internal bool IsEmpty => this.inner.Length == 0;
 
-            public int Length => this.inner.Length;
-
-            public void Clear() => this.inner.Clear();
-
-            public PooledStringBuilder AppendLine(string text)
-            {
-                this.inner.AppendLine(text);
-                return this;
-            }
-
-            public PooledStringBuilder AppendLine()
-            {
-                this.inner.AppendLine();
-                return this;
-            }
-
-            public PooledStringBuilder Append(string value)
-            {
-                this.inner.Append(value);
-                return this;
-            }
-
-            public PooledStringBuilder Insert(int index, string value)
-            {
-                this.inner.Insert(index, value);
-                return this;
-            }
-
-            public PooledStringBuilder Insert(int index, char value)
-            {
-                this.inner.Insert(index, value);
-                return this;
-            }
-
-            public PooledStringBuilder Append(char value)
-            {
-                this.inner.Append(value);
-                return this;
-            }
-
-            public string Return()
-            {
-                return StringBuilderPool.Return(this);
-            }
+            internal int Length => this.inner.Length;
 
             [Obsolete("Use StringBuilderPool.Return", true)]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
             public override string ToString() => throw new InvalidOperationException("Use StringBuilderPool.Return");
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
-            public string GetTextAndClear()
+            internal void Clear() => this.inner.Clear();
+
+            internal PooledStringBuilder AppendLine(string text)
+            {
+                this.inner.AppendLine(text);
+                return this;
+            }
+
+            internal PooledStringBuilder AppendLine()
+            {
+                this.inner.AppendLine();
+                return this;
+            }
+
+            internal PooledStringBuilder Append(string value)
+            {
+                this.inner.Append(value);
+                return this;
+            }
+
+            internal PooledStringBuilder Insert(int index, string value)
+            {
+                this.inner.Insert(index, value);
+                return this;
+            }
+
+            internal PooledStringBuilder Insert(int index, char value)
+            {
+                this.inner.Insert(index, value);
+                return this;
+            }
+
+            internal PooledStringBuilder Append(char value)
+            {
+                this.inner.Append(value);
+                return this;
+            }
+
+            internal string Return()
+            {
+                return StringBuilderPool.Return(this);
+            }
+
+            internal string GetTextAndClear()
             {
                 var text = this.inner.ToString();
                 this.inner.Clear();
