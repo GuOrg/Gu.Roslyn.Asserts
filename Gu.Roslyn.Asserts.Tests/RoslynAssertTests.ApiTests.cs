@@ -144,6 +144,15 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
+            [TestCaseSource(nameof(FixAllMethods))]
+            public static void AfterParameter(IMethodSymbol method)
+            {
+                Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "after", out var parameter));
+                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual("The expected code produced by applying <paramref name=\"fix\"/>.", GetComment(parameter));
+            }
+
+            [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(DiagnosticsMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
             [TestCaseSource(nameof(NoFixMethods))]
