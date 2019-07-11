@@ -32,7 +32,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to '{name}'",
+                            $"Rename to '{name}'.",
                             cancellationToken => Renamer.RenameSymbolAsync(
                                 context.Document.Project.Solution,
                                 local,
