@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests
         private readonly SyntaxKind[] kinds;
         private readonly List<SyntaxNodeAnalysisContext> contexts = new List<SyntaxNodeAnalysisContext>();
 
-        public SyntaxNodeAnalyzer(params SyntaxKind[] kinds)
+        internal SyntaxNodeAnalyzer(params SyntaxKind[] kinds)
         {
             this.kinds = kinds;
         }
@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
             ImmutableArray.Create(Descriptor);
 
-        public IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
+        internal IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
 
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)

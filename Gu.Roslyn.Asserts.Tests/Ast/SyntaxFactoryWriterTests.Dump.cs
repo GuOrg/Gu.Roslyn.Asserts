@@ -241,7 +241,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
             private class MethodAndParameterNamesComparer : IEqualityComparer<MethodInfo>
             {
-                public static readonly IEqualityComparer<MethodInfo> Default = new MethodAndParameterNamesComparer();
+                internal static readonly IEqualityComparer<MethodInfo> Default = new MethodAndParameterNamesComparer();
 
                 public bool Equals(MethodInfo x, MethodInfo y)
                 {

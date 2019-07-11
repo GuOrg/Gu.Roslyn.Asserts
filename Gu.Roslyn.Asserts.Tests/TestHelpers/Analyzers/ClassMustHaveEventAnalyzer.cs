@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ClassMustHaveEventAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ClassMustHaveEvent";
+        internal const string DiagnosticId = "ClassMustHaveEvent";
 
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,

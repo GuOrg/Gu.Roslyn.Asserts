@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
         {
         }
 
-        public static FixAllProvider Instance { get; } = new CustomBatchFixAllProvider();
+        internal static FixAllProvider Instance { get; } = new CustomBatchFixAllProvider();
 
         public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
         {
@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             return await this.GetFixAsync(projectsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
         }
 
-        public virtual async Task<CodeAction> GetFixAsync(
+        internal virtual async Task<CodeAction> GetFixAsync(
             ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
@@ -70,7 +70,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             return null;
         }
 
-        public async virtual Task AddDocumentFixesAsync(Document document, ImmutableArray<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
+        internal async virtual Task AddDocumentFixesAsync(Document document, ImmutableArray<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
         {
             Debug.Assert(!diagnostics.IsDefault, "!diagnostics.IsDefault");
             var cancellationToken = fixAllContext.CancellationToken;
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             }
         }
 
-        public virtual async Task<CodeAction> GetFixAsync(
+        internal virtual async Task<CodeAction> GetFixAsync(
             ImmutableDictionary<Project, ImmutableArray<Diagnostic>> projectsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
@@ -154,12 +154,12 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             return null;
         }
 
-        public virtual Task AddProjectFixesAsync(Project project, IEnumerable<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
+        internal virtual Task AddProjectFixesAsync(Project project, IEnumerable<Diagnostic> diagnostics, Action<CodeAction> addFix, FixAllContext fixAllContext)
         {
             throw new NotSupportedException();
         }
 
-        public virtual async Task<CodeAction> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
+        internal virtual async Task<CodeAction> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
         {
             if (batchOfFixes == null)
             {
@@ -182,7 +182,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             return null;
         }
 
-        public virtual string GetFixAllTitle(FixAllContext fixAllContext)
+        internal virtual string GetFixAllTitle(FixAllContext fixAllContext)
         {
             var diagnosticIds = fixAllContext.DiagnosticIds;
             string diagnosticId;
@@ -210,17 +210,17 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             }
         }
 
-        public virtual Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(FixAllContext fixAllContext)
+        internal virtual Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(FixAllContext fixAllContext)
         {
             return FixAllContextHelper.GetDocumentDiagnosticsToFixAsync(fixAllContext);
         }
 
-        public virtual Task<ImmutableDictionary<Project, ImmutableArray<Diagnostic>>> GetProjectDiagnosticsToFixAsync(FixAllContext fixAllContext)
+        internal virtual Task<ImmutableDictionary<Project, ImmutableArray<Diagnostic>>> GetProjectDiagnosticsToFixAsync(FixAllContext fixAllContext)
         {
             return FixAllContextHelper.GetProjectDiagnosticsToFixAsync(fixAllContext);
         }
 
-        public virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
+        internal virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
         {
             var changedDocumentsMap = new Dictionary<DocumentId, Document>();
             Dictionary<DocumentId, List<Document>> documentsToMergeMap = null;

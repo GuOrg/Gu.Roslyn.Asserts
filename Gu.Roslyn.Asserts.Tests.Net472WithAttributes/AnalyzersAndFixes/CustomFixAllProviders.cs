@@ -20,6 +20,6 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
         /// <value>
         /// The default batch fix all provider.
         /// </value>
-        public static FixAllProvider BatchFixer => CustomBatchFixAllProvider.Instance;
+        internal static FixAllProvider BatchFixer => CustomBatchFixAllProvider.Instance;
     }
 }

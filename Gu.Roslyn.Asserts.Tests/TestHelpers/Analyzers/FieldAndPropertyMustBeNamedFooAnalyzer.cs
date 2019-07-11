@@ -9,8 +9,8 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class FieldAndPropertyMustBeNamedFooAnalyzer : DiagnosticAnalyzer
     {
-        public const string FieldDiagnosticId = "Field";
-        public const string PropertyDiagnosticId = "Property";
+        internal const string FieldDiagnosticId = "Field";
+        internal const string PropertyDiagnosticId = "Property";
 
         internal static readonly DiagnosticDescriptor FieldDescriptor = new DiagnosticDescriptor(
             id: FieldDiagnosticId,

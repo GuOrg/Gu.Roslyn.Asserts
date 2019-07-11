@@ -19,14 +19,14 @@ namespace Gu.Roslyn.Asserts.Tests
         private readonly SymbolKind[] kinds;
         private readonly List<SymbolAnalysisContext> contexts = new List<SymbolAnalysisContext>();
 
-        public SymbolAnalyzer(params SymbolKind[] kinds)
+        internal SymbolAnalyzer(params SymbolKind[] kinds)
         {
             this.kinds = kinds;
         }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
 
-        public IReadOnlyList<SymbolAnalysisContext> Contexts => this.contexts;
+        internal IReadOnlyList<SymbolAnalysisContext> Contexts => this.contexts;
 
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)

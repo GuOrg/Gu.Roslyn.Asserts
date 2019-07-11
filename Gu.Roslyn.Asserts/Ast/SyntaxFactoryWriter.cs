@@ -590,7 +590,7 @@ namespace Gu.Roslyn.Asserts
             private string indentation = string.Empty;
             private bool newLine = true;
 
-            public Writer AppendLine(string text)
+            internal Writer AppendLine(string text)
             {
                 Debug.Assert(text != ")", "Probably a bug here, don't think we ever want newline after )");
                 if (this.newLine)
@@ -603,7 +603,7 @@ namespace Gu.Roslyn.Asserts
                 return this;
             }
 
-            public Writer Append(string text)
+            internal Writer Append(string text)
             {
                 if (this.newLine)
                 {
@@ -615,7 +615,7 @@ namespace Gu.Roslyn.Asserts
                 return this;
             }
 
-            public Writer AppendQuotedEscaped(string text)
+            internal Writer AppendQuotedEscaped(string text)
             {
                 if (this.newLine)
                 {
@@ -647,7 +647,7 @@ namespace Gu.Roslyn.Asserts
                 return this;
             }
 
-            public Writer WriteArgumentStart(string parameterName)
+            internal Writer WriteArgumentStart(string parameterName)
             {
                 switch (SyntaxFacts.GetKeywordKind(parameterName))
                 {
@@ -666,7 +666,7 @@ namespace Gu.Roslyn.Asserts
                            .Append(": ");
             }
 
-            public Writer WriteArgumentEnd(bool closeArgumentList)
+            internal Writer WriteArgumentEnd(bool closeArgumentList)
             {
                 if (closeArgumentList)
                 {
@@ -678,13 +678,13 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            public Writer PushIndent()
+            internal Writer PushIndent()
             {
                 this.indentation += "    ";
                 return this;
             }
 
-            public Writer PopIndent()
+            internal Writer PopIndent()
             {
                 this.indentation = this.indentation.Substring(0, this.indentation.Length - 4);
                 return this;

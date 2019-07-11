@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ClassMustBeSealedAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ClassMustBeSealed";
+        internal const string DiagnosticId = "ClassMustBeSealed";
 
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,

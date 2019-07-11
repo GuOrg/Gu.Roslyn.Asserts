@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class DummyAnalyzer : DiagnosticAnalyzer
     {
-        public DummyAnalyzer(params DiagnosticDescriptor[] descriptors)
+        internal DummyAnalyzer(params DiagnosticDescriptor[] descriptors)
         {
             this.SupportedDiagnostics = ImmutableArray.Create(descriptors);
         }

@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class SupportedDiagnosticsAnalyzer : DiagnosticAnalyzer
     {
-        public SupportedDiagnosticsAnalyzer(ImmutableArray<DiagnosticDescriptor> supportedDiagnostics)
+        internal SupportedDiagnosticsAnalyzer(ImmutableArray<DiagnosticDescriptor> supportedDiagnostics)
         {
             this.SupportedDiagnostics = supportedDiagnostics;
         }

@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class FieldNameMustNotBeginWithUnderscore : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "SA1309";
+        internal const string DiagnosticId = "SA1309";
 
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             DiagnosticId,

@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class ThrowingAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "Throws";
+        internal const string DiagnosticId = "Throws";
 
         internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
             id: DiagnosticId,

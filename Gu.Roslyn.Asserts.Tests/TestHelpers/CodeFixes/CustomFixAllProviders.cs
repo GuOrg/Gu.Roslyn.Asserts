@@ -19,6 +19,6 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
         /// <value>
         /// The default batch fix all provider.
         /// </value>
-        public static FixAllProvider BatchFixer => CustomBatchFixAllProvider.Instance;
+        internal static FixAllProvider BatchFixer => CustomBatchFixAllProvider.Instance;
     }
 }
