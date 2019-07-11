@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Analyzers.Tests
 {
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
@@ -117,6 +118,55 @@ namespace RoslynSandbox
 }";
 
             RoslynAssert.Valid(Analyzer, code);
+        }
+
+        [Test]
+        public static void WhenOnlyOneBeforeHasPosition()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class Foo1 { }"";
+            var code2 = ""class ↓Foo2 { }"";
+            var after = ""class Foo2 { }"";
+            RoslynAssert.CodeFix((DiagnosticAnalyzer)null, (CodeFixProvider)null, new [] { code1, code2 }, after);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class Foo1 { }"";
+            var before = ""class ↓Foo2 { }"";
+            var after = ""class Foo2 { }"";
+            RoslynAssert.CodeFix((DiagnosticAnalyzer)null, (CodeFixProvider)null, new [] { code1, before }, after);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'before'.");
+            var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Name of 'code2' should be 'before'.");
         }
 
         [Explicit("Temp ignore.")]

@@ -390,7 +390,7 @@ namespace Gu.Roslyn.Asserts
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }
 
-        private static void CodeFix(
+        public static void CodeFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
             DiagnosticsAndSources diagnosticsAndSources,

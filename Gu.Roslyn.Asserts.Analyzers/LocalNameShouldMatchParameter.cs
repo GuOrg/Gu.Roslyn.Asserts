@@ -34,33 +34,64 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is ArgumentSyntax argument &&
-                argument.Expression is IdentifierNameSyntax identifierName &&
                 argument.Parent is ArgumentListSyntax argumentList &&
                 argumentList.Parent is InvocationExpressionSyntax invocation &&
                 context.SemanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
-                context.SemanticModel.TryGetSymbol(identifierName, context.CancellationToken, out ILocalSymbol local) &&
                 method.ContainingType.Name == "RoslynAssert" &&
-                method.TryFindParameter(argument, out var parameter) &&
-                parameter.Name != local.Name &&
-                !IsParams())
+                method.TryFindParameter(argument, out var parameter))
             {
-                context.ReportDiagnostic(
-                    Diagnostic.Create(
-                        Descriptor,
-                        identifierName.GetLocation(),
-                        ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
-                        local.Name,
-                        parameter.Name));
-            }
-
-            bool IsParams()
-            {
-                if (parameter.IsParams)
+                if (argument.Expression is IdentifierNameSyntax identifierName &&
+                    context.SemanticModel.TryGetSymbol(identifierName, context.CancellationToken, out ILocalSymbol local) &&
+                    parameter.Name != local.Name &&
+                    !IsParams())
                 {
-                    return !invocation.TryFindArgument(parameter, out _);
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Descriptor,
+                            identifierName.GetLocation(),
+                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
+                            local.Name,
+                            parameter.Name));
+                }
+                else if (parameter.Name == "before" &&
+                         argument.Expression is ImplicitArrayCreationExpressionSyntax arrayCreation &&
+                         TryFindSingleWithPosition(arrayCreation.Initializer, out var before))
+                {
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Descriptor,
+                            before.GetLocation(),
+                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), "before"),
+                            before.Identifier.ValueText,
+                            "before"));
                 }
 
-                return false;
+                bool IsParams()
+                {
+                    if (parameter.IsParams)
+                    {
+                        return !invocation.TryFindArgument(parameter, out _);
+                    }
+
+                    return false;
+                }
+
+                bool TryFindSingleWithPosition(InitializerExpressionSyntax initializer, out IdentifierNameSyntax result)
+                {
+                    return initializer.Expressions.TrySingleOfType(x => HasPosition(x), out result);
+
+                    bool HasPosition(ExpressionSyntax expression)
+                    {
+                        return expression is IdentifierNameSyntax candidate &&
+                               context.SemanticModel.TryGetSymbol(candidate, context.CancellationToken, out ILocalSymbol candidateSymbol) &&
+                               candidateSymbol.TrySingleDeclaration(context.CancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
+                               localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
+                               variableDeclaration.Variables.TrySingle(out var variable) &&
+                               variable.Initializer is EqualsValueClauseSyntax localInitializer &&
+                               localInitializer.Value is LiteralExpressionSyntax literal &&
+                               literal.Token.ValueText.Contains("↓");
+                    }
+                }
             }
         }
     }
