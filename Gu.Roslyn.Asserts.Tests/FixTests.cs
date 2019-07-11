@@ -20,7 +20,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var fixedCode = @"
+            var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -34,10 +34,10 @@ namespace RoslynSandbox
             var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
             var diagnostic = Analyze.GetDiagnostics(sln, analyzer).SelectMany(x => x).Single();
             var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic);
-            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 
             fixedSln = await Fix.ApplyAsync(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic).ConfigureAwait(false);
-            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var fixedCode = @"
+            var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -68,7 +68,7 @@ namespace RoslynSandbox
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
-            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var fixedCode = @"
+            var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -97,7 +97,7 @@ namespace RoslynSandbox
             var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
-            CodeAssert.AreEqual(fixedCode, fixedSln.Projects.Single().Documents.Single());
+            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
     }
 }
