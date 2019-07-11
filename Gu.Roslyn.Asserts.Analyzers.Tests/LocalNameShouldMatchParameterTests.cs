@@ -6,9 +6,9 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
 
     public static class LocalNameShouldMatchParameterTests
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new LocalNameShouldMatchParameter();
+        private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
         private static readonly CodeFixProvider Fix = new RenameLocalFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(LocalNameShouldMatchParameter.Descriptor);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA01NameOfLocalShouldMatchParameter.Descriptor);
 
         [Test]
         public static void WhenAnalyzer()

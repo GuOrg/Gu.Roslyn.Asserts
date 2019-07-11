@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     [Shared]
     public class RenameLocalFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(LocalNameShouldMatchParameter.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(GURA01NameOfLocalShouldMatchParameter.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

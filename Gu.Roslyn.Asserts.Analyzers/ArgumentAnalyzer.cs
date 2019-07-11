@@ -8,21 +8,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class LocalNameShouldMatchParameter : DiagnosticAnalyzer
+    public class ArgumentAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "GURA01";
-
-        public static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            id: DiagnosticId,
-            title: "Name of local should match parameter.",
-            messageFormat: "Name of '{0}' should be '{1}'.",
-            category: AnalyzerCategory.Ocd,
-            defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
-            description: "Name of local should match parameter for max consistency.");
-
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
-            ImmutableArray.Create(Descriptor);
+            ImmutableArray.Create(GURA01NameOfLocalShouldMatchParameter.Descriptor);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -47,7 +36,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptor,
+                            GURA01NameOfLocalShouldMatchParameter.Descriptor,
                             identifierName.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
                             local.Name,
@@ -55,11 +44,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
                 else if (parameter.Name == "before" &&
                          argument.Expression is ImplicitArrayCreationExpressionSyntax arrayCreation &&
-                         TryFindSingleWithPosition(arrayCreation.Initializer, out var before))
+                         arrayCreation.Initializer is InitializerExpressionSyntax arrayInitializer &&
+                         arrayInitializer.Expressions.TrySingleOfType(x => HasPosition(x), out IdentifierNameSyntax before))
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptor,
+                            GURA01NameOfLocalShouldMatchParameter.Descriptor,
                             before.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), "before"),
                             before.Identifier.ValueText,
@@ -76,21 +66,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return false;
                 }
 
-                bool TryFindSingleWithPosition(InitializerExpressionSyntax initializer, out IdentifierNameSyntax result)
+                bool HasPosition(ExpressionSyntax expression)
                 {
-                    return initializer.Expressions.TrySingleOfType(x => HasPosition(x), out result);
-
-                    bool HasPosition(ExpressionSyntax expression)
-                    {
-                        return expression is IdentifierNameSyntax candidate &&
-                               context.SemanticModel.TryGetSymbol(candidate, context.CancellationToken, out ILocalSymbol candidateSymbol) &&
-                               candidateSymbol.TrySingleDeclaration(context.CancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
-                               localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
-                               variableDeclaration.Variables.TrySingle(out var variable) &&
-                               variable.Initializer is EqualsValueClauseSyntax localInitializer &&
-                               localInitializer.Value is LiteralExpressionSyntax literal &&
-                               literal.Token.ValueText.Contains("↓");
-                    }
+                    return expression is IdentifierNameSyntax candidate &&
+                           context.SemanticModel.TryGetSymbol(candidate, context.CancellationToken, out ILocalSymbol candidateSymbol) &&
+                           candidateSymbol.TrySingleDeclaration(context.CancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
+                           localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
+                           variableDeclaration.Variables.TrySingle(out var variable) &&
+                           variable.Initializer is EqualsValueClauseSyntax localInitializer &&
+                           localInitializer.Value is LiteralExpressionSyntax literal &&
+                           literal.Token.ValueText.Contains("↓");
                 }
             }
         }
