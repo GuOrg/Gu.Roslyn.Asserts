@@ -10,7 +10,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.CodeRefactorings;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Text;
     using NUnit.Framework;
 
     public static partial class RoslynAssertTests
@@ -34,6 +36,8 @@ namespace Gu.Roslyn.Asserts.Tests
             private static readonly ImmutableArray<IMethodSymbol> NoCompilerErrorsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoCompilerErrors));
             private static readonly ImmutableArray<IMethodSymbol> NoAnalyzerDiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoAnalyzerDiagnostics));
             private static readonly ImmutableArray<IMethodSymbol> NoFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoFix));
+            private static readonly ImmutableArray<IMethodSymbol> NoRefactoringMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.NoRefactoring));
+            private static readonly ImmutableArray<IMethodSymbol> RefactoringMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Refactoring));
             private static readonly ImmutableArray<IMethodSymbol> ValidMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Valid));
 
             [TestCaseSource(nameof(CodeFixMethods))]
@@ -128,6 +132,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(RefactoringMethods))]
             public static void BeforeParameter(IMethodSymbol method)
             {
                 if (!TryFindByType<DiagnosticsAndSources>(method.Parameters, out _) &&
@@ -135,9 +140,20 @@ namespace Gu.Roslyn.Asserts.Tests
                 {
                     Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "before", out var parameter));
                     Assert.AreEqual(false, parameter.IsOptional, "Optional.");
-                    if (TryFindByType<DiagnosticAnalyzer>(method.Parameters, out _))
+                    if (TryFindByType<DiagnosticAnalyzer>(method.Parameters, out var analyzerParameter))
                     {
-                        Assert.AreEqual("The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                        Assert.AreEqual($"The code to analyze with <paramref name=\"{analyzerParameter.Name}\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                    }
+                    else if (TryFindByType<CodeRefactoringProvider>(method.Parameters, out var refactoringParameter))
+                    {
+                        if (TryFindByType<TextSpan>(method.Parameters, out var spanParameter))
+                        {
+                            Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter.Name}\"/>. Position is provided by <paramref name=\"{spanParameter.Name}\"/>.", GetComment(parameter));
+                        }
+                        else
+                        {
+                            Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter.Name}\"/>. Indicate position with ↓ (alt + 25).", GetComment(parameter));
+                        }
                     }
                     else
                     {
@@ -148,11 +164,19 @@ namespace Gu.Roslyn.Asserts.Tests
 
             [TestCaseSource(nameof(CodeFixMethods))]
             [TestCaseSource(nameof(FixAllMethods))]
+            [TestCaseSource(nameof(RefactoringMethods))]
             public static void AfterParameter(IMethodSymbol method)
             {
                 Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "after", out var parameter));
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
-                Assert.AreEqual("The expected code produced by applying <paramref name=\"fix\"/>.", GetComment(parameter));
+                if (TryFindByType<CodeFixProvider>(method.Parameters, out var fix))
+                {
+                    Assert.AreEqual($"The expected code produced by applying <paramref name=\"{fix.Name}\"/>.", GetComment(parameter));
+                }
+                else if (TryFindByType<CodeRefactoringProvider>(method.Parameters, out var refactoring))
+                {
+                    Assert.AreEqual($"The expected code produced by <paramref name=\"{refactoring.Name}\"/>.", GetComment(parameter));
+                }
             }
 
             [TestCaseSource(nameof(ValidMethods))]
@@ -177,6 +201,21 @@ namespace Gu.Roslyn.Asserts.Tests
                             Assert.AreEqual($"The code to analyze using <paramref name=\"{method.Parameters[0].Name}\"/>. Analyzing the code is expected to produce no errors or warnings.", GetComment(parameter));
                             break;
                     }
+                }
+            }
+
+            [TestCaseSource(nameof(NoRefactoringMethods))]
+            public static void NoRefactoringCodeParameter(IMethodSymbol method)
+            {
+                Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
+                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                if (TryFindByType<TextSpan>(method.Parameters, out var spanParameter))
+                {
+                    Assert.AreEqual($"The code to analyze with <paramref name=\"refactoring\"/>. Position is provided by <paramref name=\"{spanParameter.Name}\"/>.", GetComment(parameter));
+                }
+                else
+                {
+                    Assert.AreEqual($"The code to analyze with <paramref name=\"refactoring\"/>. Indicate position with ↓ (alt + 25).", GetComment(parameter));
                 }
             }
 

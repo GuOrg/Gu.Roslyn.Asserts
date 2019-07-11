@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 if (parameter.IsParams)
                 {
-                    return !invocation.TryFindArgument(parameter, out var arg);
+                    return !invocation.TryFindArgument(parameter, out _);
                 }
 
                 return false;
