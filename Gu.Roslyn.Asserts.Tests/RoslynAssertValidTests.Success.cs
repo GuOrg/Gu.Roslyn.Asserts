@@ -94,18 +94,18 @@ namespace RoslynSandbox
             [Test]
             public static void ProjectFileNoErrorAnalyzer()
             {
-                var csproj = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
+                var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var analyzer = new NoErrorAnalyzer();
 
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
                     typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider));
-                RoslynAssert.Valid(analyzer, csproj, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), csproj, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code, metadataReferences: metadataReferences);
 
                 var descriptor = NoErrorAnalyzer.Descriptor;
-                RoslynAssert.Valid(analyzer, descriptor, csproj, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, csproj, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(analyzer, descriptor, code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code, metadataReferences: metadataReferences);
             }
 
             [Test]

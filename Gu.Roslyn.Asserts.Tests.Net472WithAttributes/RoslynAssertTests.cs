@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
         [Test]
         public void CodeFixSingleClassOneErrorCorrectFix()
         {
-            var code = @"
+            var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -29,7 +29,7 @@ namespace RoslynSandbox
     }
 }";
 
-            var fixedCode = @"
+            var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -39,7 +39,7 @@ namespace RoslynSandbox
 }";
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var fix = new DontUseUnderscoreCodeFixProvider();
-            RoslynAssert.CodeFix(analyzer, fix, code, fixedCode);
+            RoslynAssert.CodeFix(analyzer, fix, before, after);
         }
     }
 }

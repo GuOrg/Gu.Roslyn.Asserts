@@ -857,12 +857,12 @@ namespace ClassLibrary1
                     Path.Combine(csproj.DirectoryName, "ClassLibrary1Class1.cs"),
                     9,
                     20);
-                var sln = CodeFactory.CreateSolution(
+                var solution = CodeFactory.CreateSolution(
                     csproj,
                     analyzer,
                     expectedDiagnostic,
                     metadataReferences: new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) });
-                RoslynAssert.CodeFix(analyzer, new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, sln, after);
+                RoslynAssert.CodeFix(analyzer, new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, solution, after);
             }
         }
     }
