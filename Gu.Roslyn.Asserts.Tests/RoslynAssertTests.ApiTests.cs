@@ -117,9 +117,10 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 if (TryFindByType<DiagnosticDescriptor>(method.Parameters, out var parameter))
                 {
-                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                     Assert.AreEqual("descriptor", parameter.MetadataName);
-                    StringAssert.IsMatch("The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"\\w+\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.", GetComment(parameter));
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    string expected = $"The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"{method.Parameters[0].Name}\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.";
+                    Assert.AreEqual(expected, GetComment(parameter));
                 }
             }
 
@@ -150,6 +151,31 @@ namespace Gu.Roslyn.Asserts.Tests
                 Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "after", out var parameter));
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                 Assert.AreEqual("The expected code produced by applying <paramref name=\"fix\"/>.", GetComment(parameter));
+            }
+
+            [TestCaseSource(nameof(ValidMethods))]
+            public static void CodeParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<Solution>(method.Parameters, out var sln))
+                {
+                    Assert.AreEqual("solution", sln.MetadataName);
+                    Assert.AreEqual(false, sln.IsOptional, "Optional.");
+                }
+                else
+                {
+                    Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    switch (parameter.Type.Name)
+                    {
+                        case "FileInfo":
+                        case "Solution":
+                            break;
+                        default:
+                            Assert.AreEqual($"The code to analyze using <paramref name=\"{method.Parameters[0].Name}\"/>. Analyzing the code is expected to produce no errors or warnings.", GetComment(parameter));
+                            break;
+                    }
+                }
+
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]

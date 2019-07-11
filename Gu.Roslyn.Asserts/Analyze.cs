@@ -387,7 +387,7 @@ namespace Gu.Roslyn.Asserts
             /// </summary>
             /// <param name="errors">The compiler errors.</param>
             /// <param name="analyzerDiagnostics">The diagnostics for the analyzer.</param>
-            public DiagnosticsAndErrors(IReadOnlyList<ImmutableArray<Diagnostic>> errors, IReadOnlyList<ImmutableArray<Diagnostic>> analyzerDiagnostics)
+            internal DiagnosticsAndErrors(IReadOnlyList<ImmutableArray<Diagnostic>> errors, IReadOnlyList<ImmutableArray<Diagnostic>> analyzerDiagnostics)
             {
                 this.Errors = errors;
                 this.AnalyzerDiagnostics = analyzerDiagnostics;
