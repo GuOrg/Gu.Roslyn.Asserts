@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public static void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -41,14 +41,14 @@ namespace RoslynSandbox
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
                                "  at line 6 and character 29 in file Foo.cs | private readonly int ↓_value2;\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void SingleDocumentExplicitTitle()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -62,14 +62,14 @@ namespace RoslynSandbox
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
                                "Rename to: value\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, string.Empty, "WRONG"));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void SingleDocumentOneErrorWrongPosition()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -79,7 +79,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -93,7 +93,7 @@ namespace RoslynSandbox
             [Test]
             public static void FixDoesNotMatchAnalyzer()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -113,7 +113,7 @@ namespace RoslynSandbox
 
                 var analyzer = new NoErrorAnalyzer();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, fixedCode));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
@@ -123,7 +123,7 @@ namespace RoslynSandbox
             [Test]
             public static void SingleDocumentOneErrorErrorInFix()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -142,7 +142,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, fixedCode));
                 var expected = "Applying fixes one by one failed.\r\n" +
                                "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
@@ -179,7 +179,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -198,7 +198,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, new[] { barCode, code }, new[] { barCode, fixedCode }));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, new[] { barCode, fixedCode }));
                 var expected = "Applying fixes one by one failed.\r\n" +
                                "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
@@ -226,7 +226,7 @@ namespace RoslynSandbox
             [Test]
             public static void IndicatedAndActualPositionDoNotMatch()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -236,7 +236,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -251,7 +251,7 @@ namespace RoslynSandbox
             public static void WhenFixIntroducesCompilerErrors()
             {
                 RoslynAssert.MetadataReferences.Clear();
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     ↓class Foo
@@ -269,7 +269,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, fixedCode));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file Foo.cs | class ↓Foo\r\n" +

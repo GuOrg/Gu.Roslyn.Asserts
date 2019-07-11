@@ -220,7 +220,7 @@ namespace RoslynSandbox.Properties
     }
 }";
 
-                var testCode = @"
+                var code = @"
 namespace RoslynSandbox
 {
     using RoslynSandbox.Properties;
@@ -230,15 +230,15 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
-                RoslynAssert.Valid(analyzer, resourcesCode, testCode);
-                RoslynAssert.Valid(analyzer, testCode, resourcesCode);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, testCode);
+                RoslynAssert.Valid(analyzer, resourcesCode, code);
+                RoslynAssert.Valid(analyzer, code, resourcesCode);
+                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, code);
             }
 
             [Test]
             public static void AnalyzerWithTwoDiagnostics()
             {
-                var testCode = @"
+                var code = @"
 namespace RoslynSandbox
 {
     public class Foo
@@ -247,7 +247,7 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
-                RoslynAssert.Valid(analyzer, testCode);
+                RoslynAssert.Valid(analyzer, code);
             }
 
             [Test]
