@@ -154,7 +154,7 @@ namespace Gu.Roslyn.Asserts.Tests
             }
 
             [TestCaseSource(nameof(ValidMethods))]
-            public static void CodeParameter(IMethodSymbol method)
+            public static void ValidCodeParameter(IMethodSymbol method)
             {
                 if (TryFindByType<Solution>(method.Parameters, out var sln))
                 {
@@ -175,7 +175,34 @@ namespace Gu.Roslyn.Asserts.Tests
                             break;
                     }
                 }
+            }
 
+            [TestCaseSource(nameof(DiagnosticsMethods))]
+            [TestCaseSource(nameof(NoFixMethods))]
+            public static void CodeParameter(IMethodSymbol method)
+            {
+                if (TryFindByType<Solution>(method.Parameters, out var sln))
+                {
+                    Assert.AreEqual("solution", sln.MetadataName);
+                    Assert.AreEqual(false, sln.IsOptional, "Optional.");
+                }
+                else if (TryFindByType<DiagnosticsAndSources>(method.Parameters, out _))
+                {
+                }
+                else
+                {
+                    Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
+                    Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                    switch (parameter.Type.Name)
+                    {
+                        case "FileInfo":
+                        case "Solution":
+                            break;
+                        default:
+                            Assert.AreEqual($"The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", GetComment(parameter));
+                            break;
+                    }
+                }
             }
 
             [TestCaseSource(nameof(CodeFixMethods))]
