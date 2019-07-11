@@ -41,7 +41,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 context.SemanticModel.TryGetSymbol(identifierName, context.CancellationToken, out ILocalSymbol local) &&
                 method.ContainingType.Name == "RoslynAssert" &&
                 method.TryFindParameter(argument, out var parameter) &&
-                parameter.Name != local.Name)
+                parameter.Name != local.Name &&
+                !IsParams())
             {
                 context.ReportDiagnostic(
                     Diagnostic.Create(
@@ -50,6 +51,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
                         local.Name,
                         parameter.Name));
+            }
+
+            bool IsParams()
+            {
+                if (parameter.IsParams)
+                {
+                    return !invocation.TryFindArgument(parameter, out var arg);
+                }
+
+                return false;
             }
         }
     }

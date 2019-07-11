@@ -145,23 +145,23 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> actuals, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string expectedMessage = null)
         {
-            VerifyDiagnostics(diagnosticsAndSources, actuals.SelectMany(x => x).ToArray(), expectedMessage);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics.SelectMany(x => x).ToArray(), expectedMessage);
         }
 
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> actuals, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> diagnostics, string expectedMessage = null)
         {
             if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
                 throw new AssertException("Expected code to have at least one error position indicated with '↓'");
             }
 
-            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(actuals))
+            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(diagnostics))
             {
                 if (expectedMessage != null)
                 {
-                    foreach (var actual in actuals)
+                    foreach (var actual in diagnostics)
                     {
                         var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
                         TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
@@ -172,19 +172,19 @@ namespace Gu.Roslyn.Asserts
             }
 
             var error = StringBuilderPool.Borrow();
-            if (actuals.Count == 1 &&
+            if (diagnostics.Count == 1 &&
                 diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
-                diagnosticsAndSources.ExpectedDiagnostics[0].Id == actuals[0].Id)
+                diagnosticsAndSources.ExpectedDiagnostics[0].Id == diagnostics[0].Id)
             {
-                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(actuals[0]) &&
-                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(actuals[0]))
+                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(diagnostics[0]) &&
+                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(diagnostics[0]))
                 {
-                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, actuals[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, diagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
                 }
             }
 
             error.AppendLine("Expected and actual diagnostics do not match.");
-            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(actuals);
+            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(diagnostics);
             for (var i = 0; i < missingExpected.Count; i++)
             {
                 if (i == 0)
@@ -196,13 +196,13 @@ namespace Gu.Roslyn.Asserts
                 error.AppendLine(expected.ToString(diagnosticsAndSources.Code));
             }
 
-            if (actuals.Count == 0)
+            if (diagnostics.Count == 0)
             {
                 error.AppendLine("Actual: <no errors>");
             }
 
-            var missingActual = actuals.Except(diagnosticsAndSources.ExpectedDiagnostics);
-            if (actuals.Count > 0 && missingActual.Count == 0)
+            var missingActual = diagnostics.Except(diagnosticsAndSources.ExpectedDiagnostics);
+            if (diagnostics.Count > 0 && missingActual.Count == 0)
             {
                 error.AppendLine("Actual: <missing>");
             }

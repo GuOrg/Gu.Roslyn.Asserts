@@ -15,6 +15,20 @@ namespace Gu.Roslyn.Asserts
         internal static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
         private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
+        /// <inheritdoc />
+        bool IEqualityComparer<MetadataReference>.Equals(MetadataReference x, MetadataReference y) => Equals(x, y);
+
+        /// <inheritdoc />
+        public int GetHashCode(MetadataReference obj)
+        {
+            if (obj is PortableExecutableReference portable)
+            {
+                return OrdinalIgnoreCase.GetHashCode(portable.FilePath);
+            }
+
+            return obj.GetHashCode();
+        }
+
         /// <summary>
         /// Suppressing this with Obsolete to it is not used by mistake.
         /// </summary>
@@ -52,20 +66,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             return object.Equals(x, y);
-        }
-
-        /// <inheritdoc />
-        bool IEqualityComparer<MetadataReference>.Equals(MetadataReference x, MetadataReference y) => Equals(x, y);
-
-        /// <inheritdoc />
-        public int GetHashCode(MetadataReference obj)
-        {
-            if (obj is PortableExecutableReference portable)
-            {
-                return OrdinalIgnoreCase.GetHashCode(portable.FilePath);
-            }
-
-            return obj.GetHashCode();
         }
     }
 }
