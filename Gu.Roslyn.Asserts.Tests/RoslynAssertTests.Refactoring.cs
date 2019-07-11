@@ -11,36 +11,36 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public static void WithPositionIndicated()
             {
-                var testCode = @"
+                var before = @"
 class ↓Foo
 {
 }";
 
-                var fixedCode = @"
+                var after = @"
 class FOO
 {
 }";
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                RoslynAssert.Refactoring(refactoring, testCode, fixedCode);
-                RoslynAssert.Refactoring(refactoring, testCode, fixedCode, title: "To uppercase");
+                RoslynAssert.Refactoring(refactoring, before, after);
+                RoslynAssert.Refactoring(refactoring, before, after, title: "To uppercase");
             }
 
             [Test]
             public static void WithPositionIndicatedWhenNotExpectedCode()
             {
-                var testCode = @"
+                var before = @"
 class ↓Foo
 {
 }";
 
-                var fixedCode = @"
+                var after = @"
 class WRONG
 {
 }";
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, after));
                 var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
 Actual:   class FOO
@@ -57,43 +57,43 @@ class FOO
 }
 ";
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, fixedCode, title: "To uppercase"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, after, title: "To uppercase"));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void WithSpan()
             {
-                var testCode = @"
+                var before = @"
 class Foo
 {
 }";
 
-                var fixedCode = @"
+                var after = @"
 class FOO
 {
 }";
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode);
-                RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode, title: "To uppercase");
+                RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after);
+                RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after, title: "To uppercase");
             }
 
             [Test]
             public static void WithSpanWhenNotExpectedCode()
             {
-                var testCode = @"
+                var before = @"
 class Foo
 {
 }";
 
-                var fixedCode = @"
+                var after = @"
 class WRONG
 {
 }";
 
                 var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after));
                 var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
 Actual:   class FOO
@@ -110,7 +110,7 @@ class FOO
 }
 ";
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, testCode, new TextSpan(8, 3), fixedCode, title: "To uppercase"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after, title: "To uppercase"));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
         }

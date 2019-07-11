@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public static void SingleDocumentExplicitTitle()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -35,7 +35,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -49,16 +49,20 @@ namespace RoslynSandbox
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "WRONG"));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "WRONG"));
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "WRONG"));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void SingleDocumentTwoIndicatedErrors()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -68,7 +72,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -85,23 +89,26 @@ namespace RoslynSandbox
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode, fixTitle: "Rename to value"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to value"));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }, fixTitle: "Rename to value"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to value"));
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void SingleDocumentTwoErrors()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -112,7 +119,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
@@ -123,7 +130,7 @@ namespace RoslynSandbox
             [Test]
             public static void SingleDocumentOneErrorWrongPosition()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -133,7 +140,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
@@ -147,7 +154,7 @@ namespace RoslynSandbox
             [Test]
             public static void SingleDocumentOneErrorNoFix()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -157,7 +164,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new NoCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = "Expected one code fix, was 0.";
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -165,7 +172,7 @@ namespace RoslynSandbox
             [Test]
             public static void SingleDocumentOneErrorTwoFixes()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -175,7 +182,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new TwoFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = "Expected only one code fix, found 2:\r\n" +
                                "Rename to: value1\r\n" +
                                "Rename to: value2\r\n" +
@@ -186,7 +193,7 @@ namespace RoslynSandbox
             [Test]
             public static void SingleDocumentOneErrorEmptyFix()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -197,7 +204,7 @@ namespace RoslynSandbox
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new EmptyCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.EmptyCodeFixProvider did not change any document.";
                 Console.Write(exception.Message);
                 Assert.AreEqual(expected, exception.Message);
@@ -206,7 +213,7 @@ namespace RoslynSandbox
             [Test]
             public static void FixDoesNotMatchAnalyzer()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -215,7 +222,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -225,7 +232,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new NoErrorAnalyzer();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
                                "The analyzer produces the following diagnostics: {NoError}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
@@ -235,7 +242,7 @@ namespace RoslynSandbox
             [Test]
             public static void OneErrorWhenFixedCodeDoesNotMatchExpected()
             {
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -244,7 +251,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -254,7 +261,7 @@ namespace RoslynSandbox
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
@@ -290,7 +297,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var code = @"
+                var before = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -299,7 +306,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -329,7 +336,7 @@ namespace RoslynSandbox
                                "}\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, code }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, before }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -353,7 +360,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     public partial class Foo
@@ -387,11 +394,11 @@ namespace RoslynSandbox
                                "}\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -417,7 +424,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     using System;
@@ -455,9 +462,9 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n";
                 var fix = new RemoveUnusedFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, new[] { fixedCode, part2 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -523,7 +530,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode1 = @"
+                var after1 = @"
 namespace RoslynSandbox
 {
     class C1
@@ -532,7 +539,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode2 = @"
+                var after2 = @"
 namespace RoslynSandbox
 {
     class C2
@@ -569,22 +576,22 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, fixedCode2 }));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, after2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, fixedCode2 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, after2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, code1 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { after2, code1 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, code1 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { after2, code1 }));
                 CodeAssert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, fixedCode2 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code1, after2 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, fixedCode2 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code1, after2 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode2, code1 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { after2, code1 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode2, code1 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { after2, code1 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
 
                 expected = "Mismatch on line 8 of file C2.cs.\r\n" +
@@ -616,22 +623,22 @@ namespace RoslynSandbox
                            "    }\r\n" +
                            "}\r\n";
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, code2 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { after1, code2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, code2 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { after1, code2 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, fixedCode1 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, after1 }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, fixedCode1 }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, after1 }));
                 CodeAssert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { fixedCode1, code2 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { after1, code2 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { fixedCode1, code2 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { after1, code2 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, fixedCode1 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code1, code2 }, new[] { code2, after1 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, fixedCode1 }, fixTitle: "Rename to: Foo"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code2, code1 }, new[] { code2, after1 }, fixTitle: "Rename to: Foo"));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -647,7 +654,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class C
@@ -684,14 +691,14 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { after, extensionMethodCode }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { after, extensionMethodCode }));
                 CodeAssert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }, fixTitle: "Call ID()"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { after, extensionMethodCode }, fixTitle: "Call ID()"));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode, extensionMethodCode }, fixTitle: "Call ID()"));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { after, extensionMethodCode }, fixTitle: "Call ID()"));
                 CodeAssert.AreEqual(expected, exception.Message);
 
                 extensionMethodCode = @"namespace RoslynSandbox
@@ -747,7 +754,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class C
@@ -758,11 +765,11 @@ namespace RoslynSandbox
 
                 var analyzer = new CallIdAnalyzer();
                 var fix = new CallIdFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, after));
                 CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, fixedCode));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, after));
                 CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { fixedCode }));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { code }, new[] { after }));
                 CodeAssert.AreEqual("Expected 1 documents the fixed solution has 2 documents.", exception.Message);
             }
 
@@ -777,7 +784,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var fixedCode = @"
+                var after = @"
 namespace RoslynSandbox
 {
     class Foo
@@ -801,7 +808,7 @@ namespace RoslynSandbox
 ";
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, fixedCode));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, code, after));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
