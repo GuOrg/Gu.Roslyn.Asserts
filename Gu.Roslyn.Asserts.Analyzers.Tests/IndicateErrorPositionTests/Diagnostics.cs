@@ -122,5 +122,32 @@ namespace RoslynSandbox
 
             RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, AnalyzerCode, code);
         }
+
+        [Test]
+        public static void RoslynAssertCodeFixOneBefore()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly PlaceHolderFix Fix = new PlaceHolderFix();
+
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class Foo { }"";
+            var code2 = ""class Foo { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, ↓new [] { code1, code2 }, string.Empty);
+        }
+    }
+}";
+
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, AnalyzerCode, FixCode, code);
+        }
     }
 }

@@ -252,5 +252,51 @@ namespace RoslynSandbox
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { AnalyzerCode, before }, after);
         }
+
+        [Test]
+        public static void RoslynAssertCodeFixOneBefore()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly PlaceHolderFix Fix = new PlaceHolderFix();
+
+        [Test]
+        public static void M()
+        {
+            var before = ""class Foo { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, ↓before, string.Empty);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly PlaceHolderFix Fix = new PlaceHolderFix();
+
+        [Test]
+        public static void M()
+        {
+            var before = ""↓class Foo { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, before, string.Empty);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { AnalyzerCode, FixCode, before }, after);
+        }
     }
 }

@@ -89,7 +89,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private struct StringArg
         {
             private readonly ExpressionSyntax expression;
+#pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
             private readonly ILocalSymbol local;
+#pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
             private readonly LiteralExpressionSyntax literal;
 
             private StringArg(ExpressionSyntax identifierName, ILocalSymbol local, LiteralExpressionSyntax literal)
