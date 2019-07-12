@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
@@ -67,6 +67,57 @@ namespace RoslynSandbox
         public override Task RegisterCodeFixesAsync(CodeFixContext context) => Task.FromResult(true);
     }
 }";
+
+        [Test]
+        public static void WhenAnalyzerCorrectName()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            RoslynAssert.Valid(Analyzer, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, AnalyzerCode, code);
+        }
+
+        [Test]
+        public static void DoNotWarnWhenTwoParams()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class C { }"";
+            var code2 = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, code1, code2);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, AnalyzerCode, code);
+        }
 
         [Test]
         public static void RoslynAssertCodeFixOneParamWithPosition()
