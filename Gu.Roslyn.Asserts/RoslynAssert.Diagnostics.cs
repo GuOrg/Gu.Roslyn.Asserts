@@ -138,30 +138,31 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
                 NoCompilerErrors(sln);
             }
         }
 
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string expectedMessage = null)
-        {
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics.SelectMany(x => x).ToArray(), expectedMessage);
-        }
-
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<Diagnostic> diagnostics, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, Solution solution, string expectedMessage = null)
         {
             if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {
                 throw new AssertException("Expected code to have at least one error position indicated with '↓'");
             }
 
-            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(diagnostics))
+            var allDiagnostics = diagnostics.SelectMany(x => x).ToArray();
+            if (allDiagnostics.Length == 0)
+            {
+                allDiagnostics = Analyze.GetDiagnostics(solution).SelectMany(x => x).ToArray();
+            }
+
+            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(allDiagnostics))
             {
                 if (expectedMessage != null)
                 {
-                    foreach (var actual in diagnostics)
+                    foreach (var actual in allDiagnostics)
                     {
                         var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
                         TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
@@ -172,19 +173,19 @@ namespace Gu.Roslyn.Asserts
             }
 
             var error = StringBuilderPool.Borrow();
-            if (diagnostics.Count == 1 &&
+            if (allDiagnostics.Length == 1 &&
                 diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
-                diagnosticsAndSources.ExpectedDiagnostics[0].Id == diagnostics[0].Id)
+                diagnosticsAndSources.ExpectedDiagnostics[0].Id == allDiagnostics[0].Id)
             {
-                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(diagnostics[0]) &&
-                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(diagnostics[0]))
+                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(allDiagnostics[0]) &&
+                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(allDiagnostics[0]))
                 {
-                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, diagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, allDiagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
                 }
             }
 
             error.AppendLine("Expected and actual diagnostics do not match.");
-            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(diagnostics);
+            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(allDiagnostics);
             for (var i = 0; i < missingExpected.Count; i++)
             {
                 if (i == 0)
@@ -196,13 +197,13 @@ namespace Gu.Roslyn.Asserts
                 error.AppendLine(expected.ToString(diagnosticsAndSources.Code));
             }
 
-            if (diagnostics.Count == 0)
+            if (allDiagnostics.Length == 0)
             {
                 error.AppendLine("Actual: <no errors>");
             }
 
-            var missingActual = diagnostics.Except(diagnosticsAndSources.ExpectedDiagnostics);
-            if (diagnostics.Count > 0 && missingActual.Count == 0)
+            var missingActual = allDiagnostics.Except(diagnosticsAndSources.ExpectedDiagnostics);
+            if (allDiagnostics.Length > 0 && missingActual.Count == 0)
             {
                 error.AppendLine("Actual: <missing>");
             }

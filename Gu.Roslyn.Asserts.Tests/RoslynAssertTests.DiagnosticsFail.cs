@@ -11,13 +11,26 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class DiagnosticsFail
         {
+            [OneTimeSetUp]
+            public static void OneTimeSetUp()
+            {
+                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
+            }
+
+            [OneTimeTearDown]
+            public static void OneTimeTearDown()
+            {
+                RoslynAssert.ResetAll();
+            }
+
+
             [Test]
             public static void MessageDoNotMatch()
             {
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private int ↓_value;
     }
@@ -39,7 +52,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -55,7 +68,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -65,20 +78,51 @@ namespace RoslynSandbox
             }
 
             [Test]
-            public static void NoErrorInCode()
+            public static void NoDiagnosticOrError()
             {
                 var code = @"
 namespace RoslynSandbox
 {
-    ↓class Foo
+    class C
     {
+        private int ↓i;
+        
+        C(int i)
+        {
+            this.i = i;
+        }
+
+        public override string ToString() => this.i.ToString();
     }
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 3 and character 4 in file Foo.cs | ↓class Foo\r\n" +
+                               "  at line 5 and character 20 in file C.cs | private int ↓i;\r\n" +
                                "Actual: <no errors>\r\n";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
+                Assert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public static void NoDiagnosticButSyntaxError()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class C
+    {
+        private int ↓i = SYNTAX_ERROR;
+    }
+}";
+                var expected = "Expected and actual diagnostics do not match.\r\n" +
+                               "Expected:\r\n" +
+                               "SA1309 \r\n" +
+                               "  at line 5 and character 20 in file C.cs | private int ↓i = SYNTAX_ERROR;\r\n" +
+                               "Actual:\r\n" +
+                               "CS0103 The name 'SYNTAX_ERROR' does not exist in the current context\r\n" +
+                               "  at line 5 and character 24 in file C.cs | private int i = ↓SYNTAX_ERROR;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -140,7 +184,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -148,10 +192,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -163,7 +207,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -171,10 +215,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -191,7 +235,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -216,7 +260,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
     }
@@ -241,7 +285,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
     }
@@ -249,10 +293,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 8 in file Foo.cs | ↓private readonly int _value1;\r\n" +
+                               "  at line 5 and character 8 in file C.cs | ↓private readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore", 5, 8);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -298,7 +342,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -306,10 +350,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -326,7 +370,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         ↓private readonly int _value1;
     }
@@ -334,10 +378,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 Wrong message\r\n" +
-                               "  at line 5 and character 8 in file Foo.cs | ↓private readonly int _value1;\r\n" +
+                               "  at line 5 and character 8 in file C.cs | ↓private readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Wrong message", code, out code);
 
@@ -355,7 +399,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -363,10 +407,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA13090 \r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA13090 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -378,7 +422,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int _value2;
@@ -389,7 +433,7 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
-                               "  at line 6 and character 29 in file Foo.cs | private readonly int ↓_value2;\r\n";
+                               "  at line 6 and character 29 in file C.cs | private readonly int ↓_value2;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -399,7 +443,7 @@ namespace RoslynSandbox
                 var code1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int _value1;
     }
@@ -408,7 +452,7 @@ namespace RoslynSandbox
                 var code2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int ↓value2;
     }
@@ -419,10 +463,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 5 and character 29 in file Foo2.cs | private readonly int ↓value2;\r\n" +
+                               "  at line 5 and character 29 in file C2.cs | private readonly int ↓value2;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo1.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C1.cs | private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -470,24 +514,16 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value = 1;
         INCOMPLETE
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var expected = @"Found errors.
+                var expected = @"Found error.
 CS1519 Invalid token '}' in class, struct, or interface member declaration
-  at line 7 and character 4 in file Foo.cs | ↓}
-CS0518 Predefined type 'System.Object' is not defined or imported
-  at line 3 and character 10 in file Foo.cs | class ↓Foo
-CS0518 Predefined type 'System.Int32' is not defined or imported
-  at line 5 and character 25 in file Foo.cs | private readonly ↓int _value = 1;
-CS0518 Predefined type 'System.Int32' is not defined or imported
-  at line 5 and character 38 in file Foo.cs | private readonly int _value = ↓1;
-CS1729 'object' does not contain a constructor that takes 0 arguments
-  at line 3 and character 10 in file Foo.cs | class ↓Foo
+  at line 7 and character 4 in file C.cs | ↓}
 ";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 CodeAssert.AreEqual(expected, exception.Message);

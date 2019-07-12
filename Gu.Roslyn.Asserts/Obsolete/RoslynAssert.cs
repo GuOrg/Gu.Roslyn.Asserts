@@ -576,7 +576,7 @@ namespace Gu.Roslyn.Asserts
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, SuppressedDiagnostics, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
         }
 

@@ -130,6 +130,43 @@ namespace RoslynSandbox
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public static void WhenNoAnalyzerDiagnosticsButCompilerError()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓value = SYNTAX_ERROR;
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new NoCodeFixProvider();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var expected = @"Expected and actual diagnostics do not match.
+Expected:
+SA1309 
+  at line 5 and character 29 in file Foo.cs | private readonly int ↓value = SYNTAX_ERROR;
+Actual:
+CS0103 The name 'SYNTAX_ERROR' does not exist in the current context
+  at line 5 and character 37 in file Foo.cs | private readonly int value = ↓SYNTAX_ERROR;
+";
+
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code, string.Empty));
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }

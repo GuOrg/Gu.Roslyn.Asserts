@@ -386,7 +386,7 @@ namespace Gu.Roslyn.Asserts
             var diagnosticsAndSources = DiagnosticsAndSources.Create(
                 expectedDiagnostic,
                 solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, solution);
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }
 
@@ -425,7 +425,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics: suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences: metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, allowCompilationErrors);
         }
 

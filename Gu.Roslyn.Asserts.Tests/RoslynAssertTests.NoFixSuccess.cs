@@ -35,14 +35,34 @@ namespace RoslynSandbox
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new NoCodeFixProvider();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), code);
+                RoslynAssert.NoFix(analyzer, fix, code);
                 RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, code);
                 RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
             }
 
             [Test]
-            public static void TwoClassOneErrorNoFix()
+            public static void OneDocumentOneErrorNoFix()
+            {
+                var code = @"
+namespace RoslynSandbox
+{
+    class Foo
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new NoCodeFixProvider();
+                RoslynAssert.NoFix(analyzer, fix, code);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code);
+            }
+
+            [Test]
+            public static void TwoDocumentsOneErrorNoFix()
             {
                 var barCode = @"
 namespace RoslynSandbox

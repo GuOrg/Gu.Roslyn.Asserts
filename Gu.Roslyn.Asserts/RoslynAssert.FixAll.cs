@@ -385,7 +385,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics: suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences: metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, after, fixTitle, allowCompilationErrors);
 
             var fixAllProvider = fix.GetFixAllProvider();
@@ -473,7 +473,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors, FixAllScope.Document);
         }
 
@@ -512,7 +512,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
         }
 
@@ -553,7 +553,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
         }
 
@@ -593,7 +593,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
         }
 
@@ -635,7 +635,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
         }
 
@@ -676,7 +676,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
         }
 
@@ -719,7 +719,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
         }
 

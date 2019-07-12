@@ -187,7 +187,7 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
                 NoCompilerErrors(sln);
