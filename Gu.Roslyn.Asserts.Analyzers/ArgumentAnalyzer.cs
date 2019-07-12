@@ -1,13 +1,15 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System;
     using System.Collections.Immutable;
-    using System.Linq;
+    using System.Diagnostics;
     using System.Threading;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.Text;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ArgumentAnalyzer : DiagnosticAnalyzer
@@ -45,28 +47,29 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             local.Name,
                             parameter.Name));
                 }
-                else if (StringArg.ShouldHavePosition(parameter))
+
+                if (StringArg.ShouldHavePosition(parameter, out var message))
                 {
-                    var args = StringArg.Create(argument, context.SemanticModel, context.CancellationToken);
-                    if (args.TrySingle(x => x.HasPosition != false, out var stringArg) &&
-                        stringArg.IdentifierName.Identifier.ValueText != parameter.Name)
+                    var args = StringArg.CreateMany(argument, parameter, context.SemanticModel, context.CancellationToken);
+                    if (StringArg.ShouldRename(argument, parameter, args, out var toRename))
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
                                 GURA01NameOfLocalShouldMatchParameter.Descriptor,
-                                stringArg.IdentifierName.GetLocation(),
+                                toRename.GetLocation(),
                                 ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
-                                stringArg.IdentifierName.Identifier.ValueText,
+                                toRename.Identifier.ValueText,
                                 parameter.Name));
                     }
 
-                    if (!args.TryFirst(x => x.HasPosition != false, out stringArg))
+                    if (StringArg.ShouldIndicatePosition(argument, parameter, args, out var location, out var additionalLocation))
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
                                 GURA02IndicateErrorPosition.Descriptor,
-                                argument.GetLocation(),
-                                additionalLocations: new[] { stringArg.Literal.GetLocation() }));
+                                location,
+                                messageArgs: message,
+                                additionalLocations: additionalLocation == null ? Array.Empty<Location>() : new[] { additionalLocation }));
                     }
                 }
 
@@ -82,39 +85,74 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
+        [DebuggerDisplay("{expression}")]
         private struct StringArg
         {
-            public readonly IdentifierNameSyntax IdentifierName;
+            private readonly ExpressionSyntax expression;
+            private readonly ILocalSymbol local;
+            private readonly LiteralExpressionSyntax literal;
 
-            public readonly LiteralExpressionSyntax Literal;
-
-            private StringArg(IdentifierNameSyntax identifierName, LiteralExpressionSyntax literal)
+            private StringArg(ExpressionSyntax identifierName, ILocalSymbol local, LiteralExpressionSyntax literal)
             {
-                this.IdentifierName = identifierName;
-                this.Literal = literal;
+                this.expression = identifierName;
+                this.local = local;
+                this.literal = literal;
             }
 
-            internal bool? HasPosition => this.Literal?.Token.ValueText.Contains("↓");
+            private bool? HasPosition => this.literal?.Token.ValueText.Contains("↓");
 
-            internal static bool ShouldHavePosition(IParameterSymbol parameter)
+            internal static bool ShouldHavePosition(IParameterSymbol parameter, out string message)
             {
-                return parameter.Name == "before" ||
-                       (parameter.ContainingSymbol.Name == "Diagnostics" && parameter.Name == "code");
+                if (parameter.Name == "before" ||
+                    (parameter.ContainingSymbol.Name == "Diagnostics" && parameter.Name == "code") ||
+                    (parameter.ContainingSymbol.Name == "Refactoring" && parameter.Name == "code"))
+                {
+                    message = "Indicate expected error position with ↓ (alt + 25).";
+                    return true;
+                }
+
+                if (parameter.ContainingSymbol is IMethodSymbol method &&
+                    method.Name == "Refactoring" &&
+                    !method.Parameters.TryFirst(x => x.Type.MetadataName == typeof(TextSpan).Name, out _))
+                {
+                    message = "Indicate cursor position with ↓ (alt + 25).";
+                    return true;
+                }
+
+                message = null;
+                return false;
             }
 
-            internal static ImmutableArray<StringArg> Create(ArgumentSyntax argument, SemanticModel semanticModel, CancellationToken cancellationToken)
+            internal static ImmutableArray<StringArg> CreateMany(ArgumentSyntax argument, IParameterSymbol parameter, SemanticModel semanticModel, CancellationToken cancellationToken)
             {
-                if (argument.Expression is IdentifierNameSyntax identifierName)
+                if (TryGetInitializer(out var initializer))
                 {
-                    return ImmutableArray.Create(new StringArg(identifierName, FindLiteral(identifierName)));
-                }
-                else if (TryGetInitializer(out var initializer) &&
-                         !initializer.Expressions.TryFirst(x => !x.IsKind(SyntaxKind.IdentifierName), out _))
-                {
-                    return ImmutableArray.CreateRange(initializer.Expressions.Cast<IdentifierNameSyntax>().Select(x => new StringArg(x, FindLiteral(x))));
+                    var builder = ImmutableArray.CreateBuilder<StringArg>(initializer.Expressions.Count);
+                    foreach (var expression in initializer.Expressions)
+                    {
+                        builder.Add(Create(expression, semanticModel, cancellationToken));
+                    }
+
+                    return builder.MoveToImmutable();
                 }
 
-                return ImmutableArray<StringArg>.Empty;
+                if (parameter.IsParams)
+                {
+                    if (argument.Parent is ArgumentListSyntax argumentList)
+                    {
+                        var builder = ImmutableArray.CreateBuilder<StringArg>(argumentList.Arguments.Count - parameter.Ordinal);
+                        for (var i = parameter.Ordinal; i < argumentList.Arguments.Count; i++)
+                        {
+                            builder.Add(Create(argumentList.Arguments[i].Expression, semanticModel, cancellationToken));
+                        }
+
+                        return builder.MoveToImmutable();
+                    }
+
+                    return ImmutableArray<StringArg>.Empty;
+                }
+
+                return ImmutableArray.Create(Create(argument.Expression, semanticModel, cancellationToken));
 
                 bool TryGetInitializer(out InitializerExpressionSyntax result)
                 {
@@ -134,24 +172,71 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             return false;
                     }
                 }
+            }
 
-                LiteralExpressionSyntax FindLiteral(IdentifierNameSyntax local)
+            internal static bool ShouldIndicatePosition(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<StringArg> args, out Location location, out Location additionalLocation)
+            {
+                if (args.TryFirst(x => x.HasPosition == true, out _))
                 {
-                    if (semanticModel.TryGetSymbol(local, cancellationToken,
-                            out ILocalSymbol candidateSymbol) &&
-                        candidateSymbol.TrySingleDeclaration(cancellationToken,
-                            out LocalDeclarationStatementSyntax localDeclaration) &&
-                        localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
-                        variableDeclaration.Variables.TrySingle(out var variable) &&
-                        variable.Initializer is EqualsValueClauseSyntax localInitializer &&
-                        localInitializer.Value is LiteralExpressionSyntax literal &&
-                        literal.IsKind(SyntaxKind.StringLiteralExpression))
-                    {
-                        return literal;
-                    }
-
-                    return null;
+                    location = null;
+                    additionalLocation = null;
+                    return false;
                 }
+
+                if (args.TrySingle(x => x.local != null && x.HasPosition == false, out var match))
+                {
+                    location = match.expression.GetLocation();
+                    additionalLocation = match.literal.GetLocation();
+                    return argument.Contains(match.expression);
+                }
+
+                if (args.TrySingle(x => x.local != null && x.HasPosition == false && x.local.Name == parameter.Name, out match))
+                {
+                    location = match.expression.GetLocation();
+                    additionalLocation = match.literal.GetLocation();
+                    return argument.Contains(match.expression);
+                }
+
+                location = argument.GetLocation();
+                additionalLocation = null;
+                return true;
+            }
+
+            internal static bool ShouldRename(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<StringArg> args, out IdentifierNameSyntax identifierName)
+            {
+                if (args.TrySingle(x => x.local != null, out var match) &&
+                    argument.Contains(match.expression))
+                {
+                    identifierName = (IdentifierNameSyntax)match.expression;
+                    return identifierName.Identifier.ValueText != parameter.Name;
+                }
+
+                if (args.TrySingle(x => x.local != null && x.HasPosition == true, out match) &&
+                    argument.Contains(match.expression))
+                {
+                    identifierName = (IdentifierNameSyntax)match.expression;
+                    return identifierName.Identifier.ValueText != parameter.Name;
+                }
+
+                identifierName = null;
+                return false;
+            }
+
+            private static StringArg Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
+            {
+                if (expression is IdentifierNameSyntax candidate &&
+                    semanticModel.TryGetSymbol(candidate, cancellationToken, out ILocalSymbol candidateSymbol) &&
+                    candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
+                    localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
+                    variableDeclaration.Variables.TrySingle(out var variable) &&
+                    variable.Initializer is EqualsValueClauseSyntax localInitializer &&
+                    localInitializer.Value is LiteralExpressionSyntax literal &&
+                    literal.IsKind(SyntaxKind.StringLiteralExpression))
+                {
+                    return new StringArg(expression, candidateSymbol, literal);
+                }
+
+                return new StringArg(expression, null, null);
             }
         }
     }

@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA01NameOfLocalShouldMatchParameter.Descriptor);
 
         [Test]
-        public static void WhenAnalyzer()
+        public static void WhenAnalyzerWrongName()
         {
             var before = @"
 namespace RoslynSandbox
@@ -52,6 +52,30 @@ namespace RoslynSandbox
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'analyzer'.");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, before, after, fixTitle: "Rename to 'analyzer'.");
+        }
+
+        [Test]
+        public static void WhenAnalyzerCorrectName()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓Foo { }"";
+            var analyzer = (DiagnosticAnalyzer)null;
+            RoslynAssert.Valid(analyzer, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, code);
         }
 
         [Test]

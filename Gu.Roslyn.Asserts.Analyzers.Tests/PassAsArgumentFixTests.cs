@@ -17,7 +17,7 @@ namespace RoslynSandbox
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class NoErrorAnalyzer : DiagnosticAnalyzer
+    internal class PlaceHolderAnalyzer : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = ""NoError"";
 
@@ -58,10 +58,10 @@ namespace RoslynSandbox
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NoFix))]
-    internal class NoFix : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PlaceHolderFix))]
+    internal class PlaceHolderFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(NoErrorAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(PlaceHolderAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider() => null;
 
@@ -84,7 +84,7 @@ namespace RoslynSandbox
         public static void M()
         {
             var code = ""class Foo { }"";
-            ↓RoslynAssert.Valid<NoErrorAnalyzer>(code);
+            ↓RoslynAssert.Valid<PlaceHolderAnalyzer>(code);
         }
     }
 }";
@@ -97,7 +97,7 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly NoErrorAnalyzer Analyzer = new NoErrorAnalyzer();
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public static void M()
@@ -126,14 +126,14 @@ namespace RoslynSandbox
         public static void M1()
         {
             var code = ""class Foo { }"";
-            ↓RoslynAssert.Valid<NoErrorAnalyzer>(code);
+            ↓RoslynAssert.Valid<PlaceHolderAnalyzer>(code);
         }
 
         [Test]
         public static void M2()
         {
             var code = ""class Foo { }"";
-            ↓RoslynAssert.Valid<NoErrorAnalyzer>(code);
+            ↓RoslynAssert.Valid<PlaceHolderAnalyzer>(code);
         }
     }
 }";
@@ -146,7 +146,7 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly NoErrorAnalyzer Analyzer = new NoErrorAnalyzer();
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public static void M1()
@@ -178,13 +178,13 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public static void M()
         {
             var code = ""class Foo { }"";
-            ↓RoslynAssert.Valid<NoErrorAnalyzer>(code);
+            ↓RoslynAssert.Valid<PlaceHolderAnalyzer>(code);
         }
     }
 }";
@@ -198,7 +198,7 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public static void M()
@@ -223,13 +223,13 @@ namespace RoslynSandbox
 
     public class C
     {
-        private readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
+        private readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public void M()
         {
             var code = ""class Foo { }"";
-            ↓RoslynAssert.Valid<NoErrorAnalyzer>(code);
+            ↓RoslynAssert.Valid<PlaceHolderAnalyzer>(code);
         }
     }
 }";
@@ -243,7 +243,7 @@ namespace RoslynSandbox
 
     public class C
     {
-        private readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
+        private readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
 
         [Test]
         public void M()
@@ -268,14 +268,14 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly CodeFixProvider Fix = new NoFix();
+        private static readonly CodeFixProvider Fix = new PlaceHolderFix();
 
         [Test]
         public static void M()
         {
             var before = ""class Foo { }"";
             var after = ""class Foo { }"";
-            ↓RoslynAssert.CodeFix<NoFix>(ExpectedDiagnostic.Create(""123""), before, after);
+            ↓RoslynAssert.CodeFix<PlaceHolderFix>(ExpectedDiagnostic.Create(""123""), before, after);
         }
     }
 }";
@@ -289,7 +289,7 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly CodeFixProvider Fix = new NoFix();
+        private static readonly CodeFixProvider Fix = new PlaceHolderFix();
 
         [Test]
         public static void M()
@@ -316,15 +316,15 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
-        private static readonly CodeFixProvider Fix = new NoFix();
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly CodeFixProvider Fix = new PlaceHolderFix();
 
         [Test]
         public static void M()
         {
             var before = ""class Foo { }"";
             var after = ""class Foo { }"";
-            ↓RoslynAssert.CodeFix<NoErrorAnalyzer, NoFix>(ExpectedDiagnostic.Create(""123""), before, after);
+            ↓RoslynAssert.CodeFix<PlaceHolderAnalyzer, PlaceHolderFix>(ExpectedDiagnostic.Create(""123""), before, after);
         }
     }
 }";
@@ -339,8 +339,8 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new NoErrorAnalyzer();
-        private static readonly CodeFixProvider Fix = new NoFix();
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly CodeFixProvider Fix = new PlaceHolderFix();
 
         [Test]
         public static void M()
@@ -370,7 +370,7 @@ namespace RoslynSandbox
         {
             var before = ""class Foo { }"";
             var after = ""class Foo { }"";
-            ↓RoslynAssert.CodeFix<NoErrorAnalyzer, NoFix>(ExpectedDiagnostic.Create(""123""), before, after);
+            ↓RoslynAssert.CodeFix<PlaceHolderAnalyzer, PlaceHolderFix>(ExpectedDiagnostic.Create(""123""), before, after);
         }
     }
 }";
@@ -383,8 +383,8 @@ namespace RoslynSandbox
 
     public static class C
     {
-        private static readonly NoErrorAnalyzer Analyzer = new NoErrorAnalyzer();
-        private static readonly NoFix Fix = new NoFix();
+        private static readonly PlaceHolderAnalyzer Analyzer = new PlaceHolderAnalyzer();
+        private static readonly PlaceHolderFix Fix = new PlaceHolderFix();
 
         [Test]
         public static void M()
