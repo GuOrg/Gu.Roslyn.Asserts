@@ -25,7 +25,7 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code = ""class Foo { }"";
+            var code = ""class C { }"";
             var wrong = (DiagnosticAnalyzer)null;
             RoslynAssert.Valid(↓wrong, code);
         }
@@ -44,7 +44,7 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code = ""class Foo { }"";
+            var code = ""class C { }"";
             var analyzer = (DiagnosticAnalyzer)null;
             RoslynAssert.Valid(analyzer, code);
         }
@@ -69,7 +69,7 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code = ""class ↓Foo { }"";
+            var code = ""class ↓C { }"";
             var analyzer = (DiagnosticAnalyzer)null;
             RoslynAssert.Valid(analyzer, code);
         }
@@ -92,8 +92,8 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var foo = ""class Foo { }"";
-            RoslynAssert.Valid(null, ↓foo);
+            var C = ""class C { }"";
+            RoslynAssert.Valid(null, ↓C);
         }
     }
 }";
@@ -109,12 +109,12 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code = ""class Foo { }"";
+            var code = ""class C { }"";
             RoslynAssert.Valid(null, code);
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'foo' should be 'code'.");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'C' should be 'code'.");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, before, after);
         }
 
@@ -133,8 +133,8 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo { }"";
-            var code2 = ""class Foo { }"";
+            var code1 = ""class C { }"";
+            var code2 = ""class C { }"";
             RoslynAssert.Valid((DiagnosticAnalyzer)null, code1, code2);
         }
     }
@@ -159,9 +159,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo1 { }"";
-            var code2 = ""class ↓Foo2 { }"";
-            var after = ""class Foo2 { }"";
+            var code1 = ""class C1 { }"";
+            var code2 = ""class ↓C2 { }"";
+            var after = ""class C2 { }"";
             RoslynAssert.CodeFix((DiagnosticAnalyzer)null, (CodeFixProvider)null, new [] { code1, code2 }, after);
         }
     }
@@ -180,9 +180,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo1 { }"";
-            var before = ""class ↓Foo2 { }"";
-            var after = ""class Foo2 { }"";
+            var code1 = ""class C1 { }"";
+            var before = ""class ↓C2 { }"";
+            var after = ""class C2 { }"";
             RoslynAssert.CodeFix((DiagnosticAnalyzer)null, (CodeFixProvider)null, new [] { code1, before }, after);
         }
     }
@@ -207,9 +207,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo1 { }"";
-            var code2 = ""class ↓Foo2 { }"";
-            var after = ""class Foo2 { }"";
+            var code1 = ""class C1 { }"";
+            var code2 = ""class ↓C2 { }"";
+            var after = ""class C2 { }"";
             RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { code1, code2 });
         }
     }
@@ -227,9 +227,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo1 { }"";
-            var code = ""class ↓Foo2 { }"";
-            var after = ""class Foo2 { }"";
+            var code1 = ""class C1 { }"";
+            var code = ""class ↓C2 { }"";
+            var after = ""class C2 { }"";
             RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { code1, code });
         }
     }

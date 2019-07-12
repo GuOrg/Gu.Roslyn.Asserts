@@ -87,8 +87,8 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo { }"";
-            var code2 = ""class Foo { }"";
+            var code1 = ""class C { }"";
+            var code2 = ""class C { }"";
             RoslynAssert.Diagnostics(Analyzer, ↓code1, ↓code2);
         }
     }
@@ -113,8 +113,8 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo { }"";
-            var code2 = ""class Foo { }"";
+            var code1 = ""class C { }"";
+            var code2 = ""class C { }"";
             RoslynAssert.Diagnostics(Analyzer, ↓new [] { code1, code2 });
         }
     }
@@ -140,8 +140,8 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class Foo { }"";
-            var code2 = ""class Foo { }"";
+            var code1 = ""class C { }"";
+            var code2 = ""class C { }"";
             RoslynAssert.CodeFix(Analyzer, Fix, ↓new [] { code1, code2 }, string.Empty);
         }
     }

@@ -23,7 +23,6 @@ namespace Gu.Roslyn.Asserts.Tests
                 RoslynAssert.ResetAll();
             }
 
-
             [Test]
             public static void MessageDoNotMatch()
             {
