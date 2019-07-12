@@ -30,7 +30,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 if (syntaxRoot.TryFindNode(diagnostic, out IdentifierNameSyntax identifierName) &&
                     semanticModel.TryGetSymbol(identifierName, context.CancellationToken, out ILocalSymbol local) &&
-                    diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
+                    diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name) &&
+                    semanticModel.LookupSymbols(identifierName.SpanStart, name: name).IsEmpty)
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(

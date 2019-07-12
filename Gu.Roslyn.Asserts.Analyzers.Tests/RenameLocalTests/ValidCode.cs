@@ -37,7 +37,6 @@ namespace RoslynSandbox
             var code = @"
 namespace RoslynSandbox
 {
-    using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
