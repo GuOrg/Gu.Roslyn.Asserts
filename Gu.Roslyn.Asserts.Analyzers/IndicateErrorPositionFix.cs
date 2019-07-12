@@ -30,9 +30,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.RegisterCodeFix(
                         $"Add ↓ to the start of the string literal (move it manually after).",
-                        (editor, _) => editor.ReplaceNode(literal, literal.WithToken(SyntaxFactory.Literal("↓" + literal.Token.ValueText))),
+                        (editor, _) => editor.ReplaceNode(
+                            literal,
+                            literal.WithToken(SyntaxFactory.Literal(InsertPosition(literal.Token.Text), $"↓{literal.Token.ValueText}"))),
                         nameof(IndicateErrorPositionFix),
                         diagnostic);
+
+                    string InsertPosition(string text)
+                    {
+                        var i = text.IndexOf('"') + 1;
+                        return $"{text.Substring(0, i)}↓{text.Substring(i)}";
+                    }
                 }
             }
         }

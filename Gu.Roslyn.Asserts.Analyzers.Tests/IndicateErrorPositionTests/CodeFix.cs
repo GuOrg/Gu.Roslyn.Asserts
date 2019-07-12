@@ -55,6 +55,54 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public static void DiagnosticsOneParamWithoutPositionVerbatimString()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = @""class C
+{
+}"";
+            RoslynAssert.Diagnostics(Analyzer, ↓code);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = @""↓class C
+{
+}"";
+            RoslynAssert.Diagnostics(Analyzer, code);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+        }
+
+        [Test]
         public static void DiagnosticsTowParamWithoutPositionOneWithMatchingName()
         {
             var before = @"
