@@ -250,7 +250,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         private readonly int wrongName;
         
@@ -258,11 +258,11 @@ namespace RoslynSandbox
     }
 }";
 
-                var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
+                var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
                 var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format.\r\n" +
-                                  "  at line 5 and character 29 in file Foo.cs | private readonly int ↓wrongName;\r\n";
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                                  "  at line 5 and character 29 in file Value.cs | private readonly int ↓wrongName;\r\n";
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
 

@@ -673,7 +673,7 @@ namespace RoslynSandbox
 {
     class C1
     {
-        public int Foo { get; }
+        public int Value { get; }
     }
 }";
 
@@ -684,21 +684,21 @@ namespace RoslynSandbox
     {
         public C2(C1 c1)
         {
-            var x = c1.Foo;
+            var x = c1.Value;
         }
     }
 }";
-                var analyzer = new PropertyMustBeNamedFooAnalyzer();
-                var fix = new RenameToFooCodeFixProvider();
+                var analyzer = new PropertyMustBeNamedValueAnalyzer();
+                var fix = new RenameToValueCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 });
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after1, after2 });
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after2, after1 });
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after2, after1 });
 
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 }, fixTitle: "Rename to: Foo");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after1, after2 }, fixTitle: "Rename to: Foo");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after2, after1 }, fixTitle: "Rename to: Foo");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after2, after1 }, fixTitle: "Rename to: Foo");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 }, fixTitle: "Rename to: Value");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after1, after2 }, fixTitle: "Rename to: Value");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before1, before2 }, new[] { after2, after1 }, fixTitle: "Rename to: Value");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before2, before1 }, new[] { after2, after1 }, fixTitle: "Rename to: Value");
             }
 
             [Test]
@@ -741,7 +741,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    ↓class Foo
+    ↓class Value
     {
     }
 }";
@@ -749,7 +749,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         public event EventHandler SomeEvent;
     }
@@ -771,7 +771,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         private readonly int ↓wrongName;
         
@@ -782,16 +782,16 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
-        private readonly int foo;
+        private readonly int value;
         
         public int WrongName { get; set; }
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
-                var fix = new RenameToFooCodeFixProvider();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
+                var fix = new RenameToValueCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after });

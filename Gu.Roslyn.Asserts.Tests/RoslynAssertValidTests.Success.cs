@@ -177,18 +177,18 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
-        private readonly int foo;
+        private readonly int value;
         
         public int WrongName { get; set; }
     }
 }";
 
-                var descriptor = FieldAndPropertyMustBeNamedFooAnalyzer.FieldDescriptor;
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedFooAnalyzer), descriptor, code);
+                RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedValueAnalyzer), descriptor, code);
             }
 
             [Test]
@@ -241,12 +241,12 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
-        private int foo;
+        private int value;
     }
 }";
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 RoslynAssert.Valid(analyzer, code);
             }
 

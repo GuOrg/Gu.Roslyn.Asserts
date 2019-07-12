@@ -6,13 +6,13 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToFooCodeFixProvider))]
-    internal class RenameToFooCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToValueCodeFixProvider))]
+    internal class RenameToValueCodeFixProvider : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId,
-            FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId,
-            PropertyMustBeNamedFooAnalyzer.DiagnosticId);
+            FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId,
+            FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId,
+            PropertyMustBeNamedValueAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
@@ -29,9 +29,9 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
                 if (!string.IsNullOrEmpty(token.ValueText))
                 {
-                    var newName = diagnostic.Id == FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId
-                        ? "foo"
-                        : "Foo";
+                    var newName = diagnostic.Id == FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId
+                        ? "value"
+                        : "Value";
 
                     if (string.IsNullOrEmpty(newName))
                     {
@@ -44,7 +44,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                         CodeAction.Create(
                             $"Rename to: {newName}",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(RenameToFooCodeFixProvider)),
+                            nameof(RenameToValueCodeFixProvider)),
                         diagnostic);
                 }
             }

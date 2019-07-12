@@ -7,22 +7,13 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldAndPropertyMustBeNamedFooAnalyzer : DiagnosticAnalyzer
+    internal class PropertyMustBeNamedValueAnalyzer : DiagnosticAnalyzer
     {
-        internal const string FieldDiagnosticId = "Field";
-        internal const string PropertyDiagnosticId = "Property";
-
-        internal static readonly DiagnosticDescriptor FieldDescriptor = new DiagnosticDescriptor(
-            id: FieldDiagnosticId,
-            title: "The field must be named foo.",
-            messageFormat: "Message format.",
-            category: "Category",
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        internal const string DiagnosticId = "PropertyMustBeNamedValueAnalyzer";
 
         internal static readonly DiagnosticDescriptor PropertyDescriptor = new DiagnosticDescriptor(
-            id: PropertyDiagnosticId,
-            title: "The Property must be named Foo.",
+            id: DiagnosticId,
+            title: "The Property must be named Value.",
             messageFormat: "Message format.",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
@@ -30,7 +21,6 @@ namespace Gu.Roslyn.Asserts.Tests
 
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            FieldDescriptor,
             PropertyDescriptor);
 
         public override void Initialize(AnalysisContext context)
@@ -42,20 +32,13 @@ namespace Gu.Roslyn.Asserts.Tests
 
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.FieldDeclaration, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.PropertyDeclaration);
         }
 
         private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (context.ContainingSymbol is IFieldSymbol field &&
-                field.Name != "foo" &&
-                context.Node is FieldDeclarationSyntax fieldDeclaration)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(FieldDescriptor, fieldDeclaration.Declaration.Variables[0].GetLocation()));
-            }
-
             if (context.ContainingSymbol is IPropertySymbol property &&
-                property.Name != "Foo" &&
+                property.Name != "Value" &&
                 context.Node is PropertyDeclarationSyntax propertyDeclaration)
             {
                 context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, propertyDeclaration.Identifier.GetLocation()));

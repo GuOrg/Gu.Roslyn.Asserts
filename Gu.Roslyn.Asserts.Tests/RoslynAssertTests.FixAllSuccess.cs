@@ -651,7 +651,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    ↓class Foo
+    ↓class Value
     {
     }
 }";
@@ -659,7 +659,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         public event EventHandler SomeEvent;
     }
@@ -675,7 +675,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         private readonly int ↓wrongName;
         
@@ -686,16 +686,16 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
-        private readonly int foo;
+        private readonly int value;
         
         public int WrongName { get; set; }
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
-                var fix = new RenameToFooCodeFixProvider();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
+                var fix = new RenameToValueCodeFixProvider();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
             }
         }

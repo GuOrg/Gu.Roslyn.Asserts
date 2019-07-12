@@ -341,7 +341,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         private readonly int ↓wrongName;
         
@@ -349,14 +349,14 @@ namespace RoslynSandbox
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.FieldDiagnosticId);
-                var analyzer = new FieldAndPropertyMustBeNamedFooAnalyzer();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);
+                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
 
                 code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class Value
     {
         private readonly int wrongName;
         
@@ -364,7 +364,7 @@ namespace RoslynSandbox
     }
 }";
 
-                expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedFooAnalyzer.PropertyDiagnosticId);
+                expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId);
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
         }
