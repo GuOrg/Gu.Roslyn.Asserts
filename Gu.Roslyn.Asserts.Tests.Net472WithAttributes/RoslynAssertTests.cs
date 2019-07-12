@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
             var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -32,7 +32,7 @@ namespace RoslynSandbox
             var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
