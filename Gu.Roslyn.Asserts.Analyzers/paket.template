@@ -9,6 +9,7 @@ licenseUrl http://opensource.org/licenses/MIT
 
 excludedgroups
   Main
+  Analyzer
   Analyzers
 
 files
