@@ -1,3 +1,11 @@
+#### 3.1
+  FEATURE: Better error message: include compiler error if no diagnostics.
+  FEATURE: Analyzer nuget for fixing breaking changes.
+  BREAKING: Synchronized parameter names and positions. Shipping code fixes that fixes breakages.
+  BREAKING: More optional parameters for many overloads.
+  OBSOLETE: Generic API added a code fix for refactoring to preferred API.
+  BREAKING: Require code in RoslynAssert.Diagnostics to compile. This may break existing tests but it is a good thing.
+
 #### 3.0
 * BREAKING: Microsoft.CodeAnalysis >= 3.
 * BREAKING: Drop net46 support.
