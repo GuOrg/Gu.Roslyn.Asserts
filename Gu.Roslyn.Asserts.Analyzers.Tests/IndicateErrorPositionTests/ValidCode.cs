@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
 
         [Test]
-        public static void CodeFixOneParamWithPosition()
+        public static void DiagnosticsOneParamWithPosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,31 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void CodeFixTwoParamsWithOnePosition()
+        public static void DiagnosticsOneParamWithPositionAssertReplace()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [TestCase(""C { }"")]
+        public static void M(string declaration)
+        {
+            var code = ""↓class C { }"".AssertReplace(""C { }"", declaration);
+            RoslynAssert.Diagnostics(Analyzer, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void DiagnosticsTwoParamsWithOnePosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -57,7 +81,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void CodeFixTwoParamsWithOnePositionConst()
+        public static void DiagnosticsTwoParamsWithOnePositionConst()
         {
             var code = @"
 namespace RoslynSandbox
@@ -82,7 +106,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void CodeFixTwoParamsWithOnePositionInstanceField()
+        public static void DiagnosticsTwoParamsWithOnePositionInstanceField()
         {
             var code = @"
 namespace RoslynSandbox
@@ -107,7 +131,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void CodeFixArrayWithOnePosition()
+        public static void DiagnosticsArrayWithOnePosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -152,6 +176,59 @@ namespace RoslynSandbox
             RoslynAssert.CodeFix(Analyzer, Fix, before, string.Empty);
         }
     }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+        }
+
+        [Test]
+        public static void CodeFixAssertReplace()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [TestCase(""int"")]
+        [TestCase(""string"")]
+        public static void M(string type)
+        {
+            var before = @""
+namespace RoslynSandbox
+{
+    public class C
+    {
+        /// <summary>
+        /// Summary
+        /// </summary>
+        public static void M(string ↓text)
+        {
+        }
+    }
+}"".AssertReplace(""string"", type);
+
+            var after = @""
+namespace RoslynSandbox
+{
+    public class C
+    {
+        /// <summary>
+        /// Summary
+        /// </summary>
+        /// <param name=""""text""""></param>
+        public static void M(string text)
+        {
+        }
+    }
+}"".AssertReplace(""string"", type);
+            RoslynAssert.CodeFix(Analyzer, Fix, before, after);
+        }
+        }
 }";
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }

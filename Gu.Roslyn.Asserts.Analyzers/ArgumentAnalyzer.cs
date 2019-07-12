@@ -193,16 +193,23 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return argument.Contains(match.expression);
                 }
 
-                if (args.TrySingle(x => x.local != null && x.HasPosition == false && x.local.Name == parameter.Name, out match))
+                if (args.TrySingle(x => x.local?.Name == parameter.Name && x.HasPosition == false, out match))
                 {
                     location = match.expression.GetLocation();
                     additionalLocation = match.literal.GetLocation();
                     return argument.Contains(match.expression);
                 }
 
-                location = argument.GetLocation();
+                if (args.TrySingle(x => x.local != null, out match))
+                {
+                    location = argument.GetLocation();
+                    additionalLocation = null;
+                    return true;
+                }
+
+                location = null;
                 additionalLocation = null;
-                return true;
+                return false;
             }
 
             internal static bool ShouldRename(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<StringArg> args, out IdentifierNameSyntax identifierName)
