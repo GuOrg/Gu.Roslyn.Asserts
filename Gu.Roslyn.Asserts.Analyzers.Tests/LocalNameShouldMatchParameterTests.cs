@@ -168,6 +168,53 @@ namespace RoslynSandbox
             RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'.");
         }
 
+        [Test]
+        public static void WhenOnlyOneCodeHasPosition()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class Foo1 { }"";
+            var code2 = ""class ↓Foo2 { }"";
+            var after = ""class Foo2 { }"";
+            RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { code1, code2 });
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code1 = ""class Foo1 { }"";
+            var code = ""class ↓Foo2 { }"";
+            var after = ""class Foo2 { }"";
+            RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { code1, code });
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'code'.");
+            var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'.");
+        }
+
         [Explicit("Temp ignore.")]
         [Test]
         public static void RunOnTestProject()
