@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -43,7 +43,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -67,7 +67,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
     }
@@ -83,7 +83,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
     }
@@ -100,7 +100,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
     }
@@ -117,7 +117,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -135,7 +135,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -153,7 +153,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -173,7 +173,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -191,7 +191,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -208,7 +208,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
     }
@@ -226,7 +226,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value = 1;
     }
@@ -241,7 +241,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value = 1;
         INCOMPLETE
@@ -257,7 +257,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int ↓_value2;
@@ -270,69 +270,69 @@ namespace RoslynSandbox
             [Test]
             public static void TwoDocumentsOneError()
             {
-                var foo1 = @"
+                var c1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value = 1;
     }
 }";
-                var foo2 = @"
+                var c2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
+                RoslynAssert.Diagnostics(analyzer, c1, c2);
             }
 
             [Test]
             public static void TwoDocumentsTwoErrors()
             {
-                var foo1 = @"
+                var c1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value = 1;
     }
 }";
-                var foo2 = @"
+                var c2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int ↓_value = 1;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
+                RoslynAssert.Diagnostics(analyzer, c1, c2);
             }
 
             [Test]
             public static void TwoDocumentsTwoErrorsDefaultDisabledAnalyzer()
             {
-                var foo1 = @"
+                var c1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value = 1;
     }
 }";
-                var foo2 = @"
+                var c2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int ↓_value = 1;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
-                RoslynAssert.Diagnostics(analyzer, foo1, foo2);
+                RoslynAssert.Diagnostics(analyzer, c1, c2);
             }
 
             [Test]

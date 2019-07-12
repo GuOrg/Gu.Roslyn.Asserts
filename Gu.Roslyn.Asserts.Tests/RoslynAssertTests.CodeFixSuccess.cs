@@ -30,7 +30,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -39,7 +39,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -59,7 +59,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    ↓public class Foo
+    ↓public class C
     {
     }
 }";
@@ -67,7 +67,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    public sealed class Foo
+    public sealed class C
     {
     }
 }";
@@ -86,11 +86,11 @@ namespace RoslynSandbox
                 var before = @"
 namespace    RoslynSandbox
 {
-    ↓public class Foo
+    ↓public class C
     {
 private readonly int value;
                 
-            public Foo(int value)
+            public C(int value)
 {
         this.value  =  value;
         }
@@ -100,11 +100,11 @@ private readonly int value;
                 var after = @"
 namespace    RoslynSandbox
 {
-    public sealed class Foo
+    public sealed class C
     {
 private readonly int value;
                 
-            public Foo(int value)
+            public C(int value)
 {
         this.value  =  value;
         }
@@ -125,7 +125,7 @@ private readonly int value;
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -134,7 +134,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -154,7 +154,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -163,7 +163,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -185,7 +185,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -194,7 +194,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -214,7 +214,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -223,7 +223,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -244,7 +244,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -253,7 +253,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -278,7 +278,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo
+    public class C
     {
         public event EventHandler Bar;
     }
@@ -289,7 +289,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo
+    public class C
     {
     }
 }";
@@ -312,7 +312,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -321,7 +321,7 @@ namespace RoslynSandbox
                 var before2 = @"
 namespace RoslynSandbox
 {
-    public class Foo2
+    public class C2
     {
     }
 }";
@@ -331,7 +331,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -352,7 +352,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public partial class Foo
+    public partial class C
     {
         public event EventHandler ↓Bar;
     }
@@ -361,7 +361,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -371,7 +371,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -390,7 +390,7 @@ namespace RoslynSandbox
                 var part1 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private int ↓_value;
     }
@@ -399,7 +399,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -407,7 +407,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private int value;
     }
@@ -435,7 +435,7 @@ namespace RoslynSandbox
                 var part1 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private int ↓_value1;
     }
@@ -444,7 +444,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private int value2;
     }
@@ -453,7 +453,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private int value1;
     }
@@ -483,7 +483,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -492,7 +492,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2
+    public class C2
     {
     }
 }";
@@ -502,7 +502,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -529,7 +529,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -538,7 +538,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -548,7 +548,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -573,7 +573,7 @@ namespace RoslynSandbox.Core
                 var before1 = @"
 namespace RoslynSandbox.Core
 {
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -583,7 +583,7 @@ namespace RoslynSandbox.Client
 {
     using System;
 
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
         public event EventHandler ↓Bar;
     }
@@ -594,7 +594,7 @@ namespace RoslynSandbox.Client
 {
     using System;
 
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -624,7 +624,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -633,7 +633,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -805,7 +805,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    ↓class Foo
+    ↓class C
     {
     }
 }";
@@ -815,7 +815,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    class Foo
+    class C
     {
         public event EventHandler SomeEvent;
     }

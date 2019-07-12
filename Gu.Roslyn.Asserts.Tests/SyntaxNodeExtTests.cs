@@ -14,13 +14,13 @@ namespace Gu.Roslyn.Asserts.Tests
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo { }
+    internal class C { }
 }");
-            var node = syntaxTree.FindClassDeclaration("Foo");
-            Assert.AreEqual("internal class Foo { }", node.ToString());
+            var node = syntaxTree.FindClassDeclaration("C");
+            Assert.AreEqual("internal class C { }", node.ToString());
 
-            node = syntaxTree.Find<ClassDeclarationSyntax>("Foo");
-            Assert.AreEqual("internal class Foo { }", node.ToString());
+            node = syntaxTree.Find<ClassDeclarationSyntax>("C");
+            Assert.AreEqual("internal class C { }", node.ToString());
         }
 
         [Test]
@@ -30,13 +30,13 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo { }
+    internal class C { }
 }");
-            var node = syntaxTree.FindTypeDeclaration("Foo");
-            Assert.AreEqual("internal class Foo { }", node.ToString());
+            var node = syntaxTree.FindTypeDeclaration("C");
+            Assert.AreEqual("internal class C { }", node.ToString());
 
-            node = syntaxTree.Find<TypeDeclarationSyntax>("Foo");
-            Assert.AreEqual("internal class Foo { }", node.ToString());
+            node = syntaxTree.Find<TypeDeclarationSyntax>("C");
+            Assert.AreEqual("internal class C { }", node.ToString());
         }
 
         [TestCase("var temp = 1;", "var temp = 1;")]
@@ -47,9 +47,9 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
-        internal Foo()
+        internal C()
         {
             var temp = 1;
             temp = 2;
@@ -71,15 +71,15 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
-        internal Foo()
+        internal C()
         {
             int temp = 1;
             temp = 2;
         }
 
-        internal Foo(int i)
+        internal C(int i)
         {
             var temp = 1;
             temp = 2;
@@ -100,9 +100,9 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
-        internal Foo()
+        internal C()
         {
             var temp = 1;
             temp = 2;
@@ -123,9 +123,9 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
-        internal Foo()
+        internal C()
         {
             var temp = 1;
             temp = 2;
@@ -146,18 +146,18 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
-        internal Foo()
+        internal C()
         {
         }
     }
 }");
-            var expected = "internal Foo()\r\n        {\r\n        }";
-            var node = syntaxTree.FindConstructorDeclaration("internal Foo()");
+            var expected = "internal C()\r\n        {\r\n        }";
+            var node = syntaxTree.FindConstructorDeclaration("internal C()");
             CodeAssert.AreEqual(expected, node.ToString());
 
-            node = syntaxTree.Find<ConstructorDeclarationSyntax>("internal Foo()");
+            node = syntaxTree.Find<ConstructorDeclarationSyntax>("internal C()");
             CodeAssert.AreEqual(expected, node.ToString());
         }
 
@@ -168,7 +168,7 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
         internal void Bar()
         {
@@ -190,7 +190,7 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
         internal readonly int bar;
     }
@@ -210,7 +210,7 @@ namespace RoslynSandbox
                 @"
 namespace RoslynSandbox
 {
-    internal class Foo
+    internal class C
     {
         public int Bar { get; set; }
     }
@@ -232,9 +232,9 @@ namespace RoslynSandbox
 {
     using System;
 
-    internal class Foo
+    internal class C
     {
-        public Foo()
+        public C()
         {
             Console.WriteLine();
         }
@@ -255,9 +255,9 @@ namespace RoslynSandbox
             var testCode = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
-        public Foo()
+        public C()
         {
             var name = Id(nameof(Id));
         }
@@ -294,7 +294,7 @@ namespace RoslynSandbox
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
 
-    public class Foo : INotifyPropertyChanged
+    public class C : INotifyPropertyChanged
     {
         private static readonly PropertyChangedEventArgs Cached = new PropertyChangedEventArgs(""Bar"");
 
@@ -361,9 +361,9 @@ namespace RoslynSandbox
 {
     using System;
 
-    internal class Foo
+    internal class C
     {
-        public Foo()
+        public C()
         {
             Console.WriteLine(string.Empty);
         }
@@ -386,9 +386,9 @@ namespace RoslynSandbox
 {
     using System;
 
-    internal class Foo
+    internal class C
     {
-        public Foo(int i, int j)
+        public C(int i, int j)
         {
         }
     }
@@ -407,7 +407,7 @@ namespace RoslynSandbox
             var testCode = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
         private int value;
 
@@ -429,7 +429,7 @@ namespace RoslynSandbox
             var testCode = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
         private int value;
 
@@ -442,27 +442,27 @@ namespace RoslynSandbox
             Assert.AreEqual(expression, syntaxTree.Find<ExpressionSyntax>(expression).ToString());
         }
 
-        [TestCase("foo.Get<IComparable>(1)")]
-        [TestCase("foo.Get<System.IComparable>(1)")]
-        [TestCase("foo.Get<int>(1)")]
-        [TestCase("this.foo.Get<int>(1)")]
-        [TestCase("this.foo.Inner.Get<int>(1)")]
-        [TestCase("this.foo.Inner.foo.Get<int>(1)")]
-        [TestCase("this.foo?.Get<int>(1)")]
-        [TestCase("this.foo?.foo.Get<int>(1)")]
+        [TestCase("C.Get<IComparable>(1)")]
+        [TestCase("C.Get<System.IComparable>(1)")]
+        [TestCase("C.Get<int>(1)")]
+        [TestCase("this.C.Get<int>(1)")]
+        [TestCase("this.C.Inner.Get<int>(1)")]
+        [TestCase("this.C.Inner.C.Get<int>(1)")]
+        [TestCase("this.C?.Get<int>(1)")]
+        [TestCase("this.C?.C.Get<int>(1)")]
         [TestCase("this.Inner?.Inner.Get<int>(1)")]
-        [TestCase("this.Inner?.foo.Get<int>(1)")]
-        [TestCase("this.Inner?.foo?.Get<int>(1)")]
-        [TestCase("this.Inner.foo?.Get<int>(1)")]
-        [TestCase("this.Inner?.foo?.Inner?.Get<int>(1)")]
-        [TestCase("((Foo)meh).Get<int>(1)")]
-        [TestCase("((Foo)this.meh).Get<int>(1)")]
-        [TestCase("((Foo)this.Inner.meh).Get<int>(1)")]
-        [TestCase("(meh as Foo).Get<int>(1)")]
-        [TestCase("(this.meh as Foo).Get<int>(1)")]
-        [TestCase("(this.Inner.meh as Foo).Get<int>(1)")]
-        [TestCase("(this.Inner.meh as Foo)?.Get<int>(1)")]
-        [TestCase("(meh as Foo)?.Get<int>(1)")]
+        [TestCase("this.Inner?.C.Get<int>(1)")]
+        [TestCase("this.Inner?.C?.Get<int>(1)")]
+        [TestCase("this.Inner.C?.Get<int>(1)")]
+        [TestCase("this.Inner?.C?.Inner?.Get<int>(1)")]
+        [TestCase("((C)meh).Get<int>(1)")]
+        [TestCase("((C)this.meh).Get<int>(1)")]
+        [TestCase("((C)this.Inner.meh).Get<int>(1)")]
+        [TestCase("(meh as C).Get<int>(1)")]
+        [TestCase("(this.meh as C).Get<int>(1)")]
+        [TestCase("(this.Inner.meh as C).Get<int>(1)")]
+        [TestCase("(this.Inner.meh as C)?.Get<int>(1)")]
+        [TestCase("(meh as C)?.Get<int>(1)")]
         public static void FindExpressionComplicated(string code)
         {
             var testCode = @"
@@ -470,22 +470,22 @@ namespace RoslynSandbox
 {
     using System;
 
-    public sealed class Foo : IDisposable
+    public sealed class C : IDisposable
     {
         private readonly object meh;
-        private readonly Foo foo;
+        private readonly C C;
 
-        public Foo Inner => this.foo;
+        public C Inner => this.C;
 
         public void Dispose()
         {
-            var temp = this.foo.Get<int>(1);
+            var temp = this.C.Get<int>(1);
         }
 
         private T Get<T>(int value) => default(T);
     }
 }";
-            testCode = testCode.AssertReplace("this.foo.Get<int>(1)", code);
+            testCode = testCode.AssertReplace("this.C.Get<int>(1)", code);
             var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
             var expression = syntaxTree.FindExpression(code);
             Assert.AreEqual(code, expression.ToString());
@@ -497,7 +497,7 @@ namespace RoslynSandbox
             var testCode = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
         private int value;
 
@@ -518,7 +518,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo
+    public class C
     {
         [Obsolete]
         public int Value { get; } = 1;

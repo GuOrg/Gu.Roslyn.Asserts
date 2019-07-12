@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -48,7 +48,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -76,7 +76,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }

@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var expected = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -25,7 +25,7 @@ namespace RoslynSandbox
             var actual = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -40,7 +40,7 @@ namespace RoslynSandbox
             var expected = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -52,7 +52,7 @@ a
             var actual = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -84,7 +84,7 @@ a
             var expectedCode = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -93,21 +93,21 @@ namespace RoslynSandbox
             var actual = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int bar;
     }
 }";
 
             var exception = Assert.Throws<AssertException>(() => CodeAssert.AreEqual(expectedCode, actual));
-            var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
+            var expected = "Mismatch on line 6 of file C.cs.\r\n" +
                            "Expected:         private readonly int _value;\r\n" +
                            "Actual:           private readonly int bar;\r\n" +
                            "                                       ^\r\n" +
                            "Expected:\r\n\r\n" +
                            "namespace RoslynSandbox\r\n" +
                            "{\r\n" +
-                           "    class Foo\r\n" +
+                           "    class C\r\n" +
                            "    {\r\n" +
                            "        private readonly int _value;\r\n" +
                            "    }\r\n" +
@@ -115,7 +115,7 @@ namespace RoslynSandbox
                            "Actual:\r\n\r\n" +
                            "namespace RoslynSandbox\r\n" +
                            "{\r\n" +
-                           "    class Foo\r\n" +
+                           "    class C\r\n" +
                            "    {\r\n" +
                            "        private readonly int bar;\r\n" +
                            "    }\r\n" +
@@ -214,17 +214,17 @@ namespace RoslynSandbox
             var testCode = @"
 namespace RoslynSandbox
 {
-    public class Foo
+    public class C
     {
     }
 }";
             var sln = CodeFactory.CreateSolution(testCode);
             var editor = await DocumentEditor.CreateAsync(sln.Projects.First().Documents.First()).ConfigureAwait(false);
-            var type = editor.OriginalRoot.SyntaxTree.Find<ClassDeclarationSyntax>("Foo");
+            var type = editor.OriginalRoot.SyntaxTree.Find<ClassDeclarationSyntax>("C");
             var expected = @"
 namespace RoslynSandbox
 {
-    public sealed class Foo
+    public sealed class C
     {
     }
 }";

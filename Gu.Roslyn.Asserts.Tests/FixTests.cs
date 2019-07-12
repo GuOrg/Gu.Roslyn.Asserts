@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -23,7 +23,7 @@ namespace RoslynSandbox
             var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -46,7 +46,7 @@ namespace RoslynSandbox
             var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value1;
         private readonly int _value2;
@@ -56,7 +56,7 @@ namespace RoslynSandbox
             var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
         private readonly int value2;
@@ -77,7 +77,7 @@ namespace RoslynSandbox
             var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -86,7 +86,7 @@ namespace RoslynSandbox
             var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }

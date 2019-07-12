@@ -13,14 +13,14 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
 }";
                 var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
                 Assert.AreEqual("RoslynSandbox", sln.Projects.Single().Name);
-                Assert.AreEqual("Foo.cs", sln.Projects.Single().Documents.Single().Name);
+                Assert.AreEqual("C.cs", sln.Projects.Single().Documents.Single().Name);
             }
 
             [Test]
@@ -29,7 +29,7 @@ namespace RoslynSandbox
                 var code1 = @"
 namespace Project1
 {
-    class Foo1
+    class C1
     {
         private readonly int _value;
     }
@@ -38,18 +38,18 @@ namespace Project1
                 var code2 = @"
 namespace Project2
 {
-    class Foo2
+    class C2
     {
         private readonly int _value;
     }
 }";
                 var sln = CodeFactory.CreateSolution(new[] { code1, code2 });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
-                Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+                Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
 
                 sln = CodeFactory.CreateSolution(new[] { code2, code1 });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
-                Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+                Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
             }
 
             [Test]
@@ -58,7 +58,7 @@ namespace Project2
                 var code1 = @"
 namespace Project1
 {
-    class Foo1
+    class C1
     {
         private readonly int _value;
     }
@@ -69,14 +69,14 @@ namespace Project2
 {
     using Project1;
 
-    class Foo2
+    class C2
     {
-        private readonly Foo1 _value;
+        private readonly C1 _value;
     }
 }";
                 var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
-                Assert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+                Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                 var project1 = sln.Projects.Single(x => x.Name == "Project1");
                 CollectionAssert.IsEmpty(project1.AllProjectReferences);
                 var project2 = sln.Projects.Single(x => x.Name == "Project2");
@@ -89,7 +89,7 @@ namespace Project2
                 var code1 = @"
 namespace Project1
 {
-    public class Foo1
+    public class C1
     {
         private readonly int _value;
     }
@@ -98,14 +98,14 @@ namespace Project1
                 var code2 = @"
 namespace Project2
 {
-    public class Foo2
+    public class C2
     {
-        private readonly Project1.Foo1 _value;
+        private readonly Project1.C1 _value;
     }
 }";
                 var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
-                CollectionAssert.AreEqual(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+                CollectionAssert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                 var project1 = sln.Projects.Single(x => x.Name == "Project1");
                 CollectionAssert.IsEmpty(project1.AllProjectReferences);
                 var project2 = sln.Projects.Single(x => x.Name == "Project2");
@@ -118,7 +118,7 @@ namespace Project2
                 var code1 = @"
 namespace RoslynSandbox.Core
 {
-    public class Foo1
+    public class C1
     {
         private readonly int _value;
     }
@@ -127,7 +127,7 @@ namespace RoslynSandbox.Core
                 var code2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -135,7 +135,7 @@ namespace RoslynSandbox.Client
                 {
                     var sln = CodeFactory.CreateSolution(sources, new[] { new FieldNameMustNotBeginWithUnderscore() });
                     CollectionAssert.AreEquivalent(new[] { "RoslynSandbox.Core", "RoslynSandbox.Client" }, sln.Projects.Select(x => x.Name));
-                    CollectionAssert.AreEquivalent(new[] { "Foo1.cs", "Foo2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+                    CollectionAssert.AreEquivalent(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                     var project1 = sln.Projects.Single(x => x.Name == "RoslynSandbox.Core");
                     CollectionAssert.IsEmpty(project1.AllProjectReferences);
                     var project2 = sln.Projects.Single(x => x.Name == "RoslynSandbox.Client");
@@ -149,7 +149,7 @@ namespace RoslynSandbox.Client
                 var code1 = @"
 namespace RoslynSandbox.Core
 {
-    public class Foo1
+    public class C1
     {
         private readonly int _value;
     }
@@ -158,7 +158,7 @@ namespace RoslynSandbox.Core
                 var code2 = @"
 namespace RoslynSandbox.Bar
 {
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -167,7 +167,7 @@ namespace RoslynSandbox.Bar
                     var sln = CodeFactory.CreateSolutionWithOneProject(sources, new[] { new FieldNameMustNotBeginWithUnderscore() });
                     var project = sln.Projects.Single();
                     Assert.AreEqual("RoslynSandbox", project.AssemblyName);
-                    CollectionAssert.AreEquivalent(new[] { "Foo1.cs", "Foo2.cs" }, project.Documents.Select(x => x.Name));
+                    CollectionAssert.AreEquivalent(new[] { "C1.cs", "C2.cs" }, project.Documents.Select(x => x.Name));
                 }
             }
 
@@ -187,7 +187,7 @@ namespace RoslynSandbox
 {
     using RoslynSandbox.Properties;
 
-    public class Foo
+    public class C
     {
     }
 }";
@@ -196,7 +196,7 @@ namespace RoslynSandbox
                     var sln = CodeFactory.CreateSolution(sources);
                     var project = sln.Projects.Single();
                     Assert.AreEqual("RoslynSandbox", project.AssemblyName);
-                    CollectionAssert.AreEquivalent(new[] { "Resources.cs", "Foo.cs" }, project.Documents.Select(x => x.Name));
+                    CollectionAssert.AreEquivalent(new[] { "Resources.cs", "C.cs" }, project.Documents.Select(x => x.Name));
                 }
             }
         }

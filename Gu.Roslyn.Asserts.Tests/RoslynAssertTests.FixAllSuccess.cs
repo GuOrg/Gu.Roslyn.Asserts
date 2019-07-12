@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -37,7 +37,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -54,7 +54,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -63,7 +63,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -80,7 +80,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int ↓_value2;
@@ -90,7 +90,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
         private readonly int value2;
@@ -107,7 +107,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int ↓_value2;
@@ -117,7 +117,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
         private readonly int value2;
@@ -134,7 +134,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int ↓_value2;
@@ -144,7 +144,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
         private readonly int value2;
@@ -161,7 +161,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         public readonly int ↓_value;
     }
@@ -170,7 +170,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         public readonly int value;
     }
@@ -190,7 +190,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -199,7 +199,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -221,7 +221,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -232,7 +232,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo2
+    public class C2
     {
         public event EventHandler ↓Bar;
     }
@@ -243,7 +243,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -253,7 +253,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo2
+    public class C2
     {
     }
 }";
@@ -271,7 +271,7 @@ namespace RoslynSandbox
                 var before1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value;
     }
@@ -279,7 +279,7 @@ namespace RoslynSandbox
                 var before2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int value;
     }
@@ -288,7 +288,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int value;
     }
@@ -311,7 +311,7 @@ namespace RoslynSandbox
                 var before1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value;
     }
@@ -319,7 +319,7 @@ namespace RoslynSandbox
                 var before2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int value;
     }
@@ -328,7 +328,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int value;
     }
@@ -347,7 +347,7 @@ namespace RoslynSandbox
                 var before1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int ↓_value;
     }
@@ -355,7 +355,7 @@ namespace RoslynSandbox
                 var before2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int ↓_value;
     }
@@ -364,7 +364,7 @@ namespace RoslynSandbox
                 var after1 = @"
 namespace RoslynSandbox
 {
-    class Foo1
+    class C1
     {
         private readonly int value;
     }
@@ -373,7 +373,7 @@ namespace RoslynSandbox
                 var after2 = @"
 namespace RoslynSandbox
 {
-    class Foo2
+    class C2
     {
         private readonly int value;
     }
@@ -393,7 +393,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -402,7 +402,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2
+    public class C2
     {
     }
 }";
@@ -412,7 +412,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -431,7 +431,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -440,7 +440,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2
+    public class C2
     {
     }
 }";
@@ -450,7 +450,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -470,7 +470,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class FooCore
+    public class CCore
     {
         public event EventHandler ↓Bar;
     }
@@ -479,7 +479,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class FooClient
+    public class CClient
     {
     }
 }";
@@ -489,7 +489,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class FooCore
+    public class CCore
     {
     }
 }";
@@ -508,7 +508,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
         public event EventHandler ↓Bar;
     }
@@ -517,7 +517,7 @@ namespace RoslynSandbox.Core
                 var before2 = @"
 namespace RoslynSandbox.Client
 {
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -527,7 +527,7 @@ namespace RoslynSandbox.Core
 {
     using System;
 
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -544,7 +544,7 @@ namespace RoslynSandbox.Core
                 var before1 = @"
 namespace RoslynSandbox.Core
 {
-    public class Foo1
+    public class C1
     {
     }
 }";
@@ -554,7 +554,7 @@ namespace RoslynSandbox.Client
 {
     using System;
 
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
         public event EventHandler ↓Bar;
     }
@@ -565,7 +565,7 @@ namespace RoslynSandbox.Client
 {
     using System;
 
-    public class Foo2 : RoslynSandbox.Core.Foo1
+    public class C2 : RoslynSandbox.Core.C1
     {
     }
 }";
@@ -584,7 +584,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo
+    public class C
     {
         public event EventHandler ↓Bar;
     }
@@ -595,7 +595,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public class Foo
+    public class C
     {
     }
 }";
@@ -620,7 +620,7 @@ namespace RoslynSandbox
                 var testCode = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -629,7 +629,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }

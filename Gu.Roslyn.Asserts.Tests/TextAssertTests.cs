@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
             var expected = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -20,7 +20,7 @@ namespace RoslynSandbox
             var actual = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -34,7 +34,7 @@ namespace RoslynSandbox
             var expectedCode = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value;
     }
@@ -43,7 +43,7 @@ namespace RoslynSandbox
             var actualCode = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int bar;
     }

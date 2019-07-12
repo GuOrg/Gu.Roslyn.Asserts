@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -38,7 +38,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -65,7 +65,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int ↓_value2;
@@ -75,7 +75,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
         private readonly int value2;
@@ -111,7 +111,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value1;
         private readonly int _value2;
@@ -123,7 +123,7 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value2' must not begin with an underscore\r\n" +
-                               "  at line 6 and character 29 in file Foo.cs | private readonly int ↓_value2;\r\n";
+                               "  at line 6 and character 29 in file C.cs | private readonly int ↓_value2;\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -133,7 +133,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -144,10 +144,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -157,7 +157,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -175,7 +175,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -196,7 +196,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -216,7 +216,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -225,7 +225,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int bar;
     }
@@ -245,7 +245,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -254,7 +254,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int bar;
     }
@@ -262,14 +262,14 @@ namespace RoslynSandbox
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
+                var expected = "Mismatch on line 6 of file C.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    class Foo\r\n" +
+                               "    class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int bar;\r\n" +
                                "    }\r\n" +
@@ -277,7 +277,7 @@ namespace RoslynSandbox
                                "Actual:\r\n\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    class Foo\r\n" +
+                               "    class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
@@ -300,7 +300,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -309,19 +309,19 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int bar;
     }
 }";
-                var expected = "Mismatch on line 6 of file Foo.cs.\r\n" +
+                var expected = "Mismatch on line 6 of file C.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    class Foo\r\n" +
+                               "    class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int bar;\r\n" +
                                "    }\r\n" +
@@ -329,7 +329,7 @@ namespace RoslynSandbox
                                "Actual:\r\n\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    class Foo\r\n" +
+                               "    class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
@@ -346,7 +346,7 @@ namespace RoslynSandbox
                 var part1 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private readonly int ↓_value;
     }
@@ -355,7 +355,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -363,7 +363,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
         private readonly int wrong;
     }
@@ -378,7 +378,7 @@ namespace RoslynSandbox
                                "\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    public partial class Foo\r\n" +
+                               "    public partial class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int wrong;\r\n" +
                                "    }\r\n" +
@@ -387,7 +387,7 @@ namespace RoslynSandbox
                                "\r\n" +
                                "namespace RoslynSandbox\r\n" +
                                "{\r\n" +
-                               "    public partial class Foo\r\n" +
+                               "    public partial class C\r\n" +
                                "    {\r\n" +
                                "        private readonly int value;\r\n" +
                                "    }\r\n" +
@@ -410,7 +410,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public partial class Foo
+    public partial class C
     {
         public event EventHandler ↓Bar;
     }
@@ -419,7 +419,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -429,7 +429,7 @@ namespace RoslynSandbox
 {
     using System;
 
-    public partial class Foo
+    public partial class C
     {
         // mismatch
     }
@@ -446,7 +446,7 @@ namespace RoslynSandbox
                                "{\r\n" +
                                "    using System;\r\n" +
                                "\r\n" +
-                               "    public partial class Foo\r\n" +
+                               "    public partial class C\r\n" +
                                "    {\r\n" +
                                "        // mismatch\r\n" +
                                "    }\r\n" +
@@ -457,7 +457,7 @@ namespace RoslynSandbox
                                "{\r\n" +
                                "    using System;\r\n" +
                                "\r\n" +
-                               "    public partial class Foo\r\n" +
+                               "    public partial class C\r\n" +
                                "    {\r\n" +
                                "    }\r\n" +
                                "}\r\n";
@@ -474,7 +474,7 @@ namespace RoslynSandbox
                 var part1 = @"
 namespace RoslynSandbox
 {
-    public partial class ↓Foo
+    public partial class ↓C
     {
         public event EventHandler Bar;
     }
@@ -483,7 +483,7 @@ namespace RoslynSandbox
                 var part2 = @"
 namespace RoslynSandbox
 {
-    public partial class Foo
+    public partial class C
     {
     }
 }";
@@ -493,11 +493,11 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "CS0067 \r\n" +
-                               "  at line 3 and character 25 in file Unknown | public partial class ↓Foo\r\n" +
+                               "  at line 3 and character 25 in file Unknown | public partial class ↓C\r\n" +
                                "Actual:\r\n" +
                                "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
                                "  at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
-                               "CS0067 The event 'Foo.Bar' is never used\r\n" +
+                               "CS0067 The event 'C.Bar' is never used\r\n" +
                                "  at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
                 var fix = new RemoveUnusedFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, string.Empty));
@@ -779,7 +779,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    ↓class Foo
+    ↓class C
     {
     }
 }";
@@ -787,7 +787,7 @@ namespace RoslynSandbox
                 var after = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         public event EventHandler SomeEvent;
     }
@@ -795,12 +795,12 @@ namespace RoslynSandbox
 
                 var expected = @"Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
-  at line 5 and character 21 in file Foo.cs | public event ↓EventHandler SomeEvent;
+  at line 5 and character 21 in file C.cs | public event ↓EventHandler SomeEvent;
 First source file with error is:
 
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         public event EventHandler SomeEvent;
     }
@@ -818,7 +818,7 @@ namespace RoslynSandbox
                 var before = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private ↓readonly int _value1;
     }
@@ -826,10 +826,10 @@ namespace RoslynSandbox
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file Foo.cs | private ↓readonly int _value1;\r\n" +
+                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreCodeFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, string.Empty));

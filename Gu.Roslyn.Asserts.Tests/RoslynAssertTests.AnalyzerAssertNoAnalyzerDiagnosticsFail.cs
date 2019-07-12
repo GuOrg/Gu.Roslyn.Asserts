@@ -12,14 +12,14 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int _value = 1;
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA1309 Field '_value' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file Foo.cs | private readonly int ↓_value = 1;\r\n";
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value = 1;\r\n";
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), code));
                 Assert.AreEqual(expected, exception.Message);
@@ -34,7 +34,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";

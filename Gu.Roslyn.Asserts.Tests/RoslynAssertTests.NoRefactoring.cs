@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void WhenNoActionWithPositionIndicated()
             {
                 var code = @"
-class ↓FOO
+class ↓C
 {
 }";
 
@@ -25,7 +25,7 @@ class ↓FOO
             public static void WhenNoActionWithSPan()
             {
                 var code = @"
-class FOO
+class C
 {
 }";
 
@@ -38,7 +38,7 @@ class FOO
             public static void WhenActionIsRegistered()
             {
                 var code = @"
-class ↓Foo
+class ↓c
 {
 }";
 
@@ -54,7 +54,7 @@ class ↓Foo
             public static void WhenActionIsRegisteredWithSpan()
             {
                 var code = @"
-class Foo
+class c
 {
 }";
 

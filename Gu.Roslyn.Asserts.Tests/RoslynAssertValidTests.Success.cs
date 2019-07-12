@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -43,7 +43,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -58,7 +58,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -77,7 +77,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo<T>
+    class C<T>
         where T : struct, System.Enum
     {
     }
@@ -160,7 +160,7 @@ namespace Project2
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
     }
@@ -197,7 +197,7 @@ namespace RoslynSandbox
                 var code = @"
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
         private readonly int value1;
     }
@@ -225,7 +225,7 @@ namespace RoslynSandbox
 {
     using RoslynSandbox.Properties;
 
-    public class Foo
+    public class C
     {
     }
 }";

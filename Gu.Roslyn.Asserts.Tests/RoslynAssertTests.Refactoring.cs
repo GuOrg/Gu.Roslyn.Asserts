@@ -12,12 +12,12 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void WithPositionIndicated()
             {
                 var before = @"
-class ↓Foo
+class ↓c
 {
 }";
 
                 var after = @"
-class FOO
+class C
 {
 }";
 
@@ -27,10 +27,10 @@ class FOO
             }
 
             [Test]
-            public static void WithPositionIndicatedWhenNotExpectedCode()
+            public static void WithPositionIndicatedWhenAfterDoesNotMatch()
             {
                 var before = @"
-class ↓Foo
+class ↓c
 {
 }";
 
@@ -43,7 +43,7 @@ class WRONG
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, after));
                 var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
-Actual:   class FOO
+Actual:   class C
                 ^
 Expected:
 
@@ -52,7 +52,7 @@ class WRONG
 }
 Actual:
 
-class FOO
+class C
 {
 }
 ";
@@ -65,12 +65,12 @@ class FOO
             public static void WithSpan()
             {
                 var before = @"
-class Foo
+class c
 {
 }";
 
                 var after = @"
-class FOO
+class C
 {
 }";
 
@@ -80,10 +80,10 @@ class FOO
             }
 
             [Test]
-            public static void WithSpanWhenNotExpectedCode()
+            public static void WithSpanWhenAfterDoesNotMatch()
             {
                 var before = @"
-class Foo
+class c
 {
 }";
 
@@ -96,7 +96,7 @@ class WRONG
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after));
                 var expected = @"Mismatch on line 2 of file WRONG.cs.
 Expected: class WRONG
-Actual:   class FOO
+Actual:   class C
                 ^
 Expected:
 
@@ -105,7 +105,7 @@ class WRONG
 }
 Actual:
 
-class FOO
+class C
 {
 }
 ";

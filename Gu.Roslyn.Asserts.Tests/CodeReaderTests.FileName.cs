@@ -6,20 +6,20 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class FileName
         {
-            [TestCase("class Foo", "Foo.cs")]
-            [TestCase("struct Foo", "Foo.cs")]
-            [TestCase("enum Foo", "Foo.cs")]
-            [TestCase("class ↓Foo", "Foo.cs")]
-            [TestCase("↓class Foo", "Foo.cs")]
-            [TestCase("public class Foo", "Foo.cs")]
-            [TestCase("internal class Foo", "Foo.cs")]
-            [TestCase("internal static class Foo", "Foo.cs")]
-            [TestCase("internal ↓static class Foo", "Foo.cs")]
-            [TestCase("class Foo<T>", "Foo{T}.cs")]
-            [TestCase("sealed class Foo<T>", "Foo{T}.cs")]
-            [TestCase("public sealed class Foo<T>", "Foo{T}.cs")]
-            [TestCase("public abstract class Foo<T>", "Foo{T}.cs")]
-            [TestCase("class Foo<T1, T2>", "Foo{T1,T2}.cs")]
+            [TestCase("class C", "C.cs")]
+            [TestCase("struct C", "C.cs")]
+            [TestCase("enum C", "C.cs")]
+            [TestCase("class ↓C", "C.cs")]
+            [TestCase("↓class C", "C.cs")]
+            [TestCase("public class C", "C.cs")]
+            [TestCase("internal class C", "C.cs")]
+            [TestCase("internal static class C", "C.cs")]
+            [TestCase("internal ↓static class C", "C.cs")]
+            [TestCase("class C<T>", "C{T}.cs")]
+            [TestCase("sealed class C<T>", "C{T}.cs")]
+            [TestCase("public sealed class C<T>", "C{T}.cs")]
+            [TestCase("public abstract class C<T>", "C{T}.cs")]
+            [TestCase("class C<T1, T2>", "C{T1,T2}.cs")]
             public static void FromType(string className, string expected)
             {
                 var code = @"using System;
@@ -30,11 +30,11 @@ using System.Threading.Tasks;
 
 namespace RoslynSandbox
 {
-    class Foo
+    class C
     {
     }
 }";
-                code = code.AssertReplace("class Foo", className);
+                code = code.AssertReplace("class C", className);
                 Assert.AreEqual(expected, CodeReader.FileName(code));
             }
 
@@ -252,12 +252,12 @@ namespace RoslynSandbox.Properties {
                 Assert.AreEqual("Resources.resx", CodeReader.FileName(code));
             }
 
-            [TestCase("IFoo", "IFoo.cs")]
-            [TestCase("↓IFoo", "IFoo.cs")]
-            [TestCase("IFoo<T>", "IFoo{T}.cs")]
-            [TestCase("IFoo<↓T>", "IFoo{T}.cs")]
-            [TestCase("IFoo<T1, T2>", "IFoo{T1,T2}.cs")]
-            [TestCase("↓IFoo<↓T1, ↓T2>", "IFoo{T1,T2}.cs")]
+            [TestCase("IC", "IC.cs")]
+            [TestCase("↓IC", "IC.cs")]
+            [TestCase("IC<T>", "IC{T}.cs")]
+            [TestCase("IC<↓T>", "IC{T}.cs")]
+            [TestCase("IC<T1, T2>", "IC{T1,T2}.cs")]
+            [TestCase("↓IC<↓T1, ↓T2>", "IC{T1,T2}.cs")]
             public static void Interface(string className, string expected)
             {
                 var code = @"using System;
@@ -268,11 +268,11 @@ using System.Threading.Tasks;
 
 namespace RoslynSandbox
 {
-    interface IFoo
+    interface IC
     {
     }
 }";
-                code = code.AssertReplace("IFoo", className);
+                code = code.AssertReplace("IC", className);
                 Assert.AreEqual(expected, CodeReader.FileName(code));
             }
 
@@ -287,11 +287,11 @@ using System.Threading.Tasks;
 
 namespace RoslynSandbox
 {
-    enum Foo
+    enum C
     {
     }
 }";
-                Assert.AreEqual("Foo.cs", CodeReader.FileName(code));
+                Assert.AreEqual("C.cs", CodeReader.FileName(code));
             }
 
             [Test]
