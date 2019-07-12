@@ -9,6 +9,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
         private static readonly CodeFixProvider Fix = new IndicateErrorPositionFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA02IndicateErrorPosition.Descriptor);
+        private static readonly string[] SuppressedDiagnostics = { "CS1701" };
 
         [Test]
         public static void DiagnosticsTwoParams()
@@ -33,7 +34,7 @@ namespace RoslynSandbox
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, Code.PlaceholderAnalyzer, code);
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
 
         [Test]
@@ -59,7 +60,7 @@ namespace RoslynSandbox
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, Code.PlaceholderAnalyzer, code);
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
 
         [Test]
@@ -86,7 +87,7 @@ namespace RoslynSandbox
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
     }
 }

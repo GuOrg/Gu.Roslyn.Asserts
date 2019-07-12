@@ -200,7 +200,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return argument.Contains(match.expression);
                 }
 
-                if (args.TrySingle(x => x.local != null, out match))
+                if (args.TryFirst(x => x.local != null, out match))
                 {
                     location = argument.GetLocation();
                     additionalLocation = null;
