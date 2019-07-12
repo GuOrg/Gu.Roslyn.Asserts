@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA02IndicateErrorPosition.Descriptor);
 
         [Test]
-        public static void RoslynAssertDiagnosticsTwoParams()
+        public static void DiagnosticsTwoParams()
         {
             var code = @"
 namespace RoslynSandbox
@@ -37,7 +37,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertDiagnosticsArray()
+        public static void DiagnosticsArray()
         {
             var code = @"
 namespace RoslynSandbox
@@ -63,7 +63,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixOneBefore()
+        public static void CodeFixOneBefore()
         {
             var code = @"
 namespace RoslynSandbox

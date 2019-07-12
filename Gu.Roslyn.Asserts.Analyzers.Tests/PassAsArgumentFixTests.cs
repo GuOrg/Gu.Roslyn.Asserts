@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create("CS0618");
 
         [Test]
-        public static void RoslynAssertValidCreateField()
+        public static void ValidCreateField()
         {
             var before = @"
 namespace RoslynSandbox
@@ -51,7 +51,7 @@ namespace RoslynSandbox
 
         [Explicit("Need to test how this works.")]
         [Test]
-        public static void RoslynAssertValidCreateFieldFixAll()
+        public static void ValidCreateFieldFixAll()
         {
             var before = @"
 namespace RoslynSandbox
@@ -106,7 +106,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertValidUseExistingStaticField()
+        public static void ValidUseExistingStaticField()
         {
             var before = @"
 namespace RoslynSandbox
@@ -151,7 +151,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertValidUseExistingInstanceField()
+        public static void ValidUseExistingInstanceField()
         {
             var before = @"
 namespace RoslynSandbox
@@ -196,7 +196,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixOnlyUseExistingStaticField()
+        public static void CodeFixOnlyUseExistingStaticField()
         {
             var before = @"
 namespace RoslynSandbox
@@ -243,7 +243,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixUseExistingStaticFields()
+        public static void CodeFixUseExistingStaticFields()
         {
             var before = @"
 namespace RoslynSandbox
@@ -294,7 +294,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixCreateAndUseFields()
+        public static void CodeFixCreateAndUseFields()
         {
             var before = @"
 namespace RoslynSandbox

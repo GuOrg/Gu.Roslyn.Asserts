@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
 
         [Test]
-        public static void RoslynAssertCodeFixOneParamWithPosition()
+        public static void CodeFixOneParamWithPosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -32,7 +32,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixTwoParamsWithOnePosition()
+        public static void CodeFixTwoParamsWithOnePosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -57,7 +57,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixTwoParamsWithOnePositionConst()
+        public static void CodeFixTwoParamsWithOnePositionConst()
         {
             var code = @"
 namespace RoslynSandbox
@@ -82,7 +82,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixTwoParamsWithOnePositionInstanceField()
+        public static void CodeFixTwoParamsWithOnePositionInstanceField()
         {
             var code = @"
 namespace RoslynSandbox
@@ -107,7 +107,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixArrayWithOnePosition()
+        public static void CodeFixArrayWithOnePosition()
         {
             var code = @"
 namespace RoslynSandbox
@@ -132,7 +132,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void RoslynAssertCodeFixOneBefore()
+        public static void CodeFixOneBefore()
         {
             var code = @"
 namespace RoslynSandbox

@@ -113,7 +113,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return true;
                 }
 
-                if (parameter.ContainingSymbol is IMethodSymbol method &&
+                if (parameter.Name == "before" &&
+                    parameter.ContainingSymbol is IMethodSymbol method &&
                     method.Name == "Refactoring" &&
                     !method.Parameters.TryFirst(x => x.Type.MetadataName == typeof(TextSpan).Name, out _))
                 {
