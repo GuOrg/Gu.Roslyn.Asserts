@@ -42,18 +42,19 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             local.Name,
                             parameter.Name));
                 }
-                else if (parameter.Name == "before" &&
+                else if (ShouldHavePosition() &&
                          argument.Expression is ImplicitArrayCreationExpressionSyntax arrayCreation &&
                          arrayCreation.Initializer is InitializerExpressionSyntax arrayInitializer &&
-                         arrayInitializer.Expressions.TrySingleOfType(x => HasPosition(x), out IdentifierNameSyntax before))
+                         arrayInitializer.Expressions.TrySingleOfType(x => HasPosition(x), out IdentifierNameSyntax identifierNameSyntax) &&
+                         identifierNameSyntax.Identifier.ValueText != parameter.Name)
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
                             GURA01NameOfLocalShouldMatchParameter.Descriptor,
-                            before.GetLocation(),
-                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), "before"),
-                            before.Identifier.ValueText,
-                            "before"));
+                            identifierNameSyntax.GetLocation(),
+                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
+                            identifierNameSyntax.Identifier.ValueText,
+                            parameter.Name));
                 }
 
                 bool IsParams()
@@ -64,6 +65,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     }
 
                     return false;
+                }
+
+                bool ShouldHavePosition()
+                {
+                    return parameter.Name == "before" ||
+                           (method.Name == "Diagnostics" && parameter.Name == "code");
                 }
 
                 bool HasPosition(ExpressionSyntax expression)
