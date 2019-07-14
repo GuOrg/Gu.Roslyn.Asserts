@@ -831,11 +831,7 @@ namespace RoslynSandbox
             [Test]
             public static void ProjectFromDisk()
             {
-                var after = @"// ReSharper disable InconsistentNaming
-// ReSharper disable ArrangeThisQualifier
-// ReSharper disable NotAccessedField.Local
-#pragma warning disable IDE0009 // Member access should be qualified.
-#pragma warning disable IDE0044 // Add readonly modifier
+                var after = @"// ReSharper disable All
 namespace ClassLibrary1
 {
     public class ClassLibrary1Class1
@@ -855,7 +851,7 @@ namespace ClassLibrary1
                     FieldNameMustNotBeginWithUnderscore.DiagnosticId,
                     "Field '_value' must not begin with an underscore",
                     Path.Combine(csproj.DirectoryName, "ClassLibrary1Class1.cs"),
-                    9,
+                    5,
                     20);
                 var solution = CodeFactory.CreateSolution(
                     csproj,

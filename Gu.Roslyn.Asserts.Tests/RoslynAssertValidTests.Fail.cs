@@ -152,7 +152,7 @@ namespace Project2
                 var code = ProjectFile.Find("ClassLibrary1.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
-                              $"  at line 9 and character 20 in file {code.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
+                              $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
@@ -179,7 +179,7 @@ namespace Project2
                 var code = ProjectFile.Find("ClassLibrary2.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
-                               $"  at line 9 and character 20 in file {code.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
+                               $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
                 StringAssert.Contains(expected, exception.Message);
@@ -194,7 +194,7 @@ namespace Project2
                 var code = ProjectFile.Find("ClassLibrary1.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
-                               $"  at line 9 and character 20 in file {code.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
+                               $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
                 var solution = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, RoslynAssert.MetadataReferences);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, solution));
@@ -210,7 +210,7 @@ namespace Project2
                 var code = ProjectFile.Find("ClassLibrary2.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
-                               $"  at line 9 and character 20 in file {code.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
+                               $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
                 var solution = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() }, RoslynAssert.MetadataReferences);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, solution));

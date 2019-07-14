@@ -655,6 +655,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 typeof(CSharpCompilation),
                 typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
                 typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute));
+            Dump(metadataReferences, false);
             CollectionAssert.AreEqual(expected, metadataReferences.Select(x => Path.GetFileName(x.Display)));
         }
 
