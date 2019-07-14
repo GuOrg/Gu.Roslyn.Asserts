@@ -94,8 +94,9 @@ namespace Gu.Roslyn.Asserts.Tests
             CollectionAssert.AreEquivalent(expected, analyzer.Contexts.Select(x => x.Symbol.ToString()));
         }
 
-        // ReSharper disable once UnusedMember.Local
+#pragma warning disable IDE0051 // Remove unused private members
         private static void Dump(IEnumerable<string> strings)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             foreach (var s in strings)
             {

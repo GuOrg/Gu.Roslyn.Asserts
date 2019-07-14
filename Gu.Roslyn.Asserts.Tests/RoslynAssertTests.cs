@@ -181,7 +181,9 @@ namespace Gu.Roslyn.Asserts.Tests
         }
 
         [Conditional("DEBUG")]
+#pragma warning disable IDE0051 // Remove unused private members
         private static void Dump(IEnumerable<string> references)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             foreach (var reference in references.OrderBy(x => x))
             {

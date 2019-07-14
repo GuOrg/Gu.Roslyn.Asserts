@@ -658,8 +658,9 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             CollectionAssert.AreEqual(expected, metadataReferences.Select(x => Path.GetFileName(x.Display)));
         }
 
-        // ReSharper disable once UnusedMember.Local
+#pragma warning disable IDE0051 // Remove unused private members
         private static void Dump(IEnumerable<MetadataReference> references, bool fullname)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             foreach (var metadataReference in references)
             {
