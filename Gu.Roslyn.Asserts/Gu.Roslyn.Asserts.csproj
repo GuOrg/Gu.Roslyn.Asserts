@@ -27,7 +27,8 @@ FEATURE: Analyzer nuget for fixing breaking changes.
 BREAKING: Synchronized parameter names and positions.
 BREAKING: More optional parameters for many overloads.
 OBSOLETE: Generic API added a code fix for refactoring to preferred API.
-BREAKING: Require code in RoslynAssert.Diagnostics to compile. This may break existing tests but it is a good thing.</PackageReleaseNotes>
+BREAKING: Require code in RoslynAssert.Diagnostics to compile. This may break existing tests but it is a good thing.
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <!--

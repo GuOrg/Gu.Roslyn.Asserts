@@ -17,7 +17,7 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class C
+    public static class Valid
     {
         [Test]
         public static void M()
@@ -34,7 +34,7 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class C
+    public static class Valid
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
@@ -49,7 +49,6 @@ namespace RoslynSandbox
             RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.", suppressedDiagnostics: new[] { "CS1701" });
         }
 
-        [Explicit("Need to test how this works.")]
         [Test]
         public static void ValidCreateFieldFixAll()
         {
@@ -59,7 +58,7 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class C
+    public static class Valid
     {
         [Test]
         public static void M1()
@@ -83,7 +82,7 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class C
+    public static class Valid
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
@@ -102,7 +101,7 @@ namespace RoslynSandbox
         }
     }
 }";
-            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.", suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
         }
 
         [Test]
@@ -335,6 +334,66 @@ namespace RoslynSandbox
     }
 }";
             RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+        }
+
+        [Test]
+        public static void CodeFixCreateAndUseFieldsFixAll()
+        {
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M1()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            ↓RoslynAssert.CodeFix<PlaceholderAnalyzer, PlaceholderFix>(ExpectedDiagnostic.Create(""123""), before, after);
+        }
+
+        [Test]
+        public static void M2()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            ↓RoslynAssert.CodeFix<PlaceholderAnalyzer, PlaceholderFix>(ExpectedDiagnostic.Create(""123""), before, after);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M1()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic.Create(""123""), before, after);
+        }
+
+        [Test]
+        public static void M2()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic.Create(""123""), before, after);
+        }
+    }
+}";
+            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701", "CS1702" });
         }
     }
 }
