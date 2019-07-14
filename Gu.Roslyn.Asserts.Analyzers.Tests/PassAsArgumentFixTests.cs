@@ -293,6 +293,118 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public static void CodeFixUseExistingStaticFieldsInOtherPart()
+        {
+            var part1 = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.CodeFixes;
+
+    public static partial class C
+    {
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly CodeFixProvider Fix = new PlaceholderFix();
+    }
+}";
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static partial class C
+    {
+        [Test]
+        public static void M()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            ↓RoslynAssert.CodeFix<PlaceholderAnalyzer, PlaceholderFix>(ExpectedDiagnostic.Create(""123""), before, after);
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static partial class C
+    {
+        [Test]
+        public static void M()
+        {
+            var before = ""class C { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic.Create(""123""), before, after);
+        }
+    }
+}";
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+        }
+
+        [Test]
+        public static void CodeFixUseExistingStaticFieldsInContainingTypeInOtherPart()
+        {
+            var part1 = @"
+namespace RoslynSandbox
+{
+    using Microsoft.CodeAnalysis.Diagnostics;
+    using Microsoft.CodeAnalysis.CodeFixes;
+
+    public static partial class C
+    {
+        private static readonly DiagnosticAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly CodeFixProvider Fix = new PlaceholderFix();
+    }
+}";
+            var before = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static partial class C
+    {
+        public static class C1
+        {
+            [Test]
+            public static void M()
+            {
+                var before = ""class C { }"";
+                var after = ""class C { }"";
+                ↓RoslynAssert.CodeFix<PlaceholderAnalyzer, PlaceholderFix>(ExpectedDiagnostic.Create(""123""), before, after);
+            }
+        }
+    }
+}";
+
+            var after = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static partial class C
+    {
+        public static class C1
+        {
+            [Test]
+            public static void M()
+            {
+                var before = ""class C { }"";
+                var after = ""class C { }"";
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic.Create(""123""), before, after);
+            }
+        }
+    }
+}";
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+        }
+
+        [Test]
         public static void CodeFixCreateAndUseFields()
         {
             var before = @"

@@ -157,6 +157,11 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
+            if (containingType.ContainingType is INamedTypeSymbol parent)
+            {
+                return TryFindFieldOrProperty(parent, argumentType, semanticModel, cancellationToken, out fieldOrProperty);
+            }
+
             return false;
         }
     }
