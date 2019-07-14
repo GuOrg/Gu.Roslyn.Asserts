@@ -1,7 +1,8 @@
-<Project>
+﻿<Project>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <CodeAnalysisRuleSet>ClassLibrary2.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 </Project>

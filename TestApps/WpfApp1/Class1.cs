@@ -1,4 +1,5 @@
-﻿namespace WpfApp1
+// ReSharper disable All
+namespace WpfApp1
 {
     class Class1
     {
