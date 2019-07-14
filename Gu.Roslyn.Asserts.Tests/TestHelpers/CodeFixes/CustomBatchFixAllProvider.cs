@@ -46,21 +46,20 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 var documents = documentsAndDiagnosticsToFixMap.Keys.ToImmutableArray();
                 var fixesBag = new List<CodeAction>[documents.Length];
                 var options = new ParallelOptions() { CancellationToken = fixAllContext.CancellationToken };
-                Parallel.ForEach(
-                            documents,
-                            options,
-                            (document, state, index) =>
-                            {
-                                fixAllContext.CancellationToken.ThrowIfCancellationRequested();
-                                fixesBag[index] = new List<CodeAction>();
-                                this.AddDocumentFixesAsync(
-                                        document,
-                                        documentsAndDiagnosticsToFixMap[document],
-                                        fixesBag[index].Add,
-                                        fixAllContext)
-                                    .Wait(fixAllContext.CancellationToken);
-                            })
-                        .IgnoreReturnValue();
+                _ = Parallel.ForEach(
+                             documents,
+                             options,
+                             (document, state, index) =>
+                             {
+                                 fixAllContext.CancellationToken.ThrowIfCancellationRequested();
+                                 fixesBag[index] = new List<CodeAction>();
+                                 this.AddDocumentFixesAsync(
+                                         document,
+                                         documentsAndDiagnosticsToFixMap[document],
+                                         fixesBag[index].Add,
+                                         fixAllContext)
+                                     .Wait(fixAllContext.CancellationToken);
+                             });
 
                 if (fixesBag.Any(fixes => fixes.Count > 0))
                 {
@@ -134,18 +133,17 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             {
                 var options = new ParallelOptions() { CancellationToken = fixAllContext.CancellationToken };
                 var fixesBag = new List<CodeAction>[projectsAndDiagnosticsToFixMap.Count];
-                Parallel.ForEach(
-                            projectsAndDiagnosticsToFixMap.Keys,
-                            options,
-                            (project, state, index) =>
-                            {
-                                fixAllContext.CancellationToken.ThrowIfCancellationRequested();
-                                var diagnostics = projectsAndDiagnosticsToFixMap[project];
-                                fixesBag[index] = new List<CodeAction>();
-                                this.AddProjectFixesAsync(project, diagnostics, fixesBag[index].Add, fixAllContext)
-                                    .Wait(fixAllContext.CancellationToken);
-                            })
-                        .IgnoreReturnValue();
+                _ = Parallel.ForEach(
+                              projectsAndDiagnosticsToFixMap.Keys,
+                              options,
+                              (project, state, index) =>
+                              {
+                                  fixAllContext.CancellationToken.ThrowIfCancellationRequested();
+                                  var diagnostics = projectsAndDiagnosticsToFixMap[project];
+                                  fixesBag[index] = new List<CodeAction>();
+                                  this.AddProjectFixesAsync(project, diagnostics, fixesBag[index].Add, fixAllContext)
+                                      .Wait(fixAllContext.CancellationToken);
+                              });
 
                 if (fixesBag.Any(fixes => fixes.Count > 0))
                 {

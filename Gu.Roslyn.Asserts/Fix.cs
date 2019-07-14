@@ -81,7 +81,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null, CancellationToken cancellationToken = default)
         {
             var actions = await GetActionsAsync(solution, fix, diagnostic).ConfigureAwait(false);
             var action = FindAction(actions, fixTitle);
@@ -99,7 +99,7 @@ namespace Gu.Roslyn.Asserts
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixTitle = null, CancellationToken cancellationToken = default(CancellationToken))
+        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixTitle = null, CancellationToken cancellationToken = default)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
             fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string fixTitle = null, CancellationToken cancellationToken = default(CancellationToken))
+        internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string fixTitle = null, CancellationToken cancellationToken = default)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
             var fixedSolution = solution;

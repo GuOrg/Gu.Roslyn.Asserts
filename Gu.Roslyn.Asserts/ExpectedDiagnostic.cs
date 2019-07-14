@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
     [DebuggerDisplay("{Id} {Message} {Span}")]
     public class ExpectedDiagnostic
     {
-        private static readonly FileLinePositionSpan NoPosition = new FileLinePositionSpan("MISSING", default(LinePosition), default(LinePosition));
+        private static readonly FileLinePositionSpan NoPosition = new FileLinePositionSpan("MISSING", default, default);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpectedDiagnostic"/> class.

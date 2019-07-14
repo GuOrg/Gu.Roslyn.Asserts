@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if the collection contains an item at the specified index.</returns>
         internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -51,7 +51,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if the collection contains exactly one non null item.</returns>
         internal static bool TrySingle<T>(this IEnumerable<T> source, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -70,7 +70,7 @@ namespace Gu.Roslyn.Asserts.Internals
                     return false;
                 }
 
-                result = default(T);
+                result = default;
                 return false;
             }
         }
@@ -85,7 +85,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if the collection contains exactly one non null item.</returns>
         internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -102,7 +102,7 @@ namespace Gu.Roslyn.Asserts.Internals
                         {
                             if (selector(e.Current))
                             {
-                                result = default(T);
+                                result = default;
                                 return false;
                             }
                         }
@@ -112,7 +112,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 }
             }
 
-            result = default(T);
+            result = default;
             return false;
         }
 
@@ -127,7 +127,7 @@ namespace Gu.Roslyn.Asserts.Internals
         internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, out TResult result)
             where TResult : T
         {
-            result = default(TResult);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -165,7 +165,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if the collection contains exactly one non null item.</returns>
         internal static bool TryFirst<T>(this IEnumerable<T> source, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -195,7 +195,7 @@ namespace Gu.Roslyn.Asserts.Internals
         {
             if (source == null)
             {
-                result = default(T);
+                result = default;
                 return false;
             }
 
@@ -211,7 +211,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 }
             }
 
-            result = default(T);
+            result = default;
             return false;
         }
 
@@ -224,7 +224,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if an element was found.</returns>
         internal static bool TryLast<T>(this IEnumerable<T> source, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
@@ -256,7 +256,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>True if an element was found.</returns>
         internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T result)
         {
-            result = default(T);
+            result = default;
             if (source == null)
             {
                 return false;
