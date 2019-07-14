@@ -92,16 +92,32 @@ namespace Gu.Roslyn.Asserts.Analyzers
 #pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
             private readonly ILocalSymbol local;
 #pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
-            private readonly LiteralExpressionSyntax literal;
+            private readonly ExpressionSyntax value;
 
-            private StringArg(ExpressionSyntax identifierName, ILocalSymbol local, LiteralExpressionSyntax literal)
+            private StringArg(ExpressionSyntax identifierName, ILocalSymbol local, ExpressionSyntax value)
             {
                 this.expression = identifierName;
                 this.local = local;
-                this.literal = literal;
+                this.value = value;
             }
 
-            private bool? HasPosition => this.literal?.Token.ValueText.Contains("↓");
+            private bool? HasPosition
+            {
+                get
+                {
+                    switch (this.value)
+                    {
+                        case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression):
+                            return literal.Token.ValueText.Contains("↓");
+                        case InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+                                                                        memberAccess.Expression is LiteralExpressionSyntax literal &&
+                                                                        literal.Token.ValueText.Contains("↓"):
+                            return true;
+                        default:
+                            return null;
+                    }
+                }
+            }
 
             internal static bool ShouldHavePosition(IParameterSymbol parameter, out string message)
             {
@@ -179,7 +195,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             internal static bool ShouldIndicatePosition(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<StringArg> args, out Location location, out Location additionalLocation)
             {
-                if (args.TryFirst(x => x.HasPosition == true, out _))
+                if (args.TryFirst(x => x.HasPosition == true, out _) ||
+                    args.TryFirst(x => x.local != null && x.HasPosition == null, out _))
                 {
                     location = null;
                     additionalLocation = null;
@@ -189,18 +206,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 if (args.TrySingle(x => x.local != null && x.HasPosition == false, out var match))
                 {
                     location = match.expression.GetLocation();
-                    additionalLocation = match.literal.GetLocation();
+                    additionalLocation = match.value.GetLocation();
                     return argument.Contains(match.expression);
                 }
 
                 if (args.TrySingle(x => x.local?.Name == parameter.Name && x.HasPosition == false, out match))
                 {
                     location = match.expression.GetLocation();
-                    additionalLocation = match.literal.GetLocation();
+                    additionalLocation = match.value.GetLocation();
                     return argument.Contains(match.expression);
                 }
 
-                if (args.TryFirst(x => x.local != null, out match))
+                if (args.TryFirst(x => x.local != null && x.HasPosition == false, out match))
                 {
                     location = argument.GetLocation();
                     additionalLocation = null;
@@ -235,18 +252,28 @@ namespace Gu.Roslyn.Asserts.Analyzers
             private static StringArg Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
             {
                 if (expression is IdentifierNameSyntax candidate &&
-                    semanticModel.TryGetSymbol(candidate, cancellationToken, out ILocalSymbol candidateSymbol) &&
-                    candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
-                    localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
-                    variableDeclaration.Variables.TrySingle(out var variable) &&
-                    variable.Initializer is EqualsValueClauseSyntax localInitializer &&
-                    localInitializer.Value is LiteralExpressionSyntax literal &&
-                    literal.IsKind(SyntaxKind.StringLiteralExpression))
+                    semanticModel.TryGetSymbol(candidate, cancellationToken, out ILocalSymbol candidateSymbol))
                 {
+                    _ = TryGetValue(out var literal);
                     return new StringArg(expression, candidateSymbol, literal);
                 }
 
                 return new StringArg(expression, null, null);
+
+                bool TryGetValue(out ExpressionSyntax result)
+                {
+                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
+                        localDeclaration.Declaration is VariableDeclarationSyntax variableDeclaration &&
+                        variableDeclaration.Variables.TrySingle(out var variable) &&
+                        variable.Initializer is EqualsValueClauseSyntax initializer)
+                    {
+                        result = initializer.Value;
+                        return true;
+                    }
+
+                    result = null;
+                    return false;
+                }
             }
         }
     }

@@ -81,6 +81,56 @@ namespace RoslynSandbox
         }
 
         [Test]
+        public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplace()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [TestCase(""C { }"")]
+        public static void M(string declaration)
+        {
+            var code1 = ""class C { }"";
+            var code = ""↓class C { }"".AssertReplace(""C { }"", declaration);
+            RoslynAssert.Diagnostics(Analyzer, code1, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplaceWithPosition()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [TestCase(""↓C { }"")]
+        public static void M(string declaration)
+        {
+            var code1 = ""class C { }"";
+            var code = ""class C { }"".AssertReplace(""C { }"", declaration);
+            RoslynAssert.Diagnostics(Analyzer, code1, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
         public static void DiagnosticsTwoParamsWithOnePositionConst()
         {
             var code = @"
