@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    public static class ValidCode
+    public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
 
@@ -71,9 +71,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
+            var c1 = ""class C1 { }"";
             var code = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
@@ -93,12 +93,12 @@ namespace RoslynSandbox
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [TestCase(""C { }"")]
+        [TestCase(""C2 { }"")]
         public static void M(string declaration)
         {
-            var code1 = ""class C { }"";
-            var code = ""↓class C { }"".AssertReplace(""C { }"", declaration);
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            var c1 = ""class C1 { }"";
+            var code = ""↓class C2 { }"".AssertReplace(""C2 { }"", declaration);
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
@@ -121,9 +121,9 @@ namespace RoslynSandbox
         [TestCase(""↓C { }"")]
         public static void M(string declaration)
         {
-            var code1 = ""class C { }"";
+            var c1 = ""class C1 { }"";
             var code = ""class C { }"".AssertReplace(""C { }"", declaration);
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
@@ -142,13 +142,13 @@ namespace RoslynSandbox
     public static class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        const string code1 = ""class C { }"";
+        const string C1 = ""class C1 { }"";
 
         [Test]
         public static void M()
         {
-            var code = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            var code = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, C1, code);
         }
     }
 }";

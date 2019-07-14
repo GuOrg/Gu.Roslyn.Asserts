@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
     public static class NoFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
-        private static readonly CodeFixProvider Fix = new RenameLocalFix();
+        private static readonly CodeFixProvider Fix = new RenameFix();
 
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA01NameOfLocalShouldMatchParameter.Descriptor);
 

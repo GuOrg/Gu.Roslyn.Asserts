@@ -160,13 +160,13 @@ namespace RoslynSandbox
     public static class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        const string code1 = ""class C { }"";
+        const string C1 = ""class C1 { }"";
 
         [Test]
         public static void M()
         {
-            var code2 = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, ↓code2);
+            var code = ""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, C1, ↓code);
         }
     }
 }";
@@ -180,13 +180,13 @@ namespace RoslynSandbox
     public static class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        const string code1 = ""class C { }"";
+        const string C1 = ""class C1 { }"";
 
         [Test]
         public static void M()
         {
-            var code2 = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code2);
+            var code = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, C1, code);
         }
     }
 }";

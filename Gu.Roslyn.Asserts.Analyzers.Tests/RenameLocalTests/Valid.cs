@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    public static class ValidCode
+    public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
 
@@ -47,9 +47,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code2 = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, code1, code2);
+            var c1 = ""class C1 { }"";
+            var c2 = ""class C2 { }"";
+            RoslynAssert.Valid(Analyzer, c1, c2);
         }
     }
 }";
@@ -97,9 +97,9 @@ namespace RoslynSandbox
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            var c1 = ""class C1 { }"";
+            var code = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
@@ -118,13 +118,13 @@ namespace RoslynSandbox
     public static class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        const string code1 = ""class C { }"";
+        const string C1 = ""class C1 { }"";
 
         [Test]
         public static void M()
         {
-            var code = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            var code = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, C1, code);
         }
     }
 }";

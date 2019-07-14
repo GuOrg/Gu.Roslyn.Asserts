@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
 
     public static class RenameFixTests
     {
-        private static readonly CodeFixProvider Fix = new RenameFix();
+        private static readonly CodeFixProvider Fix = new RenameObsoleteFix();
 
         [Test]
         public static void ChangeToRoslynAssert()

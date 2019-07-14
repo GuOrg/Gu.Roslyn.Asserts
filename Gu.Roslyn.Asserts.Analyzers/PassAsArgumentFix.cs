@@ -44,7 +44,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     invocation,
                                     x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
                                           .WithArgumentList(PrependArgument(x.ArgumentList, fieldOrProperty))),
-                                nameof(RenameFix),
+                                nameof(RenameObsoleteFix),
                                 diagnostic);
                         }
                         else if (TryFindAvailableFieldName(containingType, argType, out var name))
@@ -56,7 +56,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                          invocation,
                                                          x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
                                                                .WithArgumentList(x.ArgumentList.WithArguments(x.ArgumentList.Arguments.Insert(0, SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name)))))),
-                                nameof(RenameFix),
+                                nameof(RenameObsoleteFix),
                                 diagnostic);
                         }
                     }
@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     invocation,
                                     x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
                                           .WithArgumentList(PrependArgument(PrependArgument(x.ArgumentList, fieldOrProperty1), fieldOrProperty0))),
-                                nameof(RenameFix),
+                                nameof(RenameObsoleteFix),
                                 diagnostic);
                         }
                         else if (TryFindAvailableFieldName(containingType, arg0Type, out var name0) &&
@@ -88,7 +88,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                          x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
                                                                .WithArgumentList(x.ArgumentList.WithArguments(x.ArgumentList.Arguments.Insert(0, SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name1)))
                                                                                                                                      .Insert(0, SyntaxFactory.Argument(SyntaxFactory.IdentifierName(name0)))))),
-                                nameof(RenameFix),
+                                nameof(RenameObsoleteFix),
                                 diagnostic);
                         }
                     }
