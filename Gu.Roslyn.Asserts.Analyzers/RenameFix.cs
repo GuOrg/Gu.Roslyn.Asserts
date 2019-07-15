@@ -18,7 +18,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             GURA01NameOfLocalShouldMatchParameter.DiagnosticId,
             GURA03NameFieldToFirstClass.DiagnosticId,
-            GURA04NameClassToMatchAsserts.DiagnosticId);
+            GURA04NameClassToMatchAsserts.DiagnosticId,
+            GURA05NameFileToMatchClass.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -30,10 +31,20 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out SyntaxNode node) &&
-                    diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name) &&
-                    semanticModel.TryGetSymbol(node, context.CancellationToken, out ISymbol local) &&
-                    semanticModel.LookupSymbols(node.SpanStart, name: name).IsEmpty)
+                if (diagnostic.Id == GURA05NameFileToMatchClass.DiagnosticId &&
+                    diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
+                {
+                    context.RegisterCodeFix(
+                        CodeAction.Create(
+                            $"Rename file to '{name}'.",
+                            _ => Task.FromResult(context.Document.WithName(name)),
+                            nameof(RenameFix)),
+                        diagnostic);
+                }
+                else if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out SyntaxNode node) &&
+                         diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out name) &&
+                         semanticModel.TryGetSymbol(node, context.CancellationToken, out ISymbol local) &&
+                         semanticModel.LookupSymbols(node.SpanStart, name: name).IsEmpty)
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(

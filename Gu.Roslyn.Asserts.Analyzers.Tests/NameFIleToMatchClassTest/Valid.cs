@@ -1,38 +1,38 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameClassToMatchAssertsTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameFIleToMatchClassTest
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    public static class CodeFix
+    public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
-        private static readonly CodeFixProvider Fix = new RenameFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(GURA04NameClassToMatchAsserts.Descriptor);
 
         [Test]
-        public static void WhenOneValid()
+        public static void WhenNoAsserts()
         {
-            var before = @"
+            var code = @"
 namespace RoslynSandbox
 {
-    using Gu.Roslyn.Asserts;
+    using System;
     using NUnit.Framework;
 
-    public static class ↓WRONG
+    public static class C
     {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
         [Test]
         public static void M()
         {
             var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
+            Console.WriteLine(c);
         }
     }
 }";
+            RoslynAssert.Valid(Analyzer, code);
+        }
 
-            var after = @"
+        [Test]
+        public static void WhenOneValid()
+        {
+            var code = @"
 namespace RoslynSandbox
 {
     using Gu.Roslyn.Asserts;
@@ -50,39 +50,13 @@ namespace RoslynSandbox
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
         public static void WhenTwoValid()
         {
-            var before = @"
-namespace RoslynSandbox
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class ↓WRONG
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-
-        [Test]
-        public static void M2()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
-
-            var after = @"
+            var code = @"
 namespace RoslynSandbox
 {
     using Gu.Roslyn.Asserts;
@@ -107,7 +81,38 @@ namespace RoslynSandbox
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void WhenMix()
+        {
+            var code = @"
+namespace RoslynSandbox
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+
+        [Test]
+        public static void M2()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Diagnostics(Analyzer, c);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
     }
 }

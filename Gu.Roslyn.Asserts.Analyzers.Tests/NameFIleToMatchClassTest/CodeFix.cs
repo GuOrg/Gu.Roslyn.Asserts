@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameClassToMatchAssertsTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameFIleToMatchClassTest
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
