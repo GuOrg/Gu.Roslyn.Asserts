@@ -17,7 +17,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             GURA01NameOfLocalShouldMatchParameter.DiagnosticId,
-            GURA03NameFieldToFirstClass.DiagnosticId);
+            GURA03NameFieldToFirstClass.DiagnosticId,
+            GURA04NameClassToMatchAsserts.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -29,10 +30,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNode(diagnostic, out IdentifierNameSyntax identifierName) &&
+                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out SyntaxNode node) &&
                     diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name) &&
-                    semanticModel.TryGetSymbol(identifierName, context.CancellationToken, out ISymbol local) &&
-                    semanticModel.LookupSymbols(identifierName.SpanStart, name: name).IsEmpty)
+                    semanticModel.TryGetSymbol(node, context.CancellationToken, out ISymbol local) &&
+                    semanticModel.LookupSymbols(node.SpanStart, name: name).IsEmpty)
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(

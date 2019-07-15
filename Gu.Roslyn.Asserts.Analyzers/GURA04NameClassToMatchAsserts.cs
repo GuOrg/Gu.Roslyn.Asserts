@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using Microsoft.CodeAnalysis;
 
