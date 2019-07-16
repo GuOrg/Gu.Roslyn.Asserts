@@ -16,10 +16,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class RenameFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            GURA01NameOfLocalShouldMatchParameter.DiagnosticId,
-            GURA03NameFieldToFirstClass.DiagnosticId,
-            GURA04NameClassToMatchAsserts.DiagnosticId,
-            GURA05NameFileToMatchClass.DiagnosticId);
+            Descriptors.NameOfLocalShouldMatchParameter.Id,
+            Descriptors.NameToFirstClass.Id,
+            Descriptors.NameClassToMatchAsserts.Id,
+            Descriptors.NameFileToMatchClass.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (diagnostic.Id == GURA05NameFileToMatchClass.DiagnosticId &&
+                if (diagnostic.Id == Descriptors.NameFileToMatchClass.Id &&
                     diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
                 {
                     context.RegisterCodeFix(

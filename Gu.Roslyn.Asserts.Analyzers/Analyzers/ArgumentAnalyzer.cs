@@ -16,9 +16,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ArgumentAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            GURA01NameOfLocalShouldMatchParameter.Descriptor,
-            GURA02IndicateErrorPosition.Descriptor,
-            GURA03NameFieldToFirstClass.Descriptor);
+            Descriptors.NameOfLocalShouldMatchParameter,
+            Descriptors.IndicateErrorPosition,
+            Descriptors.NameToFirstClass);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            GURA01NameOfLocalShouldMatchParameter.Descriptor,
+                            Descriptors.NameOfLocalShouldMatchParameter,
                             identifierName.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
                             local.Name,
@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            GURA02IndicateErrorPosition.Descriptor,
+                            Descriptors.IndicateErrorPosition,
                             location,
                             messageArgs: message,
                             additionalLocations: additionalLocation == null ? Array.Empty<Location>() : new[] { additionalLocation }));
@@ -218,7 +218,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         argument.Contains(match.expression))
                     {
                         identifierName = (IdentifierNameSyntax)match.expression;
-                        descriptor = GURA01NameOfLocalShouldMatchParameter.Descriptor;
+                        descriptor = Descriptors.NameOfLocalShouldMatchParameter;
                         newName = parameter.Name;
                         return !IsMatch(identifierName, parameter.Name);
                     }
@@ -227,7 +227,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         argument.Contains(match.expression))
                     {
                         identifierName = (IdentifierNameSyntax)match.expression;
-                        descriptor = GURA01NameOfLocalShouldMatchParameter.Descriptor;
+                        descriptor = Descriptors.NameOfLocalShouldMatchParameter;
                         newName = parameter.Name;
                         return !IsMatch(identifierName, parameter.Name);
                     }
@@ -238,7 +238,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     TryGetNameFromCode(stringArg, out identifierName, out newName) &&
                     stringArg.symbol.Name != newName)
                 {
-                    descriptor = GURA03NameFieldToFirstClass.Descriptor;
+                    descriptor = Descriptors.NameToFirstClass;
                     return true;
                 }
 

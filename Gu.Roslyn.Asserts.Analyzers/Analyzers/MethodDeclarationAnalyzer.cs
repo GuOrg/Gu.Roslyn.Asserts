@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class MethodDeclarationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            GURA06TestShouldBeInCorrectClass.Descriptor);
+            Descriptors.TestShouldBeInCorrectClass);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             name != method.ContainingType.Name)
                         {
                             context.ReportDiagnostic(Diagnostic.Create(
-                                GURA06TestShouldBeInCorrectClass.Descriptor,
+                                Descriptors.TestShouldBeInCorrectClass,
                                 methodDeclaration.Identifier.GetLocation(),
                                 ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
                                 name));

@@ -7,10 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     internal static class DocumentEditorExt
     {
-        internal static DocumentEditor AddPrivateStaticField(this DocumentEditor editor,
-            TypeDeclarationSyntax typeDeclaration,
-            ITypeSymbol type,
-            string name)
+        internal static DocumentEditor AddPrivateStaticField(this DocumentEditor editor, TypeDeclarationSyntax typeDeclaration, ITypeSymbol type, string name)
         {
             editor.ReplaceNode(
                 typeDeclaration,

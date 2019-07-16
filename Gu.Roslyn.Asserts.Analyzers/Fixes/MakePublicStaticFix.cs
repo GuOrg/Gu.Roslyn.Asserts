@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class MakePublicStaticFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            GURA07TestClassShouldBePublicStatic.DiagnosticId);
+            Descriptors.TestClassShouldBePublicStatic.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
