@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void MessageDoNotMatch()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -49,7 +49,7 @@ namespace RoslynSandbox
             public static void NoErrorIndicated()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -65,7 +65,7 @@ namespace RoslynSandbox
             public static void NoErrorIndicatedNoErrorAnalyzer()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -80,7 +80,7 @@ namespace RoslynSandbox
             public static void NoDiagnosticOrError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -108,7 +108,7 @@ namespace RoslynSandbox
             public static void NoDiagnosticButSyntaxError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -131,14 +131,14 @@ namespace RoslynSandbox
             public static void TwoDocumentsNoErrorIndicated()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code1
     {
     }
 }";
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code2
     {
@@ -154,14 +154,14 @@ namespace RoslynSandbox
             public static void TwoDocumentsNoErrorInCode()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     ↓class Code1
     {
     }
 }";
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code2
     {
@@ -181,7 +181,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -204,7 +204,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnostic()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -232,7 +232,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWithWrongId()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -257,7 +257,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWithWrongMessage()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -282,7 +282,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWithWrongPosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -310,14 +310,14 @@ namespace RoslynSandbox
             public static void TwoDocumentsExpectedDiagnosticWithoutPath()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code1
     {
     }
 }";
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code2
     {
@@ -339,7 +339,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreWithExpectedDiagnosticWithMessageWrongPosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -367,7 +367,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatchWithWrongMessage()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -396,7 +396,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatchFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -419,7 +419,7 @@ namespace RoslynSandbox
             public static void TwoErrorsOnlyOneIndicated()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -440,7 +440,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsIndicatedAndActualPositionDoNotMatch()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -449,7 +449,7 @@ namespace RoslynSandbox
 }";
 
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -511,7 +511,7 @@ namespace RoslynSandbox
             public static void WhenSyntaxError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

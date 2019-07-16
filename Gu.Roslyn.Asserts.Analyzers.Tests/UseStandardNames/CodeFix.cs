@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
         public static void ClassNamedFoo()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -33,7 +33,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -58,7 +58,7 @@ namespace RoslynSandbox
         public static void ClassNamedBar()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -78,7 +78,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -104,7 +104,7 @@ namespace RoslynSandbox
         public static void MethodNamedBar()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -130,7 +130,7 @@ namespace N
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

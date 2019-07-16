@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         public static void DiagnosticsOneParamWithoutPosition()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -33,7 +33,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -58,7 +58,7 @@ namespace RoslynSandbox
         public static void DiagnosticsOneParamWithoutPositionVerbatimString()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -79,7 +79,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -106,7 +106,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTowParamWithoutPositionOneWithMatchingName()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -126,7 +126,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -152,7 +152,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTowParamWithoutPositionOneLocalOneConst()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -172,7 +172,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -198,7 +198,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTowParamWithoutPositionOneLocalOneInstance()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -218,7 +218,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -244,7 +244,7 @@ namespace RoslynSandbox
         public static void CodeFixOneBefore()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -264,7 +264,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

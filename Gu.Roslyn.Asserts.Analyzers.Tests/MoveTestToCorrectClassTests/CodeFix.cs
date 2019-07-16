@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.MoveTestToCorrectClassTests
         public static void WhenMixCreatingClass()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -40,7 +40,7 @@ namespace RoslynSandbox
 }";
 
             var valid = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -59,7 +59,7 @@ namespace RoslynSandbox
 }";
 
             var diagnostics = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -83,7 +83,7 @@ namespace RoslynSandbox
         public static void WhenMixAndClassExists()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -109,7 +109,7 @@ namespace RoslynSandbox
 }";
 
             var diagnosticsBefore = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -128,7 +128,7 @@ namespace RoslynSandbox
 }";
 
             var valid = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -147,7 +147,7 @@ namespace RoslynSandbox
 }";
 
             var diagnosticsAfter = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

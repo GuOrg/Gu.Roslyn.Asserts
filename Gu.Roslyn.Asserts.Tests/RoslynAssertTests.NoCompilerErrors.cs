@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void WhenCodeNoCompilerErrors()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -37,7 +37,7 @@ namespace RoslynSandbox
             public static void WhenCodeNoCompilerErrorsCollectionInitializer()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Generic;
 
@@ -56,7 +56,7 @@ namespace RoslynSandbox
             public static void WhenCodeHasCompilerErrors()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

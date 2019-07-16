@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
         public static void WhenAnalyzerWrongName()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -33,7 +33,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -58,7 +58,7 @@ namespace RoslynSandbox
         public static void WhenOneParam()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -77,7 +77,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -102,7 +102,7 @@ namespace RoslynSandbox
         public static void WhenOnlyOneBeforeHasPosition()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -123,7 +123,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -151,7 +151,7 @@ namespace RoslynSandbox
         public static void WhenOnlyOneCodeHasPosition()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -171,7 +171,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;

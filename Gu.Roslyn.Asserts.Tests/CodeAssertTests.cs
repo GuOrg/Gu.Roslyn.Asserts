@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void WhenEqual()
         {
             var expected = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -23,7 +23,7 @@ namespace RoslynSandbox
 }";
 
             var actual = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -38,7 +38,7 @@ namespace RoslynSandbox
         public static void WhenEqualWhitespaceEnd()
         {
             var expected = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -50,7 +50,7 @@ a
 ";
 
             var actual = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -64,7 +64,7 @@ a
             CodeAssert.AreEqual(expected, actual);
         }
 
-        [TestCase("\r\nExpected:\r\n\r\nnamespace RoslynSandbox", "\r\nExpected:\r\n\nnamespace RoslynSandbox")]
+        [TestCase("\r\nExpected:\r\n\r\nnamespace N", "\r\nExpected:\r\n\nnamespace N")]
         public static void WhenEqualMixedNewLines(string expected, string actual)
         {
             CodeAssert.AreEqual(expected, actual);
@@ -82,7 +82,7 @@ a
         public static void WhenNotEqual()
         {
             var expectedCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -91,7 +91,7 @@ namespace RoslynSandbox
 }";
 
             var actual = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -105,7 +105,7 @@ namespace RoslynSandbox
                            "Actual:           private readonly int bar;\r\n" +
                            "                                       ^\r\n" +
                            "Expected:\r\n\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C\r\n" +
                            "    {\r\n" +
@@ -113,7 +113,7 @@ namespace RoslynSandbox
                            "    }\r\n" +
                            "}\r\n" +
                            "Actual:\r\n\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C\r\n" +
                            "    {\r\n" +
@@ -212,7 +212,7 @@ namespace RoslynSandbox
         public static async Task MakeSealed()
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -222,7 +222,7 @@ namespace RoslynSandbox
             var editor = await DocumentEditor.CreateAsync(sln.Projects.First().Documents.First()).ConfigureAwait(false);
             var type = editor.OriginalRoot.SyntaxTree.Find<ClassDeclarationSyntax>("C");
             var expected = @"
-namespace RoslynSandbox
+namespace N
 {
     public sealed class C
     {

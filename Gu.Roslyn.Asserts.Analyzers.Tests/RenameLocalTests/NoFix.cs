@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
         public static void WhenNameCollision()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;

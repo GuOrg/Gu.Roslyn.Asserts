@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentOneErrorNoFix()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -46,7 +46,7 @@ namespace RoslynSandbox
             public static void OneDocumentOneErrorNoFix()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -65,7 +65,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorNoFix()
             {
                 var barCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class Bar
     {
@@ -74,7 +74,7 @@ namespace RoslynSandbox
 }";
 
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

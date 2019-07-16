@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
         public static void WhenInternalStatic()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -33,7 +33,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -58,7 +58,7 @@ namespace RoslynSandbox
         public static void WhenExplicitInternal()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -77,7 +77,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -102,7 +102,7 @@ namespace RoslynSandbox
         public static void WhenImplicitInternalPrivate()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -121,7 +121,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

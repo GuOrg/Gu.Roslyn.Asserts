@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         public static void ChangeToRoslynAssert()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -27,7 +27,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -49,7 +49,7 @@ namespace RoslynSandbox
         public static void ChangeToRoslynAssertFullyQualified()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using NUnit.Framework;
 
@@ -64,7 +64,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using NUnit.Framework;
 
@@ -86,7 +86,7 @@ namespace RoslynSandbox
         public static void ChangeParameterNameToBefore(string name)
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -102,7 +102,7 @@ namespace RoslynSandbox
 }".AssertReplace("code", name);
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -125,7 +125,7 @@ namespace RoslynSandbox
         public static void ChangeParameterNameToAfter(string name)
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -141,7 +141,7 @@ namespace RoslynSandbox
 }".AssertReplace("fixedCode", name);
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -163,7 +163,7 @@ namespace RoslynSandbox
         public static void AssertTests()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -179,7 +179,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

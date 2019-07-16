@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void WhenEqual()
         {
             var expected = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -18,7 +18,7 @@ namespace RoslynSandbox
 }";
 
             var actual = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -32,7 +32,7 @@ namespace RoslynSandbox
         public static void WhenNotEqual()
         {
             var expectedCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -41,7 +41,7 @@ namespace RoslynSandbox
 }";
 
             var actualCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

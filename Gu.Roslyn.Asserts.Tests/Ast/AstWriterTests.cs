@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void SimpleClass()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -32,7 +32,7 @@ namespace RoslynSandbox
         public static void SimpleClassAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -53,7 +53,7 @@ namespace RoslynSandbox
         public static void SimpleClassJson()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -74,7 +74,7 @@ namespace RoslynSandbox
         public static void SimpleClassJsonAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -95,7 +95,7 @@ namespace RoslynSandbox
         public static void Comment()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     /// <summary>
     /// Some text
@@ -135,7 +135,7 @@ namespace RoslynSandbox
         public static void CommentAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     /// <summary>
     /// Some text
@@ -175,7 +175,7 @@ namespace RoslynSandbox
         public static void CommentIgnoreTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     /// <summary>
     /// Some text
@@ -215,7 +215,7 @@ namespace RoslynSandbox
         public static void CommentJson()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     /// <summary>
     /// Some text
@@ -255,7 +255,7 @@ namespace RoslynSandbox
         public static void CommentJsonAllTrivia()
         {
             var tree = CSharpSyntaxTree.ParseText(@"
-namespace RoslynSandbox
+namespace N
 {
     /// <summary>
     /// Some text

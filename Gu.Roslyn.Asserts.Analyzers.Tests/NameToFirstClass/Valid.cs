@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameToFirstClass
         public static void Class(string declaration, string field)
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -46,7 +46,7 @@ namespace N
         public static void GenericClass()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -76,7 +76,7 @@ namespace N
         public static void Struct()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -106,7 +106,7 @@ namespace N
         public static void IgnorePartialClass()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

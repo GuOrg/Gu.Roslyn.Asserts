@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                                    .AddDocument(
                                        DocumentId.CreateNewId(context.Document.Project.Id),
                                        "Extensions.generated.cs",
-                                       SourceText.From("namespace RoslynSandbox\r\n{\r\n    public static class Extensions\r\n    {\r\n        public static T Id<T>(this T t) => t;\r\n    }\r\n}", Encoding.UTF8)));
+                                       SourceText.From("namespace N\r\n{\r\n    public static class Extensions\r\n    {\r\n        public static T Id<T>(this T t) => t;\r\n    }\r\n}", Encoding.UTF8)));
                         },
                         nameof(CallIdFix)),
                     diagnostic);

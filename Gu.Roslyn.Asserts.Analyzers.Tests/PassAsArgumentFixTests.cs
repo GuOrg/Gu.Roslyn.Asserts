@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         public static void ValidCreateField()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -29,7 +29,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -53,7 +53,7 @@ namespace RoslynSandbox
         public static void ValidCreateFieldFixAll()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -77,7 +77,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -108,7 +108,7 @@ namespace RoslynSandbox
         public static void ValidUseExistingStaticField()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -128,7 +128,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -153,7 +153,7 @@ namespace RoslynSandbox
         public static void ValidUseExistingInstanceField()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -173,7 +173,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
@@ -198,7 +198,7 @@ namespace RoslynSandbox
         public static void CodeFixOnlyUseExistingStaticField()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Gu.Roslyn.Asserts;
@@ -219,7 +219,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Gu.Roslyn.Asserts;
@@ -245,7 +245,7 @@ namespace RoslynSandbox
         public static void CodeFixUseExistingStaticFields()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -268,7 +268,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -296,7 +296,7 @@ namespace RoslynSandbox
         public static void CodeFixUseExistingStaticFieldsInOtherPart()
         {
             var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -308,7 +308,7 @@ namespace RoslynSandbox
     }
 }";
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -326,7 +326,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -349,7 +349,7 @@ namespace RoslynSandbox
         public static void CodeFixUseExistingStaticFieldsInContainingTypeInOtherPart()
         {
             var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -361,7 +361,7 @@ namespace RoslynSandbox
     }
 }";
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -382,7 +382,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -408,7 +408,7 @@ namespace RoslynSandbox
         public static void CodeFixCreateAndUseFields()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -426,7 +426,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -452,7 +452,7 @@ namespace RoslynSandbox
         public static void CodeFixCreateAndUseFieldsFixAll()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -478,7 +478,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

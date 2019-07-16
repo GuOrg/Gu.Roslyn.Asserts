@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         public static void DiagnosticsTwoParams()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -41,7 +41,7 @@ namespace RoslynSandbox
         public static void DiagnosticsArray()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -67,7 +67,7 @@ namespace RoslynSandbox
         public static void CodeFixOneBefore()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

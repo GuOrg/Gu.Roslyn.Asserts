@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void FixDoesNotMatchAnalyzer()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -35,7 +35,7 @@ namespace RoslynSandbox
 }";
 
                 var fixedCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -55,7 +55,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorEmptyFix()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -75,7 +75,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorCodeFixFixedTheCode()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -95,7 +95,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorCodeFixFixedTheCode()
             {
                 var barCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class Bar
     {
@@ -104,7 +104,7 @@ namespace RoslynSandbox
 }";
 
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -135,7 +135,7 @@ namespace RoslynSandbox
             public static void WhenNoAnalyzerDiagnosticsButCompilerError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

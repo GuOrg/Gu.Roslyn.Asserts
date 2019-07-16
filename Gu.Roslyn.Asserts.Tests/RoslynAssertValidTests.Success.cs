@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void WithSingleMetadataReference()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -41,7 +41,7 @@ namespace RoslynSandbox
             public static void WithTransitiveMetadataReference()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -56,7 +56,7 @@ namespace RoslynSandbox
             public static void SingleDocumentNoErrorAnalyzer()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -75,7 +75,7 @@ namespace RoslynSandbox
             public static void SevenPointThreeFeature()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C<T>
         where T : struct, System.Enum
@@ -112,14 +112,14 @@ namespace RoslynSandbox
             public static void TwoDocumentsNoErrorAnalyzer()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code1
     {
     }
 }";
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class Code2
     {
@@ -158,7 +158,7 @@ namespace Project2
             public static void WithExpectedDiagnostic()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -175,7 +175,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWhenOtherReportsError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {
@@ -195,7 +195,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -213,7 +213,7 @@ namespace RoslynSandbox
             public static void Issue53()
             {
                 var resourcesCode = @"
-namespace RoslynSandbox.Properties
+namespace N.Properties
 {
     public class Resources
     {
@@ -221,9 +221,9 @@ namespace RoslynSandbox.Properties
 }";
 
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
-    using RoslynSandbox.Properties;
+    using N.Properties;
 
     public class C
     {
@@ -239,7 +239,7 @@ namespace RoslynSandbox
             public static void AnalyzerWithTwoDiagnostics()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -262,7 +262,7 @@ namespace BinaryReferencedAssembly
     }
 }";
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Reflection;
 
@@ -288,7 +288,7 @@ namespace BinaryReferencedAssembly
     }
 }";
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Reflection;
 

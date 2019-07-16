@@ -16,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoslynSandbox
+namespace N
 {
     ↓class CodeReaderTests
     {
@@ -34,7 +34,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoslynSandbox
+namespace N
 {
     ↓class ↓CodeReaderTests
     {

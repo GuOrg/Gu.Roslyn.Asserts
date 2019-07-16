@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void OneErrorIndicatedPosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -41,7 +41,7 @@ namespace RoslynSandbox
             public static void TwoErrorsSamePosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -65,7 +65,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticIdOnly()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -81,7 +81,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticIdAndMessage()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -98,7 +98,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticIdAndPosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -115,7 +115,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnostics()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -133,7 +133,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticPositionFromIndicatedCode()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -151,7 +151,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticWithMessageAndPosition()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -171,7 +171,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticWithMessageAndErrorIndicatedInCode()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -189,7 +189,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticsWithMessageAndErrorIndicatedInCode()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -206,7 +206,7 @@ namespace RoslynSandbox
             public static void OneErrorWithExpectedDiagnosticWithMessageWhenAnalyzerSupportsTwoDiagnostics()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -224,7 +224,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorPassingAnalyzer()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -239,7 +239,7 @@ namespace RoslynSandbox
             public static void WhenCompilationError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -255,7 +255,7 @@ namespace RoslynSandbox
             public static void SingleDocumentTwoErrorsIndicated()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -271,7 +271,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneError()
             {
                 var c1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -279,7 +279,7 @@ namespace RoslynSandbox
     }
 }";
                 var c2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -293,7 +293,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsTwoErrors()
             {
                 var c1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -301,7 +301,7 @@ namespace RoslynSandbox
     }
 }";
                 var c2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -316,7 +316,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsTwoErrorsDefaultDisabledAnalyzer()
             {
                 var c1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -324,7 +324,7 @@ namespace RoslynSandbox
     }
 }";
                 var c2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -339,7 +339,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {
@@ -354,7 +354,7 @@ namespace RoslynSandbox
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
 
                 code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {

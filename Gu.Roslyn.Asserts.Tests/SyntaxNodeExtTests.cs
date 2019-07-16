@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C { }
 }");
@@ -28,7 +28,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C { }
 }");
@@ -45,7 +45,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -69,7 +69,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -98,7 +98,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -121,7 +121,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -144,7 +144,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -166,7 +166,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -188,7 +188,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -208,7 +208,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     internal class C
     {
@@ -228,7 +228,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -253,7 +253,7 @@ namespace RoslynSandbox
         public static void FindInvocationWhenArgumentIsInvocation(string invocation)
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -287,7 +287,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
     using System.ComponentModel;
@@ -357,7 +357,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -382,7 +382,7 @@ namespace RoslynSandbox
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -405,7 +405,7 @@ namespace RoslynSandbox
         public static void FindAccessorDeclaration(string accessor)
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -427,7 +427,7 @@ namespace RoslynSandbox
         public static void FindExpression()
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -466,7 +466,7 @@ namespace RoslynSandbox
         public static void FindExpressionComplicated(string code)
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -495,7 +495,7 @@ namespace RoslynSandbox
         public static void FindBinaryExpression()
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -514,7 +514,7 @@ namespace RoslynSandbox
         public static void FindAttribute()
         {
             var testCode = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 

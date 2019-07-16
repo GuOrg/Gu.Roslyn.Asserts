@@ -207,7 +207,7 @@ public class CodeFixTests
 	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
 	{
 		var before = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		class Foo
 		{
@@ -216,7 +216,7 @@ public class CodeFixTests
 	}";
 
 		var after = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		class Foo
 		{
@@ -242,7 +242,7 @@ public class CodeFixTests
     public void SomeTest()
     {
         var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -251,7 +251,7 @@ namespace RoslynSandbox
 }";
 
         var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -265,7 +265,7 @@ namespace RoslynSandbox
     public void ExplicitFixTitle()
     {
         var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -274,7 +274,7 @@ namespace RoslynSandbox
 }";
 
         var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -305,7 +305,7 @@ public class CodeFixTests
 	public void TestThatCodeFixProducesExpectedCode()
 	{
 		var before = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		using System;
 
@@ -316,7 +316,7 @@ public class CodeFixTests
 	}";
 
 		var after = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		using System;
 
@@ -346,7 +346,7 @@ public class CodeFixTests
 	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
 	{
 		var before = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		class Foo
 		{
@@ -356,7 +356,7 @@ public class CodeFixTests
 	}";
 
 		var after = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		class Foo
 		{
@@ -385,7 +385,7 @@ public class CodeFixTests
 	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixDoesNothing()
 	{
 		var code = @"
-	namespace RoslynSandbox
+	namespace N
 	{
 		class Foo
 		{
@@ -594,7 +594,7 @@ When dropping down to manual mode `Analyze` & `Fix` can be used like this:
 public void SingleClassOneErrorCorrectFix()
 {
     var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -603,7 +603,7 @@ namespace RoslynSandbox
 }";
 
     var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -631,7 +631,7 @@ namespace RoslynSandbox
 public void CreateSolutionFromSources()
 {
     var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Foo
     {
@@ -639,7 +639,7 @@ namespace RoslynSandbox
     }
 }";
     var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
-    Assert.AreEqual("RoslynSandbox", sln.Projects.Single().Name);
+    Assert.AreEqual("N", sln.Projects.Single().Name);
     Assert.AreEqual("Foo.cs", sln.Projects.Single().Documents.Single().Name);
 }
 
@@ -729,7 +729,7 @@ public void FindAssignmentExpressionDemo()
 {
     var syntaxTree = CSharpSyntaxTree.ParseText(
         @"
-namespace RoslynSandbox
+namespace N
 {
     internal class Foo
     {

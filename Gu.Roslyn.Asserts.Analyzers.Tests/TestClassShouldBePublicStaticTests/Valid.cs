@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
         public static void WhenNoAsserts()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -33,7 +33,7 @@ namespace RoslynSandbox
         public static void WhenPublicStatic()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

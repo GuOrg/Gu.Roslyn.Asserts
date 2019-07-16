@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -32,7 +32,7 @@ namespace RoslynSandbox
             public static void WhenAnalyzerThrows()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

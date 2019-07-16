@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
         public static void SimpleClass()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameToFirstClass
         public static void Class(string declaration, string modifiers, string name)
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -43,7 +43,7 @@ namespace N
   .AssertReplace("private const", modifiers);
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

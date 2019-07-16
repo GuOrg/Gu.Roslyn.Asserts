@@ -14,13 +14,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoslynSandbox
+namespace N
 {
     class CodeReaderTests
     {
     }
 }";
-            Assert.AreEqual("RoslynSandbox", CodeReader.Namespace(code));
+            Assert.AreEqual("N", CodeReader.Namespace(code));
         }
 
         [TestCase(0, 0, "↓using System;")]
@@ -36,7 +36,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoslynSandbox
+namespace N
 {
     class CodeReaderTests
     {

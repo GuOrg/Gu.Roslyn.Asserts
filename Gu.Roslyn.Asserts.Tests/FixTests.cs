@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static async Task SingleDocumentOneError()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -21,7 +21,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -44,7 +44,7 @@ namespace RoslynSandbox
         public static void SingleDocumentTwoErrors()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -54,7 +54,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -75,7 +75,7 @@ namespace RoslynSandbox
         public static void SingleDocumentOneErrorCorrectFixAll()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -84,7 +84,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
     public static class Code
     {
         public const string PlaceholderAnalyzer = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -25,7 +25,7 @@ namespace RoslynSandbox
 }";
 
         public const string PlaceholderFix = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -42,7 +42,7 @@ namespace RoslynSandbox
 }";
 
         public const string PlaceholderRefactoring = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis.CodeRefactorings;

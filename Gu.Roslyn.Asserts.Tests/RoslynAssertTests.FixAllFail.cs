@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -49,7 +49,7 @@ namespace RoslynSandbox
             public static void SingleDocumentExplicitTitle()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -70,7 +70,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorWrongPosition()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -94,7 +94,7 @@ namespace RoslynSandbox
             public static void FixDoesNotMatchAnalyzer()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -103,7 +103,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -124,7 +124,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorErrorInFix()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -133,7 +133,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -149,7 +149,7 @@ namespace RoslynSandbox
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -157,7 +157,7 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -171,7 +171,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorErrorInFix()
             {
                 var barCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class Bar
     {
@@ -180,7 +180,7 @@ namespace RoslynSandbox
 }";
 
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -189,7 +189,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -205,7 +205,7 @@ namespace RoslynSandbox
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -213,7 +213,7 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -227,7 +227,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatch()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -252,7 +252,7 @@ namespace RoslynSandbox
             {
                 RoslynAssert.MetadataReferences.Clear();
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     ↓class C
     {
@@ -260,7 +260,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -284,7 +284,7 @@ namespace RoslynSandbox
                                "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
                                "First source file with error is:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +

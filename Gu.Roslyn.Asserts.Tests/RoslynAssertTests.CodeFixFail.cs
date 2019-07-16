@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentExplicitTitle()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -36,7 +36,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -63,7 +63,7 @@ namespace RoslynSandbox
             public static void SingleDocumentTwoIndicatedErrors()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -73,7 +73,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -109,7 +109,7 @@ namespace RoslynSandbox
             public static void SingleDocumentTwoErrors()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -131,7 +131,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorWrongPosition()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -155,7 +155,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorNoFix()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -173,7 +173,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorTwoFixes()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -194,7 +194,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorEmptyFix()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -214,7 +214,7 @@ namespace RoslynSandbox
             public static void FixDoesNotMatchAnalyzer()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -223,7 +223,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -243,7 +243,7 @@ namespace RoslynSandbox
             public static void OneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -252,7 +252,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -267,7 +267,7 @@ namespace RoslynSandbox
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -275,7 +275,7 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -289,7 +289,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorWhenFixedCodeDoesNotMatchExpected()
             {
                 var barCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class Bar
     {
@@ -298,7 +298,7 @@ namespace RoslynSandbox
 }";
 
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -307,7 +307,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -319,7 +319,7 @@ namespace RoslynSandbox
                                "Actual:           private readonly int value;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -327,7 +327,7 @@ namespace RoslynSandbox
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
@@ -344,7 +344,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsOneFix()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -353,7 +353,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -361,7 +361,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -376,7 +376,7 @@ namespace RoslynSandbox
                                "                                       ^\r\n" +
                                "Expected:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    public partial class C\r\n" +
                                "    {\r\n" +
@@ -385,7 +385,7 @@ namespace RoslynSandbox
                                "}\r\n" +
                                "Actual:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    public partial class C\r\n" +
                                "    {\r\n" +
@@ -406,7 +406,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsFixOnly()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -417,7 +417,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -425,7 +425,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -442,7 +442,7 @@ namespace RoslynSandbox
                                "              ^\r\n" +
                                "Expected:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    using System;\r\n" +
                                "\r\n" +
@@ -453,7 +453,7 @@ namespace RoslynSandbox
                                "}\r\n" +
                                "Actual:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    using System;\r\n" +
                                "\r\n" +
@@ -472,7 +472,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsFixOnlyWrongPosition()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class ↓C
     {
@@ -481,7 +481,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -510,7 +510,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorFixTouchingBothDocumentsWhenFixedCodeDoesNotMatchExpected()
             {
                 var code1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -519,7 +519,7 @@ namespace RoslynSandbox
 }";
 
                 var code2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -531,7 +531,7 @@ namespace RoslynSandbox
 }";
 
                 var after1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -540,7 +540,7 @@ namespace RoslynSandbox
 }";
 
                 var after2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -559,7 +559,7 @@ namespace RoslynSandbox
                                "                             ^\r\n" +
                                "Expected:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C1\r\n" +
                                "    {\r\n" +
@@ -568,7 +568,7 @@ namespace RoslynSandbox
                                "}\r\n" +
                                "Actual:\r\n" +
                                "\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    class C1\r\n" +
                                "    {\r\n" +
@@ -600,7 +600,7 @@ namespace RoslynSandbox
                            "                                 ^\r\n" +
                            "Expected:\r\n" +
                            "\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C2\r\n" +
                            "    {\r\n" +
@@ -612,7 +612,7 @@ namespace RoslynSandbox
                            "}\r\n" +
                            "Actual:\r\n" +
                            "\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C2\r\n" +
                            "    {\r\n" +
@@ -646,7 +646,7 @@ namespace RoslynSandbox
             public static void CodeFixAddingDocument()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -655,7 +655,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -663,7 +663,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var extensionMethodCode = @"namespace RoslynSandbox
+                var extensionMethodCode = @"namespace N
 {
     public static class Extensions
     {
@@ -676,14 +676,14 @@ namespace RoslynSandbox
                                "Actual:           public static T Id<T>(this T t) => t;\r\n" +
                                "              ^\r\n" +
                                "Expected:\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    public static class Extensions\r\n" +
                                "    {\r\n" +
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n" +
-                               "namespace RoslynSandbox\r\n" +
+                               "namespace N\r\n" +
                                "{\r\n" +
                                "    public static class Extensions\r\n" +
                                "    {\r\n" +
@@ -701,7 +701,7 @@ namespace RoslynSandbox
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after, extensionMethodCode }, fixTitle: "Call ID()"));
                 CodeAssert.AreEqual(expected, exception.Message);
 
-                extensionMethodCode = @"namespace RoslynSandbox
+                extensionMethodCode = @"namespace N
 {
     public static class Extensions
     {
@@ -714,7 +714,7 @@ namespace RoslynSandbox
                            "                                              ^\r\n" +
                            "Expected:\r\n" +
                            "\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C\r\n" +
                            "    {\r\n" +
@@ -723,7 +723,7 @@ namespace RoslynSandbox
                            "}\r\n" +
                            "Actual:\r\n" +
                            "\r\n" +
-                           "namespace RoslynSandbox\r\n" +
+                           "namespace N\r\n" +
                            "{\r\n" +
                            "    class C\r\n" +
                            "    {\r\n" +
@@ -746,7 +746,7 @@ namespace RoslynSandbox
             public static void CodeFixAddingDocumentWhenExpectedAddedDocIsNotProvided()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -755,7 +755,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -777,7 +777,7 @@ namespace RoslynSandbox
             public static void WhenFixIntroducesSyntaxErrors()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     ↓class C
     {
@@ -785,7 +785,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -798,7 +798,7 @@ CS0246 The type or namespace name 'EventHandler' could not be found (are you mis
   at line 5 and character 21 in file C.cs | public event ↓EventHandler SomeEvent;
 First source file with error is:
 
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -816,7 +816,7 @@ namespace RoslynSandbox
             public static void IndicatedAndActualPositionDoNotMatch()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

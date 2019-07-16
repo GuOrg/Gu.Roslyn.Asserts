@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameFIleToMatchClassTest
         public static void WhenNoAsserts()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
     using NUnit.Framework;
@@ -33,7 +33,7 @@ namespace RoslynSandbox
         public static void WhenOneValid()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -57,7 +57,7 @@ namespace RoslynSandbox
         public static void WhenTwoValid()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -88,7 +88,7 @@ namespace RoslynSandbox
         public static void WhenMix()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;

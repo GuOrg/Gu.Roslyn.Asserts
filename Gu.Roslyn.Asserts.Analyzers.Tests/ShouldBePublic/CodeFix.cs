@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
         public static void DiagnosticAnalyzer()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -35,7 +35,7 @@ namespace RoslynSandbox
 }";
 
             var diagnostics = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -55,7 +55,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;

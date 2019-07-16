@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentOneError()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -37,7 +37,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -57,7 +57,7 @@ namespace RoslynSandbox
             public static void MakeSealed()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     ↓public class C
     {
@@ -65,7 +65,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     public sealed class C
     {
@@ -84,7 +84,7 @@ namespace RoslynSandbox
             public static void MakeSealedCorrectFixKeepsPoorFormat()
             {
                 var before = @"
-namespace    RoslynSandbox
+namespace    N
 {
     ↓public class C
     {
@@ -98,7 +98,7 @@ private readonly int value;
 }";
 
                 var after = @"
-namespace    RoslynSandbox
+namespace    N
 {
     public sealed class C
     {
@@ -123,7 +123,7 @@ private readonly int value;
             public static void SingleDocumentOneErrorCorrectFixExplicitTitle()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -132,7 +132,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -152,7 +152,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithErrorsIndicated()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -161,7 +161,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -183,7 +183,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPosition()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -192,7 +192,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -212,7 +212,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -221,7 +221,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -242,7 +242,7 @@ namespace RoslynSandbox
             public static void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -251,7 +251,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -274,7 +274,7 @@ namespace RoslynSandbox
             public static void SingleDocumentCodeFixOnly()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -285,7 +285,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -308,7 +308,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsCodeFixOnly()
             {
                 var before1 = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -319,7 +319,7 @@ namespace RoslynSandbox
 }";
 
                 var before2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public class C2
     {
@@ -327,7 +327,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -348,7 +348,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsCodeFixOnly()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -359,7 +359,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -367,7 +367,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -388,7 +388,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsOneFix()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -397,7 +397,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -405,7 +405,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -433,7 +433,7 @@ namespace RoslynSandbox
             public static void PartialTwoDocumentsOneFixWhenSpansMatch()
             {
                 var part1 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -442,7 +442,7 @@ namespace RoslynSandbox
 }";
 
                 var part2 = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -451,7 +451,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     public partial class C
     {
@@ -479,7 +479,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsDifferentProjectsCodeFixOnly()
             {
                 var before1 = @"
-namespace RoslynSandbox.Core
+namespace N.Core
 {
     using System;
 
@@ -490,7 +490,7 @@ namespace RoslynSandbox.Core
 }";
 
                 var before2 = @"
-namespace RoslynSandbox.Client
+namespace N.Client
 {
     public class C2
     {
@@ -498,7 +498,7 @@ namespace RoslynSandbox.Client
 }";
 
                 var after = @"
-namespace RoslynSandbox.Core
+namespace N.Core
 {
     using System;
 
@@ -525,7 +525,7 @@ namespace RoslynSandbox.Core
             public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnly()
             {
                 var before1 = @"
-namespace RoslynSandbox.Core
+namespace N.Core
 {
     using System;
 
@@ -536,15 +536,15 @@ namespace RoslynSandbox.Core
 }";
 
                 var before2 = @"
-namespace RoslynSandbox.Client
+namespace N.Client
 {
-    public class C2 : RoslynSandbox.Core.C1
+    public class C2 : N.Core.C1
     {
     }
 }";
 
                 var after = @"
-namespace RoslynSandbox.Core
+namespace N.Core
 {
     using System;
 
@@ -571,7 +571,7 @@ namespace RoslynSandbox.Core
             public static void TwoDocumentsDifferentProjectsInheritingCodeFixOnly2()
             {
                 var before1 = @"
-namespace RoslynSandbox.Core
+namespace N.Core
 {
     public class C1
     {
@@ -579,22 +579,22 @@ namespace RoslynSandbox.Core
 }";
 
                 var before2 = @"
-namespace RoslynSandbox.Client
+namespace N.Client
 {
     using System;
 
-    public class C2 : RoslynSandbox.Core.C1
+    public class C2 : N.Core.C1
     {
         public event EventHandler ↓Bar;
     }
 }";
 
                 var after = @"
-namespace RoslynSandbox.Client
+namespace N.Client
 {
     using System;
 
-    public class C2 : RoslynSandbox.Core.C1
+    public class C2 : N.Core.C1
     {
     }
 }";
@@ -613,7 +613,7 @@ namespace RoslynSandbox.Client
             public static void TwoDocumentsOneError()
             {
                 var barCode = @"
-namespace RoslynSandbox
+namespace N
 {
     class Bar
     {
@@ -622,7 +622,7 @@ namespace RoslynSandbox
 }";
 
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -631,7 +631,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -648,7 +648,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneErrorFixTouchingBothDocuments()
             {
                 var before1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -657,7 +657,7 @@ namespace RoslynSandbox
 }";
 
                 var before2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -669,7 +669,7 @@ namespace RoslynSandbox
 }";
 
                 var after1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -678,7 +678,7 @@ namespace RoslynSandbox
 }";
 
                 var after2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -705,7 +705,7 @@ namespace RoslynSandbox
             public static void CodeFixAddingDocument()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -714,7 +714,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -722,7 +722,7 @@ namespace RoslynSandbox
     }
 }";
 
-                var extensionMethodCode = @"namespace RoslynSandbox
+                var extensionMethodCode = @"namespace N
 {
     public static class Extensions
     {
@@ -739,7 +739,7 @@ namespace RoslynSandbox
             public static void WhenFixIntroducesCompilerErrorsThatAreAccepted()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     ↓class Value
     {
@@ -747,7 +747,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {
@@ -769,7 +769,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {
@@ -780,7 +780,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {
@@ -801,7 +801,7 @@ namespace RoslynSandbox
             public static void WithMetadataReferences()
             {
                 var before = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 
@@ -811,7 +811,7 @@ namespace RoslynSandbox
 }";
 
                 var after = @"
-namespace RoslynSandbox
+namespace N
 {
     using System;
 

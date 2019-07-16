@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
         public void CodeFixSingleClassOneErrorCorrectFix()
         {
             var before = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -30,7 +30,7 @@ namespace RoslynSandbox
 }";
 
             var after = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

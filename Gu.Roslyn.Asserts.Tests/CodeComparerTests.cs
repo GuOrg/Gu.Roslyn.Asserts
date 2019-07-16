@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void WhenEqual()
         {
             var x = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -17,7 +17,7 @@ namespace RoslynSandbox
 }";
 
             var y = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -31,7 +31,7 @@ namespace RoslynSandbox
         public static void WhenEqualWhitespaceEnd()
         {
             var x = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -43,7 +43,7 @@ a
 ";
 
             var y = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -57,7 +57,7 @@ a
             Assert.AreEqual(true, CodeComparer.Equals(x, y));
         }
 
-        [TestCase("\r\nExpected:\r\n\r\nnamespace RoslynSandbox", "\r\nExpected:\r\n\nnamespace RoslynSandbox")]
+        [TestCase("\r\nExpected:\r\n\r\nnamespace N", "\r\nExpected:\r\n\nnamespace N")]
         public static void WhenEqualMixedNewLines(string x, string y)
         {
             Assert.AreEqual(true, CodeComparer.Equals(x, y));
@@ -67,7 +67,7 @@ a
         public static void WhenNotEqual()
         {
             var x = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -76,7 +76,7 @@ namespace RoslynSandbox
 }";
 
             var y = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {

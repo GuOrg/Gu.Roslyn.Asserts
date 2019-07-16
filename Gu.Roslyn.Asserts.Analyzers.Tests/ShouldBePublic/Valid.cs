@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
         public static void DiagnosticAnalyzer()
         {
             var diagnostics = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -36,7 +36,7 @@ namespace RoslynSandbox
         public static void CodeFixProvider()
         {
             var diagnostics = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -62,7 +62,7 @@ namespace RoslynSandbox
         public static void CodeRefactoringProvider()
         {
             var refactoring = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis.CodeRefactorings;
@@ -79,7 +79,7 @@ namespace RoslynSandbox
         public static void RandomClass()
         {
             var c = @"
-namespace RoslynSandbox
+namespace N
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;

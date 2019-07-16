@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -35,7 +35,7 @@ namespace RoslynSandbox
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -58,7 +58,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsOneError()
             {
                 var c1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -66,7 +66,7 @@ namespace RoslynSandbox
     }
 }";
                 var c2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -88,7 +88,7 @@ namespace RoslynSandbox
             public static void TwoDocumentsTwoErrors()
             {
                 var c1 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C1
     {
@@ -96,7 +96,7 @@ namespace RoslynSandbox
     }
 }";
                 var c2 = @"
-namespace RoslynSandbox
+namespace N
 {
     class C2
     {
@@ -224,7 +224,7 @@ namespace Project2
             public static void WithExpectedDiagnosticWithWrongId()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class C
     {
@@ -248,7 +248,7 @@ namespace RoslynSandbox
             public static void WithExpectedDiagnosticWhenOneReportsError()
             {
                 var code = @"
-namespace RoslynSandbox
+namespace N
 {
     class Value
     {

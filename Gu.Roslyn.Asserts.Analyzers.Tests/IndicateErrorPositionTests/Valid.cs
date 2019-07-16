@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
         public static void DiagnosticsOneParamWithPosition()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -35,7 +35,7 @@ namespace RoslynSandbox
         public static void DiagnosticsOneParamWithPositionAssertReplace()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -59,7 +59,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTwoParamsWithOnePosition()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -84,7 +84,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplace()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -109,7 +109,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplaceWithPosition()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -134,7 +134,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTwoParamsWithOnePositionConst()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -159,7 +159,7 @@ namespace RoslynSandbox
         public static void DiagnosticsTwoParamsWithOnePositionInstanceField()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -184,7 +184,7 @@ namespace RoslynSandbox
         public static void DiagnosticsArrayWithOnePosition()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -209,7 +209,7 @@ namespace RoslynSandbox
         public static void CodeFixOneBefore()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -234,7 +234,7 @@ namespace RoslynSandbox
         public static void CodeFixAssertReplace()
         {
             var code = @"
-namespace RoslynSandbox
+namespace N
 {
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
@@ -249,7 +249,7 @@ namespace RoslynSandbox
         public static void M(string type)
         {
             var before = @""
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
@@ -263,7 +263,7 @@ namespace RoslynSandbox
 }"".AssertReplace(""string"", type);
 
             var after = @""
-namespace RoslynSandbox
+namespace N
 {
     public class C
     {
