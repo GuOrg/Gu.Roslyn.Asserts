@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -103,7 +104,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             bool EndsWith(int oldOffset, string text, out int newOffset)
             {
-                var index = tree.FilePath.LastIndexOf(text, oldOffset);
+                var index = tree.FilePath.LastIndexOf(text, oldOffset, StringComparison.Ordinal);
                 if (index != offset - text.Length)
                 {
                     newOffset = 0;

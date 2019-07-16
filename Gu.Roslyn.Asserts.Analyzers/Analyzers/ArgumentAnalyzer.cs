@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 argument.Parent is ArgumentListSyntax argumentList &&
                 argumentList.Parent is InvocationExpressionSyntax invocation &&
                 context.SemanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
-                method.ContainingType.Name == "RoslynAssert" &&
+                method.ContainingType == KnownSymbol.RoslynAssert &&
                 method.TryFindParameter(argument, out var parameter))
             {
                 if (argument.Expression is IdentifierNameSyntax identifierName &&
