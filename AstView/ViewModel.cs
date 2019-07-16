@@ -70,7 +70,7 @@ namespace AstView
 
             bool TryFindStart(string code, out int result)
             {
-                result = code.LastIndexOf("SyntaxFactory.", pos + 15);
+                result = code.LastIndexOf("SyntaxFactory.", pos + 15, StringComparison.Ordinal);
                 return result >= 0;
             }
 

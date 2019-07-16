@@ -355,10 +355,10 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             var xml = parameter.ContainingSymbol.GetDocumentationCommentXml(CultureInfo.InvariantCulture);
             var prefix = $"<param name=\"{parameter.Name}\">";
-            var start = xml.IndexOf(prefix);
+            var start = xml.IndexOf(prefix, StringComparison.Ordinal);
             if (start > 0)
             {
-                var end = xml.IndexOf("</param>", start);
+                var end = xml.IndexOf("</param>", start, StringComparison.Ordinal);
                 return xml.Substring(start + prefix.Length, end - start - prefix.Length);
             }
 

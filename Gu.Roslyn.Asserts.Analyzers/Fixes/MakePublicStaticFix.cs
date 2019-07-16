@@ -11,9 +11,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PublicStaticFix))]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MakePublicStaticFix))]
     [Shared]
-    public class PublicStaticFix : CodeFixProvider
+    public class MakePublicStaticFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             GURA07TestClassShouldBePublicStatic.DiagnosticId);
@@ -33,9 +33,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             "Make public static.",
                             _ => Task.FromResult(context.Document.WithSyntaxRoot(
                                 syntaxRoot.ReplaceNode(
-                                classDeclaration,
-                                PublicStaticRewriter.Update(classDeclaration)))),
-                        nameof(PublicStaticFix)),
+                                    classDeclaration,
+                                    PublicStaticRewriter.Update(classDeclaration)))),
+                            nameof(MakePublicStaticFix)),
                         diagnostic);
                 }
             }

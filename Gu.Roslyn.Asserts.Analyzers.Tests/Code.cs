@@ -9,7 +9,7 @@ namespace RoslynSandbox
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    internal class PlaceholderAnalyzer : DiagnosticAnalyzer
+    public class PlaceholderAnalyzer : DiagnosticAnalyzer
     {
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
