@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -6,12 +6,12 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
 
     public static class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
-        private static readonly CodeFixProvider Fix = new MakePublicStaticFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.TestClassShouldBePublicStatic);
+        private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
+        private static readonly CodeFixProvider Fix = new StandardNamesFix();
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.UseStandardNames);
 
         [Test]
-        public static void WhenInternalStatic()
+        public static void ClassNamedFoo()
         {
             var before = @"
 namespace RoslynSandbox
@@ -19,15 +19,15 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    internal static class ↓Valid
+    public static class Valid
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        internal static void M1()
+        public static void M1()
         {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
+            var foo = ""class ↓Foo { }"";
+            RoslynAssert.Valid(Analyzer, foo);
         }
     }
 }";
@@ -45,8 +45,8 @@ namespace RoslynSandbox
         [Test]
         public static void M1()
         {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
+            var foo = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, foo);
         }
     }
 }";
@@ -55,7 +55,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void WhenExplicitInternal()
+        public static void ClassNamedBar()
         {
             var before = @"
 namespace RoslynSandbox
@@ -63,15 +63,16 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    internal class ↓Valid
+    public static class Valid
     {
-        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        internal void M1()
+        public static void M1()
         {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
+            var foo = ""class C1 { }"";
+            var bar = ""class ↓Bar { }"";
+            RoslynAssert.Valid(Analyzer, foo, bar);
         }
     }
 }";
@@ -89,8 +90,9 @@ namespace RoslynSandbox
         [Test]
         public static void M1()
         {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
+            var foo = ""class C1 { }"";
+            var bar = ""class C2 { }"";
+            RoslynAssert.Valid(Analyzer, foo, bar);
         }
     }
 }";
@@ -99,7 +101,7 @@ namespace RoslynSandbox
         }
 
         [Test]
-        public static void WhenImplicitInternalPrivate()
+        public static void MethodNamedBar()
         {
             var before = @"
 namespace RoslynSandbox
@@ -107,14 +109,21 @@ namespace RoslynSandbox
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    class ↓Valid
+    public static class Valid
     {
-        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        void M1()
+        public static void M1()
         {
-            var c = ""class C { }"";
+            var c = @""
+namespace N
+{
+    class C
+    {
+        void ↓Bar(int i) { }
+    }
+}"";
             RoslynAssert.Valid(Analyzer, c);
         }
     }
@@ -133,7 +142,14 @@ namespace RoslynSandbox
         [Test]
         public static void M1()
         {
-            var c = ""class C { }"";
+            var c = @""
+namespace N
+{
+    class C
+    {
+        void M(int i) { }
+    }
+}"";
             RoslynAssert.Valid(Analyzer, c);
         }
     }

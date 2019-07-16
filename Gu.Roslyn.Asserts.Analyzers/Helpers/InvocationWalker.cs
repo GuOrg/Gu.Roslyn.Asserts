@@ -49,6 +49,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
             return name != null;
         }
 
+        internal static bool TryFindRoslynAssert(SyntaxNode node, out InvocationExpressionSyntax invocation)
+        {
+            using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))
+            {
+                return walker.invocations.TrySingle(out invocation);
+            }
+        }
+
         /// <inheritdoc />
         protected override void Clear()
         {
