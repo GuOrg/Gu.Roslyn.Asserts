@@ -95,6 +95,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                 "System.Xml.XPath.XDocument.dll",
                            };
 #elif NETCOREAPP2_0
+            Assert.Inconclusive();
             var expected = new[]
                            {
                                 "Microsoft.CodeAnalysis.CSharp.dll",

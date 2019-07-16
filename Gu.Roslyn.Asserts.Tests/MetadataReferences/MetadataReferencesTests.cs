@@ -327,6 +327,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.Text.Encoding.CodePages.dll",
             };
 #elif NETCOREAPP2_0
+            Assert.Inconclusive();
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
@@ -529,6 +530,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.Composition.Hosting.dll",
             };
 #elif NETCOREAPP2_0
+            Assert.Inconclusive();
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
