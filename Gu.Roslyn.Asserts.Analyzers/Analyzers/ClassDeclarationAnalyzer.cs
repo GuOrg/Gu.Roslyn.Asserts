@@ -1,6 +1,8 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System.Collections.Generic;
     using System.Collections.Immutable;
+    using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,7 +13,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
             GURA04NameClassToMatchAsserts.Descriptor,
-            GURA05NameFileToMatchClass.Descriptor);
+            GURA05NameFileToMatchClass.Descriptor,
+            GURA07TestClassShouldBePublicStatic.Descriptor);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -22,7 +25,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ClassDeclarationSyntax classDeclaration)
+            if (context.Node is ClassDeclarationSyntax classDeclaration &&
+                context.ContainingSymbol is INamedTypeSymbol type)
             {
                 if (InvocationWalker.TryFindName(classDeclaration, out var name) &&
                     context.ContainingSymbol.Name != name)
@@ -36,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             name));
                 }
 
-                if (ShouldRenameFile(classDeclaration.SyntaxTree, context.ContainingSymbol as INamedTypeSymbol, out name))
+                if (ShouldRenameFile(classDeclaration.SyntaxTree, type, out name))
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
@@ -46,77 +50,136 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             context.ContainingSymbol.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart),
                             name));
                 }
+
+                if ((!type.IsStatic || type.DeclaredAccessibility != Accessibility.Public) &&
+                    UsingDirectiveWalker.IsUsingNUnit(context.SemanticModel.SyntaxTree))
+                {
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            GURA07TestClassShouldBePublicStatic.Descriptor,
+                            classDeclaration.Identifier.GetLocation(),
+                            type.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart)));
+                }
+            }
+        }
+
+        private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, out string result)
+        {
+            if (type == null ||
+                type.IsGenericType)
+            {
+                result = null;
+                return false;
             }
 
-            bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, out string result)
+            if (!EndsWith(tree.FilePath.Length - 1, "cs", out var offset))
             {
-                if (type == null ||
-                    type.IsGenericType)
+                result = null;
+                return false;
+            }
+
+            if (!EndsWith(offset, type.MetadataName, out offset))
+            {
+                return TryGetName(out result);
+            }
+
+            if (type.ContainingType is INamedTypeSymbol parent)
+            {
+                if (parent.ContainingType != null ||
+                    parent.IsGenericType)
                 {
                     result = null;
                     return false;
                 }
 
-                if (!EndsWith(tree.FilePath.Length - 1, "cs", out var offset))
-                {
-                    result = null;
-                    return false;
-                }
-
-                if (!EndsWith(offset, type.MetadataName, out offset))
+                if (!EndsWith(offset, parent.Name, out _))
                 {
                     return TryGetName(out result);
                 }
+            }
 
-                if (type.ContainingType is INamedTypeSymbol parent)
+            result = null;
+            return false;
+
+            bool EndsWith(int oldOffset, string text, out int newOffset)
+            {
+                var index = tree.FilePath.LastIndexOf(text, oldOffset);
+                if (index != offset - text.Length)
                 {
-                    if (parent.ContainingType != null ||
-                        parent.IsGenericType)
-                    {
-                        result = null;
-                        return false;
-                    }
-
-                    if (!EndsWith(offset, parent.Name, out _))
-                    {
-                        return TryGetName(out result);
-                    }
+                    newOffset = 0;
+                    return false;
                 }
 
-                result = null;
-                return false;
+                newOffset = oldOffset - index - 1;
+                return true;
+            }
 
-                bool EndsWith(int oldOffset, string text, out int newOffset)
+            bool TryGetName(out string name)
+            {
+                if (type.ContainingType is INamedTypeSymbol containing)
                 {
-                    var index = tree.FilePath.LastIndexOf(text, oldOffset);
-                    if (index != offset - text.Length)
+                    if (containing.IsGenericType ||
+                        containing.ContainingType != null)
                     {
-                        newOffset = 0;
+                        name = null;
                         return false;
                     }
 
-                    newOffset = oldOffset - index - 1;
+                    name = $"{containing.Name}.{type.Name}";
                     return true;
                 }
 
-                bool TryGetName(out string name)
+                name = type.Name;
+                return true;
+            }
+        }
+
+        private sealed class UsingDirectiveWalker : PooledWalker<UsingDirectiveWalker>
+        {
+            private readonly List<UsingDirectiveSyntax> usingDirectives = new List<UsingDirectiveSyntax>();
+
+            public override void VisitUsingDirective(UsingDirectiveSyntax node)
+            {
+                this.usingDirectives.Add(node);
+                base.VisitUsingDirective(node);
+            }
+
+            public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+            {
+                // Stop walking here
+            }
+
+            public override void VisitStructDeclaration(StructDeclarationSyntax node)
+            {
+                // Stop walking here
+            }
+
+            internal static bool IsUsingNUnit(SyntaxTree tree)
+            {
+                if (tree.TryGetRoot(out var root))
                 {
-                    if (type.ContainingType is INamedTypeSymbol containing)
+                    using (var walker = BorrowAndVisit(root, () => new UsingDirectiveWalker()))
                     {
-                        if (containing.IsGenericType ||
-                            containing.ContainingType != null)
+                        foreach (var directive in walker.usingDirectives)
                         {
-                            name = null;
-                            return false;
+                            if (directive.Name is QualifiedNameSyntax qualifiedName &&
+                                qualifiedName.Right is IdentifierNameSyntax right &&
+                                right.Identifier.ValueText == "Framework" &&
+                                qualifiedName.Left is IdentifierNameSyntax left &&
+                                left.Identifier.ValueText == "NUnit")
+                            {
+                                return true;
+                            }
                         }
-
-                        name = $"{containing.Name}.{type.Name}";
-                        return true;
                     }
-
-                    name = type.Name;
-                    return true;
                 }
+
+                return false;
+            }
+
+            protected override void Clear()
+            {
+                this.usingDirectives.Clear();
             }
         }
     }
