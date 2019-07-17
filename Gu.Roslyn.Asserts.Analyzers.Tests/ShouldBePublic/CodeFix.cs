@@ -8,6 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
         private static readonly CodeFixProvider Fix = new AccessibilityFix();
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.ShouldBePublic);
 
         [Test]
         public static void DiagnosticAnalyzer()
@@ -75,7 +76,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) }, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) }, suppressedDiagnostics: new[] { "CS1701" });
         }
     }
 }

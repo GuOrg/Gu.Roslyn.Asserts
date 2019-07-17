@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublicStatic
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -69,6 +69,50 @@ namespace N
 
         [Test]
         internal void M1()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, suppressedDiagnostics: new[] { "CS1701" });
+        }
+
+        [Test]
+        public static void WhenPublic()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public class ↓Valid
+    {
+        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public void M1()
         {
             var c = ""class C { }"";
             RoslynAssert.Valid(Analyzer, c);

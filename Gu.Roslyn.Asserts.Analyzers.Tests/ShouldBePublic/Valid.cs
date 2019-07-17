@@ -1,11 +1,13 @@
 namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
 {
+    using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
+        private static readonly DiagnosticDescriptor Descriptor = Descriptors.ShouldBePublic;
 
         [Test]
         public static void DiagnosticAnalyzer()
@@ -29,7 +31,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, diagnostics);
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, diagnostics);
         }
 
         [Test]
@@ -55,7 +57,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, Code.PlaceholderFix, diagnostics);
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, diagnostics);
         }
 
         [Test]
@@ -72,7 +74,7 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            RoslynAssert.Valid(Analyzer, refactoring);
+            RoslynAssert.Valid(Analyzer, Descriptor, refactoring);
         }
 
         [Test]
@@ -89,7 +91,7 @@ namespace N
     {
     }
 }";
-            RoslynAssert.Valid(Analyzer, c);
+            RoslynAssert.Valid(Analyzer, Descriptor, c);
         }
     }
 }

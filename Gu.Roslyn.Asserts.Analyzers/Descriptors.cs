@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             description: "Test class should be public static.");
 
         public static readonly DiagnosticDescriptor ShouldBeInternal = new DiagnosticDescriptor(
-            id: "GURA08.a",
+            id: "GURA08a",
             title: "Should be internal.",
             messageFormat: "'{0}' should be internal.",
             category: AnalyzerCategory.Ocd,
@@ -77,7 +77,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             description: "Should be internal.");
 
         public static readonly DiagnosticDescriptor ShouldBePublic = new DiagnosticDescriptor(
-            id: "GURA08.b",
+            id: "GURA08b",
             title: "Should be public.",
             messageFormat: "'{0}' should be public.",
             category: AnalyzerCategory.Ocd,

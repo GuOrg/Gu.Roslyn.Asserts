@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.TestClassShouldBePublicStaticTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublicStatic
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;

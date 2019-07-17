@@ -94,6 +94,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 first,
                                 SyntaxFactory.Token(SyntaxKind.PublicKeyword).WithTriviaFrom(first));
                             break;
+                        case SyntaxKind.PublicKeyword:
+                            break;
                         default:
                             modifiers = modifiers.Insert(0, SyntaxFactory.Token(SyntaxKind.PublicKeyword));
                             break;
