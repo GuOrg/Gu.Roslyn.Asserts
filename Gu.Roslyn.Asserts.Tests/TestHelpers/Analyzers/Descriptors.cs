@@ -6,26 +6,26 @@ namespace Gu.Roslyn.Asserts.Tests
     public static class Descriptors
     {
         public static readonly DiagnosticDescriptor Id1 = new DiagnosticDescriptor(
-            "1",
-            "Title: 1",
-            "Message: 1",
-            "Description: 1",
+            "ID1",
+            "Title: ID1",
+            "Message: ID1",
+            "Description: ID1",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         public static readonly DiagnosticDescriptor Id1Duplicate = new DiagnosticDescriptor(
-            "1",
-            "Title: 1 (dupe)",
-            "Message: 1 (dupe)",
+            "ID1",
+            "Title: ID1 (dupe)",
+            "Message: ID1 (dupe)",
             "Description: 1 (dupe)",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         public static readonly DiagnosticDescriptor Id2 = new DiagnosticDescriptor(
-            "2",
-            "Title: 2",
-            "Message: 2",
-            "Description: 2",
+            "ID2",
+            "Title: ID2",
+            "Message: ID2",
+            "Description: ID2",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 

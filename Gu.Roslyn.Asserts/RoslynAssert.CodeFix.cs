@@ -436,17 +436,17 @@ namespace Gu.Roslyn.Asserts
                                                 .ToArray();
             if (fixableDiagnostics.Length == 0)
             {
-                var message = $"Code analyzed with {analyzer} did not generate any diagnostics fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
+                var message = $"Code analyzed with {analyzer.GetType().Name} did not generate any diagnostics fixable by {fix.GetType().Name}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}.";
                 throw new AssertException(message);
             }
 
             if (fixableDiagnostics.Length > 1)
             {
-                var message = $"Code analyzed with {analyzer} generated more than one diagnostic fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}{Environment.NewLine}" +
+                var message = $"Code analyzed with {analyzer.GetType().Name} generated more than one diagnostic fixable by {fix.GetType().Name}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {Format(diagnostics.SelectMany(x => x).Select(d => d.Descriptor))}.{Environment.NewLine}" +
+                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {Format(fix.FixableDiagnosticIds)}.{Environment.NewLine}" +
                               $"Maybe you meant to call AnalyzerAssert.FixAll?";
                 throw new AssertException(message);
             }
@@ -455,7 +455,7 @@ namespace Gu.Roslyn.Asserts
             var fixedSolution = Fix.Apply(sln, fix, diagnostic, fixTitle);
             if (ReferenceEquals(sln, fixedSolution))
             {
-                throw new AssertException($"{fix} did not change any document.");
+                throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }
 
             AreEqualAsync(after, fixedSolution, null).GetAwaiter().GetResult();

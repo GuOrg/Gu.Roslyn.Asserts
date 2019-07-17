@@ -239,9 +239,9 @@ namespace N
         private readonly int value;
     }
 }";
-                var expected = "FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID WRONG.\r\n" +
-                               "FieldNameMustNotBeginWithUnderscore.SupportedDiagnostics: {SA1309}.\r\n" +
-                               "The expected diagnostic is: WRONG.";
+                var expected = "FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID 'WRONG'.\r\n" +
+                               "FieldNameMustNotBeginWithUnderscore.SupportedDiagnostics: 'SA1309'.\r\n" +
+                               "The expected diagnostic is: 'WRONG'.";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("WRONG");
 
@@ -498,7 +498,7 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
                 var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, ExpectedDiagnostic.Create(Descriptors.Id1), string.Empty));
                 Assert.AreEqual(expected, exception.Message);

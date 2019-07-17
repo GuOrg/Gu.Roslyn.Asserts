@@ -115,8 +115,8 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
                 var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
-                               "NopAnalyzer.SupportedDiagnostics: {IdWithNoFix}.\r\n" +
-                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, ID1, ID2}.";
+                               "NopAnalyzer.SupportedDiagnostics: 'IdWithNoFix'.\r\n" +
+                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -297,7 +297,7 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
                 var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
                 var fix = new DuplicateIdFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.Id1);

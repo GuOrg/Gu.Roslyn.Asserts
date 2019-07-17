@@ -81,9 +81,9 @@ namespace N
         private readonly int value2;
     }
 }";
-                var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DoNotUseUnderscoreFix.\r\n" +
-                               "The analyzed code contained the following diagnostics: {SA1309, SA1309}\r\n" +
-                               "The code fix supports the following diagnostics: {SA1309, ID1, ID2}\r\n" +
+                var expected = "Code analyzed with FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by DoNotUseUnderscoreFix.\r\n" +
+                               "The analyzed code contained the following diagnostics: {SA1309, SA1309}.\r\n" +
+                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -205,7 +205,7 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new EmptyCodeFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
-                var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.EmptyCodeFixProvider did not change any document.";
+                var expected = "EmptyCodeFixProvider did not change any document.";
                 Console.Write(exception.Message);
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -225,8 +225,8 @@ namespace N
                 var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
                 var fix = new DoNotUseUnderscoreFix();
                 var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
-                               "NopAnalyzer.SupportedDiagnostics: {IdWithNoFix}.\r\n" +
-                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, ID1, ID2}.";
+                               "NopAnalyzer.SupportedDiagnostics: 'IdWithNoFix'.\r\n" +
+                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }

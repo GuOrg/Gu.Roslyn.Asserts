@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -83,7 +84,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     foreach (var literal in walker.literals)
                     {
-                        var index = literal.Token.Text.IndexOf("class Foo");
+                        var index = literal.Token.Text.IndexOf("class Foo", StringComparison.Ordinal);
                         if (index > 0)
                         {
                             before = "Foo";
@@ -103,7 +104,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
                         }
 
-                        index = literal.Token.Text.IndexOf("class Bar");
+                        index = literal.Token.Text.IndexOf("class Bar", StringComparison.Ordinal);
                         if (index > 0)
                         {
                             before = "Bar";
@@ -123,7 +124,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
                         }
 
-                        index = literal.Token.Text.IndexOf("Bar(");
+                        index = literal.Token.Text.IndexOf("Bar(", StringComparison.Ordinal);
                         if (index > 0)
                         {
                             before = "Bar";

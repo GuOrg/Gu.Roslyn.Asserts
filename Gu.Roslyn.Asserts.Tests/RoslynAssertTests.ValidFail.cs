@@ -231,9 +231,9 @@ namespace N
         private readonly int value1;
     }
 }";
-                var expected = "SyntaxNodeAnalyzer does not produce a diagnostic with ID 2.\r\n" +
-                               "SyntaxNodeAnalyzer.SupportedDiagnostics: {1}.\r\n" +
-                               "The expected diagnostic is: 2.";
+                var expected = "SyntaxNodeAnalyzer does not produce a diagnostic with ID 'ID2'.\r\n" +
+                               "SyntaxNodeAnalyzer.SupportedDiagnostics: 'ID1'.\r\n" +
+                               "The expected diagnostic is: 'ID2'.";
 
                 var descriptor = Descriptors.Id2;
                 var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1);
@@ -270,7 +270,7 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
                 var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
                 var descriptor = Descriptors.Id1;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, string.Empty));

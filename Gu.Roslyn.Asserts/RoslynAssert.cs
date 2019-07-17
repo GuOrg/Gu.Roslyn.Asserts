@@ -147,23 +147,23 @@ namespace Gu.Roslyn.Asserts
             if (analyzer.SupportedDiagnostics.Length > 0 &&
                 analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
             {
-                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics has more than one descriptor with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
+                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics has more than one descriptor with ID '{analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}'.";
                 throw new AssertException(message);
             }
 
             var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedId);
             if (descriptors == 0)
             {
-                var message = $"{analyzer.GetType().Name} does not produce a diagnostic with ID {expectedId}.{Environment.NewLine}" +
-                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedId}.";
+                var message = $"{analyzer.GetType().Name} does not produce a diagnostic with ID '{expectedId}'.{Environment.NewLine}" +
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {Format(analyzer.SupportedDiagnostics)}.{Environment.NewLine}" +
+                              $"The expected diagnostic is: '{expectedId}'.";
                 throw new AssertException(message);
             }
 
             if (descriptors > 1)
             {
-                var message = $"{analyzer.GetType().Name} supports multiple diagnostics with ID {expectedId}.{Environment.NewLine}" +
-                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                var message = $"{analyzer.GetType().Name} supports multiple diagnostics with ID '{expectedId}'.{Environment.NewLine}" +
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {Format(analyzer.SupportedDiagnostics)}.{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }
@@ -174,10 +174,24 @@ namespace Gu.Roslyn.Asserts
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(fix.FixableDiagnosticIds).Any())
             {
                 var message = $"{analyzer.GetType().Name} does not produce diagnostics fixable by {fix.GetType().Name}.{Environment.NewLine}" +
-                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
-                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}.";
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {Format(analyzer.SupportedDiagnostics)}.{Environment.NewLine}" +
+                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {Format(fix.FixableDiagnosticIds)}.";
                 throw new AssertException(message);
             }
+        }
+
+        private static string Format(IEnumerable<DiagnosticDescriptor> supportedDiagnostics)
+        {
+            return Format(supportedDiagnostics.Select(x => x.Id));
+        }
+
+        private static string Format(IEnumerable<string> ids)
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            return ids.TrySingle(out var single)
+                ? $"'{single}'"
+                : $"{{{string.Join(", ", ids)}}}";
+            //// ReSharper restore PossibleMultipleEnumeration
         }
 
         private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)

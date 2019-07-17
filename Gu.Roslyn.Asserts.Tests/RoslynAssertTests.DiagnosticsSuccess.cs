@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
@@ -214,7 +215,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("ID2", "Field '_value1' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309b", "Field '_value1' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
@@ -365,6 +366,26 @@ namespace N
 }";
 
                 expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId);
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
+            }
+
+            [Explicit("Temp suppress.")]
+            [Test]
+            public static void AdditionalLocation()
+            {
+                var code = @"
+namespace N
+{
+    ↓class Value
+    {
+        ↓private readonly int f;
+    }
+}";
+
+                var analyzer = new FieldWithAdditionalLocationClassAnalyzer();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(analyzer.SupportedDiagnostics.Single());
+
+                RoslynAssert.Diagnostics(analyzer, code);
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
         }
