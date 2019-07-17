@@ -123,12 +123,12 @@ namespace N
                 var expected = @"Expected and actual diagnostics do not match.
 Expected:
   SA1309 
-  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
+    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
 Actual:
-  SA1309 Field '_value2' must not begin with an underscore
-    at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
   SA1309 Field '_value1' must not begin with an underscore
     at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
+  SA1309 Field '_value2' must not begin with an underscore
+    at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
 ";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -149,11 +149,11 @@ namespace N
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
-                               "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
+                               "  SA1309 \r\n" +
+                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
-                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
+                               "  SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -490,13 +490,13 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
-                               "CS0067 \r\n" +
-                               "  at line 3 and character 25 in file Unknown | public partial class ↓C\r\n" +
+                               "  CS0067 \r\n" +
+                               "    at line 3 and character 25 in file Unknown | public partial class ↓C\r\n" +
                                "Actual:\r\n" +
-                               "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
-                               "  at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
-                               "CS0067 The event 'C.Bar' is never used\r\n" +
-                               "  at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
+                               "  CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
+                               "    at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
+                               "  CS0067 The event 'C.Bar' is never used\r\n" +
+                               "    at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
                 var fix = new RemoveUnusedFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { part1, part2 }, string.Empty));
                 CodeAssert.AreEqual(expected, exception.Message);
@@ -823,11 +823,11 @@ namespace N
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
-                               "SA1309 \r\n" +
-                               "  at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
+                               "  SA1309 \r\n" +
+                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
                                "Actual:\r\n" +
-                               "SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
+                               "  SA1309 Field '_value1' must not begin with an underscore\r\n" +
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, string.Empty));

@@ -240,11 +240,11 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            error.AppendLine("Expected and actual diagnostics do not match.");
-            error.Append("Expected:\r\n");
-            foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics)
+            error.AppendLine("Expected and actual diagnostics do not match.")
+                 .AppendLine("Expected:");
+            foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
             {
-                error.AppendLine(expected.ToString(diagnosticsAndSources.Code));
+                error.AppendLine(expected.ToString(diagnosticsAndSources.Code, "  "));
             }
 
             if (allDiagnostics.Length == 0)
@@ -253,10 +253,10 @@ namespace Gu.Roslyn.Asserts
             }
             else
             {
-                error.Append("Actual:\r\n");
-                foreach (var diagnostic in allDiagnostics)
+                error.AppendLine("Actual:");
+                foreach (var diagnostic in allDiagnostics.OrderBy(x => x.Location.SourceSpan.Start))
                 {
-                    error.AppendLine(diagnostic.ToErrorString());
+                    error.AppendLine(diagnostic.ToErrorString("  "));
                 }
             }
 

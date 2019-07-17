@@ -288,18 +288,18 @@ namespace Gu.Roslyn.Asserts
         /// Writes the diagnostic and the offending code.
         /// </summary>
         /// <returns>A string for use in assert exception.</returns>
-        internal string ToString(IReadOnlyList<string> sources)
+        internal string ToString(IReadOnlyList<string> sources, string padding = "")
         {
             if (this.HasPosition)
             {
                 var path = this.HasPath ? this.Span.Path : CodeReader.FileName(sources.Single());
                 var match = sources.FirstOrDefault(x => CodeReader.FileName(x) == path && this.Span.Span.ExistsIn(x));
                 var line = match != null ? CodeReader.GetLineWithErrorIndicated(match, this.Span.StartLinePosition) : string.Empty;
-                return $"{this.Id} {this.Message}\r\n" +
-                       $"  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} | {line.TrimStart(' ')}";
+                return $"{padding}{this.Id} {this.Message}\r\n" +
+                       $"{padding}  at line {this.Span.StartLinePosition.Line} and character {this.Span.StartLinePosition.Character} in file {path} | {line.TrimStart(' ')}";
             }
 
-            return $"{this.Id} {this.Message}";
+            return $"{padding}{this.Id} {this.Message}";
         }
 
         /// <summary>

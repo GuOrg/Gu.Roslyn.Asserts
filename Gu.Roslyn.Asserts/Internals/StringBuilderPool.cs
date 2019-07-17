@@ -39,8 +39,6 @@ namespace Gu.Roslyn.Asserts.Internals
             public override string ToString() => throw new InvalidOperationException("Use StringBuilderPool.Return");
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
-            internal void Clear() => this.inner.Clear();
-
             internal PooledStringBuilder AppendLine(string text)
             {
                 this.inner.AppendLine(text);

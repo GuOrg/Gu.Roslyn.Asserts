@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
-    /// Helper for dumping recursive metadata for a SyntaxNode.
+    /// Helper for dumping recursive meta data for a SyntaxNode.
     /// </summary>
     public class AstWriter
     {

@@ -148,11 +148,11 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
-                               "SA1309 \r\n" +
-                               "  at line 5 and character 29 in file C.cs | private readonly int ↓value = SYNTAX_ERROR;\r\n" +
+                               "  SA1309 \r\n" +
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓value = SYNTAX_ERROR;\r\n" +
                                "Actual:\r\n" +
-                               "CS0103 The name 'SYNTAX_ERROR' does not exist in the current context\r\n" +
-                               "  at line 5 and character 37 in file C.cs | private readonly int value = ↓SYNTAX_ERROR;\r\n";
+                               "  CS0103 The name 'SYNTAX_ERROR' does not exist in the current context\r\n" +
+                               "    at line 5 and character 37 in file C.cs | private readonly int value = ↓SYNTAX_ERROR;\r\n";
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 Assert.AreEqual(expected, exception.Message);

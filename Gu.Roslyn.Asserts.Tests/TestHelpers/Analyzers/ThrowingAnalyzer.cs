@@ -34,12 +34,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(x => Handle(x), this.kinds);
-        }
-
-        private static void Handle(SyntaxNodeAnalysisContext context)
-        {
-            throw new InvalidOperationException("Analyzer threw this.");
+            context.RegisterSyntaxNodeAction(x => throw new InvalidOperationException("Analyzer threw this."), this.kinds);
         }
     }
 }
