@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Globalization;
@@ -92,7 +93,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -214,7 +215,7 @@ namespace Gu.Roslyn.Asserts
                 allDiagnostics = Analyze.GetDiagnostics(solution).SelectMany(x => x).ToArray();
             }
 
-            if (diagnosticsAndSources.ExpectedDiagnostics.SetEquals(allDiagnostics))
+            if (Equals(out var missingExpected, out var missingActual))
             {
                 if (expectedMessage != null)
                 {
@@ -241,7 +242,6 @@ namespace Gu.Roslyn.Asserts
             }
 
             error.AppendLine("Expected and actual diagnostics do not match.");
-            var missingExpected = diagnosticsAndSources.ExpectedDiagnostics.Except(allDiagnostics);
             for (var i = 0; i < missingExpected.Count; i++)
             {
                 if (i == 0)
@@ -258,7 +258,6 @@ namespace Gu.Roslyn.Asserts
                 error.AppendLine("Actual: <no errors>");
             }
 
-            var missingActual = allDiagnostics.Except(diagnosticsAndSources.ExpectedDiagnostics);
             if (allDiagnostics.Length > 0 && missingActual.Count == 0)
             {
                 error.AppendLine("Actual: <missing>");
@@ -276,6 +275,52 @@ namespace Gu.Roslyn.Asserts
             }
 
             throw new AssertException(error.Return());
+
+            bool Equals(out IReadOnlyList<ExpectedDiagnostic> missingExpectedDiagnostics, out IReadOnlyList<Diagnostic> missingDiagnostics)
+            {
+                List<ExpectedDiagnostic> tempExpectedDiagnostics = null;
+                List<Diagnostic> tempDiagnostics = null;
+                foreach (var diagnostic in allDiagnostics)
+                {
+                    if (diagnosticsAndSources.ExpectedDiagnostics.Any(e => e.Matches(diagnostic)))
+                    {
+                        continue;
+                    }
+
+                    if (tempDiagnostics == null)
+                    {
+                        tempDiagnostics = new List<Diagnostic>();
+                    }
+
+                    tempDiagnostics.Add(diagnostic);
+                }
+
+                foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics)
+                {
+                    if (allDiagnostics.Any(a => expected.Matches(a)))
+                    {
+                        continue;
+                    }
+
+                    if (tempExpectedDiagnostics == null)
+                    {
+                        tempExpectedDiagnostics = new List<ExpectedDiagnostic>();
+                    }
+
+                    tempExpectedDiagnostics.Add(expected);
+                }
+
+                if (tempExpectedDiagnostics == null && tempDiagnostics == null)
+                {
+                    missingExpectedDiagnostics = null;
+                    missingDiagnostics = null;
+                    return true;
+                }
+
+                missingExpectedDiagnostics = tempExpectedDiagnostics ?? (IReadOnlyList<ExpectedDiagnostic>)Array.Empty<ExpectedDiagnostic>();
+                missingDiagnostics = tempDiagnostics ?? (IReadOnlyList<Diagnostic>)Array.Empty<Diagnostic>(); ;
+                return false;
+            }
         }
     }
 }

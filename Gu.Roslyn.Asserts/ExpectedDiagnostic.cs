@@ -221,7 +221,7 @@ namespace Gu.Roslyn.Asserts
         {
             return this.Id == actual.Id &&
                    this.MessageMatches(actual) &&
-                   this.PositionMatches(actual);
+                   (this.PositionMatches(actual) || actual.AdditionalLocations.Any(a => this.PositionMatches(a)));
         }
 
         /// <summary>
@@ -242,29 +242,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if match.</returns>
         public bool PositionMatches(Diagnostic actual)
         {
-            if (!this.HasPosition)
-            {
-                return true;
-            }
-
-            var actualSpan = actual.Location.GetMappedLineSpan();
-            if (this.Span.StartLinePosition != actualSpan.StartLinePosition)
-            {
-                return false;
-            }
-
-            if (this.HasPath &&
-                this.Span.Path != actualSpan.Path)
-            {
-                return false;
-            }
-
-            if (this.Span.StartLinePosition != this.Span.EndLinePosition)
-            {
-                return this.Span.EndLinePosition == actualSpan.EndLinePosition;
-            }
-
-            return true;
+            return this.PositionMatches(actual.Location);
         }
 
         /// <summary>
@@ -322,6 +300,38 @@ namespace Gu.Roslyn.Asserts
             }
 
             return $"{this.Id} {this.Message}";
+        }
+
+        /// <summary>
+        /// Check if position matches if specified.
+        /// </summary>
+        /// <param name="location">The actual diagnostic.</param>
+        /// <returns>True if match.</returns>
+        private bool PositionMatches(Location location)
+        {
+            if (!this.HasPosition)
+            {
+                return true;
+            }
+
+            var actualSpan = location.GetMappedLineSpan();
+            if (this.Span.StartLinePosition != actualSpan.StartLinePosition)
+            {
+                return false;
+            }
+
+            if (this.HasPath &&
+                this.Span.Path != actualSpan.Path)
+            {
+                return false;
+            }
+
+            if (this.Span.StartLinePosition != this.Span.EndLinePosition)
+            {
+                return this.Span.EndLinePosition == actualSpan.EndLinePosition;
+            }
+
+            return true;
         }
     }
 }

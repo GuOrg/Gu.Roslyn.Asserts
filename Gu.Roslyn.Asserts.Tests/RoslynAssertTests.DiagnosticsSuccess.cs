@@ -369,23 +369,22 @@ namespace N
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
 
-            [Explicit("Temp suppress.")]
             [Test]
             public static void AdditionalLocation()
             {
                 var code = @"
 namespace N
 {
-    ↓class Value
+    ↓class C
     {
         ↓private readonly int f;
     }
 }";
 
                 var analyzer = new FieldWithAdditionalLocationClassAnalyzer();
-                var expectedDiagnostic = ExpectedDiagnostic.Create(analyzer.SupportedDiagnostics.Single());
-
                 RoslynAssert.Diagnostics(analyzer, code);
+
+                var expectedDiagnostic = ExpectedDiagnostic.Create(analyzer.SupportedDiagnostics.Single());
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
         }
