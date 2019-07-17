@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 objectCreation.Type.GetLocation(),
                                 $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
                     }
-                    if (type.DeclaredAccessibility != Accessibility.Public)
+                    else if (type.DeclaredAccessibility != Accessibility.Public)
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
