@@ -439,7 +439,7 @@ Actual:
   SA1309 Field '_value2' must not begin with an underscore
     at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
 ";
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -473,7 +473,7 @@ Actual:
   SA1309 Field '_value1' must not begin with an underscore
     at line 5 and character 29 in file C1.cs | private readonly int ↓_value1;
 ";
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]

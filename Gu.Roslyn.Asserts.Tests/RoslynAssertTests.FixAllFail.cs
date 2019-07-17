@@ -48,7 +48,7 @@ Actual:
     at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
 ";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
