@@ -1,15 +1,39 @@
 namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
+    [Explicit("Temp ignore.")]
     public static class Diagnostics
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
-        private static readonly CodeFixProvider Fix = new IndicateErrorPositionFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.IndicateErrorPosition);
         private static readonly string[] SuppressedDiagnostics = { "CS1701" };
+
+        [Test]
+        public static void DiagnosticsOneArgument()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ↓""class C1 { }"";
+            RoslynAssert.Diagnostics(Analyzer, ↓c1);
+        }
+    }
+}";
+
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+        }
 
         [Test]
         public static void DiagnosticsTwoParams()
@@ -27,14 +51,14 @@ namespace N
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code2 = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, ↓code1, ↓code2);
+            var c1 = ↓""class C1 { }"";
+            var c2 = ↓""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, ↓c1, ↓c2);
         }
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
 
         [Test]
@@ -53,18 +77,18 @@ namespace N
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code2 = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, ↓new [] { code1, code2 });
+            var c1 = ↓""class C1 { }"";
+            var c2 = ↓""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, new [] { ↓c1, ↓c2 });
         }
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
 
         [Test]
-        public static void CodeFixOneBefore()
+        public static void CodeFixArray()
         {
             var code = @"
 namespace N
@@ -80,14 +104,14 @@ namespace N
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code2 = ""class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, ↓new [] { code1, code2 }, string.Empty);
+            var c1 = ↓""class C1 { }"";
+            var c2 = ↓""class C2 { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, new [] { ↓c1, ↓c2 }, string.Empty);
         }
     }
 }";
 
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressedDiagnostics: SuppressedDiagnostics);
         }
     }
 }
