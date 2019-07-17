@@ -6,10 +6,18 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class IdentifierNameAnalyzer : DiagnosticAnalyzer
+    internal class SyntaxNodeAnalyzer : DiagnosticAnalyzer
     {
-        internal IdentifierNameAnalyzer(params DiagnosticDescriptor[] descriptors)
+        private readonly SyntaxKind[] kinds;
+
+        internal SyntaxNodeAnalyzer(params DiagnosticDescriptor[] descriptors)
+            : this(descriptors, SyntaxKind.IdentifierName)
         {
+        }
+
+        internal SyntaxNodeAnalyzer(DiagnosticDescriptor[] descriptors, params SyntaxKind[] kinds)
+        {
+            this.kinds = kinds;
             this.SupportedDiagnostics = ImmutableArray.Create(descriptors);
         }
 
@@ -25,11 +33,15 @@ namespace Gu.Roslyn.Asserts.Tests
 
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(HandleIdentifierName, SyntaxKind.IdentifierName);
+            context.RegisterSyntaxNodeAction(this.HandleIdentifierName, this.kinds);
         }
 
-        private static void HandleIdentifierName(SyntaxNodeAnalysisContext context)
+        private void HandleIdentifierName(SyntaxNodeAnalysisContext context)
         {
+            foreach (var diagnostic in this.SupportedDiagnostics)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(diagnostic, context.Node.GetLocation()));
+            }
         }
     }
 }

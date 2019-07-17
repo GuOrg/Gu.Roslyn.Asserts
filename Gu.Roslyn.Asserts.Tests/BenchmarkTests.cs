@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public static async Task ClassLibrary1FieldDeclarations()
         {
-            var analyzer = new SyntaxNodeAnalyzer(SyntaxKind.FieldDeclaration);
+            var analyzer = new SyntaxNodeContextAnalyzer(SyntaxKind.FieldDeclaration);
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
             var expected = new List<string> { "private int _value;" };
             CollectionAssert.AreEqual(expected, benchmark.SyntaxNodeActions.Select(x => x.Context.Node.ToString()));
