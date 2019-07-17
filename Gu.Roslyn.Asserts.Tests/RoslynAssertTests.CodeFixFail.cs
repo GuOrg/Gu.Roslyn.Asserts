@@ -120,10 +120,16 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Actual:\r\n" +
-                               "SA1309 Field '_value2' must not begin with an underscore\r\n" +
-                               "  at line 6 and character 29 in file C.cs | private readonly int ↓_value2;\r\n";
+                var expected = @"Expected and actual diagnostics do not match.
+Expected:
+  SA1309 
+  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
+Actual:
+  SA1309 Field '_value2' must not begin with an underscore
+    at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
+  SA1309 Field '_value1' must not begin with an underscore
+    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
+";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 

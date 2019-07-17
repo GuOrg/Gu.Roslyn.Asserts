@@ -193,15 +193,5 @@ namespace N
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
             RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'.");
         }
-
-        [Explicit("Temp ignore.")]
-        [Test]
-        public static void RunOnTestProject()
-        {
-            var sln = CodeFactory.CreateSolution(
-                ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"),
-                MetadataReferences.FromAttributes());
-            RoslynAssert.Valid(Analyzer, sln);
-        }
     }
 }

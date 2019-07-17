@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Globalization;
@@ -215,7 +214,7 @@ namespace Gu.Roslyn.Asserts
                 allDiagnostics = Analyze.GetDiagnostics(solution).SelectMany(x => x).ToArray();
             }
 
-            if (Equals(out var missingExpected, out var missingActual))
+            if (Equals())
             {
                 if (expectedMessage != null)
                 {
@@ -242,44 +241,29 @@ namespace Gu.Roslyn.Asserts
             }
 
             error.AppendLine("Expected and actual diagnostics do not match.");
-            for (var i = 0; i < missingExpected.Count; i++)
+            error.Append("Expected:\r\n");
+            foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics)
             {
-                if (i == 0)
-                {
-                    error.Append("Expected:\r\n");
-                }
-
-                var expected = missingExpected[i];
                 error.AppendLine(expected.ToString(diagnosticsAndSources.Code));
             }
 
             if (allDiagnostics.Length == 0)
             {
-                error.AppendLine("Actual: <no errors>");
+                error.AppendLine("Actual: <no diagnostics>");
             }
-
-            if (allDiagnostics.Length > 0 && missingActual.Count == 0)
+            else
             {
-                error.AppendLine("Actual: <missing>");
-            }
-
-            for (var i = 0; i < missingActual.Count; i++)
-            {
-                if (i == 0)
+                error.Append("Actual:\r\n");
+                foreach (var diagnostic in allDiagnostics)
                 {
-                    error.Append("Actual:\r\n");
+                    error.AppendLine(diagnostic.ToErrorString());
                 }
-
-                var actual = missingActual[i];
-                error.AppendLine(actual.ToErrorString());
             }
 
             throw new AssertException(error.Return());
 
-            bool Equals(out IReadOnlyList<ExpectedDiagnostic> missingExpectedDiagnostics, out IReadOnlyList<Diagnostic> missingDiagnostics)
+            bool Equals()
             {
-                List<ExpectedDiagnostic> tempExpectedDiagnostics = null;
-                List<Diagnostic> tempDiagnostics = null;
                 foreach (var diagnostic in allDiagnostics)
                 {
                     if (diagnosticsAndSources.ExpectedDiagnostics.Any(e => e.Matches(diagnostic)))
@@ -287,12 +271,7 @@ namespace Gu.Roslyn.Asserts
                         continue;
                     }
 
-                    if (tempDiagnostics == null)
-                    {
-                        tempDiagnostics = new List<Diagnostic>();
-                    }
-
-                    tempDiagnostics.Add(diagnostic);
+                    return false;
                 }
 
                 foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics)
@@ -302,24 +281,10 @@ namespace Gu.Roslyn.Asserts
                         continue;
                     }
 
-                    if (tempExpectedDiagnostics == null)
-                    {
-                        tempExpectedDiagnostics = new List<ExpectedDiagnostic>();
-                    }
-
-                    tempExpectedDiagnostics.Add(expected);
+                    return false;
                 }
 
-                if (tempExpectedDiagnostics == null && tempDiagnostics == null)
-                {
-                    missingExpectedDiagnostics = null;
-                    missingDiagnostics = null;
-                    return true;
-                }
-
-                missingExpectedDiagnostics = tempExpectedDiagnostics ?? (IReadOnlyList<ExpectedDiagnostic>)Array.Empty<ExpectedDiagnostic>();
-                missingDiagnostics = tempDiagnostics ?? (IReadOnlyList<Diagnostic>)Array.Empty<Diagnostic>(); ;
-                return false;
+                return true;
             }
         }
     }

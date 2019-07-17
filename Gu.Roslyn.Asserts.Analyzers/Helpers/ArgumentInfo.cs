@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    [DebuggerDisplay("{expression}")]
+    [DebuggerDisplay("{Expression}")]
     internal struct ArgumentInfo
     {
         internal readonly ExpressionSyntax Expression;
