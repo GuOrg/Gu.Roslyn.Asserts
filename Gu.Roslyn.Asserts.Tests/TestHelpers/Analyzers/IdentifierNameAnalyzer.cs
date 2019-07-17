@@ -6,9 +6,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class DummyAnalyzer : DiagnosticAnalyzer
+    internal class IdentifierNameAnalyzer : DiagnosticAnalyzer
     {
-        internal DummyAnalyzer(params DiagnosticDescriptor[] descriptors)
+        internal IdentifierNameAnalyzer(params DiagnosticDescriptor[] descriptors)
         {
             this.SupportedDiagnostics = ImmutableArray.Create(descriptors);
         }
