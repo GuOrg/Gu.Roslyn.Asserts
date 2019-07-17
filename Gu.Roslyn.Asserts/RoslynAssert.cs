@@ -155,16 +155,16 @@ namespace Gu.Roslyn.Asserts
             if (descriptors == 0)
             {
                 var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedId}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedId}";
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }
 
             if (descriptors > 1)
             {
                 var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedId}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedId}";
+                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }
         }
@@ -173,9 +173,9 @@ namespace Gu.Roslyn.Asserts
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(fix.FixableDiagnosticIds).Any())
             {
-                var message = $"Analyzer {analyzer} does not produce diagnostics fixable by {fix}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}{Environment.NewLine}" +
-                              $"The code fix supports the following diagnostics: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}";
+                var message = $"{analyzer.GetType().Name} does not produce diagnostics fixable by {fix.GetType().Name}.{Environment.NewLine}" +
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}.";
                 throw new AssertException(message);
             }
         }

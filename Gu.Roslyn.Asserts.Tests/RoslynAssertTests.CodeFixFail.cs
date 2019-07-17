@@ -224,10 +224,10 @@ namespace N
 
                 var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
                 var fix = new DoNotUseUnderscoreFix();
+                var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
+                               "NopAnalyzer.SupportedDiagnostics: {IdWithNoFix}.\r\n" +
+                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, ID1, ID2}.";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NopAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DoNotUseUnderscoreFix.\r\n" +
-                               "The analyzer produces the following diagnostics: {IdWithNoFix}\r\n" +
-                               "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
                 Assert.AreEqual(expected, exception.Message);
             }
 

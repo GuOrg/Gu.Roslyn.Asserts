@@ -232,8 +232,8 @@ namespace N
     }
 }";
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.SyntaxNodeAnalyzer does not produce a diagnostic with ID 2.\r\n" +
-                               "The analyzer produces the following diagnostics: {1}\r\n" +
-                               "The expected diagnostic is: 2";
+                               "The analyzer produces the following diagnostics: {1}.\r\n" +
+                               "The expected diagnostic is: 2.";
 
                 var descriptor = Descriptors.Id2;
                 var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1);

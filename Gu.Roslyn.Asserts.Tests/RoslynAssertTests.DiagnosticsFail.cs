@@ -240,8 +240,8 @@ namespace N
     }
 }";
                 var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID WRONG.\r\n" +
-                               "The analyzer produces the following diagnostics: {SA1309}\r\n" +
-                               "The expected diagnostic is: WRONG";
+                               "The analyzer produces the following diagnostics: {SA1309}.\r\n" +
+                               "The expected diagnostic is: WRONG.";
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("WRONG");
 
