@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
     public static partial class SyntaxFactoryWriterTests
     {
-        [Explicit("Script")]
+        [Script]
         public static class Dump
         {
             private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap = typeof(SyntaxFactory)

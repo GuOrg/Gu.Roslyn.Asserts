@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using NUnit.Framework;
 
-    [Explicit("Sandbox")]
+    [Script]
     public static class Sandbox
     {
         [TestCase(typeof(SyntaxTriviaList))]
