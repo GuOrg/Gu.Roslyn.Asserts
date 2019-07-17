@@ -246,7 +246,7 @@ namespace Gu.Roslyn.Asserts
 
                     foreach (var action in actions)
                     {
-                        builder.AppendLine(action.Title);
+                        builder.AppendLine($"  '{action.Title}'");
                     }
 
                     throw new AssertException(builder.Return());
