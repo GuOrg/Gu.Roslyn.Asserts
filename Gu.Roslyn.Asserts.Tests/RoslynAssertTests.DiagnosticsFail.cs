@@ -2,8 +2,8 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
-    using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using NUnit.Framework;
 
     [TestFixture]
@@ -62,7 +62,7 @@ namespace N
             }
 
             [Test]
-            public static void NoErrorIndicatedNoErrorAnalyzer()
+            public static void NoErrorIndicatedNopAnalyzer()
             {
                 var code = @"
 namespace N
@@ -72,7 +72,7 @@ namespace N
     }
 }";
                 var expected = "Expected code to have at least one error position indicated with '↓'";
-                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new NoErrorAnalyzer(), code));
+                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(new NopAnalyzer(), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -472,25 +472,23 @@ namespace N
             [Test]
             public static void WhenEmpty()
             {
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray<DiagnosticDescriptor>.Empty), string.Empty));
-                var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics returns an empty array.";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SyntaxNodeAnalyzer(Array.Empty<DiagnosticDescriptor>(), SyntaxKind.IdentifierName), string.Empty));
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics returns an empty array.";
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void WhenSingleNull()
             {
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SupportedDiagnosticsAnalyzer(ImmutableArray.Create((DiagnosticDescriptor)null)), string.Empty));
-                var expected = "Gu.Roslyn.Asserts.Tests.SupportedDiagnosticsAnalyzer.SupportedDiagnostics[0] returns null.";
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SyntaxNodeAnalyzer(new DiagnosticDescriptor[] { null }, SyntaxKind.IdentifierName), string.Empty));
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics[0] returns null.";
                 Assert.AreEqual(expected, exception.Message);
             }
 
             [Test]
             public static void WhenMoreThanOne()
             {
-                var analyzer = new SupportedDiagnosticsAnalyzer(ImmutableArray.Create(
-                    new DiagnosticDescriptor("ID1", "Title", "Message", "Category", DiagnosticSeverity.Warning, isEnabledByDefault: true),
-                    new DiagnosticDescriptor("ID2", "Title", "Message", "Category", DiagnosticSeverity.Warning, isEnabledByDefault: true)));
+                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id2);
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, string.Empty));
                 var expected = "This can only be used for analyzers with one SupportedDiagnostics.\r\n" +
                                "Prefer overload with ExpectedDiagnostic.";
@@ -500,10 +498,9 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
-                var analyzer = new DuplicateIdAnalyzer();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, string.Empty));
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, ExpectedDiagnostic.Create(Descriptors.Id1), string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
 

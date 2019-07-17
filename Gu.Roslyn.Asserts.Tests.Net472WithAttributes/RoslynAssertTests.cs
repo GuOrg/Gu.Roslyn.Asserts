@@ -38,7 +38,7 @@ namespace N
     }
 }";
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var fix = new DontUseUnderscoreCodeFixProvider();
+            var fix = new DoNotUseUnderscoreFix();
             RoslynAssert.CodeFix(analyzer, fix, before, after);
         }
     }

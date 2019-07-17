@@ -118,7 +118,7 @@ namespace Gu.Roslyn.Asserts
         {
             if (analyzer.SupportedDiagnostics.Length == 0)
             {
-                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics returns an empty array.";
+                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics returns an empty array.";
                 throw new AssertException(message);
             }
 
@@ -132,7 +132,7 @@ namespace Gu.Roslyn.Asserts
             descriptor = analyzer.SupportedDiagnostics[0];
             if (descriptor == null)
             {
-                var message = $"{analyzer.GetType().FullName}.SupportedDiagnostics[0] returns null.";
+                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics[0] returns null.";
                 throw new AssertException(message);
             }
         }
@@ -147,7 +147,7 @@ namespace Gu.Roslyn.Asserts
             if (analyzer.SupportedDiagnostics.Length > 0 &&
                 analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
             {
-                var message = $"Analyzer {analyzer} has more than one diagnostic with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
+                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics has more than one descriptor with ID {analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}.";
                 throw new AssertException(message);
             }
 

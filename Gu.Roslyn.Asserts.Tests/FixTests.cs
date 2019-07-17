@@ -33,10 +33,10 @@ namespace N
             var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
             var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
             var diagnostic = Analyze.GetDiagnostics(sln, analyzer).SelectMany(x => x).Single();
-            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic);
+            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostic);
             CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 
-            fixedSln = await Fix.ApplyAsync(sln, new DontUseUnderscoreCodeFixProvider(), diagnostic).ConfigureAwait(false);
+            fixedSln = await Fix.ApplyAsync(sln, new DoNotUseUnderscoreFix(), diagnostic).ConfigureAwait(false);
             CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
 
@@ -67,7 +67,7 @@ namespace N
             var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
             var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
+            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
             CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
 
@@ -96,7 +96,7 @@ namespace N
             var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
             var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-            var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
+            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
             CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
         }
     }

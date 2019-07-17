@@ -6,8 +6,8 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DontUseUnderscoreCodeFixProvider))]
-    internal class DontUseUnderscoreCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DoNotUseUnderscoreFix))]
+    internal class DoNotUseUnderscoreFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
                 FieldNameMustNotBeginWithUnderscore.DiagnosticId,
@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                         CodeAction.Create(
                             $"Rename to: {newName}",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(DontUseUnderscoreCodeFixProvider)),
+                            nameof(DoNotUseUnderscoreFix)),
                         diagnostic);
                 }
             }

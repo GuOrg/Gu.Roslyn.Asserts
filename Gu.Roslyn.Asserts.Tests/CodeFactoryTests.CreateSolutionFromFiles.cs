@@ -194,7 +194,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
                     projectFile,
-                    new[] { new SyntaxNodeAnalyzer(Descriptors.Id1234), new SyntaxNodeAnalyzer(Descriptors.Id1234) },
+                    new[] { new SyntaxNodeAnalyzer(Descriptors.Id1), new SyntaxNodeAnalyzer(Descriptors.Id1) },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]

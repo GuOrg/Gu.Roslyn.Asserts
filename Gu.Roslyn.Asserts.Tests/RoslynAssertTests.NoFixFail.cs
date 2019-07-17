@@ -42,11 +42,11 @@ namespace N
         private readonly int value;
     }
 }";
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
-                               "The analyzer produces the following diagnostics: {NoError}\r\n" +
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NopAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DoNotUseUnderscoreFix.\r\n" +
+                               "The analyzer produces the following diagnostics: {IdWithNoFix}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
-                var analyzer = new NoErrorAnalyzer();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code, fixedCode));
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -66,7 +66,7 @@ namespace N
                                "The following actions were registered:\r\n" +
                                "Rename to: value\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -83,7 +83,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
@@ -112,7 +112,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, barCode, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
@@ -123,10 +123,10 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var expectedDiagnostic = ExpectedDiagnostic.Create(DuplicateIdAnalyzer.Descriptor1);
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
-                var analyzer = new DuplicateIdAnalyzer();
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
                 var fix = new DuplicateIdFix();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.Id1);
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }

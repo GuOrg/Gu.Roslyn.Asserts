@@ -6,64 +6,64 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
     public partial class RoslynAssertTests
     {
         [Test]
-        public void ProjectFileNoErrorAnalyzer()
+        public void ProjectFileNopAnalyzer()
         {
             var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
-            var analyzer = new NoErrorAnalyzer();
+            var analyzer = new NopAnalyzer();
 
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
+            RoslynAssert.Valid(typeof(NopAnalyzer), code);
             RoslynAssert.Valid(analyzer, code);
 
-            var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+            var descriptor = NopAnalyzer.Descriptor;
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             RoslynAssert.Valid(analyzer, descriptor, code);
             RoslynAssert.Valid(analyzer, code, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Test]
-        public void ClassLibrary1NoErrorAnalyzer()
+        public void ClassLibrary1NopAnalyzer()
         {
-            var analyzer = new NoErrorAnalyzer();
+            var analyzer = new NopAnalyzer();
             var code = ProjectFile.Find("ClassLibrary1.csproj");
-            var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+            var descriptor = NopAnalyzer.Descriptor;
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             RoslynAssert.Valid(analyzer, descriptor, code);
             RoslynAssert.Valid(analyzer, code, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Test]
-        public void WpfAppNoErrorAnalyzer()
+        public void WpfAppNopAnalyzer()
         {
-            var analyzer = new NoErrorAnalyzer();
+            var analyzer = new NopAnalyzer();
             var code = ProjectFile.Find("WpfApp1.csproj");
-            var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+            var descriptor = NopAnalyzer.Descriptor;
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             RoslynAssert.Valid(analyzer, descriptor, code);
             RoslynAssert.Valid(analyzer, code, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
         }
 
         [Explicit("Need to solve signing and InternalsVisibleTo")]
         [Test]
-        public void SolutionFileNoErrorAnalyzer()
+        public void SolutionFileNopAnalyzer()
         {
             var code = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
-            var analyzer = new NoErrorAnalyzer();
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
+            var analyzer = new NopAnalyzer();
+            RoslynAssert.Valid(typeof(NopAnalyzer), code);
             RoslynAssert.Valid(analyzer, code);
 
-            var descriptor = NoErrorAnalyzer.Descriptor;
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+            var descriptor = NopAnalyzer.Descriptor;
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             RoslynAssert.Valid(analyzer, descriptor, code);
         }
 
         [Explicit("Need to solve signing and InternalsVisibleTo")]
         [Test]
-        public void SolutionNoErrorAnalyzer()
+        public void SolutionNopAnalyzer()
         {
             var sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
-            var solution = CodeFactory.CreateSolution(sln, new[] { new NoErrorAnalyzer() }, RoslynAssert.MetadataReferences);
-            RoslynAssert.Valid(typeof(NoErrorAnalyzer), solution);
-            RoslynAssert.Valid(new NoErrorAnalyzer(), solution);
+            var solution = CodeFactory.CreateSolution(sln, new[] { new NopAnalyzer() }, RoslynAssert.MetadataReferences);
+            RoslynAssert.Valid(typeof(NopAnalyzer), solution);
+            RoslynAssert.Valid(new NopAnalyzer(), solution);
         }
     }
 }

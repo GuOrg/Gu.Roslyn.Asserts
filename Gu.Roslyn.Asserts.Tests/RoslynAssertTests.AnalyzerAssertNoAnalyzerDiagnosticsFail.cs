@@ -39,7 +39,7 @@ namespace N
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
-                               "AD0001 Analyzer 'Gu.Roslyn.Asserts.Tests.ThrowingAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.\r\n" +
+                               "AD0001 Analyzer 'Gu.Roslyn.Asserts.Tests.ThrowingAnalyzer' threw an exception of type 'System.InvalidOperationException' with message 'Analyzer threw this.'.\r\n" +
                                "  at line 0 and character 0 in file  | Code did not have position 0,0\r\n";
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoAnalyzerDiagnostics(new ThrowingAnalyzer(), code));

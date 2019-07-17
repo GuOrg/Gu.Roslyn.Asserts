@@ -39,14 +39,14 @@
                         CodeAction.Create(
                             $"Rename to: {newName + 1}",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(DontUseUnderscoreCodeFixProvider) + 1),
+                            nameof(DoNotUseUnderscoreFix) + 1),
                         diagnostic);
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             $"Rename to: {newName + 2}",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(DontUseUnderscoreCodeFixProvider) + 2),
+                            nameof(DoNotUseUnderscoreFix) + 2),
                         diagnostic);
                 }
             }

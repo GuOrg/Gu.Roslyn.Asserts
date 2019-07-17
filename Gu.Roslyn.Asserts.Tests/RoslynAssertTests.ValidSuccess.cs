@@ -7,9 +7,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public static partial class RoslynAssertValidTests
+    public static partial class RoslynAssertTests
     {
-        public static class Success
+        public static class ValidSuccess
         {
             [OneTimeSetUp]
             public static void OneTimeSetUp()
@@ -33,7 +33,7 @@ namespace N
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var analyzer = new NopAnalyzer();
                 RoslynAssert.Valid(analyzer, code, metadataReferences: new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) }, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
             }
 
@@ -47,13 +47,13 @@ namespace N
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var analyzer = new NopAnalyzer();
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
                 RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
             }
 
             [Test]
-            public static void SingleDocumentNoErrorAnalyzer()
+            public static void SingleDocumentNopAnalyzer()
             {
                 var code = @"
 namespace N
@@ -62,13 +62,13 @@ namespace N
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var descriptor = Descriptors.Id1;
+                var analyzer = new NopAnalyzer(descriptor);
                 RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
+                RoslynAssert.Valid(typeof(NopAnalyzer), code);
 
-                var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             }
 
             [Test]
@@ -82,34 +82,33 @@ namespace N
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var descriptor = Descriptors.Id1;
+                var analyzer = new NopAnalyzer(descriptor);
                 RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code);
+                RoslynAssert.Valid(typeof(NopAnalyzer), code);
 
-                var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code);
+                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
             }
 
             [Test]
-            public static void ProjectFileNoErrorAnalyzer()
+            public static void ProjectFileNopAnalyzer()
             {
                 var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
-                var analyzer = new NoErrorAnalyzer();
-
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                     typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
                     typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider));
+                var descriptor = Descriptors.Id1;
+                var analyzer = new NopAnalyzer(descriptor);
                 RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NopAnalyzer), code, metadataReferences: metadataReferences);
 
-                var descriptor = NoErrorAnalyzer.Descriptor;
                 RoslynAssert.Valid(analyzer, descriptor, code, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), descriptor, code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, metadataReferences: metadataReferences);
             }
 
             [Test]
-            public static void TwoDocumentsNoErrorAnalyzer()
+            public static void TwoDocumentsNopAnalyzer()
             {
                 var code1 = @"
 namespace N
@@ -125,14 +124,14 @@ namespace N
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var analyzer = new NopAnalyzer();
                 RoslynAssert.Valid(analyzer, code1, code2);
                 RoslynAssert.Valid(analyzer, code2, code1);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
+                RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
             }
 
             [Test]
-            public static void TwoProjectsNoErrorAnalyzer()
+            public static void TwoProjectsNopAnalyzer()
             {
                 var code1 = @"
 namespace Project1
@@ -148,10 +147,10 @@ namespace Project2
     {
     }
 }";
-                var analyzer = new NoErrorAnalyzer();
+                var analyzer = new NopAnalyzer();
                 RoslynAssert.Valid(analyzer, code1, code2);
                 RoslynAssert.Valid(analyzer, code2, code1);
-                RoslynAssert.Valid(typeof(NoErrorAnalyzer), code1, code2);
+                RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
             }
 
             [Test]

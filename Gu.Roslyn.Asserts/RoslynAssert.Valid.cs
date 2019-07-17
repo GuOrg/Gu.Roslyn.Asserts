@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, params string[] code)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), descriptor, code);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), descriptor, code);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(Type analyzerType, params string[] code)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), code);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), code);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(Type analyzerType, Solution solution)
         {
-            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType), solution);
+            Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), solution);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace Gu.Roslyn.Asserts
             CSharpCompilationOptions compilationOptions = null)
         {
             Valid(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
                 code,
                 suppressedDiagnostics,
                 metadataReferences,
@@ -243,7 +243,7 @@ namespace Gu.Roslyn.Asserts
             CSharpCompilationOptions compilationOptions = null)
         {
             Valid(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType),
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
                 descriptor,
                 code,
                 suppressedDiagnostics,

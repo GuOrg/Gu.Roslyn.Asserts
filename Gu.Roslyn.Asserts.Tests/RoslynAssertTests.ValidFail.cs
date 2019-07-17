@@ -5,9 +5,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public static partial class RoslynAssertValidTests
+    public static partial class RoslynAssertTests
     {
-        public static class Fail
+        public static class ValidFail
         {
             [Test]
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
@@ -231,16 +231,13 @@ namespace N
         private readonly int value1;
     }
 }";
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore does not produce a diagnostic with ID NoError.\r\n" +
-                               "The analyzer produces the following diagnostics: {SA1309}\r\n" +
-                               "The expected diagnostic is: NoError";
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.SyntaxNodeAnalyzer does not produce a diagnostic with ID 2.\r\n" +
+                               "The analyzer produces the following diagnostics: {1}\r\n" +
+                               "The expected diagnostic is: 2";
 
-                var descriptor = NoErrorAnalyzer.Descriptor;
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var descriptor = Descriptors.Id2;
+                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1);
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -273,14 +270,10 @@ namespace N
             [Test]
             public static void DuplicateId()
             {
-                var descriptor = DuplicateIdAnalyzer.Descriptor1;
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.DuplicateIdAnalyzer has more than one diagnostic with ID 0.";
-                var analyzer = new DuplicateIdAnalyzer();
-
+                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 1.";
+                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
+                var descriptor = Descriptors.Id1;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

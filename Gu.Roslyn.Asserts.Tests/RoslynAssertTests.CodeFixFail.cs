@@ -48,7 +48,7 @@ namespace N
                                "Rename to: value\r\n";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after, fixTitle: "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
 
@@ -81,13 +81,13 @@ namespace N
         private readonly int value2;
     }
 }";
-                var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
+                var expected = "Code analyzed with Gu.Roslyn.Asserts.Tests.FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DoNotUseUnderscoreFix.\r\n" +
                                "The analyzed code contained the following diagnostics: {SA1309, SA1309}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}\r\n" +
                                "Maybe you meant to call AnalyzerAssert.FixAll?";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 Assert.AreEqual(expected, exception.Message);
@@ -118,7 +118,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Actual:\r\n" +
@@ -139,7 +139,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, null));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
@@ -222,19 +222,11 @@ namespace N
     }
 }";
 
-                var after = @"
-namespace N
-{
-    class C
-    {
-        private readonly int bar;
-    }
-}";
-                var analyzer = new NoErrorAnalyzer();
-                var fix = new DontUseUnderscoreCodeFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NoErrorAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DontUseUnderscoreCodeFixProvider.\r\n" +
-                               "The analyzer produces the following diagnostics: {NoError}\r\n" +
+                var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
+                var fix = new DoNotUseUnderscoreFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
+                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.NopAnalyzer does not produce diagnostics fixable by Gu.Roslyn.Asserts.Tests.CodeFixes.DoNotUseUnderscoreFix.\r\n" +
+                               "The analyzer produces the following diagnostics: {IdWithNoFix}\r\n" +
                                "The code fix supports the following diagnostics: {SA1309, ID1, ID2}";
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -260,7 +252,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = "Mismatch on line 6 of file C.cs.\r\n" +
                                "Expected:         private readonly int bar;\r\n" +
@@ -335,7 +327,7 @@ namespace N
                                "    }\r\n" +
                                "}\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, before }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -393,7 +385,7 @@ namespace N
                                "    }\r\n" +
                                "}\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after));
@@ -831,7 +823,7 @@ namespace N
                                "SA1309 Field '_value1' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { string.Empty }));

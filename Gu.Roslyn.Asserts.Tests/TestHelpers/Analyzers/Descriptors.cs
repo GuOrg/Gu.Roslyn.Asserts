@@ -5,19 +5,35 @@ namespace Gu.Roslyn.Asserts.Tests
     // ReSharper disable once InconsistentNaming
     public static class Descriptors
     {
-        public static readonly DiagnosticDescriptor Id1234 = new DiagnosticDescriptor(
-            "ID1234",
-            "Title: ID1234",
-            "Message: ID1234",
-            "Description: ID1234",
+        public static readonly DiagnosticDescriptor Id1 = new DiagnosticDescriptor(
+            "1",
+            "Title: 1",
+            "Message: 1",
+            "Description: 1",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        public static readonly DiagnosticDescriptor Id1234Duplicate = new DiagnosticDescriptor(
-            "ID1234",
-            "Title: ID1234 (dupe)",
-            "Message: ID1234 (dupe)",
-            "Description: ID1234 (dupe)",
+        public static readonly DiagnosticDescriptor Id1Duplicate = new DiagnosticDescriptor(
+            "1",
+            "Title: 1 (dupe)",
+            "Message: 1 (dupe)",
+            "Description: 1 (dupe)",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true);
+
+        public static readonly DiagnosticDescriptor Id2 = new DiagnosticDescriptor(
+            "2",
+            "Title: 2",
+            "Message: 2",
+            "Description: 2",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true);
+
+        public static readonly DiagnosticDescriptor IdWithNoFix = new DiagnosticDescriptor(
+            "IdWithNoFix",
+            "Title: IdWithNoFix",
+            "Message: IdWithNoFix",
+            "Description: IdWithNoFix",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
     }

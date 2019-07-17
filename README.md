@@ -51,7 +51,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 
 # RoslynAssert.Valid
 
-Use `RoslynAssert.Valid<NoErrorAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
+Use `RoslynAssert.Valid<NopAnalyzer>(code)` to test that an analyzer does not report errors for valid code.
 The code is checked so that it does not have any compiler errors either.
 A typical test fixture looks like:
 
@@ -615,7 +615,7 @@ namespace N
     var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
     var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
     var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
-    var fixedSln = Fix.Apply(sln, new DontUseUnderscoreCodeFixProvider(), diagnostics);
+    var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
     CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 }
 ```

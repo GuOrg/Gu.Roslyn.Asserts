@@ -1,30 +1,29 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ThrowingAnalyzer : DiagnosticAnalyzer
+    internal class NopAnalyzer : DiagnosticAnalyzer
     {
         private readonly SyntaxKind[] kinds;
 
-        internal ThrowingAnalyzer()
+        internal NopAnalyzer()
             : this(new[] { Descriptors.Id1 })
         {
         }
 
-        internal ThrowingAnalyzer(params DiagnosticDescriptor[] descriptors)
+        internal NopAnalyzer(params DiagnosticDescriptor[] descriptors)
             : this(descriptors, SyntaxKind.IdentifierName)
         {
         }
 
-        internal ThrowingAnalyzer(DiagnosticDescriptor[] descriptors, params SyntaxKind[] kinds)
+        internal NopAnalyzer(DiagnosticDescriptor[] descriptors, params SyntaxKind[] kinds)
         {
             this.kinds = kinds;
-            this.SupportedDiagnostics = descriptors.Length == 0 ? ImmutableArray.Create(Descriptors.Id1) : ImmutableArray.Create(descriptors);
+            this.SupportedDiagnostics = ImmutableArray.Create(descriptors);
         }
 
         /// <inheritdoc/>
@@ -39,7 +38,6 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
-            throw new InvalidOperationException("Analyzer threw this.");
         }
     }
 }

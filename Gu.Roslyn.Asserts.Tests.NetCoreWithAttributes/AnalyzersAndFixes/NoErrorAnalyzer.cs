@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class NoErrorAnalyzer : DiagnosticAnalyzer
+    internal class NopAnalyzer : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = "NoError";
 

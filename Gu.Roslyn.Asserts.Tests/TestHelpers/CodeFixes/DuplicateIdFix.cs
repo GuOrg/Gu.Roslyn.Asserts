@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DuplicateIdFix))]
     internal class DuplicateIdFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(DuplicateIdAnalyzer.Descriptor1.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(Descriptors.Id1.Id);
 
         public override FixAllProvider GetFixAllProvider() => CustomFixAllProviders.BatchFixer;
 

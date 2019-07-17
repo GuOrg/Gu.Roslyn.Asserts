@@ -45,7 +45,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -140,7 +140,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -170,7 +170,7 @@ namespace N
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: value");
@@ -201,7 +201,7 @@ namespace N
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
@@ -230,7 +230,7 @@ namespace N
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
@@ -415,7 +415,7 @@ namespace N
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { after, part2 });
@@ -461,7 +461,7 @@ namespace N
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part1, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { part2, part1 }, new[] { after, part2 });
@@ -639,7 +639,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreCodeFixProvider();
+                var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { barCode, before }, new[] { barCode, after });
             }
@@ -858,7 +858,7 @@ namespace ClassLibrary1
                     analyzer,
                     expectedDiagnostic,
                     metadataReferences: new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) });
-                RoslynAssert.CodeFix(analyzer, new DontUseUnderscoreCodeFixProvider(), expectedDiagnostic, solution, after);
+                RoslynAssert.CodeFix(analyzer, new DoNotUseUnderscoreFix(), expectedDiagnostic, solution, after);
             }
         }
     }
