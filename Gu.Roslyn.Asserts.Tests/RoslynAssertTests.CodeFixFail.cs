@@ -781,20 +781,20 @@ namespace N
 {
     class C
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }";
 
                 var expected = @"Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
-  at line 5 and character 21 in file C.cs | public event ↓EventHandler SomeEvent;
+  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;
 First source file with error is:
 
 namespace N
 {
     class C
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }
 ";

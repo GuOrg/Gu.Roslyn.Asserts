@@ -661,7 +661,7 @@ namespace N
 {
     class Value
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();

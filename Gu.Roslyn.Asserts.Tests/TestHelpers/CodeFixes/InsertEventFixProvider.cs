@@ -42,7 +42,7 @@
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);
-            editor.AddMember(classDeclaration, editor.Generator.EventDeclaration("SomeEvent", SyntaxFactory.ParseTypeName("EventHandler"), Accessibility.Public));
+            editor.AddMember(classDeclaration, editor.Generator.EventDeclaration("E", SyntaxFactory.ParseTypeName("EventHandler"), Accessibility.Public));
             return editor.GetChangedDocument();
         }
     }

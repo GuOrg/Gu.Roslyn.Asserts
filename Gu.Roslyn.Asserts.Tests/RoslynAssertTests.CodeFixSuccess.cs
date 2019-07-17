@@ -751,7 +751,7 @@ namespace N
 {
     class Value
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
@@ -817,7 +817,7 @@ namespace N
 
     class C
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }";
                 RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));

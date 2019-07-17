@@ -264,7 +264,7 @@ namespace N
 {
     class C
     {
-        public event EventHandler SomeEvent;
+        public event EventHandler E;
     }
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
@@ -274,13 +274,13 @@ namespace N
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler SomeEvent;\r\n" +
+                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;\r\n" +
                                "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
-                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler SomeEvent;\r\n" +
+                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;\r\n" +
                                "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓SomeEvent;\r\n" +
+                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓E;\r\n" +
                                "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓SomeEvent;\r\n" +
+                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓E;\r\n" +
                                "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
                                "First source file with error is:\r\n\r\n" +
@@ -288,7 +288,7 @@ namespace N
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
-                               "        public event EventHandler SomeEvent;\r\n" +
+                               "        public event EventHandler E;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
