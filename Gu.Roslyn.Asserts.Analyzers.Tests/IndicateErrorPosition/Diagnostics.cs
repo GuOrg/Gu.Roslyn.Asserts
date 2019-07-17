@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPositionTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;

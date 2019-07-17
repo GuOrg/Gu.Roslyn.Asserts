@@ -199,7 +199,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     if (args.TryFirst(x => x.symbol != null && x.HasPosition == false, out match))
                     {
                         location = argument.GetLocation();
-                        additionalLocation = null;
+                        additionalLocation = match.value.GetLocation();
                         return true;
                     }
                 }

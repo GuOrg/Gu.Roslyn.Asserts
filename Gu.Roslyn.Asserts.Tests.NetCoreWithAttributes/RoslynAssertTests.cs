@@ -3,10 +3,10 @@ namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes
     using Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes;
     using NUnit.Framework;
 
-    public class RoslynAssertTests
+    public static class RoslynAssertTests
     {
         [Test]
-        public void ValidOrdersController()
+        public static void ValidOrdersController()
         {
             var order = @"
 namespace ValidCode
