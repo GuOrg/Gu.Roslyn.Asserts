@@ -117,4 +117,7 @@
   <Rules AnalyzerId="Gu.Analyzers" RuleNamespace="Gu.Analyzers">
     <Rule Id="GU0015" Action="None" />
   </Rules>
+  <Rules AnalyzerId="Gu.Roslyn.Asserts.Analyzers" RuleNamespace="Gu.Roslyn.Asserts.Analyzers">
+    <Rule Id="GURA07" Action="Warning" />
+  </Rules>
 </RuleSet>

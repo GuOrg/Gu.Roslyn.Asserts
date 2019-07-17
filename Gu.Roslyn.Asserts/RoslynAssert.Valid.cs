@@ -19,9 +19,9 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences));
         }
 
         /// <summary>
@@ -39,12 +39,12 @@ namespace Gu.Roslyn.Asserts
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
-            var sln = CodeFactory.CreateSolution(
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(
                 code,
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+                metadataReferences ?? MetadataReferences));
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, params string[] code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences));
         }
 
         /// <summary>
@@ -90,12 +90,12 @@ namespace Gu.Roslyn.Asserts
             CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(
                 code,
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+                metadataReferences ?? MetadataReferences));
         }
 
         /// <summary>
@@ -119,23 +119,12 @@ namespace Gu.Roslyn.Asserts
             CSharpCompilationOptions compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(
                 code,
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
-        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
-        public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
-        {
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+                metadataReferences ?? MetadataReferences));
         }
 
         /// <summary>
@@ -156,12 +145,12 @@ namespace Gu.Roslyn.Asserts
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
-            var sln = CodeFactory.CreateSolution(
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(
                 code,
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+                metadataReferences ?? MetadataReferences));
         }
 
         /// <summary>
@@ -179,12 +168,12 @@ namespace Gu.Roslyn.Asserts
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
-            var sln = CodeFactory.CreateSolution(
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(
                 code,
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences);
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, sln);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+                metadataReferences ?? MetadataReferences));
         }
 
         /// <summary>
@@ -260,6 +249,17 @@ namespace Gu.Roslyn.Asserts
                 suppressedDiagnostics,
                 metadataReferences,
                 compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="solution"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
+        /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
+        public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
+        {
+            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
+            NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
 
         /// <summary>

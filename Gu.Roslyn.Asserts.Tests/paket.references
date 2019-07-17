@@ -4,6 +4,7 @@ group Test
   NUnit3TestAdapter
   Microsoft.CodeAnalysis.CSharp.Workspaces
   Microsoft.CodeAnalysis.CSharp.Scripting
+  Gu.Roslyn.Asserts.Analyzers
 
 group Analyzers
   AsyncUsageAnalyzers

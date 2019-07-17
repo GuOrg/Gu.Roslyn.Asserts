@@ -26,6 +26,7 @@ group Test
   nuget Microsoft.AspNetCore.All
   nuget Microsoft.CodeAnalysis.CSharp.Workspaces
   nuget Microsoft.CodeAnalysis.CSharp.Scripting
+  nuget Gu.Roslyn.Asserts.Analyzers
 
 group Analyzers
   source http://www.nuget.org/api/v2/
