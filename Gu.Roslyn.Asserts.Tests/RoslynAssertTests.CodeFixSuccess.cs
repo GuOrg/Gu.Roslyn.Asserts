@@ -280,7 +280,7 @@ namespace N
 
     public class C
     {
-        public event EventHandler Bar;
+        public event EventHandler ↓Bar;
     }
 }";
 
