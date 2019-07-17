@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
     public static class CodeFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
-        private static readonly CodeFixProvider Fix = new MakePublicFix();
+        private static readonly CodeFixProvider Fix = new AccessibilityFix();
 
         [Test]
         public static void DiagnosticAnalyzer()

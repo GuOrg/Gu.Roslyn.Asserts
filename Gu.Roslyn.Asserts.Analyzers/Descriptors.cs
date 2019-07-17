@@ -67,14 +67,23 @@ namespace Gu.Roslyn.Asserts.Analyzers
             isEnabledByDefault: true,
             description: "Test class should be public static.");
 
+        public static readonly DiagnosticDescriptor ShouldBeInternal = new DiagnosticDescriptor(
+            id: "GURA08.a",
+            title: "Should be internal.",
+            messageFormat: "'{0}' should be internal.",
+            category: AnalyzerCategory.Ocd,
+            defaultSeverity: DiagnosticSeverity.Info,
+            isEnabledByDefault: true,
+            description: "Should be internal.");
+
         public static readonly DiagnosticDescriptor ShouldBePublic = new DiagnosticDescriptor(
-            id: "GURA08",
-            title: "Should be public static.",
+            id: "GURA08.b",
+            title: "Should be public.",
             messageFormat: "'{0}' should be public.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
-            description: "Should be public static.");
+            isEnabledByDefault: false,
+            description: "Should be public.");
 
         public static readonly DiagnosticDescriptor UseStandardNames = new DiagnosticDescriptor(
             id: "GURA09",

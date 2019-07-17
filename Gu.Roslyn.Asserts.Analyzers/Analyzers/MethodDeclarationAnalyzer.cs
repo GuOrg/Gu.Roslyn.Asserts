@@ -140,6 +140,11 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
+            protected override void Clear()
+            {
+                this.literals.Clear();
+            }
+
             private bool AnyContains(string text)
             {
                 foreach (var literal in this.literals)
@@ -151,12 +156,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
 
                 return false;
-            }
-
-            /// <inheritdoc />
-            protected override void Clear()
-            {
-                this.literals.Clear();
             }
         }
     }

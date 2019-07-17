@@ -12,6 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ObjectCreationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
+            Descriptors.ShouldBeInternal,
             Descriptors.ShouldBePublic);
 
         public override void Initialize(AnalysisContext context)
@@ -25,18 +26,28 @@ namespace Gu.Roslyn.Asserts.Analyzers
         {
             if (context.Node is ObjectCreationExpressionSyntax objectCreation &&
                 context.SemanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
-                type.DeclaredAccessibility != Accessibility.Public &&
                 type.Locations.Any(x => x.IsInSource))
             {
                 if (type.IsAssignableTo(KnownSymbol.CodeFixProvider, context.Compilation) ||
                     type.IsAssignableTo(KnownSymbol.CodeRefactoringProvider, context.Compilation) ||
                     type.IsAssignableTo(KnownSymbol.DiagnosticAnalyzer, context.Compilation))
                 {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            Descriptors.ShouldBePublic,
-                            objectCreation.Type.GetLocation(),
-                            $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                    if (type.DeclaredAccessibility != Accessibility.Internal)
+                    {
+                        context.ReportDiagnostic(
+                            Diagnostic.Create(
+                                Descriptors.ShouldBeInternal,
+                                objectCreation.Type.GetLocation(),
+                                $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                    }
+                    if (type.DeclaredAccessibility != Accessibility.Public)
+                    {
+                        context.ReportDiagnostic(
+                            Diagnostic.Create(
+                                Descriptors.ShouldBePublic,
+                                objectCreation.Type.GetLocation(),
+                                $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                    }
                 }
             }
         }

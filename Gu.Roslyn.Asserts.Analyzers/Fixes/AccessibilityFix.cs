@@ -11,11 +11,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MakePublicFix))]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AccessibilityFix))]
     [Shared]
-    public class MakePublicFix : CodeFixProvider
+    public class AccessibilityFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
+            Descriptors.ShouldBeInternal.Id,
             Descriptors.ShouldBePublic.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
@@ -31,20 +32,38 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     semanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
                     type.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax declaration))
                 {
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            "Make public.",
-                            cancellationToken => Task.FromResult(
-                                context.Document.Project.Solution
-                                       .GetDocument(declaration.SyntaxTree)
-                                       .WithSyntaxRoot(
-                                declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
-                                    declaration,
-                                    MakePublic(declaration)))),
-                            nameof(MakePublicFix)),
-                        diagnostic);
+                    if (diagnostic.Id == Descriptors.ShouldBeInternal.Id)
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Make internal.",
+                                cancellationToken => Task.FromResult(
+                                    context.Document.Project.Solution
+                                           .GetDocument(declaration.SyntaxTree)
+                                           .WithSyntaxRoot(
+                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
+                                        declaration,
+                                        Make(declaration, SyntaxFactory.Token(SyntaxKind.InternalKeyword))))),
+                                nameof(AccessibilityFix)),
+                            diagnostic);
+                    }
+                    else if (diagnostic.Id == Descriptors.ShouldBePublic.Id)
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                "Make public.",
+                                cancellationToken => Task.FromResult(
+                                    context.Document.Project.Solution
+                                           .GetDocument(declaration.SyntaxTree)
+                                           .WithSyntaxRoot(
+                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
+                                        declaration,
+                                        Make(declaration, SyntaxFactory.Token(SyntaxKind.PublicKeyword))))),
+                                nameof(AccessibilityFix)),
+                            diagnostic);
+                    }
 
-                    MemberDeclarationSyntax MakePublic(MemberDeclarationSyntax before)
+                    MemberDeclarationSyntax Make(MemberDeclarationSyntax before, SyntaxToken token)
                     {
                         switch (before)
                         {
@@ -69,13 +88,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     case SyntaxKind.InternalKeyword:
                                         return modifiers.Replace(
                                             first,
-                                            SyntaxFactory.Token(SyntaxKind.PublicKeyword).WithTriviaFrom(first));
+                                            token.WithTriviaFrom(first));
                                     default:
-                                        return modifiers.Insert(0, SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+                                        return modifiers.Insert(0, token);
                                 }
                             }
 
-                            return SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+                            return SyntaxTokenList.Create(token);
                         }
                     }
                 }
