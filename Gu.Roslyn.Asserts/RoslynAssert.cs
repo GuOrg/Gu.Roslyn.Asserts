@@ -154,16 +154,16 @@ namespace Gu.Roslyn.Asserts
             var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedId);
             if (descriptors == 0)
             {
-                var message = $"Analyzer {analyzer} does not produce a diagnostic with ID {expectedId}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                var message = $"{analyzer.GetType().Name} does not produce a diagnostic with ID {expectedId}.{Environment.NewLine}" +
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }
 
             if (descriptors > 1)
             {
-                var message = $"Analyzer {analyzer} supports multiple diagnostics with ID {expectedId}.{Environment.NewLine}" +
-                              $"The analyzer produces the following diagnostics: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
+                var message = $"{analyzer.GetType().Name} supports multiple diagnostics with ID {expectedId}.{Environment.NewLine}" +
+                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {{{string.Join(", ", analyzer.SupportedDiagnostics.Select(d => d.Id))}}}.{Environment.NewLine}" +
                               $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }

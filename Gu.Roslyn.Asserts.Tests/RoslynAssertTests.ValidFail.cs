@@ -231,8 +231,8 @@ namespace N
         private readonly int value1;
     }
 }";
-                var expected = "Analyzer Gu.Roslyn.Asserts.Tests.SyntaxNodeAnalyzer does not produce a diagnostic with ID 2.\r\n" +
-                               "The analyzer produces the following diagnostics: {1}.\r\n" +
+                var expected = "SyntaxNodeAnalyzer does not produce a diagnostic with ID 2.\r\n" +
+                               "SyntaxNodeAnalyzer.SupportedDiagnostics: {1}.\r\n" +
                                "The expected diagnostic is: 2.";
 
                 var descriptor = Descriptors.Id2;
