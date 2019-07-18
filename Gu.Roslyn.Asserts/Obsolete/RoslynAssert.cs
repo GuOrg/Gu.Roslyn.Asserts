@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -13,13 +14,49 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(\"CS1701\") or pass in warnings to suppress in each test.")]
+        [Obsolete("This will be removed. Use [assembly: TransitiveMetadataReferences(...) or pass in explicit in test.")]
+        public static readonly MetadataReferencesCollection MetadataReferences = new MetadataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
+
+        /// <summary>
+        /// Add <paramref name="assembly"/> and all assemblies referenced by it.
+        /// </summary>
+        /// <param name="assembly">The <see cref="Assembly"/>.</param>
+        [Obsolete("This will be removed. Use [assembly: TransitiveMetadataReferences(...) or pass in explicit in test.")]
+        public static void AddTransitiveMetadataReferences(Assembly assembly)
+        {
+            MetadataReferences.AddRange(Asserts.MetadataReferences.Transitive(assembly));
+        }
+
+        /// <summary>
+        /// Resets <see cref="MetadataReferences"/> to <see cref="Asserts.MetadataReferences.FromAttributes"/>.
+        /// </summary>
+        [Obsolete("This will be removed. Use [assembly: TransitiveMetadataReferences(...) or pass in explicit in test.")]
+        public static void ResetMetadataReferences()
+        {
+            MetadataReferences.Clear();
+            MetadataReferences.AddRange(Asserts.MetadataReferences.FromAttributes());
+        }
+
+        /// <summary>
+        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>.
+        /// </summary>
+        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
+        public static void ResetAll()
+        {
+            ResetMetadataReferences();
+            ResetSuppressedDiagnostics();
+        }
+
+        /// <summary>
+        /// The metadata references used when creating the projects created in the tests.
+        /// </summary>
+        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
         public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
 
         /// <summary>
         /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="SuppressWarnings.FromAttributes()"/>.
         /// </summary>
-        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(\"CS1701\") or pass in warnings to suppress in each test.")]
+        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
         public static void ResetSuppressedDiagnostics()
         {
             SuppressedDiagnostics.Clear();
