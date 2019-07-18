@@ -56,17 +56,17 @@ The code is checked so that it does not have any compiler errors either.
 A typical test fixture looks like:
 
 ```c#
-public class ValidCode
+public class Valid
 {
     private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
 
     [Test]
-    public void SomeTest()
+    public void M()
     {
         var code = @"
-namespace TestCode
+namespace N
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -79,18 +79,18 @@ namespace TestCode
 If the analyzer produces many diagnostics you can pass in a descriptor so that only diagnostics matching it are checked.
 
 ```c#
-public class ValidCode
+public class Valid
 {
     private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
     private static readonly DiagnosticDescriptor Descriptor = YourAnalyzer.SomeDescriptor;
 
     [Test]
-    public void SomeTest()
+    public void M()
     {
         var code = @"
-namespace TestCode
+namespace N
 {
-    class Foo
+    class C
     {
     }
 }";
@@ -103,24 +103,24 @@ namespace TestCode
 When testing all analyzers something like this can be used:
 
 ```c#
-public class ValidCodeWithAllAnalyzers
+public class Valid
 {
-    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(KnownSymbol)
+    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(TypeInAnalyzerAssembly)
                                                                                 .Assembly.GetTypes()
                                                                                 .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
                                                                                 .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t))
                                                                                 .ToArray();
 
 
-    private static readonly Solution ValidCodeProjectSln = CodeFactory.CreateSolution(
-        ProjectFile.Find("ValidCode.csproj"),
+    private static readonly Solution ValidProjectSln = CodeFactory.CreateSolution(
+        ProjectFile.Find("Valid.csproj"),
         AllAnalyzers,
         RoslynAssert.MetadataReferences);
 
     [TestCaseSource(nameof(AllAnalyzers))]
-    public void ValidCodeProject(DiagnosticAnalyzer analyzer)
+    public void Valid(DiagnosticAnalyzer analyzer)
     {
-        RoslynAssert.Valid(analyzer, ValidCodeProjectSln);
+        RoslynAssert.Valid(analyzer, ValidProjectSln);
     }
 }
 ```
@@ -139,12 +139,12 @@ public class Diagnostics
     private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
 
     [Test]
-    public void SomeTest()
+    public void M()
     {
         var code = @"
-namespace TestCode
+namespace N
 {
-    class ↓Foo
+    class ↓C
     {
     }
 }";
@@ -152,16 +152,16 @@ namespace TestCode
     }
 
     [Test]
-    public void CheckMessageAlso()
+    public void M()
     {
         var code = @"
-namespace TestCode
+namespace N
 {
-    class ↓Foo
+    class ↓C
     {
     }
 }";
-        RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic.WithMessage("Don't name it foo"), code);
+        RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic.WithMessage("Don't name it C"), code);
     }
     ...
 }
@@ -176,10 +176,10 @@ public class Diagnostics
     private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
 
     [Test]
-    public void SomeTest()
+    public void M()
     {
         var code = @"
-namespace TestCode
+namespace N
 {
     class ↓Foo
     {
@@ -191,38 +191,38 @@ namespace TestCode
 }
 ```
 
-If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnsics other than the expected.
+If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnstics other than the expected.
 
 # CodeFix
-Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix fixes it and produces the expected code.
+Test that the analyzer reports an error or warning at position indicated with ↓ and that the code fix fixes it and produces the expected code.
 With an aplhanumeric keyboard `alt + 25` writes `↓`.
 
 ```c#
-public class CodeFixTests
+public class CodeFix
 {
     private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
     private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
 	[Test]
-	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+	public void M()
 	{
 		var before = @"
-	namespace N
+namespace N
+{
+	class C
 	{
-		class Foo
-		{
-			private readonly int ↓_value;
-		}
-	}";
+		private readonly int ↓_value;
+	}
+}";
 
 		var after = @"
-	namespace N
+namespace N
+{
+	class C
 	{
-		class Foo
-		{
-			private readonly int value;
-		}
-	}";
+		private readonly int value;
+	}
+}";
 		RoslynAssert.CodeFix(Analyzer, Fix, before, after);
 	}
 }
@@ -232,19 +232,19 @@ public class CodeFixTests
 A typical test fixture looks like:
 
 ```c#
-public class CodeFixTests
+public class CodeFix
 {
     private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
     private static readonly CodeFixProvider Fix = new YorCodeFixProvider();
     private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
 
     [Test]
-    public void SomeTest()
+    public void M1()
     {
         var before = @"
 namespace N
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -253,21 +253,32 @@ namespace N
         var after = @"
 namespace N
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
 }";
         RoslynAssert.CodeFix(Analyzer, Fix, before, after);
     }
+}
+```
+
+With explicit title for the fix to apply. Useful when there are many candidate fixes.
+
+```cs
+public class CodeFix
+{
+    private static readonly DiagnosticAnalyzer Analyzer = new YourAnalyzer();
+    private static readonly CodeFixProvider Fix = new YorCodeFixProvider();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourAnalyzer.Descriptor);
 
     [Test]
-    public void ExplicitFixTitle()
+    public void M1()
     {
         var before = @"
 namespace N
 {
-    class Foo
+    class C
     {
         private readonly int ↓_value;
     }
@@ -276,7 +287,7 @@ namespace N
         var after = @"
 namespace N
 {
-    class Foo
+    class C
     {
         private readonly int value;
     }
@@ -287,16 +298,13 @@ namespace N
 }
 ```
 
-With explicit title for the fix to apply. Useful when there are many candidate fixes.
-
-
-If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnsics other than the expected.
+If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnostics other than the expected.
 
 ## Code fix only
 
 When the code fix is for a warning produced by an analyzer that you do not own, for example a built in analyzer in Visual Studio.
 ```c#
-public class CodeFixTests
+public class CodeFix
 {
     private static readonly CodeFixProvider Fix = new RemoveUnusedFixProvider();
     private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
@@ -305,25 +313,25 @@ public class CodeFixTests
 	public void TestThatCodeFixProducesExpectedCode()
 	{
 		var before = @"
-	namespace N
-	{
-		using System;
+namespace N
+{
+	using System;
 
-		public class Foo
-		{
-			public event EventHandler ↓Bar;
-		}
-	}";
+	public class C
+	{
+		public event EventHandler ↓Bar;
+	}
+}";
 
 		var after = @"
-	namespace N
-	{
-		using System;
+namespace N
+{
+	using System;
 
-		public class Foo
-		{
-		}
-	}";
+	public class C
+	{
+	}
+}";
 		RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, before, after);
 	}
 }
@@ -331,39 +339,39 @@ public class CodeFixTests
 
 # FixAll
 
-When there are many isses that will be fixed:
+When there are many issues that will be fixed:
 RoslynAssert.FixAll does:
-- Fix all diagnostcs one by one
+- Fix all diagnostics one by one
 - Fix all diagnostics in all supported scopes.
 
 ```c#
-public class CodeFixTests
+public class CodeFix
 {
     private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
     private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
 	[Test]
-	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixProducesExpectedCode()
+	public void M()
 	{
 		var before = @"
-	namespace N
+namespace N
+{
+	class C
 	{
-		class Foo
-		{
-			private readonly int ↓_value1;
-			private readonly int ↓_value2;
-		}
-	}";
+		private readonly int ↓_value1;
+		private readonly int ↓_value2;
+	}
+}";
 
 		var after = @"
-	namespace N
+namespace N
+{
+	class C
 	{
-		class Foo
-		{
-			private readonly int value1;
-			private readonly int value2;
-		}
-	}";
+		private readonly int value1;
+		private readonly int value2;
+	}
+}";
 		RoslynAssert.FixAll(Analyzer, Fix, before, after);
 	}
 }
@@ -371,27 +379,27 @@ public class CodeFixTests
 
 # NoFix
 
-Test that the analyzer reports an error or warning at position indicated with ↓ and that the codefix does not change the code.
+Test that the analyzer reports an error or warning at position indicated with ↓ and that the code fix does not change the code.
 With an aplhanumeric keyboard `alt + 25` writes `↓`.
 This can happen if for example it is decided to not support rare edge cases with the code fix.
 
 ```c#
-public class CodeFixTests
+public class CodeFix
 {
     private static readonly DiagnosticAnalyzer Analyzer = new FieldNameMustNotBeginWithUnderscore();
     private static readonly CodeFixProvider Fix = new SA1309CodeFixProvider();
 
 	[Test]
-	public void TestThatAnalyzerWarnsOnCorrectPositionAndThatCodeFixDoesNothing()
+	public void M()
 	{
 		var code = @"
-	namespace N
+namespace N
+{
+	class C
 	{
-		class Foo
-		{
-			private readonly int ↓_value;
-		}
-	}";
+		private readonly int ↓_value;
+	}
+}";
 
 		RoslynAssert.NoFix(Analyzer, Fix, code);
 	}
@@ -400,20 +408,20 @@ public class CodeFixTests
 
 # Refactoring
 ```cs
-public class CodeFixTests
+public class CodeFix
 {
 	private static readonly CodeRefactoringProvider Refactoring = new ClassNameToUpperCaseRefactoringProvider();
 
     [Test]
-    public void WithPositionIndicated()
+    public void M()
     {
         var before = @"
-class ↓Foo
+class ↓c
 {
 }";
 
         var after = @"
-class FOO
+class C
 {
 }";
         RoslynAssert.Refactoring(Refactoring, before, after);
@@ -457,23 +465,59 @@ When creating the workspace to analyze metadata references need to be added. The
 Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
 
 In most scenarios something like this in the test project is what you want:
+If you have an AssemblyInfo.cs you can put it there. If not you can put it in any .cs file for example AssemblyAttributes.cs
+
+### Sample AssemblyInfo.cs (for the test project.)
 
 ```c#
 using Gu.Roslyn.Asserts;
 
+
+[assembly: SuppressWarnings("CS1701")]
+[assembly: TransitiveMetadataReferences(typeof(TypeInTestProject))]
+
+// Below should not be needed, prefer TransitiveMetadataReferences as it updates as the resolution graph changes.
+[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
+[assembly: MetadataReferences(
+    typeof(System.Linq.Enumerable),
+    typeof(System.Net.WebClient),
+    typeof(System.Data.Common.DbConnection),
+    typeof(System.Reactive.Disposables.SerialDisposable),
+    typeof(System.Reactive.Disposables.ICancelable),
+    typeof(System.Reactive.Linq.Observable),
+    typeof(System.Xml.Serialization.XmlSerializer),
+    typeof(System.Windows.Media.Brush),
+    typeof(System.Windows.Controls.Control),
+    typeof(System.Windows.Media.Matrix),
+    typeof(System.Xaml.XamlLanguage),
+    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+    typeof(Microsoft.CodeAnalysis.Compilation),
+    typeof(NUnit.Framework.Assert))]
+```
+
+## TransitiveMetadataReferences
+For specifying a metadata reference to be used in the tests. Pass in a type in a top level assembly and let the attribute figure out all transitive dependencies.
+
+```c#
+[assembly: TransitiveMetadataReferences(typeof(TypeInTestProject))]
+```
+
+Or provide many top level types:
+
+```c#
 [assembly: TransitiveMetadataReferences(
     typeof(Microsoft.EntityFrameworkCore.DbContext),
     typeof(Microsoft.AspNetCore.Mvc.Controller))]
 ```
 
-## MetadataReferenceAttribute
+## MetadataReference
 For specifying a metadata reference to be used in the tests, with or without aliases.
 
 ```c#
 [assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
 ```
 
-## MetadataReferencesAttribute
+## MetadataReferences
 
 For specifying a batch of metadata references to be used in the tests.
 ```c#
@@ -505,66 +549,12 @@ var compilation = CSharpCompilation.Create(
     MetadataReferences.FromAttributes());
 ```
 
-### Sample AssemblyInfo.cs (for the test project.)
-
-```c#
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Gu.Roslyn.Asserts;
-
-...
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
-[assembly: MetadataReference(typeof(System.Diagnostics.Debug), new[] { "global", "system" })]
-[assembly: MetadataReferences(
-    typeof(System.Linq.Enumerable),
-    typeof(System.Net.WebClient),
-    typeof(System.Data.Common.DbConnection),
-    typeof(System.Reactive.Disposables.SerialDisposable),
-    typeof(System.Reactive.Disposables.ICancelable),
-    typeof(System.Reactive.Linq.Observable),
-    typeof(System.Xml.Serialization.XmlSerializer),
-    typeof(System.Windows.Media.Brush),
-    typeof(System.Windows.Controls.Control),
-    typeof(System.Windows.Media.Matrix),
-    typeof(System.Xaml.XamlLanguage),
-    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-    typeof(Microsoft.CodeAnalysis.Compilation),
-    typeof(NUnit.Framework.Assert))]
-```
-## Exlicit set RoslynAssert.MetadataReferences
-
-```c#
-RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-```
-
-A helper like this can be used.
-```c#
-private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
-{
-    return types.Select(type => type.GetTypeInfo().Assembly)
-                .Distinct()
-                .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
-                .ToArray();
-}
-```
-
-## IgnoredErrorsAttribute
+## SuppressWarnings
 
 For globally ignoring compiler warnings and errors introduced by code fixes when calling calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
 
 ```c#
-[assembly: IgnoredErrors("CS1569", ...)]
-```
-
-## AllowedDiagnosticsAttribute
-
-For globally ignoring compiler warnings and errors introduced by code fixes when calling calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
-
-```c#
-[assembly: AllowedDiagnostics(AllowedDiagnostics.Warnings)]
+[assembly: SuppressWarnings("CS1701")]
 ```
 
 # Analyze

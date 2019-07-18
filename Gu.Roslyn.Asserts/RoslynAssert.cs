@@ -25,7 +25,8 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly List<string> SuppressedDiagnostics = DiagnosticSettings.AllowedErrorIds().ToList();
+        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(\"CS1701\") or pass in warnings to suppress in each test.")]
+        public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
 
         /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
@@ -51,7 +52,7 @@ namespace Gu.Roslyn.Asserts
         public static void ResetSuppressedDiagnostics()
         {
             SuppressedDiagnostics.Clear();
-            SuppressedDiagnostics.AddRange(DiagnosticSettings.AllowedErrorIds());
+            SuppressedDiagnostics.AddRange(SuppressWarnings.FromAttributes());
         }
 
         /// <summary>
@@ -242,7 +243,7 @@ namespace Gu.Roslyn.Asserts
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
-                                     .Except(DiagnosticSettings.AllowedErrorIds())
+                                     .Except(SuppressedDiagnostics)
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();

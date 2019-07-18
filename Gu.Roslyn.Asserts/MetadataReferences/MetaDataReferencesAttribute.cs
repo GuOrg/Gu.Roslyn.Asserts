@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// Specify what default metadata reference to use.
+    /// Specify what default metadata reference to use when compiling the code in asserts.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MetadataReferencesAttribute : Attribute

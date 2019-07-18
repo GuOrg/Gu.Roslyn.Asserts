@@ -14,16 +14,16 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class MetadataReferences
     {
-        private static ImmutableArray<MetadataReference> metadataReferences;
+        private static ImmutableArray<MetadataReference> fromAttributes;
 
         /// <summary>
         /// Get the meta data references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
         /// </summary>
         public static ImmutableArray<MetadataReference> FromAttributes()
         {
-            if (!metadataReferences.IsDefault)
+            if (!fromAttributes.IsDefault)
             {
-                return metadataReferences;
+                return fromAttributes;
             }
 
             var set = new HashSet<MetadataReference>(MetadataReferenceComparer.Default);
@@ -47,8 +47,8 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            metadataReferences = ImmutableArray.CreateRange(set);
-            return metadataReferences;
+            fromAttributes = ImmutableArray.CreateRange(set);
+            return fromAttributes;
         }
 
         /// <summary>

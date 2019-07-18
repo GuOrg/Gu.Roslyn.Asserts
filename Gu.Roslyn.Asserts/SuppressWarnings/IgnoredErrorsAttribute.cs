@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -7,13 +7,15 @@
     /// Specify what compiler errors to ignore when calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
-    public class IgnoredErrorsAttribute : Attribute
+    [Obsolete("Use " + nameof(SuppressWarningsAttribute))]
+    public class IgnoredErrorsAttribute : SuppressWarningsAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IgnoredErrorsAttribute"/> class.
         /// </summary>
         /// <param name="errorIds">Specify ids of compiler errors to ignore when checking if a fix introduced compiler errors.</param>
         public IgnoredErrorsAttribute(params string[] errorIds)
+            :base(errorIds)
         {
             this.ErrorIds = errorIds ?? Array.Empty<string>();
         }

@@ -283,7 +283,7 @@ namespace Gu.Roslyn.Asserts
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
-            NoCompilerErrors(diagnosticsAndErrors.Errors, DiagnosticSettings.AllowedErrorIds(), DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(diagnosticsAndErrors.Errors, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
         }
     }
 }
