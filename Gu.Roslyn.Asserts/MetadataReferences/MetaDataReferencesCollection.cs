@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
     /// Reason for this class is to make sure explicit references with aliases are not overwritten by added transitive.
     /// This class has weird semantics and is not elegant but doing it like this to make the breaking change when changing from List&lt;MetadataReference&gt; minimal.
     /// </summary>
-    [DebuggerTypeProxy(typeof(MetadataReferencesCollectionDebugView_))]
+    [DebuggerTypeProxy(typeof(MetadataReferencesCollectionDebugView))]
     [DebuggerDisplay("Count = {this.inner.Count}")]
     public class MetaDataReferencesCollection : IEnumerable<MetadataReference>
     {

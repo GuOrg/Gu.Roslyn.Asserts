@@ -8,15 +8,15 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// Debug view for <see cref="MetaDataReferencesCollection"/>.
     /// </summary>
-    internal class MetadataReferencesCollectionDebugView_
+    internal class MetadataReferencesCollectionDebugView
     {
         private readonly MetaDataReferencesCollection metaDataReferences;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesCollectionDebugView_"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesCollectionDebugView"/> class.
         /// </summary>
         /// <param name="set">The set.</param>
-        internal MetadataReferencesCollectionDebugView_(MetaDataReferencesCollection set)
+        internal MetadataReferencesCollectionDebugView(MetaDataReferencesCollection set)
         {
             this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
         }
