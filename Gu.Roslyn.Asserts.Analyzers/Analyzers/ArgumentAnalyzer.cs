@@ -59,13 +59,52 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             newName));
                 }
 
-                if (ShouldIndicatePosition(argument, parameter, args, out var location, out var message))
+                if (IsPositionArgument(argument, parameter, args, out var message))
                 {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            Descriptors.IndicateErrorPosition,
-                            location,
-                            message));
+                    if (!args.TryFirst(x => x.HasPosition == true, out _) &&
+                        !args.TryFirst(x => x.Symbol is ILocalSymbol && x.HasPosition == null, out _))
+                    {
+
+                        foreach (var info in args)
+                        {
+                            if (argument.Contains(info.Expression) &&
+                                info.Symbol?.IsEitherKind(SymbolKind.Property, SymbolKind.Field) != true &&
+                                !OtherArgMatchingName())
+                            {
+                                if (info.Expression.IsKind(SyntaxKind.StringLiteralExpression))
+                                {
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.IndicateErrorPosition,
+                                            info.Expression.GetLocation(),
+                                            message));
+                                }
+                                else if (info.HasPosition == false)
+                                {
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.IndicateErrorPosition,
+                                            info.Value.GetLocation(),
+                                            message));
+                                }
+                            }
+
+                            bool OtherArgMatchingName()
+                            {
+                                foreach (var candidate in args)
+                                {
+                                    if (info != candidate &&
+                                        candidate.Symbol is ILocalSymbol candidateLocal &&
+                                        candidateLocal.Name == parameter.Name)
+                                    {
+                                        return true;
+                                    }
+                                }
+
+                                return false;
+                            }
+                        }
+                    }
                 }
 
                 bool IsParams()
@@ -78,43 +117,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return false;
                 }
             }
-        }
-
-        private static bool ShouldIndicatePosition(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<ArgumentInfo> args, out Location location, out string message)
-        {
-            if (IsPositionArgument(argument, parameter, args, out message))
-            {
-                if (args.TryFirst(x => x.HasPosition == true, out _) ||
-                    args.TryFirst(x => x.Symbol is ILocalSymbol && x.HasPosition == null, out _))
-                {
-                    location = null;
-                    message = null;
-                    return false;
-                }
-
-                foreach (var info in args)
-                {
-                    if (argument.Contains(info.Expression) &&
-                        info.Symbol?.IsEitherKind(SymbolKind.Property, SymbolKind.Field) != true)
-                    {
-                        if (info.Expression.IsKind(SyntaxKind.StringLiteralExpression))
-                        {
-                            location = info.Expression.GetLocation();
-                            return true;
-                        }
-
-                        if (info.HasPosition == false)
-                        {
-                            location = info.Value.GetLocation();
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            location = null;
-            message = null;
-            return false;
         }
 
         private static bool ShouldRename(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<ArgumentInfo> args, out IdentifierNameSyntax identifierName, out DiagnosticDescriptor descriptor, out string newName)
@@ -200,7 +202,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static bool IsPositionArgument(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<ArgumentInfo> args, out string message)
         {
             if (args.TrySingle(x => x.Expression == argument.Expression, out var match) &&
-               match.Symbol?.Kind != SymbolKind.Local)
+               match.Symbol?.IsEitherKind(SymbolKind.Field, SymbolKind.Property) == true)
             {
                 message = null;
                 return false;

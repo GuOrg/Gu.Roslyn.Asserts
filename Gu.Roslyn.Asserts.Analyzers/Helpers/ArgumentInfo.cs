@@ -1,5 +1,6 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System;
     using System.Collections.Immutable;
     using System.Diagnostics;
     using System.Threading;
@@ -9,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [DebuggerDisplay("{Expression}")]
-    internal struct ArgumentInfo
+    internal struct ArgumentInfo : IEquatable<ArgumentInfo>
     {
         internal readonly ExpressionSyntax Expression;
 #pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
@@ -41,6 +42,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
         }
+
+        public static bool operator ==(ArgumentInfo left, ArgumentInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ArgumentInfo left, ArgumentInfo right)
+        {
+            return !left.Equals(right);
+        }
+
+        public bool Equals(ArgumentInfo other) => this.Expression.Equals(other.Expression);
+
+        public override bool Equals(object obj) => obj is ArgumentInfo other && this.Equals(other);
+
+        public override int GetHashCode() => this.Expression.GetHashCode();
 
         internal static ImmutableArray<ArgumentInfo> CreateMany(ArgumentSyntax argument, IParameterSymbol parameter, SemanticModel semanticModel, CancellationToken cancellationToken)
         {

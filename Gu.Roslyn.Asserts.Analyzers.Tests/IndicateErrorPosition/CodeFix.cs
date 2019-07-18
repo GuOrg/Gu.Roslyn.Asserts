@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    [Explicit("Temp suppress.")]
     public static class CodeFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
@@ -27,8 +26,8 @@ namespace N
         [Test]
         public static void M()
         {
-            var code = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, ↓code);
+            var code = ↓""class C { }"";
+            RoslynAssert.Diagnostics(Analyzer, code);
         }
     }
 }";
@@ -51,7 +50,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
@@ -71,10 +70,10 @@ namespace N
         [Test]
         public static void M()
         {
-            var code = @""class C
+            var code = ↓@""class C
 {
 }"";
-            RoslynAssert.Diagnostics(Analyzer, ↓code);
+            RoslynAssert.Diagnostics(Analyzer, code);
         }
     }
 }";
@@ -99,7 +98,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
@@ -119,9 +118,9 @@ namespace N
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, ↓code);
+            var c1 = ""class C1 { }"";
+            var code = ↓""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
@@ -139,13 +138,13 @@ namespace N
         [Test]
         public static void M()
         {
-            var code1 = ""class C { }"";
-            var code = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, code1, code);
+            var c1 = ""class C1 { }"";
+            var code = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
@@ -166,8 +165,8 @@ namespace N
         [Test]
         public static void M()
         {
-            var code = ""class C2 { }"";
-            RoslynAssert.Diagnostics(Analyzer, C1, ↓code);
+            var code = ↓""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, C1, code);
         }
     }
 }";
@@ -191,7 +190,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
@@ -212,8 +211,8 @@ namespace N
         [Test]
         public void M()
         {
-            var code2 = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, this.code1, ↓code2);
+            var code2 = ↓""class C { }"";
+            RoslynAssert.Diagnostics(Analyzer, this.code1, code2);
         }
     }
 }";
@@ -237,12 +236,12 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
-        public static void CodeFixBefore()
+        public static void CodeFixLocal()
         {
             var before = @"
 namespace N
@@ -286,11 +285,111 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+        }
+
+        [Test]
+        public static void CodeFixLocals()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ↓""class C1 { }"";
+            var c2 = ↓""class C2 { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""↓class C1 { }"";
+            var c2 = ""class C2 { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
             RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
 
         [Test]
-        public static void CodeFixInlineBefore()
+        public static void CodeFixLocalsWithBefore()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""class C1 { }"";
+            var before = ↓""class C2 { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, before }, after);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""class C1 { }"";
+            var before = ""↓class C2 { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, before }, after);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
+            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+        }
+
+        [Test]
+        public static void CodeFixLiterals()
         {
             var before = @"
 namespace N
