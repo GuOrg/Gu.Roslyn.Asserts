@@ -12,11 +12,6 @@ group Analyzer
   nuget System.Runtime.CompilerServices.Unsafe 4.5.1
   nuget Gu.Roslyn.Extensions prerelease
 
-group Build
-  storage: none
-  source http://www.nuget.org/api/v2/
-  nuget SourceLink.Create.CommandLine
-
 group Test
   storage: none
   source http://www.nuget.org/api/v2/
@@ -37,3 +32,12 @@ group Analyzers
   nuget PropertyChangedAnalyzers
   nuget ReflectionAnalyzers
   nuget StyleCop.Analyzers prerelease
+
+group Build
+  storage: none
+  source http://www.nuget.org/api/v2/
+  nuget SourceLink.Create.CommandLine
+
+group Vsix
+  source http://www.nuget.org/api/v2/
+  nuget Microsoft.VSSDK.BuildTools
