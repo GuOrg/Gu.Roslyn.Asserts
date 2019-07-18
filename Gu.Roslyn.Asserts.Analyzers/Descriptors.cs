@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     public static class Descriptors
     {
-        public static readonly DiagnosticDescriptor NameOfLocalShouldMatchParameter = new DiagnosticDescriptor(
+        public static readonly DiagnosticDescriptor ShouldMatchParameter = new DiagnosticDescriptor(
             id: "GURA01",
             title: "Name of local should match parameter.",
             messageFormat: "Name of '{0}' should be '{1}'.",

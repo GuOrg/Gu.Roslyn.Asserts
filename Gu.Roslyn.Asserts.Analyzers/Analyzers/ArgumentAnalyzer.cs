@@ -1,6 +1,5 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
-    using System;
     using System.Collections.Immutable;
     using System.Text.RegularExpressions;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -14,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ArgumentAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.NameOfLocalShouldMatchParameter,
+            Descriptors.ShouldMatchParameter,
             Descriptors.IndicateErrorPosition,
             Descriptors.NameToFirstClass);
 
@@ -41,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptors.NameOfLocalShouldMatchParameter,
+                            Descriptors.ShouldMatchParameter,
                             identifierName.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
                             local.Name,
@@ -60,14 +59,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             newName));
                 }
 
-                if (ShouldIndicatePosition(argument, parameter, args, out var location, out var additionalLocation, out var message))
+                if (ShouldIndicatePosition(argument, parameter, args, out var location, out var message))
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
                             Descriptors.IndicateErrorPosition,
                             location,
-                            messageArgs: message,
-                            additionalLocations: additionalLocation == null ? Array.Empty<Location>() : new[] { additionalLocation }));
+                            message));
                 }
 
                 bool IsParams()
@@ -82,7 +80,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldIndicatePosition(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<ArgumentInfo> args, out Location location, out Location additionalLocation, out string message)
+        private static bool ShouldIndicatePosition(ArgumentSyntax argument, IParameterSymbol parameter, ImmutableArray<ArgumentInfo> args, out Location location, out string message)
         {
             if (IsPositionArgument(argument, parameter, args, out message))
             {
@@ -90,35 +88,31 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     args.TryFirst(x => x.Symbol is ILocalSymbol && x.HasPosition == null, out _))
                 {
                     location = null;
-                    additionalLocation = null;
                     message = null;
                     return false;
                 }
 
-                if (args.TrySingle(x => x.Symbol != null && x.HasPosition == false, out var match))
+                foreach (var info in args)
                 {
-                    location = match.Expression.GetLocation();
-                    additionalLocation = match.Value.GetLocation();
-                    return argument.Contains(match.Expression);
-                }
+                    if (argument.Contains(info.Expression) &&
+                        info.Symbol?.IsEitherKind(SymbolKind.Property, SymbolKind.Field) != true)
+                    {
+                        if (info.Expression.IsKind(SyntaxKind.StringLiteralExpression))
+                        {
+                            location = info.Expression.GetLocation();
+                            return true;
+                        }
 
-                if (args.TrySingle(x => x.Symbol?.Name == parameter.Name && x.HasPosition == false, out match))
-                {
-                    location = match.Expression.GetLocation();
-                    additionalLocation = match.Value.GetLocation();
-                    return argument.Contains(match.Expression);
-                }
-
-                if (args.TryFirst(x => x.Symbol != null && x.HasPosition == false, out match))
-                {
-                    location = argument.GetLocation();
-                    additionalLocation = match.Value.GetLocation();
-                    return true;
+                        if (info.HasPosition == false)
+                        {
+                            location = info.Value.GetLocation();
+                            return true;
+                        }
+                    }
                 }
             }
 
             location = null;
-            additionalLocation = null;
             message = null;
             return false;
         }
@@ -131,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     argument.Contains(match.Expression))
                 {
                     identifierName = (IdentifierNameSyntax)match.Expression;
-                    descriptor = Descriptors.NameOfLocalShouldMatchParameter;
+                    descriptor = Descriptors.ShouldMatchParameter;
                     newName = parameter.Name;
                     return !IsMatch(identifierName, parameter.Name);
                 }
@@ -140,7 +134,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     argument.Contains(match.Expression))
                 {
                     identifierName = (IdentifierNameSyntax)match.Expression;
-                    descriptor = Descriptors.NameOfLocalShouldMatchParameter;
+                    descriptor = Descriptors.ShouldMatchParameter;
                     newName = parameter.Name;
                     return !IsMatch(identifierName, parameter.Name);
                 }
@@ -213,10 +207,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
 
             if (parameter.Name == "before" ||
-                (parameter.ContainingSymbol.Name == "Diagnostics" && parameter.Name == "code") ||
-                (parameter.ContainingSymbol.Name == "Refactoring" && parameter.Name == "code"))
+                (parameter.ContainingSymbol.Name == "Diagnostics" && parameter.Name == "code"))
             {
-                message = "Indicate expected error position with ↓ (alt + 25).";
+                message = "Indicate expected position with ↓ (alt + 25).";
                 return true;
             }
 

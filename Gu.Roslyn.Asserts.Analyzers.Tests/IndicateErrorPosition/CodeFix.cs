@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
+    [Explicit("Temp suppress.")]
     public static class CodeFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
@@ -241,7 +242,7 @@ namespace N
         }
 
         [Test]
-        public static void CodeFixOneBefore()
+        public static void CodeFixBefore()
         {
             var before = @"
 namespace N
@@ -257,8 +258,9 @@ namespace N
         [Test]
         public static void M()
         {
-            var before = ""class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, ↓before, string.Empty);
+            var before = ↓""class C { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, before, after);
         }
     }
 }";
@@ -278,12 +280,57 @@ namespace N
         public static void M()
         {
             var before = ""↓class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, before, string.Empty);
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, before, after);
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected error position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
+            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+        }
+
+        [Test]
+        public static void CodeFixInlineBefore()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(Analyzer, Fix, ↓""class C { }"", ""class C { }"");
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.CodeFix(Analyzer, Fix, ""↓class C { }"", ""class C { }"");
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
+            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
     }
 }

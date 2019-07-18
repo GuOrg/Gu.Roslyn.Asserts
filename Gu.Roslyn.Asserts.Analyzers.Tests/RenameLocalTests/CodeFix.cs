@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
         private static readonly CodeFixProvider Fix = new RenameFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.NameOfLocalShouldMatchParameter);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.ShouldMatchParameter);
 
         [Test]
         public static void WhenAnalyzerWrongName()

@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    [Explicit("Temp ignore.")]
+    [Explicit("Temp suppress.")]
     public static class Diagnostics
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
