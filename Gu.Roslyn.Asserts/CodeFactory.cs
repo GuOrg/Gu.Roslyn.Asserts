@@ -356,11 +356,11 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzers to report warning or error for.</param>
         /// <param name="expectedDiagnostic">The diagnostics to check for.</param>
-        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressedDiagnostics)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressWarnings)
         {
-            return DefaultCompilationOptions(analyzer, expectedDiagnostic.Id, suppressedDiagnostics);
+            return DefaultCompilationOptions(analyzer, expectedDiagnostic.Id, suppressWarnings);
         }
 
         /// <summary>
@@ -369,11 +369,11 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzers to report warning or error for.</param>
         /// <param name="descriptor">The diagnostics to check for.</param>
-        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string> suppressedDiagnostics)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string> suppressWarnings)
         {
-            return DefaultCompilationOptions(analyzer, descriptor.Id, suppressedDiagnostics);
+            return DefaultCompilationOptions(analyzer, descriptor.Id, suppressWarnings);
         }
 
         /// <summary>
@@ -382,14 +382,14 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzers to report warning or error for.</param>
         /// <param name="expectedDiagnostics">The diagnostics to check for.</param>
-        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string> suppressedDiagnostics)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string> suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
-            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
         /// <summary>
@@ -398,13 +398,13 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The analyzers to report warning or error for.</param>
         /// <param name="descriptors">The diagnostics to check for.</param>
-        /// <param name="suppressedDiagnostics">The analyzer IDs to suppress.</param>
+        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressedDiagnostics)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptors, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
         /// <summary>
@@ -464,12 +464,12 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="analyzer">The analyzer to add diagnostic options for.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="suppressedDiagnostics">The suppressed diagnostics.</param>
+        /// <param name="suppressWarnings">The suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressedDiagnostics = null, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressWarnings = null, IEnumerable<MetadataReference> metadataReferences = null)
         {
-            return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressedDiagnostics), metadataReferences);
+            return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressWarnings), metadataReferences);
         }
 
         /// <summary>
@@ -646,23 +646,23 @@ namespace Gu.Roslyn.Asserts
         /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="suppressedDiagnostics">The explicitly suppressed diagnostics.</param>
+        /// <param name="suppressWarnings">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions compilationOptions, IEnumerable<string> suppressedDiagnostics, IEnumerable<MetadataReference> metadataReferences)
+        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions compilationOptions, IEnumerable<string> suppressWarnings, IEnumerable<MetadataReference> metadataReferences)
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,
-                compilationOptions ?? DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressedDiagnostics),
+                compilationOptions ?? DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressWarnings),
                 metadataReferences);
         }
 
-        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string> suppressedDiagnostics)
+        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string> suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
-            suppressedDiagnostics = suppressedDiagnostics ?? Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptor, suppressedDiagnostics.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
         }
     }
 }

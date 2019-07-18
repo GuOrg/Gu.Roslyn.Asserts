@@ -283,14 +283,14 @@ namespace Gu.Roslyn.Asserts.Tests
         [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(FixAllMethods))]
         [TestCaseSource(nameof(NoFixMethods))]
-        public static void SuppressedDiagnosticsParameter(IMethodSymbol method)
+        public static void suppressWarningsParameter(IMethodSymbol method)
         {
             if (method.TryFindParameterByType<IEnumerable<string>>(out var parameter))
             {
                 Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
                 Assert.AreEqual(null, parameter.ExplicitDefaultValue);
-                Assert.AreEqual("suppressedDiagnostics", parameter.MetadataName);
-                Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics\"/> are used.", parameter.DocComment());
+                Assert.AreEqual("suppressWarnings", parameter.MetadataName);
+                Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.suppressWarnings\"/> are used.", parameter.DocComment());
                 Assert.AreEqual("allowCompilationErrors", method.Parameters[parameter.Ordinal - 1].Name);
             }
             else
@@ -313,7 +313,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 {
                     Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
                     Assert.AreEqual(null, parameter.ExplicitDefaultValue);
-                    Assert.AreEqual("suppressedDiagnostics", method.Parameters[parameter.Ordinal - 1].Name);
+                    Assert.AreEqual("suppressWarnings", method.Parameters[parameter.Ordinal - 1].Name);
                 }
 
                 Assert.AreEqual("metadataReferences", parameter.MetadataName);

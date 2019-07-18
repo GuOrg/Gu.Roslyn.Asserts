@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts
         {
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences));
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings), MetadataReferences));
         }
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             IReadOnlyList<string> code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -69,7 +69,7 @@ namespace Gu.Roslyn.Asserts
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences));
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, suppressWarnings), MetadataReferences));
         }
 
         /// <summary>
@@ -78,14 +78,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             IReadOnlyList<string> code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -94,7 +94,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -107,14 +107,14 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -123,7 +123,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -135,13 +135,13 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             FileInfo code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -149,7 +149,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -158,13 +158,13 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             string code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressedDiagnostics ?? SuppressedDiagnostics),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -204,20 +204,20 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             Type analyzerType,
             FileInfo code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
                 code,
-                suppressedDiagnostics,
+                suppressWarnings,
                 metadataReferences,
                 compilationOptions);
         }
@@ -231,14 +231,14 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
             Type analyzerType,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string> suppressedDiagnostics = null,
+            IEnumerable<string> suppressWarnings = null,
             IEnumerable<MetadataReference> metadataReferences = null,
             CSharpCompilationOptions compilationOptions = null)
         {
@@ -246,7 +246,7 @@ namespace Gu.Roslyn.Asserts
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
                 descriptor,
                 code,
-                suppressedDiagnostics,
+                suppressWarnings,
                 metadataReferences,
                 compilationOptions);
         }
@@ -283,7 +283,7 @@ namespace Gu.Roslyn.Asserts
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
-            NoCompilerErrors(diagnosticsAndErrors.Errors, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(diagnosticsAndErrors.Errors, suppressWarnings, DiagnosticSettings.AllowedDiagnostics());
         }
     }
 }

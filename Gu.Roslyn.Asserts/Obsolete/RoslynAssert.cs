@@ -77,7 +77,7 @@ namespace Gu.Roslyn.Asserts
                 after: new[] { after },
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -106,7 +106,7 @@ namespace Gu.Roslyn.Asserts
                 after: MergeFixedCode(codeWithErrorsIndicated, after),
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -135,7 +135,7 @@ namespace Gu.Roslyn.Asserts
                 after: new[] { after },
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -164,7 +164,7 @@ namespace Gu.Roslyn.Asserts
                 after: MergeFixedCode(code, after),
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -191,7 +191,7 @@ namespace Gu.Roslyn.Asserts
                 after: new[] { after },
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -218,7 +218,7 @@ namespace Gu.Roslyn.Asserts
                 after: MergeFixedCode(code, after),
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -244,7 +244,7 @@ namespace Gu.Roslyn.Asserts
                 after: MergeFixedCode(diagnosticsAndSources.Code, after),
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: null,
+                suppressWarnings: null,
                 metadataReferences: null,
                 compilationOptions: null);
         }
@@ -258,12 +258,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
-        /// <param name="suppressedDiagnostics">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use other overloads.")]
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string> suppressedDiagnostics = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string> suppressWarnings = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -272,7 +272,7 @@ namespace Gu.Roslyn.Asserts
                 after: MergeFixedCode(diagnosticsAndSources.Code, after),
                 fixTitle: fixTitle,
                 allowCompilationErrors: allowCompilationErrors,
-                suppressedDiagnostics: suppressedDiagnostics,
+                suppressWarnings: suppressWarnings,
                 metadataReferences: metadataReferences,
                 compilationOptions: null);
         }
@@ -329,7 +329,7 @@ namespace Gu.Roslyn.Asserts
                 MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -357,7 +357,7 @@ namespace Gu.Roslyn.Asserts
                 after,
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -384,7 +384,7 @@ namespace Gu.Roslyn.Asserts
                 new[] { after },
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -411,7 +411,7 @@ namespace Gu.Roslyn.Asserts
                 MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -438,7 +438,7 @@ namespace Gu.Roslyn.Asserts
                 after,
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -466,7 +466,7 @@ namespace Gu.Roslyn.Asserts
                 new[] { after },
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -494,7 +494,7 @@ namespace Gu.Roslyn.Asserts
                 MergeFixedCode(before, after),
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -522,7 +522,7 @@ namespace Gu.Roslyn.Asserts
                 after,
                 fixTitle,
                 allowCompilationErrors,
-                SuppressedDiagnostics,
+                suppressWarnings,
                 MetadataReferences);
         }
 
@@ -574,7 +574,7 @@ namespace Gu.Roslyn.Asserts
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var fix = new TCodeFix();
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, SuppressedDiagnostics, MetadataReferences);
+            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, suppressWarnings, MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);

@@ -50,7 +50,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS1701" });
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS1701" });
         }
     }
 }

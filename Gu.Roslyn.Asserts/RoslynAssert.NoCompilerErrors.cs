@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoCompilerErrors(params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, MetadataReferences);
-            NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(solution, suppressWarnings, DiagnosticSettings.AllowedDiagnostics());
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
             var solution = CodeFactory.CreateSolution(code, metadataReferences);
-            NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(solution, suppressWarnings, DiagnosticSettings.AllowedDiagnostics());
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static void NoCompilerErrors(Solution solution)
         {
-            NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(solution, suppressWarnings, DiagnosticSettings.AllowedDiagnostics());
         }
 
         /// <summary>

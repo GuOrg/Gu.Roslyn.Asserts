@@ -68,7 +68,7 @@ namespace N
 }".AssertReplace("public class C1 { }", declaration)
   .AssertReplace("private const", modifiers)
   .AssertReplace("C1", name);
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS1701" });
         }
     }
 }

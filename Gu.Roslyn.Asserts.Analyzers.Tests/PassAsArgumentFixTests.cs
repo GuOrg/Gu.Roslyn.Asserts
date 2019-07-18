@@ -46,7 +46,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.", suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.", suppressWarnings: new[] { "CS1701" });
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS1701" });
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.", suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.", suppressWarnings: new[] { "CS1701" });
         }
 
         [Test]
@@ -191,7 +191,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.", suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.", suppressWarnings: new[] { "CS1701" });
         }
 
         [Test]
@@ -238,7 +238,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'.", suppressWarnings: new[] { "CS1701", "CS1702" });
         }
 
         [Test]
@@ -289,7 +289,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressWarnings: new[] { "CS1701", "CS1702" });
         }
 
         [Test]
@@ -342,7 +342,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressWarnings: new[] { "CS1701", "CS1702" });
         }
 
         [Test]
@@ -401,7 +401,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.", suppressWarnings: new[] { "CS1701", "CS1702" });
         }
 
         [Test]
@@ -445,7 +445,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.", suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.", suppressWarnings: new[] { "CS1701", "CS1702" });
         }
 
         [Test]
@@ -505,7 +505,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, suppressedDiagnostics: new[] { "CS1701", "CS1702" });
+            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS1701", "CS1702" });
         }
     }
 }

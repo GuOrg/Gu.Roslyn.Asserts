@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.IndicateErrorPosition);
-        private static readonly string[] SuppressedDiagnostics = { "CS1701" };
+        private static readonly string[] suppressWarnings = { "CS1701" };
 
         [Test]
         public static void DiagnosticsOneArgument()
@@ -32,7 +32,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressedDiagnostics: SuppressedDiagnostics);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressWarnings: suppressWarnings);
         }
     }
 }

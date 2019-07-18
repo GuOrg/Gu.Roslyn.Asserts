@@ -148,7 +148,7 @@ Use this version for Microsoft.CodeAnalysis.CSharp 1.x
 
 #### 0.3.0
 * BREAKING: Remove obsolete NoDiagnostics
-* FEATURE: AnalyzerAssert.SuppressedDiagnostics
+* FEATURE: AnalyzerAssert.suppressWarnings
 * FEATURE: overloads with CSharpCompilationOptions.
 * FEATURE: Shallower stacks in exceptions.
 

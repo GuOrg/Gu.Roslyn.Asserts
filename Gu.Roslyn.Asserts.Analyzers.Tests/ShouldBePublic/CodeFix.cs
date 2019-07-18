@@ -76,7 +76,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) }, suppressedDiagnostics: new[] { "CS1701" });
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) }, suppressWarnings: new[] { "CS1701" });
         }
     }
 }

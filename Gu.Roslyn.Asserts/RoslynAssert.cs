@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
         [Obsolete("This will be removed. Use [assembly: SuppressWarnings(\"CS1701\") or pass in warnings to suppress in each test.")]
-        public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
+        public static readonly List<string> suppressWarnings = SuppressWarnings.FromAttributes().ToList();
 
         /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
@@ -47,21 +47,21 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>.
+        /// Resets <see cref="suppressWarnings"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>.
         /// </summary>
-        public static void ResetSuppressedDiagnostics()
+        public static void ResetsuppressWarnings()
         {
-            SuppressedDiagnostics.Clear();
-            SuppressedDiagnostics.AddRange(SuppressWarnings.FromAttributes());
+            suppressWarnings.Clear();
+            suppressWarnings.AddRange(SuppressWarnings.FromAttributes());
         }
 
         /// <summary>
-        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>.
+        /// Resets <see cref="suppressWarnings"/> and <see cref="MetadataReferences"/>.
         /// </summary>
         public static void ResetAll()
         {
             ResetMetadataReferences();
-            ResetSuppressedDiagnostics();
+            ResetsuppressWarnings();
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Gu.Roslyn.Asserts
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
-                                     .Except(SuppressedDiagnostics)
+                                     .Except(suppressWarnings)
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();

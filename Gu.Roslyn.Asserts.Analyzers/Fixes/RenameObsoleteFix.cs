@@ -54,7 +54,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
 
                         case "CS1739" when syntaxRoot.TryFindNode(diagnostic, out result):
-                            string message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                            var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                            if (message.Contains("suppressedDiagnostics"))
+                            {
+                                text = "suppressWarnings";
+                                return true;
+                            }
+
                             switch (message)
                             {
                                 case "The best overload for 'Diagnostics' does not have a parameter named 'codeWithErrorsIndicated'":
