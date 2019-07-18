@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
-        public static readonly MetaDataReferencesCollection MetadataReferences = new MetaDataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
+        public static readonly MetadataReferencesCollection_ MetadataReferences = new MetadataReferencesCollection_(Asserts.MetadataReferences.FromAttributes().ToList());
 
         /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
