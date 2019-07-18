@@ -10,14 +10,14 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
-    /// Helper for getting meta data references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
+    /// Helper for getting meta data references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute_"/>.
     /// </summary>
     public static class MetadataReferences
     {
         private static ImmutableArray<MetadataReference> fromAttributes;
 
         /// <summary>
-        /// Get the meta data references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
+        /// Get the meta data references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute_"/> in the test assemblies.
         /// </summary>
         public static ImmutableArray<MetadataReference> FromAttributes()
         {
@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts
                     set.UnionWith(transitive.MetadataReferences);
                 }
 
-                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is MetadataReferencesAttribute attribute)
+                if (assembly.GetCustomAttribute<MetadataReferencesAttribute_>() is MetadataReferencesAttribute_ attribute)
                 {
                     set.UnionWith(attribute.MetadataReferences);
                 }

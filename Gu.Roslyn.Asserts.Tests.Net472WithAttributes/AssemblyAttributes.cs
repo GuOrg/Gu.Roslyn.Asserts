@@ -5,7 +5,7 @@ using Gu.Roslyn.Asserts;
 [assembly: TransitiveMetadataReferences(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation))]
 [assembly: TransitiveMetadataReferences(typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider))]
 [assembly: TransitiveMetadataReferences(typeof(System.Windows.Window))]
-[assembly: MetadataReferences(
+[assembly: MetadataReferencesAttribute_(
     typeof(System.Linq.Enumerable),
     typeof(System.Net.WebClient),
     typeof(System.Drawing.Bitmap),

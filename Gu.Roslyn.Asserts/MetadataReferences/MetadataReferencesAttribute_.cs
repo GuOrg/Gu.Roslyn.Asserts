@@ -9,13 +9,13 @@ namespace Gu.Roslyn.Asserts
     /// Specify what default metadata reference to use when compiling the code in asserts.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class MetadataReferencesAttribute : Attribute
+    public class MetadataReferencesAttribute_ : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesAttribute_"/> class.
         /// </summary>
         /// <param name="types">Specify types in assemblies for which metadata references will be included.</param>
-        public MetadataReferencesAttribute(params Type[] types)
+        public MetadataReferencesAttribute_(params Type[] types)
         {
             this.MetadataReferences = types.Select(x => Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(x.Assembly))
                                            .ToArray();

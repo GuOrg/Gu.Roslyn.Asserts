@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
         private static AllowedDiagnostics? staticAllowedDiagnostics;
 
         /// <summary>
-        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assembly.
+        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute_"/> in the test assembly.
         /// </summary>
         internal static AllowedDiagnostics AllowedDiagnostics()
         {
