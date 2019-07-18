@@ -13,21 +13,21 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     [DebuggerTypeProxy(typeof(MetadataReferencesCollectionDebugView))]
     [DebuggerDisplay("Count = {this.inner.Count}")]
-    public class MetadataReferencesCollection_ : IEnumerable<MetadataReference>
+    public class MetadataReferencesCollection : IEnumerable<MetadataReference>
     {
         private readonly List<MetadataReference> inner = new List<MetadataReference>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesCollection_"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
         /// </summary>
-        public MetadataReferencesCollection_()
+        public MetadataReferencesCollection()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesCollection_"/> class.
+        /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
         /// </summary>
-        public MetadataReferencesCollection_(IEnumerable<MetadataReference> list)
+        public MetadataReferencesCollection(IEnumerable<MetadataReference> list)
         {
             this.AddRange(list);
         }

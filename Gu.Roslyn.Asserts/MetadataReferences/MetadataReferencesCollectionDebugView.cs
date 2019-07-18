@@ -6,17 +6,17 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// Debug view for <see cref="MetadataReferencesCollection_"/>.
+    /// Debug view for <see cref="MetadataReferencesCollection"/>.
     /// </summary>
     internal class MetadataReferencesCollectionDebugView
     {
-        private readonly MetadataReferencesCollection_ metaDataReferences;
+        private readonly MetadataReferencesCollection metaDataReferences;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataReferencesCollectionDebugView"/> class.
         /// </summary>
         /// <param name="set">The set.</param>
-        internal MetadataReferencesCollectionDebugView(MetadataReferencesCollection_ set)
+        internal MetadataReferencesCollectionDebugView(MetadataReferencesCollection set)
         {
             this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
         }
