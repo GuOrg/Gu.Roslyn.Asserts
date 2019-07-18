@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -9,13 +10,46 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
-    /// Helper for getting metadata references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
+    /// Helper for getting meta data references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
     /// </summary>
     public static class MetadataReferences
     {
-#pragma warning disable 169
-        private static List<MetadataReference> metadataReferences;
-#pragma warning restore 169
+        private static ImmutableArray<MetadataReference> metadataReferences;
+
+        /// <summary>
+        /// Get the meta data references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
+        /// </summary>
+        public static ImmutableArray<MetadataReference> FromAttributes()
+        {
+            if (!metadataReferences.IsDefault)
+            {
+                return metadataReferences;
+            }
+
+            var set = new HashSet<MetadataReference>(MetadataReferenceComparer.Default);
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var attributes = Attribute.GetCustomAttributes(assembly, typeof(MetadataReferenceAttribute));
+                foreach (var single in attributes.Cast<MetadataReferenceAttribute>())
+                {
+                    set.Add(single.MetadataReference);
+                }
+
+                attributes = Attribute.GetCustomAttributes(assembly, typeof(TransitiveMetadataReferencesAttribute));
+                foreach (var transitive in attributes.Cast<TransitiveMetadataReferencesAttribute>())
+                {
+                    set.UnionWith(transitive.MetadataReferences);
+                }
+
+                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is MetadataReferencesAttribute attribute)
+                {
+                    set.UnionWith(attribute.MetadataReferences);
+                }
+            }
+
+            metadataReferences = ImmutableArray.CreateRange(set);
+            return metadataReferences;
+        }
 
         /// <summary>
         /// Create a <see cref="MetadataReference"/> for the <paramref name="assembly"/>.
@@ -104,41 +138,6 @@ namespace Gu.Roslyn.Asserts
             {
                 yield return CreateFromAssembly(assembly);
             }
-        }
-
-        /// <summary>
-        /// Get the metadata references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
-        /// </summary>
-        public static IEnumerable<MetadataReference> FromAttributes()
-        {
-            if (metadataReferences != null)
-            {
-                return new List<MetadataReference>(metadataReferences);
-            }
-
-            var set = new HashSet<MetadataReference>(MetadataReferenceComparer.Default);
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var attributes = Attribute.GetCustomAttributes(assembly, typeof(MetadataReferenceAttribute));
-                foreach (var single in attributes.Cast<MetadataReferenceAttribute>())
-                {
-                    set.Add(single.MetadataReference);
-                }
-
-                attributes = Attribute.GetCustomAttributes(assembly, typeof(TransitiveMetadataReferencesAttribute));
-                foreach (var transitive in attributes.Cast<TransitiveMetadataReferencesAttribute>())
-                {
-                    set.UnionWith(transitive.MetadataReferences);
-                }
-
-                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is MetadataReferencesAttribute attribute)
-                {
-                    set.UnionWith(attribute.MetadataReferences);
-                }
-            }
-
-            metadataReferences = new List<MetadataReference>(set);
-            return new List<MetadataReference>(metadataReferences);
         }
 
         private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> recursiveAssemblies = null)
