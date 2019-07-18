@@ -64,7 +64,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     if (!args.TryFirst(x => x.HasPosition == true, out _) &&
                         !args.TryFirst(x => x.Symbol is ILocalSymbol && x.HasPosition == null, out _))
                     {
-
                         foreach (var info in args)
                         {
                             if (argument.Contains(info.Expression) &&
