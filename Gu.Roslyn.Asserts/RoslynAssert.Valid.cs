@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts
         {
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings), MetadataReferences));
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences));
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -69,7 +69,7 @@ namespace Gu.Roslyn.Asserts
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, suppressWarnings), MetadataReferences));
+                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -94,7 +94,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -107,7 +107,7 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -123,7 +123,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -135,7 +135,7 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -149,7 +149,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -158,7 +158,7 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? suppressWarnings),
+                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
         }
 
@@ -204,7 +204,7 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -231,7 +231,7 @@ namespace Gu.Roslyn.Asserts
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="suppressWarnings"/> are used.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         public static void Valid(
@@ -283,7 +283,7 @@ namespace Gu.Roslyn.Asserts
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
-            NoCompilerErrors(diagnosticsAndErrors.Errors, suppressWarnings, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(diagnosticsAndErrors.Errors, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
         }
     }
 }

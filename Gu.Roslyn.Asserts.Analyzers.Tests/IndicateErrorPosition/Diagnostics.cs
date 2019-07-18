@@ -8,7 +8,6 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.IndicateErrorPosition);
-        private static readonly string[] suppressWarnings = { "CS1701" };
 
         [Test]
         public static void DiagnosticsOneArgument()
@@ -32,7 +31,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code });
         }
 
         [Test]
@@ -58,7 +57,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code });
         }
 
         [Test]
@@ -84,7 +83,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code }, suppressWarnings: suppressWarnings);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, code });
         }
 
         [Test]
@@ -111,7 +110,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code }, suppressWarnings: suppressWarnings);
+            RoslynAssert.Diagnostics(Analyzer, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, code });
         }
     }
 }

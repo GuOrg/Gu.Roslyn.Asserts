@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code)
         {
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, params string[] code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -71,7 +71,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptors, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptors, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -85,7 +85,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -102,7 +102,7 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, FileInfo code)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, suppressWarnings), MetadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }

@@ -23,12 +23,6 @@ namespace Gu.Roslyn.Asserts
         public static readonly MetaDataReferencesCollection MetadataReferences = new MetaDataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
 
         /// <summary>
-        /// The metadata references used when creating the projects created in the tests.
-        /// </summary>
-        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(\"CS1701\") or pass in warnings to suppress in each test.")]
-        public static readonly List<string> suppressWarnings = SuppressWarnings.FromAttributes().ToList();
-
-        /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
@@ -47,21 +41,12 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
-        /// Resets <see cref="suppressWarnings"/> to <see cref="DiagnosticSettings.AllowedErrorIds()"/>.
-        /// </summary>
-        public static void ResetsuppressWarnings()
-        {
-            suppressWarnings.Clear();
-            suppressWarnings.AddRange(SuppressWarnings.FromAttributes());
-        }
-
-        /// <summary>
-        /// Resets <see cref="suppressWarnings"/> and <see cref="MetadataReferences"/>.
+        /// Resets <see cref="SuppressedDiagnostics"/> and <see cref="MetadataReferences"/>.
         /// </summary>
         public static void ResetAll()
         {
             ResetMetadataReferences();
-            ResetsuppressWarnings();
+            ResetSuppressedDiagnostics();
         }
 
         /// <summary>
@@ -243,7 +228,7 @@ namespace Gu.Roslyn.Asserts
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
-                                     .Except(suppressWarnings)
+                                     .Except(SuppressedDiagnostics)
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();
