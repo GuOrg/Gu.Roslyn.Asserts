@@ -23,7 +23,7 @@ group Test
   nuget Microsoft.NET.Test.Sdk
   nuget NUnit
   nuget NUnit3TestAdapter
-  nuget Microsoft.AspNetCore.All
+  nuget Microsoft.AspNetCore.All 2.2.0
   nuget Microsoft.CodeAnalysis.CSharp.Workspaces
   nuget Microsoft.CodeAnalysis.CSharp.Scripting
   nuget Gu.Roslyn.Asserts.Analyzers
