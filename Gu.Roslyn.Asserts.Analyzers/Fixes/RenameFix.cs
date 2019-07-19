@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.NameShouldMatchParameter.Id,
-            Descriptors.NameToFirstClass.Id,
+            Descriptors.NameShouldMatchCode.Id,
             Descriptors.NameClassToMatchAsserts.Id,
             Descriptors.NameFileToMatchClass.Id);
 

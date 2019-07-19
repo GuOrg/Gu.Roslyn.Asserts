@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             isEnabledByDefault: true,
             description: "Indicate error position with ↓ (alt + 25).");
 
-        public static readonly DiagnosticDescriptor NameToFirstClass = new DiagnosticDescriptor(
+        public static readonly DiagnosticDescriptor NameShouldMatchCode = new DiagnosticDescriptor(
             id: "GURA03",
             title: "Name of field should be first class.",
             messageFormat: "Name of '{0}' should be '{1}'.",

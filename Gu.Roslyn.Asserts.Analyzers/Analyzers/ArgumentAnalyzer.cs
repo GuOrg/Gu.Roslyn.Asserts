@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
             Descriptors.NameShouldMatchParameter,
             Descriptors.IndicateErrorPosition,
-            Descriptors.NameToFirstClass);
+            Descriptors.NameShouldMatchCode);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 TryGetClassName(argumentInfo, out identifierName, out newName) &&
                 argumentInfo.Symbol.Name != newName)
             {
-                descriptor = Descriptors.NameToFirstClass;
+                descriptor = Descriptors.NameShouldMatchCode;
                 return true;
             }
 
