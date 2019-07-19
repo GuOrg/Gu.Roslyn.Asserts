@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ArgumentAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.ShouldMatchParameter,
+            Descriptors.NameShouldMatchParameter,
             Descriptors.IndicateErrorPosition,
             Descriptors.NameToFirstClass);
 
@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptors.ShouldMatchParameter,
+                            Descriptors.NameShouldMatchParameter,
                             identifierName.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameter.Name),
                             local.Name,
@@ -126,7 +126,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     argument.Contains(match.Expression))
                 {
                     identifierName = (IdentifierNameSyntax)match.Expression;
-                    descriptor = Descriptors.ShouldMatchParameter;
+                    descriptor = Descriptors.NameShouldMatchParameter;
                     newName = parameter.Name;
                     return !IsMatch(identifierName, parameter.Name);
                 }
@@ -135,7 +135,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     argument.Contains(match.Expression))
                 {
                     identifierName = (IdentifierNameSyntax)match.Expression;
-                    descriptor = Descriptors.ShouldMatchParameter;
+                    descriptor = Descriptors.NameShouldMatchParameter;
                     newName = parameter.Name;
                     return !IsMatch(identifierName, parameter.Name);
                 }

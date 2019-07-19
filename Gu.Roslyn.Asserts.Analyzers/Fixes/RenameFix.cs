@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class RenameFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            Descriptors.ShouldMatchParameter.Id,
+            Descriptors.NameShouldMatchParameter.Id,
             Descriptors.NameToFirstClass.Id,
             Descriptors.NameClassToMatchAsserts.Id,
             Descriptors.NameFileToMatchClass.Id);

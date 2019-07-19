@@ -31,6 +31,31 @@ namespace N
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
 
+        [TestCase("Analyzer")]
+        [TestCase("PlaceholderAnalyzer")]
+        public static void WhenFieldAnalyzer(string name)
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Name = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class C { }"";
+            RoslynAssert.Valid(Name, code);
+        }
+    }
+}".AssertReplace("Name", name);
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
         [Test]
         public static void DoNotWarnWhenTwoParams()
         {
