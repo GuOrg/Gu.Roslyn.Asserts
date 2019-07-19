@@ -12,14 +12,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
     [DebuggerDisplay("{Expression}")]
     internal struct ArgumentInfo : IEquatable<ArgumentInfo>
     {
+        internal readonly ArgumentSyntax Argument;
+        internal readonly IParameterSymbol Parameter;
         internal readonly ExpressionSyntax Expression;
 #pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
         internal readonly ISymbol Symbol;
 #pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
         internal readonly ExpressionSyntax Value;
 
-        private ArgumentInfo(ExpressionSyntax identifierName, ISymbol symbol, ExpressionSyntax value)
+        private ArgumentInfo(ArgumentSyntax argument, IParameterSymbol parameter, ExpressionSyntax identifierName, ISymbol symbol, ExpressionSyntax value)
         {
+            this.Argument = argument;
+            this.Parameter = parameter;
             this.Expression = identifierName;
             this.Symbol = symbol;
             this.Value = value;
@@ -66,7 +70,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 var builder = ImmutableArray.CreateBuilder<ArgumentInfo>(initializer.Expressions.Count);
                 foreach (var expression in initializer.Expressions)
                 {
-                    builder.Add(Create(expression, semanticModel, cancellationToken));
+                    builder.Add(Create(argument, parameter, expression, semanticModel, cancellationToken));
                 }
 
                 return builder.MoveToImmutable();
@@ -79,7 +83,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     var builder = ImmutableArray.CreateBuilder<ArgumentInfo>(argumentList.Arguments.Count - parameter.Ordinal);
                     for (var i = parameter.Ordinal; i < argumentList.Arguments.Count; i++)
                     {
-                        builder.Add(Create(argumentList.Arguments[i].Expression, semanticModel, cancellationToken));
+                        builder.Add(Create(argument, parameter, argumentList.Arguments[i].Expression, semanticModel, cancellationToken));
                     }
 
                     return builder.MoveToImmutable();
@@ -88,7 +92,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return ImmutableArray<ArgumentInfo>.Empty;
             }
 
-            return ImmutableArray.Create(Create(argument.Expression, semanticModel, cancellationToken));
+            return ImmutableArray.Create(Create(argument, parameter, argument.Expression, semanticModel, cancellationToken));
 
             bool TryGetInitializer(out InitializerExpressionSyntax result)
             {
@@ -110,16 +114,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static ArgumentInfo Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
+        private static ArgumentInfo Create(ArgumentSyntax argument, IParameterSymbol parameter, ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
         {
             if (expression is IdentifierNameSyntax candidate &&
                 semanticModel.TryGetSymbol(candidate, cancellationToken, out ISymbol candidateSymbol))
             {
                 _ = TryGetValue(out var literal);
-                return new ArgumentInfo(expression, candidateSymbol, literal);
+                return new ArgumentInfo(argument, parameter, expression, candidateSymbol, literal);
             }
 
-            return new ArgumentInfo(expression, null, null);
+            return new ArgumentInfo(argument, parameter, expression, null, null);
 
             bool TryGetValue(out ExpressionSyntax result)
             {
