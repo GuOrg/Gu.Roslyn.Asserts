@@ -15,21 +15,21 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         public static readonly DiagnosticDescriptor IndicateErrorPosition = new DiagnosticDescriptor(
             id: "GURA02",
-            title: "Indicate error position.",
-            messageFormat: "{0}",
+            title: "Indicate position.",
+            messageFormat: "Indicate position with ↓ (alt + 25).",
             category: AnalyzerCategory.Correctness,
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
-            description: "Indicate error position with ↓ (alt + 25).");
+            description: "Indicate position with ↓ (alt + 25).");
 
         public static readonly DiagnosticDescriptor NameShouldMatchCode = new DiagnosticDescriptor(
             id: "GURA03",
-            title: "Name of field should be first class.",
+            title: "Name should match code.",
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: true,
-            description: "Name of field should be first class.");
+            description: "Name should match code.");
 
         public static readonly DiagnosticDescriptor NameClassToMatchAsserts = new DiagnosticDescriptor(
             id: "GURA04",

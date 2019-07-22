@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
 
     public static class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly CodeFixProvider Fix = new IndicateErrorPositionFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.IndicateErrorPosition);
 
@@ -50,8 +50,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -98,8 +97,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -144,12 +142,11 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
-        public static void DiagnosticsTowParamWithoutPositionOneLocalOneConst()
+        public static void DiagnosticsTowParamWithoutPositionOneLocalOneConstField()
         {
             var before = @"
 namespace N
@@ -190,12 +187,11 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
-        public static void DiagnosticsTowParamWithoutPositionOneLocalOneInstance()
+        public static void DiagnosticsTowParamWithoutPositionOneLocalOneInstanceField()
         {
             var before = @"
 namespace N
@@ -206,13 +202,13 @@ namespace N
     public class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        private readonly string code1 = ""class C { }"";
+        private readonly string c1 = ""class C1 { }"";
 
         [Test]
         public void M()
         {
-            var code2 = ↓""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, this.code1, code2);
+            var c2 = ↓""class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, this.c1, c2);
         }
     }
 }";
@@ -226,18 +222,17 @@ namespace N
     public class C
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        private readonly string code1 = ""class C { }"";
+        private readonly string c1 = ""class C1 { }"";
 
         [Test]
         public void M()
         {
-            var code2 = ""↓class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, this.code1, code2);
+            var c2 = ""↓class C2 { }"";
+            RoslynAssert.Diagnostics(Analyzer, this.c1, c2);
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -284,8 +279,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
 
         [Test]
@@ -334,8 +328,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            RoslynAssert.FixAll(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
 
         [Test]
@@ -384,8 +377,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
 
         [Test]
@@ -405,7 +397,7 @@ namespace N
         [Test]
         public static void M()
         {
-            RoslynAssert.CodeFix(Analyzer, Fix, ↓""class C { }"", ""class C { }"");
+            RoslynAssert.CodeFix(Analyzer, Fix, ↓""class C1 { }"", ""class C2 { }"");
         }
     }
 }";
@@ -424,12 +416,11 @@ namespace N
         [Test]
         public static void M()
         {
-            RoslynAssert.CodeFix(Analyzer, Fix, ""↓class C { }"", ""class C { }"");
+            RoslynAssert.CodeFix(Analyzer, Fix, ""↓class C1 { }"", ""class C2 { }"");
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Indicate expected position with ↓ (alt + 25).");
-            RoslynAssert.FixAll(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
     }
 }

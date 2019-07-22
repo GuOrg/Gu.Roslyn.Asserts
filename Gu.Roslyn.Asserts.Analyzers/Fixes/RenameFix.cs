@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Composition;
     using System.Threading.Tasks;
     using Gu.Roslyn.AnalyzerExtensions;
-    using Gu.Roslyn.CodeFixExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -41,17 +40,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             nameof(RenameFix)),
                         diagnostic);
                 }
-                else if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out SyntaxNode node) &&
+                else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken token &&
+                         semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol symbol) &&
                          diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out name) &&
-                         semanticModel.TryGetSymbol(node, context.CancellationToken, out ISymbol local) &&
-                         semanticModel.LookupSymbols(node.SpanStart, name: name).IsEmpty)
+                         semanticModel.LookupSymbols(token.SpanStart, name: name).IsEmpty)
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             $"Rename to '{name}'.",
                             cancellationToken => Renamer.RenameSymbolAsync(
                                 context.Document.Project.Solution,
-                                local,
+                                symbol,
                                 name,
                                 null,
                                 cancellationToken),

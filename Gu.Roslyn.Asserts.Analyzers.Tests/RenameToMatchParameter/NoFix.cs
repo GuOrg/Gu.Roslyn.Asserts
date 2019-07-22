@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchParameter
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -6,9 +6,8 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
 
     public static class NoFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ArgumentAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly CodeFixProvider Fix = new RenameFix();
-
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.NameShouldMatchParameter);
 
         [Test]
@@ -17,7 +16,6 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameLocalTests
             var code = @"
 namespace N
 {
-    using Microsoft.CodeAnalysis.Diagnostics;
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
@@ -28,7 +26,7 @@ namespace N
         [TestCase(""C { }"")]
         public static void M(string code)
         {
-            var wrong = ""class C { }"".AssertReplace(string.Empty, code);
+            var wrong = ""class C { }"";
             RoslynAssert.Valid(Analyzer, ↓wrong);
         }
     }
