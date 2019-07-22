@@ -30,32 +30,63 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (diagnostic.Id == Descriptors.GURA05NameFileToMatchClass.Id &&
-                    diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
+                if (diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
                 {
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            $"Rename file to '{name}'.",
-                            _ => Task.FromResult(context.Document.WithName(name)),
-                            nameof(RenameFix)),
-                        diagnostic);
-                }
-                else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken token &&
-                         semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol symbol) &&
-                         diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out name) &&
-                         semanticModel.LookupSymbols(token.SpanStart, name: name).IsEmpty)
-                {
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            $"Rename to '{name}'.",
-                            cancellationToken => Renamer.RenameSymbolAsync(
-                                context.Document.Project.Solution,
-                                symbol,
-                                name,
-                                null,
-                                cancellationToken),
-                            nameof(RenameFix)),
-                        diagnostic);
+                    if (diagnostic.Id == Descriptors.GURA05NameFileToMatchClass.Id)
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                $"Rename file to '{name}'.",
+                                _ => Task.FromResult(context.Document.Project.Solution.WithDocumentName(context.Document.Id, name + ".cs")),
+                                nameof(RenameFix)),
+                            diagnostic);
+                    }
+                    else if (diagnostic.Id == Descriptors.GURA04NameClassToMatchAsserts.Id &&
+                            syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken identifier &&
+                            semanticModel.TryGetSymbol(identifier.Parent, context.CancellationToken, out INamedTypeSymbol namedType) &&
+                            semanticModel.LookupSymbols(identifier.SpanStart, name: name).IsEmpty)
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                $"Rename to '{name}'.",
+                                async cancellationToken =>
+                                {
+                                    var sln = context.Document.Project.Solution.WithDocumentName(context.Document.Id, name + ".cs");
+                                    var options = await context.Document.GetOptionsAsync(cancellationToken)
+                                                               .ConfigureAwait(false);
+                                    return await Renamer.RenameSymbolAsync(
+                                                            sln,
+                                                            namedType,
+                                                            name,
+                                                            options,
+                                                            cancellationToken)
+                                                        .ConfigureAwait(false);
+                                },
+                                nameof(RenameFix)),
+                            diagnostic);
+                    }
+                    else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken token &&
+                             semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol symbol) &&
+                             semanticModel.LookupSymbols(token.SpanStart, name: name).IsEmpty)
+                    {
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                $"Rename to '{name}'.",
+                                async cancellationToken =>
+                                {
+                                    var options = await context.Document.GetOptionsAsync(cancellationToken)
+                                                               .ConfigureAwait(false);
+                                    return await Renamer.RenameSymbolAsync(
+                                                            context.Document.Project.Solution,
+                                                            symbol,
+                                                            name,
+                                                            options,
+                                                            cancellationToken)
+                                                        .ConfigureAwait(false);
+                                },
+                                nameof(RenameFix)),
+                            diagnostic);
+                    }
                 }
             }
         }
