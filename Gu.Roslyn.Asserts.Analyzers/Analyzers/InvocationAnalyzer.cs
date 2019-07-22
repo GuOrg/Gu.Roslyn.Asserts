@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System;
     using System.Collections.Immutable;
     using System.Diagnostics;
-    using System.Text.RegularExpressions;
     using System.Threading;
     using Gu.Roslyn.AnalyzerExtensions;
     using Gu.Roslyn.CodeFixExtensions;
@@ -342,17 +341,30 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             internal bool TryGetNameFromCode(out string codeName)
             {
-                if (this.Value is LiteralExpressionSyntax literal &&
-                    Regex.Match(literal.Token.ValueText, @"^ *(↓?(public|internal|static|sealed|abstract) )*↓?(class|struct|enum|interface) ↓?(?<name>\w+)(<(?<type>↓?\w+)(, ?(?<type>↓?\w+))*>)?", RegexOptions.ExplicitCapture | RegexOptions.Multiline) is Match match &&
-                    match.Success &&
-                    !match.Groups["type"].Success)
-                {
-                    codeName = match.Groups["name"].Value;
-                    return true;
-                }
-
                 codeName = null;
-                return false;
+                return this.Value is LiteralExpressionSyntax literal &&
+                       (TryGetName(literal.Token.ValueText, "class ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "struct ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "enum ", out codeName));
+
+                bool TryGetName(string text, string prefix, out string name)
+                {
+                    var index = text.IndexOf(prefix, StringComparison.Ordinal);
+                    if (index >= 0)
+                    {
+                        var start = index + prefix.Length;
+                        var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);
+                        if (end > start)
+                        {
+                            name = text.Substring(start, end - start).Replace("<", "Of").Replace(">", string.Empty);
+                            return true;
+                        }
+                    }
+
+                    name = null;
+                    return false;
+                }
             }
 
             private static StringArgument Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)

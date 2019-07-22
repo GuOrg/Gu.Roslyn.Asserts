@@ -104,6 +104,7 @@ namespace N
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
 
+        [Explicit("Not sure this is worth handling.")]
         [Test]
         public static void IgnorePartialClass()
         {
@@ -123,11 +124,17 @@ namespace N
     public partial class C1 { }
 }"";
 
+        private const string C1Part2 = @""
+namespace N
+{
+    public partial class C1 { }
+}"";
+
         [Test]
         public static void M()
         {
             var c2 = ""class C2 { }"";
-            RoslynAssert.Valid(Analyzer, C1Part1, c2);
+            RoslynAssert.Valid(Analyzer, C1Part1, C1Part2, c2);
         }
     }
 }";

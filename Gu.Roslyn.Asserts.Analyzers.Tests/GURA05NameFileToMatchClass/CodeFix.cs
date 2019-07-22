@@ -7,10 +7,9 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA05NameFileToMatchClass
     public static class CodeFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
-        private static readonly CodeFixProvider Fix = new MakePublicStaticFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA07TestClassShouldBePublicStatic);
+        private static readonly CodeFixProvider Fix = new RenameFix();
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts);
 
-        [Explicit("Not sure why this breaks.")]
         [Test]
         public static void WhenValidCode()
         {
@@ -25,7 +24,7 @@ namespace N
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        internal static void M1()
+        public static void M1()
         {
             var c = ""class C { }"";
             RoslynAssert.Valid(Analyzer, c);
@@ -39,7 +38,7 @@ namespace N
     using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class Valid
+    internal static class Valid
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
