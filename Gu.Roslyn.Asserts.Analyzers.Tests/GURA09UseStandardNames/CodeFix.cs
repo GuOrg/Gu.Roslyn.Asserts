@@ -70,9 +70,9 @@ namespace N
         [Test]
         public static void M1()
         {
-            var foo = ""class C1 { }"";
+            var c1 = ""class C1 { }"";
             var bar = ""class ↓Bar { }"";
-            RoslynAssert.Valid(Analyzer, foo, bar);
+            RoslynAssert.Valid(Analyzer, c1, bar);
         }
     }
 }";
@@ -90,9 +90,9 @@ namespace N
         [Test]
         public static void M1()
         {
-            var foo = ""class C1 { }"";
+            var c1 = ""class C1 { }"";
             var bar = ""class C2 { }"";
-            RoslynAssert.Valid(Analyzer, foo, bar);
+            RoslynAssert.Valid(Analyzer, c1, bar);
         }
     }
 }";
