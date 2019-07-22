@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class IndicateErrorPositionFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            Descriptors.IndicateErrorPosition.Id);
+            Descriptors.GURA02IndicateErrorPosition.Id);
 
         protected override DocumentEditorFixAllProvider FixAllProvider() => null;
 

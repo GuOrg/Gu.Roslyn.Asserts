@@ -12,8 +12,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ObjectCreationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.ShouldBeInternal,
-            Descriptors.ShouldBePublic);
+            Descriptors.GURA08aShouldBeInternal,
+            Descriptors.GURA08bShouldBePublic);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -36,7 +36,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
-                                Descriptors.ShouldBeInternal,
+                                Descriptors.GURA08aShouldBeInternal,
                                 objectCreation.Type.GetLocation(),
                                 $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
                     }
@@ -44,7 +44,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
-                                Descriptors.ShouldBePublic,
+                                Descriptors.GURA08bShouldBePublic,
                                 objectCreation.Type.GetLocation(),
                                 $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
                     }

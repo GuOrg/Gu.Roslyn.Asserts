@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchCode
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchCode
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly CodeFixProvider Fix = new RenameFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.NameShouldMatchCode);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA03NameShouldMatchCode);
 
         [TestCase("class C1 { }", "private const", "C1")]
         [TestCase("class C1 { }", "private static readonly", "C1")]

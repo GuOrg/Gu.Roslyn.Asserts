@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchParameter
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchParameter
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly CodeFixProvider Fix = new RenameFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.NameShouldMatchParameter);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA01NameShouldMatchParameter);
 
         [Test]
         public static void LocalAnalyzer()

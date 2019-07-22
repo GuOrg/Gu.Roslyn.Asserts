@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchCode
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchCode
     public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.NameShouldMatchCode;
+        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA03NameShouldMatchCode;
 
         [TestCase("class C1 { }", "private const string C1")]
         [TestCase("class C1 { }", "private static readonly string C1")]

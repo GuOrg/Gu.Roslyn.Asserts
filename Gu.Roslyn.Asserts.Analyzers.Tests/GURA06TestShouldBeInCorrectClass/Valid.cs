@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameFIleToMatchClassTest
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
@@ -18,6 +18,8 @@ namespace N
 
     public static class C
     {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
         [Test]
         public static void M()
         {
@@ -26,7 +28,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, code);
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
 
         [Test]

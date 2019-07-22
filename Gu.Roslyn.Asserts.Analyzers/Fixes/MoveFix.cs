@@ -19,7 +19,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class MoveFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            Descriptors.TestShouldBeInCorrectClass.Id);
+            Descriptors.GURA06TestShouldBeInCorrectClass.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

@@ -13,9 +13,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class ClassDeclarationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.NameClassToMatchAsserts,
-            Descriptors.NameFileToMatchClass,
-            Descriptors.TestClassShouldBePublicStatic);
+            Descriptors.GURA04NameClassToMatchAsserts,
+            Descriptors.GURA05NameFileToMatchClass,
+            Descriptors.GURA07TestClassShouldBePublicStatic);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptors.NameClassToMatchAsserts,
+                            Descriptors.GURA04NameClassToMatchAsserts,
                             classDeclaration.Identifier.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
                             context.ContainingSymbol.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart),
@@ -45,7 +45,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptors.NameFileToMatchClass,
+                            Descriptors.GURA05NameFileToMatchClass,
                             classDeclaration.Identifier.GetLocation(),
                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
                             context.ContainingSymbol.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart),
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
-                            Descriptors.TestClassShouldBePublicStatic,
+                            Descriptors.GURA07TestClassShouldBePublicStatic,
                             classDeclaration.Identifier.GetLocation(),
                             type.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart)));
                 }

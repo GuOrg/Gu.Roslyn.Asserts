@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.IndicateErrorPosition;
+        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA02IndicateErrorPosition;
 
         [Test]
         public static void DiagnosticsOneParamWithPosition()

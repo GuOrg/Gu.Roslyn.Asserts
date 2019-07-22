@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
         private static readonly CodeFixProvider Fix = new AccessibilityFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.ShouldBePublic);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA08aShouldBeInternal);
 
         [Test]
         public static void DiagnosticAnalyzer()
@@ -20,7 +20,7 @@ namespace N
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    internal class Analyzer : DiagnosticAnalyzer
+    public class Analyzer : DiagnosticAnalyzer
     {
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
@@ -62,7 +62,7 @@ namespace N
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    public class Analyzer : DiagnosticAnalyzer
+    internal class Analyzer : DiagnosticAnalyzer
     {
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }

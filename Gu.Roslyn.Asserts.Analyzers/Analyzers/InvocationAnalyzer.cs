@@ -16,9 +16,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class InvocationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.NameShouldMatchParameter,
-            Descriptors.IndicateErrorPosition,
-            Descriptors.NameShouldMatchCode);
+            Descriptors.GURA01NameShouldMatchParameter,
+            Descriptors.GURA02IndicateErrorPosition,
+            Descriptors.GURA03NameShouldMatchCode);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -56,7 +56,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 context.ReportDiagnostic(
                                     Diagnostic.Create(
-                                        Descriptors.IndicateErrorPosition,
+                                        Descriptors.GURA02IndicateErrorPosition,
                                         stringArg.Value.GetLocation()));
                             }
 
@@ -67,7 +67,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
-                                            Descriptors.NameShouldMatchCode,
+                                            Descriptors.GURA03NameShouldMatchCode,
                                             stringArg.SymbolIdentifier.GetLocation(),
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
                                             symbol.Name,
@@ -80,7 +80,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
-                                            Descriptors.NameShouldMatchParameter,
+                                            Descriptors.GURA01NameShouldMatchParameter,
                                             stringArg.Expression.GetLocation(),
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
                                             symbol.Name,
@@ -137,7 +137,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
-                                            Descriptors.NameShouldMatchCode,
+                                            Descriptors.GURA03NameShouldMatchCode,
                                             stringArg.SymbolIdentifier.GetLocation(),
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
                                             symbol.Name,
@@ -150,7 +150,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
-                                            Descriptors.NameShouldMatchParameter,
+                                            Descriptors.GURA01NameShouldMatchParameter,
                                             stringArg.Expression.GetLocation(),
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
                                             symbol.Name,
@@ -167,7 +167,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         context.ReportDiagnostic(
                             Diagnostic.Create(
-                                Descriptors.NameShouldMatchParameter,
+                                Descriptors.GURA01NameShouldMatchParameter,
                                 argument.Expression.GetLocation(),
                                 ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), newName),
                                 symbol.Name,

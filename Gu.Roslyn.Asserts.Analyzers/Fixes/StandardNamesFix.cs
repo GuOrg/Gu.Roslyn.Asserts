@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class StandardNamesFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            Descriptors.UseStandardNames.Id);
+            Descriptors.GURA09UseStandardNames.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

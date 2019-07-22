@@ -9,7 +9,7 @@ namespace N
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
-    public class PlaceholderAnalyzer : DiagnosticAnalyzer
+    internal class PlaceholderAnalyzer : DiagnosticAnalyzer
     {
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
@@ -31,7 +31,7 @@ namespace N
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    public class PlaceholderFix : CodeFixProvider
+    internal class PlaceholderFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; }
 
@@ -47,7 +47,7 @@ namespace N
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis.CodeRefactorings;
 
-    public class PlaceholderRefactoring : CodeRefactoringProvider
+    internal class PlaceholderRefactoring : CodeRefactoringProvider
     {
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }

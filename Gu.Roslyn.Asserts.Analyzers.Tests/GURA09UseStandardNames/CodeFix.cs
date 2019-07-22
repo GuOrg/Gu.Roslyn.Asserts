@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
     {
         private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
         private static readonly CodeFixProvider Fix = new StandardNamesFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.UseStandardNames);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames);
 
         [Test]
         public static void ClassNamedFoo()

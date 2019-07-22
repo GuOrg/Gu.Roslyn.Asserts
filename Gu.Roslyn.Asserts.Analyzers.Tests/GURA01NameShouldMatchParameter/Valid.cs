@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchParameter
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameToMatchParameter
     public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.NameShouldMatchParameter;
+        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
 
 
         [Test]

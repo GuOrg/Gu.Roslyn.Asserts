@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.IndicateErrorPosition
     {
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly CodeFixProvider Fix = new IndicateErrorPositionFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.IndicateErrorPosition);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA02IndicateErrorPosition);
 
         [Test]
         public static void DiagnosticsOneParamWithoutPosition()

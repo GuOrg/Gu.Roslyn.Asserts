@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublic
     public static class Valid
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.ShouldBePublic;
+        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA08aShouldBeInternal;
 
         [Test]
         public static void DiagnosticAnalyzer()

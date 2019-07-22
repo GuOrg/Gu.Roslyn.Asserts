@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.UseStandardNames
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;

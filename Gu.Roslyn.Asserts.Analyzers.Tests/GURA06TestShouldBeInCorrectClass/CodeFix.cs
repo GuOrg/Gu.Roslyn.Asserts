@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.MoveTestToCorrectClassTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.MoveTestToCorrectClassTests
     {
         private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
         private static readonly CodeFixProvider Fix = new MoveFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.TestShouldBeInCorrectClass);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA06TestShouldBeInCorrectClass);
 
         [Test]
         public static void WhenMixCreatingClass()

@@ -14,8 +14,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class MethodDeclarationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            Descriptors.TestShouldBeInCorrectClass,
-            Descriptors.UseStandardNames);
+            Descriptors.GURA06TestShouldBeInCorrectClass,
+            Descriptors.GURA09UseStandardNames);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             name != method.ContainingType.Name)
                         {
                             context.ReportDiagnostic(Diagnostic.Create(
-                                Descriptors.TestShouldBeInCorrectClass,
+                                Descriptors.GURA06TestShouldBeInCorrectClass,
                                 methodDeclaration.Identifier.GetLocation(),
                                 ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
                                 name));
@@ -51,7 +51,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 if (StringLiteralWalker.TryFindReplace(methodDeclaration, out var before, out var location, out var after))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptors.UseStandardNames,
+                        Descriptors.GURA09UseStandardNames,
                         location,
                         ImmutableDictionary<string, string>.Empty.Add("before", before).Add("after", after),
                         after,

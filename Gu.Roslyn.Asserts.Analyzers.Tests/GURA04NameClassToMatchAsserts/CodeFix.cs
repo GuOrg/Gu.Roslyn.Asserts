@@ -1,22 +1,25 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.MoveTestToCorrectClassTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts
 {
+    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-    public static class Valid
+    public static class CodeFix
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
+        private static readonly CodeFixProvider Fix = new RenameFix();
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts);
 
         [Test]
-        public static void WhenNoAsserts()
+        public static void WhenOneValid()
         {
-            var code = @"
+            var before = @"
 namespace N
 {
-    using System;
+    using Gu.Roslyn.Asserts;
     using NUnit.Framework;
 
-    public static class C
+    public static class ↓WRONG
     {
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
@@ -24,17 +27,12 @@ namespace N
         public static void M()
         {
             var c = ""class C { }"";
-            Console.WriteLine(c);
+            RoslynAssert.Valid(Analyzer, c);
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
-        }
 
-        [Test]
-        public static void WhenOneValid()
-        {
-            var code = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -52,13 +50,39 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
         public static void WhenTwoValid()
         {
-            var code = @"
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class ↓WRONG
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+
+        [Test]
+        public static void M2()
+        {
+            var c = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -83,38 +107,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
-        }
-
-        [Test]
-        public static void WhenMix()
-        {
-            var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-
-        [Test]
-        public static void M2()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Diagnostics(Analyzer, c);
-        }
-    }
-}";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
     }
 }

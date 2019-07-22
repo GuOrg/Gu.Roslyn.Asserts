@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.NameClassToMatchAssertsTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts
 {
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;

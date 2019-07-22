@@ -16,8 +16,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
     public class AccessibilityFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            Descriptors.ShouldBeInternal.Id,
-            Descriptors.ShouldBePublic.Id);
+            Descriptors.GURA08aShouldBeInternal.Id,
+            Descriptors.GURA08bShouldBePublic.Id);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -32,7 +32,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     semanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
                     type.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax declaration))
                 {
-                    if (diagnostic.Id == Descriptors.ShouldBeInternal.Id)
+                    if (diagnostic.Id == Descriptors.GURA08aShouldBeInternal.Id)
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 nameof(AccessibilityFix)),
                             diagnostic);
                     }
-                    else if (diagnostic.Id == Descriptors.ShouldBePublic.Id)
+                    else if (diagnostic.Id == Descriptors.GURA08bShouldBePublic.Id)
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
@@ -83,9 +83,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 switch (first.Kind())
                                 {
-                                    case SyntaxKind.PrivateKeyword:
-                                    case SyntaxKind.ProtectedKeyword:
                                     case SyntaxKind.InternalKeyword:
+                                    case SyntaxKind.PublicKeyword:
                                         return modifiers.Replace(
                                             first,
                                             token.WithTriviaFrom(first));

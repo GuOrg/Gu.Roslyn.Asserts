@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublicStatic
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA07TestClassShouldBePublicStatic
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.ShouldBePublicStatic
     {
         private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
         private static readonly CodeFixProvider Fix = new MakePublicStaticFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.TestClassShouldBePublicStatic);
+        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA07TestClassShouldBePublicStatic);
 
         [Test]
         public static void WhenInternalStatic()
