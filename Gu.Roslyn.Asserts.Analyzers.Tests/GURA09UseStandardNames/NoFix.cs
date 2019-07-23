@@ -42,37 +42,6 @@ namespace N
         }
 
         [Test]
-        public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
-        {
-            var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [Test]
-        public static void M()
-        {
-            var foo = @""
-namespace N
-{
-    class ↓Foo
-    {
-        public int C => 1;
-    }
-}"";
-            RoslynAssert.Valid(Analyzer, foo);
-        }
-    }
-}";
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, Code.PlaceholderAnalyzer, code);
-        }
-
-        [Test]
         public static void ClassNamedFooWithMethodNamedC()
         {
             var code = @"

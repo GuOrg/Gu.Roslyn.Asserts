@@ -22,7 +22,7 @@ namespace N
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        public static void M1()
+        public static void M()
         {
             var c = @""
 namespace N
@@ -48,7 +48,7 @@ namespace N
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        public static void M1()
+        public static void M()
         {
             var c = @""
 namespace N
@@ -64,6 +64,125 @@ namespace N
 }".AssertReplace("public int P { get; }", declarationAfter);
 
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+            }
+
+            [Test]
+            public static void NextProperty()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c = @""
+namespace N
+{
+    class C
+    {
+        public int P1 { get; }
+
+        public int ↓Foo { get; }
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c = @""
+namespace N
+{
+    class C
+    {
+        public int P1 { get; }
+
+        public int P2 { get; }
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+            }
+
+            [Test]
+            public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int ↓C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int P => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
             }
         }
     }

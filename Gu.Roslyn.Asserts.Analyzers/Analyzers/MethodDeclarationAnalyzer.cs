@@ -231,19 +231,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 return this.ReplaceTypeName(new Names("S", null), declaration);
                         }
 
-                    case EventDeclarationSyntax declaration:
-                        switch (token.ValueText)
-                        {
-                            case "Foo":
-                                return this.ReplaceMemberName(new Names("E", "E1"), declaration);
-                            case "Bar":
-                                return this.ReplaceMemberName(new Names("E", "E2"), declaration);
-                            case "Baz":
-                                return this.ReplaceMemberName(new Names("E", "E3"), declaration);
-                            default:
-                                return this.ReplaceMemberName(new Names("E", null), declaration);
-                        }
-
                     case InterfaceDeclarationSyntax declaration:
                         switch (token.ValueText)
                         {
@@ -257,44 +244,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 return this.ReplaceTypeName(new Names("I", null), declaration);
                         }
 
+                    case FieldDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("F", declaration);
+                    case EventDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("E", declaration);
                     case EventFieldDeclarationSyntax declaration:
-                        switch (token.ValueText)
-                        {
-                            case "Foo":
-                                return this.ReplaceMemberName(new Names("E", "E1"), declaration);
-                            case "Bar":
-                                return this.ReplaceMemberName(new Names("E", "E2"), declaration);
-                            case "Baz":
-                                return this.ReplaceMemberName(new Names("E", "E3"), declaration);
-                            default:
-                                return this.ReplaceMemberName(new Names("E", null), declaration);
-                        }
-
+                        return this.ReplaceMemberName("E", declaration);
                     case PropertyDeclarationSyntax declaration:
-                        switch (token.ValueText)
-                        {
-                            case "Foo":
-                                return this.ReplaceMemberName(new Names("P", "P1"), declaration);
-                            case "Bar":
-                                return this.ReplaceMemberName(new Names("P", "P2"), declaration);
-                            case "Baz":
-                                return this.ReplaceMemberName(new Names("P", "P3"), declaration);
-                            default:
-                                return this.ReplaceMemberName(new Names("P", null), declaration);
-                        }
-
+                        return this.ReplaceMemberName("P", declaration);
                     case MethodDeclarationSyntax declaration:
-                        switch (token.ValueText)
-                        {
-                            case "Foo":
-                                return this.ReplaceMemberName(new Names("M", "M1"), declaration);
-                            case "Bar":
-                                return this.ReplaceMemberName(new Names("M", "M2"), declaration);
-                            case "Baz":
-                                return this.ReplaceMemberName(new Names("M", "M3"), declaration);
-                            default:
-                                return this.ReplaceMemberName(new Names("M", null), declaration);
-                        }
+                        return this.ReplaceMemberName("M", declaration);
                 }
 
                 return null;
@@ -340,14 +299,90 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return candidateNames.Else;
             }
 
-            private string ReplaceMemberName(Names candidateNames, MemberDeclarationSyntax declaration)
+            private string ReplaceMemberName(string name, MemberDeclarationSyntax declaration)
             {
-                if (declaration.Parent is BaseTypeDeclarationSyntax)
+                switch (declaration.Parent)
                 {
-                    return candidateNames.WhenSingle;
-                }
+                    case TypeDeclarationSyntax typeDeclaration:
+                        {
+                            if (typeDeclaration.Members.TrySingle(out _))
+                            {
+                                return name;
+                            }
 
-                return null;
+                            var i = 1;
+                            while (typeDeclaration.Members.TryFirst(x => IsCollision(x), out _))
+                            {
+                                i++;
+                            }
+
+                            return $"{name}{i}";
+
+                            bool IsCollision(MemberDeclarationSyntax candidate)
+                            {
+                                switch (candidate)
+                                {
+                                    case MethodDeclarationSyntax candidateDeclaration:
+                                        if (declaration is MethodDeclarationSyntax method)
+                                        {
+                                            if (candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString()))
+                                            {
+                                                if (method.ParameterList.Parameters.Count ==
+                                                    candidateDeclaration.ParameterList.Parameters.Count)
+                                                {
+                                                    for (var j = 0; j < method.ParameterList.Parameters.Count; j++)
+                                                    {
+                                                        if (!method.ParameterList.Parameters[j].Type.IsEquivalentTo(candidateDeclaration.ParameterList.Parameters[j].Type))
+                                                        {
+                                                            return false;
+                                                        }
+                                                    }
+
+                                                    return true;
+                                                }
+                                            }
+
+                                            return false;
+                                        }
+
+                                        return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
+                                    case TypeDeclarationSyntax candidateDeclaration:
+                                        return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
+                                    case EnumDeclarationSyntax candidateDeclaration:
+                                        return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
+                                    case PropertyDeclarationSyntax candidateDeclaration:
+                                        return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
+                                    case EventDeclarationSyntax candidateDeclaration:
+                                        return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
+                                    case BaseFieldDeclarationSyntax candidateDeclaration:
+                                        return candidateDeclaration.Declaration.Variables.TrySingle(x => x.Identifier.ValueText.IsParts(name, i.ToString()), out _);
+                                    default:
+                                        return true;
+                                }
+                            }
+                        }
+
+                    case EnumDeclarationSyntax enumDeclaration:
+                        {
+                            if (enumDeclaration.Members.TrySingle(out _))
+                            {
+                                return name;
+                            }
+
+                            var i = 1;
+                            while (enumDeclaration.Members.TryFirst(x => x.Identifier.ValueText.IsParts(name, i.ToString()), out _))
+                            {
+                                i++;
+                            }
+
+                            return $"{name}{i}";
+                        }
+
+                    case BaseTypeDeclarationSyntax _:
+                        return name;
+                    default:
+                        return null;
+                }
             }
 
             private bool TryGetRoot(LiteralExpressionSyntax literal, out CompilationUnitSyntax root)
