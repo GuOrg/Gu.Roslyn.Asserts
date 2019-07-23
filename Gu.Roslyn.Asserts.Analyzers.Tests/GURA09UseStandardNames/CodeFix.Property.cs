@@ -129,6 +129,63 @@ namespace N
             }
 
             [Test]
+            public static void ClassNamedFooWithPropertyNamedC()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int ↓C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class Foo
+    {
+        public int P => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            }
+
+            [Test]
             public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
             {
                 var before = @"
@@ -173,7 +230,7 @@ namespace N
             var foo = @""
 namespace N
 {
-    public class ↓Foo
+    public class Foo
     {
         public int P => 1;
     }

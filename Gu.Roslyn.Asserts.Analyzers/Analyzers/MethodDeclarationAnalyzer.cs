@@ -130,8 +130,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         var index = -1;
                         while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
                         {
-                            var candidateLocation =
-                                literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
+                            var candidateLocation = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
                             if (token.IsKind(SyntaxKind.IdentifierToken) &&
                                 this.locations.Add(candidateLocation.SourceSpan) &&
                                 ShouldWarn(token))
@@ -305,10 +304,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     case TypeDeclarationSyntax typeDeclaration:
                         {
-                            if (typeDeclaration.Members.TrySingle(out _))
+                            if (OnlyOverloads() ||
+                                OnlyOneOfKind())
                             {
                                 return name;
                             }
+
 
                             var i = 1;
                             while (typeDeclaration.Members.TryFirst(x => IsCollision(x), out _))
@@ -317,6 +318,39 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
 
                             return $"{name}{i}";
+
+                            bool OnlyOverloads()
+                            {
+                                if (declaration is MethodDeclarationSyntax methodDeclaration)
+                                {
+                                    foreach (var member in typeDeclaration.Members)
+                                    {
+                                        if (member is MethodDeclarationSyntax method &&
+                                            method.Identifier.ValueText != methodDeclaration.Identifier.ValueText)
+                                        {
+                                            return false;
+                                        }
+                                    }
+
+                                    return true;
+                                }
+
+                                return false;
+                            }
+
+                            bool OnlyOneOfKind()
+                            {
+                                foreach (var member in typeDeclaration.Members)
+                                {
+                                    if (member.Kind() == declaration.Kind() &&
+                                        member != declaration)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                return true;
+                            }
 
                             bool IsCollision(MemberDeclarationSyntax candidate)
                             {
