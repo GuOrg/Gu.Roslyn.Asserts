@@ -93,5 +93,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: true,
             description: "Use standard names for things that do not have particular meaning in test code.");
+
+        public static readonly DiagnosticDescriptor GURA10UseLocal = new DiagnosticDescriptor(
+            id: "GUR10",
+            title: "Move to local.",
+            messageFormat: "Coly {0} to a local.",
+            category: AnalyzerCategory.Ocd,
+            defaultSeverity: DiagnosticSeverity.Hidden,
+            isEnabledByDefault: true,
+            description: "Move to local for self contained tests.");
     }
 }

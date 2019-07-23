@@ -17,7 +17,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
             Descriptors.GURA01NameShouldMatchParameter,
             Descriptors.GURA02IndicateErrorPosition,
-            Descriptors.GURA03NameShouldMatchCode);
+            Descriptors.GURA03NameShouldMatchCode,
+            Descriptors.GURA10UseLocal);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -84,6 +85,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
                                             symbol.Name,
                                             parameterName));
+                                }
+
+                                if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                {
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.GURA10UseLocal,
+                                            stringArg.Expression.GetLocation(),
+                                            additionalLocations: new[] { stringArg.Value.GetLocation() },
+                                            messageArgs: stringArg.Symbol.Name));
                                 }
                             }
 
@@ -154,6 +165,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
                                             symbol.Name,
                                             parameterName));
+                                }
+
+                                if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                {
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.GURA10UseLocal,
+                                            stringArg.Expression.GetLocation(),
+                                            additionalLocations: new[] { stringArg.Value.GetLocation() },
+                                            messageArgs: stringArg.Symbol.Name));
                                 }
                             }
                         }
