@@ -1,9 +1,9 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
-    using System.Diagnostics;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -69,24 +69,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         private sealed class StringLiteralWalker : PooledWalker<StringLiteralWalker>
         {
-            private static readonly ClassName[] ClassNames =
+            private static string[] Words =
             {
-                new ClassName("Foo", "C1"),
-                new ClassName("Bar", "C2"),
-                new ClassName("Baz", "C3"),
-                new ClassName("Meh", "C4"),
-            };
-
-            private static readonly MethodName[] MethodNames =
-            {
-                new MethodName("Foo"),
-                new MethodName("Bar"),
-                new MethodName("Baz"),
-                new MethodName("Meh"),
-                new MethodName("Lol"),
+                "Foo",
+                "Bar",
+                "Baz",
+                "Meh",
+                "Lol",
+                "SomeClass",
+                "SomeField",
+                "SomeEvent",
+                "SomeProperty",
+                "SomeMethod",
             };
 
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
+            private readonly ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax> roots = new ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax>();
             private readonly HashSet<TextSpan> locations = new HashSet<TextSpan>();
 
             private StringLiteralWalker()
@@ -109,21 +107,142 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 foreach (var literal in this.literals)
                 {
-                    foreach (var className in ClassNames)
+                    foreach (var word in Words)
                     {
-                        if (className.TryFind(literal, this.literals, out before, out location, out after) &&
-                            this.locations.Add(location.SourceSpan))
+                        var index = -1;
+                        while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
                         {
-                            return true;
-                        }
-                    }
+                            var candidateLocation =
+                                literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
+                            if (token.IsKind(SyntaxKind.IdentifierToken) &&
+                                this.locations.Add(candidateLocation.SourceSpan) &&
+                                ShouldWarn(token))
+                            {
+                                before = token.ValueText;
+                                location = candidateLocation;
+                                after = Replacement();
+                                return true;
+                                string Replacement()
+                                {
+                                    switch (token.Parent)
+                                    {
+                                        case EnumDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return TypeName(new Names("E", "E1"), declaration);
+                                                case "Bar":
+                                                    return TypeName(new Names("E", "E2"), declaration);
+                                                case "Baz":
+                                                    return TypeName(new Names("E", "E3"), declaration);
+                                                default:
+                                                    return TypeName(new Names("E", null), declaration);
+                                            }
 
-                    foreach (var className in MethodNames)
-                    {
-                        if (className.TryFind(literal, out before, out location, out after) &&
-                            this.locations.Add(location.SourceSpan))
-                        {
-                            return true;
+                                        case ClassDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return TypeName(new Names("C", "C1"), declaration);
+                                                case "Bar":
+                                                    return TypeName(new Names("C", "C2"), declaration);
+                                                case "Baz":
+                                                    return TypeName(new Names("C", "C3"), declaration);
+                                                default:
+                                                    return TypeName(new Names("C", null), declaration);
+                                            }
+
+                                        case StructDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return TypeName(new Names("S", "S1"), declaration);
+                                                case "Bar":
+                                                    return TypeName(new Names("S", "S2"), declaration);
+                                                case "Baz":
+                                                    return TypeName(new Names("S", "S3"), declaration);
+                                                default:
+                                                    return TypeName(new Names("S", null), declaration);
+                                            }
+
+                                        case EventDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return MemberName(new Names("E", "E1"), declaration);
+                                                case "Bar":
+                                                    return MemberName(new Names("E", "E2"), declaration);
+                                                case "Baz":
+                                                    return MemberName(new Names("E", "E3"), declaration);
+                                                default:
+                                                    return MemberName(new Names("E", null), declaration);
+                                            }
+
+                                        case EventFieldDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return MemberName(new Names("E", "E1"), declaration);
+                                                case "Bar":
+                                                    return MemberName(new Names("E", "E2"), declaration);
+                                                case "Baz":
+                                                    return MemberName(new Names("E", "E3"), declaration);
+                                                default:
+                                                    return MemberName(new Names("E", null), declaration);
+                                            }
+
+                                        case PropertyDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return MemberName(new Names("P", "P1"), declaration);
+                                                case "Bar":
+                                                    return MemberName(new Names("P", "P2"), declaration);
+                                                case "Baz":
+                                                    return MemberName(new Names("P", "P3"), declaration);
+                                                default:
+                                                    return MemberName(new Names("P", null), declaration);
+                                            }
+
+                                        case MethodDeclarationSyntax declaration:
+                                            switch (token.ValueText)
+                                            {
+                                                case "Foo":
+                                                    return MemberName(new Names("M", "M1"), declaration);
+                                                case "Bar":
+                                                    return MemberName(new Names("M", "M2"), declaration);
+                                                case "Baz":
+                                                    return MemberName(new Names("M", "M3"), declaration);
+                                                default:
+                                                    return MemberName(new Names("M", null), declaration);
+                                            }
+                                    }
+
+                                    return null;
+                                }
+
+                                string MemberName(Names candidateNames, MemberDeclarationSyntax declaration)
+                                {
+                                    if (declaration.Parent is BaseTypeDeclarationSyntax)
+                                    {
+                                        return candidateNames.WhenSingle;
+                                    }
+
+                                    return null;
+                                }
+                            }
+
+                            bool ShouldWarn(SyntaxToken candidate)
+                            {
+                                switch (candidate.Parent.Kind())
+                                {
+                                    case SyntaxKind.StringLiteralExpression:
+                                    case SyntaxKind.IdentifierName:
+                                        return false;
+                                    default:
+                                        return true;
+                                }
+                            }
                         }
                     }
                 }
@@ -137,224 +256,100 @@ namespace Gu.Roslyn.Asserts.Analyzers
             protected override void Clear()
             {
                 this.literals.Clear();
+                this.roots.Clear();
                 this.locations.Clear();
             }
 
-            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, out int index)
+            private string TypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
             {
-                index = literal.Token.Text.IndexOf(text, StringComparison.Ordinal);
-                return index >= 0;
-            }
-
-            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, int startIndex, out int index)
-            {
-                index = literal.Token.Text.IndexOf(text, startIndex, StringComparison.Ordinal);
-                return index >= 0;
-            }
-
-            private static bool HasMemberNamed(LiteralExpressionSyntax literal, string name)
-            {
-                return PropertyName.TryFind(literal, name) ||
-                       MethodName.TryFind(literal, name, out _);
-            }
-
-            [DebuggerDisplay("{this.pattern}")]
-            private class ClassName
-            {
-                private readonly string pattern;
-                private readonly string replacement;
-
-                public ClassName(string name, string replacement)
-                {
-                    this.pattern = "class " + name;
-                    this.replacement = replacement;
-                }
-
-                public bool TryFind(LiteralExpressionSyntax literal, List<LiteralExpressionSyntax> literals, out string before, out Location location, out string after)
-                {
-                    if (TryIndexOf(literal, this.pattern, out var index))
-                    {
-                        var start = index + 6;
-                        before = literal.Token.Text.Substring(start, literal.Token.Text.IndexOfAny(new[] { ' ', '<', '\r', '\n', }, start) - start);
-                        location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + start, before.Length));
-                        after = GetReplacement();
-                        if (after != null)
-                        {
-                            if (HasMemberNamed(literal, after))
-                            {
-                                after = null;
-                            }
-                        }
-
-                        return true;
-
-                        string GetReplacement()
-                        {
-                            foreach (var className in ClassNames)
-                            {
-                                if (className != this &&
-                                    (AnyContains(className.pattern) ||
-                                     AnyContains(className.replacement)))
-                                {
-                                    if (!AnyContains(this.replacement))
-                                    {
-                                        return this.replacement;
-                                    }
-
-                                    return null;
-                                }
-                            }
-
-                            return "C";
-                        }
-
-                        bool AnyContains(string text)
-                        {
-                            foreach (var candidate in literals)
-                            {
-                                if (candidate.Token.ValueText.Contains(text))
-                                {
-                                    return true;
-                                }
-                            }
-
-                            return false;
-                        }
-                    }
-
-                    before = null;
-                    location = null;
-                    after = null;
-                    return false;
-                }
-            }
-
-            private class PropertyName
-            {
-                internal static bool TryFind(LiteralExpressionSyntax literal, string name)
+                if (this.literals.TrySingle(out var single))
                 {
                     var index = -1;
-                    while (TryIndexOf(literal, name, index + 1, out index))
+                    while (this.TryFindToken(single, candidateNames.WhenSingle, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
                     {
-                        var text = literal.Token.Text;
-                        if (text.TryElementAt(index - 1, out var c) &&
-                            c != ' ')
+                        switch (candidateToken.Parent)
                         {
-                            index += name.Length;
-                            continue;
-                        }
-
-                        index += name.Length;
-                        if (IsProperty())
-                        {
-                            return true;
-                        }
-
-                        bool IsProperty()
-                        {
-                            while (text.TryElementAt(index, out c))
-                            {
-                                switch (c)
-                                {
-                                    case ' ':
-                                    case '\r':
-                                    case '\n':
-                                        index++;
-                                        break;
-                                    case '{':
-                                        return true;
-                                    case '=':
-                                        return text.TryElementAt(index + 1, out var c1) &&
-                                               c1 == '>';
-                                    default:
-                                        return false;
-                                }
-                            }
-
-                            return false;
+                            case BaseTypeDeclarationSyntax member when declaration.Contains(member):
+                                return null;
+                            case MemberDeclarationSyntax member when declaration.Contains(member):
+                                return null;
                         }
                     }
 
-                    return false;
+                    return candidateNames.WhenSingle;
                 }
+
+                if (candidateNames.Else is string name)
+                {
+                    foreach (var candidateLiteral in this.literals)
+                    {
+                        var index = -1;
+                        while (this.TryFindToken(candidateLiteral, name, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
+                        {
+                            switch (candidateToken.Parent)
+                            {
+                                case BaseTypeDeclarationSyntax member when member != declaration:
+                                    return null;
+                                case MemberDeclarationSyntax member when declaration.Contains(member):
+                                    return null;
+                            }
+                        }
+                    }
+                }
+
+                return candidateNames.Else;
             }
 
-            private class MethodName
+            private bool TryGetRoot(LiteralExpressionSyntax literal, out CompilationUnitSyntax root)
             {
-                private readonly string name;
-
-                public MethodName(string name)
+                root = this.roots.GetOrAdd(literal, x =>
                 {
-                    this.name = name;
-                }
-
-                public bool TryFind(LiteralExpressionSyntax literal, out string before, out Location location, out string after)
-                {
-                    if (TryFind(literal, this.name, out var index))
+                    if (CSharpSyntaxTree.ParseText(literal.Token.ValueText).TryGetRoot(out var node))
                     {
-                        var start = index;
-                        before = literal.Token.Text.Substring(start, literal.Token.Text.IndexOfAny(new[] { ' ', '<', '\r', '\n', '(' }, start) - start);
-                        location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + start, before.Length));
-                        after = "M";
-                        if (after != null)
-                        {
-                            if (HasMemberNamed(literal, after))
-                            {
-                                after = null;
-                            }
-                        }
-
-                        return true;
+                        return node as CompilationUnitSyntax;
                     }
 
-                    before = null;
-                    location = null;
-                    after = null;
-                    return false;
+                    return null;
+                });
+
+                return root != null;
+            }
+
+            private bool TryFindToken(LiteralExpressionSyntax literal, string word, int startIndex, StringComparison stringComparison, out int index, out SyntaxToken token)
+            {
+                if (TryIndexOf(literal, word, startIndex, stringComparison, out index) &&
+                    this.TryGetRoot(literal, out var root))
+                {
+                    var offset = literal.Token.Text.Length - literal.Token.ValueText.Length - 1;
+                    token = root.FindToken(index - offset);
+                    return true;
                 }
 
-                internal static bool TryFind(LiteralExpressionSyntax literal, string name, out int index)
+                token = default;
+                return false;
+            }
+
+            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, StringComparison stringComparison, out int index)
+            {
+                index = literal.Token.Text.IndexOf(text, stringComparison);
+                return index >= 0;
+            }
+
+            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, int startIndex, StringComparison stringComparison, out int index)
+            {
+                index = literal.Token.Text.IndexOf(text, startIndex, stringComparison);
+                return index >= 0;
+            }
+
+            private struct Names
+            {
+                internal readonly string WhenSingle;
+                internal readonly string Else;
+
+                public Names(string whenSingle, string @else)
                 {
-                    index = -1;
-                    while (TryIndexOf(literal, name, index + 1, out index))
-                    {
-                        var text = literal.Token.Text;
-                        if (text.TryElementAt(index - 1, out var c) &&
-                            c != ' ')
-                        {
-                            index += name.Length;
-                            continue;
-                        }
-
-                        if (IsMethod(index + name.Length))
-                        {
-                            return true;
-                        }
-
-                        index += name.Length;
-                        bool IsMethod(int position)
-                        {
-                            while (text.TryElementAt(position, out c))
-                            {
-                                switch (c)
-                                {
-                                    case ' ':
-                                    case '\r':
-                                    case '\n':
-                                        position++;
-                                        break;
-                                    case '(':
-                                        return true;
-                                    default:
-                                        return false;
-                                }
-                            }
-
-                            return false;
-                        }
-                    }
-
-                    return false;
+                    this.WhenSingle = whenSingle;
+                    this.Else = @else;
                 }
             }
         }

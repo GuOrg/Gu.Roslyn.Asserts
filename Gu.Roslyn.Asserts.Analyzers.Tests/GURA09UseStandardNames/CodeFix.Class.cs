@@ -154,7 +154,12 @@ namespace N
         [Test]
         public static void M1()
         {
-            var foo = ""class ↓Foo { public static Foo M() => new Foo(); }"";
+            var foo = @""
+class ↓Foo
+{
+    public static Foo M(Foo ↓foo) => foo;
+    public static Foo M() => new C();
+}"";
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
@@ -173,7 +178,12 @@ namespace N
         [Test]
         public static void M1()
         {
-            var foo = ""class C { public static C M() => new C(); }"";
+            var foo = @""
+class C
+{
+    public static C M(C foo) => foo;
+    public static C M() => new C();
+}"";
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
