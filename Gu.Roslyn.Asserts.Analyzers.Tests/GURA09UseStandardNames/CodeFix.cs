@@ -100,6 +100,55 @@ namespace N
             RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
         }
 
+
+        [Test]
+        public static void ClassNamedBaz()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var c1 = ""class C1 { }"";
+            var c2 = ""class C2 { }"";
+            var baz = ""class ↓Baz { }"";
+            RoslynAssert.Valid(Analyzer, c1, c2, baz);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var c1 = ""class C1 { }"";
+            var c2 = ""class C2 { }"";
+            var baz = ""class C3 { }"";
+            RoslynAssert.Valid(Analyzer, c1, c2, baz);
+        }
+    }
+}";
+
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+        }
+
         [Test]
         public static void MethodNamedBar()
         {

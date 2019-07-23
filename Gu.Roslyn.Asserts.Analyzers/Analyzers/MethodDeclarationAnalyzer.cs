@@ -30,22 +30,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 context.ContainingSymbol is IMethodSymbol method &&
                 InvocationWalker.TryFindRoslynAssert(methodDeclaration, out var invocation))
             {
-                switch (method.ContainingType.Name)
+                if (invocation.TryGetMethodName(out var name) &&
+                    name != method.ContainingType.Name)
                 {
-                    case "CodeFix":
-                    case "Diagnostics":
-                    case "Valid":
-                        if (invocation.TryGetMethodName(out var name) &&
-                            name != method.ContainingType.Name)
-                        {
-                            context.ReportDiagnostic(Diagnostic.Create(
-                                Descriptors.GURA06TestShouldBeInCorrectClass,
-                                methodDeclaration.Identifier.GetLocation(),
-                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
-                                name));
-                        }
-
-                        break;
+                    context.ReportDiagnostic(Diagnostic.Create(
+                        Descriptors.GURA06TestShouldBeInCorrectClass,
+                        methodDeclaration.Identifier.GetLocation(),
+                        ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
+                        name));
                 }
 
                 if (StringLiteralWalker.TryFindReplace(methodDeclaration, out var before, out var location, out var after))
