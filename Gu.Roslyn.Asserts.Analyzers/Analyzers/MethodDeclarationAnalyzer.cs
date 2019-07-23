@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
-    using System.Linq;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -70,7 +69,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         private sealed class StringLiteralWalker : PooledWalker<StringLiteralWalker>
         {
-            private static string[] Words =
+            private static readonly string[] Words =
             {
                 "Foo",
                 "Bar",
@@ -82,6 +81,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 "SomeEvent",
                 "SomeProperty",
                 "SomeMethod",
+            };
+
+            private static readonly string[] PropertyWords =
+            {
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
             };
 
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
@@ -121,118 +131,26 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 before = token.ValueText;
                                 location = candidateLocation;
-                                after = Replacement();
+                                after = this.Replace(token);
                                 return true;
-                                string Replacement()
-                                {
-                                    switch (token.Parent)
-                                    {
-                                        case EnumDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.TypeName(new Names("E", "E1"), declaration);
-                                                case "Bar":
-                                                    return this.TypeName(new Names("E", "E2"), declaration);
-                                                case "Baz":
-                                                    return this.TypeName(new Names("E", "E3"), declaration);
-                                                default:
-                                                    return this.TypeName(new Names("E", null), declaration);
-                                            }
-
-                                        case ClassDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.TypeName(new Names("C", "C1"), declaration);
-                                                case "Bar":
-                                                    return this.TypeName(new Names("C", "C2"), declaration);
-                                                case "Baz":
-                                                    return this.TypeName(new Names("C", "C3"), declaration);
-                                                default:
-                                                    return this.TypeName(new Names("C", null), declaration);
-                                            }
-
-                                        case StructDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.TypeName(new Names("S", "S1"), declaration);
-                                                case "Bar":
-                                                    return this.TypeName(new Names("S", "S2"), declaration);
-                                                case "Baz":
-                                                    return this.TypeName(new Names("S", "S3"), declaration);
-                                                default:
-                                                    return this.TypeName(new Names("S", null), declaration);
-                                            }
-
-                                        case EventDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.MemberName(new Names("E", "E1"), declaration);
-                                                case "Bar":
-                                                    return this.MemberName(new Names("E", "E2"), declaration);
-                                                case "Baz":
-                                                    return this.MemberName(new Names("E", "E3"), declaration);
-                                                default:
-                                                    return this.MemberName(new Names("E", null), declaration);
-                                            }
-
-                                        case EventFieldDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.MemberName(new Names("E", "E1"), declaration);
-                                                case "Bar":
-                                                    return this.MemberName(new Names("E", "E2"), declaration);
-                                                case "Baz":
-                                                    return this.MemberName(new Names("E", "E3"), declaration);
-                                                default:
-                                                    return this.MemberName(new Names("E", null), declaration);
-                                            }
-
-                                        case PropertyDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.MemberName(new Names("P", "P1"), declaration);
-                                                case "Bar":
-                                                    return this.MemberName(new Names("P", "P2"), declaration);
-                                                case "Baz":
-                                                    return this.MemberName(new Names("P", "P3"), declaration);
-                                                default:
-                                                    return this.MemberName(new Names("P", null), declaration);
-                                            }
-
-                                        case MethodDeclarationSyntax declaration:
-                                            switch (token.ValueText)
-                                            {
-                                                case "Foo":
-                                                    return this.MemberName(new Names("M", "M1"), declaration);
-                                                case "Bar":
-                                                    return this.MemberName(new Names("M", "M2"), declaration);
-                                                case "Baz":
-                                                    return this.MemberName(new Names("M", "M3"), declaration);
-                                                default:
-                                                    return this.MemberName(new Names("M", null), declaration);
-                                            }
-                                    }
-
-                                    return null;
-                                }
                             }
+                        }
+                    }
 
-                            bool ShouldWarn(SyntaxToken candidate)
+                    foreach (var word in PropertyWords)
+                    {
+                        var index = -1;
+                        while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
+                        {
+                            var candidateLocation = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
+                            if (token.IsKind(SyntaxKind.IdentifierToken) &&
+                                this.locations.Add(candidateLocation.SourceSpan) &&
+                                token.Parent.IsKind(SyntaxKind.PropertyDeclaration))
                             {
-                                switch (candidate.Parent.Kind())
-                                {
-                                    case SyntaxKind.StringLiteralExpression:
-                                    case SyntaxKind.IdentifierName:
-                                        return false;
-                                    default:
-                                        return true;
-                                }
+                                before = token.ValueText;
+                                location = candidateLocation;
+                                after = this.Replace(token);
+                                return true;
                             }
                         }
                     }
@@ -242,6 +160,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 location = null;
                 after = null;
                 return false;
+
+                bool ShouldWarn(SyntaxToken candidate)
+                {
+                    switch (candidate.Parent.Kind())
+                    {
+                        case SyntaxKind.StringLiteralExpression:
+                        case SyntaxKind.IdentifierName:
+                            return false;
+                        default:
+                            return true;
+                    }
+                }
             }
 
             protected override void Clear()
@@ -251,7 +181,106 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 this.locations.Clear();
             }
 
-            private string TypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
+            private string Replace(SyntaxToken token)
+            {
+                switch (token.Parent)
+                {
+                    case EnumDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("E", "E1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("E", "E2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("E", "E3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("E", null), declaration);
+                        }
+
+                    case ClassDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("C", "C1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("C", "C2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("C", "C3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("C", null), declaration);
+                        }
+
+                    case StructDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("S", "S1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("S", "S2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("S", "S3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("S", null), declaration);
+                        }
+
+                    case EventDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceMemberName(new Names("E", "E1"), declaration);
+                            case "Bar":
+                                return this.ReplaceMemberName(new Names("E", "E2"), declaration);
+                            case "Baz":
+                                return this.ReplaceMemberName(new Names("E", "E3"), declaration);
+                            default:
+                                return this.ReplaceMemberName(new Names("E", null), declaration);
+                        }
+
+                    case EventFieldDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceMemberName(new Names("E", "E1"), declaration);
+                            case "Bar":
+                                return this.ReplaceMemberName(new Names("E", "E2"), declaration);
+                            case "Baz":
+                                return this.ReplaceMemberName(new Names("E", "E3"), declaration);
+                            default:
+                                return this.ReplaceMemberName(new Names("E", null), declaration);
+                        }
+
+                    case PropertyDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceMemberName(new Names("P", "P1"), declaration);
+                            case "Bar":
+                                return this.ReplaceMemberName(new Names("P", "P2"), declaration);
+                            case "Baz":
+                                return this.ReplaceMemberName(new Names("P", "P3"), declaration);
+                            default:
+                                return this.ReplaceMemberName(new Names("P", null), declaration);
+                        }
+
+                    case MethodDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceMemberName(new Names("M", "M1"), declaration);
+                            case "Bar":
+                                return this.ReplaceMemberName(new Names("M", "M2"), declaration);
+                            case "Baz":
+                                return this.ReplaceMemberName(new Names("M", "M3"), declaration);
+                            default:
+                                return this.ReplaceMemberName(new Names("M", null), declaration);
+                        }
+                }
+
+                return null;
+            }
+
+            private string ReplaceTypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
             {
                 if (this.literals.TrySingle(x => this.TryGetRoot(x, out _), out var single))
                 {
@@ -291,7 +320,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return candidateNames.Else;
             }
 
-            private string MemberName(Names candidateNames, MemberDeclarationSyntax declaration)
+            private string ReplaceMemberName(Names candidateNames, MemberDeclarationSyntax declaration)
             {
                 if (declaration.Parent is BaseTypeDeclarationSyntax)
                 {
