@@ -139,6 +139,50 @@ namespace N
             }
 
             [Test]
+            public static void FooWithFactoryMethod()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var foo = ""class ↓Foo { public static Foo M() => new Foo(); }"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M1()
+        {
+            var foo = ""class C { public static C M() => new C(); }"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+            }
+
+            [Test]
             public static void Bar()
             {
                 var before = @"

@@ -77,6 +77,15 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 new ClassName("Meh", "C4"),
             };
 
+            private static readonly MethodName[] MethodNames =
+            {
+                new MethodName("Foo"),
+                new MethodName("Bar"),
+                new MethodName("Baz"),
+                new MethodName("Meh"),
+                new MethodName("Lol"),
+            };
+
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
             private readonly HashSet<TextSpan> locations = new HashSet<TextSpan>();
 
@@ -109,14 +118,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         }
                     }
 
-                    //var index = literal.Token.Text.IndexOf("Bar(", StringComparison.Ordinal);
-                    //if (index > 0)
-                    //{
-                    //    before = "Bar";
-                    //    location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, 3));
-                    //    after = "M";
-                    //    return true;
-                    //}
+                    foreach (var className in MethodNames)
+                    {
+                        if (className.TryFind(literal, out before, out location, out after) &&
+                            this.locations.Add(location.SourceSpan))
+                        {
+                            return true;
+                        }
+                    }
                 }
 
                 before = null;
@@ -143,6 +152,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return index >= 0;
             }
 
+            private static bool HasMemberNamed(LiteralExpressionSyntax literal, string name)
+            {
+                return PropertyName.TryFind(literal, name) ||
+                       MethodName.TryFind(literal, name, out _);
+            }
+
             [DebuggerDisplay("{this.pattern}")]
             private class ClassName
             {
@@ -165,7 +180,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         after = GetReplacement();
                         if (after != null)
                         {
-                            if (HasMemberNamed(after))
+                            if (HasMemberNamed(literal, after))
                             {
                                 after = null;
                             }
@@ -204,12 +219,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
 
                             return false;
-                        }
-
-                        bool HasMemberNamed(string name)
-                        {
-                            return PropertyName.TryFind(literal, name) ||
-                                   MethodName.TryFind(literal, name);
                         }
                     }
 
@@ -272,9 +281,41 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private class MethodName
             {
-                internal static bool TryFind(LiteralExpressionSyntax literal, string name)
+                private readonly string name;
+
+                public MethodName(string name)
                 {
-                    var index = -1;
+                    this.name = name;
+                }
+
+                public bool TryFind(LiteralExpressionSyntax literal, out string before, out Location location, out string after)
+                {
+                    if (TryFind(literal, this.name, out var index))
+                    {
+                        var start = index;
+                        before = literal.Token.Text.Substring(start, literal.Token.Text.IndexOfAny(new[] { ' ', '<', '\r', '\n', '(' }, start) - start);
+                        location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + start, before.Length));
+                        after = "M";
+                        if (after != null)
+                        {
+                            if (HasMemberNamed(literal, after))
+                            {
+                                after = null;
+                            }
+                        }
+
+                        return true;
+                    }
+
+                    before = null;
+                    location = null;
+                    after = null;
+                    return false;
+                }
+
+                internal static bool TryFind(LiteralExpressionSyntax literal, string name, out int index)
+                {
+                    index = -1;
                     while (TryIndexOf(literal, name, index + 1, out index))
                     {
                         var text = literal.Token.Text;
@@ -285,22 +326,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             continue;
                         }
 
-                        index += name.Length;
-                        if (IsMethod())
+                        if (IsMethod(index + name.Length))
                         {
                             return true;
                         }
 
-                        bool IsMethod()
+                        index += name.Length;
+                        bool IsMethod(int position)
                         {
-                            while (text.TryElementAt(index, out c))
+                            while (text.TryElementAt(position, out c))
                             {
                                 switch (c)
                                 {
                                     case ' ':
                                     case '\r':
                                     case '\n':
-                                        index++;
+                                        position++;
                                         break;
                                     case '(':
                                         return true;
