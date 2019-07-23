@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.Composition;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Gu.Roslyn.CodeFixExtensions;
     using Microsoft.CodeAnalysis;
@@ -53,16 +54,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             public override SyntaxNode VisitLiteralExpression(LiteralExpressionSyntax node)
             {
+                var pattern = $"[^\\w](?<before>{this.before}[^\\w])";
                 if (node.IsKind(SyntaxKind.StringLiteralExpression) &&
-                    node.Token.ValueText.Contains(this.before))
+                    Regex.IsMatch(node.Token.ValueText, pattern))
                 {
                     return node.Update(
                         SyntaxFactory.Literal(
-                            node.Token.Text.Replace(this.before, this.after),
-                            node.Token.ValueText.Replace(this.before, this.after)));
+                           Regex.Replace(node.Token.Text, this.before, UpdateMatch),
+                           Regex.Replace(node.Token.ValueText, this.before, UpdateMatch)));
                 }
 
                 return base.VisitLiteralExpression(node);
+
+                string UpdateMatch(Match match)
+                {
+                    return match.Value.Replace(this.before, this.after);
+                }
             }
 
             internal static SyntaxNode Update(MethodDeclarationSyntax method, string before, string after)

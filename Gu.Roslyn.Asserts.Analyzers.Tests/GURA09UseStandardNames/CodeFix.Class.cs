@@ -193,6 +193,108 @@ class C
             }
 
             [Test]
+            public static void DoesNotTouchWordInTestMethodName()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void FooTest()
+        {
+            var foo = @""
+class ↓Foo
+{
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void FooTest()
+        {
+            var foo = @""
+class C
+{
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+            }
+
+            [Test]
+            public static void DoesNotTouchWordPart()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void FooTest()
+        {
+            var foo = @""
+class ↓Foo
+{
+}"";
+            var text = ""FooWord"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void FooTest()
+        {
+            var foo = @""
+class C1
+{
+}"";
+            var text = ""FooWord"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+            }
+
+            [Test]
             public static void Bar()
             {
                 var before = @"

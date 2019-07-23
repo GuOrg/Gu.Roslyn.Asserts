@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Linq;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -130,102 +131,92 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return TypeName(new Names("E", "E1"), declaration);
+                                                    return this.TypeName(new Names("E", "E1"), declaration);
                                                 case "Bar":
-                                                    return TypeName(new Names("E", "E2"), declaration);
+                                                    return this.TypeName(new Names("E", "E2"), declaration);
                                                 case "Baz":
-                                                    return TypeName(new Names("E", "E3"), declaration);
+                                                    return this.TypeName(new Names("E", "E3"), declaration);
                                                 default:
-                                                    return TypeName(new Names("E", null), declaration);
+                                                    return this.TypeName(new Names("E", null), declaration);
                                             }
 
                                         case ClassDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return TypeName(new Names("C", "C1"), declaration);
+                                                    return this.TypeName(new Names("C", "C1"), declaration);
                                                 case "Bar":
-                                                    return TypeName(new Names("C", "C2"), declaration);
+                                                    return this.TypeName(new Names("C", "C2"), declaration);
                                                 case "Baz":
-                                                    return TypeName(new Names("C", "C3"), declaration);
+                                                    return this.TypeName(new Names("C", "C3"), declaration);
                                                 default:
-                                                    return TypeName(new Names("C", null), declaration);
+                                                    return this.TypeName(new Names("C", null), declaration);
                                             }
 
                                         case StructDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return TypeName(new Names("S", "S1"), declaration);
+                                                    return this.TypeName(new Names("S", "S1"), declaration);
                                                 case "Bar":
-                                                    return TypeName(new Names("S", "S2"), declaration);
+                                                    return this.TypeName(new Names("S", "S2"), declaration);
                                                 case "Baz":
-                                                    return TypeName(new Names("S", "S3"), declaration);
+                                                    return this.TypeName(new Names("S", "S3"), declaration);
                                                 default:
-                                                    return TypeName(new Names("S", null), declaration);
+                                                    return this.TypeName(new Names("S", null), declaration);
                                             }
 
                                         case EventDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return MemberName(new Names("E", "E1"), declaration);
+                                                    return this.MemberName(new Names("E", "E1"), declaration);
                                                 case "Bar":
-                                                    return MemberName(new Names("E", "E2"), declaration);
+                                                    return this.MemberName(new Names("E", "E2"), declaration);
                                                 case "Baz":
-                                                    return MemberName(new Names("E", "E3"), declaration);
+                                                    return this.MemberName(new Names("E", "E3"), declaration);
                                                 default:
-                                                    return MemberName(new Names("E", null), declaration);
+                                                    return this.MemberName(new Names("E", null), declaration);
                                             }
 
                                         case EventFieldDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return MemberName(new Names("E", "E1"), declaration);
+                                                    return this.MemberName(new Names("E", "E1"), declaration);
                                                 case "Bar":
-                                                    return MemberName(new Names("E", "E2"), declaration);
+                                                    return this.MemberName(new Names("E", "E2"), declaration);
                                                 case "Baz":
-                                                    return MemberName(new Names("E", "E3"), declaration);
+                                                    return this.MemberName(new Names("E", "E3"), declaration);
                                                 default:
-                                                    return MemberName(new Names("E", null), declaration);
+                                                    return this.MemberName(new Names("E", null), declaration);
                                             }
 
                                         case PropertyDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return MemberName(new Names("P", "P1"), declaration);
+                                                    return this.MemberName(new Names("P", "P1"), declaration);
                                                 case "Bar":
-                                                    return MemberName(new Names("P", "P2"), declaration);
+                                                    return this.MemberName(new Names("P", "P2"), declaration);
                                                 case "Baz":
-                                                    return MemberName(new Names("P", "P3"), declaration);
+                                                    return this.MemberName(new Names("P", "P3"), declaration);
                                                 default:
-                                                    return MemberName(new Names("P", null), declaration);
+                                                    return this.MemberName(new Names("P", null), declaration);
                                             }
 
                                         case MethodDeclarationSyntax declaration:
                                             switch (token.ValueText)
                                             {
                                                 case "Foo":
-                                                    return MemberName(new Names("M", "M1"), declaration);
+                                                    return this.MemberName(new Names("M", "M1"), declaration);
                                                 case "Bar":
-                                                    return MemberName(new Names("M", "M2"), declaration);
+                                                    return this.MemberName(new Names("M", "M2"), declaration);
                                                 case "Baz":
-                                                    return MemberName(new Names("M", "M3"), declaration);
+                                                    return this.MemberName(new Names("M", "M3"), declaration);
                                                 default:
-                                                    return MemberName(new Names("M", null), declaration);
+                                                    return this.MemberName(new Names("M", null), declaration);
                                             }
-                                    }
-
-                                    return null;
-                                }
-
-                                string MemberName(Names candidateNames, MemberDeclarationSyntax declaration)
-                                {
-                                    if (declaration.Parent is BaseTypeDeclarationSyntax)
-                                    {
-                                        return candidateNames.WhenSingle;
                                     }
 
                                     return null;
@@ -262,7 +253,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private string TypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
             {
-                if (this.literals.TrySingle(out var single))
+                if (this.literals.TrySingle(x => this.TryGetRoot(x, out _), out var single))
                 {
                     var index = -1;
                     while (this.TryFindToken(single, candidateNames.WhenSingle, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
@@ -298,6 +289,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
 
                 return candidateNames.Else;
+            }
+
+            private string MemberName(Names candidateNames, MemberDeclarationSyntax declaration)
+            {
+                if (declaration.Parent is BaseTypeDeclarationSyntax)
+                {
+                    return candidateNames.WhenSingle;
+                }
+
+                return null;
             }
 
             private bool TryGetRoot(LiteralExpressionSyntax literal, out CompilationUnitSyntax root)
