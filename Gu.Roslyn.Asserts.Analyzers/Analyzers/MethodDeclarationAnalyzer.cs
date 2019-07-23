@@ -72,11 +72,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
             private static readonly string[] Words =
             {
                 "Foo",
+                "IFoo",
                 "Bar",
+                "IBar",
                 "Baz",
+                "IBaz",
                 "Meh",
+                "IMeh",
                 "Lol",
+                "ILol",
                 "SomeClass",
+                "SomeInterface",
+                "ISomeInterface",
                 "SomeField",
                 "SomeEvent",
                 "SomeProperty",
@@ -235,6 +242,19 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 return this.ReplaceMemberName(new Names("E", "E3"), declaration);
                             default:
                                 return this.ReplaceMemberName(new Names("E", null), declaration);
+                        }
+
+                    case InterfaceDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "IFoo":
+                                return this.ReplaceTypeName(new Names("I", "I1"), declaration);
+                            case "IBar":
+                                return this.ReplaceTypeName(new Names("I", "I2"), declaration);
+                            case "IBaz":
+                                return this.ReplaceTypeName(new Names("I", "I3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("I", null), declaration);
                         }
 
                     case EventFieldDeclarationSyntax declaration:
