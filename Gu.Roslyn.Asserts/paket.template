@@ -3,15 +3,16 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  FEATURE: Better error message: include compiler error if no diagnostics.
-  FEATURE: Analyzer nuget for fixing breaking changes.
-  BREAKING: Synchronized parameter names and positions.
-  BREAKING: More optional parameters for many overloads.
-  OBSOLETE: Generic API added a code fix for refactoring to preferred API.
-  BREAKING: Require code in RoslynAssert.Diagnostics to compile. This may break existing tests but it is a good thing.
+  FEATURE: Copy to local analyzer and fix.
+  BUGFIX: Allow CodeFix to have many diagnostics as long as there is only one fix.
+  OBSOLETE: Global state, prefer attributes.
+  FEATURE: SuppressWarningsAttribute
+  BREAKING: Rename parameters suppressWarnings was suppressedDiagnostics (with code fix)
+  FEATURE: Handle AdditionalLocations
+  USABILITY: Improved error messages.
 
 dependencies
-  Gu.Roslyn.Asserts.Analyzers
+  Gu.Roslyn.Asserts.Analyzers >= 3.2
 
 excludedgroups
   Analyzers
