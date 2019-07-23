@@ -4,7 +4,10 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using System.Threading;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -60,7 +63,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -177,7 +180,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -217,7 +220,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -256,7 +259,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze for <paramref name="expectedDiagnostic"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -294,7 +297,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze for <paramref name="expectedDiagnostic"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -332,7 +335,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="before">The code to analyze for <paramref name="expectedDiagnostic"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
@@ -442,18 +445,29 @@ namespace Gu.Roslyn.Asserts
                 throw new AssertException(message);
             }
 
-            if (fixableDiagnostics.Length > 1)
+            Solution fixedSolution = null;
+            foreach (var fixableDiagnostic in fixableDiagnostics)
             {
-                var message = $"Code analyzed with {analyzer.GetType().Name} generated more than one diagnostic fixable by {fix.GetType().Name}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {Format(diagnostics.SelectMany(x => x).Select(d => d.Descriptor))}.{Environment.NewLine}" +
-                              $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {Format(fix.FixableDiagnosticIds)}.{Environment.NewLine}" +
-                              $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                throw new AssertException(message);
+                if (Fix.TryFindOperation(sln, fix, fixableDiagnostic, fixTitle, out var operation))
+                {
+                    var temp = operation.ChangedSolution;
+                    if (!ReferenceEquals(temp, sln))
+                    {
+                        if (fixedSolution != null)
+                        {
+                            var message = $"Code analyzed with {analyzer.GetType().Name} generated more than one diagnostic fixable by {fix.GetType().Name}.{Environment.NewLine}" +
+                                          $"The analyzed code contained the following diagnostics: {Format(diagnostics.SelectMany(x => x).Select(d => d.Descriptor))}.{Environment.NewLine}" +
+                                          $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {Format(fix.FixableDiagnosticIds)}.{Environment.NewLine}" +
+                                          $"Maybe you meant to call AnalyzerAssert.FixAll?";
+                            throw new AssertException(message);
+                        }
+
+                        fixedSolution = temp;
+                    }
+                }
             }
 
-            var diagnostic = fixableDiagnostics.Single();
-            var fixedSolution = Fix.Apply(sln, fix, diagnostic, fixTitle);
-            if (ReferenceEquals(sln, fixedSolution))
+            if (fixedSolution is null)
             {
                 throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }

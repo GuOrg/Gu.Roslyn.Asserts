@@ -47,8 +47,8 @@ namespace N
                 RoslynAssert.FixAll(analyzer, fix, before, after);
             }
 
-            [TestCase("Rename to: value1", "value1")]
-            [TestCase("Rename to: value2", "value2")]
+            [TestCase("Rename to: 'value1'", "value1")]
+            [TestCase("Rename to: 'value2'", "value2")]
             public static void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var before = @"
@@ -180,8 +180,8 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: value");
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
             }
 
             [Test]
@@ -209,8 +209,8 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: value");
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
             }
 
             [Test]
@@ -264,8 +264,8 @@ namespace N
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { fixed2, fixed1 });
             }
 
-            [TestCase("Rename to: value1", "value1")]
-            [TestCase("Rename to: value2", "value2")]
+            [TestCase("Rename to: 'value1'", "value1")]
+            [TestCase("Rename to: 'value2'", "value2")]
             public static void TwoDocumentsOneErrorWhenCodeFixProviderHasManyFixes(string title, string expected)
             {
                 var before1 = @"
@@ -292,9 +292,7 @@ namespace N
     {
         private readonly int value;
     }
-}";
-
-                after = after.AssertReplace("value", expected);
+}".AssertReplace("value", expected);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyCodeFixProvider();
@@ -304,8 +302,8 @@ namespace N
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before1, before2 }, after, title);
             }
 
-            [TestCase("Rename to: value1", "value1")]
-            [TestCase("Rename to: value2", "value2")]
+            [TestCase("Rename to: 'value1'", "value1")]
+            [TestCase("Rename to: 'value2'", "value2")]
             public static void TwoDocumentsOneFixCorrectFixPassOnlyFixedCode(string title, string expected)
             {
                 var before1 = @"
@@ -332,16 +330,14 @@ namespace N
     {
         private readonly int value;
     }
-}";
-
-                after = after.AssertReplace("value", expected);
+}".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyCodeFixProvider();
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, after, title);
             }
 
-            [TestCase("Rename to: value1", "value1")]
-            [TestCase("Rename to: value2", "value2")]
+            [TestCase("Rename to: 'value1'", "value1")]
+            [TestCase("Rename to: 'value2'", "value2")]
             public static void TwoDocumentsTwoFixes(string title, string expected)
             {
                 var before1 = @"
@@ -368,7 +364,7 @@ namespace N
     {
         private readonly int value;
     }
-}";
+}".AssertReplace("value", expected);
 
                 var after2 = @"
 namespace N
@@ -377,9 +373,7 @@ namespace N
     {
         private readonly int value;
     }
-}";
-                after1 = after1.AssertReplace("value", expected);
-                after2 = after2.AssertReplace("value", expected);
+}".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyCodeFixProvider();
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 }, title);

@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: {newName}",
+                            $"Rename to: '{newName}'",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
                             nameof(DoNotUseUnderscoreFix)),
                         diagnostic);

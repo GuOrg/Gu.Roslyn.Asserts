@@ -95,6 +95,29 @@ namespace Gu.Roslyn.Asserts
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
+        public static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, out ApplyChangesOperation operation)
+        {
+            var actions = GetActionsAsync(solution, fix, fixableDiagnostic).GetAwaiter().GetResult();
+            if (FindAction(out var action))
+            {
+                var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+                return operations.TrySingleOfType(out operation);
+            }
+
+            operation = null;
+            return false;
+
+            bool FindAction(out CodeAction result)
+            {
+                if (fixTitle == null)
+                {
+                    return actions.TrySingle(out result);
+                }
+
+                return actions.TrySingle(x => x.Title == fixTitle, out result);
+            }
+        }
+
         /// <summary>
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>

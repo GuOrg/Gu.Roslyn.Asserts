@@ -64,7 +64,7 @@ namespace N
 }";
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
-                               "  'Rename to: value'\r\n";
+                               "  'Rename to: 'value''\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
@@ -87,7 +87,7 @@ namespace N
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
-                               "  'Rename to: value'\r\n";
+                               "  'Rename to: 'value''\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -116,7 +116,7 @@ namespace N
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, barCode, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
-                               "  'Rename to: value'\r\n";
+                               "  'Rename to: 'value''\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 

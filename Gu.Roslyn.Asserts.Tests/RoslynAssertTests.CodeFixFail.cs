@@ -45,7 +45,7 @@ namespace N
 }";
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
-                               "Rename to: value\r\n";
+                               "Rename to: 'value'\r\n";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
@@ -60,7 +60,7 @@ namespace N
             }
 
             [Test]
-            public static void SingleDocumentTwoIndicatedErrors()
+            public static void SingleDocumentTwoFixableErrors()
             {
                 var before = @"
 namespace N
@@ -95,13 +95,7 @@ namespace N
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to value"));
-                Assert.AreEqual(expected, exception.Message);
-
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }));
-                Assert.AreEqual(expected, exception.Message);
-
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to value"));
                 Assert.AreEqual(expected, exception.Message);
             }
 

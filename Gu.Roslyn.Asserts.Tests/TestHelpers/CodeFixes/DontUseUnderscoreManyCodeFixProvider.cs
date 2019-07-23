@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -38,14 +38,14 @@
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: {newName}1",
+                            $"Rename to: '{newName}1'",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName + "1", cancellationToken),
                             nameof(DontUseUnderscoreManyCodeFixProvider) + "1"),
                         diagnostic);
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: {newName}2",
+                            $"Rename to: '{newName}2'",
                             cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName + "2", cancellationToken),
                             nameof(DontUseUnderscoreManyCodeFixProvider) + "2"),
                         diagnostic);

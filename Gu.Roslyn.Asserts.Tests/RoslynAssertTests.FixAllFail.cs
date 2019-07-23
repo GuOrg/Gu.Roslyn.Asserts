@@ -67,7 +67,7 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
-                               "Rename to: value\r\n";
+                               "Rename to: 'value'\r\n";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty, "WRONG"));
                 Assert.AreEqual(expected, exception.Message);
             }

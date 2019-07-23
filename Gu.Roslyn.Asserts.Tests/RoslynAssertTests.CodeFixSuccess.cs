@@ -171,12 +171,12 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
             }
 
             [Test]
@@ -202,10 +202,10 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
             }
 
             [Test]
@@ -231,14 +231,14 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
             }
 
-            [TestCase("Rename to: value1", "value1")]
-            [TestCase("Rename to: value2", "value2")]
+            [TestCase("Rename to: 'value1'", "value1")]
+            [TestCase("Rename to: 'value2'", "value2")]
             public static void SingleDocumentOneErrorTwoFixes(string title, string expected)
             {
                 var before = @"
@@ -257,8 +257,7 @@ namespace N
     {
         private readonly int value;
     }
-}";
-                after = after.AssertReplace("value", expected);
+}".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyCodeFixProvider();
                 RoslynAssert.CodeFix(analyzer, fix, before, after, title);
@@ -268,6 +267,44 @@ namespace N
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, title);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: title);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: title);
+            }
+
+            [Test]
+            public static void SingleDocumentTwoFixableErrorsFilterByTitle()
+            {
+                var before = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_value1;
+        private readonly int ↓_value2;
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    class C
+    {
+        private readonly int value1;
+        private readonly int _value2;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DoNotUseUnderscoreFix();
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value1'");
+
+                after = @"
+namespace N
+{
+    class C
+    {
+        private readonly int _value1;
+        private readonly int value2;
+    }
+}";
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value2'");
             }
 
             [Test]
@@ -424,9 +461,9 @@ namespace N
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { after, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { part2, after });
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, after }, fixTitle: "Rename to: value");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }, fixTitle: "Rename to: value");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'value'");
             }
 
             [Test]
@@ -470,9 +507,9 @@ namespace N
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { after, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, part1 }, new[] { part2, after });
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after, fixTitle: "Rename to: value1");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, after }, fixTitle: "Rename to: value1");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }, fixTitle: "Rename to: value1");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, after, fixTitle: "Rename to: 'value1'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'value1'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part1, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'value1'");
             }
 
             [Test]
