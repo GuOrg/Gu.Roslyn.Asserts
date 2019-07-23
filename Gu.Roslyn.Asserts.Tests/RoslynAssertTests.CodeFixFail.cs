@@ -81,22 +81,24 @@ namespace N
         private readonly int value2;
     }
 }";
-                var expected = "Code analyzed with FieldNameMustNotBeginWithUnderscore generated more than one diagnostic fixable by DoNotUseUnderscoreFix.\r\n" +
-                               "The analyzed code contained the following diagnostics: {SA1309, SA1309}.\r\n" +
-                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.\r\n" +
-                               "Maybe you meant to call AnalyzerAssert.FixAll?";
+                var expected = @"Expected only one code fix, found 2:
+  Rename to: 'value1'
+  Rename to: 'value2'
+Use the overload that specifies title.
+Or maybe you meant to call RoslynAssert.FixAll?
+";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
 
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after));
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }));
-                Assert.AreEqual(expected, exception.Message);
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -183,11 +185,13 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new TwoFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
-                var expected = "Expected only one code fix, found 2:\r\n" +
-                               "Rename to: value1\r\n" +
-                               "Rename to: value2\r\n" +
-                               "Use the overload that specifies title.";
-                Assert.AreEqual(expected, exception.Message);
+                var expected = @"Expected only one code fix, found 2:
+  Rename to: value1
+  Rename to: value2
+Use the overload that specifies title.
+Or maybe you meant to call RoslynAssert.FixAll?
+";
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]

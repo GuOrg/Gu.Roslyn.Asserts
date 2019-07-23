@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Internals
             {
                 // sample URL
                 // segment indices:  01111112222222222222222223333344444445555555555555555555555556666666666666666666666666666666666
-                // https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.Tests/AnalyzerAssertCodeFixTests.Fail.cs
+                // https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.Tests/RoslynAssertCodeFixTests.Fail.cs
                 var segments = uri.Segments;
                 var path = string.Join(string.Empty, segments.Skip(5));
                 this.Provider = uri.Host;

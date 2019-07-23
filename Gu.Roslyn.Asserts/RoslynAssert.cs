@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.Formatting;
 
     /// <summary>
-    /// The AnalyzerAssert class contains a collection of static methods used for assertions on the behavior of analyzers and code fixes.
+    /// The RoslynAssert class contains a collection of static methods used for assertions on the behavior of analyzers and code fixes.
     /// </summary>
     public static partial class RoslynAssert
     {

@@ -27,15 +27,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null)
         {
-            var actions = GetActionsAsync(solution, fix, diagnostic).GetAwaiter().GetResult();
-            var action = FindAction(actions, fixTitle);
-            var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
-            {
-                return operation.ChangedSolution;
-            }
-
-            throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
+            return FindSingleOperation(solution, fix, new[] { diagnostic }, fixTitle).ChangedSolution;
         }
 
         /// <summary>
@@ -95,7 +87,47 @@ namespace Gu.Roslyn.Asserts
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
-        public static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, out ApplyChangesOperation operation)
+        internal static ApplyChangesOperation FindSingleOperation(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle)
+        {
+            var actions = fixableDiagnostics.SelectMany(x => GetActionsAsync(solution, fix, x).GetAwaiter().GetResult())
+                                            .ToImmutableArray();
+            var action = FindAction(actions, fixTitle);
+            var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            {
+                return operation;
+            }
+
+            throw new AssertException($"Expected one operation, was {string.Join(", ", operations)}");
+        }
+
+        internal static bool TryFindOperations(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle, out ImmutableArray<ApplyChangesOperation> operations)
+        {
+            List<ApplyChangesOperation> temp = null;
+            foreach (var fixableDiagnostic in fixableDiagnostics)
+            {
+                if (TryFindOperation(solution, fix, fixableDiagnostic, fixTitle, out var operation))
+                {
+                    if (temp == null)
+                    {
+                        temp = new List<ApplyChangesOperation>();
+                    }
+
+                    temp.Add(operation);
+                }
+            }
+
+            if (temp == null)
+            {
+                operations = default;
+                return false;
+            }
+
+            operations = temp.ToImmutableArray();
+            return true;
+        }
+
+        internal static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, out ApplyChangesOperation operation)
         {
             var actions = GetActionsAsync(solution, fix, fixableDiagnostic).GetAwaiter().GetResult();
             if (FindAction(out var action))
@@ -249,9 +281,7 @@ namespace Gu.Roslyn.Asserts
                     throw new AssertException("Expected one code fix, was 0.");
                 }
 
-                throw new AssertException($"Expected only one code fix, found {actions.Count}:\r\n" +
-                                             $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
-                                             "Use the overload that specifies title.");
+                throw new AssertException(FoundManyMessage());
             }
             else
             {
@@ -262,8 +292,8 @@ namespace Gu.Roslyn.Asserts
 
                 if (actions.All(x => x.Title != fixTitle))
                 {
-                    var errorBuilder = StringBuilderPool.Borrow();
-                    errorBuilder.AppendLine($"Did not find a code fix with title {fixTitle}.").AppendLine("Found:");
+                    var errorBuilder = StringBuilderPool.Borrow()
+                                                        .AppendLine($"Did not find a code fix with title {fixTitle}.").AppendLine("Found:");
                     foreach (var codeAction in actions)
                     {
                         errorBuilder.AppendLine(codeAction.Title);
@@ -272,14 +302,43 @@ namespace Gu.Roslyn.Asserts
                     throw new AssertException(StringBuilderPool.Return(errorBuilder));
                 }
 
-                if (actions.Count(x => x.Title == fixTitle) == 0)
+                if (actions.Any(x => x.Title == fixTitle))
                 {
-                    throw new AssertException("Expected one code fix, was 0.");
+                    throw new AssertException(FoundManyMessage());
                 }
 
-                throw new AssertException($"Expected only one code fix, found {actions.Count}:\r\n" +
-                                             $"{string.Join("\r\n", actions.Select(x => x.Title))}\r\n" +
-                                             "Use the overload that specifies title.");
+                throw new AssertException("Expected one code fix, was 0.");
+            }
+
+            string FoundManyMessage()
+            {
+                if (actions.Select(x => x.Title).Distinct().Count() > 1)
+                {
+                    var errorBuilder = StringBuilderPool
+                                       .Borrow()
+                                       .AppendLine($"Expected only one code fix, found {actions.Count}:");
+                    foreach (var a in actions.OrderBy(x => x.Title))
+                    {
+                        errorBuilder.AppendLine("  " + a.Title);
+                    }
+
+                    return errorBuilder.AppendLine("Use the overload that specifies title.")
+                                       .AppendLine("Or maybe you meant to call RoslynAssert.FixAll?")
+                                       .Return();
+                }
+                else
+                {
+                    var errorBuilder = StringBuilderPool
+                                       .Borrow()
+                                       .AppendLine($"Expected only one code fix, found {actions.Count}:");
+                    foreach (var a in actions.OrderBy(x => x.Title))
+                    {
+                        errorBuilder.AppendLine("  " + a.Title);
+                    }
+
+                    return errorBuilder.AppendLine("Or maybe you meant to call RoslynAssert.FixAll?")
+                                     .Return();
+                }
             }
         }
 

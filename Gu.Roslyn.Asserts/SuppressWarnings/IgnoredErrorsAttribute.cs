@@ -4,7 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
 
     /// <summary>
-    /// Specify what compiler errors to ignore when calling AnalyzerAssert.CodeFix and AnalyzerAssert.FixAll.
+    /// Specify what compiler errors to ignore when calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     [Obsolete("Use " + nameof(SuppressWarningsAttribute))]

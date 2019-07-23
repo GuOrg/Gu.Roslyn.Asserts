@@ -4,10 +4,7 @@ namespace Gu.Roslyn.Asserts
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Threading;
-    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -445,38 +442,18 @@ namespace Gu.Roslyn.Asserts
                 throw new AssertException(message);
             }
 
-            Solution fixedSolution = null;
-            foreach (var fixableDiagnostic in fixableDiagnostics)
-            {
-                if (Fix.TryFindOperation(sln, fix, fixableDiagnostic, fixTitle, out var operation))
-                {
-                    var temp = operation.ChangedSolution;
-                    if (!ReferenceEquals(temp, sln))
-                    {
-                        if (fixedSolution != null)
-                        {
-                            var message = $"Code analyzed with {analyzer.GetType().Name} generated more than one diagnostic fixable by {fix.GetType().Name}.{Environment.NewLine}" +
-                                          $"The analyzed code contained the following diagnostics: {Format(diagnostics.SelectMany(x => x).Select(d => d.Descriptor))}.{Environment.NewLine}" +
-                                          $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {Format(fix.FixableDiagnosticIds)}.{Environment.NewLine}" +
-                                          $"Maybe you meant to call AnalyzerAssert.FixAll?";
-                            throw new AssertException(message);
-                        }
-
-                        fixedSolution = temp;
-                    }
-                }
-            }
-
-            if (fixedSolution is null)
+            var operation = Fix.FindSingleOperation(sln, fix, fixableDiagnostics, fixTitle);
+            if (ReferenceEquals(operation.ChangedSolution, sln))
             {
                 throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }
 
-            AreEqualAsync(after, fixedSolution, null).GetAwaiter().GetResult();
             if (allowCompilationErrors == AllowCompilationErrors.No)
             {
-                VerifyNoCompilerErrorsAsync(fix, fixedSolution).GetAwaiter().GetResult();
+                VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution).GetAwaiter().GetResult();
             }
+
+            AreEqualAsync(after, operation.ChangedSolution, null).GetAwaiter().GetResult();
         }
     }
 }
