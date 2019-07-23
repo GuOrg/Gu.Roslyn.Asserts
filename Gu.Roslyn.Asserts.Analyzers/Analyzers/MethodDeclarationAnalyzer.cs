@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -40,20 +41,39 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         name));
                 }
 
-                if (StringLiteralWalker.TryFindReplace(methodDeclaration, out var before, out var location, out var after))
+                if (StringLiteralWalker.TryFindReplacement(methodDeclaration, out var before, out var location, out var after))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptors.GURA09UseStandardNames,
-                        location,
-                        ImmutableDictionary<string, string>.Empty.Add("before", before).Add("after", after),
-                        after,
-                        before));
+                    if (after != null)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(
+                            Descriptors.GURA09UseStandardNames,
+                            location,
+                            ImmutableDictionary<string, string>.Empty.Add("before", before)
+                                                                     .Add("after", after),
+                            $"Use standard name {after} instead of {before}."));
+                    }
+                    else
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(
+                            Descriptors.GURA09UseStandardNames,
+                            location,
+                            ImmutableDictionary<string, string>.Empty.Add("before", before),
+                            $"Use standard name instead of {before}."));
+                    }
                 }
             }
         }
 
         private sealed class StringLiteralWalker : PooledWalker<StringLiteralWalker>
         {
+            private static readonly ClassName[] ClassNames =
+            {
+                new ClassName("Foo", "C1"),
+                new ClassName("Bar", "C2"),
+                new ClassName("Baz", "C3"),
+                new ClassName("Meh", "C4"),
+            };
+
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
 
             private StringLiteralWalker()
@@ -70,53 +90,21 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 base.VisitLiteralExpression(node);
             }
 
-            internal static bool TryFindReplace(SyntaxNode node, out string before, out Location location, out string after)
+            internal static bool TryFindReplacement(SyntaxNode node, out string before, out Location location, out string after)
             {
                 using (var walker = BorrowAndVisit(node, () => new StringLiteralWalker()))
                 {
                     foreach (var literal in walker.literals)
                     {
-                        var index = literal.Token.Text.IndexOf("class Foo", StringComparison.Ordinal);
-                        if (index > 0)
+                        foreach (var className in ClassNames)
                         {
-                            before = "Foo";
-                            location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index + 6, 3));
-                            if (walker.AnyContains("class Bar") || walker.AnyContains("class C"))
+                            if (className.TryFind(literal, walker.literals, out before, out location, out after))
                             {
-                                if (!walker.AnyContains("C1"))
-                                {
-                                    after = "C1";
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                after = "C";
                                 return true;
                             }
                         }
 
-                        index = literal.Token.Text.IndexOf("class Bar", StringComparison.Ordinal);
-                        if (index > 0)
-                        {
-                            before = "Bar";
-                            location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index + 6, 3));
-                            if (walker.AnyContains("class Foo") || walker.AnyContains("class C"))
-                            {
-                                if (!walker.AnyContains("C2"))
-                                {
-                                    after = "C2";
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                after = "C";
-                                return true;
-                            }
-                        }
-
-                        index = literal.Token.Text.IndexOf("Bar(", StringComparison.Ordinal);
+                        var index = literal.Token.Text.IndexOf("Bar(", StringComparison.Ordinal);
                         if (index > 0)
                         {
                             before = "Bar";
@@ -138,17 +126,74 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 this.literals.Clear();
             }
 
-            private bool AnyContains(string text)
+            [DebuggerDisplay("{this.name}")]
+            private class ClassName
             {
-                foreach (var literal in this.literals)
+                private readonly string name;
+                private readonly string pattern;
+                private readonly string replacement;
+
+                public ClassName(string name, string replacement)
                 {
-                    if (literal.Token.ValueText.Contains(text))
-                    {
-                        return true;
-                    }
+                    this.name = name;
+                    this.pattern = "class " + name;
+                    this.replacement = replacement;
                 }
 
-                return false;
+                public bool TryFind(LiteralExpressionSyntax literal, List<LiteralExpressionSyntax> literals, out string before, out Location location, out string after)
+                {
+                    if (TryIndexOf(literal, this.pattern, out var index))
+                    {
+                        before = this.name;
+                        location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index + 6, 3));
+                        after = GetReplacement();
+                        return true;
+
+                        string GetReplacement()
+                        {
+                            foreach (var className in ClassNames)
+                            {
+                                if (className != this &&
+                                    (AnyContains(className.pattern) ||
+                                     AnyContains(className.replacement)))
+                                {
+                                    if (!AnyContains(this.replacement))
+                                    {
+                                        return this.replacement;
+                                    }
+
+                                    return null;
+                                }
+                            }
+
+                            return "C";
+                        }
+
+                        bool AnyContains(string text)
+                        {
+                            foreach (var candidate in literals)
+                            {
+                                if (candidate.Token.ValueText.Contains(text))
+                                {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        }
+                    }
+
+                    before = null;
+                    location = null;
+                    after = null;
+                    return false;
+                }
+
+                private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, out int index)
+                {
+                    index = literal.Token.Text.IndexOf(text, StringComparison.Ordinal);
+                    return index >= 0;
+                }
             }
         }
     }

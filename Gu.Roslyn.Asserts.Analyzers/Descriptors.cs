@@ -88,7 +88,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public static readonly DiagnosticDescriptor GURA09UseStandardNames = new DiagnosticDescriptor(
             id: "GURA09",
             title: "Use standard names in test code.",
-            messageFormat: "Use standard name {0} instead of {1}.",
+            messageFormat: "{0}",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: true,

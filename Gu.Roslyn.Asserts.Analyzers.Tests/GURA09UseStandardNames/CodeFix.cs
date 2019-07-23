@@ -100,7 +100,6 @@ namespace N
             RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
         }
 
-
         [Test]
         public static void ClassNamedBaz()
         {

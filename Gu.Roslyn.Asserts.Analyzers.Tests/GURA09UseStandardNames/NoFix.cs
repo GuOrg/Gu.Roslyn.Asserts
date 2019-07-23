@@ -10,6 +10,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
         private static readonly CodeFixProvider Fix = new StandardNamesFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames);
 
+        [Explicit("")]
         [Test]
         public static void ClassNamedFooWithPropertyNamedC()
         {
