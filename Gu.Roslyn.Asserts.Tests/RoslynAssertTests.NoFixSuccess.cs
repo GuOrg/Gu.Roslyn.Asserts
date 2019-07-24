@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Generic;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -11,18 +10,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class NoFixSuccess
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void SingleDocumentOneErrorNoFix()
             {

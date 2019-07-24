@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -11,18 +10,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class CodeFixFail
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void SingleDocumentExplicitTitle()
             {
@@ -364,7 +351,6 @@ namespace N
         private readonly int wrong;
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var expected = "Mismatch on line 6.\r\n" +
                                "Expected:         private readonly int wrong;\r\n" +
@@ -430,7 +416,6 @@ namespace N
         // mismatch
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 var expected = "Mismatch on line 8.\r\n" +
                                "Expected:         // mismatch\r\n" +
@@ -484,7 +469,6 @@ namespace N
     }
 }";
 
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
@@ -546,7 +530,6 @@ namespace N
         }
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
                 var analyzer = new PropertyMustBeNamedValueAnalyzer();
                 var fix = new RenameToValueCodeFixProvider();
                 var expected = "Mismatch on line 6 of file C1.cs.\r\n" +

@@ -1,6 +1,7 @@
 // ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
@@ -8,18 +9,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class NoCompilerErrors
         {
-            [SetUp]
-            public static void SetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [TearDown]
-            public static void TearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void WhenCodeNoCompilerErrors()
             {
@@ -63,8 +52,7 @@ namespace N
         public event EventHandler E;
     }
 }";
-                RoslynAssert.ResetAll();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(Enumerable.Empty<MetadataReference>(), code));
                 var expected = "Found errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +

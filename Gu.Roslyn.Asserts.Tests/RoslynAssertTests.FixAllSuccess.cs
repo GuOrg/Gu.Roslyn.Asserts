@@ -1,8 +1,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -10,18 +8,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class FixAllSuccess
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void OneError()
             {
@@ -257,7 +243,6 @@ namespace N
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { fixed1, fixed2 });
@@ -410,7 +395,6 @@ namespace N.Core
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
@@ -448,7 +432,6 @@ namespace N.Core
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
@@ -487,7 +470,6 @@ namespace N.Core
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
@@ -525,7 +507,6 @@ namespace N.Core
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
@@ -563,7 +544,6 @@ namespace N.Client
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before2, out before2);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
@@ -593,7 +573,6 @@ namespace N
     {
     }
 }";
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(EventHandler).Assembly.Location));
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before, out before);
                 var fix = new RemoveUnusedFixProvider();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, before, after);

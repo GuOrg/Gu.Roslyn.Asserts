@@ -3,7 +3,6 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -11,18 +10,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class ValidSuccess
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void WithSingleMetadataReference()
             {
@@ -34,7 +21,8 @@ namespace N
     }
 }";
                 var analyzer = new NopAnalyzer();
-                RoslynAssert.Valid(analyzer, code, metadataReferences: new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) }, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
+                var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
+                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer));
             }
 
             [Test]
@@ -49,7 +37,7 @@ namespace N
 }";
                 var analyzer = new NopAnalyzer();
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
-                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, RoslynAssert.SuppressedDiagnostics));
+                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer));
             }
 
             [Test]
@@ -96,8 +84,9 @@ namespace N
             {
                 var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
-                    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-                    typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider));
+                                               typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+                                               typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider))
+                                           .ToArray();
                 var descriptor = Descriptors.Id1;
                 var analyzer = new NopAnalyzer(descriptor);
                 RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences);
@@ -271,8 +260,8 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Valid(analyzer, code, metadataReferences: RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)), compilationOptions: CodeFactory.DefaultCompilationOptions(new[] { analyzer }));
-                RoslynAssert.Valid(analyzer, code, metadataReferences: RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                RoslynAssert.Valid(analyzer, code, metadataReferences: Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)), compilationOptions: CodeFactory.DefaultCompilationOptions(new[] { analyzer }));
+                RoslynAssert.Valid(analyzer, code, metadataReferences: Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
             }
 
             [Test]
@@ -300,7 +289,7 @@ namespace N
                 var solution = CodeFactory.CreateSolution(
                     code,
                     CodeFactory.DefaultCompilationOptions(new[] { analyzer }),
-                    RoslynAssert.MetadataReferences.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                    Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
 
                 RoslynAssert.Valid(analyzer, solution);
             }

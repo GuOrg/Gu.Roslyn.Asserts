@@ -11,18 +11,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class DiagnosticsFail
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void MessageDoNotMatch()
             {

@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var sln = CodeFactory.CreateSolution(
                     new Uri("https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln"),
                     new[] { new FieldNameMustNotBeginWithUnderscore() },
-                    RoslynAssert.MetadataReferences);
+                    Gu.Roslyn.Asserts.MetadataReferences.FromAttributes());
                 var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
                 CollectionAssert.IsEmpty(assertsProject.AllProjectReferences);
             }

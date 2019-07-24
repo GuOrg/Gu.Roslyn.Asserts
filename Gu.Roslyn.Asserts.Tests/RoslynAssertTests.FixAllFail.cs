@@ -1,6 +1,7 @@
 // ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests
 {
+    using System.Linq;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
@@ -10,18 +11,6 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class FixAllFail
         {
-            [OneTimeSetUp]
-            public static void OneTimeSetUp()
-            {
-                RoslynAssert.MetadataReferences.Add(MetadataReference.CreateFromFile(typeof(int).Assembly.Location));
-            }
-
-            [OneTimeTearDown]
-            public static void OneTimeTearDown()
-            {
-                RoslynAssert.ResetAll();
-            }
-
             [Test]
             public static void SingleDocumentTwoErrorsOnlyOneIndicated()
             {
@@ -256,7 +245,6 @@ namespace N
             [Test]
             public static void WhenFixIntroducesCompilerErrors()
             {
-                RoslynAssert.MetadataReferences.Clear();
                 var before = @"
 namespace N
 {
@@ -275,7 +263,7 @@ namespace N
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFixProvider();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, metadataReferences: Enumerable.Empty<MetadataReference>()));
                 var expected = "Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
