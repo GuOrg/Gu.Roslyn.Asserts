@@ -136,7 +136,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 ShouldWarn(token))
                             {
                                 before = token.ValueText;
-                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length)); ;
+                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
                                 after = this.Replace(token);
                                 return true;
                             }
@@ -155,7 +155,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 token.Parent.IsKind(SyntaxKind.PropertyDeclaration))
                             {
                                 before = token.ValueText;
-                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length)); ;
+                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
                                 after = this.Replace(token);
                                 return true;
                             }

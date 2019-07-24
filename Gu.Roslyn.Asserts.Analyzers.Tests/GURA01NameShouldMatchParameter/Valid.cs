@@ -9,7 +9,6 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
         private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
         private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
 
-
         [Test]
         public static void WhenAnalyzerCorrectName()
         {

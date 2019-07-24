@@ -222,7 +222,6 @@ namespace N
             RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
-
         [Test]
         public static void WhenLocalNameMatchesParameter()
         {

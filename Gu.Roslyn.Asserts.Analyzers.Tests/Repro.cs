@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
                                .ToArray();
 
         private static readonly Solution Solution = CodeFactory.CreateSolution(
-            new FileInfo(@"C:\Git\_DotNetAnalyzers\ReflectionAnalyzers\ReflectionAnalyzers.sln"),
+            new FileInfo(@"C:\Git\_GuOrg\Gu.Analyzers\Gu.Analyzers.sln"),
             AllAnalyzers,
             MetadataReferences.FromAttributes());
 

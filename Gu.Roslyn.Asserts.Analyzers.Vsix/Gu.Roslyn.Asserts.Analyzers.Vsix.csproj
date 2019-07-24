@@ -2,14 +2,12 @@
 <Project>
   <Import Project="..\packages\build\Microsoft.VSSDK.BuildTools\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\build\Microsoft.VSSDK.BuildTools\build\Microsoft.VSSDK.BuildTools.props')" Label="Paket" />
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
-  
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <RootNamespace>Gu.Roslyn.Asserts.Analyzers</RootNamespace>
     <AssemblyName>Gu.Roslyn.Asserts.Analyzers.Vsix</AssemblyName>
     <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
-
   <PropertyGroup>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -19,20 +17,16 @@
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <VSSDKTargetPlatformRegRootSuffix>Roslyn</VSSDKTargetPlatformRegRootSuffix>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' != 'true'">
     <!-- This property disables extension deployment for command line builds; required for AppVeyor and the build script -->
     <DeployExtension>False</DeployExtension>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="source.extension.vsixmanifest" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj" />
   </ItemGroup>
-  
   <ItemGroup>
     <!-- https://github.com/dotnet/sdk/issues/433 -->
     <ProjectReference Update="@(ProjectReference)" AdditionalProperties="TargetFramework=netstandard1.3" />
@@ -46,7 +40,6 @@
       <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Gu.Roslyn.Extensions'" />
     </ItemGroup>
   </Target>
-
   <!--
   <Import Project="..\packages\build\Microsoft.VisualStudio.Threading.Analyzers\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\build\Microsoft.VisualStudio.Threading.Analyzers\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Label="Paket" />
   <ItemGroup>
@@ -98,7 +91,6 @@
   </ItemGroup>
   -->
   <Import Project="..\packages\build\Microsoft.VSSDK.BuildTools\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\packages\build\Microsoft.VSSDK.BuildTools\build\Microsoft.VSSDK.BuildTools.targets')" Label="Paket" />
-  <Import Project="..\.paket\Paket.Restore.targets" />
   <ItemGroup>
     <AdditionalFiles Remove="C:\Users\ds2346\.nuget\packages\microsoft.visualstudio.sdk.analyzers\16.0.29\build\AdditionalFiles\vs-threading.LegacyThreadSwitchingMembers.txt" />
     <AdditionalFiles Remove="C:\Users\ds2346\.nuget\packages\microsoft.visualstudio.sdk.analyzers\16.0.29\build\AdditionalFiles\vs-threading.MainThreadAssertingMethods.txt" />
@@ -109,4 +101,5 @@
     <AdditionalFiles Remove="C:\Users\ds2346\.nuget\packages\microsoft.visualstudio.threading.analyzers\16.0.102\build\AdditionalFiles\vs-threading.MainThreadSwitchingMethods.txt" />
     <AdditionalFiles Remove="C:\Users\ds2346\.nuget\packages\microsoft.visualstudio.threading.analyzers\16.0.102\build\AdditionalFiles\vs-threading.MembersRequiringMainThread.txt" />
   </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
