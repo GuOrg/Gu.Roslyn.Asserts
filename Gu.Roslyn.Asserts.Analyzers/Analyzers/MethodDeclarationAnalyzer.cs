@@ -187,6 +187,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 this.locations.Clear();
             }
 
+            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, int startIndex, StringComparison stringComparison, out int index)
+            {
+                index = literal.Token.Text.IndexOf(text, startIndex, stringComparison);
+                return index >= 0;
+            }
+
             private string Replace(SyntaxToken token)
             {
                 switch (token.Parent)
@@ -309,7 +315,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 return name;
                             }
-
 
                             var i = 1;
                             while (typeDeclaration.Members.TryFirst(x => IsCollision(x), out _))
@@ -446,18 +451,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                 token = default;
                 return false;
-            }
-
-            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, StringComparison stringComparison, out int index)
-            {
-                index = literal.Token.Text.IndexOf(text, stringComparison);
-                return index >= 0;
-            }
-
-            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, int startIndex, StringComparison stringComparison, out int index)
-            {
-                index = literal.Token.Text.IndexOf(text, startIndex, stringComparison);
-                return index >= 0;
             }
 
             private struct Names

@@ -97,7 +97,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public static readonly DiagnosticDescriptor GURA10UseLocal = new DiagnosticDescriptor(
             id: "GURA10",
             title: "Move to local.",
-            messageFormat: "Coly {0} to a local.",
+            messageFormat: "Copy {0} to a local.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: true,
