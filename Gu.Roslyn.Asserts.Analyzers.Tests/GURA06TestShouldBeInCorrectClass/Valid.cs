@@ -143,5 +143,34 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void WhenOneCodeFixInNestedClass()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static partial class CodeFix
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        public static class Property
+        {
+            [Test]
+            public static void M()
+            {
+                var before = ""class C { }"";
+                var after = ""class C { }"";
+                RoslynAssert.CodeFix(Analyzer, Fix, before, after);
+            }
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+        }
     }
 }
