@@ -33,6 +33,52 @@ namespace N
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
 
+        [Test]
+        public static void WhenTypeOfAnalyzer()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            RoslynAssert.Valid(typeof(PlaceholderAnalyzer), code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void WhenAnalyzerGetType()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            RoslynAssert.Valid(Analyzer.GetType(), code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
         [TestCase("Analyzer")]
         [TestCase("PlaceholderAnalyzer")]
         public static void WhenFieldAnalyzer(string name)

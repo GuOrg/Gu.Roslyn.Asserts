@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests.Refactorings
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ClassNameToUpperCaseRefactoringProvider))]
-    public class ClassNameToUpperCaseRefactoringProvider : CodeRefactoringProvider
+    internal class ClassNameToUpperCaseRefactoringProvider : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
         {
