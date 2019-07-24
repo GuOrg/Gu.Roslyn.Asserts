@@ -75,13 +75,6 @@ Gu.Roslyn.Asserts.Gac
 Gu.Roslyn.Asserts.IgnoredErrorsAttribute
 Gu.Roslyn.Asserts.IgnoredErrorsAttribute.ErrorIds.get -> System.Collections.Generic.IReadOnlyList<string>
 Gu.Roslyn.Asserts.IgnoredErrorsAttribute.IgnoredErrorsAttribute(params string[] errorIds) -> void
-Gu.Roslyn.Asserts.MetaDataReferencesCollection
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.Add(Microsoft.CodeAnalysis.MetadataReference item) -> bool
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.AddRange(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> items) -> void
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.Clear() -> void
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.GetEnumerator() -> System.Collections.Generic.IEnumerator<Microsoft.CodeAnalysis.MetadataReference>
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.MetaDataReferencesCollection() -> void
-Gu.Roslyn.Asserts.MetaDataReferencesCollection.MetaDataReferencesCollection(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> list) -> void
 Gu.Roslyn.Asserts.MetadataReferenceAttribute
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.Aliases.get -> System.Collections.Generic.IReadOnlyList<string>
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReference.get -> Microsoft.CodeAnalysis.MetadataReference
@@ -92,14 +85,35 @@ Gu.Roslyn.Asserts.MetadataReferences
 Gu.Roslyn.Asserts.MetadataReferencesAttribute
 Gu.Roslyn.Asserts.MetadataReferencesAttribute.MetadataReferences.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference>
 Gu.Roslyn.Asserts.MetadataReferencesAttribute.MetadataReferencesAttribute(params System.Type[] types) -> void
+Gu.Roslyn.Asserts.MetadataReferencesCollection
+Gu.Roslyn.Asserts.MetadataReferencesCollection.Add(Microsoft.CodeAnalysis.MetadataReference item) -> bool
+Gu.Roslyn.Asserts.MetadataReferencesCollection.AddRange(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> items) -> void
+Gu.Roslyn.Asserts.MetadataReferencesCollection.Clear() -> void
+Gu.Roslyn.Asserts.MetadataReferencesCollection.GetEnumerator() -> System.Collections.Generic.IEnumerator<Microsoft.CodeAnalysis.MetadataReference>
+Gu.Roslyn.Asserts.MetadataReferencesCollection.MetadataReferencesCollection() -> void
+Gu.Roslyn.Asserts.MetadataReferencesCollection.MetadataReferencesCollection(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> list) -> void
 Gu.Roslyn.Asserts.PlaceholderAnalyzer
 Gu.Roslyn.Asserts.PlaceholderAnalyzer.PlaceholderAnalyzer(string id) -> void
 Gu.Roslyn.Asserts.ProjectFile
 Gu.Roslyn.Asserts.Refactor
 Gu.Roslyn.Asserts.ReferenceAssembly
 Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.SolutionFile
 Gu.Roslyn.Asserts.StringHelper
+Gu.Roslyn.Asserts.SuppressWarnings
+Gu.Roslyn.Asserts.SuppressWarningsAttribute
+Gu.Roslyn.Asserts.SuppressWarningsAttribute.Ids.get -> System.Collections.Generic.IReadOnlyList<string>
+Gu.Roslyn.Asserts.SuppressWarningsAttribute.SuppressWarningsAttribute(params string[] ids) -> void
 Gu.Roslyn.Asserts.SyntaxFactoryWriter
 Gu.Roslyn.Asserts.SyntaxFactoryWriter.SyntaxFactoryWriter() -> void
 Gu.Roslyn.Asserts.SyntaxNodeExt
@@ -198,7 +212,7 @@ static Gu.Roslyn.Asserts.Gac.TryGet(string name, out Microsoft.CodeAnalysis.Meta
 static Gu.Roslyn.Asserts.MetadataReferences.CreateBinary(params string[] code) -> Microsoft.CodeAnalysis.MetadataReference
 static Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(System.Reflection.Assembly assembly) -> Microsoft.CodeAnalysis.MetadataReference
 static Gu.Roslyn.Asserts.MetadataReferences.CreateFromFile(string assemblyFile) -> Microsoft.CodeAnalysis.MetadataReference
-static Gu.Roslyn.Asserts.MetadataReferences.FromAttributes() -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference>
+static Gu.Roslyn.Asserts.MetadataReferences.FromAttributes() -> System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.MetadataReference>
 static Gu.Roslyn.Asserts.MetadataReferences.Transitive(params System.Reflection.Assembly[] assemblies) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference>
 static Gu.Roslyn.Asserts.MetadataReferences.Transitive(params System.Type[] typesInAssemblies) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference>
 static Gu.Roslyn.Asserts.ProjectFile.Find(string projectFile) -> System.IO.FileInfo
@@ -239,7 +253,9 @@ static Gu.Roslyn.Asserts.RoslynAssert.CodeFix<TAnalyzer, TCodeFix>(string codeWi
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix<TCodeFix>(Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string> code, string after, string fixTitle = null, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix<TCodeFix>(Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Gu.Roslyn.Asserts.DiagnosticsAndSources diagnosticsAndSources, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string> code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, params string[] code) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, string code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.ExpectedDiagnostic> expectedDiagnostics, params string[] code) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, System.Collections.Generic.IReadOnlyList<string> code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Diagnostics(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, params string[] code) -> void
@@ -311,6 +327,7 @@ static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.CodeFixes.Cod
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, Gu.Roslyn.Asserts.DiagnosticsAndSources diagnosticsAndSources, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string> code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, params string[] code) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic, string code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.ExpectedDiagnostic> expectedDiagnostics, params string[] code) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, System.Collections.Generic.IReadOnlyList<string> code, Gu.Roslyn.Asserts.AllowCompilationErrors allowCompilationErrors = Gu.Roslyn.Asserts.AllowCompilationErrors.No, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider fix, params string[] code) -> void
@@ -328,7 +345,7 @@ static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRef
 static Gu.Roslyn.Asserts.RoslynAssert.Refactoring(Microsoft.CodeAnalysis.CodeRefactorings.CodeRefactoringProvider refactoring, string before, string after, string title) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.ResetAll() -> void
 static Gu.Roslyn.Asserts.RoslynAssert.ResetMetadataReferences() -> void
-static Gu.Roslyn.Asserts.RoslynAssert.ResetsuppressWarnings() -> void
+static Gu.Roslyn.Asserts.RoslynAssert.ResetSuppressedDiagnostics() -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Valid(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor, System.Collections.Generic.IReadOnlyList<string> code, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Valid(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor, System.IO.FileInfo code, System.Collections.Generic.IEnumerable<string> suppressWarnings = null, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference> metadataReferences = null, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions compilationOptions = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Valid(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor, params string[] code) -> void
@@ -354,6 +371,7 @@ static Gu.Roslyn.Asserts.SolutionFile.ParseInfo(System.IO.FileInfo sln) -> Micro
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(System.Reflection.Assembly assembly, out System.IO.FileInfo sln) -> bool
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(string name, out System.IO.FileInfo sln) -> bool
 static Gu.Roslyn.Asserts.StringHelper.AssertReplace(this string text, string oldValue, string newValue) -> string
+static Gu.Roslyn.Asserts.SuppressWarnings.FromAttributes() -> System.Collections.Immutable.ImmutableArray<string>
 static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(Microsoft.CodeAnalysis.SyntaxNode node) -> string
 static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(string code) -> string
 static Gu.Roslyn.Asserts.SyntaxNodeExt.Find<T>(this Microsoft.CodeAnalysis.SyntaxNode root, string code) -> T
@@ -389,5 +407,5 @@ static readonly Gu.Roslyn.Asserts.AstWriterSettings.Default -> Gu.Roslyn.Asserts
 static readonly Gu.Roslyn.Asserts.AstWriterSettings.DefaultJson -> Gu.Roslyn.Asserts.AstWriterSettings
 static readonly Gu.Roslyn.Asserts.CodeFactory.EmptySolution -> Microsoft.CodeAnalysis.Solution
 static readonly Gu.Roslyn.Asserts.CodeFactory.Workspace -> Microsoft.CodeAnalysis.AdhocWorkspace
-static readonly Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences -> Gu.Roslyn.Asserts.MetaDataReferencesCollection
-static readonly Gu.Roslyn.Asserts.RoslynAssert.suppressWarnings -> System.Collections.Generic.List<string>
+static readonly Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences -> Gu.Roslyn.Asserts.MetadataReferencesCollection
+static readonly Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics -> System.Collections.Generic.List<string>
