@@ -103,7 +103,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
             private readonly ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax> roots = new ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax>();
-            private readonly HashSet<TextSpan> locations = new HashSet<TextSpan>();
+            private readonly HashSet<SyntaxToken> locations = new HashSet<SyntaxToken>();
 
             private StringLiteralWalker()
             {
@@ -130,13 +130,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         var index = -1;
                         while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
                         {
-                            var candidateLocation = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
                             if (token.IsKind(SyntaxKind.IdentifierToken) &&
-                                this.locations.Add(candidateLocation.SourceSpan) &&
+                                this.locations.Add(token) &&
                                 ShouldWarn(token))
                             {
                                 before = token.ValueText;
-                                location = candidateLocation;
+                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length)); ;
                                 after = this.Replace(token);
                                 return true;
                             }
@@ -148,13 +147,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         var index = -1;
                         while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
                         {
-                            var candidateLocation = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length));
-                            if (token.IsKind(SyntaxKind.IdentifierToken) &&
-                                this.locations.Add(candidateLocation.SourceSpan) &&
+                            if (token.Parent.IsKind(SyntaxKind.PropertyDeclaration) &&
+                                token.ValueText == word &&
+                                token.IsKind(SyntaxKind.IdentifierToken) &&
+                                this.locations.Add(token) &&
                                 token.Parent.IsKind(SyntaxKind.PropertyDeclaration))
                             {
                                 before = token.ValueText;
-                                location = candidateLocation;
+                                location = literal.SyntaxTree.GetLocation(new TextSpan(literal.SpanStart + index, token.ValueText.Length)); ;
                                 after = this.Replace(token);
                                 return true;
                             }
