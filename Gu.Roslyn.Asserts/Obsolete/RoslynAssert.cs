@@ -18,6 +18,12 @@ namespace Gu.Roslyn.Asserts
         public static readonly MetadataReferencesCollection MetadataReferences = new MetadataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
 
         /// <summary>
+        /// The metadata references used when creating the projects created in the tests.
+        /// </summary>
+        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
+        public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
+
+        /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
@@ -46,12 +52,6 @@ namespace Gu.Roslyn.Asserts
             ResetMetadataReferences();
             ResetSuppressedDiagnostics();
         }
-
-        /// <summary>
-        /// The metadata references used when creating the projects created in the tests.
-        /// </summary>
-        [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
-        public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
 
         /// <summary>
         /// Resets <see cref="SuppressedDiagnostics"/> to <see cref="SuppressWarnings.FromAttributes()"/>.

@@ -195,7 +195,9 @@ namespace Gu.Roslyn.Asserts
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
                                      .Except(SuppressedDiagnostics)
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();

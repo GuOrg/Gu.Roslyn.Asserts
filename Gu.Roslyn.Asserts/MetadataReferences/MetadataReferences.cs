@@ -94,7 +94,9 @@ namespace Gu.Roslyn.Asserts
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 code,
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true),
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
                 RoslynAssert.MetadataReferences);
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             RoslynAssert.NoCompilerErrors(sln);
 
             using (var ms = new MemoryStream())

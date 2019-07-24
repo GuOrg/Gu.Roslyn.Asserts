@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts
     using System.Linq;
 
     /// <summary>
-    /// For getting all warnings to suppress specified with [SuppressWarnings]
+    /// For getting all warnings to suppress specified with [SuppressWarnings].
     /// </summary>
     public static class SuppressWarnings
     {

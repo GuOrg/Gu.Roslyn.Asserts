@@ -17,8 +17,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(params string[] code)
         {
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             var solution = CodeFactory.CreateSolution(code, MetadataReferences);
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
         }
 
         /// <summary>
@@ -30,8 +32,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             var solution = CodeFactory.CreateSolution(code, metadataReferences);
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
         }
 
         /// <summary>
@@ -41,7 +45,9 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static void NoCompilerErrors(Solution solution)
         {
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
         }
 
         /// <summary>

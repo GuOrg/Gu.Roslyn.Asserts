@@ -23,7 +23,9 @@ namespace Gu.Roslyn.Asserts
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
                 var attribute = assembly.GetCustomAttribute<AllowedDiagnosticsAttribute>();
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
                 if (attribute != null)
                 {
                     staticAllowedDiagnostics = attribute.AllowedDiagnostics;
