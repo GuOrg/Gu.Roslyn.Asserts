@@ -5,11 +5,11 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public class ReferenceAssemblyTests
+    public static class ReferenceAssemblyTests
     {
         [TestCase(typeof(int))]
         [TestCase(typeof(System.Diagnostics.Debug))]
-        public void TryGetAssembly(Type type)
+        public static void TryGetAssembly(Type type)
         {
 #if NETCOREAPP2_0
             Assert.Inconclusive("Fix later.");
@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 
         [TestCase(typeof(int))]
         [TestCase(typeof(System.Diagnostics.Debug))]
-        public void TryGetLocation(Type type)
+        public static void TryGetLocation(Type type)
         {
 #if NETCOREAPP2_0
             Assert.Inconclusive("Fix later.");
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 
         [TestCase(typeof(int))]
         [TestCase(typeof(System.Diagnostics.Debug))]
-        public void TryGetFileName(Type type)
+        public static void TryGetFileName(Type type)
         {
 #if NETCOREAPP2_0
             Assert.Inconclusive("Fix later.");
