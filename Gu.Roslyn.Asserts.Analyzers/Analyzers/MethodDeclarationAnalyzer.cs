@@ -32,7 +32,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 InvocationWalker.TryFindRoslynAssert(methodDeclaration, out var invocation))
             {
                 if (invocation.TryGetMethodName(out var name) &&
-                    name != method.ContainingType.Name)
+                    name != method.ContainingType.Name &&
+                    name != method.ContainingType.ContainingType?.Name)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(
                         Descriptors.GURA06TestShouldBeInCorrectClass,
