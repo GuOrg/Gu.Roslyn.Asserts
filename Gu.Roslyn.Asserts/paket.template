@@ -12,7 +12,7 @@ releasenotes
   USABILITY: Improved error messages.
 
 dependencies
-  Gu.Roslyn.Asserts.Analyzers >= 3.2
+  Gu.Roslyn.Asserts.Analyzers >= 3.2.1
 
 excludedgroups
   Analyzers
