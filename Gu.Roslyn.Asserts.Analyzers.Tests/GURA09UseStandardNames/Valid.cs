@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
 
         [Test]
         public static void SimpleClass()
@@ -47,6 +47,33 @@ namespace N
         }
 
         [Test]
+        public static void DiagnosticAnalyzer()
+        {
+            var code = @"
+namespace N
+{
+    using System.Collections.Immutable;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.Diagnostics;
+
+    public class Analyzer : DiagnosticAnalyzer
+    {
+        /// <inheritdoc/>
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
+
+        public override void Initialize(AnalysisContext context)
+        {
+        }
+
+        private static void Handle(SyntaxNodeAnalysisContext context)
+        {
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
         public static void StringLiteral()
         {
             var code = @"
@@ -65,7 +92,7 @@ namespace N
             var c = @""
 class C
 {
-    const string Text = """"Activator.CreateInstance(typeof(T), \""""foo\"""")  """";
+    const string Text = """"Activator.CreateInstance(typeof(T), \""""foo\"""")"""";
 }"";
             RoslynAssert.Valid(Analyzer, c);
         }

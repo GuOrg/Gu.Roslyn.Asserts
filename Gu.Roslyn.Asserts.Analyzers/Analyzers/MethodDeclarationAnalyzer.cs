@@ -187,12 +187,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 this.locations.Clear();
             }
 
-            private static bool TryIndexOf(LiteralExpressionSyntax literal, string text, int startIndex, StringComparison stringComparison, out int index)
-            {
-                index = literal.Token.Text.IndexOf(text, startIndex, stringComparison);
-                return index >= 0;
-            }
-
             private string Replace(SyntaxToken token)
             {
                 switch (token.Parent)
@@ -441,11 +435,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private bool TryFindToken(LiteralExpressionSyntax literal, string word, int startIndex, StringComparison stringComparison, out int index, out SyntaxToken token)
             {
-                if (TryIndexOf(literal, word, startIndex, stringComparison, out index) &&
+                index = literal.Token.Text.IndexOf(word, startIndex, stringComparison);
+                if (index >= 0 &&
                     this.TryGetRoot(literal, out var root))
                 {
-                    var offset = literal.Token.Text.Length - literal.Token.ValueText.Length - 1;
-                    token = root.FindToken(index - offset);
+                    var offset = literal.Token.Text.IndexOf("\"", StringComparison.Ordinal);
+                    if (offset < 0)
+                    {
+                        token = default;
+                        return false;
+                    }
+
+                    token = root.FindToken(index - offset - 1);
                     return true;
                 }
 
