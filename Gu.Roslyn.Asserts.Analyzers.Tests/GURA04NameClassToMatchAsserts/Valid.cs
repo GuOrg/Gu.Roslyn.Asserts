@@ -56,6 +56,33 @@ namespace N
         }
 
         [Test]
+        public static void WhenOneValidInNestedClass()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        public static class Class
+        {
+            [Test]
+            public static void M()
+            {
+                var c = ""class C { }"";
+                RoslynAssert.Valid(Analyzer, c);
+            }
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
         public static void WhenTwoValid()
         {
             var code = @"

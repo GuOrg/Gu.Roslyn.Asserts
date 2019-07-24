@@ -30,7 +30,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 context.ContainingSymbol is INamedTypeSymbol type)
             {
                 if (InvocationWalker.TryFindName(classDeclaration, out var name) &&
-                    context.ContainingSymbol.Name != name)
+                    type.Name != name &&
+                    type.ContainingType?.Name != name)
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(

@@ -45,5 +45,34 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void StringLiteral()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void FooTest()
+        {
+            var c = @""
+class C
+{
+    const string Text = """"Activator.CreateInstance(typeof(T), \""""foo\"""")  """";
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, new[] { Code.PlaceholderAnalyzer, code });
+        }
     }
 }
