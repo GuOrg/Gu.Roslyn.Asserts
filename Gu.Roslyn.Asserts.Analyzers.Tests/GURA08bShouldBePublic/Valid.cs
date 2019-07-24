@@ -63,7 +63,7 @@ namespace N
         [Test]
         public static void CodeRefactoringProvider()
         {
-            var refactoring = @"
+            var placeholderRefactoring = @"
 namespace N
 {
     using System.Threading.Tasks;
@@ -74,7 +74,7 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, refactoring);
+            RoslynAssert.Valid(Analyzer, Descriptor, placeholderRefactoring);
         }
 
         [Test]
