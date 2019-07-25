@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
         private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
 
         [Test]
-        public static void WhenAnalyzerCorrectName()
+        public static void ValidAnalyzerAndCode()
         {
             var code = @"
 namespace N
@@ -27,6 +27,31 @@ namespace N
         {
             var code = ""class ↓C { }"";
             RoslynAssert.Valid(Analyzer, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void ValidAnalyzerAndCodeAndMetadataReferences()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
+            RoslynAssert.Valid(Analyzer, code, metadataReferences: metadataReferences);
         }
     }
 }";
