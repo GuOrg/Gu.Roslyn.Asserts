@@ -46,21 +46,20 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
             }
         }
 
-        [Explicit("Temp")]
+        [Explicit("Temp suppress.")]
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
         {
-            RoslynAssert.Valid(analyzer, AssertsTests);
-            //switch (analyzer)
-            //{
-            //    case InvocationAnalyzer _:
-            //    case MethodDeclarationAnalyzer _:
-            //        _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
-            //        break;
-            //    default:
-            //        RoslynAssert.Valid(analyzer, AssertsTests);
-            //        break;
-            //}
+            switch (analyzer)
+            {
+                case InvocationAnalyzer _:
+                case MethodDeclarationAnalyzer _:
+                    _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
+                    break;
+                default:
+                    RoslynAssert.Valid(analyzer, AssertsTests);
+                    break;
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
-    public static class CodeFix
+    public static partial class CodeFix
     {
         public static class Fail
         {

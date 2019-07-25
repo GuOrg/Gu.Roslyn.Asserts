@@ -1,10 +1,9 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Collections.Generic;
     using NUnit.Framework;
 
-    [TestFixture]
     public static partial class Valid
     {
         public static class Fail

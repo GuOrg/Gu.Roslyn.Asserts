@@ -120,6 +120,6 @@
   <Rules AnalyzerId="Gu.Roslyn.Asserts.Analyzers" RuleNamespace="Gu.Roslyn.Asserts.Analyzers">
     <Rule Id="GURA02" Action="None" />
     <Rule Id="GURA01" Action="Info" />
-    <Rule Id="GURA05" Action="Info" />
+    <Rule Id="GURA05" Action="Warning" />
   </Rules>
 </RuleSet>
