@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.Refactorings;
     using Microsoft.CodeAnalysis.Text;

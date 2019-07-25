@@ -46,6 +46,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
             }
         }
 
+        [Explicit("Temp")]
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
         {

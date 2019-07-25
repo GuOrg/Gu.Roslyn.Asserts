@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using NUnit.Framework;
 
