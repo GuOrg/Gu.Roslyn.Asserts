@@ -7,9 +7,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public static partial class RoslynAssertTests
+    public static partial class CodeFix
     {
-        public static class CodeFixSuccess
+        public static class Success
         {
             [Test]
             public static void SingleDocumentOneError()

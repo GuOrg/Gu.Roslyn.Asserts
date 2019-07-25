@@ -1,14 +1,14 @@
 // ReSharper disable RedundantNameQualifier
-namespace Gu.Roslyn.Asserts.Tests
+
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
-    [TestFixture]
-    public static partial class RoslynAssertTests
+    public static class CodeFix
     {
-        public static class CodeFixFail
+        public static class Fail
         {
             [Test]
             public static void SingleDocumentExplicitTitle()
@@ -482,6 +482,7 @@ namespace N
                 var fix = new RemoveUnusedFixProvider();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before, part2 }, string.Empty));
                 CodeAssert.AreEqual(expected, exception.Message);
+
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before, part2 }, Array.Empty<string>()));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -710,9 +711,11 @@ namespace N
                            "    }\r\n" +
                            "}\r\n";
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { before, extensionMethodCode }));
+                exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { before, extensionMethodCode }));
                 CodeAssert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { before, extensionMethodCode }));
+                exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { before, extensionMethodCode }));
                 CodeAssert.AreEqual(expected, exception.Message);
 
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { before, extensionMethodCode }, fixTitle: "Call ID()"));

@@ -5,9 +5,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public partial class RoslynAssertTests
+    public partial class NoCompilerErrors
     {
-        public static class NoCompilerErrors
+        public static class Success
         {
             [Test]
             public static void WhenCodeNoCompilerErrors()

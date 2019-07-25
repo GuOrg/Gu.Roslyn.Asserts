@@ -2,9 +2,9 @@ namespace Gu.Roslyn.Asserts.Tests
 {
     using NUnit.Framework;
 
-    public static partial class RoslynAssertTests
+    public static class NoAnalyzerDiagnostics
     {
-        public static class AnalyzerAssertNoAnalyzerDiagnosticsFail
+        public static class Fail
         {
             [Test]
             public static void SingleDocumentFieldNameMustNotBeginWithUnderscore()
@@ -21,10 +21,12 @@ namespace N
                                "SA1309 Field '_value' must not begin with an underscore\r\n" +
                                "  at line 5 and character 29 in file C.cs | private readonly int ↓_value = 1;\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(new FieldNameMustNotBeginWithUnderscore(), code));
+                var exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.NoAnalyzerDiagnostics(new FieldNameMustNotBeginWithUnderscore(), code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), code));
+                exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.NoAnalyzerDiagnostics(typeof(FieldNameMustNotBeginWithUnderscore), code));
                 Assert.AreEqual(expected, exception.Message);
             }
 
@@ -42,10 +44,12 @@ namespace N
                                "AD0001 Analyzer 'Gu.Roslyn.Asserts.Tests.ThrowingAnalyzer' threw an exception of type 'System.InvalidOperationException' with message 'Analyzer threw this.'.\r\n" +
                                "  at line 0 and character 0 in file  | Code did not have position 0,0\r\n";
 
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoAnalyzerDiagnostics(new ThrowingAnalyzer(), code));
+                var exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.NoAnalyzerDiagnostics(new ThrowingAnalyzer(), code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoAnalyzerDiagnostics(typeof(ThrowingAnalyzer), code));
+                exception = Assert.Throws<AssertException>(() =>
+                    RoslynAssert.NoAnalyzerDiagnostics(typeof(ThrowingAnalyzer), code));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

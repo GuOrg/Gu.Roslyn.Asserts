@@ -1,14 +1,13 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 // ReSharper disable AssignNullToNotNullAttribute
-namespace Gu.Roslyn.Asserts.Tests
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
     using NUnit.Framework;
 
-    [TestFixture]
-    public static partial class RoslynAssertTests
+    public static partial class Valid
     {
-        public static class ValidSuccess
+        public static class Success
         {
             [Test]
             public static void WithSingleMetadataReference()

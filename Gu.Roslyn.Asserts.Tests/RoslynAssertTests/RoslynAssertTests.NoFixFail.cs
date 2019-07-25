@@ -5,9 +5,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public static partial class RoslynAssertTests
+    public static partial class NoFix
     {
-        public static class NoFixFail
+        public static class Fail
         {
             [Test]
             public static void FixDoesNotMatchAnalyzer()

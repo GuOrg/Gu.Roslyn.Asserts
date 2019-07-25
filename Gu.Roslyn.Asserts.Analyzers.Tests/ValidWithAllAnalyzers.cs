@@ -20,6 +20,10 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
             ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"),
             MetadataReferences.FromAttributes());
 
+        private static readonly Solution AssertsTests = CodeFactory.CreateSolution(
+            ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"),
+            MetadataReferences.FromAttributes());
+
         [Test]
         public static void NotEmpty()
         {
@@ -40,6 +44,22 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
                     RoslynAssert.Valid(analyzer, AnalyzersTests);
                     break;
             }
+        }
+
+        [TestCaseSource(nameof(AllAnalyzers))]
+        public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
+        {
+            RoslynAssert.Valid(analyzer, AssertsTests);
+            //switch (analyzer)
+            //{
+            //    case InvocationAnalyzer _:
+            //    case MethodDeclarationAnalyzer _:
+            //        _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
+            //        break;
+            //    default:
+            //        RoslynAssert.Valid(analyzer, AssertsTests);
+            //        break;
+            //}
         }
     }
 }

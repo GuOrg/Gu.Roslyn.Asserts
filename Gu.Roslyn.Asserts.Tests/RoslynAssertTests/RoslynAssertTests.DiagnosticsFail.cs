@@ -7,9 +7,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public static partial class RoslynAssertTests
+    public static partial class Diagnostics
     {
-        public static class DiagnosticsFail
+        public static class Fail
         {
             [Test]
             public static void MessageDoNotMatch()

@@ -4,9 +4,9 @@ namespace Gu.Roslyn.Asserts.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class RoslynAssertTests
+    public partial class FixAll
     {
-        public static class FixAllSuccess
+        public static class Success
         {
             [Test]
             public static void OneError()
