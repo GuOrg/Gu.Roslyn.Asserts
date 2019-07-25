@@ -105,7 +105,7 @@ namespace N
         }
 
         [Test]
-        public static void OneParams()
+        public static void OneParam()
         {
             var code = @"
 namespace N
@@ -201,6 +201,33 @@ namespace N
         }
     }
 }";
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [TestCase("string.Empty")]
+        [TestCase("\"\"")]
+        [TestCase("\"SYNTAX_ERROR\"")]
+        public static void WhenNoNameInCode(string expression)
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = string.Empty;
+            RoslynAssert.Valid(Analyzer, code);
+        }
+    }
+}".AssertReplace("string.Empty", expression);
 
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }

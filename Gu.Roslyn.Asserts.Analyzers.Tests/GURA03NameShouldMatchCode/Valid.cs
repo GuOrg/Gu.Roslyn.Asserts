@@ -267,7 +267,7 @@ namespace N
         }
 
         [Test]
-        public static void InlineStringEmptyParams()
+        public static void InlineStringEmptyParam()
         {
             var code = @"
 namespace N
@@ -290,5 +290,31 @@ namespace N
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
 
+        [TestCase("string.Empty")]
+        [TestCase("\"\"")]
+        [TestCase("\"SYNTAX_ERROR\"")]
+        public static void WhenNoNameInCode(string expression)
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var empty = string.Empty;
+            RoslynAssert.Valid(Analyzer, empty);
+        }
+    }
+}".AssertReplace("string.Empty", expression);
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
     }
 }
