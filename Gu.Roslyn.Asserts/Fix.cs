@@ -87,7 +87,15 @@ namespace Gu.Roslyn.Asserts
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
-        internal static ApplyChangesOperation FindSingleOperation(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle)
+        /// <summary>
+        /// Find the single <see cref="ApplyChangesOperation"/> or throw.
+        /// </summary>
+        /// <param name="solution">The <see cref="Solution"/>.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/>.</param>
+        /// <param name="fixableDiagnostics">The <see cref="IEnumerable{Diagnostic}"/>.</param>
+        /// <param name="fixTitle">The title of the fix.</param>
+        /// <returns>The <see cref="ApplyChangesOperation"/>.</returns>
+        internal static ApplyChangesOperation FindSingleOperation(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle = null)
         {
             var actions = fixableDiagnostics.SelectMany(x => GetActionsAsync(solution, fix, x).GetAwaiter().GetResult())
                                             .ToImmutableArray();
@@ -101,6 +109,15 @@ namespace Gu.Roslyn.Asserts
             throw new AssertException($"Expected one operation, was {string.Join(", ", operations)}");
         }
 
+        /// <summary>
+        /// Find the <see cref="ApplyChangesOperation"/> fixable by <paramref name="fix"/> registered.
+        /// </summary>
+        /// <param name="solution">The <see cref="Solution"/>.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/>.</param>
+        /// <param name="fixableDiagnostics">The <see cref="IEnumerable{Diagnostic}"/>.</param>
+        /// <param name="fixTitle">The title of the fix.</param>
+        /// <param name="operations">A collection of <see cref="ApplyChangesOperation"/>.</param>
+        /// <returns>True if any were found.</returns>
         internal static bool TryFindOperations(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle, out ImmutableArray<ApplyChangesOperation> operations)
         {
             List<ApplyChangesOperation> temp = null;
@@ -127,6 +144,15 @@ namespace Gu.Roslyn.Asserts
             return true;
         }
 
+        /// <summary>
+        /// Find the single <see cref="ApplyChangesOperation"/> fixable by <paramref name="fix"/> registered.
+        /// </summary>
+        /// <param name="solution">The <see cref="Solution"/>.</param>
+        /// <param name="fix">The <see cref="CodeFixProvider"/>.</param>
+        /// <param name="fixableDiagnostic">The <see cref="Diagnostic"/>.</param>
+        /// <param name="fixTitle">The title of the fix.</param>
+        /// <param name="operation">The <see cref="ApplyChangesOperation"/>.</param>
+        /// <returns>True if exactly one was found.</returns>
         internal static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, out ApplyChangesOperation operation)
         {
             var actions = GetActionsAsync(solution, fix, fixableDiagnostic).GetAwaiter().GetResult();

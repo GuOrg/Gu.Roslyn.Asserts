@@ -188,5 +188,107 @@ namespace N
 
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
+
+        [Test]
+        public static void OneParam()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""class C1 { }"";
+            RoslynAssert.Valid(Analyzer, c1);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void TwoParams()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""class C1 { }"";
+            var c2 = ""class C2 { }"";
+            RoslynAssert.Valid(Analyzer, c1, c2);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void TwoParamsExplicitArray()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c1 = ""class C1 { }"";
+            var c2 = ""class C2 { }"";
+            RoslynAssert.Valid(Analyzer, new []{ c1, c2 });
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void InlineStringEmptyParams()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            RoslynAssert.Valid(Analyzer, string.Empty);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
     }
 }

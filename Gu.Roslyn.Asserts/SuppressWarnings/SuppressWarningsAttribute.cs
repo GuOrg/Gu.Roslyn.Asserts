@@ -20,6 +20,9 @@ namespace Gu.Roslyn.Asserts
             this.Ids = ids;
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="Diagnostic.Id"/> to suppress.
+        /// </summary>
         public IReadOnlyList<string> Ids { get; }
     }
 }
