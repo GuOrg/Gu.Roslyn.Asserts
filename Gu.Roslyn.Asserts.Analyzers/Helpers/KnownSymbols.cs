@@ -2,8 +2,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
 {
     using Gu.Roslyn.AnalyzerExtensions;
 
-    internal static class KnownSymbol
+    internal static class KnownSymbols
     {
+        internal static readonly QualifiedType Object = Create("System.Object", "object");
         internal static readonly QualifiedType RoslynAssert = Create("Gu.Roslyn.Asserts.RoslynAssert");
         internal static readonly QualifiedType DiagnosticAnalyzer = Create("Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer");
         internal static readonly QualifiedType DiagnosticDescriptor = Create("Microsoft.CodeAnalysis.DiagnosticDescriptor");

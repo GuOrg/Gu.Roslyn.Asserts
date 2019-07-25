@@ -28,9 +28,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 context.SemanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
                 type.Locations.Any(x => x.IsInSource))
             {
-                if (type.IsAssignableTo(KnownSymbol.CodeFixProvider, context.Compilation) ||
-                    type.IsAssignableTo(KnownSymbol.CodeRefactoringProvider, context.Compilation) ||
-                    type.IsAssignableTo(KnownSymbol.DiagnosticAnalyzer, context.Compilation))
+                if (type.IsAssignableTo(KnownSymbols.CodeFixProvider, context.Compilation) ||
+                    type.IsAssignableTo(KnownSymbols.CodeRefactoringProvider, context.Compilation) ||
+                    type.IsAssignableTo(KnownSymbols.DiagnosticAnalyzer, context.Compilation))
                 {
                     if (type.DeclaredAccessibility != Accessibility.Internal)
                     {

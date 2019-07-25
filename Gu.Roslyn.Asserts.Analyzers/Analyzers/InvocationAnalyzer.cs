@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         {
             if (context.Node is InvocationExpressionSyntax invocation &&
                 context.SemanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
-                method.ContainingType == KnownSymbol.RoslynAssert)
+                method.ContainingType == KnownSymbols.RoslynAssert)
             {
                 foreach (var parameter in method.Parameters)
                 {

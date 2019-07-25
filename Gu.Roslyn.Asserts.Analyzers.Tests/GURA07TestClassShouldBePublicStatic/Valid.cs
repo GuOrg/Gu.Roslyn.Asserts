@@ -52,5 +52,24 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void ScriptAttribute()
+        {
+            var code = @"
+namespace N
+{
+     using NUnit.Framework;
+
+    public class ScriptAttribute : ExplicitAttribute
+    {
+        public ScriptAttribute()
+         : base(""SCRIPT"")
+        {
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+        }
     }
 }

@@ -54,7 +54,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
 
                 if ((!type.IsStatic || type.DeclaredAccessibility != Accessibility.Public) &&
-                    UsingDirectiveWalker.IsUsingNUnit(context.SemanticModel.SyntaxTree))
+                    UsingDirectiveWalker.IsUsingNUnit(context.SemanticModel.SyntaxTree) &&
+                    type.BaseType == KnownSymbols.Object &&
+                    type.Interfaces.IsDefaultOrEmpty)
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
