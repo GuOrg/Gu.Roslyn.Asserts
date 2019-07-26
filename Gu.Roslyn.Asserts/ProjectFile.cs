@@ -54,24 +54,22 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Searches parent directories for <paramref name="projectFile"/>.
+        /// The search is done by:
+        /// 1. Find the first sln file in recursive parent directory of Assembly.GetCallingAssembly().CodeBase.
+        /// 2. Search recursive subdirectories from there.
         /// </summary>
         /// <param name="projectFile">Ex Foo.csproj.</param>
         /// <returns>The project file.</returns>
         public static FileInfo Find(string projectFile)
         {
-            if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
+            var sln = SolutionFile.Find(Assembly.GetCallingAssembly());
+            var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
+            if (result == null)
             {
-                // ReSharper disable once PossibleNullReferenceException
-                var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
-                if (result == null)
-                {
-                    throw new InvalidOperationException("Did not find a file named: " + projectFile);
-                }
-
-                return result;
+                throw new InvalidOperationException("Did not find a file named: " + projectFile);
             }
 
-            throw new InvalidOperationException("Did not find a sln for: " + Assembly.GetCallingAssembly());
+            return result;
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Searches parent directories for <paramref name="assembly"/> the first file matching *.sln.
         /// </summary>
-        /// <param name="assembly">The assembly.</param>
+        /// <param name="assembly">The <see cref="Assembly"/>.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(Assembly assembly, out FileInfo sln)
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Searches parent directories for <paramref name="name"/> the first file matching Foo.sln.
         /// </summary>
-        /// <param name="name">The assembly.</param>
+        /// <param name="name">The name of the sln file.</param>
         /// <returns>The solution file.</returns>
         public static FileInfo Find(string name)
         {
@@ -58,7 +58,22 @@ namespace Gu.Roslyn.Asserts
                 return sln;
             }
 
-            throw new InvalidOperationException("Did not find a file named: " + name);
+            throw new InvalidOperationException("Did not find a .sln file named: " + name);
+        }
+
+        /// <summary>
+        /// Searches parent directories for <paramref name="assembly"/> and return the the first .sln file found.
+        /// </summary>
+        /// <param name="assembly">The <see cref="Assembly"/>.</param>
+        /// <returns>The solution file.</returns>
+        public static FileInfo Find(Assembly assembly)
+        {
+            if (TryFind(assembly, out var sln))
+            {
+                return sln;
+            }
+
+            throw new InvalidOperationException($"Did not find a .sln file in recursive parent directories of assembly.CodeBase: {new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath}");
         }
 
         /// <summary>
