@@ -59,6 +59,14 @@ namespace Gu.Roslyn.Asserts
         }
 
         /// <summary>
+        /// Find a <see cref="LiteralExpressionSyntax"/> that matches <paramref name="signature"/>.
+        /// </summary>
+        public static IdentifierNameSyntax FindIdentifierName(this SyntaxTree tree, string signature)
+        {
+            return tree.Find<IdentifierNameSyntax>(signature);
+        }
+
+        /// <summary>
         /// Find a <see cref="StatementSyntax"/> that matches <paramref name="code"/>.
         /// </summary>
         public static StatementSyntax FindStatement(this SyntaxTree tree, string code)

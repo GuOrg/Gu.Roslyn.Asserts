@@ -402,6 +402,31 @@ namespace N
             Assert.AreEqual(text, node.ToString());
         }
 
+        [TestCase("Console")]
+        [TestCase("WriteLine")]
+        public static void FindIdentifierName(string text)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace N
+{
+    using System;
+
+    internal class C
+    {
+        public C()
+        {
+            Console.WriteLine(null);
+        }
+    }
+}".AssertReplace("null", text));
+            var node = syntaxTree.FindIdentifierName(text);
+            Assert.AreEqual(text, node.ToString());
+
+            node = syntaxTree.Find<IdentifierNameSyntax>(text);
+            Assert.AreEqual(text, node.ToString());
+        }
+
         [TestCase("int i")]
         [TestCase("int j")]
         public static void FindParameter(string parameter)
