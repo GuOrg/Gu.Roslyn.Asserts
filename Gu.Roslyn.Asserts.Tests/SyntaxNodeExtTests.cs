@@ -376,6 +376,32 @@ namespace N
             Assert.AreEqual("string.Empty", node.ToString());
         }
 
+        [TestCase("null")]
+        [TestCase("1")]
+        [TestCase("\"abc\"")]
+        public static void FindLiteralExpression(string text)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(
+                @"
+namespace N
+{
+    using System;
+
+    internal class C
+    {
+        public C()
+        {
+            Console.WriteLine(null);
+        }
+    }
+}".AssertReplace("null", text));
+            var node = syntaxTree.FindLiteralExpression(text);
+            Assert.AreEqual(text, node.ToString());
+
+            node = syntaxTree.Find<LiteralExpressionSyntax>(text);
+            Assert.AreEqual(text, node.ToString());
+        }
+
         [TestCase("int i")]
         [TestCase("int j")]
         public static void FindParameter(string parameter)
