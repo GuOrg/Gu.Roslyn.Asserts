@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Name of local should match parameter for max consistency.");
 
         public static readonly DiagnosticDescriptor GURA02IndicateErrorPosition = new DiagnosticDescriptor(
@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Name should match code.");
 
         public static readonly DiagnosticDescriptor GURA04NameClassToMatchAsserts = new DiagnosticDescriptor(
@@ -37,7 +37,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Name of class should match asserts.");
 
         public static readonly DiagnosticDescriptor GURA05NameFileToMatchClass = new DiagnosticDescriptor(
@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Name file to match class.");
 
         public static readonly DiagnosticDescriptor GURA06TestShouldBeInCorrectClass = new DiagnosticDescriptor(
@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Move to '{0}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Move test to correct class.");
 
         public static readonly DiagnosticDescriptor GURA07TestClassShouldBePublicStatic = new DiagnosticDescriptor(
@@ -64,7 +64,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "'{0}' should be public static.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Test class should be public static.");
 
         public static readonly DiagnosticDescriptor GURA08aShouldBeInternal = new DiagnosticDescriptor(
@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "'{0}' should be internal.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Info,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Should be internal.");
 
         public static readonly DiagnosticDescriptor GURA08bShouldBePublic = new DiagnosticDescriptor(
@@ -91,7 +91,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "{0}",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Use standard names for things that do not have particular meaning in test code.");
 
         public static readonly DiagnosticDescriptor GURA10UseLocal = new DiagnosticDescriptor(
@@ -100,7 +100,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             messageFormat: "Copy {0} to a local.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
-            isEnabledByDefault: true,
+            isEnabledByDefault: false,
             description: "Move to local for self contained tests.");
     }
 }
