@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis.Text;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MethodDeclarationAnalyzer : DiagnosticAnalyzer
+    internal class MethodDeclarationAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
             Descriptors.GURA06TestShouldBeInCorrectClass,

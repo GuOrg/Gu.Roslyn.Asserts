@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CopyToLocalFix))]
     [Shared]
-    public class CopyToLocalFix : DocumentEditorCodeFixProvider
+    internal class CopyToLocalFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA10UseLocal.Id);

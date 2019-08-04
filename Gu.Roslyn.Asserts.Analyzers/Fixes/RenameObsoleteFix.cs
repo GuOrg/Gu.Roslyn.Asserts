@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameObsoleteFix))]
     [Shared]
-    public class RenameObsoleteFix : DocumentEditorCodeFixProvider
+    internal class RenameObsoleteFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0103", "CS0234", "CS0618", "CS1739");
 

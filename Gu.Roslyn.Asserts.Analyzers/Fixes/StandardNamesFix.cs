@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(StandardNamesFix))]
     [Shared]
-    public class StandardNamesFix : CodeFixProvider
+    internal class StandardNamesFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA09UseStandardNames.Id);

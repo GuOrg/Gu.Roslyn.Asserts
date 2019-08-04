@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MakePublicStaticFix))]
     [Shared]
-    public class MakePublicStaticFix : CodeFixProvider
+    internal class MakePublicStaticFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA07TestClassShouldBePublicStatic.Id);

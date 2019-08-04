@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MoveFix))]
     [Shared]
-    public class MoveFix : CodeFixProvider
+    internal class MoveFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA06TestShouldBeInCorrectClass.Id);

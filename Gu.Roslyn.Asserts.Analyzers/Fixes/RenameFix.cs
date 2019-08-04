@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameFix))]
     [Shared]
-    public class RenameFix : CodeFixProvider
+    internal class RenameFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA01NameShouldMatchParameter.Id,

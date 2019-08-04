@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(IndicateErrorPositionFix))]
     [Shared]
-    public class IndicateErrorPositionFix : DocumentEditorCodeFixProvider
+    internal class IndicateErrorPositionFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA02IndicateErrorPosition.Id);

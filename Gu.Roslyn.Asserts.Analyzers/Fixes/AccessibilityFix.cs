@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AccessibilityFix))]
     [Shared]
-    public class AccessibilityFix : CodeFixProvider
+    internal class AccessibilityFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA08aShouldBeInternal.Id,

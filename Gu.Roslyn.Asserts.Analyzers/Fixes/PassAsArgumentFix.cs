@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(PassAsArgumentFix))]
     [Shared]
-    public class PassAsArgumentFix : DocumentEditorCodeFixProvider
+    internal class PassAsArgumentFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0618");
 
