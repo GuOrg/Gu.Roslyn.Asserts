@@ -3,7 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameFixTests
     using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;
 
-    public static class CodeFix
+    public static partial class CodeFix
     {
         private static readonly CodeFixProvider Fix = new RenameObsoleteFix();
 

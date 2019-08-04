@@ -14,7 +14,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     [Shared]
     public class RenameObsoleteFix : DocumentEditorCodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0103", "CS0234", "CS1739");
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0103", "CS0234", "CS0618", "CS1739");
 
         protected override async Task RegisterCodeFixesAsync(DocumentEditorCodeFixContext context)
         {
@@ -22,69 +22,94 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                           .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (TryFindIdentifier(out IdentifierNameSyntax identifierName, out var newText))
+                if (TryFindUpdate(out var expression, out var newText))
                 {
                     context.RegisterCodeFix(
                         $"Change to: {newText}.",
                         (editor, _) => editor.ReplaceNode(
-                            identifierName,
-                            x => x.WithIdentifier(SyntaxFactory.Identifier(newText).WithTriviaFrom(x.Identifier))),
+                            expression,
+                            x => SyntaxFactory.ParseExpression(newText).WithTriviaFrom(x)),
                         nameof(RenameObsoleteFix),
                         diagnostic);
                 }
 
-                bool TryFindIdentifier(out IdentifierNameSyntax result, out string text)
+                bool TryFindUpdate(out ExpressionSyntax result, out string text)
                 {
-                    const string AnalyzerAssert = "AnalyzerAssert";
                     switch (diagnostic.Id)
                     {
                         case "CS0103" when syntaxRoot.TryFindNode(diagnostic, out result):
-                            text = "RoslynAssert";
-                            return result.Identifier.ValueText == AnalyzerAssert;
-                        case "CS0234" when syntaxRoot.TryFindNode(diagnostic, out MemberAccessExpressionSyntax memberAccess):
                             {
-                                while (memberAccess.Parent is MemberAccessExpressionSyntax parent)
+                                var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                                switch (message)
                                 {
-                                    memberAccess = parent;
+                                    case "The name 'AnalyzerAssert' does not exist in the current context":
+                                        text = "RoslynAssert";
+                                        return true;
                                 }
 
-                                result = (memberAccess.Expression as MemberAccessExpressionSyntax)?.Name as IdentifierNameSyntax;
-                                text = "RoslynAssert";
-                                return result?.Identifier.ValueText == AnalyzerAssert;
+                                break;
+                            }
+
+                        case "CS0234" when syntaxRoot.TryFindNode(diagnostic, out MemberAccessExpressionSyntax qualifiedName):
+                            {
+                                var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                                switch (message)
+                                {
+                                    case "The type or namespace name 'AnalyzerAssert' does not exist in the namespace 'Gu.Roslyn.Asserts' (are you missing an assembly reference?)":
+                                        result = qualifiedName.Name;
+                                        text = "RoslynAssert";
+                                        return true;
+                                }
+
+                                break;
+                            }
+
+                        case "CS0618" when syntaxRoot.TryFindNode(diagnostic, out result):
+                            {
+                                var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                                if (message.StartsWith("'RoslynAssert.MetadataReferences' is obsolete:"))
+                                {
+                                    text = "MetadataReferences.FromAttributes()";
+                                    return true;
+                                }
+
+                                break;
                             }
 
                         case "CS1739" when syntaxRoot.TryFindNode(diagnostic, out result):
-                            var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
-                            if (message.Contains("suppressedDiagnostics"))
                             {
-                                text = "suppressWarnings";
-                                return true;
-                            }
+                                var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
+                                if (message.Contains("suppressedDiagnostics"))
+                                {
+                                    text = "suppressWarnings";
+                                    return true;
+                                }
 
-                            switch (message)
-                            {
-                                case "The best overload for 'Diagnostics' does not have a parameter named 'codeWithErrorsIndicated'":
-                                case "The best overload for 'NoFix' does not have a parameter named 'codeWithErrorsIndicated'":
-                                    text = "code";
-                                    return true;
-                                case "The best overload for 'CodeFix' does not have a parameter named 'code'":
-                                case "The best overload for 'FixAll' does not have a parameter named 'code'":
-                                case "The best overload for 'CodeFix' does not have a parameter named 'codeWithErrorsIndicated'":
-                                case "The best overload for 'FixAll' does not have a parameter named 'codeWithErrorsIndicated'":
-                                    text = "before";
-                                    return true;
-                                case "The best overload for 'CodeFix' does not have a parameter named 'fixedCode'":
-                                case "The best overload for 'FixAll' does not have a parameter named 'fixedCode'":
-                                case "The best overload for 'CodeFix' does not have a parameter named 'fixedcode'":
-                                case "The best overload for 'FixAll' does not have a parameter named 'fixedcode'":
-                                    text = "after";
-                                    return true;
-                                case "The best overload for 'NoFix' does not have a parameter named 'codeFix'":
-                                    text = "fix";
-                                    return true;
-                            }
+                                switch (message)
+                                {
+                                    case "The best overload for 'Diagnostics' does not have a parameter named 'codeWithErrorsIndicated'":
+                                    case "The best overload for 'NoFix' does not have a parameter named 'codeWithErrorsIndicated'":
+                                        text = "code";
+                                        return true;
+                                    case "The best overload for 'CodeFix' does not have a parameter named 'code'":
+                                    case "The best overload for 'FixAll' does not have a parameter named 'code'":
+                                    case "The best overload for 'CodeFix' does not have a parameter named 'codeWithErrorsIndicated'":
+                                    case "The best overload for 'FixAll' does not have a parameter named 'codeWithErrorsIndicated'":
+                                        text = "before";
+                                        return true;
+                                    case "The best overload for 'CodeFix' does not have a parameter named 'fixedCode'":
+                                    case "The best overload for 'FixAll' does not have a parameter named 'fixedCode'":
+                                    case "The best overload for 'CodeFix' does not have a parameter named 'fixedcode'":
+                                    case "The best overload for 'FixAll' does not have a parameter named 'fixedcode'":
+                                        text = "after";
+                                        return true;
+                                    case "The best overload for 'NoFix' does not have a parameter named 'codeFix'":
+                                        text = "fix";
+                                        return true;
+                                }
 
-                            break;
+                                break;
+                            }
                     }
 
                     text = null;
