@@ -200,7 +200,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static bool ShouldRename(ISymbol symbol, string expectedName, out string newName)
         {
             if (symbol.IsEitherKind(SymbolKind.Local, SymbolKind.Field, SymbolKind.Property) &&
-                !string.Equals(symbol.Name, expectedName, StringComparison.OrdinalIgnoreCase))
+                symbol.Name.IndexOf(expectedName, StringComparison.OrdinalIgnoreCase) < 0)
             {
                 if (symbol.IsStatic || IsConst())
                 {

@@ -1,3 +1,9 @@
+#### 3.2.2
+* BUGFIX: infinite loop in analyzer when looking for replacements.
+* OBSOLETE: for changing to RoslynAssert.MetadataReferences. (Code fix changing to preferred API)
+* Make analyzers default disabled. Most of them are pretty useless.
+* BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
+
 #### 3.2
 * FEATURE: Copy to local analyzer and fix.
 * BUGFIX: Allow CodeFix to have many diagnostics as long as there is only one fix.

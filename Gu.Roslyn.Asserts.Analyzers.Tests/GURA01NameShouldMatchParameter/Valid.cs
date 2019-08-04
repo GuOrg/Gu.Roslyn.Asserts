@@ -452,5 +452,33 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderRefactoring, code);
         }
+
+        [Test]
+        public static void FixAllMany()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var before1 = ""↓class C1 { }"";
+            var before2 = ""↓class C2 { }"";
+            var after1 = ""class C1 { }"";
+            var after2 = ""class C2 { }"";
+            RoslynAssert.FixAll(Analyzer, Fix, new [] { before1, before2 }, new [] { after1, after2 });
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+        }
     }
 }

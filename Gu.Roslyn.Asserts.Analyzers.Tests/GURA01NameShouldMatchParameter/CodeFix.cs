@@ -205,9 +205,9 @@ namespace N
         public static void M()
         {
             var c1 = ""class C1 { }"";
-            var code2 = ""class ↓C2 { }"";
+            var wrong = ""class ↓C2 { }"";
             var after = ""class C2 { }"";
-            RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { c1, code2 });
+            RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { c1, wrong });
         }
     }
 }";
@@ -231,7 +231,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'code'.");
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
             RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'.");
         }

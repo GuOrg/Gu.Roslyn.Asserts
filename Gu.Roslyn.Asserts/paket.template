@@ -3,16 +3,13 @@ projectUrl https://github.com/GuOrg/Gu.Roslyn.Asserts
 licenseUrl http://opensource.org/licenses/MIT
 
 releasenotes
-  FEATURE: Copy to local analyzer and fix.
-  BUGFIX: Allow CodeFix to have many diagnostics as long as there is only one fix.
-  OBSOLETE: Global state, prefer attributes.
-  FEATURE: SuppressWarningsAttribute
-  BREAKING: Rename parameters suppressWarnings was suppressedDiagnostics (with code fix)
-  FEATURE: Handle AdditionalLocations
-  USABILITY: Improved error messages.
+  BUGFIX: infinite loop in analyzer when looking for replacements.
+  OBSOLETE: for changing to RoslynAssert.MetadataReferences. (Code fix changing to preferred API)
+  Make analyzers default disabled. Most of them are pretty useless.
+  BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
 
 dependencies
-  Gu.Roslyn.Asserts.Analyzers >= 3.2.1
+  Gu.Roslyn.Asserts.Analyzers >= 3.2.2
 
 excludedgroups
   Analyzers

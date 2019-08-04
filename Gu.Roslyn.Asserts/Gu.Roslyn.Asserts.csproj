@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>3.2.1.0</Version>
+    <Version>3.2.2.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -23,13 +23,10 @@
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>
-      FEATURE: Copy to local analyzer and fix.
-      BUGFIX: Allow CodeFix to have many diagnostics as long as there is only one fix.
-      OBSOLETE: Global state, prefer attributes.
-      FEATURE: SuppressWarningsAttribute
-      BREAKING: Rename parameters suppressWarnings was suppressedDiagnostics (with code fix)
-      FEATURE: Handle AdditionalLocations
-      USABILITY: Improved error messages.
+      BUGFIX: infinite loop in analyzer when looking for replacements.
+      OBSOLETE: for changing to RoslynAssert.MetadataReferences. (Code fix changing to preferred API)
+      Make analyzers default disabled. Most of them are pretty useless.
+      BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
     </PackageReleaseNotes>
   </PropertyGroup>
 
