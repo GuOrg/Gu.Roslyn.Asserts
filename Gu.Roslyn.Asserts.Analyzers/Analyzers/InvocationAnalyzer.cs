@@ -373,7 +373,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 bool TryGetName(string text, string prefix, out string name)
                 {
                     var index = text.IndexOf(prefix, StringComparison.Ordinal);
-                    if (index >= 0)
+                    if (index >= 0 &&
+                        text.LastIndexOf("partial", index, StringComparison.Ordinal) < 0)
                     {
                         var start = index + prefix.Length;
                         var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);

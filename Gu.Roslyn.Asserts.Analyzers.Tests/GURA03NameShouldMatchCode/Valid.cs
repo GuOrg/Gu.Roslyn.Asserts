@@ -104,7 +104,6 @@ namespace N
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
 
-        [Explicit("Not sure this is worth handling.")]
         [Test]
         public static void IgnorePartialClass()
         {
