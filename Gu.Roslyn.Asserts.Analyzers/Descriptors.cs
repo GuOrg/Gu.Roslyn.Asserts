@@ -74,16 +74,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Info,
             isEnabledByDefault: false,
-            description: "Should be internal.");
+            description: "Should be internal to not expose an API that someone could take a dependency on.");
 
         internal static readonly DiagnosticDescriptor GURA08bShouldBePublic = new DiagnosticDescriptor(
             id: "GURA08b",
-            title: "Should be internal.",
-            messageFormat: "'{0}' should be internal.",
+            title: "Should be public.",
+            messageFormat: "'{0}' should be public.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: false,
-            description: "Should be internal.");
+            description: "Should be public to avoid need for [InternalsVisibleTo].");
 
         internal static readonly DiagnosticDescriptor GURA09UseStandardNames = new DiagnosticDescriptor(
             id: "GURA09",
