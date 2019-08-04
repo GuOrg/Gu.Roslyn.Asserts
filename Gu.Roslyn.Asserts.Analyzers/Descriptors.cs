@@ -60,12 +60,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         internal static readonly DiagnosticDescriptor GURA07TestClassShouldBePublicStatic = new DiagnosticDescriptor(
             id: "GURA07",
-            title: "Test class should be internal static.",
-            messageFormat: "'{0}' should be internal static.",
+            title: "Test class should be public static.",
+            messageFormat: "'{0}' should be public static.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: false,
-            description: "Test class should be internal static.");
+            description: "Test class should be public static.");
 
         internal static readonly DiagnosticDescriptor GURA08aShouldBeInternal = new DiagnosticDescriptor(
             id: "GURA08a",
