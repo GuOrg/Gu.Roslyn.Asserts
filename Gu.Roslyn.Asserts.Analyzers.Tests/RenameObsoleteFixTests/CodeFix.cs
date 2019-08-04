@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameFixTests
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameObsoleteFixTests
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;

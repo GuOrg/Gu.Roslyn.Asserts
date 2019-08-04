@@ -73,6 +73,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     return true;
                                 }
 
+                                if (message.StartsWith("'RoslynAssert.SuppressedDiagnostics' is obsolete:"))
+                                {
+                                    text = "SuppressWarnings.FromAttributes()";
+                                    return true;
+                                }
+
                                 break;
                             }
 
