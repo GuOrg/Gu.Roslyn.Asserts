@@ -11,16 +11,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <BuildOutputTargetFolder>analyzers\dotnet\cs</BuildOutputTargetFolder>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Version>3.2.2</Version>
+    <DevelopmentDependency>true</DevelopmentDependency>
     <Description>Analyzers and cod fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
     <Authors>Johan Larsson.</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <PackageTags>Roslyn Diagnostic Analyzer</PackageTags>
@@ -32,5 +27,15 @@
     </PackageReleaseNotes>
   </PropertyGroup>
 
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Gu.Roslyn.Extensions" Version="0.5.3-dev" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="tools\*" Pack="true" PackagePath="" />
+    <None
+      Include="$(OutputPath)\$(AssemblyName).dll;$(OutputPath)\Gu.Roslyn.Extensions.dll"
+      Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
 </Project>

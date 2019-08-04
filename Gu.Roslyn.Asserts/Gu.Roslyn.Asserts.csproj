@@ -16,6 +16,7 @@
     <Version>3.2.2.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
@@ -30,16 +31,14 @@
     </PackageReleaseNotes>
   </PropertyGroup>
 
-  <!--
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Exec Command=".paket\paket.exe pack publish" WorkingDirectory="$(SolutionDir)" />
-  </Target>
-  -->
-
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
 
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.0.0" PrivateAssets="None" />
+    <PackageReference Include="Gu.Roslyn.Asserts.Analyzers" Version="3.2.2" PrivateAssets="None"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="2.9.4" />
+  </ItemGroup>
 </Project>

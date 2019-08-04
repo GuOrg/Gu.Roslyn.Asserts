@@ -3,12 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3F667CC4-0891-4FCB-A15F-BDCE00C4669A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{3F667CC4-0891-4FCB-A15F-BDCE00C4669A}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		paket.dependencies = paket.dependencies
-		paket.lock = paket.lock
-		.paket\Readme.paket.md = .paket\Readme.paket.md
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts", "Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj", "{FC4FEA0F-4047-4E99-A588-D0D4B9695F42}"

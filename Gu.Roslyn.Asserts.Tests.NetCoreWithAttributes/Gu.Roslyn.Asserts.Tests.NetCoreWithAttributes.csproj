@@ -6,8 +6,16 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <CodeAnalysisRuleSet>Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Gu.Roslyn.Asserts.Analyzers" Version="3.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
+  </ItemGroup>
 </Project>
