@@ -241,6 +241,103 @@ namespace N
 }";
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
             }
+
+            [Test]
+            public static void PropertyInBaseClass()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+         [Test]
+        public static void M()
+        {
+            var c1 = @""
+namespace N
+{
+    public class C1
+    {
+        public C1(int a, params int[] values)
+        {
+            this.A = a;
+            this.Values = values;
+        }
+
+        public int ↓A { get; }
+
+        public int[] Values { get; }
+    }
+}"";
+            var c2 = @""
+namespace N
+{
+    public class C2 : C1
+    {
+        public C2(int a, int b, int c, int d)
+            : base(a, b, c, d)
+        {
+        }
+    }
+}"";
+
+            RoslynAssert.Valid(Analyzer, c1, c2);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+         [Test]
+        public static void M()
+        {
+            var c1 = @""
+namespace N
+{
+    public class C1
+    {
+        public C1(int a, params int[] values)
+        {
+            this.P1 = a;
+            this.Values = values;
+        }
+
+        public int P1 { get; }
+
+        public int[] Values { get; }
+    }
+}"";
+            var c2 = @""
+namespace N
+{
+    public class C2 : C1
+    {
+        public C2(int a, int b, int c, int d)
+            : base(a, b, c, d)
+        {
+        }
+    }
+}"";
+
+            RoslynAssert.Valid(Analyzer, c1, c2);
+        }
+    }
+}";
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            }
         }
     }
 }

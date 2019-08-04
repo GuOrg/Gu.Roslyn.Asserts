@@ -129,7 +129,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     foreach (var word in Words)
                     {
                         var index = -1;
-                        while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
+                        while (this.TryFindIdentifier(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
                         {
                             if (token.IsKind(SyntaxKind.IdentifierToken) &&
                                 this.locations.Add(token) &&
@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     foreach (var word in PropertyWords)
                     {
                         var index = -1;
-                        while (this.TryFindToken(literal, word, index + 1, StringComparison.OrdinalIgnoreCase, out index, out var token))
+                        while (this.TryFindIdentifier(literal, word, index + 1, StringComparison.Ordinal, out index, out var token))
                         {
                             if (token.Parent.IsKind(SyntaxKind.PropertyDeclaration) &&
                                 token.ValueText == word &&
@@ -264,7 +264,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 if (this.literals.TrySingle(x => this.TryGetRoot(x, out _), out var single))
                 {
                     var index = -1;
-                    while (this.TryFindToken(single, candidateNames.WhenSingle, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
+                    while (this.TryFindIdentifier(single, candidateNames.WhenSingle, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
                     {
                         switch (candidateToken.Parent)
                         {
@@ -283,7 +283,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     foreach (var candidateLiteral in this.literals)
                     {
                         var index = -1;
-                        while (this.TryFindToken(candidateLiteral, name, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
+                        while (this.TryFindIdentifier(candidateLiteral, name, index + 1, StringComparison.Ordinal, out index, out var candidateToken))
                         {
                             switch (candidateToken.Parent)
                             {
@@ -315,6 +315,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             while (typeDeclaration.Members.TryFirst(x => IsCollision(x), out _))
                             {
                                 i++;
+                                if (i > 100)
+                                {
+                                    return null;
+                                }
                             }
 
                             return $"{name}{i}";
@@ -390,6 +394,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         return candidateDeclaration.Identifier.ValueText.IsParts(name, i.ToString());
                                     case BaseFieldDeclarationSyntax candidateDeclaration:
                                         return candidateDeclaration.Declaration.Variables.TrySingle(x => x.Identifier.ValueText.IsParts(name, i.ToString()), out _);
+                                    case ConstructorDeclarationSyntax _:
+                                        return false;
                                     default:
                                         return true;
                                 }
@@ -434,7 +440,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return root != null;
             }
 
-            private bool TryFindToken(LiteralExpressionSyntax literal, string word, int startIndex, StringComparison stringComparison, out int index, out SyntaxToken token)
+            private bool TryFindIdentifier(LiteralExpressionSyntax literal, string word, int startIndex, StringComparison stringComparison, out int index, out SyntaxToken token)
             {
                 index = literal.Token.Text.IndexOf(word, startIndex, stringComparison);
                 if (index >= 0 &&
@@ -448,7 +454,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     }
 
                     token = root.FindToken(index - offset - 1);
-                    return true;
+                    return token.IsKind(SyntaxKind.IdentifierToken);
                 }
 
                 token = default;
