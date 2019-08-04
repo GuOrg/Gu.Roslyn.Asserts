@@ -33,7 +33,6 @@ namespace N
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
 
-        [Explicit("Temp suppress.")]
         [Test]
         public static void ValidAnalyzerAndCodeAndMetadataReferences()
         {

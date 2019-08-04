@@ -46,6 +46,8 @@ namespace Gu.Roslyn.Asserts.Tests
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -121,6 +123,8 @@ namespace Gu.Roslyn.Asserts.Tests
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -267,6 +271,8 @@ namespace Gu.Roslyn.Asserts.Tests
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -511,6 +517,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: SyntaxFactory.TriviaList(
                     SyntaxFactory.Comment(""// ReSharper disable InconsistentNaming""),
@@ -746,6 +754,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -925,6 +935,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -1086,6 +1098,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -1249,6 +1263,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -1288,6 +1304,7 @@ namespace A.B
                     members: SyntaxFactory.SingletonSeparatedList<EnumMemberDeclarationSyntax>(
                         SyntaxFactory.EnumMemberDeclaration(
                             attributeLists: default,
+                            modifiers: default,
                             identifier: SyntaxFactory.Identifier(
                                 leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
                                 text: ""M"",
@@ -1323,6 +1340,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -1364,6 +1383,7 @@ namespace A.B
                         {
                             SyntaxFactory.EnumMemberDeclaration(
                                 attributeLists: default,
+                                modifiers: default,
                                 identifier: SyntaxFactory.Identifier(
                                     leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
                                     text: ""M1"",
@@ -1371,6 +1391,7 @@ namespace A.B
                                 equalsValue: default),
                             SyntaxFactory.EnumMemberDeclaration(
                                 attributeLists: default,
+                                modifiers: default,
                                 identifier: SyntaxFactory.Identifier(
                                     leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
                                     text: ""M2"",
@@ -1428,6 +1449,8 @@ namespace A.B
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
@@ -1539,6 +1562,7 @@ namespace A.B
                         {
                             SyntaxFactory.EnumMemberDeclaration(
                                 attributeLists: default,
+                                modifiers: default,
                                 identifier: SyntaxFactory.Identifier(
                                     leading: SyntaxFactory.TriviaList(
                                         SyntaxFactory.Whitespace(""        ""),
@@ -1616,6 +1640,7 @@ namespace A.B
                                 equalsValue: default),
                             SyntaxFactory.EnumMemberDeclaration(
                                 attributeLists: default,
+                                modifiers: default,
                                 identifier: SyntaxFactory.Identifier(
                                     leading: SyntaxFactory.TriviaList(
                                         SyntaxFactory.LineFeed,
@@ -1897,6 +1922,8 @@ class C
     attributeLists: default,
     members: SyntaxFactory.SingletonList<MemberDeclarationSyntax>(
         SyntaxFactory.NamespaceDeclaration(
+            attributeLists: default,
+            modifiers: default,
             namespaceKeyword: SyntaxFactory.Token(
                 leading: default,
                 kind: SyntaxKind.NamespaceKeyword,
