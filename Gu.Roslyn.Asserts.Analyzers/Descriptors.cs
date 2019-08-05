@@ -102,5 +102,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
             defaultSeverity: DiagnosticSeverity.Hidden,
             isEnabledByDefault: false,
             description: "Move to local for self contained tests.");
+
+        internal static readonly DiagnosticDescriptor GURA11ChainAssertReplace = new DiagnosticDescriptor(
+            id: "GURA11",
+            title: "Chain AssertReplace.",
+            messageFormat: "Chain AssertReplace.",
+            category: AnalyzerCategory.Ocd,
+            defaultSeverity: DiagnosticSeverity.Hidden,
+            isEnabledByDefault: false,
+            description: "Chain AssertReplace.");
     }
 }

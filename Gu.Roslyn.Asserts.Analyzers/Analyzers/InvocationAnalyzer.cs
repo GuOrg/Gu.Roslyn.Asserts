@@ -18,7 +18,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
             Descriptors.GURA01NameShouldMatchParameter,
             Descriptors.GURA02IndicateErrorPosition,
             Descriptors.GURA03NameShouldMatchCode,
-            Descriptors.GURA10UseLocal);
+            Descriptors.GURA10UseLocal,
+            Descriptors.GURA11ChainAssertReplace);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -30,170 +31,181 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is InvocationExpressionSyntax invocation &&
-                context.SemanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
-                method.ContainingType == KnownSymbols.RoslynAssert)
+                context.SemanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method))
             {
-                foreach (var parameter in method.Parameters)
+                if (method.ContainingType == KnownSymbols.RoslynAssert)
                 {
-                    if (parameter.Name == "before" ||
-                        (parameter.Name == "code" && method.Name == "Diagnostics"))
+                    foreach (var parameter in method.Parameters)
                     {
-                        if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
+                        if (parameter.Name == "before" ||
+                            (parameter.Name == "code" && method.Name == "Diagnostics"))
                         {
-                            Handle(single, ImmutableArray<StringArgument>.Empty);
-                        }
-                        else if (StringArgument.TryMany(invocation, parameter, context.SemanticModel, context.CancellationToken, out var stringArgs))
-                        {
-                            foreach (var arg in stringArgs)
+                            if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
                             {
-                                Handle(arg, stringArgs);
+                                Handle(single, ImmutableArray<StringArgument>.Empty);
                             }
-                        }
-
-                        void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
-                        {
-                            if (ShouldIndicatePosition())
+                            else if (StringArgument.TryMany(invocation, parameter, context.SemanticModel, context.CancellationToken, out var stringArgs))
                             {
-                                context.ReportDiagnostic(
-                                    Diagnostic.Create(
-                                        Descriptors.GURA02IndicateErrorPosition,
-                                        stringArg.Value.GetLocation()));
-                            }
-
-                            if (stringArg.Symbol is ISymbol symbol)
-                            {
-                                if (stringArg.TryGetNameFromCode(out var codeName) &&
-                                    ShouldRename(stringArg.Symbol, codeName, out codeName))
+                                foreach (var arg in stringArgs)
                                 {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA03NameShouldMatchCode,
-                                            stringArg.SymbolIdentifier.GetLocation(),
-                                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
-                                            symbol.Name,
-                                            codeName));
-                                }
-
-                                if (stringArg.Symbol.Kind == SymbolKind.Local &&
-                                    stringArg.HasPosition == true &&
-                                    ShouldRename(symbol, parameter.Name, out var parameterName))
-                                {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA01NameShouldMatchParameter,
-                                            stringArg.Expression.GetLocation(),
-                                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
-                                            symbol.Name,
-                                            parameterName));
-                                }
-
-                                if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
-                                {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA10UseLocal,
-                                            stringArg.Expression.GetLocation(),
-                                            additionalLocations: new[] { stringArg.Value.GetLocation() },
-                                            messageArgs: stringArg.Symbol.Name));
+                                    Handle(arg, stringArgs);
                                 }
                             }
 
-                            bool ShouldIndicatePosition()
+                            void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
                             {
-                                if (stringArg.HasPosition == false &&
-                                    stringArg.Symbol?.IsEitherKind(SymbolKind.Field, SymbolKind.Property) != true)
+                                if (ShouldIndicatePosition())
                                 {
-                                    if (stringArg.Symbol?.Name == parameter.Name)
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.GURA02IndicateErrorPosition,
+                                            stringArg.Value.GetLocation()));
+                                }
+
+                                if (stringArg.Symbol is ISymbol symbol)
+                                {
+                                    if (stringArg.TryGetNameFromCode(out var codeName) &&
+                                        ShouldRename(stringArg.Symbol, codeName, out codeName))
                                     {
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA03NameShouldMatchCode,
+                                                stringArg.SymbolIdentifier.GetLocation(),
+                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
+                                                symbol.Name,
+                                                codeName));
+                                    }
+
+                                    if (stringArg.Symbol.Kind == SymbolKind.Local &&
+                                        stringArg.HasPosition == true &&
+                                        ShouldRename(symbol, parameter.Name, out var parameterName))
+                                    {
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA01NameShouldMatchParameter,
+                                                stringArg.Expression.GetLocation(),
+                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
+                                                symbol.Name,
+                                                parameterName));
+                                    }
+
+                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                    {
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA10UseLocal,
+                                                stringArg.Expression.GetLocation(),
+                                                additionalLocations: new[] { stringArg.Value.GetLocation() },
+                                                messageArgs: stringArg.Symbol.Name));
+                                    }
+                                }
+
+                                bool ShouldIndicatePosition()
+                                {
+                                    if (stringArg.HasPosition == false &&
+                                        stringArg.Symbol?.IsEitherKind(SymbolKind.Field, SymbolKind.Property) != true)
+                                    {
+                                        if (stringArg.Symbol?.Name == parameter.Name)
+                                        {
+                                            return true;
+                                        }
+
+                                        foreach (var a in args)
+                                        {
+                                            if (a.Symbol?.Kind == SymbolKind.Local &&
+                                                (a.HasPosition != false ||
+                                                 a.Symbol.Name == parameter.Name))
+                                            {
+                                                return false;
+                                            }
+                                        }
+
                                         return true;
                                     }
 
-                                    foreach (var a in args)
+                                    return false;
+                                }
+                            }
+                        }
+                        else if (parameter.Name == "after" || parameter.Name == "code")
+                        {
+                            if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
+                            {
+                                Handle(single, ImmutableArray<StringArgument>.Empty);
+                            }
+                            else if (StringArgument.TryMany(invocation, parameter, context.SemanticModel, context.CancellationToken, out var stringArgs))
+                            {
+                                foreach (var arg in stringArgs)
+                                {
+                                    Handle(arg, stringArgs);
+                                }
+                            }
+
+                            void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
+                            {
+                                if (stringArg.Symbol is ISymbol symbol)
+                                {
+                                    if (stringArg.TryGetNameFromCode(out var codeName) &&
+                                        ShouldRename(stringArg.Symbol, codeName, out codeName))
                                     {
-                                        if (a.Symbol?.Kind == SymbolKind.Local &&
-                                            (a.HasPosition != false ||
-                                             a.Symbol.Name == parameter.Name))
-                                        {
-                                            return false;
-                                        }
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA03NameShouldMatchCode,
+                                                stringArg.SymbolIdentifier.GetLocation(),
+                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
+                                                symbol.Name,
+                                                codeName));
                                     }
 
-                                    return true;
-                                }
+                                    if (stringArg.Symbol.Kind == SymbolKind.Local &&
+                                        !args.TryFirst(x => x.Symbol is ILocalSymbol && !Equals(x.Symbol, stringArg.Symbol), out _) &&
+                                        ShouldRename(symbol, parameter.Name, out var parameterName))
+                                    {
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA01NameShouldMatchParameter,
+                                                stringArg.Expression.GetLocation(),
+                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
+                                                symbol.Name,
+                                                parameterName));
+                                    }
 
-                                return false;
-                            }
-                        }
-                    }
-                    else if (parameter.Name == "after" || parameter.Name == "code")
-                    {
-                        if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
-                        {
-                            Handle(single, ImmutableArray<StringArgument>.Empty);
-                        }
-                        else if (StringArgument.TryMany(invocation, parameter, context.SemanticModel, context.CancellationToken, out var stringArgs))
-                        {
-                            foreach (var arg in stringArgs)
-                            {
-                                Handle(arg, stringArgs);
-                            }
-                        }
-
-                        void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
-                        {
-                            if (stringArg.Symbol is ISymbol symbol)
-                            {
-                                if (stringArg.TryGetNameFromCode(out var codeName) &&
-                                    ShouldRename(stringArg.Symbol, codeName, out codeName))
-                                {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA03NameShouldMatchCode,
-                                            stringArg.SymbolIdentifier.GetLocation(),
-                                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
-                                            symbol.Name,
-                                            codeName));
-                                }
-
-                                if (stringArg.Symbol.Kind == SymbolKind.Local &&
-                                    !args.TryFirst(x => x.Symbol is ILocalSymbol && !Equals(x.Symbol, stringArg.Symbol), out _) &&
-                                    ShouldRename(symbol, parameter.Name, out var parameterName))
-                                {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA01NameShouldMatchParameter,
-                                            stringArg.Expression.GetLocation(),
-                                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
-                                            symbol.Name,
-                                            parameterName));
-                                }
-
-                                if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
-                                {
-                                    context.ReportDiagnostic(
-                                        Diagnostic.Create(
-                                            Descriptors.GURA10UseLocal,
-                                            stringArg.Expression.GetLocation(),
-                                            additionalLocations: new[] { stringArg.Value.GetLocation() },
-                                            messageArgs: stringArg.Symbol.Name));
+                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                    {
+                                        context.ReportDiagnostic(
+                                            Diagnostic.Create(
+                                                Descriptors.GURA10UseLocal,
+                                                stringArg.Expression.GetLocation(),
+                                                additionalLocations: new[] { stringArg.Value.GetLocation() },
+                                                messageArgs: stringArg.Symbol.Name));
+                                    }
                                 }
                             }
                         }
+                        else if (invocation.TryFindArgument(parameter, out var argument) &&
+                                 context.SemanticModel.TryGetSymbol(argument.Expression, context.CancellationToken, out var symbol) &&
+                                 ShouldRename(symbol, parameter.Name, out var newName) &&
+                                 context.SemanticModel.TryGetType(argument.Expression, context.CancellationToken, out var type) &&
+                                 ShouldRename(symbol, type.Name, out _))
+                        {
+                            context.ReportDiagnostic(
+                                Diagnostic.Create(
+                                    Descriptors.GURA01NameShouldMatchParameter,
+                                    argument.Expression.GetLocation(),
+                                    ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), newName),
+                                    symbol.Name,
+                                    newName));
+                        }
                     }
-                    else if (invocation.TryFindArgument(parameter, out var argument) &&
-                             context.SemanticModel.TryGetSymbol(argument.Expression, context.CancellationToken, out var symbol) &&
-                             ShouldRename(symbol, parameter.Name, out var newName) &&
-                             context.SemanticModel.TryGetType(argument.Expression, context.CancellationToken, out var type) &&
-                             ShouldRename(symbol, type.Name, out _))
-                    {
-                        context.ReportDiagnostic(
-                            Diagnostic.Create(
-                                Descriptors.GURA01NameShouldMatchParameter,
-                                argument.Expression.GetLocation(),
-                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), newName),
-                                symbol.Name,
-                                newName));
-                    }
+                }
+                else if (method.Name == "AssertReplace" &&
+                         ShouldChain(invocation, context.SemanticModel, context.CancellationToken, out var location, out var additionalLocation))
+                {
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Descriptors.GURA11ChainAssertReplace,
+                            location,
+                            additionalLocations: new[] { additionalLocation }));
                 }
             }
         }
@@ -235,6 +247,27 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         return false;
                 }
             }
+        }
+
+        private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, out Location location, out Location additionalLocation)
+        {
+            if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+                memberAccess.Expression is IdentifierNameSyntax identifierName &&
+                invocation.Parent is AssignmentExpressionSyntax assignment &&
+                assignment.Left is IdentifierNameSyntax left &&
+                left.Identifier.ValueText == identifierName.Identifier.ValueText &&
+                StringArgument.Create(identifierName, semanticModel, cancellationToken) is StringArgument stringArgument &&
+                stringArgument.Symbol?.Kind == SymbolKind.Local &&
+                stringArgument.Value.IsKind(SyntaxKind.StringLiteralExpression))
+            {
+                location = memberAccess.Name.GetLocation();
+                additionalLocation = stringArgument.Value.GetLocation();
+                return true;
+            }
+
+            location = null;
+            additionalLocation = null;
+            return false;
         }
 
         [DebuggerDisplay("{Expression}")]
@@ -363,36 +396,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
-            internal bool TryGetNameFromCode(out string codeName)
-            {
-                codeName = null;
-                return this.Value is LiteralExpressionSyntax literal &&
-                       (TryGetName(literal.Token.ValueText, "class ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "struct ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "enum ", out codeName));
-
-                bool TryGetName(string text, string prefix, out string name)
-                {
-                    var index = text.IndexOf(prefix, StringComparison.Ordinal);
-                    if (index >= 0 &&
-                        text.LastIndexOf("partial", index, StringComparison.Ordinal) < 0)
-                    {
-                        var start = index + prefix.Length;
-                        var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);
-                        if (end > start)
-                        {
-                            name = text.Substring(start, end - start).Replace("<", "Of").Replace(">", string.Empty);
-                            return true;
-                        }
-                    }
-
-                    name = null;
-                    return false;
-                }
-            }
-
-            private static StringArgument Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
+            internal static StringArgument Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
             {
                 if (expression is IdentifierNameSyntax candidate &&
                     semanticModel.TryGetSymbol(candidate, cancellationToken, out var candidateSymbol))
@@ -432,6 +436,35 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                     identifier = default;
                     result = null;
+                    return false;
+                }
+            }
+
+            internal bool TryGetNameFromCode(out string codeName)
+            {
+                codeName = null;
+                return this.Value is LiteralExpressionSyntax literal &&
+                       (TryGetName(literal.Token.ValueText, "class ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "struct ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
+                        TryGetName(literal.Token.ValueText, "enum ", out codeName));
+
+                bool TryGetName(string text, string prefix, out string name)
+                {
+                    var index = text.IndexOf(prefix, StringComparison.Ordinal);
+                    if (index >= 0 &&
+                        text.LastIndexOf("partial", index, StringComparison.Ordinal) < 0)
+                    {
+                        var start = index + prefix.Length;
+                        var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);
+                        if (end > start)
+                        {
+                            name = text.Substring(start, end - start).Replace("<", "Of").Replace(">", string.Empty);
+                            return true;
+                        }
+                    }
+
+                    name = null;
                     return false;
                 }
             }
