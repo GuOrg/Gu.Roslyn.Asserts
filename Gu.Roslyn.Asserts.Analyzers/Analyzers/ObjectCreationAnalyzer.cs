@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is ObjectCreationExpressionSyntax objectCreation &&
-                context.SemanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
+                context.SemanticModel.TryGetNamedType(objectCreation, context.CancellationToken, out var type) &&
                 type.Locations.Any(x => x.IsInSource))
             {
                 if (type.IsAssignableTo(KnownSymbols.CodeFixProvider, context.Compilation) ||
