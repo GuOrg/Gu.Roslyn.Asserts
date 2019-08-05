@@ -284,5 +284,47 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
+
+        [Test]
+        public static void WhenAssertReplacingOne()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [TestCase(""↓int"")]
+        [TestCase(""↓string"")]
+        public static void M(string type)
+        {
+            var c1 = @""
+namespace N
+{
+    public class C1
+    {
+    }
+}"";
+
+            var code = @""
+namespace N
+{
+    public class C2
+    {
+        public static void M(string text)
+        {
+        }
+    }
+}"".AssertReplace(""string"", type);
+            RoslynAssert.Diagnostics(Analyzer, c1, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
     }
 }
