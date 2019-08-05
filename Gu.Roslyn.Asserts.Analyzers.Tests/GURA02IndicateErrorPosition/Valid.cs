@@ -326,5 +326,47 @@ namespace N
 }";
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void WhenAssertReplacingOnePartial()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [TestCase(""↓int"")]
+        [TestCase(""↓string"")]
+        public static void M(string type)
+        {
+            var c1Part1 = @""
+namespace N
+{
+    public partial class C1
+    {
+    }
+}"";
+
+            var c1Part2 = @""
+namespace N
+{
+    public partial class C1
+    {
+        public static void M(string text)
+        {
+        }
+    }
+}"".AssertReplace(""string"", type);
+            RoslynAssert.Diagnostics(Analyzer, c1Part1, c1Part2);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
     }
 }

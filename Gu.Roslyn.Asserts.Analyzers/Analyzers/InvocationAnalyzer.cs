@@ -110,8 +110,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                     foreach (var a in args)
                                     {
-                                        if (a.HasPosition == true ||
-                                            a.Symbol?.Name == parameter.Name)
+                                        if (a.Symbol?.Kind == SymbolKind.Local &&
+                                            (a.HasPosition != false ||
+                                             a.Symbol.Name == parameter.Name))
                                         {
                                             return false;
                                         }
