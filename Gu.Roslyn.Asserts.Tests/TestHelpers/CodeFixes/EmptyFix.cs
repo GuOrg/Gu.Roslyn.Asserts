@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -6,10 +6,11 @@
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TwoFixProvider))]
-    internal class TwoFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(EmptyFix))]
+    internal class EmptyFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } =
+            ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
@@ -26,7 +27,7 @@
                 var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
                 if (!string.IsNullOrEmpty(token.ValueText))
                 {
-                    var newName = token.ValueText.TrimStart(new[] { '_' });
+                    var newName = token.ValueText.TrimStart('_');
 
                     if (string.IsNullOrEmpty(newName))
                     {
@@ -37,16 +38,9 @@
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: {newName + 1}",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(DoNotUseUnderscoreFix) + 1),
-                        diagnostic);
-
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            $"Rename to: {newName + 2}",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(DoNotUseUnderscoreFix) + 2),
+                            $"Rename to: {newName}",
+                            cancellationToken => Task.FromResult(context.Document.Project.Solution),
+                            nameof(EmptyFix)),
                         diagnostic);
                 }
             }

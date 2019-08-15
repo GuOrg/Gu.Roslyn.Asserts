@@ -131,7 +131,7 @@ namespace N
 }";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new NoCodeFixProvider();
+                var fix = new CodeFixes.NoFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +

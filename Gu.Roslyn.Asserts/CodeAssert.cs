@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(string expected, Document actual)
         {
-            AreEqual(expected, actual.GetCode(null), null);
+            AreEqual(expected, actual.GetCode(), null);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(Document expected, Document actual)
         {
-            AreEqual(expected.GetCode(null), actual.GetCode(null), null);
+            AreEqual(expected.GetCode(), actual.GetCode(), null);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         public static void AreEqual(Document expected, string actual)
         {
             AreEqual(
-                expected.GetCode(null),
+                expected.GetCode(),
                 actual,
                 null);
         }

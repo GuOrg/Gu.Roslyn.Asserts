@@ -6,11 +6,10 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DontUseUnderscoreManyCodeFixProvider))]
-    internal class DontUseUnderscoreManyCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameTwoFix))]
+    internal class RenameTwoFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-            ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
@@ -27,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
                 if (!string.IsNullOrEmpty(token.ValueText))
                 {
-                    var newName = token.ValueText.TrimStart('_');
+                    var newName = token.ValueText.TrimStart(new[] { '_' });
 
                     if (string.IsNullOrEmpty(newName))
                     {
@@ -38,16 +37,16 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: '{newName}1'",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName + "1", cancellationToken),
-                            nameof(DontUseUnderscoreManyCodeFixProvider) + "1"),
+                            $"Rename to: {newName + 1}",
+                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
+                            nameof(DoNotUseUnderscoreFix) + 1),
                         diagnostic);
 
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            $"Rename to: '{newName}2'",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName + "2", cancellationToken),
-                            nameof(DontUseUnderscoreManyCodeFixProvider) + "2"),
+                            $"Rename to: {newName + 2}",
+                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
+                            nameof(DoNotUseUnderscoreFix) + 2),
                         diagnostic);
                 }
             }

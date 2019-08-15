@@ -152,7 +152,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new NoCodeFixProvider();
+                var fix = new CodeFixes.NoFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = "Expected one code fix, was 0.";
                 Assert.AreEqual(expected, exception.Message);
@@ -170,7 +170,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new TwoFixProvider();
+                var fix = new RenameTwoFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = @"Expected only one code fix, found 2:
   Rename to: value1
@@ -194,7 +194,7 @@ namespace N
 }";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new EmptyCodeFixProvider();
+                var fix = new EmptyFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = "EmptyCodeFixProvider did not change any document.";
                 Console.Write(exception.Message);
@@ -442,7 +442,7 @@ namespace N
                                "    {\r\n" +
                                "    }\r\n" +
                                "}\r\n";
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before, part2 }, after));
                 CodeAssert.AreEqual(expected, exception.Message);
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before, part2 }, new[] { after, part2 }));
@@ -479,7 +479,7 @@ namespace N
                                "    at line 5 and character 21 in file Unknown | public event ↓EventHandler Bar;\r\n" +
                                "  CS0067 The event 'C.Bar' is never used\r\n" +
                                "    at line 5 and character 34 in file Unknown | public event EventHandler ↓Bar;\r\n";
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before, part2 }, string.Empty));
                 CodeAssert.AreEqual(expected, exception.Message);
 
@@ -532,7 +532,7 @@ namespace N
     }
 }";
                 var analyzer = new PropertyMustBeNamedValueAnalyzer();
-                var fix = new RenameToValueCodeFixProvider();
+                var fix = new RenameToValueFix();
                 var expected = "Mismatch on line 6 of file C1.cs.\r\n" +
                                "Expected:         public int ↓WrongName { get; }\r\n" +
                                "Actual:           public int Value { get; }\r\n" +
@@ -789,7 +789,7 @@ namespace N
 }
 ";
                 var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFixProvider();
+                var fix = new InsertEventFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 CodeAssert.AreEqual(expected, exception.Message);
             }

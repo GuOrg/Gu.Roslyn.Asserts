@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -6,11 +6,13 @@
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(EmptyCodeFixProvider))]
-    internal class EmptyCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToValueFix))]
+    internal class RenameToValueFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-            ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
+            FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId,
+            FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId,
+            PropertyMustBeNamedValueAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
@@ -27,7 +29,9 @@
                 var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
                 if (!string.IsNullOrEmpty(token.ValueText))
                 {
-                    var newName = token.ValueText.TrimStart('_');
+                    var newName = diagnostic.Id == FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId
+                        ? "value"
+                        : "Value";
 
                     if (string.IsNullOrEmpty(newName))
                     {
@@ -39,8 +43,8 @@
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             $"Rename to: {newName}",
-                            cancellationToken => Task.FromResult(context.Document.Project.Solution),
-                            nameof(EmptyCodeFixProvider)),
+                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
+                            nameof(RenameToValueFix)),
                         diagnostic);
                 }
             }

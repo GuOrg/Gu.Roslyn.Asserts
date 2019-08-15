@@ -56,7 +56,7 @@ namespace N
 }".AssertReplace("value", expected);
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                var fix = new DontUseUnderscoreManyFix();
                 RoslynAssert.FixAll(analyzer, fix, before, after, fixTitle);
             }
 
@@ -244,7 +244,7 @@ namespace N
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create("CS0067");
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { fixed1, fixed2 });
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { fixed2, fixed1 });
             }
@@ -280,7 +280,7 @@ namespace N
 }".AssertReplace("value", expected);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                var fix = new DontUseUnderscoreManyFix();
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, new[] { after, before2 }, fixTitle);
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, after, fixTitle);
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 }, fixTitle);
@@ -317,7 +317,7 @@ namespace N
     }
 }".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                var fix = new DontUseUnderscoreManyFix();
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, after, fixTitle);
             }
 
@@ -360,7 +360,7 @@ namespace N
     }
 }".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DontUseUnderscoreManyCodeFixProvider();
+                var fix = new DontUseUnderscoreManyFix();
                 RoslynAssert.FixAll(analyzer, fix, new[] { before1, before2 }, new[] { after1, after2 }, title);
             }
 
@@ -396,7 +396,7 @@ namespace N.Core
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { before2, after });
             }
@@ -433,7 +433,7 @@ namespace N.Core
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
@@ -471,7 +471,7 @@ namespace N.Core
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
             }
@@ -508,7 +508,7 @@ namespace N.Core
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
             }
@@ -545,7 +545,7 @@ namespace N.Client
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before2, out before2);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
             }
@@ -574,7 +574,7 @@ namespace N
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before, out before);
-                var fix = new RemoveUnusedFixProvider();
+                var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, before, after);
             }
 
@@ -638,7 +638,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFixProvider();
+                var fix = new InsertEventFix();
                 RoslynAssert.FixAll(analyzer, fix, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
             }
 
@@ -668,7 +668,7 @@ namespace N
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);
                 var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
-                var fix = new RenameToValueCodeFixProvider();
+                var fix = new RenameToValueFix();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
             }
         }

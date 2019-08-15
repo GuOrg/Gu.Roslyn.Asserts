@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading;
@@ -10,8 +10,8 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Editing;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertEventFixProvider))]
-    internal class InsertEventFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertEventFix))]
+    internal class InsertFullyQualifiedEventFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
 
@@ -33,7 +33,7 @@
                     CodeAction.Create(
                         $"Remove {classDeclaration}",
                         cancellationToken => ApplyFixAsync(cancellationToken, document, classDeclaration),
-                        nameof(InsertEventFixProvider)),
+                        nameof(InsertEventFix)),
                     diagnostic);
             }
         }
@@ -42,7 +42,7 @@
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);
-            editor.AddMember(classDeclaration, editor.Generator.EventDeclaration("E", SyntaxFactory.ParseTypeName("EventHandler"), Accessibility.Public));
+            editor.AddMember(classDeclaration, editor.Generator.EventDeclaration("E", SyntaxFactory.ParseTypeName("System.EventHandler"), Accessibility.Public));
             return editor.GetChangedDocument();
         }
     }

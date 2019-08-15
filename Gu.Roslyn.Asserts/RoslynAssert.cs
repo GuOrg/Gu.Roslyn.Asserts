@@ -9,7 +9,6 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
-    using Microsoft.CodeAnalysis.Formatting;
 
     /// <summary>
     /// The RoslynAssert class contains a collection of static methods used for assertions on the behavior of analyzers and code fixes.
@@ -159,7 +158,7 @@ namespace Gu.Roslyn.Asserts
             {
                 foreach (var document in project.Documents)
                 {
-                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(document, Formatter.Annotation, CancellationToken.None).ConfigureAwait(false);
+                    var fixedSource = await CodeReader.GetStringFromDocumentAsync(document, CancellationToken.None).ConfigureAwait(false);
                     CodeAssert.AreEqual(FindExpected(fixedSource), fixedSource, messageHeader);
                 }
             }
@@ -208,7 +207,7 @@ namespace Gu.Roslyn.Asserts
                 }
 
                 errorBuilder.AppendLine("First source file with error is:");
-                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, Formatter.Annotation, CancellationToken.None)));
+                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
                 var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();
                 var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == lineSpan.Path);
                 errorBuilder.Append(match);

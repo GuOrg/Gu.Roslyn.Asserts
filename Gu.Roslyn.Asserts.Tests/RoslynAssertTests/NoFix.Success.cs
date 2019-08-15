@@ -22,11 +22,11 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new NoCodeFixProvider();
+                var fix = new CodeFixes.NoFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 RoslynAssert.NoFix(analyzer, fix, code);
-                RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, code);
-                RoslynAssert.NoFix(analyzer, new NoCodeFixProvider(), expectedDiagnostic, new List<string> { code });
+                RoslynAssert.NoFix(analyzer, new CodeFixes.NoFix(), expectedDiagnostic, code);
+                RoslynAssert.NoFix(analyzer, new CodeFixes.NoFix(), expectedDiagnostic, new List<string> { code });
             }
 
             [Test]
@@ -42,7 +42,7 @@ namespace N
 }";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new NoCodeFixProvider();
+                var fix = new CodeFixes.NoFix();
                 RoslynAssert.NoFix(analyzer, fix, code);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code);
@@ -70,7 +70,7 @@ namespace N
 }";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new NoCodeFixProvider();
+                var fix = new CodeFixes.NoFix();
                 RoslynAssert.NoFix(analyzer, fix, barCode, code);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, barCode, code);

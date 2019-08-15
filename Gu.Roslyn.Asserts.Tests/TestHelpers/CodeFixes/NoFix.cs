@@ -5,8 +5,8 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NoCodeFixProvider))]
-    internal class NoCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NoFix))]
+    internal class NoFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 

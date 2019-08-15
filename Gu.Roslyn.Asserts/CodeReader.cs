@@ -43,13 +43,16 @@ namespace Gu.Roslyn.Asserts
 
         /// <summary>
         /// Get the code from the document.
+        /// Runs simplifier and formatter on the document before returning the source text.
         /// </summary>
         /// <param name="document">The document.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
-        public static string GetCode(this Document document, SyntaxAnnotation format)
+        public static string GetCode(this Document document)
         {
-            return GetStringFromDocumentAsync(document, format, CancellationToken.None).GetAwaiter().GetResult();
+            return GetStringFromDocumentAsync(document, CancellationToken.None).GetAwaiter().GetResult();
         }
+
+        [Obsolete("Use overload without annotation argument.")]
+        public static string GetCode(this Document document, SyntaxAnnotation format) => GetCode(document);
 
         /// <summary>
         /// Get the filename from code as a string.
@@ -241,33 +244,14 @@ namespace Gu.Roslyn.Asserts
         /// Gets the simplified and formatted text from the document.
         /// </summary>
         /// <param name="document">The document to extract the source code from.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
-        internal static async Task<string> GetStringFromDocumentAsync(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)
+        internal static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {
-            var simplifiedDoc = await Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false);
-            var formatted = format == null
-                    ? await Formatter.FormatAsync(simplifiedDoc, cancellationToken: cancellationToken).ConfigureAwait(false)
-                    : await Formatter.FormatAsync(simplifiedDoc, format, cancellationToken: cancellationToken).ConfigureAwait(false);
-            var sourceText = await formatted.GetTextAsync(cancellationToken).ConfigureAwait(false);
-            return sourceText.ToString();
-        }
-
-        /// <summary>
-        /// Gets the simplified and formatted text from the document.
-        /// </summary>
-        /// <param name="document">The document to extract the source code from.</param>
-        /// <param name="format">If null the whole document is formatted, for fixed code use <see cref="Formatter.Annotation"/>.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
-        internal static string GetStringFromDocument(Document document, SyntaxAnnotation format, CancellationToken cancellationToken)
-        {
-            var simplifiedDoc = Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-            var formatted = format == null
-                ? Formatter.FormatAsync(simplifiedDoc, cancellationToken: cancellationToken).GetAwaiter().GetResult()
-                : Formatter.FormatAsync(simplifiedDoc, format, cancellationToken: cancellationToken).GetAwaiter().GetResult();
-            var sourceText = formatted.GetTextAsync(cancellationToken).GetAwaiter().GetResult();
+            document = await Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false);
+            document = await Formatter.FormatAsync(document, Formatter.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
+            document = await Formatter.FormatAsync(document, SyntaxAnnotation.ElasticAnnotation, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var sourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);
             return sourceText.ToString();
         }
     }

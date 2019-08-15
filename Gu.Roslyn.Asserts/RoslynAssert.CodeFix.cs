@@ -385,7 +385,7 @@ namespace Gu.Roslyn.Asserts
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(
                 expectedDiagnostic,
-                solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode(null)).ToArray());
+                solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode()).ToArray());
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, solution);
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
         }

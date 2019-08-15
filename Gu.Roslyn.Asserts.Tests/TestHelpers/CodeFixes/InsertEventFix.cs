@@ -10,10 +10,10 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Editing;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MakeSealedFixProvider))]
-    internal class MakeSealedFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertEventFix))]
+    internal class InsertEventFix : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustBeSealedAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider()
         {
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                                            .FirstAncestorOrSelf<ClassDeclarationSyntax>();
                 context.RegisterCodeFix(
                     CodeAction.Create(
-                        $"Make sealed.",
+                        $"Remove {classDeclaration}",
                         cancellationToken => ApplyFixAsync(cancellationToken, document, classDeclaration),
                         nameof(InsertEventFix)),
                     diagnostic);
@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);
-            editor.SetModifiers(classDeclaration, DeclarationModifiers.From(editor.SemanticModel.GetDeclaredSymbol(classDeclaration)).WithIsSealed(isSealed: true));
+            editor.AddMember(classDeclaration, editor.Generator.EventDeclaration("E", SyntaxFactory.ParseTypeName("EventHandler"), Accessibility.Public));
             return editor.GetChangedDocument();
         }
     }

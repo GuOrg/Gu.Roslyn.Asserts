@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading;
@@ -9,8 +9,8 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Editing;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveUnusedFixProvider))]
-    internal class RemoveUnusedFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveUnusedFix))]
+    internal class RemoveUnusedFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0067");
 
@@ -32,7 +32,7 @@
                     CodeAction.Create(
                         $"Remove {member}",
                         cancellationToken => ApplyFixAsync(cancellationToken, document, member),
-                        nameof(RemoveUnusedFixProvider)),
+                        nameof(RemoveUnusedFix)),
                     diagnostic);
             }
         }
