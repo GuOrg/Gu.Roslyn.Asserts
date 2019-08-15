@@ -248,7 +248,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A <see cref="Task"/> with the source text for the document.</returns>
         internal static async Task<string> GetStringFromDocumentAsync(Document document, CancellationToken cancellationToken)
         {
-            document = await Simplifier.ReduceAsync(document, cancellationToken: cancellationToken).ConfigureAwait(false);
+            document = await Simplifier.ReduceAsync(document, Simplifier.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
             document = await Formatter.FormatAsync(document, Formatter.Annotation, cancellationToken: cancellationToken).ConfigureAwait(false);
             document = await Formatter.FormatAsync(document, SyntaxAnnotation.ElasticAnnotation, cancellationToken: cancellationToken).ConfigureAwait(false);
             var sourceText = await document.GetTextAsync(cancellationToken).ConfigureAwait(false);

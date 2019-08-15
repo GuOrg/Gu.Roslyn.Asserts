@@ -200,7 +200,7 @@ namespace Gu.Roslyn.Asserts
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();
-                errorBuilder.AppendLine($"{fix} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                errorBuilder.AppendLine($"{fix.GetType().Name} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
                     errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");

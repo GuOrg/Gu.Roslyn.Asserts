@@ -196,7 +196,7 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new EmptyFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
-                var expected = "EmptyCodeFixProvider did not change any document.";
+                var expected = "EmptyFix did not change any document.";
                 Console.Write(exception.Message);
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -775,7 +775,7 @@ namespace N
     }
 }";
 
-                var expected = @"Gu.Roslyn.Asserts.Tests.CodeFixes.InsertEventFixProvider introduced syntax error.
+                var expected = @"InsertEventFix introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
   at line 5 and character 21 in file C.cs | public event ↓EventHandler E;
 First source file with error is:
