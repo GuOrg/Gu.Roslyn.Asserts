@@ -2,7 +2,6 @@
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Collections.Generic;
-    using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
     [TestFixture]
