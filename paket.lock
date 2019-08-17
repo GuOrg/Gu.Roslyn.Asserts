@@ -210,7 +210,7 @@ GROUP Analyzer
 STORAGE: NONE
 NUGET
   remote: http://www.nuget.org/api/v2
-    Gu.Roslyn.Extensions (0.6.0-dev)
+    Gu.Roslyn.Extensions (0.6.2.1-dev)
       Microsoft.CodeAnalysis.CSharp.Workspaces (>= 2.3.1) - restriction: >= netstandard1.3
       NETStandard.Library (>= 1.6.1) - restriction: >= netstandard1.3
     ManagedEsent (1.9.4) - restriction: >= net46
@@ -1660,7 +1660,7 @@ NUGET
       System.Runtime (>= 4.3) - restriction: || (&& (< net452) (>= netstandard1.4) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0))
       System.Security.Cryptography.Algorithms (>= 4.3) - restriction: || (&& (< net452) (>= netstandard1.4) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0))
       System.Security.Cryptography.Cng (>= 4.3) - restriction: || (&& (< net452) (>= netstandard1.4) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0))
-    Microsoft.Azure.Services.AppAuthentication (1.3) - restriction: >= netcoreapp2.2
+    Microsoft.Azure.Services.AppAuthentication (1.3.1) - restriction: >= netcoreapp2.2
       Microsoft.IdentityModel.Clients.ActiveDirectory (>= 4.3) - restriction: || (&& (>= net452) (< netstandard1.4)) (&& (< net452) (>= netstandard1.4) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0)) (>= net461)
       System.Diagnostics.Process (>= 4.3) - restriction: || (&& (< net452) (>= netstandard1.4) (< netstandard2.0)) (&& (< net452) (>= netstandard2.0))
     Microsoft.CodeAnalysis.Analyzers (2.9.4) - restriction: >= netstandard2.0
@@ -1907,7 +1907,7 @@ NUGET
       Microsoft.Extensions.DependencyInjection.Abstractions (>= 2.2) - restriction: >= netstandard2.0
       Microsoft.Extensions.Options (>= 2.2) - restriction: >= netstandard2.0
       System.Text.Encodings.Web (>= 4.5) - restriction: >= netstandard2.0
-    Microsoft.IdentityModel.Clients.ActiveDirectory (5.1.1) - restriction: >= netcoreapp2.2
+    Microsoft.IdentityModel.Clients.ActiveDirectory (5.2) - restriction: >= netcoreapp2.2
       Microsoft.CSharp (>= 4.3) - restriction: && (< monoandroid8.1) (< net45) (>= netstandard1.3) (< uap10.0) (< xamarinios)
       NETStandard.Library (>= 1.6.1) - restriction: && (< monoandroid8.1) (< net45) (>= netstandard1.3) (< uap10.0) (< xamarinios)
       System.ComponentModel.TypeConverter (>= 4.3) - restriction: && (< monoandroid8.1) (< net45) (>= netstandard1.3) (< uap10.0) (< xamarinios)
@@ -2943,7 +2943,7 @@ NUGET
       Microsoft.VisualStudio.Threading.Analyzers (>= 16.3.13) - restriction: >= netstandard1.3
       NETStandard.Library (>= 1.6.1) - restriction: >= netstandard1.3
     Microsoft.VisualStudio.Threading.Analyzers (16.3.13) - restriction: >= net46
-    Microsoft.VSSDK.BuildTools (16.3.1066)
+    Microsoft.VSSDK.BuildTools (16.3.2093)
       Microsoft.VisualStudio.SDK.Analyzers (>= 15.8.33) - restriction: >= net46
     Microsoft.Win32.Primitives (4.3) - restriction: || (&& (< net45) (>= net46) (>= netstandard1.4) (< netstandard1.5)) (&& (< net45) (>= net46) (>= netstandard1.5) (< netstandard1.6)) (&& (< net45) (>= net46) (>= netstandard1.6) (< netstandard2.0)) (&& (>= net46) (< netstandard1.4)) (&& (>= net46) (< netstandard1.5) (>= uap10.0))
     NETStandard.Library (2.0.3) - restriction: >= net46
