@@ -775,6 +775,9 @@ namespace N
     }
 }";
 
+                var analyzer = new ClassMustHaveEventAnalyzer();
+                var fix = new InsertEventFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = @"InsertEventFix introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
   at line 5 and character 21 in file C.cs | public event ↓EventHandler E;
@@ -788,9 +791,6 @@ namespace N
     }
 }
 ";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 

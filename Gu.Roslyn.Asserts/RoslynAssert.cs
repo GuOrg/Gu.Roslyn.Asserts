@@ -206,12 +206,27 @@ namespace Gu.Roslyn.Asserts
                     errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
-                errorBuilder.AppendLine("First source file with error is:");
                 var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
+
+                errorBuilder.AppendLine("First source file with error is:");
                 var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();
-                var match = sources.SingleOrDefault(x => CodeReader.FileName(x) == lineSpan.Path);
-                errorBuilder.Append(match);
-                errorBuilder.AppendLine();
+                if (sources.TrySingle(x => CodeReader.FileName(x) == lineSpan.Path, out var match))
+                {
+                    errorBuilder.AppendLine(match);
+                }
+                else if (sources.TryFirst(x => CodeReader.FileName(x) == lineSpan.Path, out _))
+                {
+                    errorBuilder.AppendLine($"Found more than one document for {lineSpan.Path}.");
+                    foreach (string source in sources.Where(x => CodeReader.FileName(x) == lineSpan.Path))
+                    {
+                        errorBuilder.AppendLine(source);
+                    }
+                }
+                else
+                {
+                    errorBuilder.AppendLine($"Did not find a single document for {lineSpan.Path}.");
+                }
+
                 throw new AssertException(errorBuilder.Return());
             }
         }
