@@ -590,7 +590,7 @@ namespace N
     }
 }";
 
-                var testCode = @"
+                var before = @"
 namespace N
 {
     class C
@@ -610,12 +610,12 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, new[] { barCode, after });
-                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, after);
-                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, after);
-                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, testCode }, new[] { barCode, after });
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { barCode, testCode }, after);
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { barCode, testCode }, new[] { barCode, after });
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, new[] { barCode, after });
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, after);
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, after);
+                RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, new[] { barCode, after });
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { barCode, before }, after);
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { barCode, before }, new[] { barCode, after });
             }
 
             [Test]
