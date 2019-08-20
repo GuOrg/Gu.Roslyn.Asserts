@@ -56,7 +56,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 if ((!type.IsStatic || type.DeclaredAccessibility != Accessibility.Public) &&
                     UsingDirectiveWalker.IsUsingNUnit(context.SemanticModel.SyntaxTree) &&
                     type.BaseType == KnownSymbols.Object &&
-                    type.Interfaces.IsDefaultOrEmpty)
+                    type.Interfaces.IsDefaultOrEmpty &&
+                    type.TryFindFirstMethod(x => x.TryGetAttribute(KnownSymbols.NUnitTestAttribute, out _) || x.TryGetAttribute(KnownSymbols.NUnitTestCaseAttribute, out _), out _))
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(
