@@ -9,7 +9,7 @@ releasenotes
   BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
 
 dependencies
-  Gu.Roslyn.Asserts.Analyzers >= 3.2.2
+  Gu.Roslyn.Asserts.Analyzers >= 3.2.3
 
 excludedgroups
   Analyzers
