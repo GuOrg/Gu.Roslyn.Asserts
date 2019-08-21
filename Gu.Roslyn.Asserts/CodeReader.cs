@@ -51,6 +51,12 @@ namespace Gu.Roslyn.Asserts
             return GetStringFromDocumentAsync(document, CancellationToken.None).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Get the code from the document.
+        /// Runs simplifier and formatter on the document before returning the source text.
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <param name="format">The <see cref="SyntaxAnnotation"/>.</param>
         [Obsolete("Use overload without annotation argument.")]
         public static string GetCode(this Document document, SyntaxAnnotation format) => GetCode(document);
 
