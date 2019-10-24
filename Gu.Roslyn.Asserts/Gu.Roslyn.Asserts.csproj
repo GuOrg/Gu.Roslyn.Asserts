@@ -16,7 +16,6 @@
     <Version>3.2.3</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <Description>Asserts for testing Roslyn analyzers and code fixes.</Description>
@@ -28,6 +27,8 @@
       Make analyzers default disabled. Most of them are pretty useless.
       BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
     </PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +41,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Gu.Roslyn.Extensions" Version="0.6.2.1-dev" />
     <PackageReference Include="IDisposableAnalyzers" Version="2.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
