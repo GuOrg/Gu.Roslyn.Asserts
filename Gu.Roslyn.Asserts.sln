@@ -5,10 +5,14 @@ VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{3F667CC4-0891-4FCB-A15F-BDCE00C4669A}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		azure-pipelines.yml = azure-pipelines.yml
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
 		.paket\Readme.paket.md = .paket\Readme.paket.md
+		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts", "Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj", "{FC4FEA0F-4047-4E99-A588-D0D4B9695F42}"
@@ -34,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net472WithAttributes", "Gu.Roslyn.Asserts.Tests.Net472WithAttributes\Gu.Roslyn.Asserts.Tests.Net472WithAttributes.csproj", "{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstView", "AstView\AstView.csproj", "{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstView", "AstView\AstView.csproj", "{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Analyzers", "Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj", "{0CBEE9C8-ADCB-4179-BB1B-DEC041AF0919}"
 EndProject
