@@ -924,10 +924,12 @@ NUGET
     AsyncUsageAnalyzers (1.0.0-alpha003)
     Gu.Analyzers (1.5.5-dev)
     IDisposableAnalyzers (2.1.2)
-    Microsoft.CodeAnalysis.PublicApiAnalyzers (2.9.4)
+    Microsoft.CodeAnalysis.PublicApiAnalyzers (2.9.6)
     PropertyChangedAnalyzers (2.7.2)
     ReflectionAnalyzers (0.1.20-dev)
-    StyleCop.Analyzers (1.1.118)
+    StyleCop.Analyzers (1.2.0-beta.66)
+      StyleCop.Analyzers.Unstable (>= 1.2.0.66)
+    StyleCop.Analyzers.Unstable (1.2.0.66)
 
 GROUP Build
 STORAGE: NONE
