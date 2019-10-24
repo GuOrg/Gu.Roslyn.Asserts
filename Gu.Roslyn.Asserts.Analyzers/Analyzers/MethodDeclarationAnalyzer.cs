@@ -466,7 +466,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 internal readonly string WhenSingle;
                 internal readonly string Else;
 
-                public Names(string whenSingle, string @else)
+                internal Names(string whenSingle, string @else)
                 {
                     this.WhenSingle = whenSingle;
                     this.Else = @else;

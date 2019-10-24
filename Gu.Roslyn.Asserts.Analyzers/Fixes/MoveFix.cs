@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 var editor = await DocumentEditor.CreateAsync(context.Document.Project.GetDocument(classDeclarationSyntax.SyntaxTree), cancellationToken)
                                                                  .ConfigureAwait(false);
-                                editor.AddMethod(classDeclarationSyntax, methodDeclaration);
+                                _ = editor.AddMethod(classDeclarationSyntax, methodDeclaration);
                                 return context.Document.Project.Solution.WithDocumentSyntaxRoot(
                                     context.Document.Id,
                                     syntaxRoot.RemoveNode(methodDeclaration, SyntaxRemoveOptions.AddElasticMarker))

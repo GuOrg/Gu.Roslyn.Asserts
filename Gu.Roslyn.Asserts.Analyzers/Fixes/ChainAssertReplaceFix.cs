@@ -36,7 +36,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         "Chain AssertReplace.",
                         (e, c) =>
                         {
-                            e.ReplaceNode(
+                            _ = e.ReplaceNode(
                                 literal,
                                 x => invocation.WithExpression(
                                     SyntaxFactory.MemberAccessExpression(
