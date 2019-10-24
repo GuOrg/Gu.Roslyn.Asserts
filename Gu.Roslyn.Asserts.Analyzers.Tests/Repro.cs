@@ -27,6 +27,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void Run(DiagnosticAnalyzer analyzer)
         {
+            Assert.Inconclusive("VS does not understand [Explicit]");
             var diagnostics = Analyze.GetDiagnostics(Solution, analyzer);
             RoslynAssert.NoDiagnostics(diagnostics);
         }

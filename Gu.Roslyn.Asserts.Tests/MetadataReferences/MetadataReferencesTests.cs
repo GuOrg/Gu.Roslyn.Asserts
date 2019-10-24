@@ -30,6 +30,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveMscorlibFullNames()
         {
+            Assert.Inconclusive("VS does not understand [Explicit]");
 #if NET472
             var expected = new[] { "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll" };
 #elif NETCOREAPP2_0
@@ -83,6 +84,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveGenericFullNames()
         {
+            Assert.Inconclusive("VS does not understand [Explicit]");
 #if NET472
             var expected = new[]
             {
@@ -218,6 +220,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveSystemCoreFullNames()
         {
+            Assert.Inconclusive("VS does not understand [Explicit]");
 #if NET472
             var expected = new[]
             {
