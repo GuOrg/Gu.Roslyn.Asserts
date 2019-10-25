@@ -293,12 +293,15 @@ namespace Gu.Roslyn.Asserts
             var context = new RefactoringContext(document, refactoring, position);
             var token = context.SyntaxRoot.FindToken(position);
             refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(token.Span)).GetAwaiter().GetResult();
-            return context.Actions.Count switch
+            switch (context.Actions.Count)
             {
-                0 => SingleAction(context, token.Parent),
-                1 => context.Actions[0],
-                _ => throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it."),
-            };
+                case 0:
+                    return SingleAction(context, token.Parent);
+                case 1:
+                    return context.Actions[0];
+                default:
+                    throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
+            }
         }
 
         private static CodeAction SingleAction(RefactoringContext context, SyntaxNode node)
@@ -307,12 +310,15 @@ namespace Gu.Roslyn.Asserts
                 node.SpanStart == context.Position)
             {
                 context.Refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(node.Span)).GetAwaiter().GetResult();
-                return context.Actions.Count switch
+                switch (context.Actions.Count)
                 {
-                    0 => SingleAction(context, node.Parent),
-                    1 => context.Actions[0],
-                    _ => throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it."),
-                };
+                    case 0:
+                        return SingleAction(context, node.Parent);
+                    case 1:
+                        return context.Actions[0];
+                    default:
+                        throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
+                }
             }
 
             throw new InvalidOperationException("The refactoring did not register any refactorings at the position.");

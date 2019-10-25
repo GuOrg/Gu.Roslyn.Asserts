@@ -238,13 +238,17 @@ namespace Gu.Roslyn.Asserts
 
         private static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
         {
-            return allowedDiagnostics switch
+            switch (allowedDiagnostics)
             {
-                AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
-                AllowedDiagnostics.None => diagnostic.Severity == DiagnosticSeverity.Error || diagnostic.Severity == DiagnosticSeverity.Warning,
-                AllowedDiagnostics.WarningsAndErrors => false,
-                _ => throw new ArgumentOutOfRangeException(),
-            };
+                case AllowedDiagnostics.Warnings:
+                    return diagnostic.Severity == DiagnosticSeverity.Error;
+                case AllowedDiagnostics.None:
+                    return diagnostic.Severity == DiagnosticSeverity.Error || diagnostic.Severity == DiagnosticSeverity.Warning;
+                case AllowedDiagnostics.WarningsAndErrors:
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

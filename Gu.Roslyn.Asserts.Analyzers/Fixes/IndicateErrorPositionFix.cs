@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         nameof(IndicateErrorPositionFix),
                         diagnostic);
 
-                    static string InsertPosition(string text)
+                    string InsertPosition(string text)
                     {
                         var i = text.IndexOf('"') + 1;
                         return $"{text.Substring(0, i)}↓{text.Substring(i)}";

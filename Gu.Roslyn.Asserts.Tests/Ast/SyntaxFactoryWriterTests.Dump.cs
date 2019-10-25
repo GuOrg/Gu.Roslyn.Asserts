@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     return false;
                 }
 
-                static string Property(ParameterInfo parameter)
+                string Property(ParameterInfo parameter)
                 {
                     switch (parameter.Name)
                     {
@@ -127,7 +127,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
                 Console.WriteLine(stringBuilder.ToString());
 
-                static string When(MethodInfo method)
+                string When(MethodInfo method)
                 {
                     if (method.GetParameters().Any(x => x.Name == "valueText"))
                     {
@@ -142,7 +142,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     return string.Empty;
                 }
 
-                static string Property(ParameterInfo parameter)
+                string Property(ParameterInfo parameter)
                 {
                     switch (parameter.Name)
                     {

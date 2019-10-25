@@ -237,12 +237,15 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             bool IsConst()
             {
-                return symbol switch
+                switch (symbol)
                 {
-                    IFieldSymbol field => field.IsConst,
-                    ILocalSymbol local => local.IsConst,
-                    _ => false,
-                };
+                    case IFieldSymbol field:
+                        return field.IsConst;
+                    case ILocalSymbol local:
+                        return local.IsConst;
+                    default:
+                        return false;
+                }
             }
         }
 
@@ -289,14 +292,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 get
                 {
-                    return this.Value switch
+                    switch (this.Value)
                     {
-                        LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
-                        InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+                        case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression):
+                            return literal.Token.ValueText.Contains("↓");
+                        case InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                                                                         memberAccess.Expression is LiteralExpressionSyntax literal &&
-                                                                        literal.Token.ValueText.Contains("↓") => true,
-                        _ => (bool?)null,
-                    };
+                                                                        literal.Token.ValueText.Contains("↓"):
+                            return true;
+                        default:
+                            return null;
+                    }
                 }
             }
 
@@ -443,7 +449,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
                         TryGetName(literal.Token.ValueText, "enum ", out codeName));
 
-                static bool TryGetName(string text, string prefix, out string name)
+                bool TryGetName(string text, string prefix, out string name)
                 {
                     var index = text.IndexOf(prefix, StringComparison.Ordinal);
                     if (index >= 0 &&

@@ -388,7 +388,7 @@ namespace Gu.Roslyn.Asserts
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
-            suppressWarnings ??= Enumerable.Empty<string>();
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
@@ -403,7 +403,7 @@ namespace Gu.Roslyn.Asserts
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-            suppressWarnings ??= Enumerable.Empty<string>();
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
@@ -624,7 +624,7 @@ namespace Gu.Roslyn.Asserts
 
             return diagnosticOptions;
 
-            static ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
+            ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
             {
                 switch (severity)
                 {
@@ -661,7 +661,7 @@ namespace Gu.Roslyn.Asserts
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
-            suppressWarnings ??= Enumerable.Empty<string>();
+            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
         }
     }

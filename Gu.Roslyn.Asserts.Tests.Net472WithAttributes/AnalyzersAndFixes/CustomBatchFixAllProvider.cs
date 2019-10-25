@@ -195,14 +195,19 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
                 diagnosticId = string.Join(",", diagnosticIds.ToArray());
             }
 
-            return fixAllContext.Scope switch
+            switch (fixAllContext.Scope)
             {
-                FixAllScope.Custom => $"Fix all occurrences of {diagnosticId} in custom scope.",
-                FixAllScope.Document => $"Fix all occurrences of {diagnosticId} in document.",
-                FixAllScope.Project => $"Fix all occurrences of {diagnosticId} in project.",
-                FixAllScope.Solution => $"Fix all occurrences of {diagnosticId} in solution.",
-                _ => throw new InvalidOperationException("Not reachable"),
-            };
+                case FixAllScope.Custom:
+                    return $"Fix all occurrences of {diagnosticId} in custom scope.";
+                case FixAllScope.Document:
+                    return $"Fix all occurrences of {diagnosticId} in document.";
+                case FixAllScope.Project:
+                    return $"Fix all occurrences of {diagnosticId} in project.";
+                case FixAllScope.Solution:
+                    return $"Fix all occurrences of {diagnosticId} in solution.";
+                default:
+                    throw new InvalidOperationException("Not reachable");
+            }
         }
 
         internal virtual Task<ImmutableDictionary<Document, ImmutableArray<Diagnostic>>> GetDocumentDiagnosticsToFixAsync(FixAllContext fixAllContext)
@@ -271,7 +276,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
                                 existingDocument,
                                 document,
                             };
-                            documentsToMergeMap ??= new Dictionary<DocumentId, List<Document>>();
+                            documentsToMergeMap = documentsToMergeMap ?? new Dictionary<DocumentId, List<Document>>();
                             documentsToMergeMap[documentId] = documentsToMerge;
                         }
                         else

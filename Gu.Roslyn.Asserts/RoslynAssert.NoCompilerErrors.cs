@@ -87,11 +87,13 @@ namespace Gu.Roslyn.Asserts
                     return true;
                 }
 
-                return diagnostic.Id switch
+                switch (diagnostic.Id)
                 {
-                    "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type") => true,
-                    _ => false,
-                };
+                        case "CS1061" when diagnostic.GetMessage(CultureInfo.InvariantCulture).Contains("does not contain a definition for 'InitializeComponent' and no accessible extension method 'InitializeComponent' accepting a first argument of type"):
+                            return true;
+                }
+
+                return false;
             }
         }
     }

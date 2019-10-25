@@ -116,7 +116,7 @@ namespace Gu.Roslyn.Asserts
         {
             return Transitive(typesInAssemblies.SelectMany(t => Assemblies(t)).ToArray());
 
-            static IEnumerable<Assembly> Assemblies(Type type)
+            IEnumerable<Assembly> Assemblies(Type type)
             {
                 yield return type.Assembly;
                 if (type.IsGenericType)
@@ -144,7 +144,7 @@ namespace Gu.Roslyn.Asserts
 
         private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> recursiveAssemblies = null)
         {
-            recursiveAssemblies ??= new HashSet<Assembly>();
+            recursiveAssemblies = recursiveAssemblies ?? new HashSet<Assembly>();
             if (recursiveAssemblies.Add(a))
             {
                 foreach (var referencedAssemblyName in a.GetReferencedAssemblies())
@@ -181,7 +181,7 @@ namespace Gu.Roslyn.Asserts
 
         private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly[] assemblies, HashSet<Assembly> recursiveAssemblies = null)
         {
-            recursiveAssemblies ??= new HashSet<Assembly>();
+            recursiveAssemblies = recursiveAssemblies ?? new HashSet<Assembly>();
             foreach (var assembly in assemblies)
             {
                 RecursiveReferencedAssemblies(assembly, recursiveAssemblies);

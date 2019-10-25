@@ -168,7 +168,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 after = null;
                 return false;
 
-                static bool ShouldWarn(SyntaxToken candidate)
+                bool ShouldWarn(SyntaxToken candidate)
                 {
                     switch (candidate.Parent.Kind())
                     {
@@ -190,48 +190,73 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private string Replace(SyntaxToken token)
             {
-                return token.Parent switch
+                switch (token.Parent)
                 {
-                    EnumDeclarationSyntax declaration => token.ValueText switch
-                    {
-                        "Foo" => this.ReplaceTypeName(new Names("E", "E1"), declaration),
-                        "Bar" => this.ReplaceTypeName(new Names("E", "E2"), declaration),
-                        "Baz" => this.ReplaceTypeName(new Names("E", "E3"), declaration),
-                        _ => this.ReplaceTypeName(new Names("E", null), declaration),
-                    },
+                    case EnumDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("E", "E1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("E", "E2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("E", "E3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("E", null), declaration);
+                        }
 
-                    ClassDeclarationSyntax declaration => token.ValueText switch
-                    {
-                        "Foo" => this.ReplaceTypeName(new Names("C", "C1"), declaration),
-                        "Bar" => this.ReplaceTypeName(new Names("C", "C2"), declaration),
-                        "Baz" => this.ReplaceTypeName(new Names("C", "C3"), declaration),
-                        _ => this.ReplaceTypeName(new Names("C", null), declaration),
-                    },
+                    case ClassDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("C", "C1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("C", "C2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("C", "C3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("C", null), declaration);
+                        }
 
-                    StructDeclarationSyntax declaration => token.ValueText switch
-                    {
-                        "Foo" => this.ReplaceTypeName(new Names("S", "S1"), declaration),
-                        "Bar" => this.ReplaceTypeName(new Names("S", "S2"), declaration),
-                        "Baz" => this.ReplaceTypeName(new Names("S", "S3"), declaration),
-                        _ => this.ReplaceTypeName(new Names("S", null), declaration),
-                    },
+                    case StructDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "Foo":
+                                return this.ReplaceTypeName(new Names("S", "S1"), declaration);
+                            case "Bar":
+                                return this.ReplaceTypeName(new Names("S", "S2"), declaration);
+                            case "Baz":
+                                return this.ReplaceTypeName(new Names("S", "S3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("S", null), declaration);
+                        }
 
-                    InterfaceDeclarationSyntax declaration => token.ValueText switch
-                    {
-                        "IFoo" => this.ReplaceTypeName(new Names("I", "I1"), declaration),
-                        "IBar" => this.ReplaceTypeName(new Names("I", "I2"), declaration),
-                        "IBaz" => this.ReplaceTypeName(new Names("I", "I3"), declaration),
-                        _ => this.ReplaceTypeName(new Names("I", null), declaration),
-                    },
+                    case InterfaceDeclarationSyntax declaration:
+                        switch (token.ValueText)
+                        {
+                            case "IFoo":
+                                return this.ReplaceTypeName(new Names("I", "I1"), declaration);
+                            case "IBar":
+                                return this.ReplaceTypeName(new Names("I", "I2"), declaration);
+                            case "IBaz":
+                                return this.ReplaceTypeName(new Names("I", "I3"), declaration);
+                            default:
+                                return this.ReplaceTypeName(new Names("I", null), declaration);
+                        }
 
-                    FieldDeclarationSyntax declaration => this.ReplaceMemberName("F", declaration),
-                    EventDeclarationSyntax declaration => this.ReplaceMemberName("E", declaration),
-                    EventFieldDeclarationSyntax declaration => this.ReplaceMemberName("E", declaration),
-                    PropertyDeclarationSyntax declaration => this.ReplaceMemberName("P", declaration),
-                    MethodDeclarationSyntax declaration => this.ReplaceMemberName("M", declaration),
+                    case FieldDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("F", declaration);
+                    case EventDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("E", declaration);
+                    case EventFieldDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("E", declaration);
+                    case PropertyDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("P", declaration);
+                    case MethodDeclarationSyntax declaration:
+                        return this.ReplaceMemberName("M", declaration);
+                }
 
-                    _ => null,
-                };
+                return null;
             }
 
             private string ReplaceTypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
