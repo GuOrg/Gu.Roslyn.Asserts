@@ -416,34 +416,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed = null)
         {
-            return new CSharpCompilationOptions(
-                outputKind: OutputKind.DynamicallyLinkedLibrary,
-                reportSuppressedDiagnostics: false,
-                moduleName: null,
-                mainTypeName: null,
-                scriptClassName: null,
-                usings: null,
-                optimizationLevel: OptimizationLevel.Debug,
-                checkOverflow: false,
-                allowUnsafe: false,
-                cryptoKeyContainer: null,
-                cryptoKeyFile: null,
-                cryptoPublicKey: default,
-                delaySign: null,
-                platform: Platform.AnyCpu,
-                generalDiagnosticOption: ReportDiagnostic.Default,
-                warningLevel: 4,
-                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(descriptors, suppressed),
-                concurrentBuild: true,
-                deterministic: false,
-                xmlReferenceResolver: null,
-                sourceReferenceResolver: null,
-                metadataReferenceResolver: null,
-                assemblyIdentityComparer: null,
-                strongNameProvider: null,
-                publicSign: false,
-                metadataImportOptions: MetadataImportOptions.Public,
-                nullableContextOptions: NullableContextOptions.Disable);
+            return new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                .WithAllowUnsafe(true)
+                .WithSpecificDiagnosticOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
         }
 
         /// <summary>
