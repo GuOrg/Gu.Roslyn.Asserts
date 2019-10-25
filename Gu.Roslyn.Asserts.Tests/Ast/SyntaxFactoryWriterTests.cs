@@ -26,6 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [TestCaseSource(nameof(CSharpFiles))]
         public static async Task Roundtrip(FileInfo file)
         {
+            Assert.Inconclusive("VS does not understand [Explicit]");
             var code = File.ReadAllText(file.FullName);
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
