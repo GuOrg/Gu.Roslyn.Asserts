@@ -74,7 +74,7 @@ namespace AstView
                 return result >= 0;
             }
 
-            bool TryFindLength(string code, int from, out int result)
+            static bool TryFindLength(string code, int from, out int result)
             {
                 int level = 0;
                 for (var i = from; i < code.Length; i++)
