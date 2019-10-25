@@ -169,6 +169,7 @@ static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(Microsoft.CodeAna
 static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, System.Collections.Generic.IEnumerable<string> suppressed = null) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.ExpectedDiagnostic> expectedDiagnostics, System.Collections.Generic.IEnumerable<string> suppressWarnings) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.DiagnosticDescriptor> descriptors, System.Collections.Generic.IEnumerable<string> suppressWarnings) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
+static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, Microsoft.CodeAnalysis.ReportDiagnostic>> specificDiagnosticOptions) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.DiagnosticDescriptor> descriptors, System.Collections.Generic.IEnumerable<string> suppressed = null) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static Gu.Roslyn.Asserts.CodeFactory.DefaultCompilationOptions(System.Collections.Generic.IReadOnlyList<Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer> analyzers, System.Collections.Generic.IEnumerable<string> suppressed = null) -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static Gu.Roslyn.Asserts.CodeFactory.TryFindFileInParentDirectory(System.IO.DirectoryInfo directory, string fileName, out System.IO.FileInfo result) -> bool
@@ -398,6 +399,7 @@ static Gu.Roslyn.Asserts.SyntaxNodeExt.FindVariableDeclaration(this Microsoft.Co
 static Gu.Roslyn.Asserts.TextAssert.AreEqual(string expected, string actual) -> void
 static readonly Gu.Roslyn.Asserts.AstWriterSettings.Default -> Gu.Roslyn.Asserts.AstWriterSettings
 static readonly Gu.Roslyn.Asserts.AstWriterSettings.DefaultJson -> Gu.Roslyn.Asserts.AstWriterSettings
+static readonly Gu.Roslyn.Asserts.CodeFactory.DllCompilationOptions -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions
 static readonly Gu.Roslyn.Asserts.CodeFactory.EmptySolution -> Microsoft.CodeAnalysis.Solution
 static readonly Gu.Roslyn.Asserts.CodeFactory.Workspace -> Microsoft.CodeAnalysis.AdhocWorkspace
 static readonly Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences -> Gu.Roslyn.Asserts.MetadataReferencesCollection
