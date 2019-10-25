@@ -20,7 +20,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>3.2.3</Version>
+    <Version>3.2.4</Version>
     <Description>Analyzers and cod fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
     <Authors>Johan Larsson.</Authors>
     <DevelopmentDependency>true</DevelopmentDependency>
@@ -29,10 +29,7 @@
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <PackageTags>Roslyn Diagnostic Analyzer</PackageTags>
     <PackageReleaseNotes>
-      BUGFIX: infinite loop in analyzer when looking for replacements.
-      OBSOLETE: for changing to RoslynAssert.MetadataReferences. (Code fix changing to preferred API)
-      Make analyzers default disabled. Most of them are pretty useless.
-      BUGFIX: SolutionFile.Find(Assembly) when more than one sln.
+      BUGFIX: handle breaking change in roslyn 3.3.1
     </PackageReleaseNotes>
   </PropertyGroup>
 
