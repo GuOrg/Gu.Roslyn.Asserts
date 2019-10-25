@@ -98,16 +98,6 @@ Gu.Roslyn.Asserts.ProjectFile
 Gu.Roslyn.Asserts.Refactor
 Gu.Roslyn.Asserts.ReferenceAssembly
 Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
-Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.SolutionFile
 Gu.Roslyn.Asserts.StringHelper
 Gu.Roslyn.Asserts.SuppressWarnings
