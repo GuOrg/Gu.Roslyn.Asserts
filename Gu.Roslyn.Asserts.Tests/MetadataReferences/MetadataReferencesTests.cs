@@ -48,30 +48,29 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         {
 #if NET472
             var expected = new[]
-                           {
-                               "System.Core.dll",
-                               "mscorlib.dll",
-                               "System.dll",
-                               "System.Configuration.dll",
-                               "System.Xml.dll",
-                               "System.Data.SqlXml.dll",
-                               "System.Security.dll",
-                               "System.Numerics.dll",
-                           };
+            {
+                "System.Core.dll",
+                "mscorlib.dll",
+                "System.dll",
+                "System.Configuration.dll",
+                "System.Xml.dll",
+                "System.Data.SqlXml.dll",
+                "System.Security.dll",
+                "System.Numerics.dll",
+            };
 #elif NETCOREAPP3_0
             var expected = new[]
-                           {
-                                "System.Linq.dll",
-                                "System.Runtime.dll",
-                                "System.Private.CoreLib.dll",
-                                "System.Private.Uri.dll",
-                                "System.Resources.ResourceManager.dll",
-                                "System.Collections.dll",
-                                "System.Diagnostics.Debug.dll",
-                                "System.Diagnostics.Tools.dll",
-                                "System.Runtime.Extensions.dll",
-                                "System.Security.Principal.dll",
-                           };
+            {
+                "System.Linq.dll",
+                "System.Runtime.dll",
+                "System.Private.CoreLib.dll",
+                "System.Private.Uri.dll",
+                "System.Resources.ResourceManager.dll",
+                "System.Diagnostics.Debug.dll",
+                "System.Collections.dll",
+                "System.Diagnostics.Tools.dll",
+                "System.Runtime.Extensions.dll",
+            };
 #else
             Assert.Inconclusive("Not handling this framework.");
 #endif
@@ -672,7 +671,6 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 typeof(CSharpCompilation),
                 typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
                 typeof(System.Runtime.CompilerServices.InternalsVisibleToAttribute));
-            Dump(metadataReferences, false);
             CollectionAssert.AreEqual(expected, metadataReferences.Select(x => Path.GetFileName(x.Display)));
         }
 
