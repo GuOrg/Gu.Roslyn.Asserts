@@ -295,7 +295,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                                                                         memberAccess.Expression is LiteralExpressionSyntax literal &&
                                                                         literal.Token.ValueText.Contains("↓") => true,
-                        _ => null,
+                        _ => (bool?)null,
                     };
                 }
             }
