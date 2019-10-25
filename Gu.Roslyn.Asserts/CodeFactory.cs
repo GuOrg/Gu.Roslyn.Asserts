@@ -17,6 +17,11 @@ namespace Gu.Roslyn.Asserts
     public static class CodeFactory
     {
         /// <summary>
+        /// Compilation options for a dll.
+        /// </summary>
+        public static readonly CSharpCompilationOptions DllCompilationOptions = DefaultCompilationOptions(null);
+
+        /// <summary>
         /// The workspace used when creating solutions.
         /// </summary>
         public static readonly AdhocWorkspace Workspace = new AdhocWorkspace();
@@ -329,10 +334,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed = null)
         {
-            return new CSharpCompilationOptions(
-                OutputKind.DynamicallyLinkedLibrary,
-                allowUnsafe: true,
-                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(analyzers, suppressed));
+            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(analyzers, suppressed));
         }
 
         /// <summary>
@@ -344,10 +346,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string> suppressed = null)
         {
-            return new CSharpCompilationOptions(
-                OutputKind.DynamicallyLinkedLibrary,
-                allowUnsafe: true,
-                specificDiagnosticOptions: CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
+            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
         }
 
         /// <summary>
@@ -416,9 +415,38 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed = null)
         {
-            return new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                .WithAllowUnsafe(true)
-                .WithSpecificDiagnosticOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
+            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
+        }
+
+        private static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>> specificDiagnosticOptions)
+        {
+            return new CSharpCompilationOptions(
+                outputKind: OutputKind.DynamicallyLinkedLibrary,
+                reportSuppressedDiagnostics: false,
+                moduleName: null,
+                mainTypeName: null,
+                scriptClassName: null,
+                usings: null,
+                optimizationLevel: OptimizationLevel.Debug,
+                checkOverflow: false,
+                allowUnsafe: false,
+                cryptoKeyContainer: null,
+                cryptoKeyFile: null,
+                cryptoPublicKey: default,
+                delaySign: null,
+                platform: Platform.AnyCpu,
+                generalDiagnosticOption: ReportDiagnostic.Default,
+                warningLevel: 4,
+                specificDiagnosticOptions: specificDiagnosticOptions,
+                concurrentBuild: true,
+                deterministic: false,
+                xmlReferenceResolver: null,
+                sourceReferenceResolver: null,
+                metadataReferenceResolver: null,
+                assemblyIdentityComparer: null,
+                strongNameProvider: null,
+                publicSign: false,
+                metadataImportOptions: MetadataImportOptions.Public);
         }
 
         /// <summary>
