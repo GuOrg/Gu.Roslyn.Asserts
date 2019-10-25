@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, objectCreation.GetLocation()));
             }
 
-            bool CallsId(ObjectCreationExpressionSyntax candidate)
+            static bool CallsId(ObjectCreationExpressionSyntax candidate)
             {
                 return candidate.Parent is MemberAccessExpressionSyntax memberAccess &&
                        memberAccess.Parent is InvocationExpressionSyntax;

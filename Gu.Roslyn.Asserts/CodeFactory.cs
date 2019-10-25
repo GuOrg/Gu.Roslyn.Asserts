@@ -387,7 +387,7 @@ namespace Gu.Roslyn.Asserts
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
-            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            suppressWarnings ??= Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
@@ -402,7 +402,7 @@ namespace Gu.Roslyn.Asserts
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            suppressWarnings ??= Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
         }
 
@@ -418,7 +418,13 @@ namespace Gu.Roslyn.Asserts
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
         }
 
-        private static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>> specificDiagnosticOptions)
+        /// <summary>
+        /// Create default compilation options for <paramref name="specificDiagnosticOptions"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="specificDiagnosticOptions">A list of ids and <see cref="ReportDiagnostic"/>.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>> specificDiagnosticOptions)
         {
             return new CSharpCompilationOptions(
                 outputKind: OutputKind.DynamicallyLinkedLibrary,
@@ -651,7 +657,7 @@ namespace Gu.Roslyn.Asserts
 
             return diagnosticOptions;
 
-            ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
+            static ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
             {
                 switch (severity)
                 {
@@ -688,7 +694,7 @@ namespace Gu.Roslyn.Asserts
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
-            suppressWarnings = suppressWarnings ?? Enumerable.Empty<string>();
+            suppressWarnings ??= Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
         }
     }

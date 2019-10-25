@@ -127,7 +127,7 @@ namespace Gu.Roslyn.Asserts.Internals
             return string.Join(" ", args.Select(Escape));
 
             // adapted from https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/
-            string Escape(string argument)
+            static string Escape(string argument)
             {
                 var commandLine = new StringBuilder();
                 bool force = false;
