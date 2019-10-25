@@ -66,18 +66,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                     MemberDeclarationSyntax Make(MemberDeclarationSyntax before, SyntaxToken token)
                     {
-                        switch (before)
+                        return before switch
                         {
-                            case FieldDeclarationSyntax field:
-                                return field.WithModifiers(Public(field.Modifiers));
-                            case PropertyDeclarationSyntax property:
-                                return property.WithModifiers(Public(property.Modifiers));
-                            case ClassDeclarationSyntax @class:
-                                return @class.WithModifiers(Public(@class.Modifiers));
-                            default:
-                                return before;
-                        }
-
+                            FieldDeclarationSyntax field => field.WithModifiers(Public(field.Modifiers)),
+                            PropertyDeclarationSyntax property => property.WithModifiers(Public(property.Modifiers)),
+                            ClassDeclarationSyntax @class => @class.WithModifiers(Public(@class.Modifiers)),
+                            _ => before,
+                        };
                         SyntaxTokenList Public(SyntaxTokenList modifiers)
                         {
                             if (modifiers.TryFirst(out var first))

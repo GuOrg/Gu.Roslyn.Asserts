@@ -185,7 +185,7 @@ namespace Gu.Roslyn.Asserts
 
             throw new AssertException(messageBuilder.Return());
 
-            bool IsSingleLine(string text)
+            static bool IsSingleLine(string text)
             {
                 bool foundNewLine = false;
                 foreach (var c in text)
@@ -209,7 +209,7 @@ namespace Gu.Roslyn.Asserts
                 return true;
             }
 
-            int DiffPos(string expectedLine, string actualLine)
+            static int DiffPos(string expectedLine, string actualLine)
             {
                 var diffPos = Math.Min(expectedLine.Length, actualLine.Length);
                 for (var i = 0; i < Math.Min(expectedLine.Length, actualLine.Length); i++)
@@ -224,7 +224,7 @@ namespace Gu.Roslyn.Asserts
                 return diffPos;
             }
 
-            string GetEnd(string text)
+            static string GetEnd(string text)
             {
                 bool lastLine = false;
                 var builder = StringBuilderPool.Borrow();

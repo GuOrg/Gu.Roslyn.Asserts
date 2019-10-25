@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts
             {
                 return directory ?? (directory = GetDefault());
 
-                DirectoryInfo GetDefault()
+                static DirectoryInfo GetDefault()
                 {
                     var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
                     if (System.IO.Directory.Exists(referenceAssemblies))

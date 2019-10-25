@@ -318,7 +318,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            comparer = comparer ?? Comparer<TKey>.Default;
+            comparer ??= Comparer<TKey>.Default;
             using (var sourceIterator = source.GetEnumerator())
             {
                 if (!sourceIterator.MoveNext())
@@ -377,7 +377,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            comparer = comparer ?? Comparer<TKey>.Default;
+            comparer ??= Comparer<TKey>.Default;
             using (var sourceIterator = source.GetEnumerator())
             {
                 if (!sourceIterator.MoveNext())
