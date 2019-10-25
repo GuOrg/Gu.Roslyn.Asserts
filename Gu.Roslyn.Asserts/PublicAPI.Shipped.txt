@@ -176,6 +176,7 @@ static Gu.Roslyn.Asserts.CodeReader.AreEqual(System.Collections.Generic.IReadOnl
 static Gu.Roslyn.Asserts.CodeReader.AreEqual(string x, string y) -> bool
 static Gu.Roslyn.Asserts.CodeReader.FileName(string code) -> string
 static Gu.Roslyn.Asserts.CodeReader.FindLinePositions(string code) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Text.LinePosition>
+static Gu.Roslyn.Asserts.CodeReader.GetCode(this Microsoft.CodeAnalysis.Document document) -> string
 static Gu.Roslyn.Asserts.CodeReader.GetCode(this Microsoft.CodeAnalysis.Document document, Microsoft.CodeAnalysis.SyntaxAnnotation format) -> string
 static Gu.Roslyn.Asserts.CodeReader.GetLineWithErrorIndicated(string code, Microsoft.CodeAnalysis.Text.LinePosition position) -> string
 static Gu.Roslyn.Asserts.CodeReader.Namespace(string code) -> string
@@ -356,6 +357,7 @@ static Gu.Roslyn.Asserts.RoslynAssert.Valid<TAnalyzer>(System.IO.FileInfo code) 
 static Gu.Roslyn.Asserts.RoslynAssert.Valid<TAnalyzer>(params string[] code) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.VerifyAnalyzerSupportsDiagnostic(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Gu.Roslyn.Asserts.ExpectedDiagnostic expectedDiagnostic) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.VerifyAnalyzerSupportsDiagnostic(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer analyzer, Microsoft.CodeAnalysis.DiagnosticDescriptor descriptor) -> void
+static Gu.Roslyn.Asserts.SolutionFile.Find(System.Reflection.Assembly assembly) -> System.IO.FileInfo
 static Gu.Roslyn.Asserts.SolutionFile.Find(string name) -> System.IO.FileInfo
 static Gu.Roslyn.Asserts.SolutionFile.ParseInfo(System.IO.FileInfo sln) -> Microsoft.CodeAnalysis.SolutionInfo
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(System.Reflection.Assembly assembly, out System.IO.FileInfo sln) -> bool
@@ -380,6 +382,7 @@ static Gu.Roslyn.Asserts.SyntaxNodeExt.FindEventDeclaration(this Microsoft.CodeA
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindEventFieldDeclaration(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.EventFieldDeclarationSyntax
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindExpression(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.ExpressionSyntax
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindFieldDeclaration(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax
+static Gu.Roslyn.Asserts.SyntaxNodeExt.FindIdentifierName(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.IdentifierNameSyntax
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindIndexerDeclaration(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.IndexerDeclarationSyntax
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindInvocation(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.InvocationExpressionSyntax
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindLiteralExpression(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.LiteralExpressionSyntax

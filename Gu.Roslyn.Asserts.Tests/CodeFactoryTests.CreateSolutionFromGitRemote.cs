@@ -15,8 +15,8 @@ namespace Gu.Roslyn.Asserts.Tests
                     new Uri("https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln"),
                     new[] { new FieldNameMustNotBeginWithUnderscore() },
                     Gu.Roslyn.Asserts.MetadataReferences.FromAttributes());
-                var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
-                CollectionAssert.IsEmpty(assertsProject.AllProjectReferences);
+                var analyzersProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Analyzers");
+                CollectionAssert.IsEmpty(analyzersProject.AllProjectReferences);
             }
         }
     }

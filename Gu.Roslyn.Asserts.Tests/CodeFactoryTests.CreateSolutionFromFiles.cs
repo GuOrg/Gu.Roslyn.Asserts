@@ -183,10 +183,16 @@ namespace Gu.Roslyn.Asserts.Tests
                     new[] { new FieldNameMustNotBeginWithUnderscore() },
                     CreateMetadataReferences(typeof(object)));
                 var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
-                CollectionAssert.IsEmpty(assertsProject.AllProjectReferences);
+                var analyzersProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Analyzers");
+                CollectionAssert.IsEmpty(analyzersProject.ProjectReferences);
+                CollectionAssert.AreEqual(
+                    new[] { analyzersProject },
+                    assertsProject.AllProjectReferences.Select(x => sln.Projects.Single(p => p.Id == x.ProjectId)));
 
                 var testProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Tests");
-                CollectionAssert.AreEqual(new[] { assertsProject.Id }, testProject.AllProjectReferences.Select(x => x.ProjectId).ToArray());
+                CollectionAssert.AreEqual(
+                    new[] { assertsProject.Id },
+                    testProject.AllProjectReferences.Select(x => x.ProjectId).ToArray());
             }
 
             [Test]
