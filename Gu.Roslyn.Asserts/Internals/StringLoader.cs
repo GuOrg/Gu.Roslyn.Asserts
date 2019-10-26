@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Internals
             this.Code = document;
             this.textAndVersion = Task.FromResult(
                 TextAndVersion.Create(
-                    SourceText.From(document, (Encoding)null, SourceHashAlgorithm.Sha1),
+                    SourceText.From(document, (Encoding?)null, SourceHashAlgorithm.Sha1),
                     VersionStamp.Default));
         }
 

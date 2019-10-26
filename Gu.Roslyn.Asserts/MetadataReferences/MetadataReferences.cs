@@ -142,7 +142,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly> recursiveAssemblies = null)
+        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly a, HashSet<Assembly>? recursiveAssemblies = null)
         {
             recursiveAssemblies ??= new HashSet<Assembly>();
             if (recursiveAssemblies.Add(a))
@@ -179,7 +179,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly[] assemblies, HashSet<Assembly> recursiveAssemblies = null)
+        private static HashSet<Assembly> RecursiveReferencedAssemblies(Assembly[] assemblies, HashSet<Assembly>? recursiveAssemblies = null)
         {
             recursiveAssemblies ??= new HashSet<Assembly>();
             foreach (var assembly in assemblies)

@@ -184,7 +184,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, params string[] code)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code);
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, FileInfo code)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, DiagnosticDescriptor descriptor, params string[] code)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), descriptor, code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptor, code);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), descriptor, code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptor, code);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), descriptors, code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptors, code);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void NoAnalyzerDiagnostics(Type analyzerType, Solution solution)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), solution);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, solution);
         }
     }
 }

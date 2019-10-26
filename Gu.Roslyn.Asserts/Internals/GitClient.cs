@@ -58,8 +58,8 @@ namespace Gu.Roslyn.Asserts.Internals
             Uri uri,
             string cloneTargetPath,
             CloneFlags flags = CloneFlags.None,
-            string branch = null,
-            IReadOnlyDictionary<string, string> config = null)
+            string? branch = null,
+            IReadOnlyDictionary<string, string>? config = null)
         {
             var parameters = new List<string>
                              {

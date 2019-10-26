@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     return false;
                 }
 
-                static string Property(ParameterInfo parameter)
+                static string? Property(ParameterInfo parameter)
                 {
                     switch (parameter.Name)
                     {
@@ -86,7 +86,7 @@ namespace Gu.Roslyn.Asserts.Tests
                         case "kind":
                             return "Kind()";
                         default:
-                            return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
+                            return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
                     }
                 }
             }
@@ -106,7 +106,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     if (parameters.Length == 1)
                     {
                         var parameter = parameters[0];
-                        var property = parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                        var property = parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
                         stringBuilder.AppendLine($"                    return this.Append($\"SyntaxFactory.{method.Name}({{token.{property}}})\");");
                     }
                     else
@@ -202,7 +202,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     for (var i = 0; i < parameters.Length; i++)
                     {
                         var parameter = parameters[i];
-                        var property = parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                        var property = parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
                         var closeArg = i == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
                         stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", token.{property}{closeArg})");
                     }

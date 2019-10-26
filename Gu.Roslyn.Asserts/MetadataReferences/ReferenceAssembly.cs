@@ -15,18 +15,18 @@ namespace Gu.Roslyn.Asserts
     public static class ReferenceAssembly
     {
         private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
-        private static DirectoryInfo directory;
+        private static DirectoryInfo? directory;
 
         /// <summary>
         /// Gets or sets the reference assembly location to use.
         /// </summary>
-        public static DirectoryInfo Directory
+        public static DirectoryInfo? Directory
         {
             get
             {
                 return directory ?? (directory = GetDefault());
 
-                static DirectoryInfo GetDefault()
+                static DirectoryInfo? GetDefault()
                 {
                     var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
                     if (System.IO.Directory.Exists(referenceAssemblies))

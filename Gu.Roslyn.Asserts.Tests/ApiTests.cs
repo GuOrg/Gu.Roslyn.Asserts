@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private static readonly INamedTypeSymbol RoslynAssertType = Project
                                                                     .GetCompilationAsync(CancellationToken.None)
-                                                                    .Result
+                                                                    .Result!
                                                                     .GetTypeByMetadataName(typeof(RoslynAssert).FullName);
 
         private static readonly ImmutableArray<IMethodSymbol> CodeFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.CodeFix));

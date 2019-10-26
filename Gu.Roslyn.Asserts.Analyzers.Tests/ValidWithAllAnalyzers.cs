@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
         private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(Descriptors)
                                                                                  .Assembly.GetTypes()
                                                                                  .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
-                                                                                 .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t))
+                                                                                 .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t)!)
                                                                                  .ToArray();
 
         private static readonly Solution AnalyzersTests = CodeFactory.CreateSolution(

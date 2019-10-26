@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         /// <inheritdoc/>
         public override string ToString() => this.writer.ToString();
 
-        private static Action<SyntaxFactoryWriter, SyntaxNode, bool> CreateArgumentWriter(ParameterInfo parameter)
+        private static Action<SyntaxFactoryWriter, SyntaxNode, bool>? CreateArgumentWriter(ParameterInfo parameter)
         {
             switch (parameter.Name)
             {
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             var method = (MethodInfo)parameter.Member;
-            var property = method.ReturnType.GetProperty(parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance);
+            var property = method.ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance);
             if (property == null)
             {
                 return null;

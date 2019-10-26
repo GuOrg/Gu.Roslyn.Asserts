@@ -794,7 +794,7 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
-            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true);
+            var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!;
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated));
@@ -810,7 +810,7 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             Diagnostics(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code));
         }
 
@@ -824,7 +824,7 @@ namespace Gu.Roslyn.Asserts
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             Diagnostics(
-                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
+                (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 new DiagnosticsAndSources(expectedDiagnostics, code));
         }
 

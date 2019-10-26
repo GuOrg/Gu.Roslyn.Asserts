@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -118,14 +119,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The title of the fix.</param>
         /// <param name="operations">A collection of <see cref="ApplyChangesOperation"/>.</param>
         /// <returns>True if any were found.</returns>
-        internal static bool TryFindOperations(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle, out ImmutableArray<ApplyChangesOperation> operations)
+        internal static bool TryFindOperations(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle, [NotNullWhen(true)] out ImmutableArray<ApplyChangesOperation>? operations)
         {
-            List<ApplyChangesOperation> temp = null;
+            List<ApplyChangesOperation>? temp = null;
             foreach (var fixableDiagnostic in fixableDiagnostics)
             {
                 if (TryFindOperation(solution, fix, fixableDiagnostic, fixTitle, out var operation))
                 {
-                    if (temp == null)
+                    if (temp is null)
                     {
                         temp = new List<ApplyChangesOperation>();
                     }
@@ -134,7 +135,7 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            if (temp == null)
+            if (temp is null)
             {
                 operations = default;
                 return false;
@@ -293,9 +294,9 @@ namespace Gu.Roslyn.Asserts
             return actions;
         }
 
-        private static CodeAction FindAction(IReadOnlyList<CodeAction> actions, string fixTitle)
+        private static CodeAction FindAction(IReadOnlyList<CodeAction> actions, string? fixTitle)
         {
-            if (fixTitle == null)
+            if (fixTitle is null)
             {
                 if (actions.TrySingle(out var action))
                 {
@@ -412,7 +413,7 @@ namespace Gu.Roslyn.Asserts
             /// Create an instance of <see cref="TestDiagnosticProvider"/>.
             /// </summary>
             /// <returns>The <see cref="TestDiagnosticProvider"/>.</returns>
-            internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider fix, string fixTitle, IReadOnlyList<Diagnostic> diagnostics)
+            internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider fix, string? fixTitle, IReadOnlyList<Diagnostic> diagnostics)
             {
                 var actions = new List<CodeAction>();
                 var diagnostic = diagnostics.First();

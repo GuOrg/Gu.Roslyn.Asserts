@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class CreateSolutionFromFiles
         {
-            private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
+            private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase!, UriKind.Absolute).LocalPath);
 
             [Test]
             public static void CreateSolutionFromProjectFile()

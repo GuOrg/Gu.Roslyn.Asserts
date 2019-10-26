@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
         internal static FixAllProvider Instance { get; } = new CustomBatchFixAllProvider();
 
-        public override async Task<CodeAction> GetFixAsync(FixAllContext fixAllContext)
+        public override async Task<CodeAction?> GetFixAsync(FixAllContext fixAllContext)
         {
             if (fixAllContext.Document != null)
             {
@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             return await this.GetFixAsync(projectsAndDiagnosticsToFixMap, fixAllContext).ConfigureAwait(false);
         }
 
-        internal virtual async Task<CodeAction> GetFixAsync(
+        internal virtual async Task<CodeAction?> GetFixAsync(
             ImmutableDictionary<Document, ImmutableArray<Diagnostic>> documentsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             }
         }
 
-        internal virtual async Task<CodeAction> GetFixAsync(
+        internal virtual async Task<CodeAction?> GetFixAsync(
             ImmutableDictionary<Project, ImmutableArray<Diagnostic>> projectsAndDiagnosticsToFixMap,
             FixAllContext fixAllContext)
         {
@@ -217,7 +217,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
         internal virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
         {
-            var changedDocumentsMap = new Dictionary<DocumentId, Document>();
+            var changedDocumentsMap = new Dictionary<DocumentId, Document?>();
             Dictionary<DocumentId, List<Document>>? documentsToMergeMap = null;
 
             foreach (var codeAction in codeActions)
@@ -226,7 +226,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
                 // TODO: Parallelize GetChangedSolutionInternalAsync for codeActions
                 ImmutableArray<CodeActionOperation> operations = await codeAction.GetPreviewOperationsAsync(cancellationToken).ConfigureAwait(false);
-                ApplyChangesOperation singleApplyChangesOperation = null;
+                ApplyChangesOperation? singleApplyChangesOperation = null;
                 foreach (var operation in operations)
                 {
                     if (operation is ApplyChangesOperation applyChangesOperation)
@@ -261,7 +261,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                     cancellationToken.ThrowIfCancellationRequested();
                     var document = changedSolution.GetDocument(documentId);
 
-                    if (changedDocumentsMap.TryGetValue(documentId, out Document existingDocument))
+                    if (changedDocumentsMap.TryGetValue(documentId, out Document? existingDocument))
                     {
                         if (existingDocument != null)
                         {

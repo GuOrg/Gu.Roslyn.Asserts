@@ -74,7 +74,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
-            return CreateSolution(code, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>)null, null), metadataReferences);
+            return CreateSolution(code, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null), metadataReferences);
         }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace Gu.Roslyn.Asserts
         {
             return CreateSolution(
                 code,
-                DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>)null, null),
+                DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null),
                 metadataReferences);
         }
 
@@ -691,7 +691,7 @@ namespace Gu.Roslyn.Asserts
                 metadataReferences);
         }
 
-        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string> suppressWarnings)
+        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string>? suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);

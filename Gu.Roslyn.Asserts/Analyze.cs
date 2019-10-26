@@ -99,7 +99,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Type analyzerType, FileInfo code, IEnumerable<MetadataReference> metadataReferences)
         {
-            return GetDiagnosticsAsync((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true), code, metadataReferences);
+            return GetDiagnosticsAsync((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code, metadataReferences);
         }
 
         /// <summary>

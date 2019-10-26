@@ -739,7 +739,7 @@ namespace Gu.Roslyn.Asserts
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
         }
 
-        private static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution solution, IReadOnlyList<string> after, string fixTitle, AllowCompilationErrors allowCompilationErrors)
+        private static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution solution, IReadOnlyList<string> after, string? fixTitle, AllowCompilationErrors allowCompilationErrors)
         {
             var fixedSolution = Fix.ApplyAllFixableOneByOneAsync(solution, analyzer, fix, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
             AreEqualAsync(after, fixedSolution, "Applying fixes one by one failed.").GetAwaiter().GetResult();
@@ -749,7 +749,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static void FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution sln, IReadOnlyList<string> after, string fixTitle, AllowCompilationErrors allowCompilationErrors, FixAllScope scope)
+        private static void FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution sln, IReadOnlyList<string> after, string? fixTitle, AllowCompilationErrors allowCompilationErrors, FixAllScope scope)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var fixedSolution = Fix.ApplyAllFixableScopeByScopeAsync(sln, analyzer, fix, scope, fixTitle, CancellationToken.None).GetAwaiter().GetResult();

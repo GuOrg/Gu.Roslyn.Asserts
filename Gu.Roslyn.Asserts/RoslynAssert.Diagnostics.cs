@@ -238,7 +238,7 @@ namespace Gu.Roslyn.Asserts
                 if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(allDiagnostics[0]) &&
                     !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(allDiagnostics[0]))
                 {
-                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message, allDiagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message!, allDiagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
                 }
             }
 

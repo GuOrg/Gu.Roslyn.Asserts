@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="node">The <see cref="SyntaxNode"/>.</param>
         /// <param name="settings">The <see cref="AstWriterSettings"/>.</param>
         /// <returns>The node serialized into a string format.</returns>
-        public static string Serialize(SyntaxNode node, AstWriterSettings settings = null)
+        public static string Serialize(SyntaxNode node, AstWriterSettings? settings = null)
         {
             var writer = new AstWriter(settings ?? AstWriterSettings.Default).Write(node);
             return writer.ToString();

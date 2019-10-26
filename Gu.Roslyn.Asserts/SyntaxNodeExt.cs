@@ -241,7 +241,7 @@ namespace Gu.Roslyn.Asserts
         public static T Find<T>(this SyntaxTree tree, string code)
             where T : SyntaxNode
         {
-            T best = null;
+            T? best = null;
             if (tree.TryGetRoot(out var root))
             {
                 best = FindBestMatchRecursive<T>(root, code);
@@ -260,7 +260,7 @@ namespace Gu.Roslyn.Asserts
             return FindBestMatchRecursive<T>(root, code) ?? throw new InvalidOperationException($"The tree does not contain an {typeof(T).Name} matching the code.");
         }
 
-        private static T FindBestMatchRecursive<T>(SyntaxNode root, string code)
+        private static T? FindBestMatchRecursive<T>(SyntaxNode root, string code)
             where T : SyntaxNode
         {
             foreach (var node in root.DescendantNodes()
