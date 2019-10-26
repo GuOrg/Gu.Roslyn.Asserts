@@ -6,21 +6,6 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes
     public partial class RoslynAssertTests
     {
         [Test]
-        public void ProjectFileNopAnalyzer()
-        {
-            var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
-            var analyzer = new NopAnalyzer();
-
-            RoslynAssert.Valid(typeof(NopAnalyzer), code);
-            RoslynAssert.Valid(analyzer, code);
-
-            var descriptor = NopAnalyzer.Descriptor;
-            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
-            RoslynAssert.Valid(analyzer, descriptor, code);
-            RoslynAssert.Valid(analyzer, code, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null));
-        }
-
-        [Test]
         public void ClassLibrary1NopAnalyzer()
         {
             var analyzer = new NopAnalyzer();

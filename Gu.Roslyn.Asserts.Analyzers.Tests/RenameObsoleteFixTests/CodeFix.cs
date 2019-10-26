@@ -46,7 +46,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS0103");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS8019" });
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS8019", "CS1702" });
         }
 
         [Test]
