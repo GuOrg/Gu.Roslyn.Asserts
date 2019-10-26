@@ -49,12 +49,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if x and y are found equal.</returns>
         internal static bool Equals(MetadataReference x, MetadataReference y)
         {
-            if (x == null && y == null)
+            if (x is null && y is null)
             {
                 return true;
             }
 
-            if (x == null || y == null)
+            if (x is null || y is null)
             {
                 return false;
             }

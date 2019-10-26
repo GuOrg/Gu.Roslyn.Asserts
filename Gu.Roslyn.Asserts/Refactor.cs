@@ -25,12 +25,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }
@@ -56,17 +56,17 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            if (title == null)
+            if (title is null)
             {
                 throw new ArgumentNullException(nameof(title));
             }
@@ -97,12 +97,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }
@@ -132,17 +132,17 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            if (metadataReferences == null)
+            if (metadataReferences is null)
             {
                 throw new ArgumentNullException(nameof(metadataReferences));
             }
@@ -171,17 +171,17 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            if (title == null)
+            if (title is null)
             {
                 throw new ArgumentNullException(nameof(title));
             }
@@ -212,12 +212,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The refactored document.</returns>
         public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IEnumerable<MetadataReference>? metadataReferences = null)
         {
-            if (refactoring == null)
+            if (refactoring is null)
             {
                 throw new ArgumentNullException(nameof(refactoring));
             }
 
-            if (testCode == null)
+            if (testCode is null)
             {
                 throw new ArgumentNullException(nameof(testCode));
             }

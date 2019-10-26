@@ -82,7 +82,7 @@ namespace Gu.Roslyn.Asserts
             }
 
             descriptor = analyzer.SupportedDiagnostics[0];
-            if (descriptor == null)
+            if (descriptor is null)
             {
                 var message = $"{analyzer.GetType().Name}.SupportedDiagnostics[0] returns null.";
                 throw new AssertException(message);

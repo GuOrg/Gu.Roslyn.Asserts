@@ -28,7 +28,7 @@ namespace Gu.Roslyn.Asserts
         {
             this.Type = type;
             this.Aliases = aliases ?? new string[0];
-            if (this.Aliases == null || this.Aliases.Count == 0)
+            if (this.Aliases is null || this.Aliases.Count == 0)
             {
                 this.MetadataReference = MetadataReferences.CreateFromAssembly(type.Assembly);
             }

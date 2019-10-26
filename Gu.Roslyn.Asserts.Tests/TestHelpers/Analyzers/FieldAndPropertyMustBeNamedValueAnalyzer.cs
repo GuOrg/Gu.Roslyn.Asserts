@@ -35,7 +35,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         public override void Initialize(AnalysisContext context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new System.ArgumentNullException(nameof(context));
             }

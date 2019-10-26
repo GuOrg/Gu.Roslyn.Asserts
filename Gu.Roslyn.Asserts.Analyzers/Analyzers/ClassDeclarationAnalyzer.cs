@@ -70,7 +70,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, out string? result)
         {
-            if (type == null ||
+            if (type is null ||
                 type.IsGenericType)
             {
                 result = null;

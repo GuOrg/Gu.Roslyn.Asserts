@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            if (context == null)
+            if (context is null)
             {
                 throw new System.ArgumentNullException(nameof(context));
             }

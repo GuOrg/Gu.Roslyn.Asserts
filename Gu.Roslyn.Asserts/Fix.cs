@@ -168,7 +168,7 @@ namespace Gu.Roslyn.Asserts
 
             bool FindAction(out CodeAction result)
             {
-                if (fixTitle == null)
+                if (fixTitle is null)
                 {
                     return actions.TrySingle(out result);
                 }

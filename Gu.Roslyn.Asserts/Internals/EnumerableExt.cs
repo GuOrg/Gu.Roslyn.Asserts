@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Helper class for applying code fixes.
@@ -16,10 +17,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="index">The index.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains an item at the specified index.</returns>
-        internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, out T result)
+        internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -49,10 +50,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingle<T>(this IEnumerable<T> source, out T result)
+        internal static bool TrySingle<T>(this IEnumerable<T> source, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -70,7 +71,7 @@ namespace Gu.Roslyn.Asserts.Internals
                     return false;
                 }
 
-                result = default;
+                result = default!;
                 return false;
             }
         }
@@ -83,10 +84,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
+        internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -102,7 +103,7 @@ namespace Gu.Roslyn.Asserts.Internals
                         {
                             if (selector(e.Current))
                             {
-                                result = default;
+                                result = default!;
                                 return false;
                             }
                         }
@@ -112,7 +113,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 }
             }
 
-            result = default;
+            result = default!;
             return false;
         }
 
@@ -124,11 +125,11 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, out TResult result)
+        internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, [MaybeNull]out TResult result)
             where TResult : T
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -163,10 +164,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TryFirst<T>(this IEnumerable<T> source, out T result)
+        internal static bool TryFirst<T>(this IEnumerable<T> source, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -191,11 +192,11 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, out T result)
+        internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNull]out T result)
         {
-            if (source == null)
+            if (source is null)
             {
-                result = default;
+                result = default!;
                 return false;
             }
 
@@ -206,12 +207,12 @@ namespace Gu.Roslyn.Asserts.Internals
                     result = e.Current;
                     if (selector(result))
                     {
-                       return true;
+                        return true;
                     }
                 }
             }
 
-            result = default;
+            result = default!;
             return false;
         }
 
@@ -222,10 +223,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection, can be null.</param>
         /// <param name="result">The first element, can be null.</param>
         /// <returns>True if an element was found.</returns>
-        internal static bool TryLast<T>(this IEnumerable<T> source, out T result)
+        internal static bool TryLast<T>(this IEnumerable<T> source, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -254,10 +255,10 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="predicate">The filter.</param>
         /// <param name="result">The first element, can be null.</param>
         /// <returns>True if an element was found.</returns>
-        internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T result)
+        internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, [MaybeNull]out T result)
         {
-            result = default;
-            if (source == null)
+            result = default!;
+            if (source is null)
             {
                 return false;
             }
@@ -306,14 +307,14 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The single item.</param>
         /// <param name="comparer">The <see cref="IComparer{TKey}"/>.</param>
         /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
-        internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey>? comparer)
         {
-            if (source == null)
+            if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector));
             }
@@ -367,12 +368,12 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
         internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey>? comparer)
         {
-            if (source == null)
+            if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector));
             }

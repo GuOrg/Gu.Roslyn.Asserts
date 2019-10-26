@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(Assembly assembly, out FileInfo sln)
         {
-            if (assembly?.CodeBase == null)
+            if (assembly?.CodeBase is null)
             {
                 sln = null;
                 return false;

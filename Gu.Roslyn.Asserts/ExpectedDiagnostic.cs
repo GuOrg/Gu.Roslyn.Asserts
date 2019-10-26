@@ -231,7 +231,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if match.</returns>
         public bool MessageMatches(Diagnostic actual)
         {
-            return this.Message == null ||
+            return this.Message is null ||
                    this.Message == actual.GetMessage(CultureInfo.InvariantCulture);
         }
 

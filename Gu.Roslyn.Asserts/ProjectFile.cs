@@ -64,7 +64,7 @@ namespace Gu.Roslyn.Asserts
         {
             var sln = SolutionFile.Find(Assembly.GetCallingAssembly());
             var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
-            if (result == null)
+            if (result is null)
             {
                 throw new InvalidOperationException("Did not find a file named: " + projectFile);
             }
@@ -96,7 +96,7 @@ namespace Gu.Roslyn.Asserts
             IReadOnlyList<ProjectReference> GetProjectReferences()
             {
                 var root = content.Root;
-                if (root == null)
+                if (root is null)
                 {
                     return new ProjectReference[0];
                 }
@@ -170,7 +170,7 @@ namespace Gu.Roslyn.Asserts
                     foreach (var compile in compiles)
                     {
                         var include = compile.Attribute("Include")?.Value;
-                        if (include == null)
+                        if (include is null)
                         {
                             throw new InvalidOperationException("Parsing failed, no Include found.");
                         }
@@ -213,7 +213,7 @@ namespace Gu.Roslyn.Asserts
                     foreach (var compile in compiles)
                     {
                         var include = compile.Attribute("Include")?.Value;
-                        if (include == null)
+                        if (include is null)
                         {
                             throw new InvalidOperationException("Parsing failed, no Include found.");
                         }

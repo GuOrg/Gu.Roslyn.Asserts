@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts
                 }
             }
 
-            if (staticAllowedDiagnostics == null)
+            if (staticAllowedDiagnostics is null)
             {
                 staticAllowedDiagnostics = Asserts.AllowedDiagnostics.Warnings;
             }

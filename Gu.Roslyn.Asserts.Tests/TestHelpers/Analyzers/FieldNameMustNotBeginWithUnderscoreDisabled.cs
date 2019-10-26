@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
         /// <inheritdoc/>
         public override void Initialize(AnalysisContext context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -42,14 +42,14 @@ namespace Gu.Roslyn.Asserts.Tests
             var syntax = (FieldDeclarationSyntax)context.Node;
 
             var variables = syntax.Declaration?.Variables;
-            if (variables == null)
+            if (variables is null)
             {
                 return;
             }
 
             foreach (VariableDeclaratorSyntax variableDeclarator in variables.Value)
             {
-                if (variableDeclarator == null)
+                if (variableDeclarator is null)
                 {
                     continue;
                 }

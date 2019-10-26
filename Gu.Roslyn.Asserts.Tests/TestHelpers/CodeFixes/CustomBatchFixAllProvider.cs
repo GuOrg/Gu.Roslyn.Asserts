@@ -113,7 +113,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             await Task.WhenAll(fixerTasks).ConfigureAwait(false);
             foreach (var fix in fixes)
             {
-                if (fix == null)
+                if (fix is null)
                 {
                     continue;
                 }
@@ -161,7 +161,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
         internal virtual async Task<CodeAction?> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
         {
-            if (batchOfFixes == null)
+            if (batchOfFixes is null)
             {
                 throw new ArgumentNullException(nameof(batchOfFixes));
             }
@@ -242,7 +242,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                     }
                 }
 
-                if (singleApplyChangesOperation == null)
+                if (singleApplyChangesOperation is null)
                 {
                     continue;
                 }

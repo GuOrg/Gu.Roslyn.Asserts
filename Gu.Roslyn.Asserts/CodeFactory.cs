@@ -268,7 +268,7 @@ namespace Gu.Roslyn.Asserts
                 string? projectName = null;
                 foreach (var doc in code)
                 {
-                    if (projectName == null)
+                    if (projectName is null)
                     {
                         projectName = CodeReader.Namespace(doc);
                     }

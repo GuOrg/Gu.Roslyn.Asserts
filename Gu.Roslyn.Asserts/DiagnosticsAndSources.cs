@@ -51,12 +51,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, string code)
         {
-            if (analyzer == null)
+            if (analyzer is null)
             {
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
@@ -72,12 +72,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
         {
-            if (analyzer == null)
+            if (analyzer is null)
             {
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
@@ -94,12 +94,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
         {
-            if (descriptor == null)
+            if (descriptor is null)
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
@@ -116,12 +116,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(string analyzerId, string? message, IReadOnlyList<string> code)
         {
-            if (analyzerId == null)
+            if (analyzerId is null)
             {
                 throw new ArgumentNullException(nameof(analyzerId));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
@@ -159,12 +159,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, string code)
         {
-            if (expectedDiagnostic == null)
+            if (expectedDiagnostic is null)
             {
                 throw new ArgumentNullException(nameof(expectedDiagnostic));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
@@ -181,12 +181,12 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources Create(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code)
         {
-            if (expectedDiagnostic == null)
+            if (expectedDiagnostic is null)
             {
                 throw new ArgumentNullException(nameof(expectedDiagnostic));
             }
 
-            if (code == null)
+            if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }

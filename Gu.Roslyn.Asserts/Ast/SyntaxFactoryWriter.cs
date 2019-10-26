@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts
 
             var method = (MethodInfo)parameter.Member;
             var property = method.ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance);
-            if (property == null)
+            if (property is null)
             {
                 return null;
             }
@@ -322,7 +322,7 @@ namespace Gu.Roslyn.Asserts
         {
             _ = this.writer
                     .WriteArgumentStart(parameter);
-            if (node == null)
+            if (node is null)
             {
                 _ = this.writer.Append("default")
                                .WriteArgumentEnd(closeArgumentList);

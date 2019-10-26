@@ -60,7 +60,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A list with diagnostics per document.</returns>
         public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
-            if (analyzer == null)
+            if (analyzer is null)
             {
                 throw new ArgumentNullException(nameof(analyzer));
             }

@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     if (invocation.TryGetMethodName(out var candidate))
                     {
-                        if (name == null)
+                        if (name is null)
                         {
                             name = candidate;
                         }

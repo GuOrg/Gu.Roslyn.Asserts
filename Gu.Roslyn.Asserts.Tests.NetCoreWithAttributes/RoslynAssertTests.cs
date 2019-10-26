@@ -47,7 +47,7 @@ namespace ValidCode
         public async Task<IActionResult> GetOrder(int id)
         {
             var match = await this.db.Orders.FirstOrDefaultAsync(x => x.Id == id);
-            if (match == null)
+            if (match is null)
             {
                 return this.NotFound();
             }
