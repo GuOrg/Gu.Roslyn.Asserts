@@ -365,7 +365,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The single item.</param>
         /// <param name="comparer">The <see cref="IComparer{TKey}"/>.</param>
         /// <returns>The item with minimum keyed by <paramref name="selector"/>.</returns>
-        internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey>? comparer)
         {
             if (source == null)
             {

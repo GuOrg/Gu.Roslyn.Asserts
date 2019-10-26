@@ -37,9 +37,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             IReadOnlyList<string> code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Valid(
                 analyzer,
@@ -91,9 +91,9 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             IReadOnlyList<string> code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
@@ -122,9 +122,9 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
@@ -151,9 +151,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             FileInfo code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Valid(
                 analyzer,
@@ -176,9 +176,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             string code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Valid(
                 analyzer,
@@ -224,9 +224,9 @@ namespace Gu.Roslyn.Asserts
         public static void Valid(
             Type analyzerType,
             FileInfo code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),
@@ -252,9 +252,9 @@ namespace Gu.Roslyn.Asserts
             Type analyzerType,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true),

@@ -234,7 +234,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 };
             }
 
-            private string ReplaceTypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
+            private string? ReplaceTypeName(Names candidateNames, BaseTypeDeclarationSyntax declaration)
             {
                 if (this.literals.TrySingle(x => this.TryGetRoot(x, out _), out var single))
                 {
@@ -274,7 +274,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return candidateNames.Else;
             }
 
-            private string ReplaceMemberName(string name, MemberDeclarationSyntax declaration)
+            private string? ReplaceMemberName(string name, MemberDeclarationSyntax declaration)
             {
                 switch (declaration.Parent)
                 {

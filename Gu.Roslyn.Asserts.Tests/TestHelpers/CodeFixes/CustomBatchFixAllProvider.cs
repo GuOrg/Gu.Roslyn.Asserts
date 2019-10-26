@@ -159,7 +159,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             throw new NotSupportedException();
         }
 
-        internal virtual async Task<CodeAction> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
+        internal virtual async Task<CodeAction?> TryGetMergedFixAsync(IEnumerable<CodeAction> batchOfFixes, FixAllContext fixAllContext)
         {
             if (batchOfFixes == null)
             {
@@ -218,7 +218,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
         internal virtual async Task<Solution> TryMergeFixesAsync(Solution oldSolution, IEnumerable<CodeAction> codeActions, CancellationToken cancellationToken)
         {
             var changedDocumentsMap = new Dictionary<DocumentId, Document>();
-            Dictionary<DocumentId, List<Document>> documentsToMergeMap = null;
+            Dictionary<DocumentId, List<Document>>? documentsToMergeMap = null;
 
             foreach (var codeAction in codeActions)
             {

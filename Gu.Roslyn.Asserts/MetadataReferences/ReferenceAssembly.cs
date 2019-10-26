@@ -92,7 +92,7 @@ namespace Gu.Roslyn.Asserts
 
         private static class NameFileMap
         {
-            private static ImmutableDictionary<string, FileInfo> value;
+            private static ImmutableDictionary<string, FileInfo>? value;
 
             internal static ImmutableDictionary<string, FileInfo> Value => value ?? (value = Create());
 

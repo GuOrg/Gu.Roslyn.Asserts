@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -54,7 +54,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -95,7 +95,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="index">The index of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -130,7 +130,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -169,7 +169,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="title">The title of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -210,7 +210,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="index">The index of the refactoring to apply.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (refactoring == null)
             {
@@ -245,7 +245,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
-        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
@@ -266,7 +266,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
-        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences)
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,

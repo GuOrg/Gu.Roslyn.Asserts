@@ -536,7 +536,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {

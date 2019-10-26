@@ -74,9 +74,9 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             string code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Diagnostics(
                 analyzer,
@@ -100,9 +100,9 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             IReadOnlyList<string> code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Diagnostics(
                 analyzer,
@@ -128,9 +128,9 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             string code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Diagnostics(
                 analyzer,
@@ -156,9 +156,9 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> code,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             Diagnostics(
                 analyzer,
@@ -182,9 +182,9 @@ namespace Gu.Roslyn.Asserts
             DiagnosticAnalyzer analyzer,
             DiagnosticsAndSources diagnosticsAndSources,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var sln = CodeFactory.CreateSolution(

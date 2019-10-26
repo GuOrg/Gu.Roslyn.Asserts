@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="diagnostic">The diagnostic.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        public static Solution Apply(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null)
+        public static Solution Apply(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string? fixTitle = null)
         {
             return FindSingleOperation(solution, fix, new[] { diagnostic }, fixTitle).ChangedSolution;
         }
@@ -38,7 +38,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="diagnostics">The diagnostics.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string fixTitle = null)
+        public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string? fixTitle = null)
         {
             var flatDiagnostics = diagnostics.SelectMany(x => x).ToArray();
             if (flatDiagnostics.Length == 1)
@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string fixTitle = null, CancellationToken cancellationToken = default)
+        public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
             var actions = await GetActionsAsync(solution, fix, diagnostic).ConfigureAwait(false);
             var action = FindAction(actions, fixTitle);
@@ -95,7 +95,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixableDiagnostics">The <see cref="IEnumerable{Diagnostic}"/>.</param>
         /// <param name="fixTitle">The title of the fix.</param>
         /// <returns>The <see cref="ApplyChangesOperation"/>.</returns>
-        internal static ApplyChangesOperation FindSingleOperation(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string fixTitle = null)
+        internal static ApplyChangesOperation FindSingleOperation(Solution solution, CodeFixProvider fix, IEnumerable<Diagnostic> fixableDiagnostics, string? fixTitle = null)
         {
             var actions = fixableDiagnostics.SelectMany(x => GetActionsAsync(solution, fix, x).GetAwaiter().GetResult())
                                             .ToImmutableArray();
@@ -180,7 +180,7 @@ namespace Gu.Roslyn.Asserts
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string fixTitle = null, CancellationToken cancellationToken = default)
+        internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
             fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
@@ -206,7 +206,7 @@ namespace Gu.Roslyn.Asserts
         /// Fix the solution by applying the code fix one fix at the time until it stops fixing the code.
         /// </summary>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string fixTitle = null, CancellationToken cancellationToken = default)
+        internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
             var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
             var fixedSolution = solution;

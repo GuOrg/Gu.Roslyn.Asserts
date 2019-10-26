@@ -114,7 +114,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="message">The expected message for the diagnostics, can be null.</param>
         /// <param name="code">The code with errors indicated.</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
-        public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(string analyzerId, string message, IReadOnlyList<string> code)
+        public static DiagnosticsAndSources CreateFromCodeWithErrorsIndicated(string analyzerId, string? message, IReadOnlyList<string> code)
         {
             if (analyzerId == null)
             {

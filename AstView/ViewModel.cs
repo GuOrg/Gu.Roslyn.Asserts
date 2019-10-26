@@ -8,13 +8,13 @@ namespace AstView
 
     public class ViewModel : INotifyPropertyChanged
     {
-        private string source;
-        private string generation;
-        private Exception exception;
+        private string? source;
+        private string? generation;
+        private Exception? exception;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string Source
+        public string? Source
         {
             get => this.source;
             set
@@ -30,7 +30,7 @@ namespace AstView
             }
         }
 
-        public string Generation
+        public string? Generation
         {
             get => this.generation;
             private set
@@ -45,7 +45,7 @@ namespace AstView
             }
         }
 
-        public Exception Exception
+        public Exception? Exception
         {
             get => this.exception;
             private set
@@ -101,7 +101,7 @@ namespace AstView
             }
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

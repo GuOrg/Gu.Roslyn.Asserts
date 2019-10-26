@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
         }
@@ -96,7 +96,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolution(new[] { code }, analyzers, metadataReferences);
         }
@@ -109,7 +109,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
@@ -123,7 +123,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="metadataReferences">The metadata references.</param>
         /// <param name="languageVersion">The <see cref="LanguageVersion"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
         {
             var solutionInfo = SolutionInfo.Create(
                 SolutionId.CreateNewId("Test.sln"),
@@ -220,7 +220,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolutionWithOneProject(new[] { code }, analyzers, metadataReferences);
         }
@@ -233,7 +233,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolutionWithOneProject(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
@@ -245,7 +245,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolutionWithOneProject(new[] { code }, compilationOptions, metadataReferences);
         }
@@ -258,14 +258,14 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             var projectInfo = GetProjectInfo();
             return EmptySolution.AddProject(projectInfo);
 
             ProjectInfo GetProjectInfo()
             {
-                string projectName = null;
+                string? projectName = null;
                 foreach (var doc in code)
                 {
                     if (projectName == null)
@@ -307,7 +307,7 @@ namespace Gu.Roslyn.Asserts
                                 sourceCodeKind: SourceCodeKind.Regular,
                                 loader: TextLoader.From(
                                     TextAndVersion.Create(
-                                        SourceText.From(x, (Encoding)null, SourceHashAlgorithm.Sha1),
+                                        SourceText.From(x, null, SourceHashAlgorithm.Sha1),
                                         VersionStamp.Default)));
                         }));
             }
@@ -320,7 +320,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzer">The analyzer to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed = null)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string>? suppressed = null)
         {
             return DefaultCompilationOptions(new[] { analyzer }, suppressed);
         }
@@ -332,7 +332,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed = null)
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer>? analyzers, IEnumerable<string>? suppressed = null)
         {
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(analyzers, suppressed));
         }
@@ -344,7 +344,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptor">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string> suppressed = null)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string>? suppressed = null)
         {
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
         }
@@ -357,7 +357,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostic">The diagnostics to check for.</param>
         /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressWarnings)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string>? suppressWarnings)
         {
             return DefaultCompilationOptions(analyzer, expectedDiagnostic.Id, suppressWarnings);
         }
@@ -383,7 +383,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expectedDiagnostics">The diagnostics to check for.</param>
         /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string> suppressWarnings)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string>? suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
             var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
@@ -413,7 +413,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptors">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressed = null)
+        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string>? suppressed = null)
         {
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
         }
@@ -424,8 +424,9 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         /// <param name="specificDiagnosticOptions">A list of ids and <see cref="ReportDiagnostic"/>.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>> specificDiagnosticOptions)
+        public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? specificDiagnosticOptions)
         {
+            // All arguments needed here to disambiguate. There was a breaking change between 3.0 and 3.3.1
             return new CSharpCompilationOptions(
                 outputKind: OutputKind.DynamicallyLinkedLibrary,
                 reportSuppressedDiagnostics: false,
@@ -464,7 +465,7 @@ namespace Gu.Roslyn.Asserts
         /// </param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolution(
                 code,
@@ -482,7 +483,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             var compilationOptions = DefaultCompilationOptions(analyzers, null);
             return CreateSolution(code, compilationOptions, metadataReferences);
@@ -500,7 +501,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="suppressWarnings">The suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string> suppressWarnings = null, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressWarnings), metadataReferences);
         }
@@ -515,7 +516,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
@@ -566,7 +567,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(Uri githubUrl, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference> metadataReferences = null)
+        public static Solution CreateSolution(Uri githubUrl, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             var git = new GitClient();
             var gitFile = GitRepositoryProvider.ParseUrl(githubUrl);
@@ -623,7 +624,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="analyzers">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The analyzer IDs to suppress.</param>
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
-        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer> analyzers, IEnumerable<string> suppressed)
+        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer>? analyzers, IEnumerable<string>? suppressed)
         {
             return CreateSpecificDiagnosticOptions(analyzers?.SelectMany(x => x.SupportedDiagnostics).Distinct(), suppressed);
         }
@@ -635,7 +636,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="enabled">The analyzers to report warning or error for.</param>
         /// <param name="suppressed">The diagnostic IDs to suppress.</param>
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
-        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticDescriptor> enabled, IEnumerable<string> suppressed)
+        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticDescriptor>? enabled, IEnumerable<string>? suppressed)
         {
             var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
             if (enabled != null)
@@ -682,7 +683,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="suppressWarnings">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions compilationOptions, IEnumerable<string> suppressWarnings, IEnumerable<MetadataReference> metadataReferences)
+        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions? compilationOptions, IEnumerable<string> suppressWarnings, IEnumerable<MetadataReference> metadataReferences)
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,

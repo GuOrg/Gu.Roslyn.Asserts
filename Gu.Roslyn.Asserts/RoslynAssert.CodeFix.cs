@@ -431,7 +431,7 @@ namespace Gu.Roslyn.Asserts
             VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, allowCompilationErrors);
         }
 
-        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             var fixableDiagnostics = diagnostics.SelectMany(x => x)
                                                 .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))

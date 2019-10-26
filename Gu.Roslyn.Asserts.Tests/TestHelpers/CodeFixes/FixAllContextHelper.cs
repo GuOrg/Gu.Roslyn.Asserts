@@ -148,7 +148,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
             return builder.ToImmutable();
         }
 
-        private static Document GetReportedDocument(Diagnostic diagnostic, ImmutableDictionary<SyntaxTree, Document> treeToDocumentsMap)
+        private static Document? GetReportedDocument(Diagnostic diagnostic, ImmutableDictionary<SyntaxTree, Document> treeToDocumentsMap)
         {
             var tree = diagnostic.Location.SourceTree;
             if (tree != null)

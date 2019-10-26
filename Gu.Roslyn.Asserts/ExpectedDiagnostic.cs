@@ -38,7 +38,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="id">The expected diagnostic ID, required.</param>
         /// <param name="message">The expected message, can be null. If null it is not checked in asserts.</param>
         /// <param name="span"> The position of the expected diagnostic.</param>
-        public ExpectedDiagnostic(string id, string message, FileLinePositionSpan span)
+        public ExpectedDiagnostic(string id, string? message, FileLinePositionSpan span)
         {
             this.Id = id ?? throw new ArgumentNullException(nameof(id));
             this.Message = message;
@@ -53,7 +53,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Gets the expected message as text.
         /// </summary>
-        public string Message { get; }
+        public string? Message { get; }
 
         /// <summary>
         /// Gets the position of the expected diagnostic.
