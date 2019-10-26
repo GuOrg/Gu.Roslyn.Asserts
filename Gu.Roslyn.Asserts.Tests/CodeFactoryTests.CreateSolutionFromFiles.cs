@@ -20,11 +20,11 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, ProjectFile.TryFind(ExecutingAssemblyDll, out var projectFile));
                 var solution = CodeFactory.CreateSolution(
-                    projectFile,
+                    projectFile!,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual(Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName), solution.Projects.Single().Name);
-                var expected = projectFile.Directory
+                var expected = projectFile!.Directory
                                           .EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                           .Where(f => !f.DirectoryName.Contains("bin"))
                                           .Where(f => !f.DirectoryName.Contains("obj"))
@@ -48,7 +48,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("WpfApp1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
-                    projectFile,
+                    projectFile!,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("WpfApp1", solution.Projects.Single().Name);
@@ -79,7 +79,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
-                    projectFile,
+                    projectFile!,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
@@ -106,7 +106,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary2.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
-                    projectFile,
+                    projectFile!,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary2", solution.Projects.Single().Name);

@@ -22,14 +22,10 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(Assembly assembly, [NotNullWhen(true)]out FileInfo? sln)
         {
-            if (assembly?.CodeBase is null)
-            {
-                sln = null;
-                return false;
-            }
-
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            return CodeFactory.TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
+            sln = null;
+            return assembly.CodeBase is string codeBase &&
+                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
+                   CodeFactory.TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
         }
 
         /// <summary>
@@ -38,11 +34,12 @@ namespace Gu.Roslyn.Asserts
         /// <param name="name">The assembly.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(string name, out FileInfo sln)
+        public static bool TryFind(string name, [NotNullWhen(true)]out FileInfo? sln)
         {
-            var assembly = Assembly.GetCallingAssembly();
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            return CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out sln);
+            sln = null;
+            return Assembly.GetCallingAssembly().CodeBase is string codeBase &&
+                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
+                   CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out sln);
         }
 
         /// <summary>
@@ -52,9 +49,9 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The solution file.</returns>
         public static FileInfo Find(string name)
         {
-            var assembly = Assembly.GetCallingAssembly();
-            var dll = new FileInfo(new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath);
-            if (CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out var sln))
+            if (Assembly.GetCallingAssembly().CodeBase is string codeBase &&
+                new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
+                CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out var sln))
             {
                 return sln;
             }
