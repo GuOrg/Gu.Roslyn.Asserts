@@ -12,9 +12,8 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Gu.Roslyn.Asserts.snk</AssemblyOriginatorKeyFile>
-    <Version>1.0.0</Version>
   </PropertyGroup>
-  
+ 
   <ItemGroup>
     <ProjectReference Include="..\Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj" />
     <ProjectReference Include="..\Gu.Roslyn.Asserts\Gu.Roslyn.Asserts.csproj" />
