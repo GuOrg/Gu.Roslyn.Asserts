@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>3.2.4</Version>
+    <Version>3.2.5</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
@@ -29,6 +29,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>
       BUGFIX: handle breaking change in roslyn 3.3.1
+      FEATURE: nullable
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
