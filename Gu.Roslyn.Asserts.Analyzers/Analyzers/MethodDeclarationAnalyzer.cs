@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -122,7 +123,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             internal static StringLiteralWalker BorrowAndVisit(SyntaxNode node) => BorrowAndVisit(node, () => new StringLiteralWalker());
 
-            internal bool TryFindReplacement(out string before, out Location location, out string after)
+            internal bool TryFindReplacement([NotNullWhen(true)]out string? before, [NotNullWhen(true)]out Location? location, [NotNullWhen(true)]out string? after)
             {
                 foreach (var literal in this.literals)
                 {
@@ -441,7 +442,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 internal readonly string WhenSingle;
                 internal readonly string Else;
 
-                internal Names(string whenSingle, string @else)
+                internal Names(string whenSingle, string? @else)
                 {
                     this.WhenSingle = whenSingle;
                     this.Else = @else;

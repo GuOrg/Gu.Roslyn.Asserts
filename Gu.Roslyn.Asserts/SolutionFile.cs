@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -19,7 +20,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(Assembly assembly, out FileInfo sln)
+        public static bool TryFind(Assembly assembly, [NotNullWhen(true)]out FileInfo? sln)
         {
             if (assembly?.CodeBase is null)
             {

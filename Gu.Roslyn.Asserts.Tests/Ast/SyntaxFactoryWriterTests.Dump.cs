@@ -64,7 +64,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = stringBuilder.ToString();
                 Console.Write(code);
 
-                static bool TryFindMethod(IEnumerable<MethodInfo> candidates, out MethodInfo result)
+                static bool TryFindMethod(IEnumerable<MethodInfo> candidates, out MethodInfo? result)
                 {
                     candidates = candidates.Where(x => x.GetParameters()
                                            .All(p => Property(p) != null));

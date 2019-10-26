@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         internal static readonly QualifiedType NUnitTestAttribute = Create("NUnit.Framework.TestAttribute");
         internal static readonly QualifiedType NUnitTestCaseAttribute = Create("NUnit.Framework.TestCaseAttribute");
 
-        private static QualifiedType Create(string qualifiedName, string alias = null)
+        private static QualifiedType Create(string qualifiedName, string? alias = null)
         {
             return new QualifiedType(qualifiedName, alias);
         }

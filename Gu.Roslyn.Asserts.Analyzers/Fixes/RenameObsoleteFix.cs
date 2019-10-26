@@ -2,6 +2,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Threading.Tasks;
     using Gu.Roslyn.CodeFixExtensions;
@@ -33,7 +34,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         diagnostic);
                 }
 
-                bool TryFindUpdate(out ExpressionSyntax result, out string text)
+                bool TryFindUpdate(out ExpressionSyntax? result, out string? text)
                 {
                     switch (diagnostic.Id)
                     {

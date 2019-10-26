@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -60,7 +61,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="assembly">Example 'System'.</param>
         /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
         /// <returns>A value indicating a reference was found.</returns>
-        public static bool TryGet(Assembly assembly, out MetadataReference metadataReference)
+        public static bool TryGet(Assembly assembly, [NotNullWhen(true)]out MetadataReference? metadataReference)
         {
             if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var dllFile))
             {
@@ -78,7 +79,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="name">Example 'System'.</param>
         /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
         /// <returns>A value indicating a reference was found.</returns>
-        public static bool TryGet(string name, out MetadataReference metadataReference)
+        public static bool TryGet(string name, [NotNullWhen(true)]out MetadataReference? metadataReference)
         {
             if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var dllFile))
             {

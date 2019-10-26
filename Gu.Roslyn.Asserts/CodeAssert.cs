@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="expected">The expected code.</param>
         /// <param name="actual">The actual code.</param>
         /// <param name="messageHeader">The first line to add to the exception message on error.</param>
-        internal static void AreEqual(string expected, string actual, string messageHeader)
+        internal static void AreEqual(string expected, string actual, string? messageHeader)
         {
             var expectedPos = 0;
             var actualPos = 0;
