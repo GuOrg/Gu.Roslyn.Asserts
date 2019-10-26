@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
+namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -12,10 +12,7 @@
         public override ImmutableArray<string> FixableDiagnosticIds { get; } =
             ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 
-        public override FixAllProvider GetFixAllProvider()
-        {
-            return CustomFixAllProviders.BatchFixer;
-        }
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
