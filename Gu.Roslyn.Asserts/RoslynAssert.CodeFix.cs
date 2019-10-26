@@ -31,11 +31,11 @@ namespace Gu.Roslyn.Asserts
             CodeFixProvider fix,
             string before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -69,11 +69,11 @@ namespace Gu.Roslyn.Asserts
             CodeFixProvider fix,
             IReadOnlyList<string> before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -107,11 +107,11 @@ namespace Gu.Roslyn.Asserts
             CodeFixProvider fix,
             IReadOnlyList<string> before,
             IReadOnlyList<string> after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -147,11 +147,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             string before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -187,11 +187,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -227,11 +227,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> before,
             IReadOnlyList<string> after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -265,11 +265,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             string before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
@@ -303,11 +303,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> before,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
@@ -341,11 +341,11 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> before,
             IReadOnlyList<string> after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
@@ -377,7 +377,7 @@ namespace Gu.Roslyn.Asserts
             ExpectedDiagnostic expectedDiagnostic,
             Solution solution,
             string after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
@@ -410,11 +410,11 @@ namespace Gu.Roslyn.Asserts
             CodeFixProvider fix,
             DiagnosticsAndSources diagnosticsAndSources,
             IReadOnlyList<string> after,
-            string fixTitle = null,
+            string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string> suppressWarnings = null,
-            IEnumerable<MetadataReference> metadataReferences = null,
-            CSharpCompilationOptions compilationOptions = null)
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);

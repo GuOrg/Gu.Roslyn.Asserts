@@ -119,7 +119,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -148,7 +148,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -178,7 +178,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -207,7 +207,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -235,7 +235,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking fix as argument.")]
-        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
@@ -262,7 +262,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking fix as argument.")]
-        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             CodeFix(
@@ -289,7 +289,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use other overloads.")]
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -317,7 +317,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use other overloads.")]
-        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string> suppressWarnings = null, IEnumerable<MetadataReference> metadataReferences = null, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             CodeFix(
                 analyzer: analyzer,
@@ -344,7 +344,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -372,7 +372,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -400,7 +400,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -427,7 +427,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
@@ -454,7 +454,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
@@ -481,7 +481,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
          /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
@@ -508,7 +508,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -564,7 +564,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, IReadOnlyList<string> after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAll<TAnalyzer, TCodeFix>(IReadOnlyList<string> before, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -592,7 +592,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAllInDocument<TAnalyzer, TCodeFix>(string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAllInDocument<TAnalyzer, TCodeFix>(string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
@@ -619,7 +619,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string before, string after, string fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
