@@ -203,7 +203,7 @@ namespace Gu.Roslyn.Asserts
             }
         }
 
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, Solution solution, string expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, Solution solution, string? expectedMessage = null)
         {
             if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
             {

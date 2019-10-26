@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="index">The index.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains an item at the specified index.</returns>
-        internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, [MaybeNull]out T result)
+        internal static bool TryElementAt<T>(this IEnumerable<T> source, int index, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)
@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingle<T>(this IEnumerable<T> source, [MaybeNull]out T result)
+        internal static bool TrySingle<T>(this IEnumerable<T> source, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)
@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNull]out T result)
+        internal static bool TrySingle<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, [MaybeNull]out TResult result)
+        internal static bool TrySingleOfType<T, TResult>(this IEnumerable<T> source, [MaybeNullWhen(false)]out TResult result)
             where TResult : T
         {
             result = default!;
@@ -164,7 +164,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TryFirst<T>(this IEnumerable<T> source, [MaybeNull]out T result)
+        internal static bool TryFirst<T>(this IEnumerable<T> source, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)
@@ -192,7 +192,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="selector">The predicate.</param>
         /// <param name="result">The single item.</param>
         /// <returns>True if the collection contains exactly one non null item.</returns>
-        internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNull]out T result)
+        internal static bool TryFirst<T>(this IEnumerable<T> source, Func<T, bool> selector, [MaybeNullWhen(false)]out T result)
         {
             if (source is null)
             {
@@ -223,7 +223,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="source">The source collection, can be null.</param>
         /// <param name="result">The first element, can be null.</param>
         /// <returns>True if an element was found.</returns>
-        internal static bool TryLast<T>(this IEnumerable<T> source, [MaybeNull]out T result)
+        internal static bool TryLast<T>(this IEnumerable<T> source, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)
@@ -255,7 +255,7 @@ namespace Gu.Roslyn.Asserts.Internals
         /// <param name="predicate">The filter.</param>
         /// <param name="result">The first element, can be null.</param>
         /// <returns>True if an element was found.</returns>
-        internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, [MaybeNull]out T result)
+        internal static bool TryLast<T>(this IEnumerable<T> source, Func<T, bool> predicate, [MaybeNullWhen(false)]out T result)
         {
             result = default!;
             if (source is null)

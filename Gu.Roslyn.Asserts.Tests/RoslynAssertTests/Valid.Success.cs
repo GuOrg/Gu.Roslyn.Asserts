@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantNameQualifier
 // ReSharper disable AssignNullToNotNullAttribute
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
@@ -81,6 +81,7 @@ namespace N
             [Test]
             public static void ProjectFileNopAnalyzer()
             {
+#if NETCOREAPP3_0
                 var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                                                typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
@@ -93,6 +94,7 @@ namespace N
 
                 RoslynAssert.Valid(analyzer, descriptor, code, metadataReferences: metadataReferences);
                 RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, metadataReferences: metadataReferences);
+#endif
             }
 
             [Test]

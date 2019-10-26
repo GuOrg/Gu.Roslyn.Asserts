@@ -131,7 +131,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="line">The expected line number.</param>
         /// <param name="character">The expected character position.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static ExpectedDiagnostic Create(string diagnosticId, string message, int line, int character)
+        public static ExpectedDiagnostic Create(string diagnosticId, string? message, int line, int character)
         {
             var position = new LinePosition(line, character);
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(NoPosition.Path, position, position));

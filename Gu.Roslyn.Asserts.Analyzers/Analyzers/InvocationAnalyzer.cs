@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System;
     using System.Collections.Immutable;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using Gu.Roslyn.AnalyzerExtensions;
     using Gu.Roslyn.CodeFixExtensions;
@@ -210,7 +211,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldRename(ISymbol symbol, string expectedName, out string newName)
+        private static bool ShouldRename(ISymbol symbol, [NotNullWhen(true)]string? expectedName, [NotNullWhen(true)]out string? newName)
         {
             if (symbol.IsEitherKind(SymbolKind.Local, SymbolKind.Field, SymbolKind.Property) &&
                 symbol.ContainingType.TypeKind != TypeKind.Enum &&
@@ -246,7 +247,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, out Location location, out Location additionalLocation)
+        private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, [NotNullWhen(true)]out Location? location, [NotNullWhen(true)]out Location? additionalLocation)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                 memberAccess.Expression is IdentifierNameSyntax identifierName &&
@@ -272,12 +273,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
         {
 #pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
             internal readonly ExpressionSyntax Expression;
-            internal readonly ISymbol Symbol;
+            internal readonly ISymbol? Symbol;
             internal readonly SyntaxToken SymbolIdentifier;
-            internal readonly ExpressionSyntax Value;
+            internal readonly ExpressionSyntax? Value;
 #pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
 
-            private StringArgument(ExpressionSyntax expression, ISymbol symbol, SyntaxToken symbolIdentifier, ExpressionSyntax value)
+            private StringArgument(ExpressionSyntax expression, ISymbol? symbol, SyntaxToken symbolIdentifier, ExpressionSyntax? value)
             {
                 this.Expression = expression;
                 this.Symbol = symbol;
@@ -366,7 +367,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 results = default;
                 return false;
 
-                bool TryGetCollectionInitializer(out InitializerExpressionSyntax result)
+                bool TryGetCollectionInitializer(out InitializerExpressionSyntax? result)
                 {
                     if (invocation.TryFindArgument(parameter, out var argument) ||
                         invocation.ArgumentList.Arguments.TryElementAt(parameter.Ordinal, out argument))
@@ -434,7 +435,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
-            internal bool TryGetNameFromCode(out string codeName)
+            internal bool TryGetNameFromCode([NotNullWhen(true)]out string? codeName)
             {
                 codeName = null;
                 return this.Value is LiteralExpressionSyntax literal &&
@@ -443,7 +444,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
                         TryGetName(literal.Token.ValueText, "enum ", out codeName));
 
-                static bool TryGetName(string text, string prefix, out string name)
+                static bool TryGetName(string text, string prefix, out string? name)
                 {
                     var index = text.IndexOf(prefix, StringComparison.Ordinal);
                     if (index >= 0 &&

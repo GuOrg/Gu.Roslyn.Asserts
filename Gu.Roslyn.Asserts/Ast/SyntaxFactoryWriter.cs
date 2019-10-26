@@ -486,7 +486,7 @@ namespace Gu.Roslyn.Asserts
                                .PopIndent();
             }
 
-            bool TryGetSingleLine(out string result)
+            bool TryGetSingleLine(out string? result)
             {
                 if (!triviaList.Any())
                 {

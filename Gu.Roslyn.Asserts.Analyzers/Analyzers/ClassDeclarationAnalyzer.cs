@@ -119,7 +119,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return true;
             }
 
-            bool TryGetName(out string name)
+            bool TryGetName(out string? name)
             {
                 if (type.ContainingType is INamedTypeSymbol containing)
                 {

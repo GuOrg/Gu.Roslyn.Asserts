@@ -107,7 +107,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return argumentList.WithArguments(argumentList.Arguments.Insert(0, SyntaxFactory.Argument(expression)));
             }
 
-            bool TryFindAvailableFieldName(ITypeSymbol containingType, ITypeSymbol argType, out string result)
+            bool TryFindAvailableFieldName(ITypeSymbol containingType, ITypeSymbol argType, out string? result)
             {
                 if (semanticModel.Compilation.GetTypeByMetadataName("Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer") is ITypeSymbol analyzerType &&
                     argType.IsAssignableTo(analyzerType, semanticModel.Compilation))

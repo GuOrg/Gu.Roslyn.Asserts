@@ -56,7 +56,7 @@ namespace Gu.Roslyn.Asserts
                 var context = new FixAllContext(document, fix, FixAllScope.Document, provider.EquivalenceKey, flatDiagnostics.Select(x => x.Id), provider, CancellationToken.None);
                 var action = WellKnownFixAllProviders.BatchFixer.GetFixAsync(context).GetAwaiter().GetResult();
                 var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-                if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+                if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
                 {
                     return operation.ChangedSolution;
                 }
@@ -80,7 +80,7 @@ namespace Gu.Roslyn.Asserts
             var action = FindAction(actions, fixTitle);
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
-            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
             {
                 return operation.ChangedSolution;
             }
@@ -102,7 +102,7 @@ namespace Gu.Roslyn.Asserts
                                             .ToImmutableArray();
             var action = FindAction(actions, fixTitle);
             var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
             {
                 return operation;
             }

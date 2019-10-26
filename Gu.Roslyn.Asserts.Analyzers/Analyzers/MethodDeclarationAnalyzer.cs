@@ -189,7 +189,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 this.locations.Clear();
             }
 
-            private string Replace(SyntaxToken token)
+            private string? Replace(SyntaxToken token)
             {
                 return token.Parent switch
                 {
@@ -440,7 +440,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             private struct Names
             {
                 internal readonly string WhenSingle;
-                internal readonly string Else;
+                internal readonly string? Else;
 
                 internal Names(string whenSingle, string? @else)
                 {
