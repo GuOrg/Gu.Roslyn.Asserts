@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Threading;
@@ -48,14 +49,14 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<DiagnosticAnalyzer>(out var parameter))
             {
-                Assert.AreEqual(0, parameter.Ordinal);
+                Assert.AreEqual(0, parameter!.Ordinal);
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                 Assert.AreEqual("analyzer", parameter.MetadataName);
                 StringAssert.IsMatch("The <see cref=\"T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer\"/> to check <paramref name=\"\\w+\"/> with.", parameter.DocComment());
             }
             else if (method.TryFindParameterByType<Type>(out parameter))
             {
-                Assert.AreEqual(0, parameter.Ordinal);
+                Assert.AreEqual(0, parameter!.Ordinal);
                 Assert.AreEqual(false, parameter.IsOptional);
                 Assert.AreEqual("analyzerType", parameter.MetadataName);
                 StringAssert.IsMatch("The type of <see cref=\"T:Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer\"/> to check <paramref name=\"\\w+\"/> with.", parameter.DocComment());
@@ -72,7 +73,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void CodeFixParameter(IMethodSymbol method)
         {
             Assert.AreEqual(true, method.TryFindParameterByType<CodeFixProvider>(out var parameter), "Missing.");
-            switch (parameter.Ordinal)
+            switch (parameter!.Ordinal)
             {
                 case 0:
                     Assert.AreEqual(typeof(ExpectedDiagnostic).Name, method.Parameters[1].Type.MetadataName);
@@ -98,7 +99,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<ExpectedDiagnostic>(out var parameter))
             {
-                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
                 Assert.AreEqual("expectedDiagnostic", parameter.MetadataName);
                 if (method.TryFindParameterByType<DiagnosticAnalyzer>(out _))
                 {
@@ -120,7 +121,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<DiagnosticDescriptor>(out var parameter))
             {
-                Assert.AreEqual("descriptor", parameter.MetadataName);
+                Assert.AreEqual("descriptor", parameter!.MetadataName);
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
                 string expected = $"The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"{method.Parameters[0].Name}\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.";
                 Assert.AreEqual(expected, parameter.DocComment());
@@ -136,20 +137,20 @@ namespace Gu.Roslyn.Asserts.Tests
                 !method.TryFindParameterByType<Solution>(out _))
             {
                 Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "before", out var parameter));
-                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
                 if (method.TryFindParameterByType<DiagnosticAnalyzer>(out var analyzerParameter))
                 {
-                    Assert.AreEqual($"The code to analyze with <paramref name=\"{analyzerParameter.Name}\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                    Assert.AreEqual($"The code to analyze with <paramref name=\"{analyzerParameter!.Name}\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
                 }
                 else if (method.TryFindParameterByType<CodeRefactoringProvider>(out var refactoringParameter))
                 {
                     if (method.TryFindParameterByType<TextSpan>(out var spanParameter))
                     {
-                        Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter.Name}\"/>. Position is provided by <paramref name=\"{spanParameter.Name}\"/>.", parameter.DocComment());
+                        Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter!.Name}\"/>. Position is provided by <paramref name=\"{spanParameter!.Name}\"/>.", parameter.DocComment());
                     }
                     else
                     {
-                        Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter.Name}\"/>. Indicate position with ↓ (alt + 25).", parameter.DocComment());
+                        Assert.AreEqual($"The code to analyze with <paramref name=\"{refactoringParameter!.Name}\"/>. Indicate position with ↓ (alt + 25).", parameter.DocComment());
                     }
                 }
                 else
@@ -165,14 +166,14 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void AfterParameter(IMethodSymbol method)
         {
             Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "after", out var parameter));
-            Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+            Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
             if (method.TryFindParameterByType<CodeFixProvider>(out var fix))
             {
-                Assert.AreEqual($"The expected code produced by applying <paramref name=\"{fix.Name}\"/>.", parameter.DocComment());
+                Assert.AreEqual($"The expected code produced by applying <paramref name=\"{fix!.Name}\"/>.", parameter.DocComment());
             }
             else if (method.TryFindParameterByType<CodeRefactoringProvider>(out var refactoring))
             {
-                Assert.AreEqual($"The expected code produced by <paramref name=\"{refactoring.Name}\"/>.", parameter.DocComment());
+                Assert.AreEqual($"The expected code produced by <paramref name=\"{refactoring!.Name}\"/>.", parameter.DocComment());
             }
         }
 
@@ -182,13 +183,13 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<Solution>(out var sln))
             {
-                Assert.AreEqual("solution", sln.MetadataName);
+                Assert.AreEqual("solution", sln!.MetadataName);
                 Assert.AreEqual(false, sln.IsOptional, "Optional.");
             }
             else
             {
                 Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
-                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
                 switch (parameter.Type.Name)
                 {
                     case "FileInfo":
@@ -205,10 +206,10 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void NoRefactoringCodeParameter(IMethodSymbol method)
         {
             Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
-            Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+            Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
             if (method.TryFindParameterByType<TextSpan>(out var spanParameter))
             {
-                Assert.AreEqual($"The code to analyze with <paramref name=\"refactoring\"/>. Position is provided by <paramref name=\"{spanParameter.Name}\"/>.", parameter.DocComment());
+                Assert.AreEqual($"The code to analyze with <paramref name=\"refactoring\"/>. Position is provided by <paramref name=\"{spanParameter!.Name}\"/>.", parameter.DocComment());
             }
             else
             {
@@ -223,7 +224,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<Solution>(out var sln))
             {
-                Assert.AreEqual("solution", sln.MetadataName);
+                Assert.AreEqual("solution", sln!.MetadataName);
                 Assert.AreEqual(false, sln.IsOptional, "Optional.");
             }
             else if (method.TryFindParameterByType<DiagnosticsAndSources>(out _))
@@ -232,7 +233,7 @@ namespace Gu.Roslyn.Asserts.Tests
             else
             {
                 Assert.AreEqual(true, method.Parameters.TrySingle(x => x.Name == "code", out var parameter));
-                Assert.AreEqual(false, parameter.IsOptional, "Optional.");
+                Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
                 switch (parameter.Type.Name)
                 {
                     case "FileInfo":
@@ -268,7 +269,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<AllowCompilationErrors>(out var parameter))
             {
-                Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
+                Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
                 Assert.AreEqual(AllowCompilationErrors.No, (AllowCompilationErrors)parameter.ExplicitDefaultValue);
                 Assert.AreEqual("allowCompilationErrors", parameter.MetadataName);
                 Assert.AreEqual("Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref=\"F:Gu.Roslyn.Asserts.AllowCompilationErrors.No\"/>.", parameter.DocComment());
@@ -287,7 +288,7 @@ namespace Gu.Roslyn.Asserts.Tests
         {
             if (method.TryFindParameterByType<IEnumerable<string>>(out var parameter))
             {
-                Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
+                Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
                 Assert.AreEqual(null, parameter.ExplicitDefaultValue);
                 Assert.AreEqual("suppressWarnings", parameter.MetadataName);
                 Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics\"/> are used.", parameter.DocComment());
@@ -311,12 +312,12 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 if (!method.Parameters.Last().IsParams)
                 {
-                    Assert.AreEqual(true, parameter.IsOptional, "Not optional.");
+                    Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
                     Assert.AreEqual(null, parameter.ExplicitDefaultValue);
                     Assert.AreEqual("suppressWarnings", method.Parameters[parameter.Ordinal - 1].Name);
                 }
 
-                Assert.AreEqual("metadataReferences", parameter.MetadataName);
+                Assert.AreEqual("metadataReferences", parameter!.MetadataName);
                 Assert.AreEqual("A collection of <see cref=\"T:Microsoft.CodeAnalysis.MetadataReference\"/> to use when compiling. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences\"/> are used.", parameter.DocComment());
             }
             else
@@ -336,19 +337,19 @@ namespace Gu.Roslyn.Asserts.Tests
                                  !IsObsolete(x)));
         }
 
-        private static bool TryFindParameterByType<T>(this IMethodSymbol method, out IParameterSymbol parameter)
+        private static bool TryFindParameterByType<T>(this IMethodSymbol method, out IParameterSymbol? parameter)
         {
             if (typeof(T).IsGenericType)
             {
                 return method.Parameters.TrySingle(
-                    x => x.Type is INamedTypeSymbol namedType &&
+                    x => x!.Type is INamedTypeSymbol namedType &&
                          namedType.IsGenericType &&
                          namedType.MetadataName == typeof(T).Name &&
                          namedType.TypeArguments[0].MetadataName == typeof(T).GenericTypeArguments[0].Name,
                     out parameter);
             }
 
-            return method.Parameters.TrySingle(x => x.Type.MetadataName == typeof(T).Name, out parameter);
+            return method.Parameters.TrySingle(x => x!.Type.MetadataName == typeof(T).Name, out parameter);
         }
 
         private static string DocComment(this IParameterSymbol parameter)

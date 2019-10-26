@@ -371,7 +371,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="descriptor">The diagnostics to check for.</param>
         /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string> suppressWarnings)
+        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string>? suppressWarnings)
         {
             return DefaultCompilationOptions(analyzer, descriptor.Id, suppressWarnings);
         }

@@ -64,7 +64,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var code = stringBuilder.ToString();
                 Console.Write(code);
 
-                static bool TryFindMethod(IEnumerable<MethodInfo> candidates, out MethodInfo? result)
+                static bool TryFindMethod(IEnumerable<MethodInfo> candidates, out MethodInfo result)
                 {
                     candidates = candidates.Where(x => x.GetParameters()
                                            .All(p => Property(p) != null));
@@ -74,7 +74,7 @@ namespace Gu.Roslyn.Asserts.Tests
                         return true;
                     }
 
-                    result = null;
+                    result = default!;
                     return false;
                 }
 
@@ -159,7 +159,7 @@ namespace Gu.Roslyn.Asserts.Tests
                         case "valueText":
                             return "ValueText";
                         default:
-                            return parameter.Name.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                            return parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
                     }
                 }
             }

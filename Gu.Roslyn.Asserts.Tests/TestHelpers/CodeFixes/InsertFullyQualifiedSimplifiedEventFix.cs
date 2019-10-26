@@ -16,10 +16,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
 
-        public override FixAllProvider GetFixAllProvider()
-        {
-            return CustomFixAllProviders.BatchFixer;
-        }
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {

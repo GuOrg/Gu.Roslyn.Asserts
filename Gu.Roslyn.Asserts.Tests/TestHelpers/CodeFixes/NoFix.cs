@@ -10,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 
-        public override FixAllProvider GetFixAllProvider() => CustomFixAllProviders.BatchFixer;
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override Task RegisterCodeFixesAsync(CodeFixContext context) => Task.FromResult(true);
     }

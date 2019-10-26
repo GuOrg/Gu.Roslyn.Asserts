@@ -3,6 +3,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Diagnostics.CodeAnalysis;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -68,7 +69,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, out string? result)
+        private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, [NotNullWhen(true)]out string? result)
         {
             if (type is null ||
                 type.IsGenericType)

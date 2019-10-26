@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA02IndicateErrorPosition.Id);
 
-        protected override DocumentEditorFixAllProvider FixAllProvider() => null;
+        protected override DocumentEditorFixAllProvider? FixAllProvider() => null;
 
         protected override async Task RegisterCodeFixesAsync(DocumentEditorCodeFixContext context)
         {

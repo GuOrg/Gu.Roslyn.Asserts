@@ -55,7 +55,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                             void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
                             {
-                                if (ShouldIndicatePosition())
+                                if (ShouldIndicatePosition() &&
+                                    stringArg.Value is { })
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
@@ -90,7 +91,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                 parameterName));
                                     }
 
-                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property) &&
+                                        stringArg.Value is { })
                                     {
                                         context.ReportDiagnostic(
                                             Diagnostic.Create(
@@ -171,7 +173,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                 parameterName));
                                     }
 
-                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property))
+                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property) &&
+                                        stringArg.Value is { })
                                     {
                                         context.ReportDiagnostic(
                                             Diagnostic.Create(
@@ -211,7 +214,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldRename(ISymbol symbol, [NotNullWhen(true)]string? expectedName, [NotNullWhen(true)]out string? newName)
+        private static bool ShouldRename(ISymbol symbol, string expectedName, [NotNullWhen(true)]out string? newName)
         {
             if (symbol.IsEitherKind(SymbolKind.Local, SymbolKind.Field, SymbolKind.Property) &&
                 symbol.ContainingType.TypeKind != TypeKind.Enum &&
@@ -259,7 +262,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 stringArgument.Value.IsKind(SyntaxKind.StringLiteralExpression))
             {
                 location = memberAccess.Name.GetLocation();
-                additionalLocation = stringArgument.Value.GetLocation();
+                additionalLocation = stringArgument.Value!.GetLocation();
                 return true;
             }
 
@@ -313,7 +316,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             public bool Equals(StringArgument other) => this.Expression.Equals(other.Expression);
 
-            public override bool Equals(object obj) => obj is StringArgument other && this.Equals(other);
+            public override bool Equals(object? obj) => obj is StringArgument other && this.Equals(other);
 
             public override int GetHashCode() => this.Expression.GetHashCode();
 
@@ -341,7 +344,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 if (TryGetCollectionInitializer(out var initializer))
                 {
-                    var builder = ImmutableArray.CreateBuilder<StringArgument>(initializer.Expressions.Count);
+                    var builder = ImmutableArray.CreateBuilder<StringArgument>(initializer!.Expressions.Count);
                     foreach (var expression in initializer.Expressions)
                     {
                         builder.Add(Create(expression, semanticModel, cancellationToken));
@@ -407,7 +410,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                 return new StringArgument(expression, null, default, null);
 
-                bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax result)
+                bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax? result)
                 {
                     if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
                         localDeclaration.Declaration is VariableDeclarationSyntax localVariableDeclaration &&

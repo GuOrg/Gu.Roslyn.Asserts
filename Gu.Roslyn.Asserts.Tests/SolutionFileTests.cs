@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
         public static void TryFind()
         {
             Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var sln));
-            Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
+            Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln!.Name);
             sln = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             Assert.AreEqual("Gu.Roslyn.Asserts.sln", sln.Name);
         }

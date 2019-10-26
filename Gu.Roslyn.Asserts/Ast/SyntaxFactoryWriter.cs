@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public class SyntaxFactoryWriter
     {
-        private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>>();
+        private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?>();
         private readonly Writer writer = new Writer();
 
         /// <summary>
@@ -112,7 +112,10 @@ namespace Gu.Roslyn.Asserts
             var parameters = method.GetParameters();
             for (var i = 0; i < parameters.Length; i++)
             {
-                ArgumentWriters[parameters[i]].Invoke(this, node, i == parameters.Length - 1);
+                if (ArgumentWriters[parameters[i]] is { } writer)
+                {
+                    writer.Invoke(this, node, i == parameters.Length - 1);
+                }
             }
 
             this.writer.PopIndent();
@@ -467,7 +470,7 @@ namespace Gu.Roslyn.Asserts
                     this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1 when TryGetSingleLine(out var text):
-                    return this.Append(text)
+                    return this.Append(text!)
                                .WriteArgumentEnd(closeArgumentList);
                 default:
                     this.AppendLine($"SyntaxFactory.TriviaList(")

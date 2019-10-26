@@ -105,7 +105,7 @@ namespace Gu.Roslyn.Asserts
                 return root.Descendants(XName.Get("ProjectReference"))
                            .Select(e => e.Attribute("Include")?.Value)
                            .Where(x => x != null)
-                           .Select(FindReference)
+                           .Select(FindReference!)
                            .ToArray();
             }
 

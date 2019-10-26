@@ -475,7 +475,7 @@ Actual:
             [Test]
             public static void WhenSingleNull()
             {
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SyntaxNodeAnalyzer(new DiagnosticDescriptor[] { null }, SyntaxKind.IdentifierName), string.Empty));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(new SyntaxNodeAnalyzer(new DiagnosticDescriptor[] { null! }, SyntaxKind.IdentifierName), string.Empty));
                 var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics[0] returns null.";
                 Assert.AreEqual(expected, exception.Message);
             }

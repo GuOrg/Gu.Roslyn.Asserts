@@ -1,6 +1,7 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             base.VisitInvocationExpression(node);
         }
 
-        internal static bool TryFindName(SyntaxNode node, out string name)
+        internal static bool TryFindName(SyntaxNode node, [NotNullWhen(true)]out string? name)
         {
             name = null;
             using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))

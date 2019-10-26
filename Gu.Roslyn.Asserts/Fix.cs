@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts
                 var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
                 if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
                 {
-                    return operation.ChangedSolution;
+                    return operation!.ChangedSolution;
                 }
             }
 
@@ -82,7 +82,7 @@ namespace Gu.Roslyn.Asserts
                                          .ConfigureAwait(false);
             if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
             {
-                return operation.ChangedSolution;
+                return operation!.ChangedSolution;
             }
 
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
@@ -104,7 +104,7 @@ namespace Gu.Roslyn.Asserts
             var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
             if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
             {
-                return operation;
+                return operation!;
             }
 
             throw new AssertException($"Expected one operation, was {string.Join(", ", operations)}");
@@ -159,21 +159,21 @@ namespace Gu.Roslyn.Asserts
             var actions = GetActionsAsync(solution, fix, fixableDiagnostic).GetAwaiter().GetResult();
             if (FindAction(out var action))
             {
-                var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+                var operations = action!.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
                 return operations.TrySingleOfType(out operation);
             }
 
             operation = null;
             return false;
 
-            bool FindAction(out CodeAction result)
+            bool FindAction(out CodeAction? result)
             {
                 if (fixTitle is null)
                 {
                     return actions.TrySingle(out result);
                 }
 
-                return actions.TrySingle(x => x.Title == fixTitle, out result);
+                return actions.TrySingle(x => x!.Title == fixTitle, out result);
             }
         }
 
@@ -246,9 +246,9 @@ namespace Gu.Roslyn.Asserts
 
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
-            if (operations.TrySingleOfType(out ApplyChangesOperation operation))
+            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
             {
-                return operation.ChangedSolution;
+                return operation!.ChangedSolution;
             }
 
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");

@@ -74,7 +74,7 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA1309 \r\n" +
@@ -231,7 +231,7 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, null));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA1309 \r\n" +

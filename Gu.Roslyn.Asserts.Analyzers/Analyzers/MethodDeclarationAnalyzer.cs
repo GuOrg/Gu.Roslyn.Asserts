@@ -104,7 +104,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             };
 
             private readonly List<LiteralExpressionSyntax> literals = new List<LiteralExpressionSyntax>();
-            private readonly ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax> roots = new ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax>();
+            private readonly ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax?> roots = new ConcurrentDictionary<LiteralExpressionSyntax, CompilationUnitSyntax?>();
             private readonly HashSet<SyntaxToken> locations = new HashSet<SyntaxToken>();
 
             private StringLiteralWalker()
@@ -401,7 +401,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
-            private bool TryGetRoot(LiteralExpressionSyntax literal, out CompilationUnitSyntax root)
+            private bool TryGetRoot(LiteralExpressionSyntax literal, [NotNullWhen(true)]out CompilationUnitSyntax? root)
             {
                 root = this.roots.GetOrAdd(literal, x =>
                 {

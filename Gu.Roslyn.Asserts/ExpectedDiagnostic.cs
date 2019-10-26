@@ -78,7 +78,7 @@ namespace Gu.Roslyn.Asserts
         /// Gets the analyzer that is expected to report a diagnostic.
         /// </summary>
         [Obsolete("To be removed.")]
-        public DiagnosticAnalyzer Analyzer { get; }
+        public DiagnosticAnalyzer? Analyzer { get; }
 
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the id from <paramref name="descriptor"/>.
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string message, string code, out string cleanedSources)
+        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string? message, string code, out string cleanedSources)
         {
             var positions = CodeReader.FindLinePositions(code).ToArray();
             if (positions.Length == 0)

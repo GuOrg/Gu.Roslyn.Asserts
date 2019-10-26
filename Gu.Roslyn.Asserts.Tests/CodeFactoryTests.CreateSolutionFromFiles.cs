@@ -131,7 +131,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var solutionFile));
                 var solution = CodeFactory.CreateSolution(
-                    solutionFile,
+                    solutionFile!,
                     new[] { new FieldNameMustNotBeginWithUnderscore(), },
                     CreateMetadataReferences(typeof(object)));
                 var expectedProjects = new[]
@@ -151,7 +151,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
                 CollectionAssert.AreEquivalent(expectedProjects, solution.Projects.Select(p => p.Name));
 
-                var expected = solutionFile.Directory
+                var expected = solutionFile!.Directory
                                            .EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                            .Where(f => !f.DirectoryName.Contains(".vs"))
                                            .Where(f => !f.DirectoryName.Contains(".git"))
@@ -200,7 +200,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
                 var solution = CodeFactory.CreateSolution(
-                    projectFile,
+                    projectFile!,
                     new[] { new SyntaxNodeAnalyzer(Descriptors.Id1), new SyntaxNodeAnalyzer(Descriptors.Id1) },
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);

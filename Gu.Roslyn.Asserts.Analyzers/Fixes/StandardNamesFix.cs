@@ -49,8 +49,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
         {
             private static readonly ConcurrentQueue<ReplaceRewriter> Cache = new ConcurrentQueue<ReplaceRewriter>();
 
-            private string before;
-            private string after;
+            private string? before;
+            private string? after;
 
             public override SyntaxNode VisitLiteralExpression(LiteralExpressionSyntax node)
             {
@@ -68,7 +68,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                 string UpdateMatch(Match match)
                 {
-                    return match.Value.Replace(this.before, this.after);
+                    return match.Value.Replace(this.before!, this.after);
                 }
             }
 

@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class TryFindFileInParentDirectory
         {
-            private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath);
+            private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase!, UriKind.Absolute).LocalPath);
 
             [Test]
             public static void TryFindProjectFileInParentDirectory()
@@ -19,7 +19,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var directory = ExecutingAssemblyDll.Directory;
                 var projectFileName = Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName) + ".csproj";
                 Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, projectFileName, out var projectFile));
-                Assert.AreEqual(projectFileName, projectFile.Name);
+                Assert.AreEqual(projectFileName, projectFile!.Name);
             }
 
             [Test]
@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Tests
             {
                 var directory = ExecutingAssemblyDll.Directory;
                 Assert.AreEqual(true, CodeFactory.TryFindFileInParentDirectory(directory, "Gu.Roslyn.Asserts.sln", out var projectFile));
-                Assert.AreEqual("Gu.Roslyn.Asserts.sln", projectFile.Name);
+                Assert.AreEqual("Gu.Roslyn.Asserts.sln", projectFile!.Name);
             }
         }
     }

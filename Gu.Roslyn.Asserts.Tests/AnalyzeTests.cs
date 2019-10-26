@@ -13,8 +13,8 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public static async Task GetDiagnosticsAsyncProjectFile()
         {
-            Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out FileInfo projectFile));
-            var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences).ConfigureAwait(false);
+            Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out FileInfo? projectFile));
+            var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile!, MetadataReferences).ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
         }
 

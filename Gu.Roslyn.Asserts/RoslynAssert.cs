@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts
             //// ReSharper restore PossibleMultipleEnumeration
         }
 
-        private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string messageHeader)
+        private static async Task AreEqualAsync(IReadOnlyList<string> expected, Solution actual, string? messageHeader)
         {
             var actualCount = actual.Projects.SelectMany(x => x.Documents).Count();
             if (expected.Count != actualCount)

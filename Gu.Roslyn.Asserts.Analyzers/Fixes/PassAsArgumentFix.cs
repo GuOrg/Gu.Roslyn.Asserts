@@ -51,7 +51,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         {
                             context.RegisterCodeFix(
                                 $"Create and use field '{name}'.",
-                                (editor, _) => editor.AddPrivateStaticField(typeDeclaration, argType, name)
+                                (editor, _) => editor.AddPrivateStaticField(typeDeclaration, argType, name!)
                                                      .ReplaceNode(
                                                          invocation,
                                                          x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
@@ -81,8 +81,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         {
                             context.RegisterCodeFix(
                                 $"Create and use fields '{name0}' and '{name1}'.",
-                                (editor, _) => editor.AddPrivateStaticField(typeDeclaration, arg0Type, name0)
-                                                     .AddPrivateStaticField(typeDeclaration, arg1Type, name1)
+                                (editor, _) => editor.AddPrivateStaticField(typeDeclaration, arg0Type, name0!)
+                                                     .AddPrivateStaticField(typeDeclaration, arg1Type, name1!)
                                                      .ReplaceNode(
                                                          invocation,
                                                          x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))

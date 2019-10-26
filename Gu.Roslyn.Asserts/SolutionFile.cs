@@ -71,7 +71,12 @@ namespace Gu.Roslyn.Asserts
                 return sln;
             }
 
-            throw new InvalidOperationException($"Did not find a .sln file in recursive parent directories of assembly.CodeBase: {new Uri(assembly.CodeBase, UriKind.Absolute).LocalPath}");
+            if (assembly.CodeBase is { } codebase)
+            {
+                throw new InvalidOperationException($"Did not find a .sln file in recursive parent directories of assembly.CodeBase: {new Uri(codebase, UriKind.Absolute).LocalPath}");
+            }
+
+            throw new InvalidOperationException($"Did not find a .sln file in recursive parent directories of assembly.CodeBase is null");
         }
 
         /// <summary>
@@ -83,9 +88,13 @@ namespace Gu.Roslyn.Asserts
         {
             var contents = File.ReadAllText(sln.FullName);
             var builder = ImmutableDictionary.CreateBuilder<ProjectId, FileInfo>();
-            foreach (Match match in Regex.Matches(contents, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
+            foreach (Match? match in Regex.Matches(contents, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
             {
-                //// ReSharper disable once AssignNullToNotNullAttribute
+                if (match is null)
+                {
+                    throw new FormatException($"Error parsing {sln}");
+                }
+
                 var projectFile = new FileInfo(Path.Combine(sln.DirectoryName, match.Groups["path"].Value));
                 builder.Add(ProjectId.CreateNewId(projectFile.FullName), projectFile);
             }

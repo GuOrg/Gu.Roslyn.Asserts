@@ -14,10 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1,
                 FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
 
-        public override FixAllProvider GetFixAllProvider()
-        {
-            return CustomFixAllProviders.BatchFixer;
-        }
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
         public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {

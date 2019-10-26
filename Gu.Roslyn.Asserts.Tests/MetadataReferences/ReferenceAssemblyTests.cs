@@ -15,7 +15,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly, out var metadataReference));
-            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
+            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }
 
         [TestCase(typeof(int))]
@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly.Location, out var metadataReference));
-            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
+            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }
 
         [TestCase(typeof(int))]
@@ -37,7 +37,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(Path.GetFileNameWithoutExtension(type.Assembly.Location), out var metadataReference));
-            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference)metadataReference).FilePath);
+            StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }
     }
 }
