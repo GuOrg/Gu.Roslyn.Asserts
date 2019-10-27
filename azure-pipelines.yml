@@ -7,16 +7,20 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-
 - task: DotNetCoreCLI@2
+  displayName: restore
   inputs:
     command: 'restore'
 
 - task: DotNetCoreCLI@2
+  displayName: build
   inputs:
     command: 'build'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
+  displayName: test
   inputs:
     command: 'test'
+    arguments: '--configuration $(buildConfiguration) --no-build'
     
