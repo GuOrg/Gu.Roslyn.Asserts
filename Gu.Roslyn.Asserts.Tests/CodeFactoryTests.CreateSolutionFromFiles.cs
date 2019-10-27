@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var expected = new[]
                 {
                     "App.xaml.cs",
-                    "AssemblyInfo.cs",
+                    "AssemblyAtributes.cs",
                     "Class1.cs",
                     "MainWindow.xaml.cs",
                     "Resources.Designer.cs",
