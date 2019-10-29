@@ -239,7 +239,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 }
             }
 
-            private class MethodAndParameterNamesComparer : IEqualityComparer<MethodInfo>
+            private sealed class MethodAndParameterNamesComparer : IEqualityComparer<MethodInfo>
             {
                 internal static readonly IEqualityComparer<MethodInfo> Default = new MethodAndParameterNamesComparer();
 

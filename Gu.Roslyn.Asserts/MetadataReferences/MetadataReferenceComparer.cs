@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts
     /// <summary>
     /// An <see cref="IEqualityComparer{T}"/> for <see cref="MetadataReference"/>.
     /// </summary>
-    internal class MetadataReferenceComparer : IEqualityComparer<MetadataReference>
+    internal sealed class MetadataReferenceComparer : IEqualityComparer<MetadataReference>
     {
         /// <summary>
         /// The default instance.
