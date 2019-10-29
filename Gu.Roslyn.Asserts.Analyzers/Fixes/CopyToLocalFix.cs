@@ -27,11 +27,11 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNode(diagnostic, out ExpressionSyntax expression) &&
+                if (syntaxRoot.TryFindNode(diagnostic, out ExpressionSyntax? expression) &&
                     semanticModel.TryGetSymbol(expression, context.CancellationToken, out var symbol) &&
                     diagnostic.AdditionalLocations.TrySingle(out var valueLocation) &&
                     syntaxRoot.FindNode(valueLocation.SourceSpan) is ExpressionSyntax value &&
-                    expression.TryFirstAncestor(out BlockSyntax block))
+                    expression.TryFirstAncestor(out BlockSyntax? block))
                 {
                     context.RegisterCodeFix(
                         $"Copy to local.",

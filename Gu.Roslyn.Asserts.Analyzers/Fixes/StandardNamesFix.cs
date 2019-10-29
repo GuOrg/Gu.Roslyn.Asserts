@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                           .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out MethodDeclarationSyntax methodDeclaration) &&
+                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out MethodDeclarationSyntax? methodDeclaration) &&
                     diagnostic.Properties.TryGetValue("before", out var before) &&
                     diagnostic.Properties.TryGetValue("after", out var after))
                 {

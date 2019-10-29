@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts
         /// Check that the <paramref name="analyzer"/> exports <paramref name="expectedDiagnostics"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
-        /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/>.</param>
+        /// <param name="expectedDiagnostics">The <see cref="IReadOnlyList{ExpectedDiagnostic}"/>.</param>
         internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
         {
             foreach (var expectedDiagnostic in expectedDiagnostics)
@@ -52,7 +52,7 @@ namespace Gu.Roslyn.Asserts
         /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptors"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
-        /// <param name="descriptors">The <see cref="DiagnosticDescriptor"/>.</param>
+        /// <param name="descriptors">The <see cref="IReadOnlyList{DiagnosticDescriptor}"/>.</param>
         internal static void VerifyAnalyzerSupportsDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors)
         {
             foreach (var expectedDiagnostic in descriptors)

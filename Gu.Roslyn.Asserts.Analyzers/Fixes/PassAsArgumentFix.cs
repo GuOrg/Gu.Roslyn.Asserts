@@ -24,13 +24,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
             var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNode(diagnostic, out InvocationExpressionSyntax invocation) &&
+                if (syntaxRoot.TryFindNode(diagnostic, out InvocationExpressionSyntax? invocation) &&
                     invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                     memberAccess.Name is GenericNameSyntax genericName &&
                     genericName.TypeArgumentList is TypeArgumentListSyntax typeArgumentList &&
                     semanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
                     method.ContainingType.Name == "RoslynAssert" &&
-                    invocation.TryFirstAncestor(out TypeDeclarationSyntax typeDeclaration) &&
+                    invocation.TryFirstAncestor(out TypeDeclarationSyntax? typeDeclaration) &&
                     semanticModel.TryGetSymbol(typeDeclaration, context.CancellationToken, out var containingType))
                 {
                     if (typeArgumentList.Arguments.TrySingle(out var typeArg) &&

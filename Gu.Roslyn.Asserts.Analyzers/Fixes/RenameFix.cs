@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     }
                     else if (diagnostic.Id == Descriptors.GURA04NameClassToMatchAsserts.Id &&
                             syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken identifier &&
-                            semanticModel.TryGetSymbol(identifier.Parent, context.CancellationToken, out INamedTypeSymbol namedType) &&
+                            semanticModel.TryGetSymbol(identifier.Parent, context.CancellationToken, out INamedTypeSymbol? namedType) &&
                             semanticModel.LookupSymbols(identifier.SpanStart, name: name).IsEmpty)
                     {
                         context.RegisterCodeFix(
@@ -66,7 +66,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             diagnostic);
                     }
                     else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken token &&
-                             semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol symbol) &&
+                             semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol? symbol) &&
                              semanticModel.LookupSymbols(token.SpanStart, name: name).IsEmpty)
                     {
                         context.RegisterCodeFix(

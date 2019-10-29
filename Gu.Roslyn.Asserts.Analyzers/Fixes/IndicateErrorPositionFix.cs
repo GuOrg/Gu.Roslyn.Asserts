@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                           .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNode(diagnostic, out LiteralExpressionSyntax literal))
+                if (syntaxRoot.TryFindNode(diagnostic, out LiteralExpressionSyntax? literal))
                 {
                     context.RegisterCodeFix(
                         $"Add ↓ to the start of the string literal (move it manually after).",

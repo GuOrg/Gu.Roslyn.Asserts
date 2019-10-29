@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                           .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out InvocationExpressionSyntax invocation) &&
+                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out InvocationExpressionSyntax? invocation) &&
                     invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                     invocation.Parent is AssignmentExpressionSyntax assignment &&
                     assignment.Parent is ExpressionStatementSyntax statement &&

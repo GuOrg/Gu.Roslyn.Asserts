@@ -29,9 +29,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out ObjectCreationExpressionSyntax objectCreation) &&
+                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out ObjectCreationExpressionSyntax? objectCreation) &&
                     semanticModel.TryGetType(objectCreation, context.CancellationToken, out var type) &&
-                    type.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax declaration))
+                    type.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax? declaration))
                 {
                     if (diagnostic.Id == Descriptors.GURA08aShouldBeInternal.Id)
                     {

@@ -31,13 +31,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                              .ConfigureAwait(false);
             foreach (var diagnostic in context.Diagnostics)
             {
-                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out MethodDeclarationSyntax methodDeclaration) &&
+                if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out MethodDeclarationSyntax? methodDeclaration) &&
                     diagnostic.Properties.TryGetValue(nameof(IdentifierNameSyntax), out var name))
                 {
                     if (semanticModel.LookupSymbols(methodDeclaration.SpanStart, name: name).TrySingle(out var symbol))
                     {
                         if (symbol is INamedTypeSymbol namedType &&
-                            namedType.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax classDeclarationSyntax))
+                            namedType.TrySingleDeclaration(context.CancellationToken, out ClassDeclarationSyntax? classDeclarationSyntax))
                         {
                             context.RegisterCodeFix(
                                 CodeAction.Create(

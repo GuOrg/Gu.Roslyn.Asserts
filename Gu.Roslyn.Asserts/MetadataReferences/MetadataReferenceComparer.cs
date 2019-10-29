@@ -45,7 +45,7 @@ namespace Gu.Roslyn.Asserts
         /// - object.Equals() if not.
         /// </summary>
         /// <param name="x">The first <see cref="MetadataReference"/>.</param>
-        /// <param name="y">The other <see cref="MetadataReferences"/>.</param>
+        /// <param name="y">The other <see cref="MetadataReference"/>.</param>
         /// <returns>True if x and y are found equal.</returns>
         internal static bool Equals(MetadataReference x, MetadataReference y)
         {

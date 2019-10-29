@@ -412,7 +412,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                 bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax? result)
                 {
-                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax localDeclaration) &&
+                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax? localDeclaration) &&
                         localDeclaration.Declaration is VariableDeclarationSyntax localVariableDeclaration &&
                         localVariableDeclaration.Variables.TrySingle(out var localVariable) &&
                         localVariable.Initializer is EqualsValueClauseSyntax localInitializer)
@@ -422,7 +422,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         return true;
                     }
 
-                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax fieldDeclaration) &&
+                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax? fieldDeclaration) &&
                         fieldDeclaration.Declaration is VariableDeclarationSyntax fieldVariableDeclaration &&
                         fieldVariableDeclaration.Variables.TrySingle(out var fieldVariable) &&
                         fieldVariable.Initializer is EqualsValueClauseSyntax fieldInitializer)
