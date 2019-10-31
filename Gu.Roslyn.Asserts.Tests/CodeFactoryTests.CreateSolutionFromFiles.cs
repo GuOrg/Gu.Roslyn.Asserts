@@ -185,9 +185,6 @@ namespace Gu.Roslyn.Asserts.Tests
                 var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
                 var analyzersProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Analyzers");
                 CollectionAssert.IsEmpty(analyzersProject.ProjectReferences);
-                CollectionAssert.AreEqual(
-                    new[] { analyzersProject },
-                    assertsProject.AllProjectReferences.Select(x => sln.Projects.Single(p => p.Id == x.ProjectId)));
 
                 var testProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Tests");
                 CollectionAssert.AreEqual(
