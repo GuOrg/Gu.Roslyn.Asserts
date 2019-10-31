@@ -57,14 +57,4 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66" PrivateAssets="all" />
     <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj">
-      <!-- hack for packing with package dependency -->
-      <PrivateAssets>none</PrivateAssets>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
-      <UndefineProperties>TargetFramework</UndefineProperties>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
