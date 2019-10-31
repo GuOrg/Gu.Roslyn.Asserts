@@ -60,7 +60,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gu.Roslyn.Asserts.Analyzers\Gu.Roslyn.Asserts.Analyzers.csproj">
+      <!-- hack for packing with package dependency -->
+      <PrivateAssets>none</PrivateAssets>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
+      <UndefineProperties>TargetFramework</UndefineProperties>
     </ProjectReference>
   </ItemGroup>
 </Project>
