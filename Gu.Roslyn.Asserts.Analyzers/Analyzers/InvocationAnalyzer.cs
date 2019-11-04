@@ -146,7 +146,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                             void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
                             {
-                                if (stringArg.Symbol is ISymbol symbol)
+                                if (stringArg.Symbol is { } symbol)
                                 {
                                     if (stringArg.TryGetNameFromCode(out var codeName) &&
                                         ShouldRename(stringArg.Symbol, codeName, out codeName))
@@ -370,8 +370,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                 bool TryGetCollectionInitializer(out InitializerExpressionSyntax? result)
                 {
-                    if (invocation.TryFindArgument(parameter, out var argument) ||
-                        invocation.ArgumentList.Arguments.TryElementAt(parameter.Ordinal, out argument))
+                    if (invocation.TryFindArgument(parameter, out var argument))
                     {
                         switch (argument.Expression)
                         {
@@ -439,11 +438,11 @@ namespace Gu.Roslyn.Asserts.Analyzers
             internal bool TryGetNameFromCode([NotNullWhen(true)]out string? codeName)
             {
                 codeName = null;
-                return this.Value is LiteralExpressionSyntax literal &&
-                       (TryGetName(literal.Token.ValueText, "class ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "struct ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "interface ", out codeName) ||
-                        TryGetName(literal.Token.ValueText, "enum ", out codeName));
+                return this.Value is LiteralExpressionSyntax { Token: { ValueText: { } valueText } } &&
+                       (TryGetName(valueText, "class ", out codeName) ||
+                        TryGetName(valueText, "struct ", out codeName) ||
+                        TryGetName(valueText, "interface ", out codeName) ||
+                        TryGetName(valueText, "enum ", out codeName));
 
                 static bool TryGetName(string text, string prefix, out string? name)
                 {
