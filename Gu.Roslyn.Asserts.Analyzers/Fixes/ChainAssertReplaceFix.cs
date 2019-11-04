@@ -26,9 +26,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             foreach (var diagnostic in context.Diagnostics)
             {
                 if (syntaxRoot.TryFindNodeOrAncestor(diagnostic, out InvocationExpressionSyntax? invocation) &&
-                    invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                    invocation.Parent is AssignmentExpressionSyntax assignment &&
-                    assignment.Parent is ExpressionStatementSyntax statement &&
+                    invocation.Expression is MemberAccessExpressionSyntax { Parent: AssignmentExpressionSyntax { Parent: ExpressionStatementSyntax statement } } memberAccess &&
                     diagnostic.AdditionalLocations.TrySingle(out var additionalLocation) &&
                     syntaxRoot.FindNode(additionalLocation.SourceSpan) is LiteralExpressionSyntax literal)
                 {
