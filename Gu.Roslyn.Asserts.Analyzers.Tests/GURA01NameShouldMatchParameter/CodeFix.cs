@@ -206,7 +206,6 @@ namespace N
         {
             var c1 = ""class C1 { }"";
             var wrong = ""class ↓C2 { }"";
-            var after = ""class C2 { }"";
             RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { c1, wrong });
         }
     }
@@ -226,7 +225,6 @@ namespace N
         {
             var c1 = ""class C1 { }"";
             var code = ""class ↓C2 { }"";
-            var after = ""class C2 { }"";
             RoslynAssert.Diagnostics((DiagnosticAnalyzer)null, new [] { c1, code });
         }
     }

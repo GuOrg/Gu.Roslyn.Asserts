@@ -50,7 +50,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             return name != null;
         }
 
-        internal static bool TryFindRoslynAssert(SyntaxNode node, out InvocationExpressionSyntax invocation)
+        internal static bool TryFindRoslynAssert(SyntaxNode node, [NotNullWhen(true)] out InvocationExpressionSyntax? invocation)
         {
             using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))
             {
