@@ -5,7 +5,6 @@ namespace Gu.Roslyn.Asserts
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;

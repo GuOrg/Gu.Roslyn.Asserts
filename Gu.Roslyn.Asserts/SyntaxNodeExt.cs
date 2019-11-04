@@ -241,13 +241,12 @@ namespace Gu.Roslyn.Asserts
         public static T Find<T>(this SyntaxTree tree, string code)
             where T : SyntaxNode
         {
-            T? best = null;
             if (tree.TryGetRoot(out var root))
             {
-                best = FindBestMatchRecursive<T>(root, code);
+                return FindBestMatchRecursive<T>(root, code) ?? throw new InvalidOperationException($"The tree does not contain an {typeof(T).Name} matching the code.");
             }
 
-            return best ?? throw new InvalidOperationException($"The tree does not contain an {typeof(T).Name} matching the code.");
+            throw new InvalidOperationException($"The tree does not have a root.");
         }
 
         /// <summary>

@@ -8,24 +8,24 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// For dumping all the things in light format.
         /// </summary>
-        public static readonly AstWriterSettings Default = new AstWriterSettings(AstFormat.Light, AstTrivia.Token, ignoreEmptyTriva: false);
+        public static readonly AstWriterSettings Default = new AstWriterSettings(AstFormat.Light, AstTrivia.Token, ignoreEmptyTrivia: false);
 
         /// <summary>
         /// For dumping all the things in JSON format.
         /// </summary>
-        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(AstFormat.Json, AstTrivia.Token, ignoreEmptyTriva: false);
+        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(AstFormat.Json, AstTrivia.Token, ignoreEmptyTrivia: false);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AstWriterSettings"/> class.
         /// </summary>
         /// <param name="format">Specifies the format of the dump.</param>
         /// <param name="trivia">Specifies what trivia to include.</param>
-        /// <param name="ignoreEmptyTriva">Specifies if empty whitespace trivia should be ignored.</param>
-        public AstWriterSettings(AstFormat format, AstTrivia trivia, bool ignoreEmptyTriva)
+        /// <param name="ignoreEmptyTrivia">Specifies if empty whitespace trivia should be ignored.</param>
+        public AstWriterSettings(AstFormat format, AstTrivia trivia, bool ignoreEmptyTrivia)
         {
             this.Format = format;
             this.Trivia = trivia;
-            this.IgnoreEmptyTriva = ignoreEmptyTriva;
+            this.IgnoreEmptyTrivia = ignoreEmptyTrivia;
         }
 
         /// <summary>
@@ -42,6 +42,6 @@ namespace Gu.Roslyn.Asserts
         /// Gets a value indicating whether empty whitespace trivia should be ignored.
         /// SyntaxFactory.Whitespace(string.Empty).
         /// </summary>
-        public bool IgnoreEmptyTriva { get; }
+        public bool IgnoreEmptyTrivia { get; }
     }
 }

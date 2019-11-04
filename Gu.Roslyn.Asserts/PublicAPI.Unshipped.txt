@@ -1,1 +1,5 @@
-﻿
+﻿Gu.Roslyn.Asserts.AstTrivia.Ignore = 8 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Node = 4 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.Token = 2 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTrivia) -> void
+Gu.Roslyn.Asserts.AstWriterSettings.IgnoreEmptyTrivia.get -> bool

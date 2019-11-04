@@ -7,7 +7,6 @@ namespace Gu.Roslyn.Asserts
     using System.Linq;
     using System.Reflection;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
     /// Helper for getting meta data references from <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/>.
@@ -41,7 +40,7 @@ namespace Gu.Roslyn.Asserts
                     set.UnionWith(transitive.MetadataReferences);
                 }
 
-                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is MetadataReferencesAttribute attribute)
+                if (assembly.GetCustomAttribute<MetadataReferencesAttribute>() is { } attribute)
                 {
                     set.UnionWith(attribute.MetadataReferences);
                 }

@@ -221,7 +221,7 @@ namespace Gu.Roslyn.Asserts
 
             bool IsIgnoredEmpty(SyntaxTrivia trivia)
             {
-                return this.settings.IgnoreEmptyTriva &&
+                return this.settings.IgnoreEmptyTrivia &&
                        trivia.IsKind(SyntaxKind.WhitespaceTrivia) &&
                        trivia.Span.IsEmpty;
             }

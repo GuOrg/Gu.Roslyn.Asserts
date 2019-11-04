@@ -112,9 +112,9 @@ namespace Gu.Roslyn.Asserts
             var parameters = method.GetParameters();
             for (var i = 0; i < parameters.Length; i++)
             {
-                if (ArgumentWriters[parameters[i]] is { } writer)
+                if (ArgumentWriters[parameters[i]] is { } argumentWriter)
                 {
-                    writer.Invoke(this, node, i == parameters.Length - 1);
+                    argumentWriter.Invoke(this, node, i == parameters.Length - 1);
                 }
             }
 
@@ -210,7 +210,7 @@ namespace Gu.Roslyn.Asserts
 
                     if (new System.Xml.Linq.XText(token.ValueText).ToString() == token.Text)
                     {
-                        this.writer.Append($"SyntaxFactory.XmlTextLiteral(")
+                        this.writer.Append("SyntaxFactory.XmlTextLiteral(")
                             .AppendQuotedEscaped(token.Text)
                             .Append(")");
                         return this;
@@ -290,21 +290,21 @@ namespace Gu.Roslyn.Asserts
             switch (trivia.Kind())
             {
                 case SyntaxKind.DisabledTextTrivia:
-                    this.writer.Append($"SyntaxFactory.DisabledText(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    this.writer.Append("SyntaxFactory.DisabledText(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.DocumentationCommentExteriorTrivia:
-                    this.writer.Append($"SyntaxFactory.DocumentationCommentExterior(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    this.writer.Append("SyntaxFactory.DocumentationCommentExterior(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.EndOfLineTrivia:
                     return this.Append("SyntaxFactory.LineFeed");
                 case SyntaxKind.MultiLineCommentTrivia:
-                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    this.writer.Append("SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.PreprocessingMessageTrivia:
-                    this.writer.Append($"SyntaxFactory.PreprocessingMessage(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    this.writer.Append("SyntaxFactory.PreprocessingMessage(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.SingleLineCommentTrivia:
-                    this.writer.Append($"SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
+                    this.writer.Append("SyntaxFactory.Comment(").AppendQuotedEscaped(trivia.ToString()).Append(")");
                     return this;
                 case SyntaxKind.WhitespaceTrivia:
                     var text = trivia.ToString();
@@ -361,7 +361,7 @@ namespace Gu.Roslyn.Asserts
                                .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
                 default:
-                    this.AppendLine($"SyntaxFactory.List(")
+                    this.AppendLine("SyntaxFactory.List(")
                         .PushIndent()
                         .AppendLine($"new {typeof(T).Name}[]")
                         .AppendLine("{")
@@ -409,7 +409,7 @@ namespace Gu.Roslyn.Asserts
 
                     this.PopIndent()
                         .AppendLine("},")
-                        .AppendLine($"new SyntaxToken[]")
+                        .AppendLine("new SyntaxToken[]")
                         .AppendLine("{")
                         .PushIndent();
 
@@ -436,14 +436,14 @@ namespace Gu.Roslyn.Asserts
                     this.Append("default").WriteArgumentEnd(closeArgumentList);
                     return this;
                 case 1:
-                    return this.AppendLine($"SyntaxFactory.TokenList(")
+                    return this.AppendLine("SyntaxFactory.TokenList(")
                                .PushIndent()
                                .Write(tokenList[0])
                                .Append(")")
                                .WriteArgumentEnd(closeArgumentList)
                                .PopIndent();
                 default:
-                    this.AppendLine($"SyntaxFactory.TokenList(")
+                    this.AppendLine("SyntaxFactory.TokenList(")
                         .PushIndent();
                     for (var i = 0; i < tokenList.Count; i++)
                     {
@@ -473,7 +473,7 @@ namespace Gu.Roslyn.Asserts
                     return this.Append(text!)
                                .WriteArgumentEnd(closeArgumentList);
                 default:
-                    this.AppendLine($"SyntaxFactory.TriviaList(")
+                    this.AppendLine("SyntaxFactory.TriviaList(")
                         .PushIndent();
                     for (var i = 0; i < triviaList.Count; i++)
                     {

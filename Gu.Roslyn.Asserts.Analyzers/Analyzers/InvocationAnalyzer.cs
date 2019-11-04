@@ -64,7 +64,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             stringArg.Value.GetLocation()));
                                 }
 
-                                if (stringArg.Symbol is ISymbol symbol)
+                                if (stringArg.Symbol is { } symbol)
                                 {
                                     if (stringArg.TryGetNameFromCode(out var codeName) &&
                                         ShouldRename(stringArg.Symbol, codeName, out codeName))
@@ -296,9 +296,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return this.Value switch
                     {
                         LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
-                        InvocationExpressionSyntax invocation when invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                                                                        memberAccess.Expression is LiteralExpressionSyntax literal &&
-                                                                        literal.Token.ValueText.Contains("↓") => true,
+                        InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
                         _ => (bool?)null,
                     };
                 }
@@ -355,12 +353,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
 
                 if (parameter.IsParams &&
-                    invocation.ArgumentList is ArgumentListSyntax argumentList)
+                    invocation.ArgumentList is { Arguments: { } arguments })
                 {
-                    var builder = ImmutableArray.CreateBuilder<StringArgument>(argumentList.Arguments.Count - parameter.Ordinal);
-                    for (var i = parameter.Ordinal; i < argumentList.Arguments.Count; i++)
+                    var builder = ImmutableArray.CreateBuilder<StringArgument>(arguments.Count - parameter.Ordinal);
+                    for (var i = parameter.Ordinal; i < arguments.Count; i++)
                     {
-                        builder.Add(Create(argumentList.Arguments[i].Expression, semanticModel, cancellationToken));
+                        builder.Add(Create(arguments[i].Expression, semanticModel, cancellationToken));
                     }
 
                     results = builder.MoveToImmutable();
@@ -377,15 +375,15 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         switch (argument.Expression)
                         {
-                            case ImplicitArrayCreationExpressionSyntax arrayCreation:
-                                result = arrayCreation.Initializer;
-                                return result != null;
-                            case ArrayCreationExpressionSyntax arrayCreation:
-                                result = arrayCreation.Initializer;
-                                return result != null;
-                            case ObjectCreationExpressionSyntax objectCreation:
-                                result = objectCreation.Initializer;
-                                return result != null;
+                            case ImplicitArrayCreationExpressionSyntax { Initializer: { } initializer }:
+                                result = initializer;
+                                return true;
+                            case ArrayCreationExpressionSyntax { Initializer: { } initializer }:
+                                result = initializer;
+                                return true;
+                            case ObjectCreationExpressionSyntax { Initializer: { } initializer }:
+                                result = initializer;
+                                return true;
                         }
                     }
 
@@ -413,9 +411,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax? result)
                 {
                     if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax? localDeclaration) &&
-                        localDeclaration.Declaration is VariableDeclarationSyntax localVariableDeclaration &&
-                        localVariableDeclaration.Variables.TrySingle(out var localVariable) &&
-                        localVariable.Initializer is EqualsValueClauseSyntax localInitializer)
+                        localDeclaration.Declaration is { Variables: { } localVariables } &&
+                        localVariables.TrySingle(out var localVariable) &&
+                        localVariable.Initializer is { } localInitializer)
                     {
                         identifier = localVariable.Identifier;
                         result = localInitializer.Value;
@@ -423,9 +421,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     }
 
                     if (candidateSymbol.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax? fieldDeclaration) &&
-                        fieldDeclaration.Declaration is VariableDeclarationSyntax fieldVariableDeclaration &&
-                        fieldVariableDeclaration.Variables.TrySingle(out var fieldVariable) &&
-                        fieldVariable.Initializer is EqualsValueClauseSyntax fieldInitializer)
+                        fieldDeclaration.Declaration is { Variables: { } fieldVariables } &&
+                        fieldVariables.TrySingle(out var fieldVariable) &&
+                        fieldVariable.Initializer is { } fieldInitializer)
                     {
                         identifier = fieldVariable.Identifier;
                         result = fieldInitializer.Value;

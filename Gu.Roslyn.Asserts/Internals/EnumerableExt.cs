@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Internals
     /// <summary>
     /// Helper class for applying code fixes.
     /// </summary>
-    internal static partial class EnumerableExt
+    internal static class EnumerableExt
     {
         /// <summary>
         /// Return the element at index if exists.
@@ -273,7 +273,7 @@ namespace Gu.Roslyn.Asserts.Internals
                 var found = false;
                 do
                 {
-                    if (e.Current is T item &&
+                    if (e.Current is { } item &&
                         predicate(item))
                     {
                         result = item;

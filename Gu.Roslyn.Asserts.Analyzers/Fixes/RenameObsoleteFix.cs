@@ -2,7 +2,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Threading.Tasks;
     using Gu.Roslyn.CodeFixExtensions;
@@ -28,17 +27,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     context.RegisterCodeFix(
                         $"Change to: {newText}.",
                         (editor, _) => editor.ReplaceNode(
-                            expression,
+                            expression!,
                             x => SyntaxFactory.ParseExpression(newText).WithTriviaFrom(x)),
                         nameof(RenameObsoleteFix),
                         diagnostic);
                 }
 
-                bool TryFindUpdate(out ExpressionSyntax result, out string? text)
+                bool TryFindUpdate(out ExpressionSyntax? result, out string? text)
                 {
                     switch (diagnostic.Id)
                     {
-                        case "CS0103" when syntaxRoot.TryFindNode(diagnostic, out result!):
+                        case "CS0103" when syntaxRoot.TryFindNode(diagnostic, out result):
                             {
                                 var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
                                 switch (message)
@@ -65,7 +64,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 break;
                             }
 
-                        case "CS0618" when syntaxRoot.TryFindNode(diagnostic, out result!):
+                        case "CS0618" when syntaxRoot.TryFindNode(diagnostic, out result):
                             {
                                 var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
                                 if (message.StartsWith("'RoslynAssert.MetadataReferences' is obsolete:"))
@@ -83,7 +82,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 break;
                             }
 
-                        case "CS1739" when syntaxRoot.TryFindNode(diagnostic, out result!):
+                        case "CS1739" when syntaxRoot.TryFindNode(diagnostic, out result):
                             {
                                 var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
                                 if (message.Contains("suppressedDiagnostics"))
