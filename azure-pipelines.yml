@@ -22,5 +22,4 @@ steps:
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
-    vsTestVersion: latest
     configuration: '$(buildConfiguration)'
