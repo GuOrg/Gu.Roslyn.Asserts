@@ -258,14 +258,6 @@ namespace N
             [Test]
             public static void TwoDocumentsOneError()
             {
-                var c1 = @"
-namespace N
-{
-    class C1
-    {
-        private readonly int ↓_value = 1;
-    }
-}";
                 var c2 = @"
 namespace N
 {
@@ -273,8 +265,17 @@ namespace N
     {
     }
 }";
+
+                var code = @"
+namespace N
+{
+    class C1
+    {
+        private readonly int ↓_value = 1;
+    }
+}";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer, c1, c2);
+                RoslynAssert.Diagnostics(analyzer, code, c2);
             }
 
             [Test]
