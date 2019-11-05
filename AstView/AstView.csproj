@@ -4,7 +4,6 @@
     <UseWpf>true</UseWpf>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <CodeAnalysisRuleSet>AstView.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
