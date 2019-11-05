@@ -64,7 +64,7 @@ namespace AstView
         {
             start = 0;
             length = 0;
-            return this.generation is string text &&
+            return this.generation is { } text &&
                    TryFindStart(text, out start) &&
                    TryFindLength(text, start, out length);
 

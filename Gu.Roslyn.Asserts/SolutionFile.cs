@@ -23,7 +23,7 @@ namespace Gu.Roslyn.Asserts
         public static bool TryFind(Assembly assembly, [NotNullWhen(true)]out FileInfo? sln)
         {
             sln = null;
-            return assembly.CodeBase is string codeBase &&
+            return assembly.CodeBase is { } codeBase &&
                    new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
                    CodeFactory.TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
         }
@@ -37,7 +37,7 @@ namespace Gu.Roslyn.Asserts
         public static bool TryFind(string name, [NotNullWhen(true)]out FileInfo? sln)
         {
             sln = null;
-            return Assembly.GetCallingAssembly().CodeBase is string codeBase &&
+            return Assembly.GetCallingAssembly().CodeBase is { } codeBase &&
                    new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
                    CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out sln);
         }
@@ -49,7 +49,7 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The solution file.</returns>
         public static FileInfo Find(string name)
         {
-            if (Assembly.GetCallingAssembly().CodeBase is string codeBase &&
+            if (Assembly.GetCallingAssembly().CodeBase is { } codeBase &&
                 new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
                 CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out var sln))
             {

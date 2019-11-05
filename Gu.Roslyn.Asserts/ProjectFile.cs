@@ -220,7 +220,7 @@ namespace Gu.Roslyn.Asserts
                         }
 
                         if (include.Contains("\\") &&
-                            Path.Combine(csproj.Directory.FullName, include) is string fileName &&
+                            Path.Combine(csproj.Directory.FullName, include) is { } fileName &&
                             File.Exists(fileName))
                         {
                             yield return MetadataReferences.CreateFromFile(fileName);

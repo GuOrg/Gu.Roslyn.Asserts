@@ -290,7 +290,7 @@ namespace Gu.Roslyn.Asserts
                     return FindBestMatchRecursive<T>(node, code) ?? node;
                 }
 
-                if (node.FirstAncestorOrSelf<StatementSyntax>() is StatementSyntax statement &&
+                if (node.FirstAncestorOrSelf<StatementSyntax>() is { } statement &&
                     statement.ToFullString().Contains(code))
                 {
                     foreach (var descendant in statement.DescendantNodes())

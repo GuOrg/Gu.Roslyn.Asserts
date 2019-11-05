@@ -25,9 +25,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             foreach (var diagnostic in context.Diagnostics)
             {
                 if (syntaxRoot.TryFindNode(diagnostic, out InvocationExpressionSyntax? invocation) &&
-                    invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                    memberAccess.Name is GenericNameSyntax genericName &&
-                    genericName.TypeArgumentList is TypeArgumentListSyntax typeArgumentList &&
+                    invocation.Expression is MemberAccessExpressionSyntax { Name: GenericNameSyntax { TypeArgumentList: { } typeArgumentList } genericName } memberAccess &&
                     semanticModel.TryGetSymbol(invocation, context.CancellationToken, out var method) &&
                     method.ContainingType.Name == "RoslynAssert" &&
                     invocation.TryFirstAncestor(out TypeDeclarationSyntax? typeDeclaration) &&
@@ -150,7 +148,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             foreach (var member in containingType.GetMembers())
             {
                 if (FieldOrProperty.TryCreate(member, out fieldOrProperty) &&
-                    fieldOrProperty.Initializer(cancellationToken) is EqualsValueClauseSyntax initializer &&
+                    fieldOrProperty.Initializer(cancellationToken) is { } initializer &&
                     semanticModel.TryGetType(initializer.Value, cancellationToken, out var candidate) &&
                     Equals(candidate, argumentType))
                 {
@@ -158,7 +156,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 }
             }
 
-            if (containingType.ContainingType is INamedTypeSymbol parent)
+            if (containingType.ContainingType is { } parent)
             {
                 return TryFindFieldOrProperty(parent, argumentType, semanticModel, cancellationToken, out fieldOrProperty);
             }
