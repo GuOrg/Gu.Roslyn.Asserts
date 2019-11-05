@@ -254,7 +254,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return candidateNames.WhenSingle;
                 }
 
-                if (candidateNames.Else is string name)
+                if (candidateNames.Else is { } name)
                 {
                     foreach (var candidateLiteral in this.literals)
                     {
@@ -305,8 +305,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 {
                                     foreach (var member in typeDeclaration.Members)
                                     {
-                                        if (member is MethodDeclarationSyntax method &&
-                                            method.Identifier.ValueText != methodDeclaration.Identifier.ValueText)
+                                        if (member is MethodDeclarationSyntax { Identifier: { ValueText: { } valueText } } &&
+                                            valueText != methodDeclaration.Identifier.ValueText)
                                         {
                                             return false;
                                         }
@@ -403,15 +403,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             private bool TryGetRoot(LiteralExpressionSyntax literal, [NotNullWhen(true)]out CompilationUnitSyntax? root)
             {
-                root = this.roots.GetOrAdd(literal, x =>
-                {
-                    if (CSharpSyntaxTree.ParseText(literal.Token.ValueText).TryGetRoot(out var node))
+                root = this.roots.GetOrAdd(
+                    literal,
+                    x =>
                     {
-                        return node as CompilationUnitSyntax;
-                    }
+                        if (CSharpSyntaxTree.ParseText(literal.Token.ValueText).TryGetRoot(out var node))
+                        {
+                            return node as CompilationUnitSyntax;
+                        }
 
-                    return null;
-                });
+                        return null;
+                    });
 
                 return root != null;
             }
@@ -429,8 +431,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         return false;
                     }
 
-                    token = root.FindToken(index - offset - 1);
-                    return token.IsKind(SyntaxKind.IdentifierToken);
+                    int position = index - offset - 1;
+                    if (root.FullSpan.Contains(position))
+                    {
+                        token = root.FindToken(position);
+                        return token.IsKind(SyntaxKind.IdentifierToken);
+                    }
                 }
 
                 token = default;

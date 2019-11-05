@@ -16,9 +16,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
-            if (node.Expression is MemberAccessExpressionSyntax memberAccess &&
-                memberAccess.Expression is IdentifierNameSyntax identifierName &&
-                identifierName.Identifier.ValueText == "RoslynAssert")
+            if (node.Expression is MemberAccessExpressionSyntax { Expression: IdentifierNameSyntax { Identifier: { ValueText: "RoslynAssert" } } })
             {
                 this.invocations.Add(node);
             }

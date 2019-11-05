@@ -89,16 +89,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 return TryGetName(out result);
             }
 
-            if (type.ContainingType is INamedTypeSymbol parent)
+            if (type.ContainingType is { IsGenericType: false, ContainingType: null } containingType)
             {
-                if (parent.ContainingType != null ||
-                    parent.IsGenericType)
-                {
-                    result = null;
-                    return false;
-                }
-
-                if (!EndsWith(offset, parent.Name, out _))
+                if (!EndsWith(offset, containingType.Name, out _))
                 {
                     return TryGetName(out result);
                 }
@@ -122,16 +115,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             bool TryGetName(out string? name)
             {
-                if (type.ContainingType is INamedTypeSymbol containing)
+                if (type.ContainingType is { IsGenericType: false, ContainingType: null } containingType)
                 {
-                    if (containing.IsGenericType ||
-                        containing.ContainingType != null)
-                    {
-                        name = null;
-                        return false;
-                    }
-
-                    name = $"{containing.Name}.{type.Name}";
+                    name = $"{containingType.Name}.{type.Name}";
                     return true;
                 }
 
@@ -168,11 +154,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         foreach (var directive in walker.usingDirectives)
                         {
-                            if (directive.Name is QualifiedNameSyntax qualifiedName &&
-                                qualifiedName.Right is IdentifierNameSyntax right &&
-                                right.Identifier.ValueText == "Framework" &&
-                                qualifiedName.Left is IdentifierNameSyntax left &&
-                                left.Identifier.ValueText == "NUnit")
+                            if (directive.Name is QualifiedNameSyntax { Left: IdentifierNameSyntax { Identifier: { ValueText: "NUnit" } }, Right: IdentifierNameSyntax { Identifier: { ValueText: "Framework" } } })
                             {
                                 return true;
                             }
