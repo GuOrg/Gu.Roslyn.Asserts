@@ -1,3 +1,4 @@
+// ReSharper disable PossiblyImpureMethodCallOnReadonlyVariable
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
@@ -80,6 +81,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                     if (stringArg.Symbol.Kind == SymbolKind.Local &&
                                         stringArg.HasPosition == true &&
+                                        args.TrySingle(x => x.HasPosition == true, out _) &&
                                         ShouldRename(symbol, parameter.Name, out var parameterName))
                                     {
                                         context.ReportDiagnostic(
