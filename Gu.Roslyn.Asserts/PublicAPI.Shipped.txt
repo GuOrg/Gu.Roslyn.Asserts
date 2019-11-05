@@ -22,9 +22,9 @@ Gu.Roslyn.Asserts.AstTrivia.Token = 1 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstTrivia.Unspecified = 0 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstWriter
 Gu.Roslyn.Asserts.AstWriterSettings
-Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTriva) -> void
+Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTrivia) -> void
 Gu.Roslyn.Asserts.AstWriterSettings.Format.get -> Gu.Roslyn.Asserts.AstFormat
-Gu.Roslyn.Asserts.AstWriterSettings.IgnoreEmptyTriva.get -> bool
+Gu.Roslyn.Asserts.AstWriterSettings.IgnoreEmptyTrivia.get -> bool
 Gu.Roslyn.Asserts.AstWriterSettings.Trivia.get -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.Benchmark
 Gu.Roslyn.Asserts.Benchmark.Analyzer.get -> Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer
