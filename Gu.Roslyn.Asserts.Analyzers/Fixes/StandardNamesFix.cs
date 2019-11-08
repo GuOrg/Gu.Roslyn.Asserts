@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.Composition;
-    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -109,7 +108,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                         static string? FindNewMemberName(TypeDeclarationSyntax type, string name)
                         {
-                            if (type is TypeDeclarationSyntax typeDeclaration)
+                            if (type is { } typeDeclaration)
                             {
                                 foreach (var item in typeDeclaration.Members)
                                 {

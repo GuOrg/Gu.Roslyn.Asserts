@@ -2,7 +2,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -40,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 CodeLiteral? code = null;
                 foreach (var word in Words)
                 {
-                    if (Regex.IsMatch(valueText, $"[^\\w](?<before>{word})[^\\w]", RegexOptions.IgnoreCase))
+                    if (Regex.IsMatch(valueText, $"[^\\w]{word}[^\\w]", RegexOptions.IgnoreCase))
                     {
                         if (code is null)
                         {
@@ -58,16 +57,16 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             {
                                 switch (identifier.Parent)
                                 {
-                                    case ClassDeclarationSyntax parent when word != "C":
+                                    case ClassDeclarationSyntax _ when word != "C":
                                         yield return new WordAndLocation(word, Location());
                                         break;
-                                    case StructDeclarationSyntax parent:
+                                    case StructDeclarationSyntax _:
                                         yield return new WordAndLocation(word, Location());
                                         break;
-                                    case InterfaceDeclarationSyntax parent:
+                                    case InterfaceDeclarationSyntax _:
                                         yield return new WordAndLocation(word, Location());
                                         break;
-                                    case EnumDeclarationSyntax parent when word != "E":
+                                    case EnumDeclarationSyntax _ when word != "E":
                                         yield return new WordAndLocation(word, Location());
                                         break;
                                     case VariableDeclaratorSyntax { Parent: FieldDeclarationSyntax _ }:

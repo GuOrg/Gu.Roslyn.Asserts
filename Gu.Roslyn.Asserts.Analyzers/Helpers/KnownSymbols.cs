@@ -1,8 +1,6 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using Gu.Roslyn.AnalyzerExtensions;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     internal static class KnownSymbols
     {
