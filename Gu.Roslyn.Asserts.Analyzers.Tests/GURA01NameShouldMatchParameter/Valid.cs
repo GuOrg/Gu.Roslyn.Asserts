@@ -532,5 +532,35 @@ namespace N
 
             RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void WhenMetadataReferencesInOtherClass()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using Microsoft.CodeAnalysis;
+    using NUnit.Framework;
+
+    public static class SpecialMetadataReferences
+    {
+        public static readonly MetadataReference[] Corlib = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
+    }
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            RoslynAssert.Valid(Analyzer, code, metadataReferences: SpecialMetadataReferences.Corlib);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
     }
 }
