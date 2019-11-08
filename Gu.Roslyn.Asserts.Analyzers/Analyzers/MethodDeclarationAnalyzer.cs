@@ -49,20 +49,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         if (after != null)
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(
-                                Descriptors.GURA09UseStandardNames,
-                                location,
-                                ImmutableDictionary<string, string>.Empty.Add("before", before)
-                                                                         .Add("after", after),
-                                $"Use standard name {after} instead of {before}."));
+                            context.ReportDiagnostic(
+                                Diagnostic.Create(
+                                    Descriptors.GURA09UseStandardNames,
+                                    location,
+                                    ImmutableDictionary<string, string>.Empty.Add("before", before)
+                                                                       .Add("after", after),
+                                    $"Use standard name {after} instead of {before}."));
                         }
                         else
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(
-                                Descriptors.GURA09UseStandardNames,
-                                location,
-                                ImmutableDictionary<string, string>.Empty.Add("before", before),
-                                $"Use standard name instead of {before}."));
+                            context.ReportDiagnostic(
+                                Diagnostic.Create(
+                                    Descriptors.GURA09UseStandardNames,
+                                    location,
+                                    ImmutableDictionary<string, string>.Empty.Add("before", before),
+                                    $"Use standard name instead of {before}."));
                         }
                     }
                 }

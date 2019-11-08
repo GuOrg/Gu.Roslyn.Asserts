@@ -39,7 +39,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     syntaxRoot.ReplaceNode(
                                         methodDeclaration,
                                         ReplaceRewriter.Update(methodDeclaration, before, after)))),
-                            nameof(StandardNamesFix)),
+                            $"Replace {before} with {after}"),
                         diagnostic);
                 }
             }
