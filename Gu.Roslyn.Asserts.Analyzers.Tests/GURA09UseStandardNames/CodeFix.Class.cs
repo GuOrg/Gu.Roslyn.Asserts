@@ -6,8 +6,9 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
     {
         public static class Class
         {
-            [Test]
-            public static void Foo()
+            [TestCase("Foo")]
+            [TestCase("Bar")]
+            public static void SingleClassNamed(string name)
             {
                 var before = @"
 namespace N
@@ -26,7 +27,7 @@ namespace N
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
-}";
+}".AssertReplace("Foo", name);
 
                 var after = @"
 namespace N
@@ -47,11 +48,12 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: "Replace Foo with C");
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
             }
 
-            [Test]
-            public static void FooGeneric()
+            [TestCase("Foo")]
+            [TestCase("Bar")]
+            public static void GenericClassNamed(string name)
             {
                 var before = @"
 namespace N
@@ -70,7 +72,7 @@ namespace N
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
-}";
+}".AssertReplace("Foo", name);
 
                 var after = @"
 namespace N
@@ -295,7 +297,7 @@ class C1
             }
 
             [Test]
-            public static void Bar()
+            public static void C1AndBar()
             {
                 var before = @"
 namespace N
@@ -341,7 +343,7 @@ namespace N
             }
 
             [Test]
-            public static void Baz()
+            public static void C1C2AndBaz()
             {
                 var before = @"
 namespace N

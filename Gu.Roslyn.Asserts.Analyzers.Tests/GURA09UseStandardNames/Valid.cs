@@ -5,7 +5,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
+        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
 
         [Test]
         public static void SimpleClass()
@@ -23,7 +23,7 @@ namespace N
         [Test]
         public static void M()
         {
-            var c = @""
+            var code = @""
 namespace N
 {
     class C
@@ -39,7 +39,7 @@ namespace N
         public int P { get; }
     }
 }"";
-            RoslynAssert.Valid(Analyzer, c);
+            RoslynAssert.Valid(Analyzer, code);
         }
     }
 }";
@@ -89,12 +89,12 @@ namespace N
         [Test]
         public static void FooTest()
         {
-            var c = @""
+            var code = @""
 class C
 {
     const string Text = """"Activator.CreateInstance(typeof(T), \""""foo\"""")"""";
 }"";
-            RoslynAssert.Valid(Analyzer, c);
+            RoslynAssert.Valid(Analyzer, code);
         }
     }
 }";

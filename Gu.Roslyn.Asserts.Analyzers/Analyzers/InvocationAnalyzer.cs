@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
     using System.Collections.Immutable;
-    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -20,6 +19,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             Descriptors.GURA01NameShouldMatchParameter,
             Descriptors.GURA02IndicateErrorPosition,
             Descriptors.GURA03NameShouldMatchCode,
+            Descriptors.GURA09UseStandardNames,
             Descriptors.GURA10UseLocal,
             Descriptors.GURA11ChainAssertReplace);
 
@@ -39,8 +39,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     foreach (var parameter in method.Parameters)
                     {
-                        if (parameter.Name == "before" ||
-                            (parameter.Name == "code" && method.Name == "Diagnostics"))
+                        if (IsCode(parameter))
                         {
                             if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
                             {
@@ -79,9 +78,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                 codeName));
                                     }
 
-                                    if (stringArg.Symbol.Kind == SymbolKind.Local &&
-                                        stringArg.HasPosition == true &&
-                                        args.TrySingle(x => x.HasPosition == true, out _) &&
+                                    if (ShouldRenameToMatchParameter() &&
                                         ShouldRename(symbol, parameter.Name, out var parameterName))
                                     {
                                         context.ReportDiagnostic(
@@ -105,9 +102,21 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     }
                                 }
 
+                                bool IsPositionParameter()
+                                {
+                                    return parameter switch
+                                    {
+                                        { Name: "before" } => true,
+                                        { Name: "code", ContainingSymbol: IMethodSymbol { Name: "Diagnostics" } } => true,
+                                        _ => false,
+
+                                    };
+                                }
+
                                 bool ShouldIndicatePosition()
                                 {
-                                    if (stringArg.HasPosition == false &&
+                                    if (IsPositionParameter() &&
+                                        stringArg.HasPosition == false &&
                                         stringArg.Symbol?.IsEitherKind(SymbolKind.Field, SymbolKind.Property) != true)
                                     {
                                         if (stringArg.Symbol?.Name == parameter.Name)
@@ -130,61 +139,26 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                     return false;
                                 }
-                            }
-                        }
-                        else if (parameter.Name == "after" || parameter.Name == "code")
-                        {
-                            if (StringArgument.TrySingle(invocation, parameter, context.SemanticModel, context.CancellationToken, out var single))
-                            {
-                                Handle(single, ImmutableArray<StringArgument>.Empty);
-                            }
-                            else if (StringArgument.TryMany(invocation, parameter, context.SemanticModel, context.CancellationToken, out var stringArgs))
-                            {
-                                foreach (var arg in stringArgs)
+
+                                bool ShouldRenameToMatchParameter()
                                 {
-                                    Handle(arg, stringArgs);
-                                }
-                            }
-
-                            void Handle(StringArgument stringArg, ImmutableArray<StringArgument> args)
-                            {
-                                if (stringArg.Symbol is { } symbol)
-                                {
-                                    if (stringArg.TryGetNameFromCode(out var codeName) &&
-                                        ShouldRename(stringArg.Symbol, codeName, out codeName))
+                                    if (stringArg.Symbol?.Kind != SymbolKind.Local)
                                     {
-                                        context.ReportDiagnostic(
-                                            Diagnostic.Create(
-                                                Descriptors.GURA03NameShouldMatchCode,
-                                                stringArg.SymbolIdentifier.GetLocation(),
-                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
-                                                symbol.Name,
-                                                codeName));
+                                        return false;
                                     }
 
-                                    if (stringArg.Symbol.Kind == SymbolKind.Local &&
-                                        !args.TryFirst(x => x.Symbol is ILocalSymbol && !Equals(x.Symbol, stringArg.Symbol), out _) &&
-                                        ShouldRename(symbol, parameter.Name, out var parameterName))
+                                    if (IsPositionParameter())
                                     {
-                                        context.ReportDiagnostic(
-                                            Diagnostic.Create(
-                                                Descriptors.GURA01NameShouldMatchParameter,
-                                                stringArg.Expression.GetLocation(),
-                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
-                                                symbol.Name,
-                                                parameterName));
+                                        return stringArg.HasPosition == true &&
+                                               args.TrySingle(x => x.HasPosition == true, out _);
                                     }
 
-                                    if (stringArg.Symbol.IsEitherKind(SymbolKind.Field, SymbolKind.Property) &&
-                                        stringArg.Value is { })
+                                    if (stringArg.TryGetNameFromCode(out var codeName))
                                     {
-                                        context.ReportDiagnostic(
-                                            Diagnostic.Create(
-                                                Descriptors.GURA10UseLocal,
-                                                stringArg.Expression.GetLocation(),
-                                                additionalLocations: new[] { stringArg.Value.GetLocation() },
-                                                messageArgs: stringArg.Symbol.Name));
+                                        return !string.Equals(stringArg.Symbol.Name, codeName, StringComparison.OrdinalIgnoreCase);
                                     }
+
+                                    return true;
                                 }
                             }
                         }
@@ -216,7 +190,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldRename(ISymbol symbol, string expectedName, [NotNullWhen(true)]out string? newName)
+        private static bool IsCode(IParameterSymbol parameter)
+        {
+            return parameter switch
+            {
+                { Name: "code", ContainingSymbol: { Name: "Valid" } } => true,
+                { Name: "code", ContainingSymbol: { Name: "Diagnostics" } } => true,
+                { Name: "code", ContainingSymbol: { Name: "NoDiagnostics" } } => true,
+                { Name: "before", ContainingSymbol: { Name: "CodeFix" } } => true,
+                { Name: "after", ContainingSymbol: { Name: "CodeFix" } } => true,
+                { Name: "before", ContainingSymbol: { Name: "Refactoring" } } => true,
+                { Name: "after", ContainingSymbol: { Name: "Refactoring" } } => true,
+                _ => false,
+            };
+        }
+
+        private static bool ShouldRename(ISymbol symbol, string expectedName, [NotNullWhen(true)] out string? newName)
         {
             if (symbol.IsEitherKind(SymbolKind.Local, SymbolKind.Field, SymbolKind.Property) &&
                 symbol.ContainingType.TypeKind != TypeKind.Enum &&
@@ -252,7 +241,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, [NotNullWhen(true)]out Location? location, [NotNullWhen(true)]out Location? additionalLocation)
+        private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, [NotNullWhen(true)] out Location? location, [NotNullWhen(true)] out Location? additionalLocation)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
                 memberAccess.Expression is IdentifierNameSyntax identifierName &&
@@ -271,200 +260,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
             location = null;
             additionalLocation = null;
             return false;
-        }
-
-        [DebuggerDisplay("{Expression}")]
-        internal struct StringArgument : IEquatable<StringArgument>
-        {
-#pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
-            internal readonly ExpressionSyntax Expression;
-            internal readonly ISymbol? Symbol;
-            internal readonly SyntaxToken SymbolIdentifier;
-            internal readonly ExpressionSyntax? Value;
-#pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
-
-            private StringArgument(ExpressionSyntax expression, ISymbol? symbol, SyntaxToken symbolIdentifier, ExpressionSyntax? value)
-            {
-                this.Expression = expression;
-                this.Symbol = symbol;
-                this.SymbolIdentifier = symbolIdentifier;
-                this.Value = value;
-            }
-
-            internal bool? HasPosition
-            {
-                get
-                {
-                    return this.Value switch
-                    {
-                        LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
-                        InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
-                        _ => (bool?)null,
-                    };
-                }
-            }
-
-            public static bool operator ==(StringArgument left, StringArgument right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(StringArgument left, StringArgument right)
-            {
-                return !left.Equals(right);
-            }
-
-            public bool Equals(StringArgument other) => this.Expression.Equals(other.Expression);
-
-            public override bool Equals(object? obj) => obj is StringArgument other && this.Equals(other);
-
-            public override int GetHashCode() => this.Expression.GetHashCode();
-
-            internal static bool TrySingle(InvocationExpressionSyntax invocation, IParameterSymbol parameter, SemanticModel semanticModel, CancellationToken cancellationToken, out StringArgument result)
-            {
-                if (invocation.TryFindArgument(parameter, out var argument))
-                {
-                    switch (argument.Expression.Kind())
-                    {
-                        case SyntaxKind.ImplicitArrayCreationExpression:
-                        case SyntaxKind.ArrayCreationExpression:
-                        case SyntaxKind.ObjectCreationExpression:
-                            break;
-                        default:
-                            result = Create(argument.Expression, semanticModel, cancellationToken);
-                            return true;
-                    }
-                }
-
-                result = default;
-                return false;
-            }
-
-            internal static bool TryMany(InvocationExpressionSyntax invocation, IParameterSymbol parameter, SemanticModel semanticModel, CancellationToken cancellationToken, out ImmutableArray<StringArgument> results)
-            {
-                if (TryGetCollectionInitializer(out var initializer))
-                {
-                    var builder = ImmutableArray.CreateBuilder<StringArgument>(initializer!.Expressions.Count);
-                    foreach (var expression in initializer.Expressions)
-                    {
-                        builder.Add(Create(expression, semanticModel, cancellationToken));
-                    }
-
-                    results = builder.MoveToImmutable();
-                    return true;
-                }
-
-                if (parameter.IsParams &&
-                    invocation.ArgumentList is { Arguments: { } arguments })
-                {
-                    var builder = ImmutableArray.CreateBuilder<StringArgument>(arguments.Count - parameter.Ordinal);
-                    for (var i = parameter.Ordinal; i < arguments.Count; i++)
-                    {
-                        builder.Add(Create(arguments[i].Expression, semanticModel, cancellationToken));
-                    }
-
-                    results = builder.MoveToImmutable();
-                    return true;
-                }
-
-                results = default;
-                return false;
-
-                bool TryGetCollectionInitializer(out InitializerExpressionSyntax? result)
-                {
-                    if (invocation.TryFindArgument(parameter, out var argument))
-                    {
-                        switch (argument.Expression)
-                        {
-                            case ImplicitArrayCreationExpressionSyntax { Initializer: { } initializer }:
-                                result = initializer;
-                                return true;
-                            case ArrayCreationExpressionSyntax { Initializer: { } initializer }:
-                                result = initializer;
-                                return true;
-                            case ObjectCreationExpressionSyntax { Initializer: { } initializer }:
-                                result = initializer;
-                                return true;
-                        }
-                    }
-
-                    result = null;
-                    return false;
-                }
-            }
-
-            internal static StringArgument Create(ExpressionSyntax expression, SemanticModel semanticModel, CancellationToken cancellationToken)
-            {
-                if (expression is IdentifierNameSyntax candidate &&
-                    semanticModel.TryGetSymbol(candidate, cancellationToken, out var candidateSymbol))
-                {
-                    _ = TryGetValue(out var symbolIdentifier, out var value);
-                    return new StringArgument(expression, candidateSymbol, symbolIdentifier, value);
-                }
-
-                if (expression.Kind() == SyntaxKind.StringLiteralExpression)
-                {
-                    return new StringArgument(expression, null, default, expression);
-                }
-
-                return new StringArgument(expression, null, default, null);
-
-                bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax? result)
-                {
-                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax? localDeclaration) &&
-                        localDeclaration.Declaration is { Variables: { Count: 1 } localVariables } &&
-                        localVariables.TrySingle(out var localVariable) &&
-                        localVariable.Initializer is { } localInitializer)
-                    {
-                        identifier = localVariable.Identifier;
-                        result = localInitializer.Value;
-                        return true;
-                    }
-
-                    if (candidateSymbol.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax? fieldDeclaration) &&
-                        fieldDeclaration.Declaration is { Variables: { Count: 1 } fieldVariables } &&
-                        fieldVariables.TrySingle(out var fieldVariable) &&
-                        fieldVariable.Initializer is { } fieldInitializer)
-                    {
-                        identifier = fieldVariable.Identifier;
-                        result = fieldInitializer.Value;
-                        return true;
-                    }
-
-                    identifier = default;
-                    result = null;
-                    return false;
-                }
-            }
-
-            internal bool TryGetNameFromCode([NotNullWhen(true)]out string? codeName)
-            {
-                codeName = null;
-                return this.Value is LiteralExpressionSyntax { Token: { ValueText: { } valueText } } &&
-                       (TryGetName(valueText, "class ", out codeName) ||
-                        TryGetName(valueText, "struct ", out codeName) ||
-                        TryGetName(valueText, "interface ", out codeName) ||
-                        TryGetName(valueText, "enum ", out codeName));
-
-                static bool TryGetName(string text, string prefix, out string? name)
-                {
-                    var index = text.IndexOf(prefix, StringComparison.Ordinal);
-                    if (index >= 0 &&
-                        text.LastIndexOf("partial", index, StringComparison.Ordinal) < 0)
-                    {
-                        var start = index + prefix.Length;
-                        var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);
-                        if (end > start)
-                        {
-                            name = text.Substring(start, end - start).Replace("<", "Of").Replace(">", string.Empty);
-                            return true;
-                        }
-                    }
-
-                    name = null;
-                    return false;
-                }
-            }
         }
     }
 }

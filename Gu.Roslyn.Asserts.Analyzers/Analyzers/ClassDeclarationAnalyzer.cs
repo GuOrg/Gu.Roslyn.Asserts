@@ -69,7 +69,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
         }
 
-        private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, [NotNullWhen(true)]out string? result)
+        private static bool ShouldRenameFile(SyntaxTree tree, INamedTypeSymbol type, [NotNullWhen(true)] out string? result)
         {
             if (type is null ||
                 type.IsGenericType)
