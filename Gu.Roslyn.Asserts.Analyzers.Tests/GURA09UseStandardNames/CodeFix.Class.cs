@@ -20,7 +20,7 @@ namespace N
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        public static void M1()
+        public static void M()
         {
             var foo = ""class ↓Foo { }"";
             RoslynAssert.Valid(Analyzer, foo);
@@ -39,7 +39,7 @@ namespace N
         private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
         [Test]
-        public static void M1()
+        public static void M()
         {
             var foo = ""class C { }"";
             RoslynAssert.Valid(Analyzer, foo);
@@ -47,7 +47,7 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: "Replace Foo with C");
             }
 
             [Test]
