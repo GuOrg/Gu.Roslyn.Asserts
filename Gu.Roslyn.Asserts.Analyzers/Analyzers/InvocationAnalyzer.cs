@@ -4,6 +4,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System;
     using System.Collections.Immutable;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Threading;
     using Gu.Roslyn.AnalyzerExtensions;
     using Gu.Roslyn.CodeFixExtensions;
@@ -66,7 +67,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                 if (stringArg.Symbol is { } symbol)
                                 {
-                                    if (stringArg.TryGetNameFromCode(out var codeName) &&
+                                    if (symbol.Name != parameter.Name &&
+                                        stringArg.TryGetNameFromCode(out var codeName) &&
                                         ShouldRename(stringArg.Symbol, codeName, out codeName))
                                     {
                                         context.ReportDiagnostic(
@@ -100,6 +102,17 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                                 additionalLocations: new[] { stringArg.Value.GetLocation() },
                                                 messageArgs: stringArg.Symbol.Name));
                                     }
+                                }
+
+                                foreach (WordAndLocation replacement in StandardNames.FindReplacements(stringArg, args))
+                                {
+                                    context.ReportDiagnostic(
+                                        Diagnostic.Create(
+                                            Descriptors.GURA09UseStandardNames,
+                                            replacement.Location,
+                                            args.Select(x => x.Value?.GetLocation()).Where(x => x is { }),
+                                            ImmutableDictionary<string, string>.Empty.Add(nameof(WordAndLocation.Word), replacement.Word),
+                                            $"Use standard name instead of {replacement.Word}."));
                                 }
 
                                 bool IsPositionParameter()
@@ -147,15 +160,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         return false;
                                     }
 
-                                    if (IsPositionParameter())
+                                    if (args.Count(x => x.Symbol?.Kind == SymbolKind.Local) > 1)
                                     {
-                                        return stringArg.HasPosition == true &&
-                                               args.TrySingle(x => x.HasPosition == true, out _);
-                                    }
+                                        if (IsPositionParameter())
+                                        {
+                                            return stringArg.HasPosition == true &&
+                                                   args.TrySingle(x => x.HasPosition == true, out _);
+                                        }
 
-                                    if (stringArg.TryGetNameFromCode(out var codeName))
-                                    {
-                                        return !string.Equals(stringArg.Symbol.Name, codeName, StringComparison.OrdinalIgnoreCase);
+                                        if (stringArg.TryGetNameFromCode(out var codeName))
+                                        {
+                                            return !string.Equals(stringArg.Symbol.Name, codeName, StringComparison.OrdinalIgnoreCase);
+                                        }
                                     }
 
                                     return true;

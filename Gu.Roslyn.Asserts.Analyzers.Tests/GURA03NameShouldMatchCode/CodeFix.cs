@@ -221,59 +221,5 @@ namespace N
 }";
             RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
-
-        [Test]
-        public static void WhenLocalNameMatchesParameter()
-        {
-            var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        private const string C1 = @""
-namespace N
-{
-    public class C1 { }
-}"";
-
-        [Test]
-        public static void M()
-        {
-            var ↓code = ""class C2 { }"";
-            RoslynAssert.Valid(Analyzer, C1, code);
-        }
-    }
-}";
-            var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        private const string C1 = @""
-namespace N
-{
-    public class C1 { }
-}"";
-
-        [Test]
-        public static void M()
-        {
-            var c2 = ""class C2 { }"";
-            RoslynAssert.Valid(Analyzer, C1, c2);
-        }
-    }
-}";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
     }
 }

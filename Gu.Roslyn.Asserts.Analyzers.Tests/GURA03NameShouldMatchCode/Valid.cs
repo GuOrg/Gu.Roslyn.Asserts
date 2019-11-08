@@ -315,5 +315,36 @@ namespace N
 
             RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
         }
+
+        [Test]
+        public static void WhenLocalNameMatchesParameter()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        private const string C1 = @""
+namespace N
+{
+    public class C1 { }
+}"";
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class C2 { }"";
+            RoslynAssert.Valid(Analyzer, C1, code);
+        }
+    }
+}";
+
+            RoslynAssert.Valid(Analyzer, Descriptors.GURA03NameShouldMatchCode, new[] { Code.PlaceholderAnalyzer, code });
+        }
     }
 }

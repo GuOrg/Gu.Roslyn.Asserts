@@ -42,6 +42,70 @@ namespace N
         }
 
         [Test]
+        public static void ClassNamedFooWithPropertyNamedC()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before });
+        }
+
+        [Test]
+        public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before });
+        }
+
+        [Test]
         public static void ParameterNameFoo()
         {
             var code = @"
