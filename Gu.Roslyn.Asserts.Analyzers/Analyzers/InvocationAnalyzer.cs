@@ -104,7 +104,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     }
                                 }
 
-                                foreach (WordAndLocation replacement in StandardNames.FindReplacements(stringArg, args))
+                                foreach (WordAndLocation replacement in StandardNames.FindReplacements(stringArg))
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(

@@ -4,7 +4,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Text.RegularExpressions;
-    using Gu.Roslyn.AnalyzerExtensions;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -31,16 +30,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
             "SomeEvent",
             "SomeProperty",
             "SomeMethod",
-            //"A",
-            //"B",
-            //"C",
-            //"D",
-            //"E",
-            //"F",
-            //"G",
         };
 
-        internal static IEnumerable<WordAndLocation> FindReplacements(StringArgument argument, ImmutableArray<StringArgument> arguments)
+        internal static IEnumerable<WordAndLocation> FindReplacements(StringArgument argument)
         {
             if (argument.Value is LiteralExpressionSyntax { Token: { ValueText: { } valueText } } literal &&
                 literal.IsKind(SyntaxKind.StringLiteralExpression))

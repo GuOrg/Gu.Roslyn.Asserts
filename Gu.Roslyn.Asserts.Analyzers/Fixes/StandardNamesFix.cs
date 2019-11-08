@@ -55,32 +55,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                         string? NewName(int? n)
                         {
-                            switch (identifier.Parent)
+                            return identifier.Parent switch
                             {
-                                case ClassDeclarationSyntax parent:
-                                    return FindNewTypeName(parent, $"C{n}");
-                                case StructDeclarationSyntax parent:
-                                    return FindNewTypeName(parent, $"S{n}");
-                                case InterfaceDeclarationSyntax parent:
-                                    return FindNewTypeName(parent, $"I{n}");
-                                case EnumDeclarationSyntax parent:
-                                    return FindNewTypeName(parent, $"E{n}");
-                                case VariableDeclaratorSyntax { Parent: FieldDeclarationSyntax { Parent: TypeDeclarationSyntax parent } }:
-                                    return FindNewMemberName(parent, $"f{n}");
-                                case EventDeclarationSyntax { Parent: TypeDeclarationSyntax parent }:
-                                    return FindNewMemberName(parent, $"E{n}");
-                                case EventFieldDeclarationSyntax { Parent: TypeDeclarationSyntax parent }:
-                                    return FindNewMemberName(parent, $"E{n}");
-                                case PropertyDeclarationSyntax { Parent: TypeDeclarationSyntax parent }:
-                                    return FindNewMemberName(parent, $"P{n}");
-                                case MethodDeclarationSyntax { Parent: TypeDeclarationSyntax parent }:
-                                    return FindNewMemberName(parent, $"M{n}");
-                                default:
-                                    return null;
-                            }
+                                ClassDeclarationSyntax parent => FindNewTypeName(parent, $"C{n}"),
+                                StructDeclarationSyntax parent => FindNewTypeName(parent, $"S{n}"),
+                                InterfaceDeclarationSyntax parent => FindNewTypeName(parent, $"I{n}"),
+                                EnumDeclarationSyntax parent => FindNewTypeName(parent, $"E{n}"),
+                                VariableDeclaratorSyntax { Parent: FieldDeclarationSyntax { Parent: TypeDeclarationSyntax parent } } => FindNewMemberName(parent, $"f{n}"),
+                                EventDeclarationSyntax { Parent: TypeDeclarationSyntax parent } => FindNewMemberName(parent, $"E{n}"),
+                                EventFieldDeclarationSyntax { Parent: TypeDeclarationSyntax parent } => FindNewMemberName(parent, $"E{n}"),
+                                PropertyDeclarationSyntax { Parent: TypeDeclarationSyntax parent } => FindNewMemberName(parent, $"P{n}"),
+                                MethodDeclarationSyntax { Parent: TypeDeclarationSyntax parent } => FindNewMemberName(parent, $"M{n}"),
+                                _ => null,
+                            };
                         }
 
-                        string? FindNewTypeName(BaseTypeDeclarationSyntax type, string name)
+                        static string? FindNewTypeName(BaseTypeDeclarationSyntax type, string name)
                         {
                             if (type is TypeDeclarationSyntax typeDeclaration)
                             {
@@ -117,7 +107,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             return name;
                         }
 
-                        string? FindNewMemberName(TypeDeclarationSyntax type, string name)
+                        static string? FindNewMemberName(TypeDeclarationSyntax type, string name)
                         {
                             if (type is TypeDeclarationSyntax typeDeclaration)
                             {
