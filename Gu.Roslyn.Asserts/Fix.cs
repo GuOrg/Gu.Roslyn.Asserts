@@ -154,7 +154,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fixTitle">The title of the fix.</param>
         /// <param name="operation">The <see cref="ApplyChangesOperation"/>.</param>
         /// <returns>True if exactly one was found.</returns>
-        internal static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, [NotNullWhen(true)]out ApplyChangesOperation? operation)
+        internal static bool TryFindOperation(Solution solution, CodeFixProvider fix, Diagnostic fixableDiagnostic, string fixTitle, [NotNullWhen(true)] out ApplyChangesOperation? operation)
         {
             var actions = GetActionsAsync(solution, fix, fixableDiagnostic).GetAwaiter().GetResult();
             if (FindAction(out var action))

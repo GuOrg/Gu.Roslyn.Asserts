@@ -67,7 +67,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to parse.</param>
         /// <param name="fileName">The file to read from <paramref name="code"/>.</param>
         /// <returns>The file name. </returns>
-        public static bool TryGetFileName(string code, [NotNullWhen(true)]out string? fileName)
+        public static bool TryGetFileName(string code, [NotNullWhen(true)] out string? fileName)
         {
             fileName = null;
             if (string.IsNullOrEmpty(code))

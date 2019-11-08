@@ -20,7 +20,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(Assembly assembly, [NotNullWhen(true)]out FileInfo? sln)
+        public static bool TryFind(Assembly assembly, [NotNullWhen(true)] out FileInfo? sln)
         {
             sln = null;
             return assembly.CodeBase is { } codeBase &&
@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="name">The assembly.</param>
         /// <param name="sln">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(string name, [NotNullWhen(true)]out FileInfo? sln)
+        public static bool TryFind(string name, [NotNullWhen(true)] out FileInfo? sln)
         {
             sln = null;
             return Assembly.GetCallingAssembly().CodeBase is { } codeBase &&

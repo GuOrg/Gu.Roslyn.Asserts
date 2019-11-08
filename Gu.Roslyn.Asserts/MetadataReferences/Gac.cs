@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="name">Example 'System'.</param>
         /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
         /// <returns>A value indicating a reference was found.</returns>
-        public static bool TryGet(string name, [NotNullWhen(true)]out MetadataReference? metadataReference)
+        public static bool TryGet(string name, [NotNullWhen(true)] out MetadataReference? metadataReference)
         {
             if (Cache.Value.TryGetValue(name, out var fileInfo))
             {

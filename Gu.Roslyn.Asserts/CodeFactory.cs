@@ -589,7 +589,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="fileName">Ex Foo.csproj.</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFindFileInParentDirectory(DirectoryInfo directory, string fileName, [NotNullWhen(true)]out FileInfo? result)
+        public static bool TryFindFileInParentDirectory(DirectoryInfo directory, string fileName, [NotNullWhen(true)] out FileInfo? result)
         {
             if (directory.EnumerateFiles(fileName).TryFirst(out result))
             {

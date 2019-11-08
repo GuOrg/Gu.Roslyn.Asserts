@@ -24,7 +24,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             base.VisitInvocationExpression(node);
         }
 
-        internal static bool TryFindName(SyntaxNode node, [NotNullWhen(true)]out string? name)
+        internal static bool TryFindName(SyntaxNode node, [NotNullWhen(true)] out string? name)
         {
             name = null;
             using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))

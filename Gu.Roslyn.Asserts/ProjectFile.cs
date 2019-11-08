@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="dllFile">Ex Foo.dll.</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(FileInfo dllFile, [NotNullWhen(true)]out FileInfo? result)
+        public static bool TryFind(FileInfo dllFile, [NotNullWhen(true)] out FileInfo? result)
         {
             result = null;
             if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="projectFile">Ex Foo.csproj.</param>
         /// <param name="result">The <see cref="File"/> if found.</param>
         /// <returns>A value indicating if a file was found.</returns>
-        public static bool TryFind(string projectFile, [NotNullWhen(true)]out FileInfo? result)
+        public static bool TryFind(string projectFile, [NotNullWhen(true)] out FileInfo? result)
         {
             result = null;
             if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
