@@ -16,7 +16,7 @@
     <PackageReference Include="Gu.Analyzers" Version="1.6.3-dev" PrivateAssets="all" />
     <PackageReference Include="IDisposableAnalyzers" Version="2.1.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.3.1" />
-    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.2" PrivateAssets="all" />
+    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.3" PrivateAssets="all" />
     <PackageReference Include="ReflectionAnalyzers" Version="0.1.20-dev" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66" PrivateAssets="all" />
   </ItemGroup>
