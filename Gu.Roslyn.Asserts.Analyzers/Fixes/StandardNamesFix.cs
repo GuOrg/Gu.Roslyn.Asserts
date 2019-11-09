@@ -8,21 +8,18 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Gu.Roslyn.AnalyzerExtensions;
     using Gu.Roslyn.CodeFixExtensions;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(StandardNamesFix))]
     [Shared]
-    internal class StandardNamesFix : CodeFixProvider
+    internal class StandardNamesFix : DocumentEditorCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             Descriptors.GURA09UseStandardNames.Id);
 
-        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
-
-        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        protected override async Task RegisterCodeFixesAsync(DocumentEditorCodeFixContext context)
         {
             var syntaxRoot = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
                                           .ConfigureAwait(false);
@@ -40,15 +37,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             if (NewName(i == 0 ? (int?)null : i) is { } newName)
                             {
                                 context.RegisterCodeFix(
-                                    CodeAction.Create(
                                         $"Replace {before} with {newName}",
-                                        _ => Task.FromResult(
-                                            context.Document.WithSyntaxRoot(
-                                                syntaxRoot.ReplaceNode(
-                                                    containingMethod,
-                                                    ReplaceRewriter.Update(containingMethod, before, newName)))),
-                                        $"Replace {before} with {newName}"),
-                                    diagnostic);
+                                        (e, _) => e.ReplaceNode(
+                                            containingMethod,
+                                            ReplaceRewriter.Update(containingMethod, before, newName)),
+                                        $"Replace {before} with {newName}",
+                                        diagnostic);
                             }
                         }
 
