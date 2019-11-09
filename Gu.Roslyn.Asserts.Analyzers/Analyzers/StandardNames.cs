@@ -10,6 +10,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     internal static class StandardNames
     {
+        internal const string PrefixPattern = @"[^a-z,A-Z]";
+        internal const string SuffixPattern = @"[^0-9,a-z,A-Z]";
         private static readonly string[] Words =
         {
             "Foo",
@@ -45,7 +47,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 CodeLiteral? code = null;
                 foreach (var word in Words)
                 {
-                    if (Regex.IsMatch(valueText, $"[^\\w]{word}[^\\w]", RegexOptions.IgnoreCase))
+                    if (Regex.IsMatch(valueText, $"{PrefixPattern}{word}{SuffixPattern}", RegexOptions.IgnoreCase))
                     {
                         if (code is null)
                         {
@@ -89,6 +91,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         yield return new WordAndLocation(word, Location());
                                         break;
                                     case VariableDeclaratorSyntax { Parent: LocalDeclarationStatementSyntax _ }:
+                                    case IdentifierNameSyntax { Parent: IncompleteMemberSyntax _ }:
                                     case ParameterSyntax _:
                                         yield return new WordAndLocation(word, Location());
                                         break;

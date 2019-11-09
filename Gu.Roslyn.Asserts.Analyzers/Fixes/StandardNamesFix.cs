@@ -136,7 +136,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             public override SyntaxNode VisitLiteralExpression(LiteralExpressionSyntax node)
             {
                 if (node.IsKind(SyntaxKind.StringLiteralExpression) &&
-                    this.replacements.Any(x => Regex.IsMatch(node.Token.ValueText, $"[^\\w](?<before>{x.Before})[^\\w]")))
+                    this.replacements.Any(x => Regex.IsMatch(node.Token.ValueText, $"{StandardNames.PrefixPattern}(?<before>{x.Before}){StandardNames.SuffixPattern}")))
                 {
                     return node.Update(
                         SyntaxFactory.Literal(
@@ -170,7 +170,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     rewriter.replacements.Add(new Replacement(FirstCharLower(before), FirstCharLower(after)));
 
-                    string FirstCharLower(string s) => s.Substring(0, 1).ToLower() + s.Substring(1);
+                    static string FirstCharLower(string s) => s.Substring(0, 1).ToLower() + s.Substring(1);
                 }
 
                 if (char.IsLower(before[0]) &&
@@ -178,7 +178,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     rewriter.replacements.Add(new Replacement(FirstCharUpper(before), FirstCharUpper(after)));
 
-                    string FirstCharUpper(string s) => s.Substring(0, 1).ToUpper() + s.Substring(1);
+                    static string FirstCharUpper(string s) => s.Substring(0, 1).ToUpper() + s.Substring(1);
                 }
 
                 var updated = rewriter.Visit(method);
