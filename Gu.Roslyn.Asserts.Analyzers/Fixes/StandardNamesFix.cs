@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     diagnostic.Properties.TryGetValue(nameof(WordAndLocation.Word), out var before))
                 {
                     if (CodeLiteral.TryCreate(stringLiteral, out var codeLiteral) &&
-                        codeLiteral.Value.Identifiers.TrySingle(x => x.Span.Contains(diagnostic.Location.SourceSpan.Start - stringLiteral.SpanStart), out var identifier))
+                        codeLiteral.Value.TryFind(diagnostic.Location, out var identifier))
                     {
                         for (int i = 0; i < 4; i++)
                         {

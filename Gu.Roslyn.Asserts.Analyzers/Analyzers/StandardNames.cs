@@ -6,7 +6,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Text;
 
     internal static class StandardNames
     {
@@ -99,11 +98,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                 Location Location()
                                 {
-                                    return literal.SyntaxTree.GetLocation(
-                                        new TextSpan(
-                                            literal.SpanStart + literal.Token.Text.IndexOf('\"') + 1 +
-                                            identifier.SpanStart,
-                                            identifier.Text.Length));
+                                    return code.Value.Location(identifier);
                                 }
                             }
                         }
