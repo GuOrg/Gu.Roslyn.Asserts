@@ -12,14 +12,12 @@
     internal struct CodeLiteral
     {
         internal readonly ImmutableArray<SyntaxToken> Identifiers;
-        private readonly SyntaxNode root;
         private readonly LiteralExpressionSyntax stringLiteral;
 
-        private CodeLiteral(ImmutableArray<SyntaxToken> identifiers, LiteralExpressionSyntax stringLiteral, SyntaxNode root)
+        private CodeLiteral(ImmutableArray<SyntaxToken> identifiers, LiteralExpressionSyntax stringLiteral)
         {
             this.Identifiers = identifiers;
             this.stringLiteral = stringLiteral;
-            this.root = root;
         }
 
         internal static bool TryCreate(LiteralExpressionSyntax stringLiteral, [NotNullWhen(true)] out CodeLiteral? code)
@@ -28,7 +26,7 @@
             {
                 using (var walker = IdentifierTokenWalker.Borrow(node))
                 {
-                    code = new CodeLiteral(walker.IdentifierTokens.ToImmutableArray(), stringLiteral, node);
+                    code = new CodeLiteral(walker.IdentifierTokens.ToImmutableArray(), stringLiteral);
                     return true;
                 }
             }

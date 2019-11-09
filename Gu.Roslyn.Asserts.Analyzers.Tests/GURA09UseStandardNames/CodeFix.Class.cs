@@ -69,8 +69,11 @@ namespace N
         public static void M()
         {
             var foo = @""
-class ↓Foo
+namespace N
 {
+    class ↓Foo
+    {
+    }
 }"";
             RoslynAssert.Valid(Analyzer, foo);
         }
@@ -91,8 +94,11 @@ namespace N
         public static void M()
         {
             var foo = @""
-class C
+namespace N
 {
+    class C
+    {
+    }
 }"";
             RoslynAssert.Valid(Analyzer, foo);
         }
@@ -488,6 +494,179 @@ namespace N
 }";
 
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Baz with C3");
+            }
+
+            [Test]
+            public static void ClassNamedFooWithMethodNamedC()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    class ↓Foo
+    {
+        public int C() => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    class C3
+    {
+        public int C() => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C3");
+            }
+
+            [Test]
+            public static void ClassNamedFooWithPropertyNamedC()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class C2
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C2");
+            }
+
+            [Test]
+            public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class ↓Foo
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var foo = @""
+namespace N
+{
+    public class C1
+    {
+        public int C => 1;
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, foo);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C1");
             }
         }
     }

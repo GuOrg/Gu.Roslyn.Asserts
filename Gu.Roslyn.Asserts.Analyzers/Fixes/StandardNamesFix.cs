@@ -84,23 +84,38 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 }
                             }
 
-                            foreach (var sibling in type.Parent.ChildNodes())
+                            switch (type.Parent)
                             {
-                                switch (sibling)
-                                {
-                                    case BaseTypeDeclarationSyntax { Identifier: { } identifier }:
-                                        if (identifier.ValueText == name)
-                                        {
-                                            return null;
-                                        }
-
-                                        break;
-                                    default:
-                                        return null;
-                                }
+                                case NamespaceDeclarationSyntax { Members: { } members }
+                                    when CollidesWithSibling(members):
+                                    return null;
+                                case TypeDeclarationSyntax { Members: { } members }
+                                    when CollidesWithSibling(members):
+                                    return null;
                             }
 
                             return name;
+
+                            bool CollidesWithSibling(SyntaxList<MemberDeclarationSyntax> siblings)
+                            {
+                                foreach (var sibling in siblings)
+                                {
+                                    switch (sibling)
+                                    {
+                                        case BaseTypeDeclarationSyntax { Identifier: { } identifier }:
+                                            if (identifier.ValueText == name)
+                                            {
+                                                return true;
+                                            }
+
+                                            break;
+                                        default:
+                                            return true;
+                                    }
+                                }
+
+                                return false;
+                            }
                         }
 
                         static string? FindNewMemberName(TypeDeclarationSyntax type, string name)
