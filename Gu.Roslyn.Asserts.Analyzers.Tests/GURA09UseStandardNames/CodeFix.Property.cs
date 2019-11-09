@@ -284,6 +284,78 @@ namespace N
 }";
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: $"Replace Foo with P1");
             }
+
+            [Test]
+            public static void WithBackingField()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c = @""
+namespace N
+{
+    class C
+    {
+        private int foo;
+
+        public C(int ↓foo)
+        {
+            this.foo = foo;
+        }
+
+        public int ↓Foo { get => this.foo; set => this.foo = value; }
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c = @""
+namespace N
+{
+    class C
+    {
+        private int p;
+
+        public C(int p)
+        {
+            this.p = p;
+        }
+
+        public int P { get => this.p; set => this.p = value; }
+    }
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
+            }
         }
     }
 }

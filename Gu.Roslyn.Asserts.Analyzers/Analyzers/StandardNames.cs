@@ -13,8 +13,14 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static readonly string[] Words =
         {
             "Foo",
+            "Foo1",
+            "Foo2",
+            "Foo3",
             "IFoo",
             "Bar",
+            "Bar1",
+            "Bar2",
+            "Bar3",
             "IBar",
             "Baz",
             "IBaz",

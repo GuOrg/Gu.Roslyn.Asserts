@@ -235,7 +235,7 @@ namespace N
             var foo = @""
 class C
 {
-    public static C M(C foo) => foo;
+    public static C M(C c) => c;
     public static C M() => new C();
 }"";
             RoslynAssert.Valid(Analyzer, foo);

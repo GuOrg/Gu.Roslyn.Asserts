@@ -1,8 +1,11 @@
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Composition;
+    using System.Diagnostics;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -40,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         $"Replace {before} with {newName}",
                                         (e, _) => e.ReplaceNode(
                                             containingMethod,
-                                            ReplaceRewriter.Update(containingMethod, before, newName)),
+                                            x => ReplaceRewriter.Update(x, before, newName)),
                                         $"Replace {before} with {newName}",
                                         diagnostic);
                             }
@@ -128,28 +131,30 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private class ReplaceRewriter : CSharpSyntaxRewriter
         {
             private static readonly ConcurrentQueue<ReplaceRewriter> Cache = new ConcurrentQueue<ReplaceRewriter>();
-
-            private string? before;
-            private string? after;
+            private readonly List<Replacement> replacements = new List<Replacement>();
 
             public override SyntaxNode VisitLiteralExpression(LiteralExpressionSyntax node)
             {
-                var pattern = $"[^\\w](?<before>{this.before})[^\\w]";
                 if (node.IsKind(SyntaxKind.StringLiteralExpression) &&
-                    Regex.IsMatch(node.Token.ValueText, pattern))
+                    this.replacements.Any(x => Regex.IsMatch(node.Token.ValueText, $"[^\\w](?<before>{x.Before})[^\\w]")))
                 {
                     return node.Update(
                         SyntaxFactory.Literal(
-                           Regex.Replace(node.Token.Text, this.before, UpdateMatch),
-                           Regex.Replace(node.Token.ValueText, this.before, UpdateMatch)));
+                            ReplaceAll(node.Token.Text),
+                            ReplaceAll(node.Token.ValueText)));
+
+                    string ReplaceAll(string text)
+                    {
+                        foreach (Replacement replacement in this.replacements)
+                        {
+                            text = Regex.Replace(text, replacement.Before, x => replacement.Replace(x));
+                        }
+
+                        return text;
+                    }
                 }
 
                 return base.VisitLiteralExpression(node);
-
-                string UpdateMatch(Match match)
-                {
-                    return match.Value.Replace(this.before!, this.after);
-                }
             }
 
             internal static SyntaxNode Update(MethodDeclarationSyntax method, string before, string after)
@@ -159,11 +164,45 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     rewriter = new ReplaceRewriter();
                 }
 
-                rewriter.before = before;
-                rewriter.after = after;
+                rewriter.replacements.Add(new Replacement(before, after));
+                if (char.IsUpper(before[0]) &&
+                    char.IsUpper(after[0]))
+                {
+                    rewriter.replacements.Add(new Replacement(FirstCharLower(before), FirstCharLower(after)));
+
+                    string FirstCharLower(string s) => s.Substring(0, 1).ToLower() + s.Substring(1);
+                }
+
+                if (char.IsLower(before[0]) &&
+                    char.IsLower(after[0]))
+                {
+                    rewriter.replacements.Add(new Replacement(FirstCharUpper(before), FirstCharUpper(after)));
+
+                    string FirstCharUpper(string s) => s.Substring(0, 1).ToUpper() + s.Substring(1);
+                }
+
                 var updated = rewriter.Visit(method);
+                rewriter.replacements.Clear();
                 Cache.Enqueue(rewriter);
                 return updated;
+            }
+
+            [DebuggerDisplay("Before: {Before} After: {After}")]
+            private struct Replacement
+            {
+                internal readonly string Before;
+                internal readonly string After;
+
+                internal Replacement(string before, string after)
+                {
+                    this.Before = before;
+                    this.After = after;
+                }
+
+                internal string Replace(Match match)
+                {
+                    return match.Value.Replace(this.Before, this.After);
+                }
             }
         }
     }
