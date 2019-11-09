@@ -356,6 +356,84 @@ namespace N
 
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
             }
+
+            [Test]
+            public static void UpdatesStringLiteral()
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var before = @""
+namespace N
+{
+    class C
+    {
+        public int ↓Foo { get; }
+    }
+}"";
+
+            var after = @""
+namespace N
+{
+    class C
+    {
+        public int Value { get; }
+    }
+}"";
+            RoslynAssert.CodeFix(Analyzer, Fix, before, after, fixTitle: ""Foo"");
+        }
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+
+        [Test]
+        public static void M()
+        {
+            var before = @""
+namespace N
+{
+    class C
+    {
+        public int P { get; }
+    }
+}"";
+
+            var after = @""
+namespace N
+{
+    class C
+    {
+        public int Value { get; }
+    }
+}"";
+            RoslynAssert.CodeFix(Analyzer, Fix, before, after, fixTitle: ""P"");
+        }
+    }
+}";
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, after }, fixTitle: $"Replace Foo with P");
+            }
         }
     }
 }

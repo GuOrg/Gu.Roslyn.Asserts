@@ -9,8 +9,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
     internal static class StandardNames
     {
-        internal const string PrefixPattern = @"[^a-z,A-Z]";
-        internal const string SuffixPattern = @"[^0-9,a-z,A-Z]";
+        internal const string PrefixPattern = @"(^|[^a-z,A-Z])";
+        internal const string SuffixPattern = @"([^0-9,a-z,A-Z]|$)";
         private static readonly string[] Words =
         {
             "Foo",
