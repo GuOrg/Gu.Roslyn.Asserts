@@ -164,31 +164,6 @@ namespace N
         }
 
         [Test]
-        public static void WhenAssertReplace()
-        {
-            var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [TestCase(""C { }"")]
-        public static void M(string declaration)
-        {
-            var anything = ""class C { }"".AssertReplace(""class C { }"", declaration);
-            RoslynAssert.Valid(Analyzer, anything);
-        }
-    }
-}";
-
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
-
-        [Test]
         public static void OneParam()
         {
             var code = @"

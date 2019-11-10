@@ -18,6 +18,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         internal readonly ISymbol? Symbol;
         internal readonly SyntaxToken SymbolIdentifier;
         internal readonly ExpressionSyntax? Value;
+        internal readonly LiteralExpressionSyntax? StringLiteral;
 #pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
 
         private StringArgument(ExpressionSyntax expression, ISymbol? symbol, SyntaxToken symbolIdentifier, ExpressionSyntax? value)
@@ -26,6 +27,20 @@ namespace Gu.Roslyn.Asserts.Analyzers
             this.Symbol = symbol;
             this.SymbolIdentifier = symbolIdentifier;
             this.Value = value;
+            switch (value)
+            {
+                case LiteralExpressionSyntax literal
+                    when literal.IsKind(SyntaxKind.StringLiteralExpression):
+                    this.StringLiteral = literal;
+                    break;
+                case InvocationExpressionSyntax { Expression: MemberAccessExpressionSyntax { Expression: LiteralExpressionSyntax literal } }
+                    when literal.IsKind(SyntaxKind.StringLiteralExpression):
+                    this.StringLiteral = literal;
+                    break;
+                default:
+                    this.StringLiteral = null;
+                    break;
+            }
         }
 
         internal bool? HasPosition
@@ -177,7 +192,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
         internal bool TryGetNameFromCode([NotNullWhen(true)] out string? codeName)
         {
             codeName = null;
-            return this.Value is LiteralExpressionSyntax { Token: { ValueText: { } valueText } } &&
+            return this.StringLiteral is { Token: { ValueText: { } valueText } } &&
                    (TryGetName(valueText, "class ", out codeName) ||
                     TryGetName(valueText, "struct ", out codeName) ||
                     TryGetName(valueText, "interface ", out codeName) ||
