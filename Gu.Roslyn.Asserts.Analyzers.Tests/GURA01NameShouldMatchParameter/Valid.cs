@@ -34,6 +34,32 @@ namespace N
         }
 
         [Test]
+        public static void WhenTwoAnalyzers()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer1 = new PlaceholderAnalyzer();
+        private static readonly PlaceholderAnalyzer Analyzer2 = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class ↓C { }"";
+            RoslynAssert.Valid(Analyzer1, code);
+            RoslynAssert.Valid(Analyzer2, code);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
         public static void ValidAnalyzerAndCodeAndMetadataReferences()
         {
             var code = @"
