@@ -113,6 +113,57 @@ namespace N
         }
 
         [Test]
+        public static void LocalWhenSingleArgumentWhenComment()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var ↓wrong = @""
+// class for stuff
+class C
+{
+}"";
+            RoslynAssert.Valid(Analyzer, wrong);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var c = @""
+// class for stuff
+class C
+{
+}"";
+            RoslynAssert.Valid(Analyzer, c);
+        }
+    }
+}";
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+        }
+
+        [Test]
         public static void LocalWhenAssertReplace()
         {
             var before = @"
