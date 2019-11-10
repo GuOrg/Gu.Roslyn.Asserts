@@ -36,6 +36,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
             "SomeEvent",
             "SomeProperty",
             "SomeMethod",
+            "ViewModel",
+            "Value1",
+            "Value2",
         };
 
         internal static IEnumerable<WordAndLocation> FindReplacements(StringArgument argument)
