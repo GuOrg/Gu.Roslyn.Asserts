@@ -179,7 +179,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             }
                         }
                         else if (invocation.TryFindArgument(parameter, out var argument) &&
-                                 context.SemanticModel.TryGetSymbol(argument.Expression, context.CancellationToken, out var symbol) &&
+                                 argument is { Expression: IdentifierNameSyntax identifierName } &&
+                                 context.SemanticModel.TryGetSymbol(identifierName, context.CancellationToken, out var symbol) &&
                                  ShouldRename(symbol, parameter.Name, out var newName) &&
                                  context.SemanticModel.TryGetType(argument.Expression, context.CancellationToken, out var type) &&
                                  ShouldRename(symbol, type.Name, out _))
