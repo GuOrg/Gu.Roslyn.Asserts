@@ -25,7 +25,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>3.2.8</Version>
+    <Version>3.2.9</Version>
     <Description>Analyzers and cod fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
     <Authors>Johan Larsson.</Authors>
     <DevelopmentDependency>true</DevelopmentDependency>
