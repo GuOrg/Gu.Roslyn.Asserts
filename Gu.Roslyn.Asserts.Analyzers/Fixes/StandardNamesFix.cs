@@ -162,7 +162,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     {
                         foreach (Replacement replacement in this.replacements)
                         {
-                            text = Regex.Replace(text, replacement.Before, x => replacement.Replace(x));
+                            text = Regex.Replace(
+                                text,
+                                $"{StandardNames.PrefixPattern}(?<word>{replacement.Before}){StandardNames.SuffixPattern}",
+                                x => x.Value.Replace(x.Groups["word"].Value, replacement.After));
                         }
 
                         return text;
@@ -212,11 +215,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     this.Before = before;
                     this.After = after;
-                }
-
-                internal string Replace(Match match)
-                {
-                    return match.Value.Replace(this.Before, this.After);
                 }
             }
         }

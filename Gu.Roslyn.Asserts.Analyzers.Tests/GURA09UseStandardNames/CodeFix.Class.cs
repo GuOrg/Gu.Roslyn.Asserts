@@ -153,6 +153,54 @@ namespace N
                 RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
             }
 
+            [TestCase("Other")]
+            [TestCase("FooBase")]
+            [TestCase("AbstractFoo")]
+            public static void ClassNamedFooAnd(string name)
+            {
+                var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var fooBase = ""class FooBase { }"";
+            var foo = ""class ↓Foo : FooBase { }"";
+            RoslynAssert.Valid(Analyzer, fooBase, foo);
+        }
+    }
+}".AssertReplace("FooBase", name);
+
+                var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class Valid
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        [Test]
+        public static void M()
+        {
+            var fooBase = ""class FooBase { }"";
+            var foo = ""class C : FooBase { }"";
+            RoslynAssert.Valid(Analyzer, fooBase, foo);
+        }
+    }
+}".AssertReplace("FooBase", name);
+
+                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: "Replace Foo with C");
+            }
+
             [Ignore("Not sure if we want to touch this.")]
             [Test]
             public static void FooException()
