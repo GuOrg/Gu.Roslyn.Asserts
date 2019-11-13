@@ -25,8 +25,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.3" PrivateAssets="all" />
+    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.4" PrivateAssets="all" />
     <PackageReference Include="ReflectionAnalyzers" Version="0.1.20-dev" PrivateAssets="all" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all" />
   </ItemGroup>
 </Project>

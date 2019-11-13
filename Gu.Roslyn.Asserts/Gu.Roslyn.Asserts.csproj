@@ -52,9 +52,9 @@
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="2.9.7" PrivateAssets="all" />
     <PackageDownload Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19554-01" PrivateAssets="all" />
-    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.3" PrivateAssets="all" />
+    <PackageReference Include="PropertyChangedAnalyzers" Version="2.7.4" PrivateAssets="all" />
     <PackageReference Include="ReflectionAnalyzers" Version="0.1.20-dev" PrivateAssets="all" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all" />
     <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.97" PrivateAssets="all" />
   </ItemGroup>
 </Project>
