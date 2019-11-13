@@ -97,7 +97,7 @@ namespace N
         }
 
         [Test]
-        public static void WhenOneParam()
+        public static void RoslynAssertValidOneParam()
         {
             var before = @"
 namespace N
@@ -133,6 +133,102 @@ namespace N
         {
             var code = ""class C { }"";
             RoslynAssert.Valid(Analyzer, code);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+        }
+
+        [Test]
+        public static void RoslynAssertValidFieldAndLocal()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        const string C1 = ""class C1 { }"";
+
+        [Test]
+        public static void M()
+        {
+            var wrong = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, C1, ↓wrong);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        const string C1 = ""class C1 { }"";
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, C1, code);
+        }
+    }
+}";
+            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+        }
+
+        [Test]
+        public static void RoslynAssertValidLocalAndField()
+        {
+            var before = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        const string C1 = ""class C1 { }"";
+
+        [Test]
+        public static void M()
+        {
+            var wrong = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, ↓wrong, C1);
+        }
+    }
+}";
+
+            var after = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        const string C1 = ""class C1 { }"";
+
+        [Test]
+        public static void M()
+        {
+            var code = ""class C { }"";
+            RoslynAssert.Valid(Analyzer, code, C1);
         }
     }
 }";
