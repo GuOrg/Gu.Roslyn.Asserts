@@ -211,11 +211,15 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     text.LastIndexOf("partial", index, StringComparison.Ordinal) < 0)
                 {
                     var start = index + prefix.Length;
-                    var end = text.IndexOfAny(new[] { ' ', '\r', '\n' }, start);
+                    var end = text.IndexOfAny(new[] { ':', '{', '\r', '\n' }, start);
                     if (end > start)
                     {
-                        name = text.Substring(start, end - start).Replace("<", "Of").Replace(">", string.Empty);
-                        return true;
+                        name = text.Substring(start, end - start).Replace("<", "Of")
+                                                                 .Replace(">", string.Empty)
+                                                                 .Replace(">", string.Empty)
+                                                                 .Replace(",", string.Empty)
+                                                                 .Replace(" ", string.Empty);
+                        return SyntaxFacts.IsValidIdentifier(name);
                     }
                 }
 

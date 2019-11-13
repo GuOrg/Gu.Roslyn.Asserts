@@ -45,7 +45,7 @@ namespace N
         }
 
         [Test]
-        public static void GenericClass()
+        public static void GenericClassOneTypeParameters()
         {
             var code = @"
 namespace N
@@ -66,8 +66,38 @@ namespace N
         [Test]
         public static void M()
         {
-            var c2 = ""class C2 { }"";
-            RoslynAssert.Valid(Analyzer, COfT, c2);
+            var c2OfT = ""class C2<T> { }"";
+            RoslynAssert.Valid(Analyzer, COfT, c2OfT);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+        }
+
+        [Test]
+        public static void GenericClassWithTwoTypeParameters()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+
+        private const string COfT1T2 = @""
+namespace N
+{
+    public partial class C1<T1, T2> { }
+}"";
+
+        [Test]
+        public static void M()
+        {
+            var c2OfT1T2 = ""class C2<T1, T2> { }"";
+            RoslynAssert.Valid(Analyzer, COfT1T2, c2OfT1T2);
         }
     }
 }";
