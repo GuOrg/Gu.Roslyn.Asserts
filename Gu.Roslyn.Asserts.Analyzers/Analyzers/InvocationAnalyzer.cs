@@ -122,7 +122,6 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         { Name: "before" } => true,
                                         { Name: "code", ContainingSymbol: IMethodSymbol { Name: "Diagnostics" } } => true,
                                         _ => false,
-
                                     };
                                 }
 
