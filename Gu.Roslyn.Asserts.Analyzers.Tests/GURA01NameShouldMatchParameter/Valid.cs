@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -426,6 +426,34 @@ namespace N
         {
             var before = ""↓class C { }"";
             RoslynAssert.CodeFix(Analyzer, Fix, before, string.Empty);
+        }
+    }
+}";
+            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+        }
+
+        [Ignore("tbd")]
+        [Test]
+        public static void CodeFixExpectedDiagnosticMatchingId()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+        private static readonly ExpectedDiagnostic CS0535 = ExpectedDiagnostic.Create(nameof(CS0535));
+
+        [Test]
+        public static void M()
+        {
+            var before = ""↓class C { }"";
+            var after = ""class C { }"";
+            RoslynAssert.CodeFix(Analyzer, Fix, CS0535, before, after);
         }
     }
 }";
