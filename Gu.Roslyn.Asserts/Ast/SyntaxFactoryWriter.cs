@@ -33,7 +33,7 @@
     public class SyntaxFactoryWriter
     {
         private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?>();
-        private static readonly ConcurrentDictionary<Type, MethodInfo> FactoryMethods = new ConcurrentDictionary<Type, MethodInfo>();
+        private static readonly ConcurrentDictionary<(Type, bool), MethodInfo> FactoryMethods = new ConcurrentDictionary<(Type, bool), MethodInfo>();
         private readonly Writer writer = new Writer();
         private readonly SyntaxFactoryWriterSettings settings;
 
@@ -129,22 +129,27 @@
 
         private SyntaxFactoryWriter Write(SyntaxNode node)
         {
-            var method = FactoryMethods.GetOrAdd(node.GetType(), x => FindFactoryMethod(x));
+            var method = FactoryMethods.GetOrAdd(
+                (node.GetType(), this.settings.DefaultTrivia),
+                x => FindFactoryMethod(x.Item1, x.Item2));
             this.writer.Append("SyntaxFactory.").Append(method.Name).AppendLine("(")
                 .PushIndent();
             var parameters = method.GetParameters();
-            for (var i = 0; i < parameters.Length; i++)
+            foreach (var parameter in parameters)
             {
-                if (ArgumentWriters[parameters[i]] is { } argumentWriter)
+                var writer = ArgumentWriters[parameter];
+                if (writer is null)
                 {
-                    argumentWriter.Invoke(this, node, i == parameters.Length - 1);
+                    throw new NotSupportedException($"Could not write {parameter}");
                 }
+
+                writer.Invoke(this, node, parameter.Position == parameters.Length - 1);
             }
 
             this.writer.PopIndent();
             return this;
 
-            MethodInfo FindFactoryMethod(Type nodeType)
+            MethodInfo FindFactoryMethod(Type nodeType, bool defaultTrivia)
             {
                 return typeof(SyntaxFactory)
                          .GetMethods(BindingFlags.Public | BindingFlags.Static)
@@ -631,7 +636,6 @@
 
             internal Writer AppendLine(string text)
             {
-                Debug.Assert(text != ")", "Probably a bug here, don't think we ever want newline after )");
                 if (this.newLine)
                 {
                     this.builder.Append(this.indentation);
