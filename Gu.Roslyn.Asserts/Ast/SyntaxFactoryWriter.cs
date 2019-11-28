@@ -162,19 +162,17 @@
                                .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
+                case SyntaxKind.IdentifierToken
+                    when token.IsContextualKeyword():
+                    return this.AppendLine("SyntaxFactory.Identifier(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("contextualKind", token.Kind())
+                               .WriteArgument("text", token.Text)
+                               .WriteArgument("valueText", token.ValueText)
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
                 case SyntaxKind.IdentifierToken:
-                    if (token.IsContextualKeyword())
-                    {
-                        return this.AppendLine("SyntaxFactory.Identifier(")
-                                   .PushIndent()
-                                   .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("contextualKind", token.Kind())
-                                   .WriteArgument("text", token.Text)
-                                   .WriteArgument("valueText", token.ValueText)
-                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                                   .PopIndent();
-                    }
-
                     return this.AppendLine("SyntaxFactory.Identifier(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
@@ -252,18 +250,16 @@
                                .WriteArgument("value", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
+                case SyntaxKind.XmlTextLiteralNewLineToken
+                    when token.Text.Length == 1:
+                    return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
+                               .PushIndent()
+                               .WriteArgument("leading", token.LeadingTrivia)
+                               .WriteArgument("text", "\n")
+                               .WriteArgument("value", "\n")
+                               .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                               .PopIndent();
                 case SyntaxKind.XmlTextLiteralNewLineToken:
-                    if (token.Text.Length == 1)
-                    {
-                        return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
-                                   .PushIndent()
-                                   .WriteArgument("leading", token.LeadingTrivia)
-                                   .WriteArgument("text", "\n")
-                                   .WriteArgument("value", "\n")
-                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                                   .PopIndent();
-                    }
-
                     return this.AppendLine("SyntaxFactory.XmlTextNewLine(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
