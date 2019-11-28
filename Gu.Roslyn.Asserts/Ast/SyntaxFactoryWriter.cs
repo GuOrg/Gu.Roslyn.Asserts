@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -172,6 +171,9 @@
                                .WriteArgument("valueText", token.ValueText)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
+                case SyntaxKind.IdentifierToken
+                    when SkipTrivia():
+                    return this.Append("SyntaxFactory.Identifier(\"").Append(token.Text).Append("\")");
                 case SyntaxKind.IdentifierToken:
                     return this.AppendLine("SyntaxFactory.Identifier(")
                                .PushIndent()
@@ -179,17 +181,15 @@
                                .WriteArgument("text", token.Text)
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
+                case SyntaxKind.NumericLiteralToken
+                    when SkipTrivia() ||
+                         NoTrivia():
+                    return this.AppendLine("SyntaxFactory.Literal(")
+                               .PushIndent()
+                               .WriteArgument("text", token.Text)
+                               .WriteArgumentValue("value", token.ValueText, closeArgumentList: true)
+                               .PopIndent();
                 case SyntaxKind.NumericLiteralToken:
-                    if (!token.HasLeadingTrivia &&
-                        !token.HasTrailingTrivia)
-                    {
-                        return this.AppendLine("SyntaxFactory.Literal(")
-                                   .PushIndent()
-                                   .WriteArgument("text", token.Text)
-                                   .WriteArgumentValue("value", token.ValueText, closeArgumentList: true)
-                                   .PopIndent();
-                    }
-
                     return this.AppendLine("SyntaxFactory.Literal(")
                                .PushIndent()
                                .WriteArgument("leading", token.LeadingTrivia)
@@ -271,17 +271,18 @@
                 default:
                     if (SyntaxFacts.GetText(token.Kind()) == token.Text)
                     {
-                        if (token.HasLeadingTrivia || token.HasTrailingTrivia)
+                        if (SkipTrivia() ||
+                            NoTrivia())
                         {
-                            return this.AppendLine("SyntaxFactory.Token(")
-                                       .PushIndent()
-                                       .WriteArgument("leading", token.LeadingTrivia)
-                                       .WriteArgument("kind", token.Kind())
-                                       .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
-                                       .PopIndent();
+                            return this.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
                         }
 
-                        return this.Append($"SyntaxFactory.Token(SyntaxKind.{token.Kind()})");
+                        return this.AppendLine("SyntaxFactory.Token(")
+                                   .PushIndent()
+                                   .WriteArgument("leading", token.LeadingTrivia)
+                                   .WriteArgument("kind", token.Kind())
+                                   .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
+                                   .PopIndent();
                     }
 
                     return this.AppendLine("SyntaxFactory.Token(")
@@ -293,6 +294,42 @@
                                .WriteArgument("trailing", token.TrailingTrivia, closeArgumentList: true)
                                .PopIndent();
             }
+
+            bool SkipTrivia()
+            {
+                if (this.settings.DefaultTrivia)
+                {
+                    foreach (var trivia in token.LeadingTrivia)
+                    {
+                        switch (trivia.Kind())
+                        {
+                            case SyntaxKind.EndOfLineTrivia:
+                            case SyntaxKind.WhitespaceTrivia:
+                                break;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    foreach (var trivia in token.TrailingTrivia)
+                    {
+                        switch (trivia.Kind())
+                        {
+                            case SyntaxKind.EndOfLineTrivia:
+                            case SyntaxKind.WhitespaceTrivia:
+                                break;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            bool NoTrivia() => !token.HasLeadingTrivia && !token.HasTrailingTrivia;
         }
 
         private SyntaxFactoryWriter Write(SyntaxTrivia trivia)
