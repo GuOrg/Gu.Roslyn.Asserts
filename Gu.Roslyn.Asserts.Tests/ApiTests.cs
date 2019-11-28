@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -341,8 +341,7 @@ namespace Gu.Roslyn.Asserts.Tests
             if (typeof(T).IsGenericType)
             {
                 return method.Parameters.TrySingle(
-                    x => x!.Type is INamedTypeSymbol namedType &&
-                         namedType.IsGenericType &&
+                    x => x!.Type is INamedTypeSymbol { IsGenericType: true } namedType &&
                          namedType.MetadataName == typeof(T).Name &&
                          namedType.TypeArguments[0].MetadataName == typeof(T).GenericTypeArguments[0].Name,
                     out parameter);

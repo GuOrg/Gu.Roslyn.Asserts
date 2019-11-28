@@ -20,7 +20,7 @@
         }
 
         /// <summary>
-        /// Controls if default trivia should be used.
+        /// Gets a value indicating whether default trivia should be used.
         /// True means that no calls for creating trivia is generated.
         /// </summary>
         public bool DefaultTrivia { get; }

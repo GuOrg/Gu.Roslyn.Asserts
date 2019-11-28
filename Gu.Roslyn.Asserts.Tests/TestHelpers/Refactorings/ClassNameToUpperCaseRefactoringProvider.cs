@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.Refactorings
+﻿namespace Gu.Roslyn.Asserts.Tests.Refactorings
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,8 +14,7 @@ namespace Gu.Roslyn.Asserts.Tests.Refactorings
         public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-            if (root.FindToken(context.Span.Start) is SyntaxToken token &&
-                token.Parent is ClassDeclarationSyntax classDeclaration &&
+            if (root.FindToken(context.Span.Start) is { Parent: ClassDeclarationSyntax classDeclaration } token &&
                 classDeclaration.Identifier == token &&
                 token.ValueText.Any(x => char.IsLower(x)))
             {

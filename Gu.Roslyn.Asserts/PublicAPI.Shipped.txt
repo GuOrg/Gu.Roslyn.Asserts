@@ -98,6 +98,16 @@ Gu.Roslyn.Asserts.ProjectFile
 Gu.Roslyn.Asserts.Refactor
 Gu.Roslyn.Asserts.ReferenceAssembly
 Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
+Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.SolutionFile
 Gu.Roslyn.Asserts.StringHelper
 Gu.Roslyn.Asserts.SuppressWarnings
@@ -105,7 +115,10 @@ Gu.Roslyn.Asserts.SuppressWarningsAttribute
 Gu.Roslyn.Asserts.SuppressWarningsAttribute.Ids.get -> System.Collections.Generic.IReadOnlyList<string>
 Gu.Roslyn.Asserts.SuppressWarningsAttribute.SuppressWarningsAttribute(params string[] ids) -> void
 Gu.Roslyn.Asserts.SyntaxFactoryWriter
-Gu.Roslyn.Asserts.SyntaxFactoryWriter.SyntaxFactoryWriter() -> void
+Gu.Roslyn.Asserts.SyntaxFactoryWriter.SyntaxFactoryWriter(Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings settings = null) -> void
+Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings
+Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings.DefaultTrivia.get -> bool
+Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings.SyntaxFactoryWriterSettings(bool defaultTrivia) -> void
 Gu.Roslyn.Asserts.SyntaxNodeExt
 Gu.Roslyn.Asserts.TextAssert
 Gu.Roslyn.Asserts.TransitiveMetadataReferencesAttribute
@@ -365,8 +378,8 @@ static Gu.Roslyn.Asserts.SolutionFile.TryFind(System.Reflection.Assembly assembl
 static Gu.Roslyn.Asserts.SolutionFile.TryFind(string name, out System.IO.FileInfo sln) -> bool
 static Gu.Roslyn.Asserts.StringHelper.AssertReplace(this string text, string oldValue, string newValue) -> string
 static Gu.Roslyn.Asserts.SuppressWarnings.FromAttributes() -> System.Collections.Immutable.ImmutableArray<string>
-static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(Microsoft.CodeAnalysis.SyntaxNode node) -> string
-static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(string code) -> string
+static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(Microsoft.CodeAnalysis.SyntaxNode node, Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings settings = null) -> string
+static Gu.Roslyn.Asserts.SyntaxFactoryWriter.Serialize(string code, Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings settings = null) -> string
 static Gu.Roslyn.Asserts.SyntaxNodeExt.Find<T>(this Microsoft.CodeAnalysis.SyntaxNode root, string code) -> T
 static Gu.Roslyn.Asserts.SyntaxNodeExt.Find<T>(this Microsoft.CodeAnalysis.SyntaxTree tree, string code) -> T
 static Gu.Roslyn.Asserts.SyntaxNodeExt.FindAccessorDeclaration(this Microsoft.CodeAnalysis.SyntaxTree tree, string signature) -> Microsoft.CodeAnalysis.CSharp.Syntax.AccessorDeclarationSyntax
@@ -404,3 +417,4 @@ static readonly Gu.Roslyn.Asserts.CodeFactory.EmptySolution -> Microsoft.CodeAna
 static readonly Gu.Roslyn.Asserts.CodeFactory.Workspace -> Microsoft.CodeAnalysis.AdhocWorkspace
 static readonly Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences -> Gu.Roslyn.Asserts.MetadataReferencesCollection
 static readonly Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics -> System.Collections.Generic.List<string>
+static readonly Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings.Default -> Gu.Roslyn.Asserts.SyntaxFactoryWriterSettings
