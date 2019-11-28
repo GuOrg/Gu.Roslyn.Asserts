@@ -12,22 +12,6 @@
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
-    /// Controls serialization using <see cref="SyntaxFactoryWriter"/>.
-    /// </summary>
-    public sealed class SyntaxFactoryWriterSettings
-    {
-        /// <summary>
-        /// The default instance.
-        /// </summary>
-        public static readonly SyntaxFactoryWriterSettings Default = new SyntaxFactoryWriterSettings();
-
-        /// <summary>
-        /// Controls if default trivia should be used.
-        /// </summary>
-        public bool DefaultTrivia { get; }
-    }
-
-    /// <summary>
     /// For transforming code into the corresponding SyntaxFactory call.
     /// </summary>
     public class SyntaxFactoryWriter
