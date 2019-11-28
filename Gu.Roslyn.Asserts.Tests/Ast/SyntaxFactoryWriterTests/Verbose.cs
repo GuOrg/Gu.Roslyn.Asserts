@@ -11,7 +11,7 @@
     using Microsoft.CodeAnalysis.Scripting;
     using NUnit.Framework;
 
-    public static partial class Verbose
+    public static class Verbose
     {
         private static readonly ScriptOptions ScriptOptions = ScriptOptions.Default
                                                                            .WithReferences(Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(SyntaxFactory)))
@@ -26,7 +26,6 @@
         [TestCaseSource(nameof(CSharpFiles))]
         public static async Task Roundtrip(FileInfo file)
         {
-            Assert.Inconclusive("VS does not understand [Explicit]");
             var code = File.ReadAllText(file.FullName);
             await AssertRoundtrip(code).ConfigureAwait(false);
         }
