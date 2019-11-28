@@ -1,4 +1,4 @@
-// ReSharper disable PossiblyImpureMethodCallOnReadonlyVariable
+﻿// ReSharper disable PossiblyImpureMethodCallOnReadonlyVariable
 namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
@@ -259,10 +259,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, [NotNullWhen(true)] out Location? location, [NotNullWhen(true)] out Location? additionalLocation)
         {
-            if (invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
-                memberAccess.Expression is IdentifierNameSyntax identifierName &&
-                invocation.Parent is AssignmentExpressionSyntax assignment &&
-                assignment.Left is IdentifierNameSyntax left &&
+            if (invocation.Expression is MemberAccessExpressionSyntax { Expression: IdentifierNameSyntax identifierName } memberAccess &&
+                invocation.Parent is AssignmentExpressionSyntax { Left: IdentifierNameSyntax left } assignment &&
                 left.Identifier.ValueText == identifierName.Identifier.ValueText &&
                 StringArgument.Create(identifierName, semanticModel, cancellationToken) is StringArgument stringArgument &&
                 stringArgument.Symbol?.Kind == SymbolKind.Local &&

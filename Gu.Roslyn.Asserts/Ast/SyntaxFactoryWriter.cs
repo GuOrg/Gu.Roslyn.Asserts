@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Concurrent;
@@ -12,22 +12,50 @@ namespace Gu.Roslyn.Asserts
     using Microsoft.CodeAnalysis.CSharp;
 
     /// <summary>
+    /// Controls serialization using <see cref="SyntaxFactoryWriter"/>.
+    /// </summary>
+    public sealed class SyntaxFactoryWriterSettings
+    {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
+        public static readonly SyntaxFactoryWriterSettings Default = new SyntaxFactoryWriterSettings();
+
+        /// <summary>
+        /// Controls if default trivia should be used.
+        /// </summary>
+        public bool DefaultTrivia { get; }
+    }
+
+    /// <summary>
     /// For transforming code into the corresponding SyntaxFactory call.
     /// </summary>
     public class SyntaxFactoryWriter
     {
         private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?>();
+        private static readonly ConcurrentDictionary<Type, MethodInfo> FactoryMethods = new ConcurrentDictionary<Type, MethodInfo>();
         private readonly Writer writer = new Writer();
+        private readonly SyntaxFactoryWriterSettings settings;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyntaxFactoryWriter"/> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="SyntaxFactoryWriterSettings"/>.</param>
+        public SyntaxFactoryWriter(SyntaxFactoryWriterSettings? settings = null)
+        {
+            this.settings = settings ?? SyntaxFactoryWriterSettings.Default;
+        }
 
         /// <summary>
         /// Transforms the code passed in to a call to SyntaxFactory that creates the same code.
         /// </summary>
         /// <param name="code">For example class C { }. </param>
+        /// <param name="settings">The <see cref="SyntaxFactoryWriterSettings"/>.</param>
         /// <returns>SyntaxFactory.Compilation(...)</returns>
-        public static string Serialize(string code)
+        public static string Serialize(string code, SyntaxFactoryWriterSettings? settings = null)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetRoot(CancellationToken.None);
-            return new SyntaxFactoryWriter()
+            return new SyntaxFactoryWriter(settings)
                    .Write(root)
                    .ToString();
         }
@@ -36,10 +64,11 @@ namespace Gu.Roslyn.Asserts
         /// Transforms the code passed in to a call to SyntaxFactory that creates the same code.
         /// </summary>
         /// <param name="node">For example class C { }. </param>
+        /// <param name="settings">The <see cref="SyntaxFactoryWriterSettings"/>.</param>
         /// <returns>SyntaxFactory.Xxx(...)</returns>
-        public static string Serialize(SyntaxNode node)
+        public static string Serialize(SyntaxNode node, SyntaxFactoryWriterSettings? settings = null)
         {
-            return new SyntaxFactoryWriter()
+            return new SyntaxFactoryWriter(settings)
                    .Write(node)
                    .ToString();
         }
@@ -66,7 +95,7 @@ namespace Gu.Roslyn.Asserts
             if (property.PropertyType.IsGenericType)
             {
                 foreach (var candidate in typeof(SyntaxFactoryWriter).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                                                                     .Where(x => x.Name == "WriteArgument" && x.IsGenericMethod))
+                                                                             .Where(x => x.Name == "WriteArgument" && x.IsGenericMethod))
                 {
                     var parameters = candidate.GetParameters();
                     if (parameters.Length == 3 &&
@@ -100,13 +129,7 @@ namespace Gu.Roslyn.Asserts
 
         private SyntaxFactoryWriter Write(SyntaxNode node)
         {
-            var method = typeof(SyntaxFactory)
-                         .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                         .Where(x => !x.Name.StartsWith("Parse") &&
-                                     x.ReturnType == node.GetType() &&
-                                     x.GetParameters().All(p => ArgumentWriters.GetOrAdd(p, CreateArgumentWriter) != null) &&
-                                     x.ReturnType.Name.StartsWith(x.Name))
-                         .MaxBy(x => x.GetParameters().Length);
+            var method = FactoryMethods.GetOrAdd(node.GetType(), x => FindFactoryMethod(x));
             this.writer.Append("SyntaxFactory.").Append(method.Name).AppendLine("(")
                 .PushIndent();
             var parameters = method.GetParameters();
@@ -120,6 +143,17 @@ namespace Gu.Roslyn.Asserts
 
             this.writer.PopIndent();
             return this;
+
+            MethodInfo FindFactoryMethod(Type nodeType)
+            {
+                return typeof(SyntaxFactory)
+                         .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                         .Where(x => !x.Name.StartsWith("Parse") &&
+                                     x.ReturnType == nodeType &&
+                                     x.ReturnType.Name.StartsWith(x.Name) &&
+                                     x.GetParameters().All(p => ArgumentWriters.GetOrAdd(p, CreateArgumentWriter) != null))
+                         .MaxBy(x => x.GetParameters().Length);
+            }
         }
 
         private SyntaxFactoryWriter Write(SyntaxToken token)
