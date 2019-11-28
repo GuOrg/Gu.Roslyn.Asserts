@@ -260,10 +260,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
         private static bool ShouldChain(InvocationExpressionSyntax invocation, SemanticModel semanticModel, CancellationToken cancellationToken, [NotNullWhen(true)] out Location? location, [NotNullWhen(true)] out Location? additionalLocation)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax { Expression: IdentifierNameSyntax identifierName } memberAccess &&
-                invocation.Parent is AssignmentExpressionSyntax { Left: IdentifierNameSyntax left } assignment &&
+                invocation.Parent is AssignmentExpressionSyntax { Left: IdentifierNameSyntax left } &&
                 left.Identifier.ValueText == identifierName.Identifier.ValueText &&
-                StringArgument.Create(identifierName, semanticModel, cancellationToken) is StringArgument stringArgument &&
-                stringArgument.Symbol?.Kind == SymbolKind.Local &&
+                StringArgument.Create(identifierName, semanticModel, cancellationToken) is { Symbol: { Kind: SymbolKind.Local } } stringArgument &&
                 stringArgument.Value.IsKind(SyntaxKind.StringLiteralExpression))
             {
                 location = memberAccess.Name.GetLocation();

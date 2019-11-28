@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -50,10 +50,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
         internal static bool TryFindRoslynAssert(SyntaxNode node, [NotNullWhen(true)] out InvocationExpressionSyntax? invocation)
         {
-            using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))
-            {
-                return walker.invocations.TrySingle(out invocation);
-            }
+            using var walker = BorrowAndVisit(node, () => new InvocationWalker());
+            return walker.invocations.TrySingle(out invocation);
         }
 
         /// <inheritdoc />

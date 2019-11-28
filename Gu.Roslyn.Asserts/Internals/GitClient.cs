@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Internals
+﻿namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
     using System.Collections.Generic;
@@ -101,14 +101,12 @@ namespace Gu.Roslyn.Asserts.Internals
                 RedirectStandardError = true,
                 CreateNoWindow = true,
             };
-            using (var p = Process.Start(psi))
+            using var p = Process.Start(psi);
+            p.WaitForExit();
+            var output = p.StandardError.ReadToEnd();
+            if (p.ExitCode != 0)
             {
-                p.WaitForExit();
-                var output = p.StandardError.ReadToEnd();
-                if (p.ExitCode != 0)
-                {
-                    throw new InvalidOperationException(output);
-                }
+                throw new InvalidOperationException(output);
             }
         }
 

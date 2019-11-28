@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Internals
+﻿namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
     using System.Collections.Generic;
@@ -58,22 +58,20 @@ namespace Gu.Roslyn.Asserts.Internals
                 return false;
             }
 
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            if (e.MoveNext())
             {
-                if (e.MoveNext())
+                result = e.Current;
+                if (!e.MoveNext())
                 {
-                    result = e.Current;
-                    if (!e.MoveNext())
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    return true;
                 }
 
-                result = default!;
                 return false;
             }
+
+            result = default!;
+            return false;
         }
 
         /// <summary>
@@ -172,16 +170,14 @@ namespace Gu.Roslyn.Asserts.Internals
                 return false;
             }
 
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            if (e.MoveNext())
             {
-                if (e.MoveNext())
-                {
-                    result = e.Current;
-                    return true;
-                }
-
-                return false;
+                result = e.Current;
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -231,20 +227,18 @@ namespace Gu.Roslyn.Asserts.Internals
                 return false;
             }
 
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            if (!e.MoveNext())
             {
-                if (!e.MoveNext())
-                {
-                    return false;
-                }
-
-                while (e.MoveNext())
-                {
-                    result = e.Current;
-                }
-
-                return true;
+                return false;
             }
+
+            while (e.MoveNext())
+            {
+                result = e.Current;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -263,26 +257,24 @@ namespace Gu.Roslyn.Asserts.Internals
                 return false;
             }
 
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            if (!e.MoveNext())
             {
-                if (!e.MoveNext())
-                {
-                    return false;
-                }
-
-                var found = false;
-                do
-                {
-                    if (e.Current is { } item &&
-                        predicate(item))
-                    {
-                        result = item;
-                        found = true;
-                    }
-                }
-                while (e.MoveNext());
-                return found;
+                return false;
             }
+
+            var found = false;
+            do
+            {
+                if (e.Current is { } item &&
+                    predicate(item))
+                {
+                    result = item;
+                    found = true;
+                }
+            }
+            while (e.MoveNext());
+            return found;
         }
 
         /// <summary>
@@ -320,28 +312,26 @@ namespace Gu.Roslyn.Asserts.Internals
             }
 
             comparer ??= Comparer<TKey>.Default;
-            using (var sourceIterator = source.GetEnumerator())
+            using var sourceIterator = source.GetEnumerator();
+            if (!sourceIterator.MoveNext())
             {
-                if (!sourceIterator.MoveNext())
-                {
-                    throw new InvalidOperationException("Sequence contains no elements");
-                }
-
-                var min = sourceIterator.Current;
-                var minKey = selector(min);
-                while (sourceIterator.MoveNext())
-                {
-                    var candidate = sourceIterator.Current;
-                    var candidateKey = selector(candidate);
-                    if (comparer.Compare(candidateKey, minKey) < 0)
-                    {
-                        min = candidate;
-                        minKey = candidateKey;
-                    }
-                }
-
-                return min;
+                throw new InvalidOperationException("Sequence contains no elements");
             }
+
+            var min = sourceIterator.Current;
+            var minKey = selector(min);
+            while (sourceIterator.MoveNext())
+            {
+                var candidate = sourceIterator.Current;
+                var candidateKey = selector(candidate);
+                if (comparer.Compare(candidateKey, minKey) < 0)
+                {
+                    min = candidate;
+                    minKey = candidateKey;
+                }
+            }
+
+            return min;
         }
 
         /// <summary>
@@ -379,28 +369,26 @@ namespace Gu.Roslyn.Asserts.Internals
             }
 
             comparer ??= Comparer<TKey>.Default;
-            using (var sourceIterator = source.GetEnumerator())
+            using var sourceIterator = source.GetEnumerator();
+            if (!sourceIterator.MoveNext())
             {
-                if (!sourceIterator.MoveNext())
-                {
-                    throw new InvalidOperationException("Sequence contains no elements");
-                }
-
-                var max = sourceIterator.Current;
-                var maxKey = selector(max);
-                while (sourceIterator.MoveNext())
-                {
-                    var candidate = sourceIterator.Current;
-                    var candidateKey = selector(candidate);
-                    if (comparer.Compare(candidateKey, maxKey) > 0)
-                    {
-                        max = candidate;
-                        maxKey = candidateKey;
-                    }
-                }
-
-                return max;
+                throw new InvalidOperationException("Sequence contains no elements");
             }
+
+            var max = sourceIterator.Current;
+            var maxKey = selector(max);
+            while (sourceIterator.MoveNext())
+            {
+                var candidate = sourceIterator.Current;
+                var candidateKey = selector(candidate);
+                if (comparer.Compare(candidateKey, maxKey) > 0)
+                {
+                    max = candidate;
+                    maxKey = candidateKey;
+                }
+            }
+
+            return max;
         }
     }
 }

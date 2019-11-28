@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
     using System.Collections.Generic;
@@ -150,14 +150,12 @@ namespace Gu.Roslyn.Asserts.Analyzers
             {
                 if (tree.TryGetRoot(out var root))
                 {
-                    using (var walker = BorrowAndVisit(root, () => new UsingDirectiveWalker()))
+                    using var walker = BorrowAndVisit(root, () => new UsingDirectiveWalker());
+                    foreach (var directive in walker.usingDirectives)
                     {
-                        foreach (var directive in walker.usingDirectives)
+                        if (directive.Name is QualifiedNameSyntax { Left: IdentifierNameSyntax { Identifier: { ValueText: "NUnit" } }, Right: IdentifierNameSyntax { Identifier: { ValueText: "Framework" } } })
                         {
-                            if (directive.Name is QualifiedNameSyntax { Left: IdentifierNameSyntax { Identifier: { ValueText: "NUnit" } }, Right: IdentifierNameSyntax { Identifier: { ValueText: "Framework" } } })
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -98,12 +98,10 @@ namespace Gu.Roslyn.Asserts
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             RoslynAssert.NoCompilerErrors(sln);
 
-            using (var ms = new MemoryStream())
-            {
-                _ = sln.Projects.Single().GetCompilationAsync().Result.Emit(ms);
-                ms.Position = 0;
-                return MetadataReference.CreateFromStream(ms);
-            }
+            using var ms = new MemoryStream();
+            _ = sln.Projects.Single().GetCompilationAsync().Result.Emit(ms);
+            ms.Position = 0;
+            return MetadataReference.CreateFromStream(ms);
         }
 
         /// <summary>

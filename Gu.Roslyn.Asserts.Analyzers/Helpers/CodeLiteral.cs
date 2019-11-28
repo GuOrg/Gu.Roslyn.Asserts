@@ -24,11 +24,9 @@
         {
             if (CSharpSyntaxTree.ParseText(stringLiteral.Token.ValueText.Trim('\"').Replace("↓", string.Empty)).TryGetRoot(out var node))
             {
-                using (var walker = IdentifierTokenWalker.Borrow(node))
-                {
-                    code = new CodeLiteral(walker.IdentifierTokens.ToImmutableArray(), stringLiteral);
-                    return true;
-                }
+                using var walker = IdentifierTokenWalker.Borrow(node);
+                code = new CodeLiteral(walker.IdentifierTokens.ToImmutableArray(), stringLiteral);
+                return true;
             }
 
             code = default;
