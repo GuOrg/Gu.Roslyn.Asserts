@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Generic;
     using System.Collections.Immutable;
@@ -48,9 +48,9 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                             async Task<Solution> MoveMethod(CancellationToken cancellationToken)
                             {
-                                var editor = await DocumentEditor.CreateAsync(context.Document.Project.GetDocument(classDeclarationSyntax.SyntaxTree), cancellationToken)
+                                var editor = await DocumentEditor.CreateAsync(context.Document.Project.GetDocument(classDeclarationSyntax!.SyntaxTree), cancellationToken)
                                                                  .ConfigureAwait(false);
-                                _ = editor.AddMethod(classDeclarationSyntax, methodDeclaration);
+                                _ = editor.AddMethod(classDeclarationSyntax, methodDeclaration!);
                                 return context.Document.Project.Solution.WithDocumentSyntaxRoot(
                                     context.Document.Id,
                                     syntaxRoot.RemoveNode(methodDeclaration, SyntaxRemoveOptions.AddElasticMarker))
@@ -71,8 +71,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                         async Task<Solution> CreateClassAndMoveMethod(CancellationToken cancellationToken)
                         {
-                            var root = await methodDeclaration.SyntaxTree.GetRootAsync(cancellationToken)
-                                                              .ConfigureAwait(false);
+                            var root = await methodDeclaration!.SyntaxTree.GetRootAsync(cancellationToken)
+                                                                                   .ConfigureAwait(false);
                             var classDeclaration = (ClassDeclarationSyntax)methodDeclaration.Parent;
                             root = root.ReplaceNode(
                                 classDeclaration,

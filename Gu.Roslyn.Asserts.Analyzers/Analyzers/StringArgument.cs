@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
     using System.Collections.Immutable;
@@ -163,7 +163,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
             bool TryGetValue(out SyntaxToken identifier, out ExpressionSyntax? result)
             {
-                if (candidateSymbol.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax? localDeclaration) &&
+                if (candidateSymbol!.TrySingleDeclaration(cancellationToken, out LocalDeclarationStatementSyntax? localDeclaration) &&
                     localDeclaration.Declaration is { Variables: { Count: 1 } localVariables } &&
                     localVariables.TrySingle(out var localVariable) &&
                     localVariable.Initializer is { } localInitializer)
@@ -173,7 +173,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     return true;
                 }
 
-                if (candidateSymbol.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax? fieldDeclaration) &&
+                if (candidateSymbol!.TrySingleDeclaration(cancellationToken, out FieldDeclarationSyntax? fieldDeclaration) &&
                     fieldDeclaration.Declaration is { Variables: { Count: 1 } fieldVariables } &&
                     fieldVariables.TrySingle(out var fieldVariable) &&
                     fieldVariable.Initializer is { } fieldInitializer)

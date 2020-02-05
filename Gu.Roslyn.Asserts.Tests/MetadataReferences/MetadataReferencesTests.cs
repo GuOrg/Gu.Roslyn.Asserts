@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
+﻿namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 {
     using System;
     using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveMscorlib()
         {
-#if NET472
+#if NET48
             var expected = new[] { "mscorlib.dll" };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             var expected = new[] { "System.Private.CoreLib.dll" };
 #else
             Assert.Inconclusive("Not handling this framework.");
@@ -31,9 +31,9 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         public void TransitiveMscorlibFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET472
+#if NET48
             var expected = new[] { "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll" };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             var expected = new[] { "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Private.CoreLib.dll" };
 #else
             Assert.Inconclusive("Not handling this framework.");
@@ -46,7 +46,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveSystemCore()
         {
-#if NET472
+#if NET48
             var expected = new[]
             {
                 "System.Core.dll",
@@ -58,7 +58,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.Security.dll",
                 "System.Numerics.dll",
             };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "System.Linq.dll",
@@ -84,7 +84,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         public void TransitiveGenericFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET472
+#if NET48
             var expected = new[]
             {
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll",
@@ -96,7 +96,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Numerics.dll",
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Data.SqlXml.dll",
             };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Private.CoreLib.dll",
@@ -220,7 +220,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         public void TransitiveSystemCoreFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET472
+#if NET48
             var expected = new[]
             {
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Core.dll",
@@ -232,7 +232,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Security.dll",
                 "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Numerics.dll",
             };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Linq.dll",
@@ -257,7 +257,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void TransitiveCSharpCompilation()
         {
-#if NET472
+#if NET48
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
@@ -328,7 +328,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.Threading.Tasks.Extensions.dll",
                 "System.Text.Encoding.CodePages.dll",
             };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             Assert.Inconclusive();
             var expected = new[]
             {
@@ -455,7 +455,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [Test]
         public void ManyTransitive()
         {
-#if NET472
+#if NET48
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
@@ -543,7 +543,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
                 "System.ObjectModel.dll",
                 "System.Runtime.Extensions.dll",
             };
-#elif NETCOREAPP3_0
+#elif NETCOREAPP3_1
             Assert.Inconclusive();
             var expected = new[]
             {

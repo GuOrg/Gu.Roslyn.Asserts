@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
+﻿namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
 {
     using System;
     using System.IO;
@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetAssembly(Type type)
         {
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly, out var metadataReference));
@@ -22,7 +22,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetLocation(Type type)
         {
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly.Location, out var metadataReference));
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Tests.MetadataReferences
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetFileName(Type type)
         {
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1
             Assert.Inconclusive("Fix later.");
 #endif
             Assert.AreEqual(true, ReferenceAssembly.TryGet(Path.GetFileNameWithoutExtension(type.Assembly.Location), out var metadataReference));

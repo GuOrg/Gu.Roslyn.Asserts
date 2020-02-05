@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System;
     using System.Collections.Generic;
@@ -101,7 +101,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                                 Location Location()
                                 {
-                                    return code.Value.Location(identifier);
+                                    return code!.Value.Location(identifier);
                                 }
                             }
                         }
