@@ -26,7 +26,7 @@
   
   <PropertyGroup>
     <Version>3.2.10</Version>
-    <Description>Analyzers and cod fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
+    <Description>Analyzers and code fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
     <Authors>Johan Larsson.</Authors>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

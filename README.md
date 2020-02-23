@@ -127,8 +127,7 @@ public class Valid
 
 # RoslynAssert.Diagnostics
 
-Use `RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports error or warning at position indicated with ↓
-With an aplhanumeric keyboard `alt + 25` writes `↓`.
+Use `RoslynAssert.Diagnostics<FieldNameMustNotBeginWithUnderscore>(code)` to test that the analyzer reports an error or warning at the position indicated by the character `↓`. To type this character, hold down <kbd>Alt</kbd> and use the numpad to type the number <kbd>2</kbd><kbd>5</kbd>.
 
 A typical test fixture looks like:
 
@@ -194,8 +193,8 @@ namespace N
 If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnstics other than the expected.
 
 # CodeFix
-Test that the analyzer reports an error or warning at position indicated with ↓ and that the code fix fixes it and produces the expected code.
-With an aplhanumeric keyboard `alt + 25` writes `↓`.
+Test that the analyzer reports an error or warning at the position indicated by the character `↓` and that the code fix fixes it and produces the expected code.
+To type this character, hold down <kbd>Alt</kbd> and use the numpad to type the number <kbd>2</kbd><kbd>5</kbd>.
 
 ```c#
 public class CodeFix
@@ -379,8 +378,8 @@ namespace N
 
 # NoFix
 
-Test that the analyzer reports an error or warning at position indicated with ↓ and that the code fix does not change the code.
-With an aplhanumeric keyboard `alt + 25` writes `↓`.
+Test that the analyzer reports an error or warning at the position indicated by the character `↓` and that the code fix does not change the code.
+To type this character, hold down <kbd>Alt</kbd> and use the numpad to type the number <kbd>2</kbd><kbd>5</kbd>.
 This can happen if for example it is decided to not support rare edge cases with the code fix.
 
 ```c#
