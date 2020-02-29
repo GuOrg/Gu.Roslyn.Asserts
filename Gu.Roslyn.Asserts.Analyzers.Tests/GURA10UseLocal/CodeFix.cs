@@ -1,14 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA10UseLocal
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA10UseLocal
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new CopyToLocalFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA10UseLocal);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, CopyToLocalFix>(
+            ExpectedDiagnostic.Create(Descriptors.GURA10UseLocal));
 
         [Test]
         public static void StaticField()
@@ -53,7 +50,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
         }
     }
 }

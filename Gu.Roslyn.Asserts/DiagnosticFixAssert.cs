@@ -1,8 +1,10 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -73,6 +75,343 @@
         public void NoFix(ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             RoslynAssert.NoFix(this.CreateAnalyzer(), this.CreateCodeFixProvider(), expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            string before,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            if (this.expectedDiagnostic is { })
+            {
+                RoslynAssert.CodeFix(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    this.expectedDiagnostic,
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+            else
+            {
+                RoslynAssert.CodeFix(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            IReadOnlyList<string> before,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            if (this.expectedDiagnostic is { })
+            {
+                RoslynAssert.CodeFix(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    this.expectedDiagnostic,
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+            else
+            {
+                RoslynAssert.CodeFix(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            IReadOnlyList<string> before,
+            IReadOnlyList<string> after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            if (this.expectedDiagnostic is { })
+            {
+                RoslynAssert.CodeFix(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    this.expectedDiagnostic,
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+            else
+            {
+                RoslynAssert.CodeFix(
+                  this.CreateAnalyzer(),
+                  this.CreateCodeFixProvider(),
+                  before,
+                  after,
+                  fixTitle,
+                  allowCompilationErrors,
+                  suppressWarnings,
+                  metadataReferences,
+                  compilationOptions);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
+        /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
+        /// </param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            ExpectedDiagnostic expectedDiagnostic,
+            string before,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            RoslynAssert.CodeFix(
+                this.CreateAnalyzer(),
+                this.CreateCodeFixProvider(),
+                expectedDiagnostic,
+                before,
+                after,
+                fixTitle,
+                allowCompilationErrors,
+                suppressWarnings,
+                metadataReferences,
+                compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
+        /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
+        /// </param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> before,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            RoslynAssert.CodeFix(
+                this.CreateAnalyzer(),
+                this.CreateCodeFixProvider(),
+                expectedDiagnostic,
+                before,
+                after,
+                fixTitle,
+                allowCompilationErrors,
+                suppressWarnings,
+                metadataReferences,
+                compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
+        /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
+        /// </param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            ExpectedDiagnostic expectedDiagnostic,
+            IReadOnlyList<string> before,
+            IReadOnlyList<string> after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            RoslynAssert.CodeFix(
+                this.CreateAnalyzer(),
+                this.CreateCodeFixProvider(),
+                expectedDiagnostic,
+                before,
+                after,
+                fixTitle,
+                allowCompilationErrors,
+                suppressWarnings,
+                metadataReferences,
+                compilationOptions);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="solution"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
+        /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
+        /// </param>
+        /// <param name="solution">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        public void CodeFix(
+            ExpectedDiagnostic expectedDiagnostic,
+            Solution solution,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        {
+            RoslynAssert.CodeFix(
+                this.CreateAnalyzer(),
+                this.CreateCodeFixProvider(),
+                expectedDiagnostic,
+                solution,
+                after,
+                fixTitle,
+                allowCompilationErrors);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. The current code fix provider supports fixing diagnostics reported by the current analyzer.
+        /// 2. <paramref name="diagnosticsAndSources"/> produces diagnostics fixable by the current code fix provider.
+        /// 3. Applying the current code fix provider results in <paramref name="after"/>.
+        /// </summary>
+        /// <param name="diagnosticsAndSources">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix provider.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void CodeFix(
+            DiagnosticsAndSources diagnosticsAndSources,
+            IReadOnlyList<string> after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            RoslynAssert.CodeFix(
+                this.CreateAnalyzer(),
+                this.CreateCodeFixProvider(),
+                diagnosticsAndSources,
+                after,
+                fixTitle,
+                allowCompilationErrors,
+                suppressWarnings,
+                metadataReferences,
+                compilationOptions);
         }
     }
 }
