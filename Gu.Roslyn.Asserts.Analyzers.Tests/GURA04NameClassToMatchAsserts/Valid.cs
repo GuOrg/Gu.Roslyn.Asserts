@@ -1,11 +1,10 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts
 {
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ClassDeclarationAnalyzer();
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer>();
 
         [Test]
         public static void WhenNoAsserts()
@@ -28,7 +27,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -52,7 +51,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -79,7 +78,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -110,7 +109,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -141,7 +140,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
     }
 }

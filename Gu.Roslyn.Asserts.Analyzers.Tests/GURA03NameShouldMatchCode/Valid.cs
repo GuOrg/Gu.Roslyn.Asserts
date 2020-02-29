@@ -1,13 +1,10 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA03NameShouldMatchCode;
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA03NameShouldMatchCode);
 
         [TestCase("class C1 { }", "private const string C1")]
         [TestCase("class C1 { }", "private static readonly string C1")]
@@ -41,7 +38,7 @@ namespace N
     }
 }".AssertReplace("public class C1 { }", declaration)
   .AssertReplace("private const string C1", field);
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -71,7 +68,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -101,7 +98,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -131,7 +128,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -167,7 +164,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -190,7 +187,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -215,7 +212,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -241,7 +238,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -267,7 +264,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -291,7 +288,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [TestCase("string.Empty")]
@@ -318,7 +315,7 @@ namespace N
     }
 }".AssertReplace("string.Empty", expression);
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -349,7 +346,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptors.GURA03NameShouldMatchCode, new[] { Code.PlaceholderAnalyzer, code });
+            Assert.Valid(new[] { Code.PlaceholderAnalyzer, code });
         }
     }
 }

@@ -1,13 +1,10 @@
 ﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA01NameShouldMatchParameter);
 
         [Test]
         public static void ValidAnalyzerAndCode()
@@ -30,7 +27,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -56,7 +53,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -81,7 +78,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -103,7 +100,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -127,7 +124,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [TestCase("Analyzer")]
@@ -152,7 +149,7 @@ namespace N
         }
     }
 }".AssertReplace("Name", name);
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -177,7 +174,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -203,7 +200,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -229,7 +226,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -253,7 +250,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [TestCase("string.Empty")]
@@ -280,7 +277,7 @@ namespace N
     }
 }".AssertReplace("string.Empty", expression);
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -304,7 +301,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -329,7 +326,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -354,7 +351,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -379,7 +376,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -404,7 +401,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -429,7 +426,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
 
         [Ignore("tbd")]
@@ -457,7 +454,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
 
         [Test]
@@ -483,7 +480,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
 
         [Test]
@@ -530,7 +527,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderRefactoring, code);
+            Assert.Valid(Code.PlaceholderRefactoring, code);
         }
 
         [Test]
@@ -558,7 +555,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
 
         [Test]
@@ -584,7 +581,7 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -614,7 +611,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
     }
 }

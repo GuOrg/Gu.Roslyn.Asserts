@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -6,8 +6,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA08aShouldBeInternal;
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08aShouldBeInternal);
 
         [Test]
         public static void CodeRefactoringProvider()
@@ -23,7 +22,7 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, refactoring);
+            Assert.Valid(refactoring);
         }
 
         [Test]
@@ -40,7 +39,7 @@ namespace N
     {
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, c);
+            Assert.Valid(c);
         }
 
         [Test]
@@ -86,7 +85,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, diagnostics);
+            Assert.Valid(analyzer, diagnostics);
         }
 
         [Test]
@@ -137,7 +136,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, diagnostics);
+            Assert.Valid(analyzer, diagnostics);
         }
     }
 }
