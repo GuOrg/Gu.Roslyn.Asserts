@@ -1,14 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class NoFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new StandardNamesFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, StandardNamesFix>(
+             ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames));
 
         [Test]
         public static void ParameterNameFoo()
@@ -38,7 +35,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.NoFix(Analyzer, Fix, ExpectedDiagnostic, Code.PlaceholderAnalyzer, code);
+            Assert.NoFix(Code.PlaceholderAnalyzer, code);
         }
     }
 }

@@ -34,5 +34,45 @@
             this.createCodeFixProvider = createCodeFixProvider ?? throw new ArgumentNullException(nameof(createCodeFixProvider));
             this.expectedDiagnostic = expectedDiagnostic;
         }
+
+        /// <summary>
+        /// Constructs the <see cref="CodeFixProvider"/> to use in asserts.
+        /// </summary>
+        private CodeFixProvider CreateCodeFixProvider() => this.createCodeFixProvider();
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="code">
+        /// The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).
+        /// </param>
+        public void NoFix(params string[] code)
+        {
+            if (this.expectedDiagnostic is null)
+            {
+                throw new InvalidOperationException("Either pass an ExpectedDiagnostic instance to RoslynAssert.Create or to the NoFix overload that accepts one.");
+            }
+
+            this.NoFix(this.expectedDiagnostic, code);
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="code"/> produces the expected diagnostics
+        /// 2. The code fix does not change the code.
+        /// </summary>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
+        /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
+        /// </param>
+        /// <param name="code">
+        /// The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).
+        /// </param>
+        public void NoFix(ExpectedDiagnostic expectedDiagnostic, params string[] code)
+        {
+            RoslynAssert.NoFix(this.CreateAnalyzer(), this.CreateCodeFixProvider(), expectedDiagnostic, code);
+        }
     }
 }

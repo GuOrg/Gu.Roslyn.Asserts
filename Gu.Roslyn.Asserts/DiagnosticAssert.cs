@@ -39,7 +39,7 @@
         /// </param>
         public void Valid(params string[] code)
         {
-            var analyzer = this.createAnalyzer();
+            var analyzer = this.CreateAnalyzer();
 
             if (this.descriptorId is null)
             {
@@ -55,5 +55,10 @@
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
             }
         }
+
+        /// <summary>
+        /// Constructs the <see cref="DiagnosticAnalyzer"/> to use in asserts.
+        /// </summary>
+        protected DiagnosticAnalyzer CreateAnalyzer() => this.createAnalyzer();
     }
 }
