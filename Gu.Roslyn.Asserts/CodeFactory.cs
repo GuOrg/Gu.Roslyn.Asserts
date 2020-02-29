@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -691,7 +691,7 @@ namespace Gu.Roslyn.Asserts
                 metadataReferences);
         }
 
-        private static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string>? suppressWarnings)
+        internal static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string>? suppressWarnings)
         {
             RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
