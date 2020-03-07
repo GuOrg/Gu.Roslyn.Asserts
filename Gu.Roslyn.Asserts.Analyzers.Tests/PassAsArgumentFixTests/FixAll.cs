@@ -1,12 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.PassAsArgumentFixTests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.PassAsArgumentFixTests
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;
 
     public static class FixAll
     {
-        private static readonly CodeFixProvider Fix = new PassAsArgumentFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create("CS0618");
+        private static readonly FixAssert Assert = RoslynAssert.CreateWithoutAnalyzer<PassAsArgumentFix>(
+            ExpectedDiagnostic.Create("CS0618"));
 
         [Test]
         public static void ValidCreateField()
@@ -60,7 +59,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            Assert.FixAll(new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -120,7 +119,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.FixAll(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after);
+            Assert.FixAll(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after);
         }
     }
 }

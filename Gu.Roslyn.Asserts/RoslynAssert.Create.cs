@@ -40,5 +40,18 @@
         {
             return new DiagnosticFixAssert(() => new TDiagnosticAnalyzer(), () => new TCodeFixProvider(), expectedDiagnostic);
         }
+
+        /// <summary>
+        /// Obtains an instance which provides assertions against the specified code fix provider type.
+        /// </summary>
+        /// <typeparam name="TCodeFixProvider">The <see cref="CodeFixProvider"/> to use in asserts.</typeparam>
+        /// <param name="expectedDiagnostic">
+        /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>.
+        /// </param>
+        public static FixAssert CreateWithoutAnalyzer<TCodeFixProvider>(ExpectedDiagnostic expectedDiagnostic)
+            where TCodeFixProvider : CodeFixProvider, new()
+        {
+            return new FixAssert(() => new TCodeFixProvider(), expectedDiagnostic);
+        }
     }
 }
