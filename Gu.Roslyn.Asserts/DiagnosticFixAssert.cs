@@ -38,11 +38,6 @@
         }
 
         /// <summary>
-        /// Constructs the <see cref="CodeFixProvider"/> to use in asserts.
-        /// </summary>
-        private CodeFixProvider CreateCodeFixProvider() => this.createCodeFixProvider();
-
-        /// <summary>
         /// Verifies that
         /// 1. <paramref name="code"/> produces the expected diagnostics
         /// 2. The code fix does not change the code.
@@ -413,5 +408,110 @@
                 metadataReferences,
                 compilationOptions);
         }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="before"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void FixAll(
+            IReadOnlyList<string> before,
+            string after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            if (this.expectedDiagnostic is { })
+            {
+                RoslynAssert.FixAll(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    this.expectedDiagnostic,
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+            else
+            {
+                RoslynAssert.FixAll(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+        }
+
+        /// <summary>
+        /// Verifies that
+        /// 1. <paramref name="before"/> produces the expected diagnostics
+        /// 2. The code fix fixes the code.
+        /// </summary>
+        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="after">The expected code produced by applying the current code fix.</param>
+        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="RoslynAssert.SuppressedDiagnostics"/> are used.</param>
+        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        public void FixAll(
+            IReadOnlyList<string> before,
+            IReadOnlyList<string> after,
+            string? fixTitle = null,
+            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
+            IEnumerable<string>? suppressWarnings = null,
+            IEnumerable<MetadataReference>? metadataReferences = null,
+            CSharpCompilationOptions? compilationOptions = null)
+        {
+            if (this.expectedDiagnostic is { })
+            {
+                RoslynAssert.FixAll(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    this.expectedDiagnostic,
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+            else
+            {
+                RoslynAssert.FixAll(
+                    this.CreateAnalyzer(),
+                    this.CreateCodeFixProvider(),
+                    before,
+                    after,
+                    fixTitle,
+                    allowCompilationErrors,
+                    suppressWarnings,
+                    metadataReferences,
+                    compilationOptions);
+            }
+        }
+
+        /// <summary>
+        /// Constructs the <see cref="CodeFixProvider"/> to use in asserts.
+        /// </summary>
+        private CodeFixProvider CreateCodeFixProvider() => this.createCodeFixProvider();
     }
 }

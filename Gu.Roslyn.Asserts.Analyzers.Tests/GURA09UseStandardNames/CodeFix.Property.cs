@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 {
     using NUnit.Framework;
 
@@ -64,7 +64,7 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with P");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with P");
             }
 
             [TestCase("public int ↓Foo { get; }", "public int P { get; }")]
@@ -123,7 +123,7 @@ namespace N
     }
 }".AssertReplace("public int P { get; }", declarationAfter);
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
             }
 
             [Test]
@@ -185,7 +185,7 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P2");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P2");
             }
 
             [Test]
@@ -282,7 +282,7 @@ namespace N
         }
     }
 }";
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: $"Replace Foo with P1");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: $"Replace Foo with P1");
             }
 
             [Test]
@@ -354,7 +354,7 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with P");
             }
 
             [Test]
@@ -432,7 +432,7 @@ namespace N
     }
 }";
 
-                RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, after }, fixTitle: $"Replace Foo with P");
+                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, after }, fixTitle: $"Replace Foo with P");
             }
         }
     }

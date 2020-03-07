@@ -1,12 +1,8 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
-
     public static partial class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new StandardNamesFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, StandardNamesFix>(
+            ExpectedDiagnostic.Create(Descriptors.GURA09UseStandardNames));
     }
 }
