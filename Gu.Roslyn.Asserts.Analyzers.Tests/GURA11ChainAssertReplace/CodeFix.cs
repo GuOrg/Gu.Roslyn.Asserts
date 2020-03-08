@@ -1,14 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA11ChainAssertReplace
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA11ChainAssertReplace
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new ChainAssertReplaceFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA11ChainAssertReplace);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, ChainAssertReplaceFix>(
+            ExpectedDiagnostic.Create(Descriptors.GURA11ChainAssertReplace));
 
         [Test]
         public static void Local()
@@ -53,7 +50,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
         }
     }
 }

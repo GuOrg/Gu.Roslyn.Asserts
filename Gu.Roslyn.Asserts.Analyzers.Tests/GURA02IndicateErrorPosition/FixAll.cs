@@ -1,14 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class FixAll
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new IndicateErrorPositionFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA02IndicateErrorPosition);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, IndicateErrorPositionFix>(
+            ExpectedDiagnostic.Create(Descriptors.GURA02IndicateErrorPosition));
 
         [Test]
         public static void CodeFixLocals()
@@ -56,7 +53,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.FixAll(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            Assert.FixAll(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
     }
 }

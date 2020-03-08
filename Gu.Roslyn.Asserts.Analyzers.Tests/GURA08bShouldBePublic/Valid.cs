@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -6,8 +6,7 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA08bShouldBePublic;
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08bShouldBePublic);
 
         [Test]
         public static void DiagnosticAnalyzer()
@@ -53,7 +52,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, diagnostics);
+            Assert.Valid(analyzer, diagnostics);
         }
 
         [Test]
@@ -118,7 +117,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, fix, diagnostics);
+            Assert.Valid(analyzer, fix, diagnostics);
         }
 
         [Test]
@@ -135,7 +134,7 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, placeholderRefactoring);
+            Assert.Valid(placeholderRefactoring);
         }
 
         [Test]
@@ -152,7 +151,7 @@ namespace N
     {
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, c);
+            Assert.Valid(c);
         }
 
         [Test]
@@ -198,7 +197,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, diagnostics);
+            Assert.Valid(analyzer, diagnostics);
         }
 
         [Test]
@@ -249,7 +248,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, analyzer, diagnostics);
+            Assert.Valid(analyzer, diagnostics);
         }
     }
 }

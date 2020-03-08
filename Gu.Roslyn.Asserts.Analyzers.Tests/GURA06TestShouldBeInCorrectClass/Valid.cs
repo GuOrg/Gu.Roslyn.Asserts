@@ -1,11 +1,10 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
 {
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new MethodDeclarationAnalyzer();
+        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<MethodDeclarationAnalyzer>();
 
         [Test]
         public static void WhenNoAsserts()
@@ -28,7 +27,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -52,7 +51,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -83,7 +82,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -110,7 +109,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, code);
         }
 
         [Test]
@@ -139,7 +138,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
     }
 }

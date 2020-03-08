@@ -1,12 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.PassAsArgumentFixTests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.PassAsArgumentFixTests
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;
 
     public static class CodeFix
     {
-        private static readonly CodeFixProvider Fix = new PassAsArgumentFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create("CS0618");
+        private static readonly FixAssert Assert = RoslynAssert.CreateWithoutAnalyzer<PassAsArgumentFix>(
+            ExpectedDiagnostic.Create("CS0618"));
 
         [Test]
         public static void ValidCreateField()
@@ -46,7 +45,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.");
         }
 
         [Test]
@@ -91,7 +90,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
         }
 
         [Test]
@@ -136,7 +135,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
         }
 
         [Test]
@@ -183,7 +182,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'.");
         }
 
         [Test]
@@ -234,7 +233,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
         }
 
         [Test]
@@ -287,7 +286,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
         }
 
         [Test]
@@ -346,7 +345,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
         }
 
         [Test]
@@ -390,7 +389,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Fix, ExpectedDiagnostic, new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.");
         }
     }
 }

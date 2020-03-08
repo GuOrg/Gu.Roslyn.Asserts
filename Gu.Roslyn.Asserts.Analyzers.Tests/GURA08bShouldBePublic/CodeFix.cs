@@ -1,14 +1,11 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class CodeFix
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new ObjectCreationAnalyzer();
-        private static readonly CodeFixProvider Fix = new AccessibilityFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA08bShouldBePublic);
+        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer, AccessibilityFix>(
+            ExpectedDiagnostic.Create(Descriptors.GURA08bShouldBePublic));
 
         [Test]
         public static void DiagnosticAnalyzer()
@@ -76,7 +73,7 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) });
+            Assert.CodeFix(new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) });
         }
     }
 }
