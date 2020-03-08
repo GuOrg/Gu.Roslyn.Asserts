@@ -1,10 +1,13 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
+    using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class NoFix
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, RenameFix>();
+        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
+        private static readonly CodeFixProvider Fix = new RenameFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA01NameShouldMatchParameter);
 
         [Test]
@@ -30,7 +33,7 @@ namespace N
 }";
 
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
-            Assert.NoFix(expectedDiagnostic, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+            RoslynAssert.NoFix(Analyzer, Fix, expectedDiagnostic, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
+namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
 {
+    using Microsoft.CodeAnalysis.CodeFixes;
+    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class CodeFix
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, RenameFix>();
+        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
+        private static readonly CodeFixProvider Fix = new RenameFix();
         private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA01NameShouldMatchParameter);
 
         [Test]
@@ -46,7 +49,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'analyzer'.");
-            Assert.CodeFix(expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'analyzer'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'analyzer'.");
         }
 
         [Test]
@@ -90,7 +93,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'Wrong' should be 'Analyzer'.");
-            Assert.CodeFix(expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'Analyzer'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'Analyzer'.");
         }
 
         [Test]
@@ -134,7 +137,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
-            Assert.CodeFix(expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -182,7 +185,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
-            Assert.CodeFix(expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -230,7 +233,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
-            Assert.CodeFix(expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
 
         [Test]
@@ -279,7 +282,7 @@ namespace N
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'before'.");
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            Assert.CodeFix(diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'.");
         }
 
         [Test]
@@ -324,7 +327,7 @@ namespace N
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'.");
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            Assert.CodeFix(diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'.");
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'.");
         }
 
         [Test]
@@ -368,7 +371,7 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
         }
 
         [Test]
@@ -422,7 +425,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
         }
     }
 }
