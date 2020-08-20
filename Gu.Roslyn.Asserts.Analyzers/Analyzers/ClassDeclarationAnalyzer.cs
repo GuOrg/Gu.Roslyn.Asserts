@@ -78,7 +78,8 @@
                 return false;
             }
 
-            if (!EndsWith(tree.FilePath.Length - 1, "cs", out var offset))
+            var offset = -1;
+            if (!EndsWith(tree.FilePath.Length - 1, "cs", out offset))
             {
                 result = null;
                 return false;
