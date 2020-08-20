@@ -1,7 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
     public static class Valid

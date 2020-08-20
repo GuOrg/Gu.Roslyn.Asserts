@@ -26,18 +26,16 @@
             }
 
             var current = 0;
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            while (e.MoveNext())
             {
-                while (e.MoveNext())
+                if (current == index)
                 {
-                    if (current == index)
-                    {
-                        result = e.Current;
-                        return true;
-                    }
-
-                    current++;
+                    result = e.Current;
+                    return true;
                 }
+
+                current++;
             }
 
             return false;
@@ -132,23 +130,21 @@
                 return false;
             }
 
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+            while (e.MoveNext())
             {
-                while (e.MoveNext())
+                if (e.Current is TResult candidate)
                 {
-                    if (e.Current is TResult candidate)
+                    while (e.MoveNext())
                     {
-                        while (e.MoveNext())
+                        if (e.Current is TResult)
                         {
-                            if (e.Current is TResult)
-                            {
-                                return false;
-                            }
+                            return false;
                         }
-
-                        result = candidate;
-                        return true;
                     }
+
+                    result = candidate;
+                    return true;
                 }
             }
 
