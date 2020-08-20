@@ -27,20 +27,18 @@
         internal static bool TryFindName(SyntaxNode node, [NotNullWhen(true)] out string? name)
         {
             name = null;
-            using (var walker = BorrowAndVisit(node, () => new InvocationWalker()))
+            using var walker = BorrowAndVisit(node, () => new InvocationWalker());
+            foreach (var invocation in walker.invocations)
             {
-                foreach (var invocation in walker.invocations)
+                if (invocation.TryGetMethodName(out var candidate))
                 {
-                    if (invocation.TryGetMethodName(out var candidate))
+                    if (name is null)
                     {
-                        if (name is null)
-                        {
-                            name = candidate;
-                        }
-                        else if (name != candidate)
-                        {
-                            return false;
-                        }
+                        name = candidate;
+                    }
+                    else if (name != candidate)
+                    {
+                        return false;
                     }
                 }
             }
@@ -51,7 +49,9 @@
         internal static bool TryFindRoslynAssert(SyntaxNode node, [NotNullWhen(true)] out InvocationExpressionSyntax? invocation)
         {
             using var walker = BorrowAndVisit(node, () => new InvocationWalker());
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
             return walker.invocations.TrySingle(out invocation);
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
         }
 
         /// <inheritdoc />

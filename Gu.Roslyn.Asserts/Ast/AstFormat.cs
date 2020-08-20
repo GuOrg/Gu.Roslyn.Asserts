@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     /// <summary>
     /// For configuring output from <see cref="AstWriter"/>.
@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
         Light,
 
         /// <summary>
-        /// JSON
+        /// JSON.
         /// </summary>
         Json,
     }

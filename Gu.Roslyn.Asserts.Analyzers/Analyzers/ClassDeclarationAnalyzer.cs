@@ -87,14 +87,18 @@
 
             if (!EndsWith(offset, type.MetadataName, out offset))
             {
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                 return TryGetName(out result);
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
             }
 
             if (type.ContainingType is { IsGenericType: false, ContainingType: null } containingType)
             {
                 if (!EndsWith(offset, containingType.Name, out _))
                 {
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                     return TryGetName(out result);
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
                 }
             }
 

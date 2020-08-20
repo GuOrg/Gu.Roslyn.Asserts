@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 cancellationToken.ThrowIfCancellationRequested();
                 var document = documentAndDiagnostics.Key;
                 var diagnosticsForDocument = documentAndDiagnostics.ToImmutableArray();
-                builder.Add(document, diagnosticsForDocument);
+                builder.Add(document!, diagnosticsForDocument);
             }
 
             return builder.ToImmutable();

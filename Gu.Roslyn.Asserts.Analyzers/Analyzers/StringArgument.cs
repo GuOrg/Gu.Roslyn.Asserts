@@ -192,11 +192,13 @@
         internal bool TryGetNameFromCode([NotNullWhen(true)] out string? codeName)
         {
             codeName = null;
+#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
             return this.StringLiteral is { Token: { ValueText: { } valueText } } &&
                    (TryGetName(valueText, "class ", out codeName) ||
                     TryGetName(valueText, "struct ", out codeName) ||
                     TryGetName(valueText, "interface ", out codeName) ||
                     TryGetName(valueText, "enum ", out codeName));
+#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
 
             static bool TryGetName(string text, string prefix, out string? name)
             {
