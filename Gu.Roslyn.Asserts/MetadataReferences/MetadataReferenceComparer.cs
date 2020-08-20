@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts
         private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
         /// <inheritdoc />
-        bool IEqualityComparer<MetadataReference>.Equals(MetadataReference x, MetadataReference y) => Equals(x, y);
+        bool IEqualityComparer<MetadataReference>.Equals(MetadataReference? x, MetadataReference? y) => Equals(x, y);
 
         /// <inheritdoc />
         public int GetHashCode(MetadataReference obj)
@@ -47,7 +47,7 @@ namespace Gu.Roslyn.Asserts
         /// <param name="x">The first <see cref="MetadataReference"/>.</param>
         /// <param name="y">The other <see cref="MetadataReference"/>.</param>
         /// <returns>True if x and y are found equal.</returns>
-        internal static bool Equals(MetadataReference x, MetadataReference y)
+        internal static bool Equals(MetadataReference? x, MetadataReference? y)
         {
             if (x is null && y is null)
             {

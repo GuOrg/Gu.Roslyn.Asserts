@@ -241,8 +241,18 @@
         {
             internal static readonly IEqualityComparer<MethodInfo> Default = new MethodAndParameterNamesComparer();
 
-            public bool Equals(MethodInfo x, MethodInfo y)
+            public bool Equals(MethodInfo? x, MethodInfo? y)
             {
+                if (x is null && y is null)
+                {
+                    return true;
+                }
+
+                if (x is null || y is null)
+                {
+                    return false;
+                }
+
                 if (x.Name != y.Name)
                 {
                     return false;

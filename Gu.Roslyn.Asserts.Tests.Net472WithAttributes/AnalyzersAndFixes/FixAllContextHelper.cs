@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
 {
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
@@ -125,7 +125,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
                 cancellationToken.ThrowIfCancellationRequested();
                 var document = documentAndDiagnostics.Key;
                 var diagnosticsForDocument = documentAndDiagnostics.ToImmutableArray();
-                builder.Add(document, diagnosticsForDocument);
+                builder.Add(document!, diagnosticsForDocument);
             }
 
             return builder.ToImmutable();

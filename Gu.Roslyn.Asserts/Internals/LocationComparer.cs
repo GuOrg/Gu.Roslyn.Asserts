@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Internals
+﻿namespace Gu.Roslyn.Asserts.Internals
 {
     using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
@@ -16,7 +16,7 @@ namespace Gu.Roslyn.Asserts.Internals
         }
 
         /// <inheritdoc />
-        public int Compare(Location x, Location y)
+        public int Compare(Location? x, Location? y)
         {
             if (ReferenceEquals(x, y))
             {

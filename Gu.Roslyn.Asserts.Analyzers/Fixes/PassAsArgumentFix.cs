@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -96,7 +96,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             ArgumentListSyntax PrependArgument(ArgumentListSyntax argumentList, FieldOrProperty fieldOrProperty)
             {
                 var expression = !fieldOrProperty.IsStatic &&
-                                 semanticModel.UnderscoreFields() != CodeStyleResult.Yes
+                                 semanticModel!.UnderscoreFields() != CodeStyleResult.Yes
                     ? (ExpressionSyntax)SyntaxFactory.MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         SyntaxFactory.ThisExpression(),
