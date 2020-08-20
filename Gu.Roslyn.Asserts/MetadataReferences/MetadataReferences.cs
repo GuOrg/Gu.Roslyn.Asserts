@@ -158,7 +158,7 @@
             bool TryGetOrLoad(AssemblyName name, out Assembly result)
             {
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                result = assemblies.SingleOrDefault(x => AssemblyName.ReferenceMatchesDefinition(x.GetName(), name));
+                result = assemblies.SingleOrDefault(x => IsMatch(x.GetName()));
                 if (result != null)
                 {
                     return true;
@@ -172,6 +172,12 @@
                 catch
                 {
                     return false;
+                }
+
+                bool IsMatch(AssemblyName candidate)
+                {
+                    return AssemblyName.ReferenceMatchesDefinition(candidate, name) &&
+                           candidate.Version == name.Version;
                 }
             }
         }
