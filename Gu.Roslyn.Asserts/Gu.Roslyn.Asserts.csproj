@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>3.3.0</Version>
+    <Version>3.3.1</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
@@ -23,6 +23,8 @@
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>
+      3.3.1
+      BUGFIX: Handle collision in metadata references.
       3.3.0
       FEATURE: Instance asserts.
       3.2.6

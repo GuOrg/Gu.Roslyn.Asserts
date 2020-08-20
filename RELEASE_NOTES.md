@@ -1,3 +1,6 @@
+#### 3.3.1
+* BUGFIX: Handle collision in metadata references.
+
 #### 3.2.2
 * BUGFIX: infinite loop in analyzer when looking for replacements.
 * OBSOLETE: for changing to RoslynAssert.MetadataReferences. (Code fix changing to preferred API)
