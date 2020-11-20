@@ -2,9 +2,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <UseWpf>true</UseWpf>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5</TargetFramework>
     <Nullable>enable</Nullable>
-    <CodeAnalysisRuleSet>AstView.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup>
