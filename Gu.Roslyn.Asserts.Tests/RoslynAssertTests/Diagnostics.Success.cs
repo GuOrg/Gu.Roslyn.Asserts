@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
     using NUnit.Framework;
@@ -52,6 +52,7 @@ namespace N
             [Test]
             public static void OneErrorWithExpectedDiagnosticIdOnly()
             {
+#pragma warning disable GURA02 // Indicate position.
                 var code = @"
 namespace N
 {
@@ -60,6 +61,7 @@ namespace N
         private readonly int _value1;
     }
 }";
+#pragma warning restore GURA02 // Indicate position.
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309");
                 RoslynAssert.Diagnostics(new FieldNameMustNotBeginWithUnderscore(), expectedDiagnostic, code);
@@ -68,6 +70,7 @@ namespace N
             [Test]
             public static void OneErrorWithExpectedDiagnosticIdAndMessage()
             {
+#pragma warning disable GURA02 // Indicate position.
                 var code = @"
 namespace N
 {
@@ -76,6 +79,7 @@ namespace N
         private readonly int _value1;
     }
 }";
+#pragma warning restore GURA02 // Indicate position.
 
                 var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();

@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.Refactorings;
     using Microsoft.CodeAnalysis.Text;
@@ -46,10 +46,12 @@ class C
             [Test]
             public static void WithSpanWhenAfterDoesNotMatch()
             {
+#pragma warning disable GURA02 // Indicate position.
                 var before = @"
 class c
 {
 }";
+#pragma warning restore GURA02 // Indicate position.
 
                 var after = @"
 class WRONG

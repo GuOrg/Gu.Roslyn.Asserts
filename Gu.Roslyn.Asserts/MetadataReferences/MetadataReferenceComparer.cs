@@ -36,7 +36,7 @@
         /// <param name="y">The other.</param>
         /// <returns>object.Equals().</returns>
         [Obsolete("Don't use this", error: true)]
-        internal new static bool Equals(object x, object y) => object.Equals(x, y);
+        internal static new bool Equals(object x, object y) => object.Equals(x, y);
 
         /// <summary>
         /// Compare two <see cref="MetadataReference"/>.
