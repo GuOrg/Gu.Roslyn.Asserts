@@ -150,7 +150,7 @@
                 if (FieldOrProperty.TryCreate(member, out fieldOrProperty) &&
                     fieldOrProperty.Initializer(cancellationToken) is { } initializer &&
                     semanticModel.TryGetType(initializer.Value, cancellationToken, out var candidate) &&
-                    TypeSymbolComparer.Equal(candidate, argumentType))
+                    Equals(candidate, argumentType))
                 {
                     return true;
                 }

@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -24,11 +24,11 @@
         /// </summary>
         /// <param name="type">A type in the assembly.</param>
         /// <param name="aliases">Aliases: ex {"global", "mscorlib"} can be null.</param>
-        public MetadataReferenceAttribute(Type type, string[]? aliases)
+        public MetadataReferenceAttribute(Type type, string[] aliases)
         {
             this.Type = type;
             this.Aliases = aliases ?? new string[0];
-            if (this.Aliases.Count == 0)
+            if (this.Aliases is null || this.Aliases.Count == 0)
             {
                 this.MetadataReference = MetadataReferences.CreateFromAssembly(type.Assembly);
             }

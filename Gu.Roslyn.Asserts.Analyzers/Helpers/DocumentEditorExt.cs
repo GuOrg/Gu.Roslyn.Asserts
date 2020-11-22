@@ -1,4 +1,4 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers
+namespace Gu.Roslyn.Asserts.Analyzers
 {
     using Gu.Roslyn.AnalyzerExtensions.StyleCopComparers;
     using Microsoft.CodeAnalysis;
@@ -14,14 +14,12 @@
                 (node, generator) => AddSorted(
                     generator,
                     (TypeDeclarationSyntax)node,
-#pragma warning disable SA1118 // Parameter should not span multiple lines
                     (FieldDeclarationSyntax)generator.FieldDeclaration(
                         name,
                         editor.Generator.TypeExpression(type),
                         Accessibility.Private,
                         DeclarationModifiers.Static | DeclarationModifiers.ReadOnly,
                         editor.Generator.ObjectCreationExpression(type))));
-#pragma warning restore SA1118 // Parameter should not span multiple lines
             return editor;
         }
 

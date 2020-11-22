@@ -563,7 +563,7 @@
                         case SyntaxKind.WhitespaceTrivia:
                             result = trivia.Span.Length == 1
                                 ? "SyntaxFactory.TriviaList(SyntaxFactory.Space)"
-                                : $"SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(\"{trivia}\"))";
+                                : $"SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(\"{trivia.ToString()}\"))";
                             return true;
                         case SyntaxKind.EndOfLineTrivia:
                             result = "SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)";
