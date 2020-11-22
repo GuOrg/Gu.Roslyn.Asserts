@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Gu.Roslyn.Asserts
         {
             foreach (var item in items)
             {
-                this.Add(item);
+                _ = this.Add(item);
             }
         }
 

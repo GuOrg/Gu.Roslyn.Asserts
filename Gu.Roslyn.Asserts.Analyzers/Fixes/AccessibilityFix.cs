@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     context.Document.Project.Solution
                                            .GetDocument(declaration.SyntaxTree)
                                            .WithSyntaxRoot(
-                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
+                                               syntaxRoot.ReplaceNode(
                                         declaration,
                                         Make(declaration, SyntaxFactory.Token(SyntaxKind.InternalKeyword))))),
                                 nameof(AccessibilityFix)),
@@ -57,7 +57,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     context.Document.Project.Solution
                                            .GetDocument(declaration.SyntaxTree)
                                            .WithSyntaxRoot(
-                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
+                                               syntaxRoot.ReplaceNode(
                                         declaration,
                                         Make(declaration, SyntaxFactory.Token(SyntaxKind.PublicKeyword))))),
                                 nameof(AccessibilityFix)),

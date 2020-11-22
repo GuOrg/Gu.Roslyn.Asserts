@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -8,8 +8,10 @@ namespace Gu.Roslyn.Asserts.Analyzers
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+
     using Gu.Roslyn.AnalyzerExtensions;
     using Gu.Roslyn.CodeFixExtensions;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
@@ -35,7 +37,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     if (CodeLiteral.TryCreate(stringLiteral, out var codeLiteral) &&
                         codeLiteral.Value.TryFind(diagnostic.Location, out var identifier))
                     {
-                        for (int i = 0; i < 4; i++)
+                        for (var i = 0; i < 4; i++)
                         {
                             if (NewName(i == 0 ? (int?)null : i) is { } newName)
                             {
@@ -84,17 +86,15 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 }
                             }
 
-                            switch (type.Parent)
+                            return type.Parent switch
                             {
-                                case NamespaceDeclarationSyntax { Members: { } members }
-                                    when CollidesWithSibling(members):
-                                    return null;
-                                case TypeDeclarationSyntax { Members: { } members }
-                                    when CollidesWithSibling(members):
-                                    return null;
-                            }
-
-                            return name;
+                                NamespaceDeclarationSyntax { Members: { } members }
+                                    when CollidesWithSibling(members) =>
+                                    null,
+                                TypeDeclarationSyntax { Members: { } members }
+                                    when CollidesWithSibling(members) => null,
+                                _ => name,
+                            };
 
                             bool CollidesWithSibling(SyntaxList<MemberDeclarationSyntax> siblings)
                             {
@@ -160,7 +160,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
 
                     string ReplaceAll(string text)
                     {
-                        foreach (Replacement replacement in this.replacements)
+                        foreach (var replacement in this.replacements)
                         {
                             text = Regex.Replace(
                                 text,
@@ -172,7 +172,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     }
                 }
 
-                return base.VisitLiteralExpression(node);
+                return base.VisitLiteralExpression(node)!;
             }
 
             internal static SyntaxNode Update(MethodDeclarationSyntax method, string before, string after)
@@ -206,7 +206,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             }
 
             [DebuggerDisplay("Before: {Before} After: {After}")]
-            private struct Replacement
+            private readonly struct Replacement
             {
                 internal readonly string Before;
                 internal readonly string After;
