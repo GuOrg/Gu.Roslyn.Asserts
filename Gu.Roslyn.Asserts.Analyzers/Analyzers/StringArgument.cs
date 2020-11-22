@@ -5,21 +5,21 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading;
+
     using Gu.Roslyn.AnalyzerExtensions;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [DebuggerDisplay("{Expression}")]
-    internal struct StringArgument : IEquatable<StringArgument>
+    internal readonly struct StringArgument : IEquatable<StringArgument>
     {
-#pragma warning disable RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
         internal readonly ExpressionSyntax Expression;
         internal readonly ISymbol? Symbol;
         internal readonly SyntaxToken SymbolIdentifier;
         internal readonly ExpressionSyntax? Value;
         internal readonly LiteralExpressionSyntax? StringLiteral;
-#pragma warning restore RS1008 // Avoid storing per-compilation data into the fields of a diagnostic analyzer.
 
         private StringArgument(ExpressionSyntax expression, ISymbol? symbol, SyntaxToken symbolIdentifier, ExpressionSyntax? value)
         {
@@ -27,20 +27,13 @@
             this.Symbol = symbol;
             this.SymbolIdentifier = symbolIdentifier;
             this.Value = value;
-            switch (value)
+            this.StringLiteral = value switch
             {
-                case LiteralExpressionSyntax literal
-                    when literal.IsKind(SyntaxKind.StringLiteralExpression):
-                    this.StringLiteral = literal;
-                    break;
-                case InvocationExpressionSyntax { Expression: MemberAccessExpressionSyntax { Expression: LiteralExpressionSyntax literal } }
-                    when literal.IsKind(SyntaxKind.StringLiteralExpression):
-                    this.StringLiteral = literal;
-                    break;
-                default:
-                    this.StringLiteral = null;
-                    break;
-            }
+                LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal,
+                InvocationExpressionSyntax { Expression: MemberAccessExpressionSyntax { Expression: LiteralExpressionSyntax literal } }
+                    when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal,
+                _ => null,
+            };
         }
 
         internal bool? HasPosition

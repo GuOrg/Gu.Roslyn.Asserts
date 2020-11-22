@@ -104,13 +104,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     }
                                 }
 
-                                foreach (WordAndLocation replacement in StandardNames.FindReplacements(stringArg))
+                                foreach (var replacement in StandardNames.FindReplacements(stringArg))
                                 {
                                     context.ReportDiagnostic(
                                         Diagnostic.Create(
                                             Descriptors.GURA09UseStandardNames,
                                             replacement.Location,
-                                            args.Select(x => x.Value?.GetLocation()).Where(x => x is { }),
+                                            args.Select(x => x.Value.GetLocation()).Where(x => x is { }),
                                             ImmutableDictionary<string, string>.Empty.Add(nameof(WordAndLocation.Word), replacement.Word),
                                             $"Use standard name instead of {replacement.Word}."));
                                 }

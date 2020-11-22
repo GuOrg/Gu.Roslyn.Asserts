@@ -59,9 +59,7 @@
                             }
                         }
 
-#pragma warning disable CS8629 // Nullable value type may be null. ReSharper disable once PossibleInvalidOperationException
-                        foreach (SyntaxToken identifier in code.Value.Identifiers)
-#pragma warning restore CS8629 // Nullable value type may be null.
+                        foreach (var identifier in code.Value.Identifiers)
                         {
                             if (string.Equals(identifier.ValueText, word, StringComparison.OrdinalIgnoreCase))
                             {

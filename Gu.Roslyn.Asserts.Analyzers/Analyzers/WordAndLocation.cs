@@ -1,8 +1,8 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using Microsoft.CodeAnalysis;
 
-    internal struct WordAndLocation
+    internal readonly struct WordAndLocation
     {
         internal readonly string Word;
         internal readonly Location Location;
