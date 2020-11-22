@@ -168,7 +168,7 @@
                     }
                 }
 
-                return base.VisitLiteralExpression(node);
+                return base.VisitLiteralExpression(node)!;
             }
 
             internal static SyntaxNode Update(MethodDeclarationSyntax method, string before, string after)
