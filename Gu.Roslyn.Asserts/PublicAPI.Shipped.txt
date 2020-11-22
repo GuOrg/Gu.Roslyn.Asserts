@@ -104,7 +104,7 @@ Gu.Roslyn.Asserts.MetadataReferenceAttribute
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.Aliases.get -> System.Collections.Generic.IReadOnlyList<string!>!
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReference.get -> Microsoft.CodeAnalysis.MetadataReference!
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReferenceAttribute(System.Type! type) -> void
-Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReferenceAttribute(System.Type! type, string![]! aliases) -> void
+Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReferenceAttribute(System.Type! type, string![]? aliases) -> void
 Gu.Roslyn.Asserts.MetadataReferenceAttribute.Type.get -> System.Type!
 Gu.Roslyn.Asserts.MetadataReferences
 Gu.Roslyn.Asserts.MetadataReferencesAttribute

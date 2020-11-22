@@ -71,17 +71,21 @@
 
                         async Task<Solution> CreateClassAndMoveMethod(CancellationToken cancellationToken)
                         {
-                            var root = await methodDeclaration!.SyntaxTree.GetRootAsync(cancellationToken)
-                                                                                   .ConfigureAwait(false);
-                            var classDeclaration = (ClassDeclarationSyntax)methodDeclaration.Parent;
-                            root = root.ReplaceNode(
-                                classDeclaration,
-                                classDeclaration.RemoveNodes(MembersToRemove(), SyntaxRemoveOptions.AddElasticMarker)
-                                                .WithIdentifier(SyntaxFactory.Identifier(name)));
-                            return context.Document.Project.Solution.WithDocumentSyntaxRoot(
-                                context.Document.Id,
-                                syntaxRoot.RemoveNode(methodDeclaration, SyntaxRemoveOptions.AddElasticMarker))
-                                          .AddDocument(DocumentId.CreateNewId(context.Document.Project.Id), name, root, context.Document.Folders);
+                            if (methodDeclaration.Parent is ClassDeclarationSyntax classDeclaration)
+                            {
+                                var root = await methodDeclaration.SyntaxTree.GetRootAsync(cancellationToken)
+                                                                  .ConfigureAwait(false);
+                                root = root.ReplaceNode(
+                                    classDeclaration,
+                                    classDeclaration.RemoveNodes(MembersToRemove(), SyntaxRemoveOptions.AddElasticMarker)
+                                                    .WithIdentifier(SyntaxFactory.Identifier(name)));
+                                return context.Document.Project.Solution.WithDocumentSyntaxRoot(
+                                                  context.Document.Id,
+                                                  syntaxRoot.RemoveNode(methodDeclaration, SyntaxRemoveOptions.AddElasticMarker))
+                                              .AddDocument(DocumentId.CreateNewId(context.Document.Project.Id), name, root, context.Document.Folders);
+                            }
+
+                            return context.Document.Project.Solution;
 
                             IEnumerable<MemberDeclarationSyntax> MembersToRemove()
                             {

@@ -27,3 +27,6 @@ dotnet_diagnostic.VSTHRD200.severity = none
 
 # RS2008: Enable analyzer release tracking for the analyzer project containing rule 'CallId'
 dotnet_diagnostic.RS2008.severity = none
+
+# VSTHRD103: Call async methods when in an async method
+dotnet_diagnostic.VSTHRD103.severity = none

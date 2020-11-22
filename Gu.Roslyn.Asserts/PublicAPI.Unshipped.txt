@@ -1,1 +1,1 @@
-﻿Gu.Roslyn.Asserts.MetadataReferenceAttribute.MetadataReferenceAttribute(System.Type! type, string![]? aliases) -> void
+﻿

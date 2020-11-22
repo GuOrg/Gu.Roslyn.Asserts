@@ -1,4 +1,5 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
+#pragma warning disable GURA02 // Indicate position.
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System;
@@ -132,6 +133,7 @@ namespace N
     {
     }
 }";
+
                 var expected = "Expected code to have at least one error position indicated with '↓'";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Diagnostics(analyzer, code1, code2));

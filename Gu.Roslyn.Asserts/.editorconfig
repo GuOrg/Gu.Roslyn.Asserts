@@ -17,3 +17,6 @@ dotnet_diagnostic.RS2008.severity = none
 
 # VSTHRD002: Avoid problematic synchronous waits
 dotnet_diagnostic.VSTHRD002.severity = none
+
+# VSTHRD003: Avoid awaiting foreign Tasks
+dotnet_diagnostic.VSTHRD003.severity = none
