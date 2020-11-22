@@ -1,6 +1,5 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
@@ -13,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
         [Test]
         public static async Task GetDiagnosticsAsyncProjectFile()
         {
-            Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out FileInfo? projectFile));
+            Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out var projectFile));
             var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile!, MetadataReferences).ConfigureAwait(false);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
         }
