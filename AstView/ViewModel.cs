@@ -1,4 +1,4 @@
-namespace AstView
+﻿namespace AstView
 {
     using System;
     using System.ComponentModel;
@@ -76,7 +76,7 @@ namespace AstView
 
             static bool TryFindLength(string code, int from, out int result)
             {
-                int level = 0;
+                var level = 0;
                 for (var i = from; i < code.Length; i++)
                 {
                     switch (code[i])
@@ -106,9 +106,9 @@ namespace AstView
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-#pragma warning disable AvoidAsyncVoid // Avoid async void
+#pragma warning disable VSTHRD100 // Avoid async void methods
         private async void UpdateGeneration()
-#pragma warning restore AvoidAsyncVoid // Avoid async void
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             this.Exception = null;
             this.Generation = null;
