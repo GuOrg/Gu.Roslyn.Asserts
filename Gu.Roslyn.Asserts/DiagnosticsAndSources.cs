@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -197,8 +197,8 @@ namespace Gu.Roslyn.Asserts
                 {
                     var message = "Expected diagnostic has position indicated and the code has error position indicated with ↓\r\n" +
                                   "Use either:\r\n" +
-                                  "a) Diagnostic with position and no error indicated in the code.\r\n" +
-                                  "a) Diagnostic with position and no error indicated in the code.\r\n";
+                                  "a) Expected error position indicated with ↓ in the code.\r\n" +
+                                  "a) ExpectedDiagnostic with expected error position.\r\n";
                     throw new InvalidOperationException(message);
                 }
 
