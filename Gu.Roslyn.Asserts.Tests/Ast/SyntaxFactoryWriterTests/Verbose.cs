@@ -997,6 +997,7 @@ namespace A.B
                                     trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
                             constraintClauses: default,
                             body: SyntaxFactory.Block(
+                                attributeLists: default,
                                 openBraceToken: SyntaxFactory.Token(
                                     leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
                                     kind: SyntaxKind.OpenBraceToken,
@@ -1170,12 +1171,14 @@ namespace A.B
                                     trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))),
                             constraintClauses: default,
                             body: SyntaxFactory.Block(
+                                attributeLists: default,
                                 openBraceToken: SyntaxFactory.Token(
                                     leading: SyntaxFactory.TriviaList(SyntaxFactory.Whitespace(""        "")),
                                     kind: SyntaxKind.OpenBraceToken,
                                     trailing: SyntaxFactory.TriviaList(SyntaxFactory.LineFeed)),
                                 statements: SyntaxFactory.SingletonList<StatementSyntax>(
                                     SyntaxFactory.ReturnStatement(
+                                        attributeLists: default,
                                         returnKeyword: SyntaxFactory.Token(
                                             leading: SyntaxFactory.TriviaList(
                                                 SyntaxFactory.Trivia(

@@ -319,12 +319,11 @@
                 "System.Xml.XPath.XDocument.dll",
                 "Microsoft.CodeAnalysis.dll",
                 "System.Collections.Immutable.dll",
-                "System.Reflection.Metadata.dll",
                 "System.Memory.dll",
                 "System.Numerics.Vectors.dll",
                 "System.Runtime.CompilerServices.Unsafe.dll",
-                "System.Runtime.dll",
                 "System.Buffers.dll",
+                "System.Reflection.Metadata.dll",
                 "System.Threading.Tasks.Extensions.dll",
                 "System.Text.Encoding.CodePages.dll",
             };
@@ -448,6 +447,7 @@
             Assert.Inconclusive("Not handling this framework.");
 #endif
             var type = typeof(CSharpCompilation);
+
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
@@ -517,17 +517,18 @@
                 "System.Xml.XPath.XDocument.dll",
                 "Microsoft.CodeAnalysis.dll",
                 "System.Collections.Immutable.dll",
-                "System.Reflection.Metadata.dll",
                 "System.Memory.dll",
                 "System.Numerics.Vectors.dll",
                 "System.Runtime.CompilerServices.Unsafe.dll",
-                "System.Runtime.dll",
                 "System.Buffers.dll",
+                "System.Reflection.Metadata.dll",
                 "System.Threading.Tasks.Extensions.dll",
                 "System.Text.Encoding.CodePages.dll",
                 "Microsoft.CodeAnalysis.Workspaces.dll",
                 "System.Composition.AttributedModel.dll",
+                "System.Runtime.dll",
                 "System.Reflection.dll",
+                "Microsoft.Bcl.AsyncInterfaces.dll",
                 "System.Composition.Runtime.dll",
                 "System.Collections.dll",
                 "System.Diagnostics.Tools.dll",
