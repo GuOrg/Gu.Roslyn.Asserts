@@ -708,6 +708,7 @@ namespace A.B
                                 closeParenToken: SyntaxFactory.Token(SyntaxKind.CloseParenToken)),
                             constraintClauses: default,
                             body: SyntaxFactory.Block(
+                                attributeLists: default,
                                 openBraceToken: SyntaxFactory.Token(SyntaxKind.OpenBraceToken),
                                 statements: default,
                                 closeBraceToken: SyntaxFactory.Token(
@@ -819,9 +820,11 @@ namespace A.B
                                 closeParenToken: SyntaxFactory.Token(SyntaxKind.CloseParenToken)),
                             constraintClauses: default,
                             body: SyntaxFactory.Block(
+                                attributeLists: default,
                                 openBraceToken: SyntaxFactory.Token(SyntaxKind.OpenBraceToken),
                                 statements: SyntaxFactory.SingletonList<StatementSyntax>(
                                     SyntaxFactory.ReturnStatement(
+                                        attributeLists: default,
                                         returnKeyword: SyntaxFactory.Token(
                                             leading: SyntaxFactory.TriviaList(
                                                 SyntaxFactory.Trivia(
