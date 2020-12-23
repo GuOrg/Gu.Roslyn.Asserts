@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
 {
     using System;
     using System.Threading;
@@ -26,7 +26,7 @@ namespace Gu.Roslyn.Asserts.Tests.Net472WithAttributes.AnalyzersAndFixes
             var semanticModel = await annotatedDocument.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var symbol = semanticModel.GetDeclaredSymbol(annotatedToken.Parent, cancellationToken);
 
-            var newSolution = await Renamer.RenameSymbolAsync(annotatedSolution, symbol, newName, null, cancellationToken).ConfigureAwait(false);
+            var newSolution = await Renamer.RenameSymbolAsync(annotatedSolution, symbol, newName, null!, cancellationToken).ConfigureAwait(false);
 
             // TODO: return annotatedSolution instead of newSolution if newSolution contains any new errors (for any project)
             return newSolution;

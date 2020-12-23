@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
     using Microsoft.CodeAnalysis.CSharp;
@@ -104,7 +104,7 @@ namespace N
     {
     }
 }");
-            var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
+            var comment = (DocumentationCommentTriviaSyntax?)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
             var actual = AstWriter.Serialize(comment);
             var expected = "{ SingleLineDocumentationCommentTrivia\n" +
                            "  ChildTokens: [ { EndOfDocumentationCommentToken Text: \"\" } ]\n" +
@@ -144,7 +144,7 @@ namespace N
     {
     }
 }");
-            var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
+            var comment = (DocumentationCommentTriviaSyntax?)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
             var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Node | AstTrivia.Token, ignoreEmptyTrivia: false));
             var expected = "{ SingleLineDocumentationCommentTrivia LeadingTrivia: [ { DocumentationCommentExteriorTrivia: \"///\" } ]\n" +
                            "  ChildTokens: [ { EndOfDocumentationCommentToken Text: \"\" } ]\n" +
@@ -184,7 +184,7 @@ namespace N
     {
     }
 }");
-            var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
+            var comment = (DocumentationCommentTriviaSyntax?)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
             var actual = AstWriter.Serialize(comment, new AstWriterSettings(AstFormat.Light, AstTrivia.Ignore, ignoreEmptyTrivia: false));
             var expected = "{ SingleLineDocumentationCommentTrivia\n" +
                            "  ChildTokens: [ { EndOfDocumentationCommentToken Text: \"\" } ]\n" +
@@ -224,7 +224,7 @@ namespace N
     {
     }
 }");
-            var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
+            var comment = (DocumentationCommentTriviaSyntax?)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
             var actual = AstWriter.Serialize(comment, AstWriterSettings.DefaultJson);
             var expected = "{ \"Kind\": \"SingleLineDocumentationCommentTrivia\",\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"EndOfDocumentationCommentToken\", \"Text\": \"\" } ],\n" +
@@ -264,7 +264,7 @@ namespace N
     {
     }
 }");
-            var comment = (DocumentationCommentTriviaSyntax)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
+            var comment = (DocumentationCommentTriviaSyntax?)tree.FindClassDeclaration("C").GetLeadingTrivia().Single(x => x.HasStructure).GetStructure();
             var expected = "{ \"Kind\": \"SingleLineDocumentationCommentTrivia\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
                            "  \"ChildTokens\": [ { \"Kind\": \"EndOfDocumentationCommentToken\", \"Text\": \"\" } ],\n" +
                            "  \"ChildNodes\":  [ { \"Kind\": \"XmlText\", \"LeadingTrivia\": [ { \"Kind\": \"DocumentationCommentExteriorTrivia\", \"Text\": \"///\" } ],\n" +
