@@ -542,7 +542,7 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expected = @"Found error.
-CS1519 Invalid token '}' in class, struct, or interface member declaration
+CS1519 Invalid token '}' in class, record, struct, or interface member declaration
   at line 7 and character 4 in file C.cs | ↓}
 ";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
