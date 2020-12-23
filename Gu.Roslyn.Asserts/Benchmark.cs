@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -323,8 +324,22 @@
                 public override void RegisterSyntaxNodeAction<TLanguageKindEnum>(Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds)
                 {
                     this.context.RegisterSyntaxNodeAction(
-                        x => this.analyzer.SyntaxNodeActions.Add(new ContextAndAction<SyntaxNodeAnalysisContext>(x, action)),
+                        x => this.analyzer.SyntaxNodeActions.Add(new ContextAndAction<SyntaxNodeAnalysisContext>(BenchmarkContext(x), action)),
                         syntaxKinds);
+
+                    static SyntaxNodeAnalysisContext BenchmarkContext(SyntaxNodeAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new SyntaxNodeAnalysisContext(
+                            node: original.Node,
+                            containingSymbol: original.ContainingSymbol,
+                            semanticModel: original.SemanticModel,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterCompilationStartAction(Action<CompilationStartAnalysisContext> action)
@@ -336,7 +351,19 @@
                 public override void RegisterCompilationAction(Action<CompilationAnalysisContext> action)
                 {
                     this.context.RegisterCompilationAction(
-                        x => this.analyzer.CompilationActions.Add(new ContextAndAction<CompilationAnalysisContext>(x, action)));
+                        x => this.analyzer.CompilationActions.Add(new ContextAndAction<CompilationAnalysisContext>(BenchmarkContext(x), action)));
+
+                    static CompilationAnalysisContext BenchmarkContext(CompilationAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new CompilationAnalysisContext(
+                            compilation: original.Compilation,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterSemanticModelAction(Action<SemanticModelAnalysisContext> action)
@@ -348,8 +375,21 @@
                 public override void RegisterSymbolAction(Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
                 {
                     this.context.RegisterSymbolAction(
-                        x => this.analyzer.SymbolActions.Add(new ContextAndAction<SymbolAnalysisContext>(x, action)),
+                        x => this.analyzer.SymbolActions.Add(new ContextAndAction<SymbolAnalysisContext>(BenchmarkContext(x), action)),
                         symbolKinds);
+
+                    static SymbolAnalysisContext BenchmarkContext(SymbolAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new SymbolAnalysisContext(
+                            symbol: original.Symbol,
+                            compilation: original.Compilation,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterCodeBlockStartAction<TLanguageKindEnum>(Action<CodeBlockStartAnalysisContext<TLanguageKindEnum>> action)
@@ -361,26 +401,80 @@
                 public override void RegisterCodeBlockAction(Action<CodeBlockAnalysisContext> action)
                 {
                     this.context.RegisterCodeBlockAction(
-                        x => this.analyzer.CodeBlockActions.Add(new ContextAndAction<CodeBlockAnalysisContext>(x, action)));
+                        x => this.analyzer.CodeBlockActions.Add(new ContextAndAction<CodeBlockAnalysisContext>(BenchmarkContext(x), action)));
+
+                    static CodeBlockAnalysisContext BenchmarkContext(CodeBlockAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new CodeBlockAnalysisContext(
+                            codeBlock: original.CodeBlock,
+                            owningSymbol: original.OwningSymbol,
+                            semanticModel: original.SemanticModel,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterSyntaxTreeAction(Action<SyntaxTreeAnalysisContext> action)
                 {
                     this.context.RegisterSyntaxTreeAction(
-                        x => this.analyzer.SyntaxTreeActions.Add(new ContextAndAction<SyntaxTreeAnalysisContext>(x, action)));
+                        x => this.analyzer.SyntaxTreeActions.Add(new ContextAndAction<SyntaxTreeAnalysisContext>(BenchmarkContext(x), action)));
+
+                    static SyntaxTreeAnalysisContext BenchmarkContext(SyntaxTreeAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new SyntaxTreeAnalysisContext(
+                            tree: original.Tree,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterOperationAction(Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds)
                 {
                     this.context.RegisterOperationAction(
-                        x => this.analyzer.OperationActions.Add(new ContextAndAction<OperationAnalysisContext>(x, action)),
+                        x => this.analyzer.OperationActions.Add(new ContextAndAction<OperationAnalysisContext>(BenchmarkContext(x), action)),
                         operationKinds);
+
+                    static OperationAnalysisContext BenchmarkContext(OperationAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new OperationAnalysisContext(
+                            operation: original.Operation,
+                            containingSymbol: original.ContainingSymbol,
+                            compilation: original.Compilation,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterOperationBlockAction(Action<OperationBlockAnalysisContext> action)
                 {
                     this.context.RegisterOperationBlockAction(
-                        x => this.analyzer.OperationBlockActions.Add(new ContextAndAction<OperationBlockAnalysisContext>(x, action)));
+                        x => this.analyzer.OperationBlockActions.Add(new ContextAndAction<OperationBlockAnalysisContext>(BenchmarkContext(x), action)));
+
+                    static OperationBlockAnalysisContext BenchmarkContext(OperationBlockAnalysisContext original)
+                    {
+                        // Benchmarks started throwing when diagnostics were reported somewhere around Roslyn 3.4.0
+                        // We work around this by making report a no operation.
+                        return new OperationBlockAnalysisContext(
+                            operationBlocks: original.OperationBlocks,
+                            owningSymbol: original.OwningSymbol,
+                            compilation: original.Compilation,
+                            options: original.Options,
+                            reportDiagnostic: _ => { },
+                            isSupportedDiagnostic: _ => true,
+                            cancellationToken: CancellationToken.None);
+                    }
                 }
 
                 public override void RegisterOperationBlockStartAction(Action<OperationBlockStartAnalysisContext> action)
