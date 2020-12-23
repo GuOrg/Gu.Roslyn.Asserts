@@ -198,7 +198,7 @@
                     var message = "Expected diagnostic has position indicated and the code has error position indicated with ↓\r\n" +
                                   "Use either:\r\n" +
                                   "a) Expected error position indicated with ↓ in the code.\r\n" +
-                                  "a) ExpectedDiagnostic with expected error position.\r\n";
+                                  "b) ExpectedDiagnostic with expected error position.\r\n";
                     throw new InvalidOperationException(message);
                 }
 
