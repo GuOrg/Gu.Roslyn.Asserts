@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -25,10 +25,18 @@ namespace Gu.Roslyn.Asserts
             var set = new HashSet<string>();
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                var attributes = Attribute.GetCustomAttributes(assembly, typeof(SuppressWarningsAttribute));
-                foreach (var attribute in attributes.Cast<SuppressWarningsAttribute>())
+                var suppressAttributes = Attribute.GetCustomAttributes(assembly, typeof(SuppressWarningsAttribute));
+                foreach (var attribute in suppressAttributes.Cast<SuppressWarningsAttribute>())
                 {
                     set.UnionWith(attribute.Ids);
+                }
+
+#pragma warning disable CS0618 // Type or member is obsolete
+                var errorsAttributes = Attribute.GetCustomAttributes(assembly, typeof(IgnoredErrorsAttribute));
+                foreach (var attribute in errorsAttributes.Cast<IgnoredErrorsAttribute>())
+#pragma warning restore CS0618 // Type or member is obsolete
+                {
+                    set.UnionWith(attribute.ErrorIds);
                 }
             }
 

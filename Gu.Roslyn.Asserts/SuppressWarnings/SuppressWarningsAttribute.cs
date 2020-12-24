@@ -10,16 +10,16 @@
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
 #pragma warning disable CA1813 // Avoid unsealed attributes
-    public class SuppressWarningsAttribute : Attribute
+    public sealed class SuppressWarningsAttribute : Attribute
 #pragma warning restore CA1813 // Avoid unsealed attributes
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SuppressWarningsAttribute"/> class.
         /// </summary>
         /// <param name="ids">A collection of <see cref="Diagnostic.Id"/> to suppress.</param>
-        public SuppressWarningsAttribute(params string[] ids)
+        public SuppressWarningsAttribute(params string[]? ids)
         {
-            this.Ids = ids;
+            this.Ids = ids ?? Array.Empty<string>();
         }
 
         /// <summary>
