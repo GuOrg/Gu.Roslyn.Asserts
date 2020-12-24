@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -29,13 +29,6 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                     var newName = diagnostic.Id == FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId
                         ? "value"
                         : "Value";
-
-                    if (string.IsNullOrEmpty(newName))
-                    {
-                        // The variable consisted of only underscores. In this case we cannot
-                        // generate a valid variable name and thus will not offer a code fix.
-                        continue;
-                    }
 
                     context.RegisterCodeFix(
                         CodeAction.Create(

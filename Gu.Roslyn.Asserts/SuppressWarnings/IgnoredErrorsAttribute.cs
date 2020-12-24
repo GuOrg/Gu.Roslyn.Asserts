@@ -14,7 +14,7 @@
         /// Initializes a new instance of the <see cref="IgnoredErrorsAttribute"/> class.
         /// </summary>
         /// <param name="errorIds">Specify ids of compiler errors to ignore when checking if a fix introduced compiler errors.</param>
-        public IgnoredErrorsAttribute(params string[]? errorIds)
+        public IgnoredErrorsAttribute(params string[] errorIds)
         {
             this.ErrorIds = errorIds ?? Array.Empty<string>();
         }

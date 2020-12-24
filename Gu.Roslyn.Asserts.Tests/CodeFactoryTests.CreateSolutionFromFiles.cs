@@ -1,4 +1,4 @@
-// ReSharper disable PossibleNullReferenceException
+﻿// ReSharper disable PossibleNullReferenceException
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
@@ -55,7 +55,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var expected = new[]
                 {
                     "App.xaml.cs",
-                    "AssemblyAtributes.cs",
+                    "AssemblyAttributes.cs",
                     "Class1.cs",
                     "MainWindow.xaml.cs",
                     "Resources.Designer.cs",

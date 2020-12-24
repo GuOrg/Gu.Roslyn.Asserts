@@ -17,7 +17,7 @@
         /// Initializes a new instance of the <see cref="SuppressWarningsAttribute"/> class.
         /// </summary>
         /// <param name="ids">A collection of <see cref="Diagnostic.Id"/> to suppress.</param>
-        public SuppressWarningsAttribute(params string[]? ids)
+        public SuppressWarningsAttribute(params string[] ids)
         {
             this.Ids = ids ?? Array.Empty<string>();
         }
