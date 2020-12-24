@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts
     /// Specify what default metadata reference to use.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly,  AllowMultiple = true)]
-    public class TransitiveMetadataReferencesAttribute : Attribute
+    public sealed class TransitiveMetadataReferencesAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TransitiveMetadataReferencesAttribute"/> class.

@@ -15,6 +15,11 @@
         /// <returns>True if the code is found to be equal.</returns>
         public static bool Equals(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
+            if (xs.Count != ys.Count)
+            {
+                return false;
+            }
+
             for (var i = 0; i < xs.Count; i++)
             {
                 if (!Equals(xs[i], ys[i]))

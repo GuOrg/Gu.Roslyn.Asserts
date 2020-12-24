@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
 
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     [Obsolete("Use " + nameof(SuppressWarningsAttribute))]
-    public class AllowedDiagnosticsAttribute : Attribute
+    public sealed class AllowedDiagnosticsAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AllowedDiagnosticsAttribute"/> class.

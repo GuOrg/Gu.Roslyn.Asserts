@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts
     /// Specify what default metadata reference to use when compiling the code in asserts.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class MetadataReferencesAttribute : Attribute
+    public sealed class MetadataReferencesAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.

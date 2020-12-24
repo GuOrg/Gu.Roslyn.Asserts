@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,9 @@ namespace Gu.Roslyn.Asserts
     /// Example: [assembly: SuppressWarnings("CS1701", "CS1702")].
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+#pragma warning disable CA1813 // Avoid unsealed attributes
     public class SuppressWarningsAttribute : Attribute
+#pragma warning restore CA1813 // Avoid unsealed attributes
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SuppressWarningsAttribute"/> class.

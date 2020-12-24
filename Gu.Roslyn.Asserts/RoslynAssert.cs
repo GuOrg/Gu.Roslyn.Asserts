@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -206,7 +206,7 @@ namespace Gu.Roslyn.Asserts
                     errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");
                 }
 
-                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None)));
+                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None))).ConfigureAwait(false);
 
                 errorBuilder.AppendLine("First source file with error is:");
                 var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();

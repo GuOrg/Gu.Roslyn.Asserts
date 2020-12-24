@@ -8,7 +8,7 @@
     /// Specify a default metadata reference to use.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    public class MetadataReferenceAttribute : Attribute
+    public sealed class MetadataReferenceAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataReferenceAttribute"/> class.

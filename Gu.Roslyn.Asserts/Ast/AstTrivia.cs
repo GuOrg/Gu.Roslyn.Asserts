@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
 
@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// Caller did not specify.
         /// </summary>
-        Unspecified = 0,
+        None = 0,
 
         /// <summary>
         /// Include trivia for tokens only.

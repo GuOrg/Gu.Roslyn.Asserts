@@ -1,9 +1,10 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
-    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Text;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
@@ -29,6 +30,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The node serialized into a string format.</returns>
         public static string Serialize(SyntaxNode node, AstWriterSettings? settings = null)
         {
+            if (node is null)
+            {
+                throw new System.ArgumentNullException(nameof(node));
+            }
+
             var writer = new AstWriter(settings ?? AstWriterSettings.Default).Write(node);
             return writer.ToString();
         }
@@ -49,7 +55,7 @@ namespace Gu.Roslyn.Asserts
                     this.WriteProperty("Kind", node.Kind().ToString());
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException(nameof(this.settings.Format), (int)this.settings.Format, typeof(AstFormat));
             }
 
             this.indentation.Push();
@@ -161,11 +167,11 @@ namespace Gu.Roslyn.Asserts
 
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException(nameof(this.settings.Format), (int)this.settings.Format, typeof(AstFormat));
             }
 
             if (this.settings.Trivia.HasFlag(AstTrivia.Token) ||
-                this.settings.Trivia == AstTrivia.Unspecified)
+                this.settings.Trivia == AstTrivia.None)
             {
                 _ = this.WriteTrivia("LeadingTrivia", token.LeadingTrivia)
                         .WriteTrivia("TrailingTrivia", token.TrailingTrivia);
@@ -193,7 +199,7 @@ namespace Gu.Roslyn.Asserts
                         this.Write(", \"").Write(name).Write("\": [ ");
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new InvalidEnumArgumentException(nameof(this.settings.Format), (int)this.settings.Format, typeof(AstFormat));
                 }
 
                 var wrote = false;
@@ -263,7 +269,7 @@ namespace Gu.Roslyn.Asserts
                         .Append('"');
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException(nameof(this.settings.Format), (int)this.settings.Format, typeof(AstFormat));
             }
 
             this.builder
@@ -294,13 +300,13 @@ namespace Gu.Roslyn.Asserts
 
         private AstWriter WriteStartElement()
         {
-            this.builder.Append("{");
+            this.builder.Append('{');
             return this;
         }
 
         private AstWriter WriteEndElement()
         {
-            this.builder.Append("}");
+            this.builder.Append('}');
             return this;
         }
 

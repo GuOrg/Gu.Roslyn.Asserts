@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     [Obsolete("Use " + nameof(SuppressWarningsAttribute))]
-    public class IgnoredErrorsAttribute : SuppressWarningsAttribute
+    public sealed class IgnoredErrorsAttribute : SuppressWarningsAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IgnoredErrorsAttribute"/> class.

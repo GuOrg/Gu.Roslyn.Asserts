@@ -120,7 +120,7 @@
             {
                 try
                 {
-                    await Task.Run(() => this.Generation = SyntaxFactoryWriter.Serialize(this.source));
+                    await Task.Run(() => this.Generation = SyntaxFactoryWriter.Serialize(this.source)).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

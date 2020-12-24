@@ -2062,7 +2062,7 @@ class C
             var call = SyntaxFactoryWriter.Serialize(code);
             try
             {
-                var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions);
+                var result = await CSharpScript.EvaluateAsync<SyntaxNode>(call, ScriptOptions).ConfigureAwait(false);
                 CodeAssert.AreEqual(code, result.ToFullString());
             }
             catch (CompilationErrorException)
