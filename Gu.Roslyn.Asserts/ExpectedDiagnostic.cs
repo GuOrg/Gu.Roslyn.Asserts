@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -87,6 +87,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(DiagnosticDescriptor descriptor)
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             return new ExpectedDiagnostic(descriptor.Id, null, NoPosition);
         }
 
@@ -97,6 +102,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
             return new ExpectedDiagnostic(diagnosticId, null, NoPosition);
         }
 
@@ -108,6 +118,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             return new ExpectedDiagnostic(diagnosticId, message, NoPosition);
         }
 
@@ -120,6 +140,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, int line, int character)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
             return Create(diagnosticId, null, line, character);
         }
 
@@ -133,6 +158,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string? message, int line, int character)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
             var position = new LinePosition(line, character);
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(NoPosition.Path, position, position));
         }
@@ -148,6 +178,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(string diagnosticId, string message, string path, int line, int character)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             var position = new LinePosition(line, character);
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(path, position, position));
         }
@@ -161,6 +201,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string code, out string cleanedSources)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateFromCodeWithErrorsIndicated(diagnosticId, null, code, out cleanedSources);
         }
 
@@ -174,6 +224,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string? message, string code, out string cleanedSources)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             var positions = CodeReader.FindLinePositions(code).ToArray();
             if (positions.Length == 0)
             {
@@ -201,6 +261,21 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static IReadOnlyList<ExpectedDiagnostic> CreateManyFromCodeWithErrorsIndicated(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
         {
+            if (diagnosticId is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticId));
+            }
+
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
             var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
             if (positions.Length == 0)
             {
@@ -219,6 +294,11 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public bool Matches(Diagnostic actual)
         {
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             return this.Id == actual.Id &&
                    this.MessageMatches(actual) &&
                    (this.PositionMatches(actual) || actual.AdditionalLocations.Any(a => this.PositionMatches(a)));
@@ -231,6 +311,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if match.</returns>
         public bool MessageMatches(Diagnostic actual)
         {
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             return this.Message is null ||
                    this.Message == actual.GetMessage(CultureInfo.InvariantCulture);
         }
@@ -242,6 +327,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>True if match.</returns>
         public bool PositionMatches(Diagnostic actual)
         {
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             return this.PositionMatches(actual.Location);
         }
 
@@ -267,6 +357,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public ExpectedDiagnostic WithPositionFromCodeWithErrorsIndicated(string codeWithErrorsIndicated, out string cleanedSources)
         {
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
             var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
             if (positions.Length == 0)
             {

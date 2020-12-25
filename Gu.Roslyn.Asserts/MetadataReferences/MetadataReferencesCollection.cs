@@ -38,6 +38,11 @@
         /// <param name="items">The references to add.</param>
         public void AddRange(IEnumerable<MetadataReference> items)
         {
+            if (items is null)
+            {
+                throw new System.ArgumentNullException(nameof(items));
+            }
+
             foreach (var item in items)
             {
                 _ = this.Add(item);
@@ -51,6 +56,11 @@
         /// <param name="item">The item.</param>
         public bool Add(MetadataReference item)
         {
+            if (item is null)
+            {
+                throw new System.ArgumentNullException(nameof(item));
+            }
+
             for (var i = 0; i < this.inner.Count; i++)
             {
                 var existing = this.inner[i];

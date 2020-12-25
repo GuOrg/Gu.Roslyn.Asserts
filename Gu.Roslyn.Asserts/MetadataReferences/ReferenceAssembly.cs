@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Concurrent;
@@ -25,7 +25,7 @@ namespace Gu.Roslyn.Asserts
         {
             get
             {
-                return directory ?? (directory = GetDefault());
+                return directory ??= GetDefault();
 
                 static DirectoryInfo? GetDefault()
                 {
@@ -63,6 +63,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating a reference was found.</returns>
         public static bool TryGet(Assembly assembly, [NotNullWhen(true)] out MetadataReference? metadataReference)
         {
+            if (assembly is null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
             if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var dllFile))
             {
                 metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));

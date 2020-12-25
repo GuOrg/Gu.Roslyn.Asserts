@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -24,6 +24,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(FileInfo dllFile, [NotNullWhen(true)] out FileInfo? result)
         {
+            if (dllFile is null)
+            {
+                throw new ArgumentNullException(nameof(dllFile));
+            }
+
             result = null;
             if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
             {

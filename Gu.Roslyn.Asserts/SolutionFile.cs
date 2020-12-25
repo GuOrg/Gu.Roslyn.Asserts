@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Immutable;
@@ -22,6 +22,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFind(Assembly assembly, [NotNullWhen(true)] out FileInfo? sln)
         {
+            if (assembly is null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
             sln = null;
             return assembly.CodeBase is { } codeBase &&
                    new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
