@@ -1,9 +1,9 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
-    internal class AnalyzerCategory
+    internal static class AnalyzerCategory
     {
-        internal static readonly string Ocd = nameof(Ocd);
+        internal const string Ocd = nameof(Ocd);
 
-        internal static readonly string Correctness = nameof(Correctness);
+        internal const string Correctness = nameof(Correctness);
     }
 }
