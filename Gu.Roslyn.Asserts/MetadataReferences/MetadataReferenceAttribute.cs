@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="type">A type in the assembly.</param>
         public MetadataReferenceAttribute(Type type)
-            : this(type, new string[0])
+            : this(type, null)
         {
         }
 
@@ -26,7 +26,7 @@
         /// <param name="aliases">Aliases: ex {"global", "mscorlib"} can be null.</param>
         public MetadataReferenceAttribute(Type type, string[]? aliases)
         {
-            this.Type = type;
+            this.Type = type ?? throw new ArgumentNullException(nameof(type));
             this.Aliases = aliases ?? new string[0];
             if (this.Aliases.Count == 0)
             {

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -243,7 +244,7 @@
                 AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
                 AllowedDiagnostics.None => diagnostic.Severity == DiagnosticSeverity.Error || diagnostic.Severity == DiagnosticSeverity.Warning,
                 AllowedDiagnostics.WarningsAndErrors => false,
-                _ => throw new ArgumentOutOfRangeException(),
+                _ => throw new InvalidEnumArgumentException(nameof(allowedDiagnostics), (int)allowedDiagnostics, typeof(AllowedDiagnostics)),
             };
         }
     }

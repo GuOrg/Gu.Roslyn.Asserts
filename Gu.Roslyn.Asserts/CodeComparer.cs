@@ -15,6 +15,18 @@
         /// <returns>True if the code is found to be equal.</returns>
         public static bool Equals(IReadOnlyList<string> xs, IReadOnlyList<string> ys)
         {
+            if (xs is null &&
+                ys is null)
+            {
+                return true;
+            }
+
+            if (xs is null ||
+                ys is null)
+            {
+                return false;
+            }
+
             if (xs.Count != ys.Count)
             {
                 return false;
@@ -39,6 +51,18 @@
         /// <returns>True if the code is found to be equal.</returns>
         public static bool Equals(string x, string y)
         {
+            if (x is null &&
+                y is null)
+            {
+                return true;
+            }
+
+            if (x is null ||
+                y is null)
+            {
+                return false;
+            }
+
             var xPos = 0;
             var yPos = 0;
             while (xPos < x.Length && yPos < y.Length)
