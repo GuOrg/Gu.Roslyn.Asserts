@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -21,9 +21,9 @@ namespace Gu.Roslyn.Asserts
         {
             Valid(
                 analyzer,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -45,10 +45,10 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace Gu.Roslyn.Asserts
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -100,10 +100,10 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -131,10 +131,10 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -159,10 +159,10 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -184,10 +184,10 @@ namespace Gu.Roslyn.Asserts
                 analyzer,
                 CodeFactory.CreateSolution(
                 code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
                 metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -297,9 +297,9 @@ namespace Gu.Roslyn.Asserts
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             NoCompilerErrors(diagnosticsAndErrors.Errors, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
     }
 }

@@ -50,9 +50,9 @@
                 RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, this.descriptorId);
                 RoslynAssert.Valid(
                     analyzer,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                     CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, this.descriptorId, RoslynAssert.SuppressedDiagnostics), RoslynAssert.MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             }
         }
 

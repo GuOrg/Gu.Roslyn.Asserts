@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -291,6 +291,21 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Use other overloads.")]
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnosticsAndSources is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticsAndSources));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -319,6 +334,21 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Use other overloads.")]
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (diagnosticsAndSources is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticsAndSources));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -348,6 +378,21 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             var fix = new TCodeFix();
             FixAll(
@@ -376,6 +421,21 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             FixAll(
                 new TAnalyzer(),
                 new TCodeFix(),
@@ -404,6 +464,21 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             FixAll(
                 new TAnalyzer(),
                 new TCodeFix(),
@@ -430,6 +505,21 @@ namespace Gu.Roslyn.Asserts
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
@@ -457,6 +547,21 @@ namespace Gu.Roslyn.Asserts
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
@@ -484,6 +589,21 @@ namespace Gu.Roslyn.Asserts
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             FixAll(
                 analyzer,
@@ -512,6 +632,16 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             FixAll(
                 analyzer,
@@ -540,6 +670,16 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             FixAll(
                 analyzer,
@@ -568,6 +708,16 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             FixAll(
                 analyzer,
@@ -596,6 +746,16 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             FixAllByScope(
                 analyzer,
@@ -623,6 +783,16 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
@@ -656,6 +826,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics<TAnalyzer>(DiagnosticDescriptor descriptor, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             NoAnalyzerDiagnostics(new TAnalyzer(), descriptor, code);
         }
 
@@ -669,6 +844,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics<TAnalyzer>(IReadOnlyList<DiagnosticDescriptor> descriptors, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (descriptors is null)
+            {
+                throw new ArgumentNullException(nameof(descriptors));
+            }
+
             NoAnalyzerDiagnostics(new TAnalyzer(), descriptors, code);
         }
 
@@ -682,6 +862,16 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics<TAnalyzer>(DiagnosticDescriptor descriptor, FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             NoAnalyzerDiagnostics(new TAnalyzer(), descriptor, code);
         }
 
@@ -694,6 +884,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics<TAnalyzer>(FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             NoAnalyzerDiagnostics(new TAnalyzer(), code);
         }
 
@@ -706,6 +901,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoAnalyzerDiagnostics<TAnalyzer>(Solution solution)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
             NoAnalyzerDiagnostics(new TAnalyzer(), solution);
         }
 
@@ -741,6 +941,11 @@ namespace Gu.Roslyn.Asserts
         public static void NoFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, params string[] code)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             NoFix(
                 new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 new TCodeFix(),
@@ -760,6 +965,11 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
             NoFix(
                 new TAnalyzer(),
                 new TCodeFix(),
@@ -780,6 +990,11 @@ namespace Gu.Roslyn.Asserts
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             NoFix(
                 new TAnalyzer(),
                 new TCodeFix(),
@@ -794,6 +1009,11 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
         public static void Diagnostics(Type analyzerType, params string[] codeWithErrorsIndicated)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
             var analyzer = (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!;
             Diagnostics(
                 analyzer,
@@ -809,6 +1029,16 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
         public static void Diagnostics(Type analyzerType, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             Diagnostics(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code));
@@ -823,6 +1053,16 @@ namespace Gu.Roslyn.Asserts
         [Obsolete("Will be removed unless someone objects. Not sure when this would ever be useful.")]
         public static void Diagnostics(Type analyzerType, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
+            if (expectedDiagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostics));
+            }
+
             Diagnostics(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 new DiagnosticsAndSources(expectedDiagnostics, code));
@@ -849,6 +1089,11 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(new TAnalyzer(), code);
         }
 
@@ -862,6 +1107,11 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(DiagnosticDescriptor descriptor, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             Valid(new TAnalyzer(), descriptor, code);
         }
 
@@ -875,6 +1125,16 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(DiagnosticDescriptor descriptor, FileInfo code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(new TAnalyzer(), descriptor, code);
         }
 
@@ -887,6 +1147,11 @@ namespace Gu.Roslyn.Asserts
         public static void Valid<TAnalyzer>(Solution solution)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
             Valid(new TAnalyzer(), solution);
         }
     }

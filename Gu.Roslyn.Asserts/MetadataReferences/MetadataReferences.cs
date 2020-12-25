@@ -93,9 +93,9 @@
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 code,
                 CodeFactory.DllCompilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 RoslynAssert.MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             RoslynAssert.NoCompilerErrors(sln);
 
             using var ms = new MemoryStream();

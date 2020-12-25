@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Collections.Immutable;
@@ -17,10 +17,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(params string[] code)
         {
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var solution = CodeFactory.CreateSolution(code, MetadataReferences);
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -32,10 +32,10 @@ namespace Gu.Roslyn.Asserts
         /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
         {
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var solution = CodeFactory.CreateSolution(code, metadataReferences);
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Gu.Roslyn.Asserts
         /// </summary>
         public static void NoCompilerErrors(Solution solution)
         {
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
 
         /// <summary>

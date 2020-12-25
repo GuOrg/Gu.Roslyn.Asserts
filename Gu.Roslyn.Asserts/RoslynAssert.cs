@@ -195,9 +195,9 @@
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                                      .Except(SuppressedDiagnostics)
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                                      .Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();

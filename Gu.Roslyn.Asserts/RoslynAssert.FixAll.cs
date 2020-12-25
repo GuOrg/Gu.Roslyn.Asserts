@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
     using System.Threading;
@@ -382,10 +382,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources: diagnosticsAndSources,
                 analyzer: analyzer,
                 compilationOptions: compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, after, fixTitle, allowCompilationErrors);
@@ -472,10 +472,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors, FixAllScope.Document);
@@ -513,10 +513,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
@@ -556,10 +556,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
@@ -598,10 +598,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
@@ -642,10 +642,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
@@ -685,10 +685,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
@@ -730,10 +730,10 @@ namespace Gu.Roslyn.Asserts
                 diagnosticsAndSources,
                 analyzer,
                 compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 suppressWarnings ?? SuppressedDiagnostics,
                 metadataReferences ?? MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with Metadatareferences.FromAttributes()
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, allowCompilationErrors, scope);
