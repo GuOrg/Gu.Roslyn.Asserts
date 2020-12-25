@@ -40,6 +40,11 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(string code, params MetadataReference[] metadataReferences)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateSolution(new[] { code }, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
@@ -52,6 +57,11 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, params MetadataReference[] metadataReferences)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
         }
 
@@ -63,6 +73,16 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(string code, IEnumerable<MetadataReference> metadataReferences)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (metadataReferences is null)
+            {
+                throw new ArgumentNullException(nameof(metadataReferences));
+            }
+
             return CreateSolution(new[] { code }, metadataReferences);
         }
 
@@ -75,6 +95,16 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (metadataReferences is null)
+            {
+                throw new ArgumentNullException(nameof(metadataReferences));
+            }
+
             return CreateSolution(code, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null), metadataReferences);
         }
 
@@ -87,6 +117,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
             return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
         }
 
@@ -99,6 +139,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             return CreateSolution(new[] { code }, analyzers, metadataReferences);
         }
 
@@ -112,6 +162,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
@@ -126,6 +186,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
             var solutionInfo = SolutionInfo.Create(
                 SolutionId.CreateNewId("Test.sln"),
                 VersionStamp.Default,
@@ -223,6 +293,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolutionWithOneProject(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             return CreateSolutionWithOneProject(new[] { code }, analyzers, metadataReferences);
         }
 
@@ -236,6 +316,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             return CreateSolutionWithOneProject(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
@@ -248,6 +338,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolutionWithOneProject(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
             return CreateSolutionWithOneProject(new[] { code }, compilationOptions, metadataReferences);
         }
 
@@ -261,6 +361,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
             var projectInfo = GetProjectInfo();
             return EmptySolution.AddProject(projectInfo);
 
@@ -323,6 +433,11 @@
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string>? suppressed = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             return DefaultCompilationOptions(new[] { analyzer }, suppressed);
         }
 
@@ -347,6 +462,11 @@
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string>? suppressed = null)
         {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
         }
 
@@ -456,6 +576,11 @@
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string>? suppressed = null)
         {
+            if (descriptors is null)
+            {
+                throw new ArgumentNullException(nameof(descriptors));
+            }
+
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
         }
 
@@ -467,6 +592,11 @@
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? specificDiagnosticOptions)
         {
+            if (specificDiagnosticOptions is null)
+            {
+                throw new ArgumentNullException(nameof(specificDiagnosticOptions));
+            }
+
             // All arguments needed here to disambiguate. There was a breaking change between 3.0 and 3.3.1
             return new CSharpCompilationOptions(
                 outputKind: OutputKind.DynamicallyLinkedLibrary,
@@ -508,6 +638,11 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             return CreateSolution(
                 code,
                 DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null),
@@ -526,6 +661,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(FileInfo code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             var compilationOptions = DefaultCompilationOptions(analyzers, null);
             return CreateSolution(code, compilationOptions, metadataReferences);
         }
@@ -544,6 +689,21 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressWarnings), metadataReferences);
         }
 
@@ -559,6 +719,16 @@
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
                 return CreateSolution(new[] { File.ReadAllText(code.FullName) }, compilationOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
@@ -610,6 +780,16 @@
         /// <returns>>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(Uri githubUrl, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
         {
+            if (githubUrl is null)
+            {
+                throw new ArgumentNullException(nameof(githubUrl));
+            }
+
+            if (analyzers is null)
+            {
+                throw new ArgumentNullException(nameof(analyzers));
+            }
+
             var git = new GitClient();
             var gitFile = GitRepositoryProvider.ParseUrl(githubUrl);
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -632,6 +812,16 @@
         /// <returns>A value indicating if a file was found.</returns>
         public static bool TryFindFileInParentDirectory(DirectoryInfo directory, string fileName, [NotNullWhen(true)] out FileInfo? result)
         {
+            if (directory is null)
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             if (directory.EnumerateFiles(fileName).TryFirst(out result))
             {
 #pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
@@ -657,6 +847,11 @@
         /// <returns>A collection to pass in as argument when creating compilation options.</returns>
         public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             return CreateSpecificDiagnosticOptions(new[] { analyzer }, suppressed);
         }
 
