@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     /// <summary>
     /// Helper with methods for manipulating strings.
@@ -14,6 +14,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The sting with the replaced text.</returns>
         public static string AssertReplace(this string text, string oldValue, string newValue)
         {
+            if (text is null)
+            {
+                throw new System.ArgumentNullException(nameof(text));
+            }
+
+            if (oldValue is null)
+            {
+                throw new System.ArgumentNullException(nameof(oldValue));
+            }
+
             if (!text.Contains(oldValue))
             {
                 throw new AssertException($"AssertReplace failed, expected {oldValue} to be in {text}");

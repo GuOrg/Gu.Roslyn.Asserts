@@ -71,6 +71,11 @@
         /// <returns>The solution file.</returns>
         public static FileInfo Find(Assembly assembly)
         {
+            if (assembly is null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
             if (TryFind(assembly, out var sln))
             {
                 return sln;
@@ -91,6 +96,11 @@
         /// <returns>A <see cref="SolutionInfo"/>.</returns>
         public static SolutionInfo ParseInfo(FileInfo sln)
         {
+            if (sln is null)
+            {
+                throw new ArgumentNullException(nameof(sln));
+            }
+
             var contents = File.ReadAllText(sln.FullName);
             var builder = ImmutableDictionary.CreateBuilder<ProjectId, FileInfo>();
             foreach (Match? match in Regex.Matches(contents, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))

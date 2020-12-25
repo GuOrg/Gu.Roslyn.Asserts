@@ -28,6 +28,21 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string? fixTitle = null)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostic));
+            }
+
             return FindSingleOperation(solution, fix, new[] { diagnostic }, fixTitle).ChangedSolution;
         }
 
@@ -41,6 +56,21 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string? fixTitle = null)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostics));
+            }
+
             var flatDiagnostics = diagnostics.SelectMany(x => x).ToArray();
             if (flatDiagnostics.Length == 1)
             {
@@ -76,6 +106,21 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         public static async Task<Solution> ApplyAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostic));
+            }
+
             var actions = await GetActionsAsync(solution, fix, diagnostic).ConfigureAwait(false);
             var action = FindAction(actions, fixTitle);
             var operations = await action.GetOperationsAsync(cancellationToken)

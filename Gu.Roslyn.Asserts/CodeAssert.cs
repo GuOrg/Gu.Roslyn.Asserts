@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using Gu.Roslyn.Asserts.Internals;
@@ -16,6 +16,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(string expected, string actual)
         {
+            if (expected is null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             AreEqual(expected, actual, null);
         }
 
@@ -26,6 +36,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(string expected, Document actual)
         {
+            if (expected is null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             AreEqual(expected, actual.GetCode(), null);
         }
 
@@ -36,6 +56,16 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(Document expected, Document actual)
         {
+            if (expected is null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
             AreEqual(expected.GetCode(), actual.GetCode(), null);
         }
 
@@ -46,10 +76,17 @@ namespace Gu.Roslyn.Asserts
         /// <param name="actual">The actual code.</param>
         public static void AreEqual(Document expected, string actual)
         {
-            AreEqual(
-                expected.GetCode(),
-                actual,
-                null);
+            if (expected is null)
+            {
+                throw new ArgumentNullException(nameof(expected));
+            }
+
+            if (actual is null)
+            {
+                throw new ArgumentNullException(nameof(actual));
+            }
+
+            AreEqual(expected.GetCode(), actual, null);
         }
 
         /// <summary>

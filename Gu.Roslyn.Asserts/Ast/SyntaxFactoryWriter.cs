@@ -51,6 +51,11 @@
         /// <returns>SyntaxFactory.Xxx(...)</returns>
         public static string Serialize(SyntaxNode node, SyntaxFactoryWriterSettings? settings = null)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             return new SyntaxFactoryWriter(settings)
                    .Write(node)
                    .ToString();
