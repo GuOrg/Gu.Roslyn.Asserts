@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
@@ -95,7 +95,7 @@ namespace Gu.Roslyn.Asserts
                 return true;
             }
 
-            if (code.StartsWith("<"))
+            if (code.StartsWith("<", StringComparison.InvariantCulture))
             {
                 if (code.Contains("<resheader name=\"resmimetype\">"))
                 {
@@ -126,12 +126,12 @@ namespace Gu.Roslyn.Asserts
                 return fileName;
             }
 
-            if (code.StartsWith("<"))
+            if (code.StartsWith("<", StringComparison.InvariantCulture))
             {
                 return "Unknown.xml";
             }
 
-            if (code.StartsWith("{"))
+            if (code.StartsWith("{", StringComparison.InvariantCulture))
             {
                 return "Unknown.json";
             }
@@ -146,6 +146,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The namespace. </returns>
         public static string Namespace(string code)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             const string nameSpacePattern = @"(?<name>\w+(\.\w+)*)";
             var match = Regex.Match(code, $"namespace {nameSpacePattern}", RegexOptions.ExplicitCapture);
             if (match.Success)
@@ -169,6 +174,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>The positions of the expected diagnostics.</returns>
         public static IEnumerable<LinePosition> FindLinePositions(string code)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             var line = 0;
             var character = 0;
             foreach (var c in code)
@@ -198,6 +208,11 @@ namespace Gu.Roslyn.Asserts
         /// <returns>A string with the line with error indicated.</returns>
         public static string GetLineWithErrorIndicated(string code, LinePosition position)
         {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             var builder = StringBuilderPool.Borrow();
             var line = 0;
             var character = 0;

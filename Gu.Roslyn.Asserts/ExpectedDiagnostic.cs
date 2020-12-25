@@ -26,7 +26,7 @@
         [Obsolete("To be removed use factory methods.")]
         public ExpectedDiagnostic(DiagnosticAnalyzer analyzer, FileLinePositionSpan span)
         {
-            this.Analyzer = analyzer;
+            this.Analyzer = analyzer ?? throw new ArgumentNullException(nameof(analyzer));
             this.Message = null;
             this.Id = analyzer.SupportedDiagnostics[0].Id;
             this.Span = span;

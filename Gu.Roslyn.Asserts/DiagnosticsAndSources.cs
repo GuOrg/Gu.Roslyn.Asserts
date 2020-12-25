@@ -22,6 +22,16 @@
             IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics,
             IReadOnlyList<string> code)
         {
+            if (expectedDiagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostics));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             if (code.Count > 1 &&
                 expectedDiagnostics.Any(x => !x.HasPath))
             {

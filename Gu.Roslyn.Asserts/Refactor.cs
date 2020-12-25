@@ -1,9 +1,10 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeRefactorings;
@@ -247,6 +248,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
         public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode is null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
                 CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
@@ -268,6 +279,16 @@ namespace Gu.Roslyn.Asserts
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
         public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (testCode is null)
+            {
+                throw new ArgumentNullException(nameof(testCode));
+            }
+
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
                 CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
