@@ -592,11 +592,6 @@
         /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
         public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? specificDiagnosticOptions)
         {
-            if (specificDiagnosticOptions is null)
-            {
-                throw new ArgumentNullException(nameof(specificDiagnosticOptions));
-            }
-
             // All arguments needed here to disambiguate. There was a breaking change between 3.0 and 3.3.1
             return new CSharpCompilationOptions(
                 outputKind: OutputKind.DynamicallyLinkedLibrary,
