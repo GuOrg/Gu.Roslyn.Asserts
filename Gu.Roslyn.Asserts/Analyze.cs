@@ -144,6 +144,11 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in solution.Projects)
             {
@@ -162,6 +167,11 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in solution.Projects)
             {
@@ -181,6 +191,16 @@
         /// <returns>A list with all fixable diagnostics.</returns>
         public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var fixableDiagnostics = new List<Diagnostic>();
             foreach (var project in solution.Projects)
             {
@@ -213,6 +233,16 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var results = new List<ImmutableArray<Diagnostic>>();
             foreach (var project in solution.Projects)
             {
@@ -294,6 +324,16 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
         {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var results = new List<ImmutableArray<Diagnostic>>();
             var compilation = await project.GetCompilationAsync(CancellationToken.None)
                                            .ConfigureAwait(false);
@@ -322,6 +362,16 @@
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
         {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var results = new List<ImmutableArray<Diagnostic>>();
             var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
             if (analyzer is PlaceholderAnalyzer)

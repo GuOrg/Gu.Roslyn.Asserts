@@ -9,9 +9,6 @@ dotnet_diagnostic.SA0001.severity = none
 # SA1401: Fields should be private
 dotnet_diagnostic.SA1401.severity = none
 
-# CA1308: In method 'M', replace the call to 'ToLowerInvariant' with 'ToUpperInvariant'.
-dotnet_diagnostic.CA1308.severity = none
-
 # RS2008: Enable analyzer release tracking
 dotnet_diagnostic.RS2008.severity = none
 
@@ -20,3 +17,9 @@ dotnet_diagnostic.VSTHRD002.severity = none
 
 # VSTHRD003: Avoid awaiting foreign Tasks
 dotnet_diagnostic.VSTHRD003.severity = none
+
+# CA1308: In method 'M', replace the call to 'ToLowerInvariant' with 'ToUpperInvariant'.
+dotnet_diagnostic.CA1308.severity = none
+
+# CA1825: Avoid zero-length array allocations
+dotnet_diagnostic.CA1825.severity = none

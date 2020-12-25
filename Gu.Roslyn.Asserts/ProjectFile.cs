@@ -85,6 +85,11 @@
         /// <returns>A <see cref="ProjectInfo"/>.</returns>
         public static ProjectInfo ParseInfo(FileInfo csproj)
         {
+            if (csproj is null)
+            {
+                throw new ArgumentNullException(nameof(csproj));
+            }
+
             return ParseInfo(csproj, ProjectId.CreateNewId(csproj.FullName), out _);
         }
 
