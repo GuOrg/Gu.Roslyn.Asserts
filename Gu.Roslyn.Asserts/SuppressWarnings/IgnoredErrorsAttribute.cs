@@ -16,7 +16,7 @@
         /// <param name="errorIds">Specify ids of compiler errors to ignore when checking if a fix introduced compiler errors.</param>
         public IgnoredErrorsAttribute(params string[] errorIds)
         {
-            this.ErrorIds = errorIds ?? Array.Empty<string>();
+            this.ErrorIds = errorIds;
         }
 
         /// <summary>

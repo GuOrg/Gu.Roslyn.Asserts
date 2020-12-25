@@ -30,3 +30,6 @@ dotnet_diagnostic.RS2008.severity = none
 
 # VSTHRD103: Call async methods when in an async method
 dotnet_diagnostic.VSTHRD103.severity = none
+
+# CA1307: Specify StringComparison for clarity
+dotnet_diagnostic.CA1307.severity = none

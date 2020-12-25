@@ -321,7 +321,7 @@
             }
             else
             {
-                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
+                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
             }
         }
 

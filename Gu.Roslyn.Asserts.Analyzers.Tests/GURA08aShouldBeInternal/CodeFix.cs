@@ -73,7 +73,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { before, diagnostics }, new[] { after, diagnostics.Replace("↓", string.Empty) });
+            Assert.CodeFix(new[] { before, diagnostics }, new[] { after, diagnostics.AssertReplace("↓", string.Empty) });
         }
     }
 }

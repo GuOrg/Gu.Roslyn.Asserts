@@ -19,7 +19,7 @@
         /// <param name="ids">A collection of <see cref="Diagnostic.Id"/> to suppress.</param>
         public SuppressWarningsAttribute(params string[] ids)
         {
-            this.Ids = ids ?? Array.Empty<string>();
+            this.Ids = ids;
         }
 
         /// <summary>
