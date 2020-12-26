@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{3F667CC4-0
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		azure-pipelines.yml = azure-pipelines.yml
-		.paket\Readme.paket.md = .paket\Readme.paket.md
 		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
@@ -26,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D8C50F8A-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApps", "TestApps", "{A7C9EF29-060D-4AC4-B8EA-278DC2BE1D0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "TestApps\WpfApp1\WpfApp1.csproj", "{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "TestApps\WpfApp1\WpfApp1.csproj", "{0EF93D61-9DDB-454D-BC40-0E32C3F52B37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\ClassLibrary1\ClassLibrary1.csproj", "{C6361E10-9E5E-445F-A042-55D115197EE4}"
 EndProject
