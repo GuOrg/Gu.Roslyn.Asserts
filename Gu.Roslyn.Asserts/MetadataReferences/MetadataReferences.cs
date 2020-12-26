@@ -99,7 +99,7 @@
             RoslynAssert.NoCompilerErrors(sln);
 
             using var ms = new MemoryStream();
-            _ = sln.Projects.Single().GetCompilationAsync().Result.Emit(ms);
+            _ = sln.Projects.Single().GetCompilationAsync().GetAwaiter().GetResult().Emit(ms);
             ms.Position = 0;
             return MetadataReference.CreateFromStream(ms);
         }

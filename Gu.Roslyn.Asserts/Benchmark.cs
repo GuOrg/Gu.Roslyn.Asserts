@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿#pragma warning disable CA1034 // Nested types should not be visible
+namespace Gu.Roslyn.Asserts
 {
     using System;
     using System.Collections.Generic;

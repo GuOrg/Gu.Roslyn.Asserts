@@ -39,7 +39,7 @@
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);
-            editor.SetModifiers(classDeclaration, DeclarationModifiers.From(editor.SemanticModel.GetDeclaredSymbol(classDeclaration)).WithIsSealed(isSealed: true));
+            editor.SetModifiers(classDeclaration, DeclarationModifiers.From(editor.SemanticModel.GetDeclaredSymbol(classDeclaration, cancellationToken)).WithIsSealed(isSealed: true));
             return editor.GetChangedDocument();
         }
     }
