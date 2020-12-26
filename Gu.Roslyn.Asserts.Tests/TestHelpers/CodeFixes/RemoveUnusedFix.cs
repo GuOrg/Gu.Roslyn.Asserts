@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading;
@@ -28,13 +28,13 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         $"Remove {member}",
-                        cancellationToken => ApplyFixAsync(cancellationToken, document, member),
+                        cancellationToken => ApplyFixAsync(document, member, cancellationToken),
                         nameof(RemoveUnusedFix)),
                     diagnostic);
             }
         }
 
-        private static async Task<Document> ApplyFixAsync(CancellationToken cancellationToken, Document document, MemberDeclarationSyntax member)
+        private static async Task<Document> ApplyFixAsync(Document document, MemberDeclarationSyntax member, CancellationToken cancellationToken)
         {
             var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
                                              .ConfigureAwait(false);

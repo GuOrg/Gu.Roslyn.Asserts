@@ -1,4 +1,4 @@
-#pragma warning disable SA1600 // Elements must be documented
+﻿#pragma warning disable SA1600 // Elements must be documented
 namespace Gu.Roslyn.Asserts.Internals
 {
     using System;
@@ -34,8 +34,8 @@ namespace Gu.Roslyn.Asserts.Internals
 
             internal int Length => this.inner.Length;
 
-            [Obsolete("Use StringBuilderPool.Return", true)]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
+            [Obsolete("Use StringBuilderPool.Return", true)]
             public override string ToString() => throw new InvalidOperationException("Use StringBuilderPool.Return");
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
