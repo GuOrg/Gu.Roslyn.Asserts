@@ -25,7 +25,7 @@
         private static readonly INamedTypeSymbol RoslynAssertType = Project
                                                                     .GetCompilationAsync(CancellationToken.None)
                                                                     .Result!
-                                                                    .GetTypeByMetadataName(typeof(RoslynAssert).FullName);
+                                                                    .GetTypeByMetadataName(typeof(RoslynAssert).FullName)!;
 
         private static readonly ImmutableArray<IMethodSymbol> CodeFixMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.CodeFix));
         private static readonly ImmutableArray<IMethodSymbol> DiagnosticsMethods = GetMethods(RoslynAssertType, nameof(RoslynAssert.Diagnostics));
@@ -269,7 +269,7 @@
             if (method.TryFindParameterByType<AllowCompilationErrors>(out var parameter))
             {
                 Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
-                Assert.AreEqual(AllowCompilationErrors.No, (AllowCompilationErrors)parameter.ExplicitDefaultValue);
+                Assert.AreEqual(AllowCompilationErrors.No, (AllowCompilationErrors)parameter.ExplicitDefaultValue!);
                 Assert.AreEqual("allowCompilationErrors", parameter.MetadataName);
                 Assert.AreEqual("Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref=\"F:Gu.Roslyn.Asserts.AllowCompilationErrors.No\"/>.", parameter.DocComment());
             }

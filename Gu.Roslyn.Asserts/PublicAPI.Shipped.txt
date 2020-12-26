@@ -20,7 +20,7 @@ Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstTrivia.Ignore = 4 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstTrivia.Node = 2 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstTrivia.Token = 1 -> Gu.Roslyn.Asserts.AstTrivia
-Gu.Roslyn.Asserts.AstTrivia.Unspecified = 0 -> Gu.Roslyn.Asserts.AstTrivia
+Gu.Roslyn.Asserts.AstTrivia.None = 0 -> Gu.Roslyn.Asserts.AstTrivia
 Gu.Roslyn.Asserts.AstWriter
 Gu.Roslyn.Asserts.AstWriterSettings
 Gu.Roslyn.Asserts.AstWriterSettings.AstWriterSettings(Gu.Roslyn.Asserts.AstFormat format, Gu.Roslyn.Asserts.AstTrivia trivia, bool ignoreEmptyTrivia) -> void

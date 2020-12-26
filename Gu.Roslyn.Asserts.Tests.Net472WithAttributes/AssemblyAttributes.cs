@@ -1,4 +1,5 @@
-﻿using Gu.Roslyn.Asserts;
+﻿using System;
+using Gu.Roslyn.Asserts;
 
 [assembly: CLSCompliant(false)]
 

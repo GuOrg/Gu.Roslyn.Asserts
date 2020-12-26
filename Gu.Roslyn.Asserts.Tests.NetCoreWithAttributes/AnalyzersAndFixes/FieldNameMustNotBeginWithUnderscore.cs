@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes
 {
     using System;
     using System.Collections.Immutable;
@@ -10,10 +10,8 @@ namespace Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.AnalyzersAndFixes
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class FieldNameMustNotBeginWithUnderscore : DiagnosticAnalyzer
     {
-        internal const string DiagnosticId = "SA1309";
-
         private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
-            DiagnosticId,
+            "SA1309",
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",
             "Naming",
