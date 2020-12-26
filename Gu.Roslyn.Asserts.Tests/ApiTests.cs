@@ -295,7 +295,7 @@
             }
             else
             {
-                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Microsoft.CodeAnalysis.Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
+                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
             }
         }
 
@@ -327,13 +327,23 @@
 
         private static ImmutableArray<IMethodSymbol> GetMethods(INamedTypeSymbol containingType, string name, params string[] names)
         {
-            names = new[] { name }.Concat(names ?? Enumerable.Empty<string>()).ToArray();
+            names = Names();
             return ImmutableArray.CreateRange(
                 names.SelectMany(x => containingType.GetMembers(x))
                      .Cast<IMethodSymbol>()
                      .Where(x => x.DeclaredAccessibility == Accessibility.Public &&
                                  !x.IsGenericMethod &&
                                  !IsObsolete(x)));
+
+            string[] Names()
+            {
+                if (names is { })
+                {
+                    return new[] { name }.Concat(names).ToArray();
+                }
+
+                return new[] { name };
+            }
         }
 
         private static bool TryFindParameterByType<T>(this IMethodSymbol method, out IParameterSymbol? parameter)

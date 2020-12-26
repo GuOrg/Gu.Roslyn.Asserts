@@ -15,7 +15,9 @@
         /// Initializes a new instance of the <see cref="MetadataReferencesAttribute"/> class.
         /// </summary>
         /// <param name="types">Specify types in assemblies for which metadata references will be included.</param>
+#pragma warning disable CA1019 // Define accessors for attribute arguments
         public MetadataReferencesAttribute(params Type[] types)
+#pragma warning restore CA1019 // Define accessors for attribute arguments
         {
             this.MetadataReferences = types.Select(x => Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(x.Assembly))
                                            .ToArray();

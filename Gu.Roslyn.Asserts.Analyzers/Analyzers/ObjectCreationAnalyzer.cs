@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Linq;
@@ -32,21 +32,22 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     type.IsAssignableTo(KnownSymbols.CodeRefactoringProvider, context.Compilation) ||
                     type.IsAssignableTo(KnownSymbols.DiagnosticAnalyzer, context.Compilation))
                 {
-                    if (type.DeclaredAccessibility != Accessibility.Internal)
+                    switch (type.DeclaredAccessibility)
                     {
-                        context.ReportDiagnostic(
-                            Diagnostic.Create(
-                                Descriptors.GURA08aShouldBeInternal,
-                                objectCreation.Type.GetLocation(),
-                                $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
-                    }
-                    else if (type.DeclaredAccessibility != Accessibility.Public)
-                    {
-                        context.ReportDiagnostic(
-                            Diagnostic.Create(
-                                Descriptors.GURA08bShouldBePublic,
-                                objectCreation.Type.GetLocation(),
-                                $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                        case Accessibility.Internal:
+                            context.ReportDiagnostic(
+                                Diagnostic.Create(
+                                    Descriptors.GURA08bShouldBePublic,
+                                    objectCreation.Type.GetLocation(),
+                                    $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                            break;
+                        case Accessibility.Public:
+                            context.ReportDiagnostic(
+                                Diagnostic.Create(
+                                    Descriptors.GURA08aShouldBeInternal,
+                                    objectCreation.Type.GetLocation(),
+                                    $"{type.ToMinimalDisplayString(context.SemanticModel, context.Node.SpanStart)}"));
+                            break;
                     }
                 }
             }

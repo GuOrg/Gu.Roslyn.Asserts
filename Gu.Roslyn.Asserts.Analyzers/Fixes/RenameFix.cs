@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -42,7 +42,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                             diagnostic);
                     }
                     else if (diagnostic.Id == Descriptors.GURA04NameClassToMatchAsserts.Id &&
-                            syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken identifier &&
+                            syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is { } identifier &&
                             semanticModel.TryGetSymbol(identifier.Parent, context.CancellationToken, out INamedTypeSymbol? namedType) &&
                             semanticModel.LookupSymbols(identifier.SpanStart, name: name).IsEmpty)
                     {
@@ -65,7 +65,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 nameof(RenameFix)),
                             diagnostic);
                     }
-                    else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is SyntaxToken token &&
+                    else if (syntaxRoot.FindToken(diagnostic.Location.SourceSpan.Start) is { } token &&
                              semanticModel.TryGetSymbol(token.Parent, context.CancellationToken, out ISymbol? symbol) &&
                              semanticModel.LookupSymbols(token.SpanStart, name: name).IsEmpty)
                     {

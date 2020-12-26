@@ -44,7 +44,7 @@
                 {
                     LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
                     InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
-                    _ => (bool?)null,
+                    _ => null,
                 };
             }
         }
@@ -87,7 +87,7 @@
 
         internal static bool TryMany(InvocationExpressionSyntax invocation, IParameterSymbol parameter, SemanticModel semanticModel, CancellationToken cancellationToken, out ImmutableArray<StringArgument> results)
         {
-            if (TryGetCollectionInitializer(out var initializer))
+            if (TryGetCollectionInitializer() is { } initializer)
             {
                 var builder = ImmutableArray.CreateBuilder<StringArgument>(initializer!.Expressions.Count);
                 foreach (var expression in initializer.Expressions)
@@ -115,26 +115,22 @@
             results = default;
             return false;
 
-            bool TryGetCollectionInitializer(out InitializerExpressionSyntax? result)
+            InitializerExpressionSyntax? TryGetCollectionInitializer()
             {
                 if (invocation.TryFindArgument(parameter, out var argument))
                 {
                     switch (argument.Expression)
                     {
-                        case ImplicitArrayCreationExpressionSyntax { Initializer: { } initializer }:
-                            result = initializer;
-                            return true;
-                        case ArrayCreationExpressionSyntax { Initializer: { } initializer }:
-                            result = initializer;
-                            return true;
-                        case ObjectCreationExpressionSyntax { Initializer: { } initializer }:
-                            result = initializer;
-                            return true;
+                        case ImplicitArrayCreationExpressionSyntax { Initializer: { } i }:
+                            return i;
+                        case ArrayCreationExpressionSyntax { Initializer: { } i }:
+                            return i;
+                        case ObjectCreationExpressionSyntax { Initializer: { } i }:
+                            return i;
                     }
                 }
 
-                result = null;
-                return false;
+                return null;
             }
         }
 
