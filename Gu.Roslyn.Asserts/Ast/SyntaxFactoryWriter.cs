@@ -74,7 +74,7 @@
             }
 
             var method = (MethodInfo)parameter.Member;
-            var property = method.ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance);
+            var property = method.ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance);
             if (property is null)
             {
                 return null;
@@ -688,7 +688,7 @@
                 }
 
                 this.newLine = false;
-                this.builder.Append("\"");
+                this.builder.Append('"');
                 foreach (var c in text)
                 {
                     switch (c)
@@ -708,7 +708,7 @@
                     this.builder.Append(c);
                 }
 
-                this.builder.Append("\"");
+                this.builder.Append('"');
                 return this;
             }
 

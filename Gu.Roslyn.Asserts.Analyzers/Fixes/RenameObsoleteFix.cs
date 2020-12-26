@@ -1,5 +1,6 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
+    using System;
     using System.Collections.Immutable;
     using System.Composition;
     using System.Globalization;
@@ -67,13 +68,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
                         case "CS0618" when syntaxRoot.TryFindNode(diagnostic, out result):
                             {
                                 var message = diagnostic.GetMessage(CultureInfo.InvariantCulture);
-                                if (message.StartsWith("'RoslynAssert.MetadataReferences' is obsolete:"))
+                                if (message.StartsWith("'RoslynAssert.MetadataReferences' is obsolete:", StringComparison.Ordinal))
                                 {
                                     text = "MetadataReferences.FromAttributes()";
                                     return true;
                                 }
 
-                                if (message.StartsWith("'RoslynAssert.SuppressedDiagnostics' is obsolete:"))
+                                if (message.StartsWith("'RoslynAssert.SuppressedDiagnostics' is obsolete:", StringComparison.Ordinal))
                                 {
                                     text = "SuppressWarnings.FromAttributes()";
                                     return true;

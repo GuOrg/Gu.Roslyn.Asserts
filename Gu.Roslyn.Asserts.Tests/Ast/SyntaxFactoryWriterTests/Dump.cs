@@ -15,9 +15,9 @@
     {
         private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap = typeof(SyntaxFactory)
                                                                                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                                                                                   .Where(x => !x.Name.StartsWith("Parse") &&
+                                                                                   .Where(x => !x.Name.StartsWith("Parse", StringComparison.Ordinal) &&
                                                                                                typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType) &&
-                                                                                               x.ReturnType.Name.StartsWith(x.Name))
+                                                                                               x.ReturnType.Name.StartsWith(x.Name, StringComparison.Ordinal))
                                                                                    .OrderBy(x => x.Name)
                                                                                    .ThenBy(x => x.GetParameters().Length)
                                                                                    .GroupBy(x => x.ReturnType)
@@ -30,8 +30,8 @@
             foreach (var kvp in TypeFactoryMethodMap)
             {
                 var type = kvp.Key;
-                var variable = type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
-                if (variable.EndsWith("Syntax"))
+                var variable = type.Name.Substring(0, 1).ToLowerInvariant() + type.Name.Substring(1);
+                if (variable.EndsWith("Syntax", StringComparison.Ordinal))
                 {
                     variable = variable.Substring(0, variable.Length - 6);
                 }
@@ -84,7 +84,7 @@
                     case "kind":
                         return "Kind()";
                     default:
-                        return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
+                        return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
                 }
             }
         }
@@ -104,7 +104,7 @@
                 if (parameters.Length == 1)
                 {
                     var parameter = parameters[0];
-                    var property = parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                    var property = parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
                     stringBuilder.AppendLine($"                    return this.Append($\"SyntaxFactory.{method.Name}({{token.{property}}})\");");
                 }
                 else
@@ -157,7 +157,7 @@
                     case "valueText":
                         return "ValueText";
                     default:
-                        return parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                        return parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
                 }
             }
         }
@@ -200,7 +200,7 @@
                 for (var i = 0; i < parameters.Length; i++)
                 {
                     var parameter = parameters[i];
-                    var property = parameter.Name!.Substring(0, 1).ToUpper() + parameter.Name.Substring(1);
+                    var property = parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
                     var closeArg = i == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
                     stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", token.{property}{closeArg})");
                 }
@@ -230,7 +230,7 @@
         public static void DumpTokenKinds()
         {
             foreach (var name in System.Enum.GetNames(typeof(SyntaxKind))
-                                     .Where(x => x.EndsWith("Trivia"))
+                                     .Where(x => x.EndsWith("Trivia", StringComparison.Ordinal))
                                      .OrderBy(x => x))
             {
                 Console.WriteLine($"case SyntaxKind.{name}:");

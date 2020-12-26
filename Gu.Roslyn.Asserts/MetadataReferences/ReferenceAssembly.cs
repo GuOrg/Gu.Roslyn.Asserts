@@ -100,7 +100,7 @@
         {
             private static ImmutableDictionary<string, FileInfo>? value;
 
-            internal static ImmutableDictionary<string, FileInfo> Value => value ?? (value = Create());
+            internal static ImmutableDictionary<string, FileInfo> Value => value ??= Create();
 
             internal static void Clear()
             {

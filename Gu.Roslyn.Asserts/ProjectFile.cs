@@ -199,7 +199,7 @@
                     file.Name,
                     sourceCodeKind: SourceCodeKind.Regular,
                     filePath: file.FullName,
-                    isGenerated: file.Name.EndsWith(".g.cs"),
+                    isGenerated: file.Name.EndsWith(".g.cs", StringComparison.Ordinal),
                     loader: TextLoader.From(
                         TextAndVersion.Create(
                             text: Microsoft.CodeAnalysis.Text.SourceText.From(File.ReadAllText(file.FullName)),

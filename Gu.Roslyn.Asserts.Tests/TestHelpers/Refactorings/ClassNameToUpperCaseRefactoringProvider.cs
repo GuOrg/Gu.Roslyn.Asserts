@@ -25,7 +25,7 @@
                             context.Document.WithSyntaxRoot(
                                 root.ReplaceToken(
                                     token,
-                                    SyntaxFactory.Identifier(token.ValueText.ToUpper())))),
+                                    SyntaxFactory.Identifier(token.ValueText.ToUpperInvariant())))),
                         "To uppercase"));
             }
         }

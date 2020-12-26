@@ -184,7 +184,7 @@
                 {
                     rewriter.replacements.Add(new Replacement(FirstCharLower(before), FirstCharLower(after)));
 
-                    static string FirstCharLower(string s) => s.Substring(0, 1).ToLower() + s.Substring(1);
+                    static string FirstCharLower(string s) => s.Substring(0, 1).ToLowerInvariant() + s.Substring(1);
                 }
 
                 if (char.IsLower(before[0]) &&
@@ -192,7 +192,7 @@
                 {
                     rewriter.replacements.Add(new Replacement(FirstCharUpper(before), FirstCharUpper(after)));
 
-                    static string FirstCharUpper(string s) => s.Substring(0, 1).ToUpper() + s.Substring(1);
+                    static string FirstCharUpper(string s) => s.Substring(0, 1).ToLowerInvariant() + s.Substring(1);
                 }
 
                 var updated = rewriter.Visit(method);
