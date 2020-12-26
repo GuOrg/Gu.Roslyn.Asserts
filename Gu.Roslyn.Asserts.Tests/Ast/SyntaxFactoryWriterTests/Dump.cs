@@ -5,9 +5,12 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
+
     using NUnit.Framework;
 
     [Script]
@@ -30,7 +33,7 @@
             foreach (var kvp in TypeFactoryMethodMap)
             {
                 var type = kvp.Key;
-                var variable = type.Name.Substring(0, 1).ToLowerInvariant() + type.Name.Substring(1);
+                var variable = char.ToLowerInvariant(type.Name[0]) + type.Name.Substring(1);
                 if (variable.EndsWith("Syntax", StringComparison.Ordinal))
                 {
                     variable = variable.Substring(0, variable.Length - 6);
