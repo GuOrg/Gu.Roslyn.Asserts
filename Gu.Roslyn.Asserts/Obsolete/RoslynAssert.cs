@@ -21,7 +21,9 @@
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
         [Obsolete("This will be removed. Use [assembly: SuppressWarnings(...) or pass in explicit in test.")]
+#pragma warning disable CA1002 // Do not expose generic lists
         public static readonly List<string> SuppressedDiagnostics = SuppressWarnings.FromAttributes().ToList();
+#pragma warning restore CA1002 // Do not expose generic lists
 
         /// <summary>
         /// Add <paramref name="assembly"/> and all assemblies referenced by it.
