@@ -13,6 +13,7 @@ Gu.Roslyn.Asserts.Analyze
 Gu.Roslyn.Asserts.AssertException
 Gu.Roslyn.Asserts.AssertException.AssertException(string! message) -> void
 Gu.Roslyn.Asserts.AssertException.AssertException(string! message, System.Exception! innerException) -> void
+Gu.Roslyn.Asserts.AssertException.AssertException(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 Gu.Roslyn.Asserts.AstFormat
 Gu.Roslyn.Asserts.AstFormat.Json = 1 -> Gu.Roslyn.Asserts.AstFormat
 Gu.Roslyn.Asserts.AstFormat.Light = 0 -> Gu.Roslyn.Asserts.AstFormat

@@ -1,1 +1,1 @@
-﻿Gu.Roslyn.Asserts.AssertException.AssertException(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
+﻿

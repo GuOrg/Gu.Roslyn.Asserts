@@ -34,7 +34,7 @@
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <PackageTags>Roslyn Diagnostic Analyzer</PackageTags>
     <PackageReleaseNotes>
-      BUGFIX: handle breaking change in roslyn 3.3.1
+      BUGFIX: handle breaking change in Roslyn 3.3.1
     </PackageReleaseNotes>
   </PropertyGroup>
 
