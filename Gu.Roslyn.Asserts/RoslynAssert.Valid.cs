@@ -19,6 +19,11 @@
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             Valid(
                 analyzer,
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
@@ -41,6 +46,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(
                 analyzer,
                 CodeFactory.CreateSolution(
@@ -59,6 +74,16 @@
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(Type analyzerType, DiagnosticDescriptor descriptor, params string[] code)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptor, code);
         }
 
@@ -70,6 +95,16 @@
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
@@ -95,6 +130,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
@@ -126,6 +176,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
@@ -155,6 +220,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(
                 analyzer,
                 CodeFactory.CreateSolution(
@@ -180,6 +255,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(
                 analyzer,
                 CodeFactory.CreateSolution(
@@ -197,6 +282,11 @@
         /// <param name="code">The code to analyze using <paramref name="analyzerType"/>. Analyzing the code is expected to produce no errors or warnings.</param>
         public static void Valid(Type analyzerType, params string[] code)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
             Valid((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code);
         }
 
@@ -228,6 +318,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 code,
@@ -256,6 +356,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzerType is null)
+            {
+                throw new ArgumentNullException(nameof(analyzerType));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 descriptor,
@@ -272,6 +387,16 @@
         /// <param name="solution">The <see cref="Solution"/> for which no errors or warnings are expected.</param>
         public static void Valid(DiagnosticAnalyzer analyzer, Solution solution)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
             var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
             NoDiagnosticsOrErrors(diagnosticsAndErrors);
         }
@@ -282,6 +407,11 @@
         /// <param name="diagnostics">The diagnostics.</param>
         public static void NoDiagnostics(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
         {
+            if (diagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostics));
+            }
+
             if (diagnostics.Any(x => x.Any()))
             {
                 var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");

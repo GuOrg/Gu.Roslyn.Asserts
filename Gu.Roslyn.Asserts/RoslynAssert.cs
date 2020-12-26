@@ -23,6 +23,16 @@
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/>.</param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic.Id);
         }
 
@@ -33,6 +43,16 @@
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/>.</param>
         public static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor.Id);
         }
 
