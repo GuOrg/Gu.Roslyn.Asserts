@@ -21,6 +21,16 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
             NoFix(
                 analyzer,
                 fix,
@@ -38,6 +48,21 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             NoFix(
                 analyzer,
                 fix,
@@ -67,6 +92,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -100,6 +145,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -121,6 +186,21 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostics is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostics));
+            }
+
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -148,6 +228,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -179,6 +274,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             var analyzer = new PlaceholderAnalyzer(expectedDiagnostic.Id);
             NoFix(
                 analyzer: analyzer,
@@ -211,6 +321,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new System.ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnosticsAndSources is null)
+            {
+                throw new System.ArgumentNullException(nameof(diagnosticsAndSources));
+            }
+
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(

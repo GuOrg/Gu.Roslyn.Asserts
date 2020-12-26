@@ -14,6 +14,16 @@
         /// <param name="code">The code to analyze with <paramref name="refactoring"/>. Indicate position with ↓ (alt + 25).</param>
         public static void NoRefactoring(CodeRefactoringProvider refactoring, string code)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             var position = GetPosition(code, out var testCode);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var actions = Refactor.CodeActions(refactoring, testCode, position, MetadataReferences);
@@ -32,6 +42,21 @@
         /// <param name="title">The title of the refactoring to apply.</param>
         public static void NoRefactoring(CodeRefactoringProvider refactoring, string code, string title)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (title is null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             var position = GetPosition(code, out var testCode);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var actions = Refactor.CodeActions(refactoring, testCode, position, MetadataReferences);
@@ -50,6 +75,16 @@
         /// <param name="span">A <see cref="TextSpan"/> indicating the position.</param>
         public static void NoRefactoring(CodeRefactoringProvider refactoring, string code, TextSpan span)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var actions = Refactor.CodeActions(refactoring, code, span, MetadataReferences);
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
@@ -68,6 +103,21 @@
         /// <param name="title">The title of the refactoring to apply.</param>
         public static void NoRefactoring(CodeRefactoringProvider refactoring, string code, TextSpan span, string title)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (title is null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var actions = Refactor.CodeActions(refactoring, code, span, MetadataReferences);
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
@@ -85,6 +135,21 @@
         /// <param name="after">The expected code produced by <paramref name="refactoring"/>.</param>
         public static void Refactoring(CodeRefactoringProvider refactoring, string before, string after)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var position = GetPosition(before, out var testCode);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var refactored = Refactor.Apply(refactoring, testCode, position, MetadataReferences);
@@ -101,6 +166,26 @@
         /// <param name="title">The title of the refactoring to apply.</param>
         public static void Refactoring(CodeRefactoringProvider refactoring, string before, string after, string title)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
+            if (title is null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             var position = GetPosition(before, out var testCode);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var refactored = Refactor.Apply(refactoring, testCode, position, title, MetadataReferences);
@@ -117,6 +202,21 @@
         /// <param name="after">The expected code produced by <paramref name="refactoring"/>.</param>
         public static void Refactoring(CodeRefactoringProvider refactoring, string before, TextSpan span, string after)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var refactored = Refactor.Apply(refactoring, before, span, MetadataReferences);
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
@@ -133,6 +233,26 @@
         /// <param name="title">The title of the refactoring to apply.</param>
         public static void Refactoring(CodeRefactoringProvider refactoring, string before, TextSpan span, string after, string title)
         {
+            if (refactoring is null)
+            {
+                throw new ArgumentNullException(nameof(refactoring));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
+            if (title is null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var refactored = Refactor.Apply(refactoring, before, span, title, MetadataReferences);
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()

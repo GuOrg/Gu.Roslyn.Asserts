@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CSharp;
@@ -37,6 +38,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -75,6 +96,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -113,6 +154,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -153,6 +214,31 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -193,6 +279,31 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -233,6 +344,31 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
@@ -271,6 +407,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: fix,
@@ -309,6 +465,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: fix,
@@ -347,6 +523,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: fix,
@@ -380,6 +576,31 @@
             string? fixTitle = null,
             AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
@@ -416,6 +637,26 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (fix is null)
+            {
+                throw new ArgumentNullException(nameof(fix));
+            }
+
+            if (diagnosticsAndSources is null)
+            {
+                throw new ArgumentNullException(nameof(diagnosticsAndSources));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var sln = CodeFactory.CreateSolution(

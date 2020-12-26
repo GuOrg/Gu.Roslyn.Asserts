@@ -102,6 +102,11 @@
         public static void Diagnostics<TAnalyzer>(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
             where TAnalyzer : DiagnosticAnalyzer, new()
         {
+            if (expectedDiagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostics));
+            }
+
             Diagnostics(
                 new TAnalyzer(),
                 new DiagnosticsAndSources(expectedDiagnostics, code));
@@ -123,6 +128,16 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             CodeFix(
                 analyzer: analyzer,
@@ -152,6 +167,16 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (codeWithErrorsIndicated is null)
+            {
+                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             var analyzer = new TAnalyzer();
             CodeFix(
                 analyzer: analyzer,
@@ -182,6 +207,21 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new TAnalyzer(),
                 fix: new TCodeFix(),
@@ -211,6 +251,21 @@
             where TAnalyzer : DiagnosticAnalyzer, new()
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new TAnalyzer(),
                 fix: new TCodeFix(),
@@ -238,6 +293,21 @@
         public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (before is null)
+            {
+                throw new ArgumentNullException(nameof(before));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: new TCodeFix(),
@@ -265,6 +335,21 @@
         public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
         {
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (after is null)
+            {
+                throw new ArgumentNullException(nameof(after));
+            }
+
             CodeFix(
                 analyzer: new PlaceholderAnalyzer(expectedDiagnostic.Id),
                 fix: new TCodeFix(),

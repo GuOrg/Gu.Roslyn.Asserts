@@ -18,6 +18,11 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
@@ -35,6 +40,16 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
@@ -52,6 +67,16 @@
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostics is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostics));
+            }
+
             Diagnostics(
                 analyzer,
                 new DiagnosticsAndSources(expectedDiagnostics, code),
@@ -78,6 +103,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
@@ -104,6 +139,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
@@ -132,6 +177,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
@@ -160,6 +220,21 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new System.ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            if (code is null)
+            {
+                throw new System.ArgumentNullException(nameof(code));
+            }
+
             Diagnostics(
                 analyzer,
                 DiagnosticsAndSources.Create(expectedDiagnostic, code),
@@ -186,6 +261,16 @@
             IEnumerable<MetadataReference>? metadataReferences = null,
             CSharpCompilationOptions? compilationOptions = null)
         {
+            if (analyzer is null)
+            {
+                throw new System.ArgumentNullException(nameof(analyzer));
+            }
+
+            if (diagnosticsAndSources is null)
+            {
+                throw new System.ArgumentNullException(nameof(diagnosticsAndSources));
+            }
+
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var sln = CodeFactory.CreateSolution(
                 diagnosticsAndSources,
