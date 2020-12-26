@@ -80,7 +80,7 @@
                 case 0:
                     throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
                 case 1:
-                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
                     return edit.ChangedSolution.Projects.Single().Documents.Single();
                 default:
                     throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
@@ -154,7 +154,7 @@
                 case 0:
                     throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
                 case 1:
-                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
                     return edit.ChangedSolution.Projects.Single().Documents.Single();
                 default:
                     throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
@@ -195,7 +195,7 @@
                 case 0:
                     throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
                 case 1:
-                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+                    var edit = actions[0].GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
                     return edit.ChangedSolution.Projects.Single().Documents.Single();
                 default:
                     throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it.");
@@ -234,7 +234,7 @@
                 throw new InvalidOperationException("The refactoring did not register a refactoring for the current index.");
             }
 
-            var edit = actions[index].GetOperationsAsync(CancellationToken.None).Result.OfType<ApplyChangesOperation>().First();
+            var edit = actions[index].GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
             return edit.ChangedSolution.Projects.Single().Documents.Single();
         }
 

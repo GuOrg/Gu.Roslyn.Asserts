@@ -463,11 +463,11 @@
             internal static async Task<TestDiagnosticProvider> CreateAsync(Solution solution, CodeFixProvider fix, string? fixTitle, IReadOnlyList<Diagnostic> diagnostics)
             {
                 var actions = new List<CodeAction>();
-                var diagnostic = diagnostics.First();
+                var diagnostic = diagnostics[0];
                 var context = new CodeFixContext(solution.GetDocument(diagnostic.Location.SourceTree), diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
                 await fix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
                 var action = FindAction(actions, fixTitle);
-                return new TestDiagnosticProvider(diagnostics, solution.GetDocument(diagnostics.First().Location.SourceTree), action.EquivalenceKey);
+                return new TestDiagnosticProvider(diagnostics, solution.GetDocument(diagnostic.Location.SourceTree), action.EquivalenceKey);
             }
         }
     }

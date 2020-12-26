@@ -62,7 +62,7 @@
             }
             else if (method.Name != nameof(RoslynAssert.NoCompilerErrors))
             {
-                Assert.AreEqual(typeof(CodeFixProvider).Name, method.Parameters[0].Type.MetadataName);
+                Assert.AreEqual(nameof(CodeFixProvider), method.Parameters[0].Type.MetadataName);
             }
         }
 
@@ -75,10 +75,10 @@
             switch (parameter!.Ordinal)
             {
                 case 0:
-                    Assert.AreEqual(typeof(ExpectedDiagnostic).Name, method.Parameters[1].Type.MetadataName);
+                    Assert.AreEqual(nameof(ExpectedDiagnostic), method.Parameters[1].Type.MetadataName);
                     break;
                 case 1:
-                    Assert.AreEqual(typeof(DiagnosticAnalyzer).Name, method.Parameters[0].Type.MetadataName);
+                    Assert.AreEqual(nameof(DiagnosticAnalyzer), method.Parameters[0].Type.MetadataName);
                     break;
                 default:
                     Assert.Fail("Position");
@@ -122,7 +122,7 @@
             {
                 Assert.AreEqual("descriptor", parameter!.MetadataName);
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
-                string expected = $"The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"{method.Parameters[0].Name}\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.";
+                var expected = $"The <see cref=\"T:Microsoft.CodeAnalysis.DiagnosticDescriptor\"/> with information about the expected <see cref=\"T:Microsoft.CodeAnalysis.Diagnostic\"/>. If <paramref name=\"{method.Parameters[0].Name}\"/> supports more than one <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> this must be provided.";
                 Assert.AreEqual(expected, parameter.DocComment());
             }
         }
@@ -295,7 +295,7 @@
             }
             else
             {
-                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == typeof(Solution).Name) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
+                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Microsoft.CodeAnalysis.Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
             }
         }
 
