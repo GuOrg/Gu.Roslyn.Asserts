@@ -161,6 +161,7 @@
                 return TryFindFieldOrProperty(parent, argumentType, semanticModel, cancellationToken, out fieldOrProperty);
             }
 
+            fieldOrProperty = default;
             return false;
         }
     }

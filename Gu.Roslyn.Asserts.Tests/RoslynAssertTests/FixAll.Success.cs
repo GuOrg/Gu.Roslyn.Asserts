@@ -1,10 +1,10 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class FixAll
+    public static partial class FixAll
     {
         public static class Success
         {

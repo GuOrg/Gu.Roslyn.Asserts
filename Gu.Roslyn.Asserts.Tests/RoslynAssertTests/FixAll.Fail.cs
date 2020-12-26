@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class FixAll
+    public static partial class FixAll
     {
         public static class Fail
         {

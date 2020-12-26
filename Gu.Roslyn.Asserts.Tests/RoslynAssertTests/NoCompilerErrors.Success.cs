@@ -1,11 +1,11 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
-    public partial class NoCompilerErrors
+    public static class NoCompilerErrors
     {
         public static class Success
         {
