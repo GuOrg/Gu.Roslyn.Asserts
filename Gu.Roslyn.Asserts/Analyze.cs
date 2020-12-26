@@ -430,7 +430,6 @@
         /// </summary>
         internal class DiagnosticsAndErrors
         {
-#pragma warning disable SA1401 // Fields must be private
             /// <summary>
             /// Gets the compiler errors.
             /// </summary>
@@ -440,7 +439,6 @@
             /// Gets the diagnostics for the analyzer.
             /// </summary>
             internal readonly IReadOnlyList<ImmutableArray<Diagnostic>> AnalyzerDiagnostics;
-#pragma warning restore SA1401 // Fields must be private
 
             /// <summary>
             /// Initializes a new instance of the <see cref="DiagnosticsAndErrors"/> class.

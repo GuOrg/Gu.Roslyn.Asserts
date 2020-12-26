@@ -273,7 +273,6 @@
         [DiagnosticAnalyzer(LanguageNames.CSharp)]
         private class BenchmarkAnalyzer : DiagnosticAnalyzer
         {
-#pragma warning disable SA1401 // Fields must be private
             internal readonly List<ContextAndAction<SyntaxNodeAnalysisContext>> SyntaxNodeActions = new List<ContextAndAction<SyntaxNodeAnalysisContext>>();
             internal readonly List<ContextAndAction<CompilationStartAnalysisContext>> CompilationStartActions = new List<ContextAndAction<CompilationStartAnalysisContext>>();
             internal readonly List<ContextAndAction<CompilationAnalysisContext>> CompilationActions = new List<ContextAndAction<CompilationAnalysisContext>>();
@@ -285,7 +284,6 @@
             internal readonly List<ContextAndAction<OperationAnalysisContext>> OperationActions = new List<ContextAndAction<OperationAnalysisContext>>();
             internal readonly List<ContextAndAction<OperationBlockAnalysisContext>> OperationBlockActions = new List<ContextAndAction<OperationBlockAnalysisContext>>();
             internal readonly List<ContextAndAction<OperationBlockStartAnalysisContext>> OperationBlockStartActions = new List<ContextAndAction<OperationBlockStartAnalysisContext>>();
-#pragma warning restore SA1401 // Fields must be private
 
             private readonly DiagnosticAnalyzer inner;
 

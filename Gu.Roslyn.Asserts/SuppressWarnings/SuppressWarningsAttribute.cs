@@ -9,9 +9,7 @@
     /// Example: [assembly: SuppressWarnings("CS1701", "CS1702")].
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
-#pragma warning disable CA1813 // Avoid unsealed attributes
     public sealed class SuppressWarningsAttribute : Attribute
-#pragma warning restore CA1813 // Avoid unsealed attributes
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SuppressWarningsAttribute"/> class.

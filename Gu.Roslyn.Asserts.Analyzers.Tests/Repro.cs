@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,6 @@ namespace Gu.Roslyn.Asserts.Analyzers.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
 
-#pragma warning disable GURA04, GURA06
     [Explicit("Only for digging out test cases.")]
     public static class Repro
     {

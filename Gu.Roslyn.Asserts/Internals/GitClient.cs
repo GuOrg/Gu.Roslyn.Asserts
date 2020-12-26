@@ -125,7 +125,7 @@
             {
                 var commandLine = new StringBuilder();
 
-                if (argument == string.Empty &&
+                if (string.IsNullOrEmpty(argument) ||
                     argument.IndexOfAny(new[] { ' ', '\t', '\n', '\v', '\"' }) == -1)
                 {
                     commandLine.Append(argument);
