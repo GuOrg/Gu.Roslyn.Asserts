@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.IO;
@@ -38,11 +38,12 @@ namespace Gu.Roslyn.Asserts.Tests
             var file = ProjectFile.Find("ClassLibrary1.csproj");
             var csproj = ProjectFile.ParseInfo(file);
             var expected = new[]
-                           {
-                               "AllowCompilationErrors.cs",
-                               "ClassLibrary1Class1.cs",
-                               "AssemblyInfo.cs",
-                           };
+            {
+                "AllowCompilationErrors.cs",
+                "AssemblyAttributes.cs",
+                "ClassLibrary1Class1.cs",
+                "AssemblyInfo.cs",
+            };
             CollectionAssert.AreEquivalent(expected, csproj.Documents.Select(x => x.Name));
             foreach (var document in csproj.Documents)
             {

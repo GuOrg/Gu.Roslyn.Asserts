@@ -124,18 +124,18 @@
             static string Escape(string argument)
             {
                 var commandLine = new StringBuilder();
-                bool force = false;
 
-                if (!force && argument == string.Empty && argument.IndexOfAny(new[] { ' ', '\t', '\n', '\v', '\"' }) == -1)
+                if (argument == string.Empty &&
+                    argument.IndexOfAny(new[] { ' ', '\t', '\n', '\v', '\"' }) == -1)
                 {
                     commandLine.Append(argument);
                 }
                 else
                 {
                     commandLine.Append('\"');
-                    for (int i = 0; ; ++i)
+                    for (var i = 0; ; ++i)
                     {
-                        int numberOfBackslashes = 0;
+                        var numberOfBackslashes = 0;
                         while (i != argument.Length && argument[i] == '\\')
                         {
                             ++i;

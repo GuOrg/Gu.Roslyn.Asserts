@@ -84,11 +84,12 @@ namespace Gu.Roslyn.Asserts.Tests
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
-                               {
-                                   "AllowCompilationErrors.cs",
-                                   "AssemblyInfo.cs",
-                                   "ClassLibrary1Class1.cs",
-                               };
+                {
+                    "AllowCompilationErrors.cs",
+                    "AssemblyAttributes.cs",
+                    "AssemblyInfo.cs",
+                    "ClassLibrary1Class1.cs",
+                };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
                                      .Select(d => d.Name)
@@ -111,9 +112,10 @@ namespace Gu.Roslyn.Asserts.Tests
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary2", solution.Projects.Single().Name);
                 var expected = new[]
-                               {
-                                   "ClassLibrary2Class1.cs",
-                               };
+                {
+                    "AssemblyAttributes.cs",
+                    "ClassLibrary2Class1.cs",
+                };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
                                      .Select(d => d.Name)
@@ -202,11 +204,12 @@ namespace Gu.Roslyn.Asserts.Tests
                     CreateMetadataReferences(typeof(object)));
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
-                               {
-                                   "AllowCompilationErrors.cs",
-                                   "AssemblyInfo.cs",
-                                   "ClassLibrary1Class1.cs",
-                               };
+                {
+                    "AllowCompilationErrors.cs",
+                    "AssemblyAttributes.cs",
+                    "AssemblyInfo.cs",
+                    "ClassLibrary1Class1.cs",
+                };
                 var actual = solution.Projects
                                      .SelectMany(p => p.Documents)
                                      .Select(d => d.Name)

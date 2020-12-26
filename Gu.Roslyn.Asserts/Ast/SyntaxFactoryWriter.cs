@@ -119,7 +119,7 @@
         {
             var method = FactoryMethods.GetOrAdd(
                 (node.GetType(), this.settings.DefaultTrivia),
-                x => FindFactoryMethod(x.Item1, x.Item2));
+                x => FindFactoryMethod(x.Item1));
             this.writer.Append("SyntaxFactory.").Append(method.Name).AppendLine("(")
                 .PushIndent();
             var parameters = method.GetParameters();
@@ -137,13 +137,13 @@
             this.writer.PopIndent();
             return this;
 
-            MethodInfo FindFactoryMethod(Type nodeType, bool defaultTrivia)
+            MethodInfo FindFactoryMethod(Type nodeType)
             {
                 return typeof(SyntaxFactory)
                          .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                         .Where(x => !x.Name.StartsWith("Parse") &&
+                         .Where(x => !x.Name.StartsWith("Parse", StringComparison.Ordinal) &&
                                      x.ReturnType == nodeType &&
-                                     x.ReturnType.Name.StartsWith(x.Name) &&
+                                     x.ReturnType.Name.StartsWith(x.Name, StringComparison.Ordinal) &&
                                      x.GetParameters().All(p => ArgumentWriters.GetOrAdd(p, CreateArgumentWriter) != null))
                          .MaxBy(x => x.GetParameters().Length);
             }
