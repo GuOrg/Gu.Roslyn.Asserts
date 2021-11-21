@@ -19,6 +19,7 @@
 
   <!-- Specific to packing an analyzer -->
   <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <AppendTargetFrameworkToOutputDirectory>false</AppendTargetFrameworkToOutputDirectory>
