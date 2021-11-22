@@ -154,7 +154,7 @@
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
                                                .ConfigureAwait(false);
-                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
             }
 
             return results;
@@ -176,7 +176,7 @@
             foreach (var project in solution.Projects)
             {
                 var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
-                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
             }
 
             return results;
@@ -208,11 +208,11 @@
                                                .ConfigureAwait(false);
                 if (analyzer is PlaceholderAnalyzer)
                 {
-                    fixableDiagnostics.AddRange(compilation.GetDiagnostics(CancellationToken.None).Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
+                    fixableDiagnostics.AddRange(compilation!.GetDiagnostics(CancellationToken.None).Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
                 }
                 else
                 {
-                    var withAnalyzers = compilation.WithAnalyzers(
+                    var withAnalyzers = compilation!.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);

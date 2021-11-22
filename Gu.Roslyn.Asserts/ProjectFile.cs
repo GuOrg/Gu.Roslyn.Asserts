@@ -33,8 +33,7 @@
             if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
             {
                 var projectFileName = Path.GetFileNameWithoutExtension(dllFile.FullName) + ".csproj";
-                //// ReSharper disable once PossibleNullReferenceException
-                result = sln.Directory.EnumerateFiles(projectFileName, SearchOption.AllDirectories).FirstOrDefault();
+                result = sln.Directory!.EnumerateFiles(projectFileName, SearchOption.AllDirectories).FirstOrDefault();
             }
 
             return result != null;
@@ -51,8 +50,7 @@
             result = null;
             if (SolutionFile.TryFind(Assembly.GetCallingAssembly(), out var sln))
             {
-                // ReSharper disable once PossibleNullReferenceException
-                result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
+                result = sln.Directory!.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
             }
 
             return result != null;
@@ -69,7 +67,7 @@
         public static FileInfo Find(string projectFile)
         {
             var sln = SolutionFile.Find(Assembly.GetCallingAssembly());
-            var result = sln.Directory.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
+            var result = sln.Directory!.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
             if (result is null)
             {
                 throw new InvalidOperationException("Did not find a file named: " + projectFile);
@@ -109,7 +107,7 @@
                 var root = content.Root;
                 if (root is null)
                 {
-                    return new ProjectReference[0];
+                    return Array.Empty<ProjectReference>();
                 }
 
                 return root.Descendants(XName.Get("ProjectReference"))

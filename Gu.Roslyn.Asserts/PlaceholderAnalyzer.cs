@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;

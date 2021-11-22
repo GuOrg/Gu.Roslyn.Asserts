@@ -343,7 +343,7 @@
             {
                 return this.AppendLine("SyntaxFactory.Trivia(")
                     .PushIndent()
-                    .Write(trivia.GetStructure())
+                    .Write(trivia.GetStructure()!)
                     .PopIndent()
                     .Append(")");
             }

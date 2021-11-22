@@ -6,7 +6,7 @@
     {
         internal static readonly DiagnosticDescriptor GURA01NameShouldMatchParameter = new(
             id: "GURA01",
-            title: "Name of local should match parameter.",
+            title: "Name of local should match parameter",
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -15,7 +15,7 @@
 
         internal static readonly DiagnosticDescriptor GURA02IndicateErrorPosition = new(
             id: "GURA02",
-            title: "Indicate position.",
+            title: "Indicate position",
             messageFormat: "Indicate position with ↓ (alt + 25).",
             category: AnalyzerCategory.Correctness,
             defaultSeverity: DiagnosticSeverity.Warning,
@@ -24,7 +24,7 @@
 
         internal static readonly DiagnosticDescriptor GURA03NameShouldMatchCode = new(
             id: "GURA03",
-            title: "Name should match code.",
+            title: "Name should match code",
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -33,7 +33,7 @@
 
         internal static readonly DiagnosticDescriptor GURA04NameClassToMatchAsserts = new(
             id: "GURA04",
-            title: "Name of class should match asserts.",
+            title: "Name of class should match asserts",
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -42,7 +42,7 @@
 
         internal static readonly DiagnosticDescriptor GURA05NameFileToMatchClass = new(
             id: "GURA05",
-            title: "Name file to match class.",
+            title: "Name file to match class",
             messageFormat: "Name of '{0}' should be '{1}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -51,7 +51,7 @@
 
         internal static readonly DiagnosticDescriptor GURA06TestShouldBeInCorrectClass = new(
             id: "GURA06",
-            title: "Move test to correct class.",
+            title: "Move test to correct class",
             messageFormat: "Move to '{0}'.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -60,7 +60,7 @@
 
         internal static readonly DiagnosticDescriptor GURA07TestClassShouldBePublicStatic = new(
             id: "GURA07",
-            title: "Test class should be public static.",
+            title: "Test class should be public static",
             messageFormat: "'{0}' should be public static.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -69,7 +69,7 @@
 
         internal static readonly DiagnosticDescriptor GURA08aShouldBeInternal = new(
             id: "GURA08a",
-            title: "Should be internal.",
+            title: "Should be internal",
             messageFormat: "'{0}' should be internal.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Info,
@@ -78,7 +78,7 @@
 
         internal static readonly DiagnosticDescriptor GURA08bShouldBePublic = new(
             id: "GURA08b",
-            title: "Should be public.",
+            title: "Should be public",
             messageFormat: "'{0}' should be public.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -87,7 +87,7 @@
 
         internal static readonly DiagnosticDescriptor GURA09UseStandardNames = new(
             id: "GURA09",
-            title: "Use standard names in test code.",
+            title: "Use standard names in test code",
             messageFormat: "{0}",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -96,7 +96,7 @@
 
         internal static readonly DiagnosticDescriptor GURA10UseLocal = new(
             id: "GURA10",
-            title: "Move to local.",
+            title: "Move to local",
             messageFormat: "Copy {0} to a local.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
@@ -105,7 +105,7 @@
 
         internal static readonly DiagnosticDescriptor GURA11ChainAssertReplace = new(
             id: "GURA11",
-            title: "Chain AssertReplace.",
+            title: "Chain AssertReplace",
             messageFormat: "Chain AssertReplace.",
             category: AnalyzerCategory.Ocd,
             defaultSeverity: DiagnosticSeverity.Hidden,
