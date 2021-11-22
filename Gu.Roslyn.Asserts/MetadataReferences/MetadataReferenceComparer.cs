@@ -23,7 +23,7 @@
         {
             if (obj is PortableExecutableReference portable)
             {
-                return OrdinalIgnoreCase.GetHashCode(portable.FilePath);
+                return OrdinalIgnoreCase.GetHashCode(portable.FilePath!);
             }
 
             return obj.GetHashCode();

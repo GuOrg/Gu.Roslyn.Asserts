@@ -301,11 +301,11 @@
                 var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
                 if (analyzer is PlaceholderAnalyzer)
                 {
-                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                    results.Add(compilation!.GetDiagnostics(CancellationToken.None));
                 }
                 else
                 {
-                    var withAnalyzers = compilation.WithAnalyzers(
+                    var withAnalyzers = compilation!.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);

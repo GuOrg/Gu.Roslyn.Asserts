@@ -30,7 +30,9 @@
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
 
         /// <inheritdoc />
+#pragma warning disable RS1025, RS1026
         public override void Initialize(AnalysisContext context)
+#pragma warning restore  RS1025, RS1026
         {
             // nop
         }

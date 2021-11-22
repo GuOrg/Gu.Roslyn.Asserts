@@ -119,7 +119,7 @@
 
             ProjectReference FindReference(string reference)
             {
-                var fileInfo = new FileInfo(Path.Combine(csproj.Directory.FullName, reference));
+                var fileInfo = new FileInfo(Path.Combine(csproj.Directory!.FullName, reference));
                 foreach (var kvp in idFileMap)
                 {
                     if (kvp.Value.FullName == fileInfo.FullName)
@@ -152,7 +152,7 @@
             {
                 if (IsSdk())
                 {
-                    foreach (var csFile in csproj.Directory.EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
+                    foreach (var csFile in csproj.Directory!.EnumerateFiles("*.cs", SearchOption.TopDirectoryOnly))
                     {
                         yield return CreateDocumentInfo(csFile);
                     }
