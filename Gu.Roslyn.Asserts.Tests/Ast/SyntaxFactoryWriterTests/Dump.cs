@@ -71,7 +71,7 @@
                                        .All(p => Property(p) != null));
                 if (candidates.Any())
                 {
-                    result = candidates.MaxBy(x => x.GetParameters().Length);
+                    result = Enumerable.MaxBy(candidates, x => x.GetParameters().Length);
                     return true;
                 }
 

@@ -38,7 +38,7 @@
                         Diagnostic.Create(
                             Descriptors.GURA04NameClassToMatchAsserts,
                             classDeclaration.Identifier.GetLocation(),
-                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
+                            ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), name),
                             context.ContainingSymbol.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart),
                             name));
                 }
@@ -49,7 +49,7 @@
                         Diagnostic.Create(
                             Descriptors.GURA05NameFileToMatchClass,
                             classDeclaration.Identifier.GetLocation(),
-                            ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
+                            ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), name),
                             context.ContainingSymbol.ToMinimalDisplayString(context.SemanticModel, classDeclaration.SpanStart),
                             name));
                 }

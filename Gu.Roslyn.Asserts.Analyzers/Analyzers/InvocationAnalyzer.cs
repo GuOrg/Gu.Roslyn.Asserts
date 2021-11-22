@@ -75,7 +75,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             Diagnostic.Create(
                                                 Descriptors.GURA03NameShouldMatchCode,
                                                 stringArg.SymbolIdentifier.GetLocation(),
-                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
+                                                ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), codeName),
                                                 symbol.Name,
                                                 codeName));
                                     }
@@ -87,7 +87,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             Diagnostic.Create(
                                                 Descriptors.GURA01NameShouldMatchParameter,
                                                 stringArg.Expression.GetLocation(),
-                                                ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
+                                                ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), parameterName),
                                                 symbol.Name,
                                                 parameterName));
                                     }
@@ -111,7 +111,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                             Descriptors.GURA09UseStandardNames,
                                             replacement.Location,
                                             args.Select(x => x.Value.GetLocation()).Where(x => x is { }),
-                                            ImmutableDictionary<string, string>.Empty.Add(nameof(WordAndLocation.Word), replacement.Word),
+                                            ImmutableDictionary<string, string?>.Empty.Add(nameof(WordAndLocation.Word), replacement.Word),
                                             $"Use standard name instead of {replacement.Word}."));
                                 }
 
@@ -188,7 +188,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                 Diagnostic.Create(
                                     Descriptors.GURA01NameShouldMatchParameter,
                                     argument.Expression.GetLocation(),
-                                    ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), newName),
+                                    ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), newName),
                                     symbol.Name,
                                     newName));
                         }

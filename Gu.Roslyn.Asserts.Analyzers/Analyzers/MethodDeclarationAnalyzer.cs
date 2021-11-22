@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using Gu.Roslyn.AnalyzerExtensions;
@@ -33,7 +33,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     context.ReportDiagnostic(Diagnostic.Create(
                         Descriptors.GURA06TestShouldBeInCorrectClass,
                         methodDeclaration.Identifier.GetLocation(),
-                        ImmutableDictionary<string, string>.Empty.Add(nameof(IdentifierNameSyntax), name),
+                        ImmutableDictionary<string, string?>.Empty.Add(nameof(IdentifierNameSyntax), name),
                         name));
                 }
             }
