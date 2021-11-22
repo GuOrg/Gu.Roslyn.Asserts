@@ -147,8 +147,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     "Gu.Roslyn.Asserts.Analyzers.Tests",
                     "Gu.Roslyn.Asserts.Analyzers.Vsix",
                     "Gu.Roslyn.Asserts.Tests",
-                    "Gu.Roslyn.Asserts.Tests.Net472WithAttributes",
-                    "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
+                    "Gu.Roslyn.Asserts.Tests.WithAttributes",
                 };
 
                 CollectionAssert.AreEquivalent(expectedProjects, solution.Projects.Select(p => p.Name));

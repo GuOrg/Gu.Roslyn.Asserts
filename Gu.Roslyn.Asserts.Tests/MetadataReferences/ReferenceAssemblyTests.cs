@@ -11,9 +11,7 @@
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetAssembly(Type type)
         {
-#if NETCOREAPP3_1
-            Assert.Inconclusive("Fix later.");
-#endif
+            Assert.Inconclusive("Fix for net6.");
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly, out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }
@@ -22,9 +20,7 @@
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetLocation(Type type)
         {
-#if NETCOREAPP3_1
-            Assert.Inconclusive("Fix later.");
-#endif
+            Assert.Inconclusive("Fix for net6.");
             Assert.AreEqual(true, ReferenceAssembly.TryGet(type.Assembly.Location, out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }
@@ -33,9 +29,7 @@
         [TestCase(typeof(System.Diagnostics.Debug))]
         public static void TryGetFileName(Type type)
         {
-#if NETCOREAPP3_1
-            Assert.Inconclusive("Fix later.");
-#endif
+            Assert.Inconclusive("Fix for net6.");
             Assert.AreEqual(true, ReferenceAssembly.TryGet(Path.GetFileNameWithoutExtension(type.Assembly.Location), out var metadataReference));
             StringAssert.Contains("Reference Assemblies", ((PortableExecutableReference?)metadataReference)!.FilePath);
         }

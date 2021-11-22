@@ -3,17 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
+
     using NUnit.Framework;
 
     public static class ValidWithAllAnalyzers
     {
-        private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(Descriptors)
-                                                                                 .Assembly.GetTypes()
-                                                                                 .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
-                                                                                 .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t)!)
-                                                                                 .ToArray();
+        private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers =
+            typeof(Descriptors)
+                .Assembly.GetTypes()
+                .Where(x => typeof(DiagnosticAnalyzer).IsAssignableFrom(x) && !x.IsAbstract)
+                .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t)!)
+                .ToArray();
 
         private static readonly Solution AnalyzersTests = CodeFactory.CreateSolution(
             ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"),

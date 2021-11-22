@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameObsoleteFixTests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameObsoleteFixTests
 {
     using Microsoft.CodeAnalysis.CodeFixes;
     using NUnit.Framework;
@@ -46,7 +46,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS0103");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS8019", "CS1702" });
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, suppressWarnings: new[] { "CS8019", "CS1701", "CS1702" });
         }
 
         [Test]

@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
     using NUnit.Framework;
@@ -33,8 +33,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 "Gu.Roslyn.Asserts.Analyzers.Tests",
                 "Gu.Roslyn.Asserts.Analyzers.Vsix",
                 "Gu.Roslyn.Asserts.Tests",
-                "Gu.Roslyn.Asserts.Tests.Net472WithAttributes",
-                "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes",
+                "Gu.Roslyn.Asserts.Tests.WithAttributes",
                 "AstView",
                 "WpfApp1",
                 "ClassLibrary2",
