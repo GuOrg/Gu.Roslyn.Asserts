@@ -250,11 +250,11 @@
                                                .ConfigureAwait(false);
                 if (analyzer is PlaceholderAnalyzer)
                 {
-                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                    results.Add(compilation!.GetDiagnostics(CancellationToken.None));
                 }
                 else
                 {
-                    var withAnalyzers = compilation.WithAnalyzers(
+                    var withAnalyzers = compilation!.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);
@@ -376,11 +376,11 @@
             var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
             if (analyzer is PlaceholderAnalyzer)
             {
-                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
             }
             else
             {
-                var withAnalyzers = compilation.WithAnalyzers(
+                var withAnalyzers = compilation!.WithAnalyzers(
                     ImmutableArray.Create(analyzer),
                     project.AnalyzerOptions,
                     CancellationToken.None);
@@ -407,13 +407,13 @@
 
                 if (analyzer is PlaceholderAnalyzer placeholder)
                 {
-                    var diagnostics = compilation.GetDiagnostics(CancellationToken.None);
+                    var diagnostics = compilation!.GetDiagnostics(CancellationToken.None);
                     errors.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id != x.Id)).ToImmutableArray());
                     analyzerDiagnostics.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
                 }
                 else
                 {
-                    errors.Add(compilation.GetDiagnostics(CancellationToken.None));
+                    errors.Add(compilation!.GetDiagnostics(CancellationToken.None));
                     var withAnalyzers = compilation.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,

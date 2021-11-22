@@ -85,7 +85,7 @@
                 var provider = TestDiagnosticProvider.CreateAsync(solution, fix, fixTitle, flatDiagnostics).GetAwaiter().GetResult();
                 var context = new FixAllContext(document, fix, FixAllScope.Document, provider.EquivalenceKey, flatDiagnostics.Select(x => x.Id), provider, CancellationToken.None);
                 var action = WellKnownFixAllProviders.BatchFixer.GetFixAsync(context).GetAwaiter().GetResult();
-                var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
+                var operations = action!.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
                 if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
                 {
                     return operation!.ChangedSolution;

@@ -6,7 +6,9 @@
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -376,28 +378,7 @@
 
             ProjectInfo GetProjectInfo()
             {
-                string? projectName = null;
-                foreach (var doc in code)
-                {
-                    if (projectName is null)
-                    {
-                        projectName = CodeReader.Namespace(doc);
-                    }
-                    else
-                    {
-                        var ns = CodeReader.Namespace(doc);
-                        var indexOf = ns.IndexOf('.');
-                        if (indexOf > 0)
-                        {
-                            ns = ns.Substring(0, indexOf);
-                        }
-
-                        if (ns.Length < projectName.Length)
-                        {
-                            projectName = ns;
-                        }
-                    }
-                }
+                var projectName = ProjectName();
 
                 var projectId = ProjectId.CreateNewId(projectName);
                 return ProjectInfo.Create(
@@ -421,6 +402,34 @@
                                         SourceText.From(x, null, SourceHashAlgorithm.Sha1),
                                         VersionStamp.Default)));
                         }));
+
+                string ProjectName()
+                {
+                    string? projectName = null;
+                    foreach (var doc in code)
+                    {
+                        if (projectName is null)
+                        {
+                            projectName = CodeReader.Namespace(doc);
+                        }
+                        else
+                        {
+                            var ns = CodeReader.Namespace(doc);
+                            var indexOf = ns.IndexOf('.');
+                            if (indexOf > 0)
+                            {
+                                ns = ns.Substring(0, indexOf);
+                            }
+
+                            if (ns.Length < projectName.Length)
+                            {
+                                projectName = ns;
+                            }
+                        }
+                    }
+
+                    return projectName ?? throw new InvalidOperationException("Could not find project name.");
+                }
             }
         }
 
