@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -30,7 +30,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 {
                     context.RegisterCodeFix(
                         CodeAction.Create(
-                            "Make public static.",
+                            "Make public static",
                             _ => Task.FromResult(context.Document.WithSyntaxRoot(
                                 syntaxRoot.ReplaceNode(
                                     classDeclaration,

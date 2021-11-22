@@ -37,7 +37,7 @@
                         if (TryFindFieldOrProperty(containingType, argType, semanticModel, context.CancellationToken, out var fieldOrProperty))
                         {
                             context.RegisterCodeFix(
-                                $"Use '{fieldOrProperty.Name}'.",
+                                $"Use '{fieldOrProperty.Name}'",
                                 (editor, _) => editor.ReplaceNode(
                                     invocation,
                                     x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
@@ -48,7 +48,7 @@
                         else if (TryFindAvailableFieldName(containingType, argType, out var name))
                         {
                             context.RegisterCodeFix(
-                                $"Create and use field '{name}'.",
+                                $"Create and use field '{name}'",
                                 (editor, _) => editor.AddPrivateStaticField(typeDeclaration, argType, name!)
                                                      .ReplaceNode(
                                                          invocation,
@@ -66,7 +66,7 @@
                             TryFindFieldOrProperty(containingType, arg1Type, semanticModel, context.CancellationToken, out var fieldOrProperty1))
                         {
                             context.RegisterCodeFix(
-                                $"Use '{fieldOrProperty0.Name}' and '{fieldOrProperty1.Name}.",
+                                $"Use '{fieldOrProperty0.Name}' and '{fieldOrProperty1.Name}'",
                                 (editor, _) => editor.ReplaceNode(
                                     invocation,
                                     x => x.WithExpression(memberAccess.WithName(SyntaxFactory.IdentifierName(genericName.Identifier)))
@@ -78,7 +78,7 @@
                                  TryFindAvailableFieldName(containingType, arg1Type, out var name1))
                         {
                             context.RegisterCodeFix(
-                                $"Create and use fields '{name0}' and '{name1}'.",
+                                $"Create and use fields '{name0}' and '{name1}'",
                                 (editor, _) => editor.AddPrivateStaticField(typeDeclaration, arg0Type, name0!)
                                                      .AddPrivateStaticField(typeDeclaration, arg1Type, name1!)
                                                      .ReplaceNode(

@@ -36,7 +36,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                $"Rename file to '{name}'.",
+                                $"Rename file to '{name}'",
                                 _ => Task.FromResult(context.Document.Project.Solution.WithDocumentName(context.Document.Id, name + ".cs")),
                                 nameof(RenameFix)),
                             diagnostic);
@@ -48,7 +48,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                $"Rename to '{name}'.",
+                                $"Rename to '{name}'",
                                 async cancellationToken =>
                                 {
                                     var sln = context.Document.Project.Solution.WithDocumentName(context.Document.Id, name + ".cs");
@@ -71,7 +71,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                $"Rename to '{name}'.",
+                                $"Rename to '{name}'",
                                 async cancellationToken =>
                                 {
                                     var options = await context.Document.GetOptionsAsync(cancellationToken)

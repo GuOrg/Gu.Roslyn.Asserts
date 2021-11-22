@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -34,7 +34,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     expression.TryFirstAncestor(out BlockSyntax? block))
                 {
                     context.RegisterCodeFix(
-                        $"Copy to local.",
+                        "Copy to local",
                         (editor, _) =>
                         {
                             var identifierName = SyntaxFactory.IdentifierName(symbol.Name.ToFirstCharLower());

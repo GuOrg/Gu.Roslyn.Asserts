@@ -45,7 +45,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use field 'Analyzer'");
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'");
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer'");
         }
 
         [Test]
@@ -182,7 +182,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'.");
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after, fixTitle: "Use 'Fix'");
         }
 
         [Test]
@@ -233,7 +233,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Use 'Analyzer' and 'Fix'");
         }
 
         [Test]
@@ -286,7 +286,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix'");
         }
 
         [Test]
@@ -345,7 +345,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, part1, before }, after, fixTitle: "Use 'Analyzer' and 'Fix'");
         }
 
         [Test]
@@ -389,7 +389,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'.");
+            Assert.CodeFix(new[] { Code.PlaceholderFix, Code.PlaceholderAnalyzer, before }, after, fixTitle: "Create and use fields 'Analyzer' and 'Fix'");
         }
     }
 }

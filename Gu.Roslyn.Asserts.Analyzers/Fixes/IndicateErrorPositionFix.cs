@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -27,7 +27,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 if (syntaxRoot.TryFindNode(diagnostic, out LiteralExpressionSyntax? literal))
                 {
                     context.RegisterCodeFix(
-                        $"Add ↓ to the start of the string literal (move it manually after).",
+                        "Add ↓ to the start of the string literal (move it manually after)",
                         (editor, _) => editor.ReplaceNode(
                             literal,
                             literal.WithToken(SyntaxFactory.Literal(InsertPosition(literal.Token.Text), $"↓{literal.Token.ValueText}"))),

@@ -64,7 +64,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                $"Create class {name} and move method.",
+                                $"Create class {name} and move method",
                                 cancellationToken => CreateClassAndMoveMethod(cancellationToken),
                                 nameof(MoveFix)),
                             diagnostic);

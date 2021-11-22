@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers
 {
     using System.Collections.Immutable;
     using System.Composition;
@@ -31,7 +31,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                     syntaxRoot.FindNode(additionalLocation.SourceSpan) is LiteralExpressionSyntax literal)
                 {
                     context.RegisterCodeFix(
-                        "Chain AssertReplace.",
+                        "Chain AssertReplace",
                         (e, c) =>
                         {
                             _ = e.ReplaceNode(
@@ -43,7 +43,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                         memberAccess.Name)));
                             e.RemoveNode(statement);
                         },
-                        "Chain AssertReplace.",
+                        "Chain AssertReplace",
                         diagnostic);
                 }
             }

@@ -37,7 +37,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                "Make internal.",
+                                "Make internal",
                                 cancellationToken => Task.FromResult(
                                     context.Document.Project.Solution
                                            .GetDocument(declaration.SyntaxTree)
@@ -54,7 +54,7 @@
                     {
                         context.RegisterCodeFix(
                             CodeAction.Create(
-                                "Make public.",
+                                "Make public",
                                 cancellationToken => Task.FromResult(
                                     context.Document.Project.Solution
                                            .GetDocument(declaration.SyntaxTree)
