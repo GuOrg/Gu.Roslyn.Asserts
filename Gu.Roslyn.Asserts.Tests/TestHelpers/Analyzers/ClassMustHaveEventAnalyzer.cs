@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         internal const string DiagnosticId = "ClassMustHaveEvent";
 
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
             title: "This analyzer reports warnings if a class does not have an event.",
             messageFormat: "Message format.",

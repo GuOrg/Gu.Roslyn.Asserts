@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         internal const string DiagnosticId = "CallId";
 
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
             title: "This analyzer reports warnings if the extension method ID() is not called.",
             messageFormat: "Message format.",

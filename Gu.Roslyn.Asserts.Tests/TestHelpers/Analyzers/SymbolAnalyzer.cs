@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class SymbolAnalyzer : DiagnosticAnalyzer
     {
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             "123",
             "SymbolAnalyzer",
             "SymbolAnalyzer",
@@ -17,7 +17,7 @@ namespace Gu.Roslyn.Asserts.Tests
             isEnabledByDefault: true);
 
         private readonly SymbolKind[] kinds;
-        private readonly List<SymbolAnalysisContext> contexts = new List<SymbolAnalysisContext>();
+        private readonly List<SymbolAnalysisContext> contexts = new();
 
         internal SymbolAnalyzer(params SymbolKind[] kinds)
         {

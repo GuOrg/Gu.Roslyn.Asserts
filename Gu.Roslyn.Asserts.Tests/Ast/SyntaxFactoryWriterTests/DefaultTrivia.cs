@@ -22,7 +22,7 @@
                                                                                   .Directory.EnumerateFiles("*.cs", SearchOption.AllDirectories)
                                                                                   .ToArray();
 
-        private static readonly SyntaxFactoryWriterSettings Settings = new SyntaxFactoryWriterSettings(defaultTrivia: true);
+        private static readonly SyntaxFactoryWriterSettings Settings = new(defaultTrivia: true);
 
         [Explicit("Fails on AppVeyor?")]
         [TestCaseSource(nameof(CSharpFiles))]

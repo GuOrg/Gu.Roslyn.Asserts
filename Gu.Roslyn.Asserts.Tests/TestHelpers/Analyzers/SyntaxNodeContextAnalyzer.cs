@@ -9,7 +9,7 @@ namespace Gu.Roslyn.Asserts.Tests
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class SyntaxNodeContextAnalyzer : DiagnosticAnalyzer
     {
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             "12345",
             "SyntaxNodeAnalyzer",
             "SyntaxNodeAnalyzer",
@@ -18,7 +18,7 @@ namespace Gu.Roslyn.Asserts.Tests
             isEnabledByDefault: true);
 
         private readonly SyntaxKind[] kinds;
-        private readonly List<SyntaxNodeAnalysisContext> contexts = new List<SyntaxNodeAnalysisContext>();
+        private readonly List<SyntaxNodeAnalysisContext> contexts = new();
 
         internal SyntaxNodeContextAnalyzer(params SyntaxKind[] kinds)
         {

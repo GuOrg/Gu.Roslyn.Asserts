@@ -13,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests
         internal const string Id1 = "SA1309a";
         internal const string Id2 = "SA1309b";
 
-        private static readonly DiagnosticDescriptor Descriptor1 = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor1 = new(
             Id1,
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",
@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        private static readonly DiagnosticDescriptor Descriptor2 = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor2 = new(
             Id2,
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",

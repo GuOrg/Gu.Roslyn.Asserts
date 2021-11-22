@@ -1,8 +1,7 @@
-// ReSharper disable AssignNullToNotNullAttribute
+﻿// ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable PossibleNullReferenceException
 namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using System.IO;
     using System.Reflection;
     using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         public static class TryFindFileInParentDirectory
         {
-            private static readonly FileInfo ExecutingAssemblyDll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase!, UriKind.Absolute).LocalPath);
+            private static readonly FileInfo ExecutingAssemblyDll = new(Assembly.GetExecutingAssembly().Location);
 
             [Test]
             public static void TryFindProjectFileInParentDirectory()

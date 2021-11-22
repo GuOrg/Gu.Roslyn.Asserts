@@ -1,6 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -11,7 +10,7 @@
         [Test]
         public static void TryFindFromDll()
         {
-            var dll = new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase!, UriKind.Absolute).LocalPath);
+            var dll = new FileInfo(Assembly.GetExecutingAssembly().Location);
             Assert.AreEqual(true, ProjectFile.TryFind(dll, out var projectFile));
             Assert.AreEqual(Path.GetFileNameWithoutExtension(dll.FullName) + ".csproj", projectFile!.Name);
         }

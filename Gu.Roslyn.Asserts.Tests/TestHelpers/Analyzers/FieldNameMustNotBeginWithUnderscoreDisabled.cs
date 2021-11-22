@@ -12,7 +12,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         internal const string DiagnosticId = "SA13090";
 
-        internal static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        internal static readonly DiagnosticDescriptor Descriptor = new(
             DiagnosticId,
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",

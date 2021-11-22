@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests
     {
         internal const string DiagnosticId = "ClassMustBeSealed";
 
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
             title: "This analyzer reports warnings if a class is not sealed.",
             messageFormat: "Message format.",
