@@ -31,9 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "TestApps\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary2", "TestApps\ClassLibrary2\ClassLibrary2.csproj", "{F47D2C86-48F6-4FAE-B179-9DB4ECF4DE92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes", "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes\Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes.csproj", "{43974B67-929E-4211-B2CF-67699C7E0C63}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.Net472WithAttributes", "Gu.Roslyn.Asserts.Tests.Net472WithAttributes\Gu.Roslyn.Asserts.Tests.Net472WithAttributes.csproj", "{74869460-44E5-4EF3-9A5E-8296E5E3FCF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Roslyn.Asserts.Tests.NetCoreWithAttributes", "Gu.Roslyn.Asserts.Tests.WithAttributes\Gu.Roslyn.Asserts.Tests.WithAttributes.csproj", "{43974B67-929E-4211-B2CF-67699C7E0C63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstView", "AstView\AstView.csproj", "{55DDBCEA-984E-4B14-83FD-FDA8F4DE96BB}"
 EndProject

@@ -14,13 +14,7 @@
         [Test]
         public void TransitiveMscorlib()
         {
-#if NET48
-            var expected = new[] { "mscorlib.dll" };
-#elif NETCOREAPP3_1
             var expected = new[] { "System.Private.CoreLib.dll" };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(object);
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
@@ -31,13 +25,7 @@
         public void TransitiveMscorlibFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET48
-            var expected = new[] { "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll" };
-#elif NETCOREAPP3_1
             var expected = new[] { "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Private.CoreLib.dll" };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(object);
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => x.Display).ToArray());
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => x.Display).ToArray());
@@ -46,19 +34,6 @@
         [Test]
         public void TransitiveSystemCore()
         {
-#if NET48
-            var expected = new[]
-            {
-                "System.Core.dll",
-                "mscorlib.dll",
-                "System.dll",
-                "System.Configuration.dll",
-                "System.Xml.dll",
-                "System.Data.SqlXml.dll",
-                "System.Security.dll",
-                "System.Numerics.dll",
-            };
-#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "System.Linq.dll",
@@ -71,9 +46,6 @@
                 "System.Diagnostics.Tools.dll",
                 "System.Runtime.Extensions.dll",
             };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(Enumerable);
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
@@ -84,19 +56,6 @@
         public void TransitiveGenericFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET48
-            var expected = new[]
-            {
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Xml.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Configuration.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Security.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Core.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Numerics.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Data.SqlXml.dll",
-            };
-#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Private.CoreLib.dll",
@@ -208,9 +167,6 @@
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Xml.XPath.XDocument.dll",
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Xml.XPath.dll",
             };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(List<XmlReader>);
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => x.Display));
         }
@@ -220,19 +176,6 @@
         public void TransitiveSystemCoreFullNames()
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
-#if NET48
-            var expected = new[]
-            {
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Core.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\mscorlib.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Configuration.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Xml.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Data.SqlXml.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Security.dll",
-                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.7.2\\System.Numerics.dll",
-            };
-#elif NETCOREAPP3_1
             var expected = new[]
             {
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Linq.dll",
@@ -246,9 +189,6 @@
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Runtime.Extensions.dll",
                 "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.0.9\\System.Security.Principal.dll",
             };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(Enumerable);
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => x.Display));
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => x.Display));
@@ -257,78 +197,6 @@
         [Test]
         public void TransitiveCSharpCompilation()
         {
-#if NET48
-            var expected = new[]
-            {
-                "Microsoft.CodeAnalysis.CSharp.dll",
-                "netstandard.dll",
-                "mscorlib.dll",
-                "System.Core.dll",
-                "System.dll",
-                "System.Configuration.dll",
-                "System.Xml.dll",
-                "System.Data.SqlXml.dll",
-                "System.Security.dll",
-                "System.Numerics.dll",
-                "System.Data.dll",
-                "System.Transactions.dll",
-                "System.EnterpriseServices.dll",
-                "System.DirectoryServices.dll",
-                "System.Runtime.Remoting.dll",
-                "System.Web.dll",
-                "System.Drawing.dll",
-                "System.Web.RegularExpressions.dll",
-                "System.Design.dll",
-                "System.Windows.Forms.dll",
-                "Accessibility.dll",
-                "System.Deployment.dll",
-                "System.Runtime.Serialization.Formatters.Soap.dll",
-                "System.Data.OracleClient.dll",
-                "System.Drawing.Design.dll",
-                "System.Web.ApplicationServices.dll",
-                "System.ComponentModel.DataAnnotations.dll",
-                "System.DirectoryServices.Protocols.dll",
-                "System.ServiceProcess.dll",
-                "System.Configuration.Install.dll",
-                "System.Runtime.Serialization.dll",
-                "System.ServiceModel.Internals.dll",
-                "SMDiagnostics.dll",
-                "System.Web.Services.dll",
-                "Microsoft.Build.Utilities.v4.0.dll",
-                "Microsoft.Build.Framework.dll",
-                "System.Xaml.dll",
-                "System.Runtime.Caching.dll",
-                "Microsoft.Build.Tasks.v4.0.dll",
-                "System.Data.Common.dll",
-                "System.Diagnostics.StackTrace.dll",
-                "System.Diagnostics.Tracing.dll",
-                "System.Globalization.Extensions.dll",
-                "System.IO.Compression.dll",
-                "System.IO.Compression.FileSystem.dll",
-                "System.ComponentModel.Composition.dll",
-                "System.Net.Http.dll",
-                "System.Net.Sockets.dll",
-                "System.ValueTuple.dll",
-                "System.Runtime.InteropServices.RuntimeInformation.dll",
-                "System.Runtime.Serialization.Xml.dll",
-                "System.Runtime.Serialization.Primitives.dll",
-                "System.Security.Cryptography.Algorithms.dll",
-                "System.Security.SecureString.dll",
-                "System.Threading.Overlapped.dll",
-                "System.Xml.Linq.dll",
-                "System.Xml.XPath.XDocument.dll",
-                "Microsoft.CodeAnalysis.dll",
-                "System.Collections.Immutable.dll",
-                "System.Memory.dll",
-                "System.Numerics.Vectors.dll",
-                "System.Runtime.CompilerServices.Unsafe.dll",
-                "System.Buffers.dll",
-                "System.Reflection.Metadata.dll",
-                "System.Threading.Tasks.Extensions.dll",
-                "System.Text.Encoding.CodePages.dll",
-            };
-#elif NETCOREAPP3_1
-            Assert.Inconclusive();
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
@@ -443,9 +311,6 @@
                 "System.Runtime.CompilerServices.Unsafe.dll",
                 "System.Text.Encoding.CodePages.dll",
             };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var type = typeof(CSharpCompilation);
 
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type).Select(x => Path.GetFileName(x.Display)));
@@ -455,97 +320,6 @@
         [Test]
         public void ManyTransitive()
         {
-#if NET48
-            var expected = new[]
-            {
-                "Microsoft.CodeAnalysis.CSharp.dll",
-                "netstandard.dll",
-                "mscorlib.dll",
-                "System.Core.dll",
-                "System.dll",
-                "System.Configuration.dll",
-                "System.Xml.dll",
-                "System.Data.SqlXml.dll",
-                "System.Security.dll",
-                "System.Numerics.dll",
-                "System.Data.dll",
-                "System.Transactions.dll",
-                "System.EnterpriseServices.dll",
-                "System.DirectoryServices.dll",
-                "System.Runtime.Remoting.dll",
-                "System.Web.dll",
-                "System.Drawing.dll",
-                "System.Web.RegularExpressions.dll",
-                "System.Design.dll",
-                "System.Windows.Forms.dll",
-                "Accessibility.dll",
-                "System.Deployment.dll",
-                "System.Runtime.Serialization.Formatters.Soap.dll",
-                "System.Data.OracleClient.dll",
-                "System.Drawing.Design.dll",
-                "System.Web.ApplicationServices.dll",
-                "System.ComponentModel.DataAnnotations.dll",
-                "System.DirectoryServices.Protocols.dll",
-                "System.ServiceProcess.dll",
-                "System.Configuration.Install.dll",
-                "System.Runtime.Serialization.dll",
-                "System.ServiceModel.Internals.dll",
-                "SMDiagnostics.dll",
-                "System.Web.Services.dll",
-                "Microsoft.Build.Utilities.v4.0.dll",
-                "Microsoft.Build.Framework.dll",
-                "System.Xaml.dll",
-                "System.Runtime.Caching.dll",
-                "Microsoft.Build.Tasks.v4.0.dll",
-                "System.Data.Common.dll",
-                "System.Diagnostics.StackTrace.dll",
-                "System.Diagnostics.Tracing.dll",
-                "System.Globalization.Extensions.dll",
-                "System.IO.Compression.dll",
-                "System.IO.Compression.FileSystem.dll",
-                "System.ComponentModel.Composition.dll",
-                "System.Net.Http.dll",
-                "System.Net.Sockets.dll",
-                "System.ValueTuple.dll",
-                "System.Runtime.InteropServices.RuntimeInformation.dll",
-                "System.Runtime.Serialization.Xml.dll",
-                "System.Runtime.Serialization.Primitives.dll",
-                "System.Security.Cryptography.Algorithms.dll",
-                "System.Security.SecureString.dll",
-                "System.Threading.Overlapped.dll",
-                "System.Xml.Linq.dll",
-                "System.Xml.XPath.XDocument.dll",
-                "Microsoft.CodeAnalysis.dll",
-                "System.Collections.Immutable.dll",
-                "System.Memory.dll",
-                "System.Numerics.Vectors.dll",
-                "System.Runtime.CompilerServices.Unsafe.dll",
-                "System.Buffers.dll",
-                "System.Reflection.Metadata.dll",
-                "System.Threading.Tasks.Extensions.dll",
-                "System.Text.Encoding.CodePages.dll",
-                "Microsoft.CodeAnalysis.Workspaces.dll",
-                "System.Composition.AttributedModel.dll",
-                "System.Runtime.dll",
-                "System.Reflection.dll",
-                "Microsoft.Bcl.AsyncInterfaces.dll",
-                "System.Composition.Runtime.dll",
-                "System.Collections.dll",
-                "System.Diagnostics.Tools.dll",
-                "System.Diagnostics.Debug.dll",
-                "System.Resources.ResourceManager.dll",
-                "System.Globalization.dll",
-                "System.Linq.dll",
-                "System.Composition.TypedParts.dll",
-                "System.Composition.Hosting.dll",
-                "System.Linq.Expressions.dll",
-                "System.Reflection.Extensions.dll",
-                "System.Threading.dll",
-                "System.ObjectModel.dll",
-                "System.Runtime.Extensions.dll",
-            };
-#elif NETCOREAPP3_1
-            Assert.Inconclusive();
             var expected = new[]
             {
                 "Microsoft.CodeAnalysis.CSharp.dll",
@@ -665,9 +439,6 @@
                 "System.Composition.TypedParts.dll",
                 "System.Composition.Hosting.dll",
             };
-#else
-            Assert.Inconclusive("Not handling this framework.");
-#endif
             var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
                 typeof(CSharpCompilation),
                 typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider),
