@@ -14,16 +14,16 @@ namespace Gu.Roslyn.Asserts.Tests
 
         internal static readonly DiagnosticDescriptor FieldDescriptor = new(
             id: FieldDiagnosticId,
-            title: "The field must be named Value.",
-            messageFormat: "Message format.",
+            title: "The field must be named Value",
+            messageFormat: "Message format",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
         internal static readonly DiagnosticDescriptor PropertyDescriptor = new(
             id: PropertyDiagnosticId,
-            title: "The Property must be named Value.",
-            messageFormat: "Message format.",
+            title: "The Property must be named Value",
+            messageFormat: "Message format",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);

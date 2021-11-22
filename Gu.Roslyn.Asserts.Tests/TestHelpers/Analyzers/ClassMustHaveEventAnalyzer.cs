@@ -13,8 +13,8 @@ namespace Gu.Roslyn.Asserts.Tests
 
         private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
-            title: "This analyzer reports warnings if a class does not have an event.",
-            messageFormat: "Message format.",
+            title: "This analyzer reports warnings if a class does not have an event",
+            messageFormat: "Message format",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);

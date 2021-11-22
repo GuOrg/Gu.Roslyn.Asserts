@@ -256,7 +256,7 @@ namespace N
 
                 var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
                 var expected = "Expected no diagnostics, found:\r\n" +
-                                  "Field Message format.\r\n" +
+                                  "Field Message format\r\n" +
                                   "  at line 5 and character 29 in file Value.cs | private readonly int ↓wrongName;\r\n";
                 var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
