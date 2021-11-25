@@ -15,7 +15,7 @@
     [DebuggerDisplay("Count = {this.inner.Count}")]
     public class MetadataReferencesCollection : IEnumerable<MetadataReference>
     {
-        private readonly List<MetadataReference> inner = new List<MetadataReference>();
+        private readonly List<MetadataReference> inner = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.

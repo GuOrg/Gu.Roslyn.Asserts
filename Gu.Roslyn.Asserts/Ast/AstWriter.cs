@@ -13,9 +13,9 @@
     /// </summary>
     public class AstWriter
     {
-        private readonly StringBuilder builder = new StringBuilder();
+        private readonly StringBuilder builder = new();
         private readonly AstWriterSettings settings;
-        private readonly Indentation indentation = new Indentation();
+        private readonly Indentation indentation = new();
 
         private AstWriter(AstWriterSettings settings)
         {
@@ -312,7 +312,7 @@
 
         private class Indentation
         {
-            private readonly Stack<string> stack = new Stack<string>(new[] { string.Empty });
+            private readonly Stack<string> stack = new(new[] { string.Empty });
 
             internal string Current => this.stack.Peek();
 

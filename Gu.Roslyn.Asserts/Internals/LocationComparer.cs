@@ -9,7 +9,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        internal static readonly LocationComparer BySourceSpan = new LocationComparer();
+        internal static readonly LocationComparer BySourceSpan = new();
 
         private LocationComparer()
         {

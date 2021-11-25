@@ -6,7 +6,7 @@
 
     internal static class StringBuilderPool
     {
-        private static readonly ConcurrentQueue<PooledStringBuilder> Cache = new ConcurrentQueue<PooledStringBuilder>();
+        private static readonly ConcurrentQueue<PooledStringBuilder> Cache = new();
 
         internal static PooledStringBuilder Borrow()
         {
@@ -27,7 +27,7 @@
 
         internal class PooledStringBuilder
         {
-            private readonly StringBuilder inner = new StringBuilder();
+            private readonly StringBuilder inner = new();
 
             internal bool IsEmpty => this.inner.Length == 0;
 

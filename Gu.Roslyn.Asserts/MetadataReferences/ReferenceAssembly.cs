@@ -15,7 +15,7 @@
     /// </summary>
     public static class ReferenceAssembly
     {
-        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
+        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new();
         private static DirectoryInfo? directory;
 
         /// <summary>

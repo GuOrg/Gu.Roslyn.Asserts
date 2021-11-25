@@ -39,6 +39,6 @@ namespace Gu.Roslyn.Asserts.Internals
         /// </summary>
         /// <param name="document">The document text.</param>
         /// <returns>A <see cref="StringLoader"/>.</returns>
-        internal static StringLoader Create(string document) => new StringLoader(document);
+        internal static StringLoader Create(string document) => new(document);
     }
 }

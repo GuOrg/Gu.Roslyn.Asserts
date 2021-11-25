@@ -274,17 +274,17 @@ namespace Gu.Roslyn.Asserts
         [DiagnosticAnalyzer(LanguageNames.CSharp)]
         private class BenchmarkAnalyzer : DiagnosticAnalyzer
         {
-            internal readonly List<ContextAndAction<SyntaxNodeAnalysisContext>> SyntaxNodeActions = new List<ContextAndAction<SyntaxNodeAnalysisContext>>();
-            internal readonly List<ContextAndAction<CompilationStartAnalysisContext>> CompilationStartActions = new List<ContextAndAction<CompilationStartAnalysisContext>>();
-            internal readonly List<ContextAndAction<CompilationAnalysisContext>> CompilationActions = new List<ContextAndAction<CompilationAnalysisContext>>();
-            internal readonly List<ContextAndAction<SemanticModelAnalysisContext>> SemanticModelActions = new List<ContextAndAction<SemanticModelAnalysisContext>>();
-            internal readonly List<ContextAndAction<SymbolAnalysisContext>> SymbolActions = new List<ContextAndAction<SymbolAnalysisContext>>();
-            internal readonly List<IContextAndAction> CodeBlockStartActions = new List<IContextAndAction>();
-            internal readonly List<ContextAndAction<CodeBlockAnalysisContext>> CodeBlockActions = new List<ContextAndAction<CodeBlockAnalysisContext>>();
-            internal readonly List<ContextAndAction<SyntaxTreeAnalysisContext>> SyntaxTreeActions = new List<ContextAndAction<SyntaxTreeAnalysisContext>>();
-            internal readonly List<ContextAndAction<OperationAnalysisContext>> OperationActions = new List<ContextAndAction<OperationAnalysisContext>>();
-            internal readonly List<ContextAndAction<OperationBlockAnalysisContext>> OperationBlockActions = new List<ContextAndAction<OperationBlockAnalysisContext>>();
-            internal readonly List<ContextAndAction<OperationBlockStartAnalysisContext>> OperationBlockStartActions = new List<ContextAndAction<OperationBlockStartAnalysisContext>>();
+            internal readonly List<ContextAndAction<SyntaxNodeAnalysisContext>> SyntaxNodeActions = new();
+            internal readonly List<ContextAndAction<CompilationStartAnalysisContext>> CompilationStartActions = new();
+            internal readonly List<ContextAndAction<CompilationAnalysisContext>> CompilationActions = new();
+            internal readonly List<ContextAndAction<SemanticModelAnalysisContext>> SemanticModelActions = new();
+            internal readonly List<ContextAndAction<SymbolAnalysisContext>> SymbolActions = new();
+            internal readonly List<IContextAndAction> CodeBlockStartActions = new();
+            internal readonly List<ContextAndAction<CodeBlockAnalysisContext>> CodeBlockActions = new();
+            internal readonly List<ContextAndAction<SyntaxTreeAnalysisContext>> SyntaxTreeActions = new();
+            internal readonly List<ContextAndAction<OperationAnalysisContext>> OperationActions = new();
+            internal readonly List<ContextAndAction<OperationBlockAnalysisContext>> OperationBlockActions = new();
+            internal readonly List<ContextAndAction<OperationBlockStartAnalysisContext>> OperationBlockStartActions = new();
 
             private readonly DiagnosticAnalyzer inner;
 

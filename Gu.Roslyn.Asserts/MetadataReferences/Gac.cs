@@ -13,8 +13,8 @@ namespace Gu.Roslyn.Asserts
     /// </summary>
     public static class Gac
     {
-        private static readonly Lazy<ImmutableDictionary<string, FileInfo>> Cache = new Lazy<ImmutableDictionary<string, FileInfo>>(Create);
-        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new ConcurrentDictionary<string, MetadataReference>();
+        private static readonly Lazy<ImmutableDictionary<string, FileInfo>> Cache = new(Create);
+        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new();
 
         /// <summary>
         /// Try get a <see cref="MetadataReference"/> from the GAC.

@@ -15,7 +15,7 @@
         /// The metadata references used when creating the projects created in the tests.
         /// </summary>
         [Obsolete("This will be removed. Use [assembly: TransitiveMetadataReferences(...) or pass in explicit in test.")]
-        public static readonly MetadataReferencesCollection MetadataReferences = new MetadataReferencesCollection(Asserts.MetadataReferences.FromAttributes().ToList());
+        public static readonly MetadataReferencesCollection MetadataReferences = new(Asserts.MetadataReferences.FromAttributes().ToList());
 
         /// <summary>
         /// The metadata references used when creating the projects created in the tests.

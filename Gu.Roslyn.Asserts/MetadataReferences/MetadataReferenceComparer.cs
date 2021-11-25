@@ -12,7 +12,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        internal static readonly MetadataReferenceComparer Default = new MetadataReferenceComparer();
+        internal static readonly MetadataReferenceComparer Default = new();
         private static readonly StringComparer OrdinalIgnoreCase = StringComparer.OrdinalIgnoreCase;
 
         /// <inheritdoc />

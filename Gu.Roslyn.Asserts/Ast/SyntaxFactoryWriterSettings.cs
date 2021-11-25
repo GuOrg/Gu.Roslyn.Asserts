@@ -8,7 +8,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        public static readonly SyntaxFactoryWriterSettings Default = new SyntaxFactoryWriterSettings(defaultTrivia: false);
+        public static readonly SyntaxFactoryWriterSettings Default = new(defaultTrivia: false);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SyntaxFactoryWriterSettings"/> class.

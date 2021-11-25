@@ -15,9 +15,9 @@
     /// </summary>
     public class SyntaxFactoryWriter
     {
-        private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?> ArgumentWriters = new ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?>();
-        private static readonly ConcurrentDictionary<(Type, bool), MethodInfo> FactoryMethods = new ConcurrentDictionary<(Type, bool), MethodInfo>();
-        private readonly Writer writer = new Writer();
+        private static readonly ConcurrentDictionary<ParameterInfo, Action<SyntaxFactoryWriter, SyntaxNode, bool>?> ArgumentWriters = new();
+        private static readonly ConcurrentDictionary<(Type, bool), MethodInfo> FactoryMethods = new();
+        private readonly Writer writer = new();
         private readonly SyntaxFactoryWriterSettings settings;
 
         /// <summary>
@@ -650,7 +650,7 @@
 
         private class Writer
         {
-            private readonly StringBuilder builder = new StringBuilder();
+            private readonly StringBuilder builder = new();
             private string indentation = string.Empty;
             private bool newLine = true;
 

@@ -8,12 +8,12 @@ namespace Gu.Roslyn.Asserts
         /// <summary>
         /// For dumping all the things in light format.
         /// </summary>
-        public static readonly AstWriterSettings Default = new AstWriterSettings(AstFormat.Light, AstTrivia.Token, ignoreEmptyTrivia: false);
+        public static readonly AstWriterSettings Default = new(AstFormat.Light, AstTrivia.Token, ignoreEmptyTrivia: false);
 
         /// <summary>
         /// For dumping all the things in JSON format.
         /// </summary>
-        public static readonly AstWriterSettings DefaultJson = new AstWriterSettings(AstFormat.Json, AstTrivia.Token, ignoreEmptyTrivia: false);
+        public static readonly AstWriterSettings DefaultJson = new(AstFormat.Json, AstTrivia.Token, ignoreEmptyTrivia: false);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AstWriterSettings"/> class.

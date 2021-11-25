@@ -16,7 +16,7 @@
     [DebuggerDisplay("{Id} {Message} {Span}")]
     public class ExpectedDiagnostic
     {
-        private static readonly FileLinePositionSpan NoPosition = new FileLinePositionSpan("MISSING", default, default);
+        private static readonly FileLinePositionSpan NoPosition = new("MISSING", default, default);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpectedDiagnostic"/> class.
@@ -340,14 +340,14 @@
         /// </summary>
         /// <param name="message">The expected message.</param>
         /// <returns>A new <see cref="ExpectedDiagnostic"/>.</returns>
-        public ExpectedDiagnostic WithMessage(string message) => new ExpectedDiagnostic(this.Id, message, this.Span);
+        public ExpectedDiagnostic WithMessage(string message) => new(this.Id, message, this.Span);
 
         /// <summary>
         /// Get a clone of this instance with updated <see cref="Span"/>.
         /// </summary>
         /// <param name="span">The expected position.</param>
         /// <returns>A new <see cref="ExpectedDiagnostic"/>.</returns>
-        public ExpectedDiagnostic WithPosition(FileLinePositionSpan span) => new ExpectedDiagnostic(this.Id, this.Message, span);
+        public ExpectedDiagnostic WithPosition(FileLinePositionSpan span) => new(this.Id, this.Message, span);
 
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/> with position.

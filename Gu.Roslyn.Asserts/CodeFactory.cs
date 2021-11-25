@@ -27,7 +27,7 @@
         /// <summary>
         /// The workspace used when creating solutions.
         /// </summary>
-        public static readonly AdhocWorkspace Workspace = new AdhocWorkspace();
+        public static readonly AdhocWorkspace Workspace = new();
 
         /// <summary>
         /// An empty solution.
