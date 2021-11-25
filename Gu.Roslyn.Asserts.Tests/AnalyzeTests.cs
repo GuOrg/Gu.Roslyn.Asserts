@@ -1,5 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
@@ -7,7 +8,7 @@
 
     public static class AnalyzeTests
     {
-        private static readonly MetadataReference[] MetadataReferences = new MetadataReference[0];
+        private static readonly MetadataReference[] MetadataReferences = Array.Empty<MetadataReference>();
 
         [Test]
         public static async Task GetDiagnosticsAsyncProjectFile()
@@ -46,7 +47,9 @@
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
 
+#pragma warning disable CA1849 // Call async methods when in an async method
             diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+#pragma warning restore CA1849 // Call async methods when in an async method
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
         }
 
