@@ -141,8 +141,8 @@
 
         private class ReplaceRewriter : CSharpSyntaxRewriter
         {
-            private static readonly ConcurrentQueue<ReplaceRewriter> Cache = new ConcurrentQueue<ReplaceRewriter>();
-            private readonly List<Replacement> replacements = new List<Replacement>();
+            private static readonly ConcurrentQueue<ReplaceRewriter> Cache = new();
+            private readonly List<Replacement> replacements = new();
 
             public override SyntaxNode VisitLiteralExpression(LiteralExpressionSyntax node)
             {

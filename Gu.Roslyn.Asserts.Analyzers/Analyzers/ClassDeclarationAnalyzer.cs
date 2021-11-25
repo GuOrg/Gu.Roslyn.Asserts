@@ -129,7 +129,7 @@
 
         private sealed class UsingDirectiveWalker : PooledWalker<UsingDirectiveWalker>
         {
-            private readonly List<UsingDirectiveSyntax> usingDirectives = new List<UsingDirectiveSyntax>();
+            private readonly List<UsingDirectiveSyntax> usingDirectives = new();
 
             public override void VisitUsingDirective(UsingDirectiveSyntax node)
             {

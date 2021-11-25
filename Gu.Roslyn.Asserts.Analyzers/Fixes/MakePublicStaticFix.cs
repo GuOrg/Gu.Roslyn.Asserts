@@ -43,7 +43,7 @@
 
         private class PublicStaticRewriter : CSharpSyntaxRewriter
         {
-            private static readonly PublicStaticRewriter Default = new PublicStaticRewriter();
+            private static readonly PublicStaticRewriter Default = new();
 
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
