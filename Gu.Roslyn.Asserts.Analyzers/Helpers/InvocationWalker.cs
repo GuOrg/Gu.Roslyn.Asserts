@@ -49,9 +49,7 @@
         internal static bool TryFindRoslynAssert(SyntaxNode node, [NotNullWhen(true)] out InvocationExpressionSyntax? invocation)
         {
             using var walker = BorrowAndVisit(node, () => new InvocationWalker());
-#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
             return walker.invocations.TrySingle(out invocation);
-#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
         }
 
         /// <inheritdoc />

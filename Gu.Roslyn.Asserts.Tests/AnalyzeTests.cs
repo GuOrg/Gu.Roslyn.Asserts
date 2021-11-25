@@ -56,7 +56,7 @@
         private static string SkipDirectory(Diagnostic diagnostic)
         {
             var text = diagnostic.ToString();
-            return text.Substring(text.LastIndexOf('\\') + 1);
+            return text[(text.LastIndexOf('\\') + 1)..];
         }
     }
 }

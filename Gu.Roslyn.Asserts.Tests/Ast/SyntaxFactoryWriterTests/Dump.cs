@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿#pragma warning disable CA1305 // Specify IFormatProvider
+namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -16,15 +17,16 @@
     [Script]
     public static class Dump
     {
-        private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap = typeof(SyntaxFactory)
-                                                                                   .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                                                                                   .Where(x => !x.Name.StartsWith("Parse", StringComparison.Ordinal) &&
-                                                                                               typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType) &&
-                                                                                               x.ReturnType.Name.StartsWith(x.Name, StringComparison.Ordinal))
-                                                                                   .OrderBy(x => x.Name)
-                                                                                   .ThenBy(x => x.GetParameters().Length)
-                                                                                   .GroupBy(x => x.ReturnType)
-                                                                                   .ToDictionary(x => x.Key, x => x.ToArray());
+        private static readonly Dictionary<Type, MethodInfo[]> TypeFactoryMethodMap =
+            typeof(SyntaxFactory)
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Where(x => !x.Name.StartsWith("Parse", StringComparison.Ordinal) &&
+                            typeof(CSharpSyntaxNode).IsAssignableFrom(x.ReturnType) &&
+                            x.ReturnType.Name.StartsWith(x.Name, StringComparison.Ordinal))
+                .OrderBy(x => x.Name)
+                .ThenBy(x => x.GetParameters().Length)
+                .GroupBy(x => x.ReturnType)
+                .ToDictionary(x => x.Key, x => x.ToArray());
 
         [Test]
         public static void CodeGenNodes()
@@ -33,7 +35,7 @@
             foreach (var kvp in TypeFactoryMethodMap)
             {
                 var type = kvp.Key;
-                var variable = char.ToLowerInvariant(type.Name[0]) + type.Name.Substring(1);
+                var variable = char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
                 if (variable.EndsWith("Syntax", StringComparison.Ordinal))
                 {
                     variable = variable.Substring(0, variable.Length - 6);

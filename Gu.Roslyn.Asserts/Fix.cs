@@ -205,9 +205,7 @@
             if (FindAction(out var action))
             {
                 var operations = action!.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-#pragma warning disable CS8762 // Parameter must have a non-null value when exiting in some condition.
                 return operations.TrySingleOfType(out operation);
-#pragma warning restore CS8762 // Parameter must have a non-null value when exiting in some condition.
             }
 
             operation = null;

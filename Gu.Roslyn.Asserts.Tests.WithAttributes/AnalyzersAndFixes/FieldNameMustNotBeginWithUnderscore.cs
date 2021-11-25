@@ -10,7 +10,7 @@
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     internal class FieldNameMustNotBeginWithUnderscore : DiagnosticAnalyzer
     {
-        private static readonly DiagnosticDescriptor Descriptor = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             "SA1309",
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",
@@ -44,13 +44,8 @@
                 return;
             }
 
-            foreach (VariableDeclaratorSyntax variableDeclarator in variables.Value)
+            foreach (var variableDeclarator in variables.Value)
             {
-                if (variableDeclarator is null)
-                {
-                    continue;
-                }
-
                 var identifier = variableDeclarator.Identifier;
                 if (identifier.IsMissing)
                 {
