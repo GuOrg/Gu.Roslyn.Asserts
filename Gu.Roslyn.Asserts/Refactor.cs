@@ -348,7 +348,7 @@
                 this.Document = document;
                 this.Refactoring = refactoring;
                 this.Position = position;
-                this.SyntaxRoot = document.GetSyntaxRootAsync(CancellationToken.None).GetAwaiter().GetResult();
+                this.SyntaxRoot = document.GetSyntaxRootAsync(CancellationToken.None).GetAwaiter().GetResult() ?? throw new InvalidOperationException("document.GetSyntaxRootAsync() returned null.");
                 this.actions = new List<CodeAction>();
             }
 

@@ -297,6 +297,8 @@ namespace Gu.Roslyn.Asserts
 
             public override void Initialize(AnalysisContext context)
             {
+                context.EnableConcurrentExecution();
+                context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
                 var benchmarkContext = new BenchmarkAnalysisContext(this, context);
                 this.inner.Initialize(benchmarkContext);
             }

@@ -38,7 +38,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 var variable = char.ToLowerInvariant(type.Name[0]) + type.Name[1..];
                 if (variable.EndsWith("Syntax", StringComparison.Ordinal))
                 {
-                    variable = variable.Substring(0, variable.Length - 6);
+                    variable = variable[0..^6];
                 }
 
                 stringBuilder.AppendLine($"                case {type.Name} {variable}:");
@@ -89,7 +89,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     case "kind":
                         return "Kind()";
                     default:
-                        return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1), BindingFlags.Public | BindingFlags.Instance)?.Name;
+                        return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..], BindingFlags.Public | BindingFlags.Instance)?.Name;
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 if (parameters.Length == 1)
                 {
                     var parameter = parameters[0];
-                    var property = parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
+                    var property = parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..];
                     stringBuilder.AppendLine($"                    return this.Append($\"SyntaxFactory.{method.Name}({{token.{property}}})\");");
                 }
                 else
@@ -162,7 +162,7 @@ namespace Gu.Roslyn.Asserts.Tests
                     case "valueText":
                         return "ValueText";
                     default:
-                        return parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
+                        return parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..];
                 }
             }
         }
@@ -205,7 +205,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 for (var i = 0; i < parameters.Length; i++)
                 {
                     var parameter = parameters[i];
-                    var property = parameter.Name!.Substring(0, 1).ToUpperInvariant() + parameter.Name.Substring(1);
+                    var property = parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..];
                     var closeArg = i == parameters.Length - 1 ? ", closeArgumentList: true" : string.Empty;
                     stringBuilder.AppendLine($"                               .WriteArgument(\"{parameter.Name}\", token.{property}{closeArg})");
                 }

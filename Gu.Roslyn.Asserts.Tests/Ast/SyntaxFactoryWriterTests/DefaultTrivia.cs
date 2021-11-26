@@ -1541,19 +1541,13 @@ class C
             }
         }
 
-#pragma warning disable IDE0051 // Remove unused private members Run by Roundtrip()
+#pragma warning disable IDE0051, IDE0059, CS0219
         private static void Samples()
-#pragma warning restore IDE0051 // Remove unused private members
         {
-#pragma warning disable IDE0059 // Value assigned to symbol is never used
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-            // ReSharper disable UnusedVariable
             const string s1 = "1\u0040mm";
             const string s2 = "1\r\n";
             const string s3 = @"1""";
-            //// ReSharper restore UnusedVariable
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
-#pragma warning restore IDE0059 // Value assigned to symbol is never used
         }
+#pragma warning restore IDE0051, IDE0059, CS0219
     }
 }
