@@ -329,7 +329,8 @@
         /// <returns>The list of registered actions.</returns>
         internal static async Task<IReadOnlyList<CodeAction>> GetActionsAsync(Solution solution, CodeFixProvider fix, Diagnostic diagnostic)
         {
-            var document = solution.GetDocument(diagnostic.Location.SourceTree);
+            var document = solution.GetDocument(diagnostic.Location.SourceTree) ??
+                           throw new InvalidOperationException("solution.GetDocument(diagnostic.Location.SourceTree) returned null.");
             var actions = new List<CodeAction>();
             var context = new CodeFixContext(
                 document,
@@ -463,10 +464,12 @@
             {
                 var actions = new List<CodeAction>();
                 var diagnostic = diagnostics[0];
-                var context = new CodeFixContext(solution.GetDocument(diagnostic.Location.SourceTree), diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
+                var document = solution.GetDocument(diagnostic.Location.SourceTree) ??
+                               throw new InvalidOperationException("solution.GetDocument(diagnostic.Location.SourceTree) returned null.");
+                var context = new CodeFixContext(document, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
                 await fix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
                 var action = FindAction(actions, fixTitle);
-                return new TestDiagnosticProvider(diagnostics, solution.GetDocument(diagnostic.Location.SourceTree), action.EquivalenceKey);
+                return new TestDiagnosticProvider(diagnostics, document, action.EquivalenceKey);
             }
         }
     }
