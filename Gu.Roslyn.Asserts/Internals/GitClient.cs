@@ -101,7 +101,8 @@
                 RedirectStandardError = true,
                 CreateNoWindow = true,
             };
-            using var p = Process.Start(psi);
+            using var p = Process.Start(psi) ??
+                          throw new InvalidOperationException($"Process.Start({this.gitPath}) returned null.");
             p.WaitForExit();
             var output = p.StandardError.ReadToEnd();
             if (p.ExitCode != 0)

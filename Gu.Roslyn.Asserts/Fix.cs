@@ -308,7 +308,8 @@
         /// <returns>The list of registered actions.</returns>
         internal static IReadOnlyList<CodeAction> GetActions(Solution solution, CodeFixProvider fix, Diagnostic diagnostic)
         {
-            var document = solution.GetDocument(diagnostic.Location.SourceTree);
+            var document = solution.GetDocument(diagnostic.Location.SourceTree) ??
+                           throw new InvalidOperationException("solution.GetDocument(diagnostic.Location.SourceTree) returned null.");
             var actions = new List<CodeAction>();
             var context = new CodeFixContext(
                 document,
