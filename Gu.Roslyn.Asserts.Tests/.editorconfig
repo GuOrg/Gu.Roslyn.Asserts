@@ -14,6 +14,9 @@ dotnet_diagnostic.CA1034.severity = none
 # CA1062: In externally visible method 'void DocumentationTests.Description(DescriptorInfo descriptorInfo)', validate parameter 'descriptorInfo' is non-null before using it. If appropriate, throw an ArgumentNullException when the argument is null or add a Code Contract precondition asserting non-null argument.
 dotnet_diagnostic.CA1062.severity = none
 
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = none
+
 # CA1307: Specify StringComparison for clarity
 dotnet_diagnostic.CA1307.severity = none
 
@@ -25,6 +28,9 @@ dotnet_diagnostic.CA1724.severity = none
 
 # CA1825: Avoid zero-length array allocations
 dotnet_diagnostic.CA1825.severity = none
+
+# CA1849: Call async methods when in an async method
+dotnet_diagnostic.CA1849.severity = none
 
 dotnet_diagnostic.CS8602.severity = none
 dotnet_diagnostic.CS8604.severity = none
@@ -38,5 +44,3 @@ dotnet_diagnostic.VSTHRD200.severity = none
 # VSTHRD103: Call async methods when in an async method
 dotnet_diagnostic.VSTHRD103.severity = none
 
-# CA1303: Do not pass literals as localized parameters
-dotnet_diagnostic.CA1303.severity = none
