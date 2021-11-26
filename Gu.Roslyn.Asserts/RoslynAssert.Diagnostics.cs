@@ -301,7 +301,7 @@
                 allDiagnostics = Analyze.GetDiagnostics(solution).SelectMany(x => x).ToArray();
             }
 
-            if (Equals())
+            if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, allDiagnostics))
             {
                 if (expectedMessage != null)
                 {
@@ -349,11 +349,11 @@
 
             throw new AssertException(error.Return());
 
-            bool Equals()
+            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<Diagnostic> allDiagnostics)
             {
                 foreach (var diagnostic in allDiagnostics)
                 {
-                    if (diagnosticsAndSources.ExpectedDiagnostics.Any(e => e.Matches(diagnostic)))
+                    if (expectedDiagnostics.Any(e => e.Matches(diagnostic)))
                     {
                         continue;
                     }
@@ -361,7 +361,7 @@
                     return false;
                 }
 
-                foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics)
+                foreach (var expected in expectedDiagnostics)
                 {
                     if (allDiagnostics.Any(a => expected.Matches(a)))
                     {
