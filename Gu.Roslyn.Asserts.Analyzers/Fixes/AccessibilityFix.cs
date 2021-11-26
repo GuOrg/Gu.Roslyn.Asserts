@@ -38,15 +38,14 @@
                         context.RegisterCodeFix(
                             CodeAction.Create(
                                 "Make internal",
-                                cancellationToken => Task.FromResult(
-                                    context.Document.Project.Solution
-                                           .GetDocument(declaration.SyntaxTree)
-                                           .WithSyntaxRoot(
-#pragma warning disable VSTHRD103 // Call async methods when in an async method
-                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
-#pragma warning restore VSTHRD103 // Call async methods when in an async method
-                                        declaration,
-                                        Make(declaration, SyntaxFactory.Token(SyntaxKind.InternalKeyword))))),
+                                async cancellationToken =>
+                                {
+                                    var root = await declaration.SyntaxTree.GetRootAsync(cancellationToken)
+                                                                .ConfigureAwait(false);
+                                    return context.Document.Project.Solution
+                                                  .GetDocument(declaration.SyntaxTree)
+                                                  .WithSyntaxRoot(root.ReplaceNode(declaration, Make(declaration, SyntaxFactory.Token(SyntaxKind.InternalKeyword))));
+                                },
                                 nameof(AccessibilityFix)),
                             diagnostic);
                     }
@@ -55,15 +54,14 @@
                         context.RegisterCodeFix(
                             CodeAction.Create(
                                 "Make public",
-                                cancellationToken => Task.FromResult(
-                                    context.Document.Project.Solution
-                                           .GetDocument(declaration.SyntaxTree)
-                                           .WithSyntaxRoot(
-#pragma warning disable VSTHRD103 // Call async methods when in an async method
-                                    declaration.SyntaxTree.GetRoot(cancellationToken).ReplaceNode(
-#pragma warning restore VSTHRD103 // Call async methods when in an async method
-                                        declaration,
-                                        Make(declaration, SyntaxFactory.Token(SyntaxKind.PublicKeyword))))),
+                                async cancellationToken =>
+                                {
+                                    var root = await declaration.SyntaxTree.GetRootAsync(cancellationToken)
+                                                          .ConfigureAwait(false);
+                                    return context.Document.Project.Solution
+                                                  .GetDocument(declaration.SyntaxTree)
+                                                  .WithSyntaxRoot(root.ReplaceNode(declaration, Make(declaration, SyntaxFactory.Token(SyntaxKind.PublicKeyword))));
+                                },
                                 nameof(AccessibilityFix)),
                             diagnostic);
                     }
