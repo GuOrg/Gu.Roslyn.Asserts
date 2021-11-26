@@ -133,6 +133,11 @@
         /// <returns><see cref="MetadataReference"/>s.</returns>
         public static IEnumerable<MetadataReference> Transitive(params Assembly[] assemblies)
         {
+            if (assemblies is null)
+            {
+                throw new ArgumentNullException(nameof(assemblies));
+            }
+
             foreach (var assembly in RecursiveReferencedAssemblies(assemblies))
             {
                 yield return CreateFromAssembly(assembly);
