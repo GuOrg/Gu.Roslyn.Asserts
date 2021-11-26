@@ -85,8 +85,9 @@
                 var provider = TestDiagnosticProvider.CreateAsync(solution, fix, fixTitle, flatDiagnostics).GetAwaiter().GetResult();
                 var context = new FixAllContext(document, fix, FixAllScope.Document, provider.EquivalenceKey, flatDiagnostics.Select(x => x.Id), provider, CancellationToken.None);
                 var action = WellKnownFixAllProviders.BatchFixer.GetFixAsync(context).GetAwaiter().GetResult();
-                var operations = action!.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-                if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
+                var operations = action?.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult() ??
+                                 throw new InvalidOperationException("action!.GetOperationsAsync() returned null");
+                if (operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out var operation))
                 {
                     return operation!.ChangedSolution;
                 }
@@ -123,9 +124,8 @@
 
             var actions = await GetActionsAsync(solution, fix, diagnostic).ConfigureAwait(false);
             var action = FindAction(actions, fixTitle);
-            var operations = await action.GetOperationsAsync(cancellationToken)
-                                         .ConfigureAwait(false);
-            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
+            var operations = await action.GetOperationsAsync(cancellationToken).ConfigureAwait(false);
+            if (operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out var operation))
             {
                 return operation!.ChangedSolution;
             }
@@ -147,7 +147,7 @@
                                             .ToImmutableArray();
             var action = FindAction(actions, fixTitle);
             var operations = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
+            if (operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out var operation))
             {
                 return operation!;
             }
@@ -205,7 +205,7 @@
             if (FindAction(out var action))
             {
                 var operations = action!.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult();
-                return operations.TrySingleOfType(out operation);
+                return operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out operation);
             }
 
             operation = null;
@@ -279,6 +279,7 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAsync(CodeFixProvider fix, FixAllScope scope, TestDiagnosticProvider diagnosticProvider, CancellationToken cancellationToken)
         {
+            var fixAllProvider = fix.GetFixAllProvider() ?? throw new InvalidOperationException($"No fix all provider for {fix}");
             var context = new FixAllContext(
                 diagnosticProvider.Document,
                 fix,
@@ -287,13 +288,13 @@
                 fix.FixableDiagnosticIds,
                 diagnosticProvider,
                 cancellationToken);
-            var action = await fix.GetFixAllProvider().GetFixAsync(context).ConfigureAwait(false);
+            var action = await fixAllProvider.GetFixAsync(context).ConfigureAwait(false) ?? throw new InvalidOperationException("fixAllProvider.GetFixAsync(context) returned null.");
 
             var operations = await action.GetOperationsAsync(cancellationToken)
                                          .ConfigureAwait(false);
-            if (operations.TrySingleOfType(out ApplyChangesOperation? operation))
+            if (operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out var operation))
             {
-                return operation!.ChangedSolution;
+                return operation.ChangedSolution;
             }
 
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");

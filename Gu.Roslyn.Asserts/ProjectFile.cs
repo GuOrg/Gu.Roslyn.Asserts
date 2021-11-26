@@ -184,7 +184,7 @@
                             throw new InvalidOperationException("Parsing failed, no Include found.");
                         }
 
-                        var csFile = Path.Combine(csproj.Directory.FullName, include);
+                        var csFile = Path.Combine(csproj.Directory!.FullName, include);
                         yield return CreateDocumentInfo(new FileInfo(csFile));
                     }
                 }
