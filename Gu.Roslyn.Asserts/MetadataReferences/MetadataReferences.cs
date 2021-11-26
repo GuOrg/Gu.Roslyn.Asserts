@@ -163,7 +163,9 @@
             bool TryGetOrLoad(AssemblyName name, out Assembly result)
             {
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#pragma warning disable CS8601 // Possible null reference assignment.
                 result = assemblies.SingleOrDefault(x => IsMatch(x.GetName()));
+#pragma warning restore CS8601 // Possible null reference assignment.
                 if (result != null)
                 {
                     return true;

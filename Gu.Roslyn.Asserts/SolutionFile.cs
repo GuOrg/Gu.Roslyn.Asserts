@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
+
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -29,8 +30,8 @@
 
             sln = null;
             return assembly.CodeBase is { } codeBase &&
-                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
-                   CodeFactory.TryFindFileInParentDirectory(dll.Directory, "*.sln", out sln);
+                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { Directory: { } directory } &&
+                   CodeFactory.TryFindFileInParentDirectory(directory, "*.sln", out sln);
         }
 
         /// <summary>
@@ -43,8 +44,8 @@
         {
             sln = null;
             return Assembly.GetCallingAssembly().CodeBase is { } codeBase &&
-                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
-                   CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out sln);
+                   new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { Directory: { } directory } &&
+                   CodeFactory.TryFindFileInParentDirectory(directory, name, out sln);
         }
 
         /// <summary>
@@ -55,8 +56,8 @@
         public static FileInfo Find(string name)
         {
             if (Assembly.GetCallingAssembly().CodeBase is { } codeBase &&
-                new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { } dll &&
-                CodeFactory.TryFindFileInParentDirectory(dll.Directory, name, out var sln))
+                new FileInfo(new Uri(codeBase, UriKind.Absolute).LocalPath) is { Directory: { } directory } &&
+                CodeFactory.TryFindFileInParentDirectory(directory, name, out var sln))
             {
                 return sln;
             }
@@ -114,7 +115,7 @@
                 builder.Add(ProjectId.CreateNewId(projectFile.FullName), projectFile);
             }
 
-            ImmutableDictionary<ProjectId, FileInfo> idFileMap = builder.ToImmutable();
+            var idFileMap = builder.ToImmutable();
             return SolutionInfo.Create(
                 SolutionId.CreateNewId(sln.FullName),
                 VersionStamp.Create(sln.LastWriteTimeUtc),
