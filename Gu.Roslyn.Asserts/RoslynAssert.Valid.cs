@@ -5,9 +5,10 @@
     using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class RoslynAssert
@@ -26,9 +27,7 @@
 
             Valid(
                 analyzer,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, analyzer, Settings.Default));
         }
 
         /// <summary>
@@ -36,15 +35,11 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             IReadOnlyList<string> code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -58,12 +53,7 @@
 
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(
-                code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -108,9 +98,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, descriptor, Settings.Default));
         }
 
         /// <summary>
@@ -119,16 +107,12 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             IReadOnlyList<string> code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -148,12 +132,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(
-                code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, descriptor, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -165,16 +144,12 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -194,12 +169,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(
-                code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, descriptor, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -210,15 +180,11 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             FileInfo code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -232,12 +198,7 @@
 
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(
-                code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -245,15 +206,11 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             string code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -267,12 +224,7 @@
 
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(
-                code,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                compilationOptions ?? CodeFactory.DefaultCompilationOptions(analyzer, suppressWarnings ?? SuppressedDiagnostics),
-                metadataReferences ?? MetadataReferences));
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -308,15 +260,11 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             Type analyzerType,
             FileInfo code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzerType is null)
             {
@@ -331,9 +279,7 @@
             Valid(
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 code,
-                suppressWarnings,
-                metadataReferences,
-                compilationOptions);
+                settings);
         }
 
         /// <summary>
@@ -345,16 +291,12 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Valid(
             Type analyzerType,
             DiagnosticDescriptor descriptor,
             FileInfo code,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzerType is null)
             {
@@ -375,9 +317,7 @@
                 (DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!,
                 descriptor,
                 code,
-                suppressWarnings,
-                metadataReferences,
-                compilationOptions);
+                settings);
         }
 
         /// <summary>

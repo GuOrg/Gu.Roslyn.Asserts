@@ -686,6 +686,66 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
+        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
+            if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
+            {
+                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, compilationOptions, parseOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+            }
+
+            if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
+            {
+                var projectInfo = ProjectFile.ParseInfo(code).WithParseOptions(parseOptions);
+                return EmptySolution.AddProject(projectInfo)
+                                    .WithProjectCompilationOptions(
+                                        projectInfo.Id,
+                                        compilationOptions)
+                                    .AddMetadataReferences(
+                                        projectInfo.Id,
+                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
+            }
+
+            if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
+            {
+                var solution = EmptySolution;
+                var solutionInfo = SolutionFile.ParseInfo(code);
+                foreach (var projectInfo in solutionInfo.Projects)
+                {
+                    solution = solution.AddProject(projectInfo.WithParseOptions(parseOptions))
+                                       .WithProjectCompilationOptions(
+                                           projectInfo.Id,
+                                           compilationOptions)
+                                       .AddMetadataReferences(
+                                           projectInfo.Id,
+                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                }
+
+                return solution;
+            }
+
+            throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
+        }
+
+        /// <summary>
+        /// Create a Solution.
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences = null)
@@ -1001,6 +1061,55 @@
             return CreateSolution(
                 code,
                 settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
+                settings.ParseOptions,
+                settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
+        /// </summary>
+        /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticDescriptor descriptor, Settings settings)
+        {
+            return CreateSolution(
+                code,
+                settings.CompilationOptions.WithWarningOrError(descriptor),
+                settings.ParseOptions,
+                settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
+        /// </summary>
+        /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, Settings settings)
+        {
+            return CreateSolution(
+                code,
+                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
+                settings.ParseOptions,
+                settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
+        /// </summary>
+        /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(FileInfo code, DiagnosticDescriptor descriptor, Settings settings)
+        {
+            return CreateSolution(
+                code,
+                settings.CompilationOptions.WithWarningOrError(descriptor),
+                settings.ParseOptions,
                 settings.MetadataReferences);
         }
     }

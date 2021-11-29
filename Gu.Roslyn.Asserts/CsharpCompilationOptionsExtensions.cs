@@ -44,6 +44,9 @@
             return options.WithSpecificDiagnosticOptions(diagnosticOptions);
         }
 
+        public static CSharpCompilationOptions WithWarningOrError(this CSharpCompilationOptions options, params DiagnosticDescriptor[] descriptors)
+            => WithWarningOrError(options, (IEnumerable<DiagnosticDescriptor>)descriptors);
+
         public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, IEnumerable<string> ids)
         {
             if (options is null)
@@ -64,5 +67,8 @@
 
             return options.WithSpecificDiagnosticOptions(diagnosticOptions);
         }
+
+        public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, params string[] ids)
+            => WithSuppressed(options, (IEnumerable<string>)ids);
     }
 }
