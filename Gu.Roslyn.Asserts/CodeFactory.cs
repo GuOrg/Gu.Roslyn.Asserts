@@ -680,6 +680,30 @@
         }
 
         /// <summary>
+        /// Create a Solution.
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(FileInfo code, Settings settings)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            return CreateSolution(code, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="code">
@@ -796,7 +820,7 @@
 
             var git = new GitClient();
             var gitFile = GitRepositoryProvider.ParseUrl(githubUrl);
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var directoryInfo = Directory.CreateDirectory(tempDirectory);
             git.Clone(
                 gitFile.RepositoryUrl,
