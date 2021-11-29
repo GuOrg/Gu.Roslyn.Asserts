@@ -261,7 +261,6 @@
         }
 
         [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(FixAllMethods))]
         [TestCaseSource(nameof(NoFixMethods))]
         public static void AllowCompilationErrorsParameter(IMethodSymbol method)
@@ -280,7 +279,6 @@
         }
 
         [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(FixAllMethods))]
         [TestCaseSource(nameof(NoFixMethods))]
         public static void SuppressWarningsParameter(IMethodSymbol method)
@@ -300,7 +298,6 @@
         }
 
         [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(FixAllMethods))]
         [TestCaseSource(nameof(NoCompilerErrorsMethods))]
         [TestCaseSource(nameof(NoFixMethods))]
@@ -324,6 +321,7 @@
             }
         }
 
+        [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(ValidMethods))]
         public static void SettingsParameter(IMethodSymbol method)
         {
