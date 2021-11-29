@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 // ReSharper disable AssignNullToNotNullAttribute
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
@@ -21,7 +21,7 @@ namespace N
 }";
                 var analyzer = new NopAnalyzer();
                 var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
-                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer));
+                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
             }
 
             [Test]
@@ -36,7 +36,7 @@ namespace N
 }";
                 var analyzer = new NopAnalyzer();
                 var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
-                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer));
+                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
             }
 
             [Test]
@@ -89,11 +89,11 @@ namespace N
                                            .ToArray();
                 var descriptor = Descriptors.Id1;
                 var analyzer = new NopAnalyzer(descriptor);
-                RoslynAssert.Valid(analyzer, code, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NopAnalyzer), code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
+                RoslynAssert.Valid(typeof(NopAnalyzer), code, Settings.Default.WithMetadataReferences(metadataReferences));
 
-                RoslynAssert.Valid(analyzer, descriptor, code, metadataReferences: metadataReferences);
-                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, metadataReferences: metadataReferences);
+                RoslynAssert.Valid(analyzer, descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
+                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
             }
 
             [Test]
@@ -260,8 +260,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Valid(analyzer, code, metadataReferences: Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)), compilationOptions: CodeFactory.DefaultCompilationOptions(new[] { analyzer }));
-                RoslynAssert.Valid(analyzer, code, metadataReferences: Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(x => x.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode))));
             }
 
             [Test]
