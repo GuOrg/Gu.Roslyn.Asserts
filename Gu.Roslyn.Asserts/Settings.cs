@@ -14,20 +14,20 @@
         /// Create an instance of the class <see cref="Settings"/>.
         /// </summary>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="errorOnAD0001">Compiler error if AD0001 is reported.</param>
-        public Settings(CSharpCompilationOptions compilationOptions, IReadOnlyList<MetadataReference>? metadataReferences, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No, bool errorOnAd0001 = true)
+        public Settings(CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IReadOnlyList<MetadataReference>? metadataReferences, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             this.CompilationOptions = compilationOptions;
+            this.ParseOptions = parseOptions;
             this.MetadataReferences = metadataReferences;
             this.AllowCompilationErrors = allowCompilationErrors;
-            this.ErrorOnAd0001 = errorOnAd0001;
         }
 
         public static Settings Default
         {
-            get => @default ??= new Settings(CodeFactory.DefaultCompilationOptions(specificDiagnosticOptions: null), null);
+            get => @default ??= new Settings(CodeFactory.DefaultCompilationOptions(new[] { new KeyValuePair<string, ReportDiagnostic>("AD0001", ReportDiagnostic.Error) }), CSharpParseOptions.Default, null);
             set => @default = value;
         }
 
@@ -35,6 +35,11 @@
         /// The <see cref="CSharpCompilationOptions"/>.
         /// </summary>
         public CSharpCompilationOptions CompilationOptions { get; }
+
+        /// <summary>
+        /// The <see cref="CSharpParseOptions"/>.
+        /// </summary>
+        public CSharpParseOptions ParseOptions { get; }
 
         /// <summary>
         /// A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.
@@ -47,16 +52,11 @@
         public AllowCompilationErrors AllowCompilationErrors { get; }
 
         /// <summary>
-        /// Compiler error if AD0001 is reported.
-        /// </summary>
-        public bool ErrorOnAd0001 { get; }
-
-        /// <summary>
         /// Create a new instance with new <see cref="CSharpCompilationOptions"/>.
         /// </summary>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithCompilationOptions(CSharpCompilationOptions compilationOptions) => new(compilationOptions, this.MetadataReferences, this.AllowCompilationErrors, this.ErrorOnAd0001);
+        public Settings WithCompilationOptions(CSharpCompilationOptions compilationOptions) => new(compilationOptions, this.ParseOptions, this.MetadataReferences, this.AllowCompilationErrors);
 
         /// <summary>
         /// Create a new instance with new <see cref="CSharpCompilationOptions"/>.
@@ -70,7 +70,7 @@
                 throw new ArgumentNullException(nameof(update));
             }
 
-            return new(update(this.CompilationOptions), this.MetadataReferences, this.AllowCompilationErrors, this.ErrorOnAd0001);
+            return new(update(this.CompilationOptions), this.ParseOptions, this.MetadataReferences, this.AllowCompilationErrors);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@
         /// </summary>
         /// <param name="metadataReferences">The <see cref="IReadOnlyList{MetadataReference}"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithMetadataReferences(IReadOnlyList<MetadataReference>? metadataReferences) => new(this.CompilationOptions, metadataReferences, this.AllowCompilationErrors, this.ErrorOnAd0001);
+        public Settings WithMetadataReferences(IReadOnlyList<MetadataReference>? metadataReferences) => new(this.CompilationOptions, this.ParseOptions, metadataReferences, this.AllowCompilationErrors);
 
         /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
@@ -92,7 +92,7 @@
                 throw new ArgumentNullException(nameof(update));
             }
 
-            return new(this.CompilationOptions, update(this.MetadataReferences), this.AllowCompilationErrors, this.ErrorOnAd0001);
+            return new(this.CompilationOptions, this.ParseOptions, update(this.MetadataReferences), this.AllowCompilationErrors);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
         /// </summary>
         /// <param name="allowCompilationErrors">The <see cref="AllowCompilationErrors"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithAllowCompilationErrors(AllowCompilationErrors allowCompilationErrors) => new(this.CompilationOptions, this.MetadataReferences, allowCompilationErrors, this.ErrorOnAd0001);
+        public Settings WithAllowCompilationErrors(AllowCompilationErrors allowCompilationErrors) => new(this.CompilationOptions, this.ParseOptions, this.MetadataReferences, allowCompilationErrors);
     }
 }
 
