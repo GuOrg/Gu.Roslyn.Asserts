@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class RoslynAssert
@@ -21,9 +21,7 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -33,7 +31,8 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -45,9 +44,7 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -60,7 +57,8 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -72,9 +70,7 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -98,9 +94,7 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -124,9 +118,7 @@
             }
 
             VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptors, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -137,7 +129,8 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IReadOnlyList<string> code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IReadOnlyList<string> code, Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -155,9 +148,7 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -171,7 +162,8 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, FileInfo code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, FileInfo code, Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -189,9 +181,7 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var sln = CodeFactory.CreateSolution(code, CodeFactory.DefaultCompilationOptions(analyzer, descriptor, SuppressedDiagnostics), MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+            var sln = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -221,43 +211,11 @@
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
         {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics);
-        }
-
-        /// <summary>
-        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The metadata references to use when compiling.</param>
-        public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);
         }
@@ -280,9 +238,10 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void NoAnalyzerDiagnostics(Type analyzerType, FileInfo code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(Type analyzerType, FileInfo code, Settings? settings = null)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code, settings);
         }
 
         /// <summary>
@@ -305,9 +264,10 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        public static void NoAnalyzerDiagnostics(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code)
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NoAnalyzerDiagnostics(Type analyzerType, DiagnosticDescriptor descriptor, FileInfo code, Settings? settings = null)
         {
-            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptor, code);
+            NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, descriptor, code, settings);
         }
 
         /// <summary>
