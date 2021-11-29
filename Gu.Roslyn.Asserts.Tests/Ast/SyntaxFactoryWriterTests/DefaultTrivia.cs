@@ -1544,9 +1544,11 @@ class C
 #pragma warning disable IDE0051, IDE0059, CS0219
         private static void Samples()
         {
+            // ReSharper disable UnusedVariable
             const string s1 = "1\u0040mm";
             const string s2 = "1\r\n";
             const string s3 = @"1""";
+            //// ReSharper restore UnusedVariable
         }
 #pragma warning restore IDE0051, IDE0059, CS0219
     }
