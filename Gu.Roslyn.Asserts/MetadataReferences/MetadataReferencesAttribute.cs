@@ -9,6 +9,7 @@
     /// Specify what default metadata reference to use when compiling the code in asserts.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
+    [Obsolete("Use Settings.Default")]
     public sealed class MetadataReferencesAttribute : Attribute
     {
         /// <summary>

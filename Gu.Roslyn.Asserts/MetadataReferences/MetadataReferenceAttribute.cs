@@ -7,6 +7,7 @@
     /// <summary>
     /// Specify a default metadata reference to use.
     /// </summary>
+    [Obsolete("Use Settings.Default")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public sealed class MetadataReferenceAttribute : Attribute
     {

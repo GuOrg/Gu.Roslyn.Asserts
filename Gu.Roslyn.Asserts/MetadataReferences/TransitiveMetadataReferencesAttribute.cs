@@ -9,6 +9,7 @@
     /// Specify what default metadata reference to use.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly,  AllowMultiple = true)]
+    [Obsolete("Use Settings.Default")]
     public sealed class TransitiveMetadataReferencesAttribute : Attribute
     {
         /// <summary>

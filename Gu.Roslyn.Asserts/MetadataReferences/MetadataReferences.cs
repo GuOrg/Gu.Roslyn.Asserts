@@ -18,6 +18,7 @@
         /// <summary>
         /// Get the meta data references specified with <see cref="MetadataReferenceAttribute"/> and <see cref="MetadataReferencesAttribute"/> in the test assemblies.
         /// </summary>
+        [Obsolete("Use Settings.Default")]
         public static ImmutableArray<MetadataReference> FromAttributes()
         {
             if (!fromAttributes.IsDefault)
