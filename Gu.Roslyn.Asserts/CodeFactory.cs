@@ -35,6 +35,120 @@
         public static readonly Solution EmptySolution = Workspace.CurrentSolution;
 
         /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
+            if (parseOptions is null)
+            {
+                throw new ArgumentNullException(nameof(parseOptions));
+            }
+
+            var solutionInfo = SolutionInfo.Create(
+                SolutionId.CreateNewId("Test.sln"),
+                VersionStamp.Default,
+                projects: GetProjectInfos());
+            var solution = EmptySolution;
+            foreach (var projectInfo in solutionInfo.Projects)
+            {
+                solution = solution.AddProject(projectInfo.WithProjectReferences(FindReferences(projectInfo)));
+            }
+
+            return solution;
+
+            IEnumerable<ProjectInfo> GetProjectInfos()
+            {
+                var byNamespace = new SortedDictionary<string, List<string>>();
+                foreach (var document in code)
+                {
+                    var ns = CodeReader.Namespace(document);
+                    if (byNamespace.TryGetValue(ns, out var doc))
+                    {
+                        doc.Add(document);
+                    }
+                    else
+                    {
+                        byNamespace[ns] = new List<string> { document };
+                    }
+                }
+
+                var byProject = new SortedDictionary<string, List<KeyValuePair<string, List<string>>>>();
+                foreach (var kvp in byNamespace)
+                {
+                    var last = byProject.Keys.LastOrDefault();
+                    var ns = kvp.Key;
+                    if (last != null &&
+                        ns.Contains(last))
+                    {
+                        byProject[last].Add(kvp);
+                    }
+                    else
+                    {
+                        byProject.Add(ns, new List<KeyValuePair<string, List<string>>> { kvp });
+                    }
+                }
+
+                foreach (var kvp in byProject)
+                {
+                    var assemblyName = kvp.Key;
+                    var projectId = ProjectId.CreateNewId(assemblyName);
+                    yield return ProjectInfo.Create(
+                                                projectId,
+                                                VersionStamp.Default,
+                                                assemblyName,
+                                                assemblyName,
+                                                LanguageNames.CSharp,
+                                                compilationOptions: compilationOptions,
+                                                metadataReferences: metadataReferences,
+                                                documents: kvp.Value.SelectMany(x => x.Value)
+                                                              .Select(
+                                                                  x =>
+                                                                  {
+                                                                      var documentName = CodeReader.FileName(x);
+                                                                      return DocumentInfo.Create(
+                                                                          DocumentId.CreateNewId(projectId, documentName),
+                                                                          documentName,
+                                                                          sourceCodeKind: SourceCodeKind.Regular,
+                                                                          loader: new StringLoader(x));
+                                                                  }))
+                                            .WithParseOptions(parseOptions);
+                }
+            }
+
+            IEnumerable<ProjectReference> FindReferences(ProjectInfo projectInfo)
+            {
+                var references = new List<ProjectReference>();
+                foreach (var other in solutionInfo.Projects.Where(x => x.Id != projectInfo.Id))
+                {
+                    if (projectInfo.Documents.Any(x => x.TextLoader is StringLoader stringLoader &&
+                                                 (stringLoader.Code.Contains($"using {other.Name};") ||
+                                                  stringLoader.Code.Contains($"{other.Name}."))))
+                    {
+                        references.Add(new ProjectReference(other.Id));
+                    }
+                }
+
+                return references;
+            }
+        }
+
+        /// <summary>
         /// Creates a solution for <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The sources as strings.</param>
@@ -186,104 +300,38 @@
         /// <param name="metadataReferences">The metadata references.</param>
         /// <param name="languageVersion">The <see cref="LanguageVersion"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
+        [Obsolete("Use overload with CSharpParseOptions")]
         public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
+        {
+            return CreateSolution(
+                code,
+                compilationOptions,
+                CSharpParseOptions.Default.WithLanguageVersion(languageVersion),
+                metadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution.
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(FileInfo code, Settings settings)
         {
             if (code is null)
             {
                 throw new ArgumentNullException(nameof(code));
             }
 
-            if (compilationOptions is null)
+            if (settings is null)
             {
-                throw new ArgumentNullException(nameof(compilationOptions));
+                throw new ArgumentNullException(nameof(settings));
             }
 
-            var solutionInfo = SolutionInfo.Create(
-                SolutionId.CreateNewId("Test.sln"),
-                VersionStamp.Default,
-                projects: GetProjectInfos());
-            var solution = EmptySolution;
-            foreach (var projectInfo in solutionInfo.Projects)
-            {
-                solution = solution.AddProject(projectInfo.WithProjectReferences(FindReferences(projectInfo)));
-            }
-
-            return solution;
-
-            IEnumerable<ProjectInfo> GetProjectInfos()
-            {
-                var byNamespace = new SortedDictionary<string, List<string>>();
-                foreach (var document in code)
-                {
-                    var ns = CodeReader.Namespace(document);
-                    if (byNamespace.TryGetValue(ns, out var doc))
-                    {
-                        doc.Add(document);
-                    }
-                    else
-                    {
-                        byNamespace[ns] = new List<string> { document };
-                    }
-                }
-
-                var byProject = new SortedDictionary<string, List<KeyValuePair<string, List<string>>>>();
-                foreach (var kvp in byNamespace)
-                {
-                    var last = byProject.Keys.LastOrDefault();
-                    var ns = kvp.Key;
-                    if (last != null &&
-                        ns.Contains(last))
-                    {
-                        byProject[last].Add(kvp);
-                    }
-                    else
-                    {
-                        byProject.Add(ns, new List<KeyValuePair<string, List<string>>> { kvp });
-                    }
-                }
-
-                foreach (var kvp in byProject)
-                {
-                    var assemblyName = kvp.Key;
-                    var projectId = ProjectId.CreateNewId(assemblyName);
-                    yield return ProjectInfo.Create(
-                                                projectId,
-                                                VersionStamp.Default,
-                                                assemblyName,
-                                                assemblyName,
-                                                LanguageNames.CSharp,
-                                                compilationOptions: compilationOptions,
-                                                metadataReferences: metadataReferences,
-                                                documents: kvp.Value.SelectMany(x => x.Value)
-                                                              .Select(
-                                                                  x =>
-                                                                  {
-                                                                      var documentName = CodeReader.FileName(x);
-                                                                      return DocumentInfo.Create(
-                                                                          DocumentId.CreateNewId(projectId, documentName),
-                                                                          documentName,
-                                                                          sourceCodeKind: SourceCodeKind.Regular,
-                                                                          loader: new StringLoader(x));
-                                                                  }))
-                                            .WithParseOptions(CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
-                }
-            }
-
-            IEnumerable<ProjectReference> FindReferences(ProjectInfo projectInfo)
-            {
-                var references = new List<ProjectReference>();
-                foreach (var other in solutionInfo.Projects.Where(x => x.Id != projectInfo.Id))
-                {
-                    if (projectInfo.Documents.Any(x => x.TextLoader is StringLoader stringLoader &&
-                                                 (stringLoader.Code.Contains($"using {other.Name};") ||
-                                                  stringLoader.Code.Contains($"{other.Name}."))))
-                    {
-                        references.Add(new ProjectReference(other.Id));
-                    }
-                }
-
-                return references;
-            }
+            return CreateSolution(code, settings.CompilationOptions, settings.MetadataReferences);
         }
 
         /// <summary>
@@ -680,30 +728,6 @@
         }
 
         /// <summary>
-        /// Create a Solution.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="settings">The <see cref="Settings"/>.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, Settings settings)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            return CreateSolution(code, settings.CompilationOptions, settings.MetadataReferences);
-        }
-
-        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzer"/>.
         /// </summary>
         /// <param name="code">
@@ -963,6 +987,21 @@
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
             suppressWarnings ??= Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
+        /// </summary>
+        /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticAnalyzer analyzer, Settings settings)
+        {
+            return CreateSolution(
+                code,
+                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
+                settings.MetadataReferences);
         }
     }
 }
