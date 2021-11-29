@@ -207,13 +207,11 @@
 
             IEnumerable<MetadataReference> GetMetadataReferences()
             {
-                if (IsSdk())
+                if (!IsSdk() && csproj.Directory is not null)
                 {
-                }
-                else
-                {
-                    var compiles = xdoc.Descendants(XName.Get("Reference", "http://schemas.microsoft.com/developer/msbuild/2003"))
-                                       .ToArray();
+                    var compiles = xdoc
+                                   .Descendants(XName.Get("Reference", "http://schemas.microsoft.com/developer/msbuild/2003"))
+                                   .ToArray();
                     if (compiles.Length == 0)
                     {
                         throw new InvalidOperationException("Parsing failed, no <Compile ... /> found.");
