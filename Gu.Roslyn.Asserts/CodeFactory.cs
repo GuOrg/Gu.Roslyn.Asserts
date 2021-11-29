@@ -1034,6 +1034,7 @@
         /// <param name="suppressWarnings">The explicitly suppressed diagnostics.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
+        [Obsolete("Use overload with settings.")]
         internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions? compilationOptions, IEnumerable<string> suppressWarnings, IEnumerable<MetadataReference> metadataReferences)
         {
             return CreateSolution(
@@ -1048,6 +1049,22 @@
             var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
             suppressWarnings ??= Enumerable.Empty<string>();
             return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="diagnosticsAndSources"/>.
+        /// </summary>
+        /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, Settings settings)
+        {
+            return CreateSolution(
+                diagnosticsAndSources.Code,
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, diagnosticsAndSources.ExpectedDiagnostics),
+                settings.ParseOptions,
+                settings.MetadataReferences);
         }
 
         /// <summary>
@@ -1070,14 +1087,15 @@
         /// Create a <see cref="Solution"/> for <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(IEnumerable<string> code, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, DiagnosticDescriptor descriptor, Settings settings)
+        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, Settings settings)
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithSpecific(supportedDiagnostics, descriptor),
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.ParseOptions,
                 settings.MetadataReferences);
         }
@@ -1102,14 +1120,15 @@
         /// Create a <see cref="Solution"/> for <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(FileInfo code, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, DiagnosticDescriptor descriptor, Settings settings)
+        internal static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, Settings settings)
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithSpecific(supportedDiagnostics, descriptor),
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.ParseOptions,
                 settings.MetadataReferences);
         }
