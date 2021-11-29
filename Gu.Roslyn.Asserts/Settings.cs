@@ -17,7 +17,7 @@
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        public Settings(CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IReadOnlyList<MetadataReference>? metadataReferences, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        public Settings(CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, MetadataReferencesCollection? metadataReferences, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
             this.CompilationOptions = compilationOptions;
             this.ParseOptions = parseOptions;
@@ -44,7 +44,7 @@
         /// <summary>
         /// A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.
         /// </summary>
-        public IReadOnlyList<MetadataReference>? MetadataReferences { get; }
+        public MetadataReferencesCollection? MetadataReferences { get; }
 
         /// <summary>
         /// Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.
@@ -74,25 +74,40 @@
         }
 
         /// <summary>
+        /// Create a new instance with new <see cref="CSharpCompilationOptions"/>.
+        /// </summary>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <returns>A new instance of <see cref="Settings"/>.</returns>
+        public Settings WithParseOption(CSharpParseOptions parseOptions) => new(this.CompilationOptions, parseOptions, this.MetadataReferences, this.AllowCompilationErrors);
+
+        /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
         /// </summary>
-        /// <param name="metadataReferences">The <see cref="IReadOnlyList{MetadataReference}"/>.</param>
+        /// <param name="metadataReferences">The <see cref="IEnumerable{MetadataReference}"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithMetadataReferences(IReadOnlyList<MetadataReference>? metadataReferences) => new(this.CompilationOptions, this.ParseOptions, metadataReferences, this.AllowCompilationErrors);
+        public Settings WithMetadataReferences(IEnumerable<MetadataReference>? metadataReferences) => new(
+            this.CompilationOptions,
+            this.ParseOptions,
+            metadataReferences is null ? null : new MetadataReferencesCollection(metadataReferences),
+            this.AllowCompilationErrors);
 
         /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
         /// </summary>
         /// <param name="update">The update of current <see cref="IReadOnlyList{MetadataReference}"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithCompilationOptions(Func<IReadOnlyList<MetadataReference>?, IReadOnlyList<MetadataReference>?> update)
+        public Settings WithMetadataReferences(Func<IEnumerable<MetadataReference>?, IEnumerable<MetadataReference>?> update)
         {
             if (update is null)
             {
                 throw new ArgumentNullException(nameof(update));
             }
 
-            return new(this.CompilationOptions, this.ParseOptions, update(this.MetadataReferences), this.AllowCompilationErrors);
+            return new(
+                this.CompilationOptions,
+                this.ParseOptions,
+                update(this.MetadataReferences) is { } metadataReferences ? new MetadataReferencesCollection(metadataReferences) : null,
+                this.AllowCompilationErrors);
         }
 
         /// <summary>
@@ -103,4 +118,3 @@
         public Settings WithAllowCompilationErrors(AllowCompilationErrors allowCompilationErrors) => new(this.CompilationOptions, this.ParseOptions, this.MetadataReferences, allowCompilationErrors);
     }
 }
-
