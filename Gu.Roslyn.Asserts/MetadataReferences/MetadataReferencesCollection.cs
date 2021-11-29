@@ -1,8 +1,10 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -11,7 +13,7 @@
     /// Reason for this class is to make sure explicit references with aliases are not overwritten by added transitive.
     /// This class has weird semantics and is not elegant but doing it like this to make the breaking change when changing from List&lt;MetadataReference&gt; minimal.
     /// </summary>
-    [DebuggerTypeProxy(typeof(MetadataReferencesCollectionDebugView))]
+    [DebuggerTypeProxy(typeof(DebugView))]
     [DebuggerDisplay("Count = {this.inner.Count}")]
     public class MetadataReferencesCollection : IEnumerable<MetadataReference>
     {
@@ -90,5 +92,18 @@
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)this.inner).GetEnumerator();
+
+        private class DebugView
+        {
+            private readonly MetadataReferencesCollection metaDataReferences;
+
+            internal DebugView(MetadataReferencesCollection set)
+            {
+                this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
+            }
+
+            [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+            internal MetadataReference[] Items => this.metaDataReferences.ToArray();
+        }
     }
 }
