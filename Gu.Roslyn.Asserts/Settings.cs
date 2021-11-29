@@ -81,6 +81,17 @@
         public Settings WithParseOption(CSharpParseOptions parseOptions) => new(this.CompilationOptions, parseOptions, this.MetadataReferences, this.AllowCompilationErrors);
 
         /// <summary>
+        /// Create a new instance with the array of <see cref="MetadataReference"/>/>.
+        /// </summary>
+        /// <param name="metadataReferences">The array of <see cref="MetadataReference"/>.</param>
+        /// <returns>A new instance of <see cref="Settings"/>.</returns>
+        public Settings WithMetadataReferences(params MetadataReference[] metadataReferences) => new(
+            this.CompilationOptions,
+            this.ParseOptions,
+            metadataReferences is null ? null : new MetadataReferencesCollection(metadataReferences),
+            this.AllowCompilationErrors);
+
+        /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
         /// </summary>
         /// <param name="metadataReferences">The <see cref="IEnumerable{MetadataReference}"/>.</param>
