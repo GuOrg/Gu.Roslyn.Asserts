@@ -470,7 +470,7 @@
                 var context = new CodeFixContext(document, diagnostic, (a, d) => actions.Add(a), CancellationToken.None);
                 await fix.RegisterCodeFixesAsync(context).ConfigureAwait(false);
                 var action = FindAction(actions, fixTitle);
-                return new TestDiagnosticProvider(diagnostics, document, action.EquivalenceKey);
+                return new TestDiagnosticProvider(diagnostics, document, action.EquivalenceKey!);
             }
         }
     }

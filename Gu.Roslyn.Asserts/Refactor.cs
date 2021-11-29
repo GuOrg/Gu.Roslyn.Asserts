@@ -316,7 +316,8 @@
             refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(token.Span)).GetAwaiter().GetResult();
             return context.Actions.Count switch
             {
-                0 => SingleAction(context, token.Parent),
+                0 when token.Parent is { }
+                    => SingleAction(context, token.Parent),
                 1 => context.Actions[0],
                 _ => throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it."),
             };
@@ -330,7 +331,8 @@
                 context.Refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(node.Span)).GetAwaiter().GetResult();
                 return context.Actions.Count switch
                 {
-                    0 => SingleAction(context, node.Parent),
+                    0 when node.Parent is { }
+                        => SingleAction(context, node.Parent),
                     1 => context.Actions[0],
                     _ => throw new NotSupportedException("More than one action available. Currently not supporting invoking action by index. We should add support for it."),
                 };

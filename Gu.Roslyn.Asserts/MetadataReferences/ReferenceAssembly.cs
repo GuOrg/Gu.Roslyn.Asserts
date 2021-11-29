@@ -38,7 +38,7 @@
                             var name = AssemblyName.GetAssemblyName(mscorlib);
                             if (expectedName.FullName == name.FullName)
                             {
-                                return new DirectoryInfo(Path.GetDirectoryName(mscorlib));
+                                return new DirectoryInfo(Path.GetDirectoryName(mscorlib)!);
                             }
                         }
                     }

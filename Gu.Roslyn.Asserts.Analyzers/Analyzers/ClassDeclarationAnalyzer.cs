@@ -78,7 +78,9 @@
                 return false;
             }
 
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var offset = -1;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             if (!EndsWith(tree.FilePath.Length - 1, "cs", out offset))
             {
                 result = null;

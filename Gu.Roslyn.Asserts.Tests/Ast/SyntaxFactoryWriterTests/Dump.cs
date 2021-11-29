@@ -73,7 +73,7 @@ namespace Gu.Roslyn.Asserts.Tests
                                        .All(p => Property(p) != null));
                 if (candidates.Any())
                 {
-                    result = Enumerable.MaxBy(candidates, x => x.GetParameters().Length);
+                    result = Enumerable.MaxBy(candidates, x => x.GetParameters().Length)!;
                     return true;
                 }
 

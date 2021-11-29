@@ -102,9 +102,9 @@
                 throw new ArgumentNullException(nameof(sln));
             }
 
-            if (sln.Directory is null)
+            if (sln.DirectoryName is null)
             {
-                throw new ArgumentNullException(nameof(sln), "sln.Directory is null");
+                throw new ArgumentNullException(nameof(sln), "sln.DirectoryName is null");
             }
 
             var contents = File.ReadAllText(sln.FullName);
