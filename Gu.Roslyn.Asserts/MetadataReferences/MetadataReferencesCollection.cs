@@ -42,7 +42,7 @@
         {
             if (items is null)
             {
-                throw new System.ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items));
             }
 
             foreach (var item in items)
@@ -60,7 +60,7 @@
         {
             if (item is null)
             {
-                throw new System.ArgumentNullException(nameof(item));
+                throw new ArgumentNullException(nameof(item));
             }
 
             for (var i = 0; i < this.inner.Count; i++)

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.ComponentModel;
-
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
@@ -67,13 +67,45 @@
             var diagnosticOptions = options.SpecificDiagnosticOptions;
             foreach (var supported in supportedDiagnostics)
             {
-                if (supported.Id != descriptor.Id)
+                diagnosticOptions = diagnosticOptions.Add(supported.Id, Report());
+
+                ReportDiagnostic Report()
                 {
-                    diagnosticOptions = diagnosticOptions.Add(supported.Id, ReportDiagnostic.Suppress);
+                    if (supported.Id == descriptor.Id)
+                    {
+                        return WarnOrError(descriptor.DefaultSeverity);
+                    }
+
+                    return ReportDiagnostic.Suppress;
                 }
             }
 
-            diagnosticOptions = diagnosticOptions.Add(descriptor.Id, WarnOrError(descriptor.DefaultSeverity));
+            return options.WithSpecificDiagnosticOptions(diagnosticOptions);
+        }
+
+        internal static CSharpCompilationOptions WithSpecific(this CSharpCompilationOptions options, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, IReadOnlyList<ExpectedDiagnostic> expecteds)
+        {
+            if (options is null)
+            {
+                throw new System.ArgumentNullException(nameof(options));
+            }
+
+            var diagnosticOptions = options.SpecificDiagnosticOptions;
+            foreach (var supported in supportedDiagnostics)
+            {
+                diagnosticOptions = diagnosticOptions.Add(supported.Id, Report());
+
+                ReportDiagnostic Report()
+                {
+                    if (expecteds.Any(x => x.Id == supported.Id))
+                    {
+                        return WarnOrError(supported.DefaultSeverity);
+                    }
+
+                    return ReportDiagnostic.Suppress;
+                }
+            }
+
             return options.WithSpecificDiagnosticOptions(diagnosticOptions);
         }
 
