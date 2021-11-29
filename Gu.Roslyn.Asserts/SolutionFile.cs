@@ -102,6 +102,11 @@
                 throw new ArgumentNullException(nameof(sln));
             }
 
+            if (sln.Directory is null)
+            {
+                throw new ArgumentNullException(nameof(sln), "sln.Directory is null");
+            }
+
             var contents = File.ReadAllText(sln.FullName);
             var builder = ImmutableDictionary.CreateBuilder<ProjectId, FileInfo>();
             foreach (Match? match in Regex.Matches(contents, @"Project\(""[^ ""]+""\) = ""(?<name>\w+(\.\w+)*)\"", ?""(?<path>\w+(\.\w+)*(\\\w+(\.\w+)*)*.csproj)", RegexOptions.ExplicitCapture))
