@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
@@ -1072,11 +1073,11 @@
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticDescriptor descriptor, Settings settings)
+        internal static Solution CreateSolution(IEnumerable<string> code, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, DiagnosticDescriptor descriptor, Settings settings)
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithWarningOrError(descriptor),
+                settings.CompilationOptions.WithSpecific(supportedDiagnostics, descriptor),
                 settings.ParseOptions,
                 settings.MetadataReferences);
         }
@@ -1104,11 +1105,11 @@
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(FileInfo code, DiagnosticDescriptor descriptor, Settings settings)
+        internal static Solution CreateSolution(FileInfo code, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, DiagnosticDescriptor descriptor, Settings settings)
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithWarningOrError(descriptor),
+                settings.CompilationOptions.WithSpecific(supportedDiagnostics, descriptor),
                 settings.ParseOptions,
                 settings.MetadataReferences);
         }

@@ -33,7 +33,6 @@
                 "Gu.Roslyn.Asserts.Analyzers.Tests",
                 "Gu.Roslyn.Asserts.Analyzers.Vsix",
                 "Gu.Roslyn.Asserts.Tests",
-                "Gu.Roslyn.Asserts.Tests.WithAttributes",
                 "AstView",
                 "WpfApp1",
                 "ClassLibrary2",

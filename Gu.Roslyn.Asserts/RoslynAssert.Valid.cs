@@ -98,7 +98,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, descriptor, Settings.Default));
+                CodeFactory.CreateSolution(code, analyzer.SupportedDiagnostics, descriptor, Settings.Default));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, descriptor, settings ?? Settings.Default));
+                CodeFactory.CreateSolution(code, analyzer.SupportedDiagnostics, descriptor, settings ?? Settings.Default));
         }
 
         /// <summary>
@@ -169,7 +169,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             Valid(
                 analyzer,
-                CodeFactory.CreateSolution(code, descriptor, settings ?? Settings.Default));
+                CodeFactory.CreateSolution(code, analyzer.SupportedDiagnostics, descriptor, settings ?? Settings.Default));
         }
 
         /// <summary>

@@ -168,7 +168,7 @@ namespace Project2
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 StringAssert.Contains(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code, compilationOptions: CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null)));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code, Settings.Default.WithCompilationOptions(CodeFactory.DefaultCompilationOptions(analyzer, descriptor, null))));
                 StringAssert.Contains(expected, exception.Message);
             }
 

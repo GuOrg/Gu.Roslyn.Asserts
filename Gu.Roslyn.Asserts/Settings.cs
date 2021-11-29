@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -107,7 +108,7 @@
         /// </summary>
         /// <param name="update">The update of current <see cref="IReadOnlyList{MetadataReference}"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithMetadataReferences(Func<IEnumerable<MetadataReference>?, IEnumerable<MetadataReference>?> update)
+        public Settings WithMetadataReferences(Func<IEnumerable<MetadataReference>, IEnumerable<MetadataReference>?> update)
         {
             if (update is null)
             {
@@ -117,7 +118,7 @@
             return new(
                 this.CompilationOptions,
                 this.ParseOptions,
-                update(this.MetadataReferences) is { } metadataReferences ? new MetadataReferencesCollection(metadataReferences) : null,
+                update(this.MetadataReferences ?? Enumerable.Empty<MetadataReference>()) is { } metadataReferences ? new MetadataReferencesCollection(metadataReferences) : null,
                 this.AllowCompilationErrors);
         }
 
