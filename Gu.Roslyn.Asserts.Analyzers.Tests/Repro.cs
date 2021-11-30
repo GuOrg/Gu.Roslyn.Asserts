@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
+
     using NUnit.Framework;
 
     [Explicit("Only for digging out test cases.")]
@@ -20,8 +22,7 @@
 
         private static readonly Solution Solution = CodeFactory.CreateSolution(
             new FileInfo(@"C:\Git\_GuOrg\Gu.Analyzers\Gu.Analyzers.sln"),
-            AllAnalyzers,
-            MetadataReferences.FromAttributes());
+            Settings.Default.WithCompilationOptions(x => x.WithWarningOrError(AllAnalyzers.SelectMany(x => x.SupportedDiagnostics))));
 
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void Run(DiagnosticAnalyzer analyzer)

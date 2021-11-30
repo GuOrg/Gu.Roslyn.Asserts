@@ -241,14 +241,6 @@ namespace N
             [Test]
             public static void BinaryStrings()
             {
-                var binaryReferencedCode = @"
-namespace BinaryReferencedAssembly
-{
-    public class Base
-    {
-        private int _fieldName;
-    }
-}";
                 var code = @"
 namespace N
 {
@@ -260,20 +252,22 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(x => x.Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode))));
+                var binaryReference = Asserts.MetadataReferences.CreateBinary(@"
+namespace BinaryReferencedAssembly
+{
+    public class Base
+    {
+        private int _fieldName;
+    }
+}");
+
+                var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
+                RoslynAssert.Valid(analyzer, code, settings);
             }
 
             [Test]
             public static void BinarySolution()
             {
-                var binaryReferencedCode = @"
-namespace BinaryReferencedAssembly
-{
-    public class Base
-    {
-        private int _fieldName;
-    }
-}";
                 var code = @"
 namespace N
 {
@@ -284,11 +278,20 @@ namespace N
         private int f;
     }
 }";
+                var binaryReference = Asserts.MetadataReferences.CreateBinary(@"
+namespace BinaryReferencedAssembly
+{
+    public class Base
+    {
+        private int _fieldName;
+    }
+}");
+
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
                 var solution = CodeFactory.CreateSolution(
                     code,
-                    CodeFactory.DefaultCompilationOptions(new[] { analyzer }),
-                    Gu.Roslyn.Asserts.MetadataReferences.FromAttributes().Append(Asserts.MetadataReferences.CreateBinary(binaryReferencedCode)));
+                    settings);
 
                 RoslynAssert.Valid(analyzer, solution);
             }
