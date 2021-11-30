@@ -215,6 +215,16 @@
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoAnalyzerDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
         {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             var sln = CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             NoDiagnostics(diagnostics);

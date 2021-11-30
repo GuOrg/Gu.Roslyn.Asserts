@@ -182,14 +182,11 @@
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
             {
-                var projectInfo = ProjectFile.ParseInfo(code).WithParseOptions(parseOptions);
-                return EmptySolution.AddProject(projectInfo)
-                                    .WithProjectCompilationOptions(
-                                        projectInfo.Id,
-                                        compilationOptions)
-                                    .AddMetadataReferences(
-                                        projectInfo.Id,
-                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                return EmptySolution.AddProject(
+                    ProjectFile.ParseInfo(code)
+                               .WithParseOptions(parseOptions)
+                               .WithCompilationOptions(compilationOptions)
+                               .WithMetadataReferences(metadataReferences));
             }
 
             if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
@@ -198,13 +195,11 @@
                 var solutionInfo = SolutionFile.ParseInfo(code);
                 foreach (var projectInfo in solutionInfo.Projects)
                 {
-                    solution = solution.AddProject(projectInfo.WithParseOptions(parseOptions))
-                                       .WithProjectCompilationOptions(
-                                           projectInfo.Id,
-                                           compilationOptions)
-                                       .AddMetadataReferences(
-                                           projectInfo.Id,
-                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                    solution = solution.AddProject(
+                        projectInfo
+                            .WithParseOptions(parseOptions)
+                            .WithCompilationOptions(compilationOptions)
+                            .WithMetadataReferences(metadataReferences));
                 }
 
                 return solution;
