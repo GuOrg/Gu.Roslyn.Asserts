@@ -432,17 +432,18 @@
 
             foreach (var project in solution.Projects)
             {
-                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
 
                 if (analyzer is PlaceholderAnalyzer placeholder)
                 {
-                    var diagnostics = compilation!.GetDiagnostics(CancellationToken.None);
+                    var diagnostics = compilation.GetDiagnostics(CancellationToken.None);
                     errors.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id != x.Id)).ToImmutableArray());
                     analyzerDiagnostics.Add(diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
                 }
                 else
                 {
-                    errors.Add(compilation!.GetDiagnostics(CancellationToken.None));
+                    errors.Add(compilation.GetDiagnostics(CancellationToken.None));
                     var withAnalyzers = compilation.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,

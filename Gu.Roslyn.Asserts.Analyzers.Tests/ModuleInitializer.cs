@@ -10,7 +10,7 @@
         internal static void Initialize()
         {
             Settings.Default = Settings.Default
-                .WithCompilationOptions(x => x.WithSuppressed("CS1701", "CS1702", "CS0281"))
+                .WithCompilationOptions(x => x.WithSuppressed("CS0281", "CS1701", "CS1702"))
                 .WithMetadataReferences(MetadataReferences.Transitive(typeof(ModuleInitializer)));
         }
     }
