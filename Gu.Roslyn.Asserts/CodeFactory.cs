@@ -149,6 +149,40 @@
         }
 
         /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(string code, Settings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            return CreateSolution(new[] { code }, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(IEnumerable<string> code, Settings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
         /// Creates a solution for <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The sources as strings.</param>
