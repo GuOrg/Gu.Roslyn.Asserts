@@ -43,7 +43,7 @@
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
         {
             if (code is null)
             {
@@ -149,6 +149,71 @@
         }
 
         /// <summary>
+        /// Create a Solution.
+        /// </summary>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// </param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(FileInfo code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
+            if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
+            {
+                return CreateSolution(
+                    new[] { File.ReadAllText(code.FullName) },
+                    parseOptions,
+                    compilationOptions,
+                    metadataReferences ?? Enumerable.Empty<MetadataReference>());
+            }
+
+            if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
+            {
+                var projectInfo = ProjectFile.ParseInfo(code).WithParseOptions(parseOptions);
+                return EmptySolution.AddProject(projectInfo)
+                                    .WithProjectCompilationOptions(
+                                        projectInfo.Id,
+                                        compilationOptions)
+                                    .AddMetadataReferences(
+                                        projectInfo.Id,
+                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
+            }
+
+            if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
+            {
+                var solution = EmptySolution;
+                var solutionInfo = SolutionFile.ParseInfo(code);
+                foreach (var projectInfo in solutionInfo.Projects)
+                {
+                    solution = solution.AddProject(projectInfo.WithParseOptions(parseOptions))
+                                       .WithProjectCompilationOptions(
+                                           projectInfo.Id,
+                                           compilationOptions)
+                                       .AddMetadataReferences(
+                                           projectInfo.Id,
+                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                }
+
+                return solution;
+            }
+
+            throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
+        }
+
+        /// <summary>
         /// Create a <see cref="Solution"/> for <paramref name="code"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
@@ -157,7 +222,7 @@
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
         {
             if (code is null)
             {
@@ -236,13 +301,9 @@
         /// <param name="code">The code to create the solution from.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(string code, Settings settings)
+        public static Solution CreateSolution(string code, Settings? settings = null)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
+            settings ??= Settings.Default;
             return CreateSolution(new[] { code }, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
         }
 
@@ -253,13 +314,48 @@
         /// <param name="code">The code to create the solution from.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, Settings settings)
+        public static Solution CreateSolution(IEnumerable<string> code, Settings? settings = null)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            settings ??= Settings.Default;
+            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
 
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolutionWithOneProject(string code, Settings? settings = null)
+        {
+            settings ??= Settings.Default;
+            return CreateSolutionWithOneProject(new[] { code }, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, Settings? settings = null)
+        {
+            settings ??= Settings.Default;
+            return CreateSolutionWithOneProject(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(FileInfo code, Settings? settings = null)
+        {
+            settings ??= Settings.Default;
             return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
         }
 
@@ -423,30 +519,6 @@
                 CSharpParseOptions.Default.WithLanguageVersion(languageVersion),
                 compilationOptions,
                 metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a Solution.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="settings">The <see cref="Settings"/>.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, Settings settings)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            return CreateSolution(code, settings.CompilationOptions, settings.MetadataReferences);
         }
 
         /// <summary>
@@ -721,74 +793,9 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
-        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
-        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (compilationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(compilationOptions));
-            }
-
-            if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
-            {
-                return CreateSolution(
-                    new[] { File.ReadAllText(code.FullName) },
-                    parseOptions,
-                    compilationOptions,
-                    metadataReferences ?? Enumerable.Empty<MetadataReference>());
-            }
-
-            if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
-            {
-                var projectInfo = ProjectFile.ParseInfo(code).WithParseOptions(parseOptions);
-                return EmptySolution.AddProject(projectInfo)
-                                    .WithProjectCompilationOptions(
-                                        projectInfo.Id,
-                                        compilationOptions)
-                                    .AddMetadataReferences(
-                                        projectInfo.Id,
-                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
-            }
-
-            if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
-            {
-                var solution = EmptySolution;
-                var solutionInfo = SolutionFile.ParseInfo(code);
-                foreach (var projectInfo in solutionInfo.Projects)
-                {
-                    solution = solution.AddProject(projectInfo.WithParseOptions(parseOptions))
-                                       .WithProjectCompilationOptions(
-                                           projectInfo.Id,
-                                           compilationOptions)
-                                       .AddMetadataReferences(
-                                           projectInfo.Id,
-                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                }
-
-                return solution;
-            }
-
-            throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
-        }
-
-        /// <summary>
-        /// Create a Solution.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences)
         {
             if (code is null)
             {

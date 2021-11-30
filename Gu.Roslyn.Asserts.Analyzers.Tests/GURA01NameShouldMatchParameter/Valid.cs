@@ -60,7 +60,7 @@ namespace N
         }
 
         [Test]
-        public static void ValidAnalyzerAndCodeAndMetadataReferences()
+        public static void ValidAnalyzerAndCodeAndSettings()
         {
             var code = @"
 namespace N
@@ -76,8 +76,8 @@ namespace N
         public static void M()
         {
             var code = ""class ↓C { }"";
-            var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
-            RoslynAssert.Valid(Analyzer, code, metadataReferences: metadataReferences);
+            var settings = Settings.Default.WithMetadataReferences(Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly));
+            RoslynAssert.Valid(Analyzer, code, settings: settings);
         }
     }
 }";
@@ -461,32 +461,6 @@ namespace N
         }
 
         [Test]
-        public static void CodeFixAllowCompilationErrors()
-        {
-            var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        private static readonly PlaceholderFix Fix = new PlaceholderFix();
-
-        [Test]
-        public static void M()
-        {
-            var before = ""↓class C { }"";
-            var after = ""class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
-        }
-    }
-}";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
-
-        [Test]
         public static void Refactoring()
         {
             var code = @"
@@ -610,7 +584,7 @@ namespace N
         public static void M()
         {
             var code = ""class ↓C { }"";
-            RoslynAssert.Valid(Analyzer, code, metadataReferences: SpecialMetadataReferences.Corlib);
+            RoslynAssert.Valid(Analyzer, code, settings: Settings.Default.WithMetadataReferences(SpecialMetadataReferences.Corlib));
         }
     }
 }";
