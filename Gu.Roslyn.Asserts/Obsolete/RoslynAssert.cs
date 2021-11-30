@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -124,7 +125,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void CodeFix<TAnalyzer, TCodeFix>(string codeWithErrorsIndicated, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
@@ -147,10 +148,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 after: new[] { after },
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -163,7 +161,7 @@
         /// <param name="codeWithErrorsIndicated">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void CodeFix<TAnalyzer, TCodeFix>(IReadOnlyList<string> codeWithErrorsIndicated, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
@@ -186,10 +184,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, codeWithErrorsIndicated),
                 after: MergeFixedCode(codeWithErrorsIndicated, after),
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -230,10 +225,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: new[] { after },
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -247,7 +239,7 @@
         /// <param name="code">The code with error positions indicated.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void CodeFix<TAnalyzer, TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TAnalyzer : DiagnosticAnalyzer, new()
@@ -274,10 +266,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 after: MergeFixedCode(code, after),
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -290,7 +279,7 @@
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking fix as argument.")]
         public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
@@ -316,10 +305,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after: new[] { after },
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -332,7 +318,7 @@
         /// <param name="code">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking fix as argument.")]
         public static void CodeFix<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> code, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
@@ -358,10 +344,7 @@
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
                 after: MergeFixedCode(code, after),
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -374,7 +357,7 @@
         /// <param name="diagnosticsAndSources">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/> name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use other overloads.")]
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
@@ -399,10 +382,7 @@
                 diagnosticsAndSources: diagnosticsAndSources,
                 after: MergeFixedCode(diagnosticsAndSources.Code, after),
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: null,
-                metadataReferences: null,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -417,7 +397,7 @@
         /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use other overloads.")]
         public static void CodeFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, DiagnosticsAndSources diagnosticsAndSources, string after, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
         {
@@ -442,10 +422,7 @@
                 diagnosticsAndSources: diagnosticsAndSources,
                 after: MergeFixedCode(diagnosticsAndSources.Code, after),
                 fixTitle: fixTitle,
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: suppressWarnings,
-                metadataReferences: metadataReferences,
-                compilationOptions: null);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -488,7 +465,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { before }),
                 new[] { after },
                 fixTitle,
-                allowCompilationErrors);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -529,9 +506,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 MergeFixedCode(before, after),
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -572,9 +547,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after,
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -587,7 +560,7 @@
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
@@ -614,9 +587,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, new[] { before }),
                 new[] { after },
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -629,7 +600,7 @@
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
@@ -656,9 +627,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 MergeFixedCode(before, after),
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -671,7 +640,7 @@
         /// <param name="before">The code to analyze.</param>
         /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-         /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
         [Obsolete("Use overload taking analyzer & fix as arguments.")]
         public static void FixAll<TCodeFix>(ExpectedDiagnostic expectedDiagnostic, IReadOnlyList<string> before, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
             where TCodeFix : CodeFixProvider, new()
@@ -698,9 +667,7 @@
                 DiagnosticsAndSources.Create(expectedDiagnostic, before),
                 after,
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -736,9 +703,7 @@
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, new[] { codeWithErrorsIndicated }),
                 new[] { after },
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -774,9 +739,7 @@
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
                 MergeFixedCode(before, after),
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -812,9 +775,7 @@
                 DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
                 after,
                 fixTitle,
-                allowCompilationErrors,
-                SuppressedDiagnostics,
-                MetadataReferences);
+                settings: Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>
@@ -851,7 +812,7 @@
                 new[] { after },
                 FixAllScope.Document,
                 fixTitle,
-                allowCompilationErrors);
+                Settings.Default.WithAllowCompilationErrors(allowCompilationErrors));
         }
 
         /// <summary>

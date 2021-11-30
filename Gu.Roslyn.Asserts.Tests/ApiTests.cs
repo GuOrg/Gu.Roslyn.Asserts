@@ -260,47 +260,7 @@
             }
         }
 
-        [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(FixAllMethods))]
-        [TestCaseSource(nameof(NoFixMethods))]
-        public static void AllowCompilationErrorsParameter(IMethodSymbol method)
-        {
-            if (method.TryFindParameterByType<AllowCompilationErrors>(out var parameter))
-            {
-                Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
-                Assert.AreEqual(AllowCompilationErrors.No, (AllowCompilationErrors)parameter.ExplicitDefaultValue!);
-                Assert.AreEqual("allowCompilationErrors", parameter.MetadataName);
-                Assert.AreEqual("Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref=\"F:Gu.Roslyn.Asserts.AllowCompilationErrors.No\"/>.", parameter.DocComment());
-            }
-            else
-            {
-                Assert.AreEqual(true, method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
-            }
-        }
-
-        [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(FixAllMethods))]
-        [TestCaseSource(nameof(NoFixMethods))]
-        public static void SuppressWarningsParameter(IMethodSymbol method)
-        {
-            if (method.TryFindParameterByType<IEnumerable<string>>(out var parameter))
-            {
-                Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
-                Assert.AreEqual(null, parameter.ExplicitDefaultValue);
-                Assert.AreEqual("suppressWarnings", parameter.MetadataName);
-                Assert.AreEqual("A collection of <see cref=\"P:Microsoft.CodeAnalysis.DiagnosticDescriptor.Id\"/> to suppress when analyzing the code. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.SuppressedDiagnostics\"/> are used.", parameter.DocComment());
-                Assert.AreEqual("allowCompilationErrors", method.Parameters[parameter.Ordinal - 1].Name);
-            }
-            else
-            {
-                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
-            }
-        }
-
-        [TestCaseSource(nameof(CodeFixMethods))]
-        [TestCaseSource(nameof(FixAllMethods))]
         [TestCaseSource(nameof(NoCompilerErrorsMethods))]
-        [TestCaseSource(nameof(NoFixMethods))]
         public static void MetadataReferencesParameter(IMethodSymbol method)
         {
             if (method.TryFindParameterByType<IEnumerable<MetadataReference>>(out var parameter))
@@ -321,7 +281,10 @@
             }
         }
 
+        [TestCaseSource(nameof(CodeFixMethods))]
         [TestCaseSource(nameof(DiagnosticsMethods))]
+        [TestCaseSource(nameof(FixAllMethods))]
+        [TestCaseSource(nameof(NoFixMethods))]
         [TestCaseSource(nameof(ValidMethods))]
         public static void SettingsParameter(IMethodSymbol method)
         {
