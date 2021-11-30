@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.IO;
@@ -773,12 +773,13 @@ namespace N
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
-                RoslynAssert.CodeFix(analyzer, fix, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, allowCompilationErrors: AllowCompilationErrors.Yes);
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, allowCompilationErrors: AllowCompilationErrors.Yes);
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, allowCompilationErrors: AllowCompilationErrors.Yes);
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, allowCompilationErrors: AllowCompilationErrors.Yes);
+                var settings = Settings.Default.WithAllowCompilationErrors(AllowCompilationErrors.Yes);
+                RoslynAssert.CodeFix(analyzer, fix, before, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, settings: settings);
             }
 
             [Test]

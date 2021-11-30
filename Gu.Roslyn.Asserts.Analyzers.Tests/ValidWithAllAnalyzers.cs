@@ -19,12 +19,10 @@
                 .ToArray();
 
         private static readonly Solution AnalyzersTests = CodeFactory.CreateSolution(
-            ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"),
-            MetadataReferences.FromAttributes());
+            ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"));
 
         private static readonly Solution AssertsTests = CodeFactory.CreateSolution(
-            ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"),
-            MetadataReferences.FromAttributes());
+            ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"));
 
         [Test]
         public static void NotEmpty()

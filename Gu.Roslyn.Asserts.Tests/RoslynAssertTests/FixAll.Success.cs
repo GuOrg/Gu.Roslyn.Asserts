@@ -1,6 +1,7 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -639,7 +640,7 @@ namespace N
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFix();
-                RoslynAssert.FixAll(analyzer, fix, before, after, allowCompilationErrors: AllowCompilationErrors.Yes);
+                RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowCompilationErrors(AllowCompilationErrors.Yes));
             }
 
             [Test]

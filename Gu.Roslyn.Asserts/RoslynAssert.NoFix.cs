@@ -3,10 +3,11 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     public static partial class RoslynAssert
@@ -78,19 +79,13 @@
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
             ExpectedDiagnostic expectedDiagnostic,
             string code,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -116,10 +111,7 @@
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: suppressWarnings,
-                metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions);
+                settings: settings);
         }
 
         /// <summary>
@@ -131,19 +123,13 @@
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> code,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -169,10 +155,7 @@
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.Create(expectedDiagnostic, code),
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: suppressWarnings,
-                metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions);
+                settings: settings);
         }
 
         /// <summary>
@@ -215,18 +198,12 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
             IReadOnlyList<string> code,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -247,10 +224,7 @@
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: suppressWarnings,
-                metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions);
+                settings: settings);
         }
 
         /// <summary>
@@ -261,18 +235,12 @@
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>.</param>
         /// <param name="code">The code to analyze. Indicate error position with ↓ (alt + 25).</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             CodeFixProvider fix,
             ExpectedDiagnostic expectedDiagnostic,
             IReadOnlyList<string> code,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (fix is null)
             {
@@ -294,10 +262,7 @@
                 analyzer: analyzer,
                 fix: fix,
                 diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
-                allowCompilationErrors: allowCompilationErrors,
-                suppressWarnings: suppressWarnings,
-                metadataReferences: metadataReferences,
-                compilationOptions: compilationOptions);
+                settings: settings);
         }
 
         /// <summary>
@@ -308,18 +273,12 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        /// <param name="suppressWarnings">A collection of <see cref="DiagnosticDescriptor.Id"/> to suppress when analyzing the code. Default is <see langword="null" /> meaning <see cref="SuppressedDiagnostics"/> are used.</param>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
             DiagnosticsAndSources diagnosticsAndSources,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No,
-            IEnumerable<string>? suppressWarnings = null,
-            IEnumerable<MetadataReference>? metadataReferences = null,
-            CSharpCompilationOptions? compilationOptions = null)
+            Settings? settings = null)
         {
             if (analyzer is null)
             {
@@ -336,19 +295,17 @@
                 throw new System.ArgumentNullException(nameof(diagnosticsAndSources));
             }
 
+            settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(
                 diagnosticsAndSources,
                 analyzer,
-                compilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                suppressWarnings ?? SuppressedDiagnostics,
-                metadataReferences ?? MetadataReferences);
+                settings);
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            if (allowCompilationErrors == AllowCompilationErrors.No)
+            if (settings.AllowCompilationErrors == AllowCompilationErrors.No)
             {
                 NoCompilerErrors(sln);
             }
