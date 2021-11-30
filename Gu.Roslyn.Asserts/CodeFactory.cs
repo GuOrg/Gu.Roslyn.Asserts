@@ -39,11 +39,11 @@
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (code is null)
             {
@@ -305,8 +305,8 @@
         {
             return CreateSolution(
                 code,
-                compilationOptions,
                 CSharpParseOptions.Default.WithLanguageVersion(languageVersion),
+                compilationOptions,
                 metadataReferences);
         }
 
@@ -703,7 +703,11 @@
 
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
-                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, compilationOptions, parseOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                return CreateSolution(
+                    new[] { File.ReadAllText(code.FullName) },
+                    parseOptions,
+                    compilationOptions,
+                    metadataReferences ?? Enumerable.Empty<MetadataReference>());
             }
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
@@ -1061,8 +1065,8 @@
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,
-                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, diagnosticsAndSources.ExpectedDiagnostics),
                 settings.ParseOptions,
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, diagnosticsAndSources.ExpectedDiagnostics),
                 settings.MetadataReferences);
         }
 
@@ -1077,8 +1081,8 @@
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
                 settings.ParseOptions,
+                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
                 settings.MetadataReferences);
         }
 
@@ -1094,8 +1098,8 @@
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.ParseOptions,
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.MetadataReferences);
         }
 
