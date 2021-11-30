@@ -133,9 +133,7 @@
             using var e = source.GetEnumerator();
             while (e.MoveNext())
             {
-#pragma warning disable CA1508 // Avoid dead conditional code
                 if (e.Current is TResult candidate)
-#pragma warning restore CA1508 // Avoid dead conditional code
                 {
                     while (e.MoveNext())
                     {

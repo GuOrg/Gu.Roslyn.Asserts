@@ -225,7 +225,6 @@
                 diagnosticsAndSources,
                 analyzer,
                 settings);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             if (settings.AllowCompilationErrors == AllowCompilationErrors.No)
