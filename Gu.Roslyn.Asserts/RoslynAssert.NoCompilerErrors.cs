@@ -18,7 +18,7 @@
         public static void NoCompilerErrors(params string[] code)
         {
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var solution = CodeFactory.CreateSolution(code, MetadataReferences);
+            var solution = CodeFactory.CreateSolution(code, Settings.Default);
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
