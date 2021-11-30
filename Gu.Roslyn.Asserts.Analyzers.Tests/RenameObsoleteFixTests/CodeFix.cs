@@ -166,49 +166,5 @@ namespace N
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
             RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after);
         }
-
-        [Test]
-        public static void ChangeParameterNameToSuppressWarnings()
-        {
-            var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [Test]
-        public static void M()
-        {
-            var code = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, code, ↓suppressedDiagnostics: new[] { ""CS1701"" });
-        }
-    }
-}";
-
-            var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
-
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-
-        [Test]
-        public static void M()
-        {
-            var code = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, code, suppressWarnings: new[] { ""CS1701"" });
-        }
-    }
-}";
-            var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
     }
 }
