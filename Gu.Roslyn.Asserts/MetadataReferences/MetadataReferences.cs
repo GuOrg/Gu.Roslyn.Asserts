@@ -93,10 +93,9 @@
         {
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 code,
+                Settings.Default.ParseOptions,
                 CodeFactory.DllCompilationOptions,
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                RoslynAssert.MetadataReferences);
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+                Settings.Default.MetadataReferences);
             RoslynAssert.NoCompilerErrors(sln);
 
             using var ms = new MemoryStream();

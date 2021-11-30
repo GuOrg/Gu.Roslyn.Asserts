@@ -153,6 +153,87 @@
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
         /// <param name="code">The code to create the solution from.</param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        {
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
+            var projectInfo = GetProjectInfo().WithParseOptions(parseOptions);
+            return EmptySolution.AddProject(projectInfo);
+
+            ProjectInfo GetProjectInfo()
+            {
+                var projectName = ProjectName();
+
+                var projectId = ProjectId.CreateNewId(projectName);
+                return ProjectInfo.Create(
+                    projectId,
+                    VersionStamp.Default,
+                    projectName,
+                    projectName,
+                    LanguageNames.CSharp,
+                    metadataReferences: metadataReferences,
+                    compilationOptions: compilationOptions,
+                    documents: code.Select(
+                        x =>
+                        {
+                            var documentName = CodeReader.FileName(x);
+                            return DocumentInfo.Create(
+                                DocumentId.CreateNewId(projectId, documentName),
+                                documentName,
+                                sourceCodeKind: SourceCodeKind.Regular,
+                                loader: TextLoader.From(
+                                    TextAndVersion.Create(
+                                        SourceText.From(x, null, SourceHashAlgorithm.Sha1),
+                                        VersionStamp.Default)));
+                        }));
+
+                string ProjectName()
+                {
+                    string? projectName = null;
+                    foreach (var doc in code)
+                    {
+                        if (projectName is null)
+                        {
+                            projectName = CodeReader.Namespace(doc);
+                        }
+                        else
+                        {
+                            var ns = CodeReader.Namespace(doc);
+                            var indexOf = ns.IndexOf('.');
+                            if (indexOf > 0)
+                            {
+                                ns = ns.Substring(0, indexOf);
+                            }
+
+                            if (ns.Length < projectName.Length)
+                            {
+                                projectName = ns;
+                            }
+                        }
+                    }
+
+                    return projectName ?? throw new InvalidOperationException("Could not find project name.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>
+        /// Each unique namespace in <paramref name="code"/> is added as a project.
+        /// </summary>
+        /// <param name="code">The code to create the solution from.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
         public static Solution CreateSolution(string code, Settings settings)
@@ -410,7 +491,7 @@
                 throw new ArgumentNullException(nameof(analyzers));
             }
 
-            return CreateSolutionWithOneProject(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
+            return CreateSolutionWithOneProject(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
         /// <summary>
@@ -432,87 +513,7 @@
                 throw new ArgumentNullException(nameof(compilationOptions));
             }
 
-            return CreateSolutionWithOneProject(new[] { code }, compilationOptions, metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (compilationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(compilationOptions));
-            }
-
-            var projectInfo = GetProjectInfo();
-            return EmptySolution.AddProject(projectInfo);
-
-            ProjectInfo GetProjectInfo()
-            {
-                var projectName = ProjectName();
-
-                var projectId = ProjectId.CreateNewId(projectName);
-                return ProjectInfo.Create(
-                    projectId,
-                    VersionStamp.Default,
-                    projectName,
-                    projectName,
-                    LanguageNames.CSharp,
-                    metadataReferences: metadataReferences,
-                    compilationOptions: compilationOptions,
-                    documents: code.Select(
-                        x =>
-                        {
-                            var documentName = CodeReader.FileName(x);
-                            return DocumentInfo.Create(
-                                DocumentId.CreateNewId(projectId, documentName),
-                                documentName,
-                                sourceCodeKind: SourceCodeKind.Regular,
-                                loader: TextLoader.From(
-                                    TextAndVersion.Create(
-                                        SourceText.From(x, null, SourceHashAlgorithm.Sha1),
-                                        VersionStamp.Default)));
-                        }));
-
-                string ProjectName()
-                {
-                    string? projectName = null;
-                    foreach (var doc in code)
-                    {
-                        if (projectName is null)
-                        {
-                            projectName = CodeReader.Namespace(doc);
-                        }
-                        else
-                        {
-                            var ns = CodeReader.Namespace(doc);
-                            var indexOf = ns.IndexOf('.');
-                            if (indexOf > 0)
-                            {
-                                ns = ns.Substring(0, indexOf);
-                            }
-
-                            if (ns.Length < projectName.Length)
-                            {
-                                projectName = ns;
-                            }
-                        }
-                    }
-
-                    return projectName ?? throw new InvalidOperationException("Could not find project name.");
-                }
-            }
+            return CreateSolutionWithOneProject(new[] { code }, CSharpParseOptions.Default, compilationOptions, metadataReferences);
         }
 
         /// <summary>
@@ -720,10 +721,11 @@
         /// The code to create the solution from.
         /// Can be a .cs, .csproj or .sln file.
         /// </param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Solution CreateSolution(FileInfo code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
         {
             if (code is null)
             {
@@ -1148,8 +1150,8 @@
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
                 settings.ParseOptions,
+                settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
                 settings.MetadataReferences);
         }
 
@@ -1165,8 +1167,8 @@
         {
             return CreateSolution(
                 code,
-                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.ParseOptions,
+                settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.MetadataReferences);
         }
     }
