@@ -255,7 +255,7 @@
                 throw new ArgumentNullException(nameof(metadataReferences));
             }
 
-            return CreateSolution(code, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null), metadataReferences);
+            return CreateSolution(code, CSharpParseOptions.Default, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null), metadataReferences);
         }
 
         /// <summary>
@@ -277,7 +277,7 @@
                 throw new ArgumentNullException(nameof(compilationOptions));
             }
 
-            return CreateSolution(new[] { code }, compilationOptions, metadataReferences);
+            return CreateSolution(new[] { code }, CSharpParseOptions.Default, compilationOptions, metadataReferences);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@
                 throw new ArgumentNullException(nameof(analyzers));
             }
 
-            return CreateSolution(code, DefaultCompilationOptions(analyzers, null), metadataReferences);
+            return CreateSolution(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
         }
 
         /// <summary>
@@ -881,7 +881,7 @@
 
             if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
             {
-                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, compilationOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, CSharpParseOptions.Default, compilationOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
             }
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))

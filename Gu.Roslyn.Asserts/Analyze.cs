@@ -22,14 +22,14 @@
         /// Then compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="sources">The sources as strings.</param>
+        /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, IEnumerable<MetadataReference> metadataReferences)
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
         {
             return GetDiagnosticsAsync(
                 analyzer,
-                sources,
+                code,
                 CodeFactory.DefaultCompilationOptions(analyzer, null),
                 metadataReferences);
         }
@@ -39,13 +39,12 @@
         /// Then compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="sources">The sources as strings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
         {
-            var sln = CodeFactory.CreateSolution(sources, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
             return GetDiagnostics(sln, analyzer);
         }
 
@@ -54,18 +53,47 @@
         /// Then compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="sources">The sources as strings.</param>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
+        {
+            var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
+            return GetDiagnostics(sln, analyzer);
+        }
+
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="code">The sources as strings.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> sources, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        {
+            var sln = CodeFactory.CreateSolution(code, CSharpParseOptions.Default, compilationOptions, metadataReferences);
+            return GetDiagnostics(sln, analyzer);
+        }
+
+        /// <summary>
+        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
+        /// Then compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
+        /// <param name="code">The sources as strings.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
+        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
         {
             if (analyzer is null)
             {
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            var sln = CodeFactory.CreateSolution(sources, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, CSharpParseOptions.Default, compilationOptions, metadataReferences);
             return GetDiagnosticsAsync(sln, analyzer);
         }
 
