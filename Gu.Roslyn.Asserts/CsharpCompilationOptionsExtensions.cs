@@ -7,8 +7,18 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
+    /// <summary>
+    /// Extension methods for <see cref="CSharpCompilationOptions"/>
+    /// </summary>
     public static class CsharpCompilationOptionsExtensions
     {
+        /// <summary>
+        /// Configure all <paramref name="descriptors"/> to report at least warning.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="descriptors">The descriptors.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public static CSharpCompilationOptions WithWarningOrError(this CSharpCompilationOptions options, IEnumerable<DiagnosticDescriptor> descriptors)
         {
             if (options is null)
@@ -30,9 +40,23 @@
             return options.WithSpecificDiagnosticOptions(diagnosticOptions);
         }
 
+        /// <summary>
+        /// Configure all <paramref name="descriptors"/> to report at least warning.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="descriptors">The descriptors.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public static CSharpCompilationOptions WithWarningOrError(this CSharpCompilationOptions options, params DiagnosticDescriptor[] descriptors)
             => WithWarningOrError(options, (IEnumerable<DiagnosticDescriptor>)descriptors);
 
+        /// <summary>
+        /// Configure all <paramref name="ids"/> suppressed.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="ids">The diagnostic ids.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, IEnumerable<string> ids)
         {
             if (options is null)
@@ -54,6 +78,13 @@
             return options.WithSpecificDiagnosticOptions(diagnosticOptions);
         }
 
+        /// <summary>
+        /// Configure all <paramref name="ids"/> suppressed.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="ids">The diagnostic ids.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
         public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, params string[] ids)
             => WithSuppressed(options, (IEnumerable<string>)ids);
 

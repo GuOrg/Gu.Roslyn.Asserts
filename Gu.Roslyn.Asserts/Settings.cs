@@ -7,6 +7,9 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
 
+    /// <summary>
+    /// Settings for creating solutions.
+    /// </summary>
     public class Settings
     {
         private static Settings? @default;
@@ -26,6 +29,9 @@
             this.AllowCompilationErrors = allowCompilationErrors;
         }
 
+        /// <summary>
+        /// The default instance that is used by <see cref="RoslynAssert"/>.
+        /// </summary>
         public static Settings Default
         {
             get => @default ??= new Settings(CodeFactory.DefaultCompilationOptions(new[] { new KeyValuePair<string, ReportDiagnostic>("AD0001", ReportDiagnostic.Error) }), CSharpParseOptions.Default, null);
