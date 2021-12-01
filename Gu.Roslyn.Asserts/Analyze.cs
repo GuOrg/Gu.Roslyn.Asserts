@@ -132,6 +132,27 @@
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static ProjectDiagnostics GetDiagnostics(DiagnosticAnalyzer analyzer, Project project)
+        {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            return ProjectDiagnostics.CreateAsync(project, analyzer).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
         /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -208,27 +229,6 @@
             }
 
             return results;
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static ProjectDiagnostics GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
-        {
-            if (project is null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            return ProjectDiagnostics.CreateAsync(project, analyzer).GetAwaiter().GetResult();
         }
 
         /// <summary>
