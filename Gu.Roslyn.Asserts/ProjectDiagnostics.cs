@@ -1,6 +1,7 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading;
@@ -43,6 +44,12 @@
         public ImmutableArray<Diagnostic> AnalyzerDiagnostics { get; }
 
         /// <summary>
+        /// If both <see cref="CompilerDiagnostics"/> and <see cref="AnalyzerDiagnostics"/> are empty.
+        /// </summary>
+        public bool IsEmpty => this.CompilerDiagnostics.IsDefaultOrEmpty &&
+                               this.AnalyzerDiagnostics.IsDefaultOrEmpty;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProjectDiagnostics"/> class.
         /// </summary>
         /// <param name="project">The <see cref="Project"/>.</param>
@@ -81,6 +88,19 @@
                     project,
                     compilation.GetDiagnostics(CancellationToken.None),
                     analyzerDiagnostics);
+            }
+        }
+
+        public IEnumerable<Diagnostic> All()
+        {
+            foreach (var diagnostic in this.CompilerDiagnostics)
+            {
+                yield return diagnostic;
+            }
+
+            foreach (var diagnostic in this.AnalyzerDiagnostics)
+            {
+                yield return diagnostic;
             }
         }
     }
