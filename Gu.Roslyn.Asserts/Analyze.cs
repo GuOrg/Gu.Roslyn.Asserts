@@ -172,17 +172,6 @@
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution, DiagnosticAnalyzer analyzer)
-        {
-            return GetDiagnostics(analyzer, solution);
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
