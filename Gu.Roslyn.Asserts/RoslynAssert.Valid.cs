@@ -111,6 +111,40 @@
         public static void Valid(
             DiagnosticAnalyzer analyzer,
             DiagnosticDescriptor descriptor,
+            string code,
+            Settings? settings = null)
+        {
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            if (code is null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
+            Valid(
+                analyzer,
+                CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings ?? Settings.Default));
+        }
+
+        /// <summary>
+        /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <paramref name="analyzer"/>.
+        /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
+        /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
+        /// <param name="code">The code to analyze using <paramref name="analyzer"/>. Analyzing the code is expected to produce no errors or warnings.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void Valid(
+            DiagnosticAnalyzer analyzer,
+            DiagnosticDescriptor descriptor,
             IReadOnlyList<string> code,
             Settings? settings = null)
         {
