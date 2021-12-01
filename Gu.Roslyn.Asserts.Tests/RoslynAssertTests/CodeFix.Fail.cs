@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
@@ -394,7 +394,7 @@ namespace N
 
     public partial class C
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓Bar;
     }
 }";
 

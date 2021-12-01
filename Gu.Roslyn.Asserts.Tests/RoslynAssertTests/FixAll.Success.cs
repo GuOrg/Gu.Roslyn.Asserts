@@ -210,7 +210,7 @@ namespace N
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -221,7 +221,7 @@ namespace N
 
     public class C2
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -375,7 +375,7 @@ namespace N.Core
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -412,7 +412,7 @@ namespace N.Core
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -450,7 +450,7 @@ namespace N.Core
 
     public class CCore
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓Bar;
     }
 }";
 
@@ -487,7 +487,7 @@ namespace N.Core
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -532,7 +532,7 @@ namespace N.Client
 
     public class C2 : N.Core.C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓Bar;
     }
 }";
 
@@ -561,7 +561,7 @@ namespace N
 
     public class C
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓Bar;
     }
 }";
 

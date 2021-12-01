@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Analyzers.Tests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests
 {
     public static class Code
     {
@@ -35,7 +35,7 @@ namespace N
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; }
 
-        public override FixAllProvider GetFixAllProvider() => null;
+        public override FixAllProvider? GetFixAllProvider() => null;
 
         public override Task RegisterCodeFixesAsync(CodeFixContext context) => Task.CompletedTask;
     }

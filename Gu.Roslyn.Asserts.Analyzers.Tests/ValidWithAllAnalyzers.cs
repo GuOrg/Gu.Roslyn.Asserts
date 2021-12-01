@@ -31,6 +31,7 @@
             Assert.Pass($"Count: {AllAnalyzers.Count}");
         }
 
+        [Explicit]
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void AnalyzersTestsProject(DiagnosticAnalyzer analyzer)
         {
