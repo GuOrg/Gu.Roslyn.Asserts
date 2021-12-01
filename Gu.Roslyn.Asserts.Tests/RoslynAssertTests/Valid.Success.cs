@@ -3,6 +3,7 @@
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
+
     using NUnit.Framework;
 
     public static partial class Valid
@@ -195,6 +196,24 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
                 RoslynAssert.Valid(analyzer, descriptor, code);
                 RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
+            }
+
+            [Test]
+            public static void Suppressed()
+            {
+                var code = @"
+namespace N
+{
+    public class C
+    {
+        private readonly string value1;
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressed("CS1823", "CS8618"));
+                RoslynAssert.Valid(analyzer, code, settings: settings);
+                RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
             }
 
             [Test]
