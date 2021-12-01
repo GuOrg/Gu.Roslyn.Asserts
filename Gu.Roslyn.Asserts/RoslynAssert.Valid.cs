@@ -402,7 +402,7 @@
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            NoCompilerErrors(diagnosticsAndErrors.Errors, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+            NoCompilerErrors(diagnosticsAndErrors.Errors.SelectMany(x => x), SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
     }
