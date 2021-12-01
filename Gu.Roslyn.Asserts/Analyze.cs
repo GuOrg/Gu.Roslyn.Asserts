@@ -77,8 +77,9 @@
             foreach (var project in solution.Projects)
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false);
-                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
+                                               .ConfigureAwait(false) ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
+                results.Add(compilation.GetDiagnostics(CancellationToken.None));
             }
 
             return results;
