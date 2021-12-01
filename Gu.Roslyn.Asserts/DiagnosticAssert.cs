@@ -26,6 +26,7 @@
         /// The ID of the expected <see cref="Diagnostic"/>. If the analyzer supports more than one <see
         /// cref="DiagnosticDescriptor.Id"/>, this must be provided.
         /// </param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         internal DiagnosticAssert(Func<DiagnosticAnalyzer> createAnalyzer, string? descriptorId = null, Settings? settings = null)
         {
             this.createAnalyzer = createAnalyzer ?? throw new ArgumentNullException(nameof(createAnalyzer));
