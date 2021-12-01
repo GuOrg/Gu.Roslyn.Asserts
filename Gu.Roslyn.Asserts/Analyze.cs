@@ -9,7 +9,6 @@
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -88,27 +87,6 @@
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<ProjectDiagnostics> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
-        {
-            if (project is null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            return ProjectDiagnostics.CreateAsync(project, analyzer);
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution)
@@ -169,6 +147,27 @@
             }
 
             return fixableDiagnostics;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Task<ProjectDiagnostics> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
+        {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            return ProjectDiagnostics.CreateAsync(project, analyzer);
         }
 
         /// <summary>
