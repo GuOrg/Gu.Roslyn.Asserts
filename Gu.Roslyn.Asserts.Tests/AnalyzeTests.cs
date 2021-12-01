@@ -11,24 +11,23 @@
         private static readonly MetadataReference[] MetadataReferences = Array.Empty<MetadataReference>();
 
         [Test]
-        public static async Task GetDiagnosticsAsyncProjectFile()
+        public static void GetDiagnosticsProjectFile()
         {
             Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out var projectFile));
-            var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile!, MetadataReferences).ConfigureAwait(false);
+            var diagnostics = Analyze.GetDiagnostics(new FieldNameMustNotBeginWithUnderscore(), projectFile, Settings.Default);
             CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
         }
 
         [Test]
-        public static async Task GetDiagnosticsAsyncSolutionFile()
+        public static void GetDiagnosticsSolutionFile()
         {
             var solutionFile = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
-            var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), solutionFile, MetadataReferences)
-                                           .ConfigureAwait(false);
+            var diagnostics = Analyze.GetDiagnostics(new FieldNameMustNotBeginWithUnderscore(), solutionFile, Settings.Default);
             var expected = new[]
-                           {
-                               "ClassLibrary1Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
-                               "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
-                           };
+            {
+                "ClassLibrary1Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
+                "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
+            };
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
         }
 
@@ -37,19 +36,17 @@
         {
             var solutionFile = SolutionFile.Find("Gu.Roslyn.Asserts.sln");
             var expected = new[]
-                           {
-                               "ClassLibrary1Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
-                               "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
-                           };
+            {
+                "ClassLibrary1Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
+                "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
+            };
 
             var sln = CodeFactory.CreateSolution(solutionFile, MetadataReferences);
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
 
-#pragma warning disable CA1849 // Call async methods when in an async method
             diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-#pragma warning restore CA1849 // Call async methods when in an async method
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
         }
 
