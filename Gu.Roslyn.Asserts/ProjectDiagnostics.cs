@@ -49,6 +49,16 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
         public static async Task<ProjectDiagnostics> CreateAsync(Project project, DiagnosticAnalyzer analyzer)
         {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
             var compilation = await project.GetCompilationAsync(CancellationToken.None).ConfigureAwait(false) ??
                               throw new InvalidOperationException("project.GetCompilationAsync() returned null");
 
