@@ -211,7 +211,6 @@
         {
             var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
-                .SelectMany(x => x)
                 .Where(IsIncluded)
                 .ToArray();
             if (introducedDiagnostics.Select(x => x.Id)

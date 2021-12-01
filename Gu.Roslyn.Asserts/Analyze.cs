@@ -66,20 +66,20 @@
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution)
+        public static async Task<IReadOnlyList<Diagnostic>> GetDiagnosticsAsync(Solution solution)
         {
             if (solution is null)
             {
                 throw new ArgumentNullException(nameof(solution));
             }
 
-            var results = new List<ImmutableArray<Diagnostic>>();
+            var results = new List<Diagnostic>();
             foreach (var project in solution.Projects)
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
                                                .ConfigureAwait(false) ??
                                   throw new InvalidOperationException("project.GetCompilationAsync() returned null");
-                results.Add(compilation.GetDiagnostics(CancellationToken.None));
+                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
             }
 
             return results;
@@ -153,7 +153,7 @@
                                                .ConfigureAwait(false);
                 if (analyzer is PlaceholderAnalyzer)
                 {
-                    results.Add(compilation!.GetDiagnostics(CancellationToken.None));
+                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
                 }
                 else
                 {
