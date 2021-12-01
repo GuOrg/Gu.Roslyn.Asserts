@@ -223,7 +223,7 @@
         /// <param name="project">The project.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
+        public static ProjectDiagnostics GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)
         {
             if (project is null)
             {
@@ -235,22 +235,7 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            var results = new List<ImmutableArray<Diagnostic>>();
-            var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
-            if (analyzer is PlaceholderAnalyzer)
-            {
-                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
-            }
-            else
-            {
-                var withAnalyzers = compilation!.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
-            }
-
-            return results;
+            return ProjectDiagnostics.CreateAsync(project, analyzer).GetAwaiter().GetResult();
         }
 
         /// <summary>
