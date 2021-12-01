@@ -159,7 +159,7 @@
                 }
                 else
                 {
-                    var withAnalyzers = compilation!.WithAnalyzers(
+                    var withAnalyzers = compilation.WithAnalyzers(
                         ImmutableArray.Create(analyzer),
                         project.AnalyzerOptions,
                         CancellationToken.None);
