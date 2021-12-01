@@ -304,7 +304,7 @@ namespace N
 
     public class C
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -322,9 +322,9 @@ namespace N
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, before, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, new[] { after });
-                RoslynAssert.CodeFix(fix, expectedDiagnostic, before, after, fixTitle: "Remove public event EventHandler Bar;");
-                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Remove public event EventHandler Bar;");
-                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Remove public event EventHandler Bar;");
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, before, after, fixTitle: "Remove public event EventHandler? E;");
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Remove public event EventHandler? E;");
+                RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Remove public event EventHandler? E;");
             }
 
             [Test]
@@ -337,7 +337,7 @@ namespace N
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -376,7 +376,7 @@ namespace N
 
     public partial class C
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -504,7 +504,7 @@ namespace N.Core
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -549,7 +549,7 @@ namespace N.Core
 
     public class C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -602,7 +602,7 @@ namespace N.Client
 
     public class C2 : N.Core.C1
     {
-        public event EventHandler ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
