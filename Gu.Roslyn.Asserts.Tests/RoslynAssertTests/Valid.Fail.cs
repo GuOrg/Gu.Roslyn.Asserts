@@ -275,6 +275,31 @@ namespace N
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, string.Empty));
                 Assert.AreEqual(expected, exception.Message);
             }
+
+            [Test]
+            public static void WhenCompilerWarnings()
+            {
+                var code = @"
+namespace N
+{
+    public class C
+    {
+        public string M() => null;
+    }
+}";
+                var expected = "Expected no diagnostics, found:\r\n" +
+                               "SA1309 Field '_value' must not begin with an underscore\r\n" +
+                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value = 1;\r\n";
+                var analyzer = new NopAnalyzer();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code));
+                Assert.AreEqual(expected, exception.Message);
+
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), code));
+                Assert.AreEqual(expected, exception.Message);
+            }
         }
     }
 }
