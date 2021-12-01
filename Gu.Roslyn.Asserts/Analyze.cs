@@ -90,18 +90,19 @@
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(Solution solution)
+        public static IReadOnlyList<Diagnostic> GetDiagnostics(Solution solution)
         {
             if (solution is null)
             {
                 throw new ArgumentNullException(nameof(solution));
             }
 
-            var results = new List<ImmutableArray<Diagnostic>>();
+            var results = new List<Diagnostic>();
             foreach (var project in solution.Projects)
             {
-                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
-                results.Add(compilation!.GetDiagnostics(CancellationToken.None));
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
+                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
             }
 
             return results;
