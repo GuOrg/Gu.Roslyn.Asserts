@@ -8,7 +8,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -104,49 +103,6 @@
             }
 
             return results;
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics fixable by <paramref name="fix"/>.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
-        /// <param name="fix">The code fix to use when filtering the diagnostics.</param>
-        /// <returns>A list with all fixable diagnostics.</returns>
-        public static async Task<IReadOnlyList<Diagnostic>> GetFixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
-        {
-            if (solution is null)
-            {
-                throw new ArgumentNullException(nameof(solution));
-            }
-
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            var fixableDiagnostics = new List<Diagnostic>();
-            foreach (var project in solution.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false);
-                if (analyzer is PlaceholderAnalyzer)
-                {
-                    fixableDiagnostics.AddRange(compilation!.GetDiagnostics(CancellationToken.None).Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
-                }
-                else
-                {
-                    var withAnalyzers = compilation!.WithAnalyzers(
-                        ImmutableArray.Create(analyzer),
-                        project.AnalyzerOptions,
-                        CancellationToken.None);
-                    var diagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                                         .ConfigureAwait(false);
-                    fixableDiagnostics.AddRange(diagnostics.Where(d => fix.FixableDiagnosticIds.Contains(d.Id)));
-                }
-            }
-
-            return fixableDiagnostics;
         }
 
         /// <summary>

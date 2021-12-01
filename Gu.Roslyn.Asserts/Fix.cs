@@ -239,7 +239,7 @@
 
             static async Task<Solution?> ApplyNext(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string? fixTitle, CancellationToken cancellationToken)
             {
-                if (await FirstFixable(solution, analyzer, fix).ConfigureAwait(false) is { } fixable &&
+                if (await FirstFixableDiagnosticAsync(solution, analyzer, fix).ConfigureAwait(false) is { } fixable &&
                     await ApplyAsync(solution, fix, fixable, fixTitle, cancellationToken).ConfigureAwait(false) is
                     { } temp &&
                     temp != solution)
@@ -249,7 +249,7 @@
 
                 return null;
 
-                static async Task<Diagnostic?> FirstFixable(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
+                static async Task<Diagnostic?> FirstFixableDiagnosticAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
                 {
                     foreach (var project in solution.Projects)
                     {
@@ -275,7 +275,7 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
-            var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
+            var fixable = await FixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
             var fixedSolution = solution;
             int count;
             do
@@ -288,10 +288,28 @@
 
                 var diagnosticProvider = await TestDiagnosticProvider.CreateAsync(fixedSolution, fix, fixTitle, fixable).ConfigureAwait(false);
                 fixedSolution = await ApplyAsync(fix, scope, diagnosticProvider, cancellationToken).ConfigureAwait(false);
-                fixable = await Analyze.GetFixableDiagnosticsAsync(fixedSolution, analyzer, fix).ConfigureAwait(false);
+                fixable = await FixableDiagnosticsAsync(fixedSolution, analyzer, fix).ConfigureAwait(false);
             }
             while (fixable.Count < count);
             return fixedSolution;
+
+            static async Task<IReadOnlyList<Diagnostic>> FixableDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
+            {
+                var fixableDiagnostics = new List<Diagnostic>();
+                foreach (var project in solution.Projects)
+                {
+                    var projectDiagnostics = await Analyze.GetDiagnosticsAsync(project, analyzer).ConfigureAwait(false);
+                    foreach (var diagnostic in projectDiagnostics.AnalyzerDiagnostics)
+                    {
+                        if (fix.FixableDiagnosticIds.Contains(diagnostic.Id))
+                        {
+                            fixableDiagnostics.Add(diagnostic);
+                        }
+                    }
+                }
+
+                return fixableDiagnostics;
+            }
         }
 
         /// <summary>
