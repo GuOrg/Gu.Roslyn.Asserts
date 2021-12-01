@@ -243,7 +243,7 @@
             var allDiagnostics = diagnostics.SelectMany(x => x).ToArray();
             if (allDiagnostics.Length == 0)
             {
-                allDiagnostics = Analyze.GetDiagnostics(solution).SelectMany(x => x).ToArray();
+                allDiagnostics = Analyze.GetDiagnostics(solution).ToArray();
             }
 
             if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, allDiagnostics))

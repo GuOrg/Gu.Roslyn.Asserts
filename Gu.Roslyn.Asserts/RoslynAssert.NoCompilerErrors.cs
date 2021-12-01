@@ -56,13 +56,12 @@
         public static void NoCompilerErrors(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
         {
             var diagnostics = Analyze.GetDiagnostics(solution);
-            NoCompilerErrors(diagnostics, allowedIds, allowedDiagnostics);
+            NoCompilerErrors(diagnostics.SelectMany(x => x), allowedIds, allowedDiagnostics);
         }
 
-        private static void NoCompilerErrors(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
+        private static void NoCompilerErrors(IEnumerable<Diagnostic> diagnostics, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
         {
             var introducedDiagnostics = diagnostics
-                                        .SelectMany(x => x)
                                         .Where(x => IsIncluded(x, allowedDiagnostics))
                                         .Where(x => !IsExcluded(x))
                                         .ToArray();
