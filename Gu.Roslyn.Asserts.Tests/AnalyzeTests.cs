@@ -43,7 +43,7 @@
 
             var sln = CodeFactory.CreateSolution(solutionFile, MetadataReferences);
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var diagnostics = await Analyze.GetDiagnosticsAsync(sln, analyzer).ConfigureAwait(false);
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, sln).ConfigureAwait(false);
             CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
 
             diagnostics = Analyze.GetDiagnostics(analyzer, sln);
