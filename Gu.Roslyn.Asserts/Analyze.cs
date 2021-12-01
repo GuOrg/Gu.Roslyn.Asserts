@@ -151,7 +151,8 @@
             foreach (var project in solution.Projects)
             {
                 var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false);
+                                               .ConfigureAwait(false) ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
                 if (analyzer is PlaceholderAnalyzer)
                 {
                     results.Add(compilation.GetDiagnostics(CancellationToken.None));
