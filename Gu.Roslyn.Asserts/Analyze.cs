@@ -135,7 +135,7 @@
         /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Solution solution, DiagnosticAnalyzer analyzer)
+        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution solution)
         {
             if (solution is null)
             {

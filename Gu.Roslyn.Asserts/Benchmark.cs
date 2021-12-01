@@ -130,7 +130,7 @@ namespace Gu.Roslyn.Asserts
         public static async Task<Benchmark> CreateAsync(Solution solution, DiagnosticAnalyzer analyzer)
         {
             var benchmarkAnalyzer = new BenchmarkAnalyzer(analyzer);
-            await Analyze.GetDiagnosticsAsync(solution, benchmarkAnalyzer).ConfigureAwait(false);
+            await Analyze.GetDiagnosticsAsync(benchmarkAnalyzer, solution).ConfigureAwait(false);
             return new Benchmark(
                 analyzer,
                 benchmarkAnalyzer.SyntaxNodeActions,
