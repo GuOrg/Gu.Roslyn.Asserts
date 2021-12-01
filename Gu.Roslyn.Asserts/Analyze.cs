@@ -23,23 +23,6 @@
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
         /// <param name="code">The sources as strings.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, IEnumerable<MetadataReference> metadataReferences)
-        {
-            return GetDiagnosticsAsync(
-                analyzer,
-                code,
-                CodeFactory.DefaultCompilationOptions(analyzer, null),
-                metadataReferences);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="code">The sources as strings.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
@@ -67,102 +50,16 @@
         /// Then compiles it and returns the diagnostics.
         /// </summary>
         /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="code">The sources as strings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="code">
+        /// The code to create the solution from.
+        /// Can be a .cs, .csproj or .solution file.
+        /// </param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
+        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
         {
-            var sln = CodeFactory.CreateSolution(code, CSharpParseOptions.Default, compilationOptions, metadataReferences);
+            var sln = CodeFactory.CreateSolution(code, settings);
             return GetDiagnostics(sln, analyzer);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="code">The sources as strings.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            var sln = CodeFactory.CreateSolution(code, CSharpParseOptions.Default, compilationOptions, metadataReferences);
-            return GetDiagnosticsAsync(sln, analyzer);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <typeparamref name="TAnalyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file.
-        /// </param>
-        /// <param name="references">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync<TAnalyzer>(FileInfo code, IEnumerable<MetadataReference> references)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-        {
-            return GetDiagnosticsAsync(new TAnalyzer(), code, references);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzerType"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzerType">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file.
-        /// </param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Type analyzerType, FileInfo code, IEnumerable<MetadataReference> metadataReferences)
-        {
-            return GetDiagnosticsAsync((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, code, metadataReferences);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file.
-        /// </param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, new[] { analyzer }, metadataReferences);
-            return GetDiagnosticsAsync(sln, analyzer);
-        }
-
-        /// <summary>
-        /// Creates a solution and adds the <paramref name="analyzer"/> as analyzer.
-        /// Then compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to find diagnostics for.</param>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .solution file.
-        /// </param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/> to use.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference> metadataReferences)
-        {
-            var sln = CodeFactory.CreateSolution(code, compilationOptions, metadataReferences);
-            return GetDiagnosticsAsync(sln, analyzer);
         }
 
         /// <summary>
@@ -186,6 +83,27 @@
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static Task<ProjectDiagnostics> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
+        {
+            if (project is null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (analyzer is null)
+            {
+                throw new ArgumentNullException(nameof(analyzer));
+            }
+
+            return ProjectDiagnostics.CreateAsync(project, analyzer);
         }
 
         /// <summary>
@@ -339,45 +257,6 @@
                         CancellationToken.None);
                     results.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
                 }
-            }
-
-            return results;
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
-        {
-            if (project is null)
-            {
-                throw new ArgumentNullException(nameof(project));
-            }
-
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            var results = new List<ImmutableArray<Diagnostic>>();
-            var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                           .ConfigureAwait(false) ??
-                              throw new InvalidOperationException("project.GetCompilationAsync() returned null");
-            if (analyzer is PlaceholderAnalyzer)
-            {
-                results.Add(compilation.GetDiagnostics(CancellationToken.None));
-            }
-            else
-            {
-                var withAnalyzers = compilation.WithAnalyzers(
-                    ImmutableArray.Create(analyzer),
-                    project.AnalyzerOptions,
-                    CancellationToken.None);
-                results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                               .ConfigureAwait(false));
             }
 
             return results;
