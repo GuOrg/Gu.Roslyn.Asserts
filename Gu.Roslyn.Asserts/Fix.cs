@@ -7,7 +7,9 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -127,7 +129,7 @@
             var operations = await action.GetOperationsAsync(cancellationToken).ConfigureAwait(false);
             if (operations.TrySingleOfType<CodeActionOperation, ApplyChangesOperation>(out var operation))
             {
-                return operation!.ChangedSolution;
+                return operation.ChangedSolution;
             }
 
             throw new InvalidOperationException($"Expected one operation, was {string.Join(", ", operations)}");
@@ -228,24 +230,43 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
-            var fixable = await Analyze.GetFixableDiagnosticsAsync(solution, analyzer, fix).ConfigureAwait(false);
-            fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
-            var fixedSolution = solution;
-            int count;
-            do
+            while (await ApplyNext(solution, analyzer, fix, fixTitle, cancellationToken).ConfigureAwait(false) is { } fixedSolution)
             {
-                count = fixable.Count;
-                if (count == 0)
+                solution = fixedSolution;
+            }
+
+            return solution;
+
+            static async Task<Solution?> ApplyNext(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string? fixTitle, CancellationToken cancellationToken)
+            {
+                if (await FirstFixable(solution, analyzer, fix).ConfigureAwait(false) is { } fixable &&
+                    await ApplyAsync(solution, fix, fixable, fixTitle, cancellationToken).ConfigureAwait(false) is
+                    { } temp &&
+                    temp != solution)
                 {
-                    return fixedSolution;
+                    return temp;
                 }
 
-                fixedSolution = await ApplyAsync(fixedSolution, fix, fixable[0], fixTitle, cancellationToken).ConfigureAwait(false);
-                fixable = await Analyze.GetFixableDiagnosticsAsync(fixedSolution, analyzer, fix).ConfigureAwait(false);
-                fixable = fixable.OrderBy(x => x.Location, LocationComparer.BySourceSpan).ToArray();
+                return null;
+
+                static async Task<Diagnostic?> FirstFixable(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix)
+                {
+                    foreach (var project in solution.Projects)
+                    {
+                        var projectDiagnostics = await Analyze.GetDiagnosticsAsync(project, analyzer).ConfigureAwait(false);
+                        var diagnostic = projectDiagnostics.AnalyzerDiagnostics
+                                                           .Where(d => fix.FixableDiagnosticIds.Contains(d.Id))
+                                                           .OrderBy(x => x.Location, LocationComparer.BySourceSpan)
+                                                           .FirstOrDefault();
+                        if (diagnostic is not null)
+                        {
+                            return diagnostic;
+                        }
+                    }
+
+                    return null;
+                }
             }
-            while (fixable.Count < count);
-            return fixedSolution;
         }
 
         /// <summary>

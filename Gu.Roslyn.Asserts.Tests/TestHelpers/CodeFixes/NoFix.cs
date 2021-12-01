@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 {
     using System.Collections.Immutable;
     using System.Threading.Tasks;
@@ -12,6 +12,6 @@ namespace Gu.Roslyn.Asserts.Tests.CodeFixes
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public override Task RegisterCodeFixesAsync(CodeFixContext context) => Task.FromResult(true);
+        public override Task RegisterCodeFixesAsync(CodeFixContext context) => Task.CompletedTask;
     }
 }
