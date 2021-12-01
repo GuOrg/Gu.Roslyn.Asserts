@@ -56,7 +56,7 @@
         public static void NoCompilerErrors(Solution solution, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
         {
             var diagnostics = Analyze.GetDiagnostics(solution);
-            NoCompilerErrors(diagnostics.SelectMany(x => x), allowedIds, allowedDiagnostics);
+            NoCompilerErrors(diagnostics, allowedIds, allowedDiagnostics);
         }
 
         private static void NoCompilerErrors(IEnumerable<Diagnostic> diagnostics, IReadOnlyList<string> allowedIds, AllowedDiagnostics allowedDiagnostics)
