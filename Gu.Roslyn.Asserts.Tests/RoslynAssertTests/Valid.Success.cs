@@ -217,6 +217,27 @@ namespace N
             }
 
             [Test]
+            public static void Pragma()
+            {
+                var code = @"
+namespace N
+{
+    public class C
+    {
+#pragma warning disable CA1823 // Avoid unused private fields
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        private readonly string value1;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning restore CA1823 // Avoid unused private fields
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                RoslynAssert.Valid(analyzer, code);
+                RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code);
+            }
+
+            [Test]
             public static void Issue53()
             {
                 var resourcesCode = @"
