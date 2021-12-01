@@ -238,7 +238,7 @@
                 else if (sources.TryFirst(x => CodeReader.FileName(x) == lineSpan.Path, out _))
                 {
                     errorBuilder.AppendLine($"Found more than one document for {lineSpan.Path}.");
-                    foreach (string source in sources.Where(x => CodeReader.FileName(x) == lineSpan.Path))
+                    foreach (var source in sources.Where(x => CodeReader.FileName(x) == lineSpan.Path))
                     {
                         errorBuilder.AppendLine(source);
                     }
