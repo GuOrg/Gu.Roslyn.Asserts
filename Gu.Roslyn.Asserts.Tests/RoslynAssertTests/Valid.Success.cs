@@ -210,7 +210,7 @@ namespace N
     }
 }";
 
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var analyzer = new NopAnalyzer();
                 var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressed("CS1823", "CS8618"));
                 RoslynAssert.Valid(analyzer, code, settings: settings);
                 RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
@@ -232,7 +232,7 @@ namespace N
     }
 }";
 
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var analyzer = new NopAnalyzer();
                 RoslynAssert.Valid(analyzer, code);
                 RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code);
             }
