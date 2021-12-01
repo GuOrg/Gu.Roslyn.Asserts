@@ -627,7 +627,7 @@
                 diagnosticsAndSources,
                 analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationErrors, FixAllScope.Document);
         }
@@ -846,7 +846,7 @@
                 diagnosticsAndSources,
                 analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationErrors, scope);
         }
@@ -900,7 +900,7 @@
                 diagnosticsAndSources,
                 analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationErrors, scope);
         }
@@ -961,7 +961,7 @@
                 diagnosticsAndSources,
                 analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationErrors, scope);
         }

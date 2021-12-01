@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -26,7 +27,7 @@
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnostics(sln, analyzer);
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
@@ -40,7 +41,7 @@
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnostics(sln, analyzer);
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@
         public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings);
-            return GetDiagnostics(sln, analyzer);
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
