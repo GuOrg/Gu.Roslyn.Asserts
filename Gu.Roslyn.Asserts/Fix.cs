@@ -253,7 +253,7 @@
                 {
                     foreach (var project in solution.Projects)
                     {
-                        var projectDiagnostics = await Analyze.GetDiagnosticsAsync(project, analyzer).ConfigureAwait(false);
+                        var projectDiagnostics = await Analyze.GetDiagnosticsAsync(analyzer, project).ConfigureAwait(false);
                         var diagnostic = projectDiagnostics.AnalyzerDiagnostics
                                                            .Where(d => fix.FixableDiagnosticIds.Contains(d.Id))
                                                            .OrderBy(x => x.Location, LocationComparer.BySourceSpan)
@@ -303,7 +303,7 @@
                     foreach (var project in solution.Projects)
                     {
                         var projectDiagnostics =
-                            await Analyze.GetDiagnosticsAsync(project, analyzer).ConfigureAwait(false);
+                            await Analyze.GetDiagnosticsAsync(analyzer, project).ConfigureAwait(false);
                         foreach (var diagnostic in projectDiagnostics.AnalyzerDiagnostics)
                         {
                             if (fix.FixableDiagnosticIds.Contains(diagnostic.Id))

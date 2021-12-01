@@ -114,7 +114,7 @@
         /// <param name="project">The project.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Task<ProjectDiagnostics> GetDiagnosticsAsync(Project project, DiagnosticAnalyzer analyzer)
+        public static Task<ProjectDiagnostics> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Project project)
         {
             if (project is null)
             {
