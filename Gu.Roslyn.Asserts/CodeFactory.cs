@@ -778,7 +778,8 @@
                 assemblyIdentityComparer: null,
                 strongNameProvider: null,
                 publicSign: false,
-                metadataImportOptions: MetadataImportOptions.Public);
+                metadataImportOptions: MetadataImportOptions.Public,
+                nullableContextOptions: NullableContextOptions.Enable);
         }
 
         /// <summary>
