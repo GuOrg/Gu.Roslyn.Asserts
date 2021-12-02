@@ -24,10 +24,10 @@
         /// <param name="code">The sources as strings.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
+        public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnostics(analyzer, sln);
+            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -38,10 +38,10 @@
         /// <param name="code">The sources as strings.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
+        public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnostics(analyzer, sln);
+            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -55,10 +55,10 @@
         /// </param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
+        public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings);
-            return GetDiagnostics(analyzer, sln);
+            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
         }
 
         /// <summary>
