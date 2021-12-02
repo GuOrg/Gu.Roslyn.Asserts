@@ -246,18 +246,20 @@ namespace N
                 var code = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int wrongName;
+        private readonly int wrongName = 1;
         
         public int WrongName { get; set; }
+
+        public int M() => this.wrongName;
     }
 }";
 
                 var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
                 var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format\r\n" +
-                                  "  at line 5 and character 29 in file Value.cs | private readonly int ↓wrongName;\r\n";
+                                  "  at line 5 and character 29 in file C.cs | private readonly int ↓wrongName;\r\n";
                 var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);

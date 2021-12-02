@@ -170,11 +170,11 @@ namespace N
 {
     class C
     {
-        private readonly int f = 1;
+        private readonly int value = 1;
         
         public int WrongName { get; set; }
 
-        public int M() => this.f;
+        public int M() => this.value;
     }
 }";
 
