@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -77,11 +77,11 @@ namespace Gu.Roslyn.Asserts.Tests
             var analyzer = new SymbolAnalyzer(SymbolKind.Field);
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
             var expected = new List<string>
-                           {
-                               "Gu.Roslyn.Asserts.AllowCompilationErrors.No",
-                               "Gu.Roslyn.Asserts.AllowCompilationErrors.Yes",
-                               "ClassLibrary1.ClassLibrary1Class1._value",
-                           };
+            {
+                "Gu.Roslyn.Asserts.AllowCompilationErrors.No",
+                "Gu.Roslyn.Asserts.AllowCompilationErrors.Yes",
+                "ClassLibrary1.ClassLibrary1Class1._value",
+            };
 
             CollectionAssert.AreEquivalent(expected, benchmark.SymbolActions.Select(x => x.Context.Symbol.ToString()));
             CollectionAssert.IsEmpty(analyzer.Contexts);

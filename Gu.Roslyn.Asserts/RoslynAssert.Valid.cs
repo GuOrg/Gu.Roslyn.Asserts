@@ -386,14 +386,15 @@
                 throw new ArgumentNullException(nameof(diagnostics));
             }
 
-            if (diagnostics.Any(x => x.Any()))
+            StringBuilderPool.PooledStringBuilder? builder = null;
+            foreach (var diagnostic in diagnostics.SelectMany(x => x))
             {
-                var builder = StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
-                foreach (var diagnostic in diagnostics.SelectMany(x => x))
-                {
-                    builder.AppendLine(diagnostic.ToErrorString());
-                }
+                builder ??= StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
+                builder.AppendLine(diagnostic.ToErrorString());
+            }
 
+            if (builder is { })
+            {
                 throw new AssertException(builder.Return());
             }
         }
