@@ -1,6 +1,5 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
@@ -8,8 +7,6 @@
 
     public static class AnalyzeTests
     {
-        private static readonly MetadataReference[] MetadataReferences = Array.Empty<MetadataReference>();
-
         [Test]
         public static void GetDiagnosticsProjectFile()
         {
@@ -41,13 +38,13 @@
                 "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
             };
 
-            var sln = CodeFactory.CreateSolution(solutionFile, MetadataReferences);
+            var sln = CodeFactory.CreateSolution(solutionFile);
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, sln).ConfigureAwait(false);
-            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
+            var diagnostics1 = await Analyze.GetDiagnosticsAsync(analyzer, sln).ConfigureAwait(false);
+            CollectionAssert.AreEquivalent(expected, diagnostics1.SelectMany(x => x.AnalyzerDiagnostics).Select(SkipDirectory));
 
-            diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
+            var __diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            CollectionAssert.AreEquivalent(expected, __diagnostics.SelectMany(x => x).Select(SkipDirectory));
         }
 
         private static string SkipDirectory(Diagnostic diagnostic)
