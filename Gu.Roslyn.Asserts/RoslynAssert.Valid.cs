@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
 
@@ -379,7 +378,7 @@
         /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
         /// </summary>
         /// <param name="diagnostics">The diagnostics.</param>
-        public static void NoDiagnostics(IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics)
+        public static void NoDiagnostics(IEnumerable<Diagnostic> diagnostics)
         {
             if (diagnostics is null)
             {
@@ -387,7 +386,7 @@
             }
 
             StringBuilderPool.PooledStringBuilder? builder = null;
-            foreach (var diagnostic in diagnostics.SelectMany(x => x))
+            foreach (var diagnostic in diagnostics)
             {
                 builder ??= StringBuilderPool.Borrow().AppendLine("Expected no diagnostics, found:");
                 builder.AppendLine(diagnostic.ToErrorString());
@@ -401,7 +400,7 @@
 
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
-            NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics);
+            NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics.SelectMany(x => x));
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             NoCompilerErrors(diagnosticsAndErrors.Errors.SelectMany(x => x), SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()

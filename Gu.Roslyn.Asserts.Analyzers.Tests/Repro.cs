@@ -29,7 +29,7 @@
         {
             Assert.Inconclusive("VS does not understand [Explicit]");
             var diagnostics = Analyze.GetDiagnostics(analyzer, Solution);
-            RoslynAssert.NoDiagnostics(diagnostics);
+            RoslynAssert.NoDiagnostics(diagnostics.SelectMany(x => x));
         }
     }
 }
