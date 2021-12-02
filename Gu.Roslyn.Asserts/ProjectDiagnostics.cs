@@ -30,6 +30,9 @@
             this.AnalyzerDiagnostics = analyzerDiagnostics;
         }
 
+        /// <summary>
+        /// The <see cref="DiagnosticAnalyzer"/>.
+        /// </summary>
         public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
