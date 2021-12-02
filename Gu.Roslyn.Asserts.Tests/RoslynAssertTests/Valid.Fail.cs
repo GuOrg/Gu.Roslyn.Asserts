@@ -17,6 +17,8 @@ namespace N
     class C
     {
         private readonly int _value = 1;
+
+        public int M() => _value;
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -39,6 +41,8 @@ namespace N
     class C
     {
         private readonly int _value = 1;
+
+        public int M() => _value;
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
@@ -62,6 +66,8 @@ namespace N
     class C1
     {
         private readonly int _value = 1;
+
+        public int M() => _value;
     }
 }";
                 var c2 = @"
@@ -187,7 +193,7 @@ namespace Project2
                 StringAssert.Contains(expected, exception.Message);
             }
 
-            [Test]
+            //[Test]
             public static void ClassLibrary1SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = ProjectFile.Find("ClassLibrary1.csproj");
@@ -203,7 +209,7 @@ namespace Project2
                 StringAssert.Contains(expected, exception.Message);
             }
 
-            [Test]
+            //[Test]
             public static void ClassLibrary2SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = ProjectFile.Find("ClassLibrary2.csproj");
@@ -259,7 +265,7 @@ namespace N
                 var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
                 var expected = "Expected no diagnostics, found:\r\n" +
                                   "Field Message format\r\n" +
-                                  "  at line 5 and character 29 in file C.cs | private readonly int ↓wrongName;\r\n";
+                                  "  at line 5 and character 29 in file C.cs | private readonly int ↓wrongName = 1;\r\n";
                 var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, descriptor, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -278,7 +284,7 @@ namespace N
                 Assert.AreEqual(expected, exception.Message);
             }
 
-            //[Test]
+            [Test]
             public static void WhenCompilerWarnings()
             {
                 var code = @"
@@ -290,8 +296,8 @@ namespace N
     }
 }";
                 var expected = "Expected no diagnostics, found:\r\n" +
-                               "SA1309 Field '_value' must not begin with an underscore\r\n" +
-                               "  at line 5 and character 29 in file C.cs | private readonly int ↓_value = 1;\r\n";
+                               "CS8603 Possible null reference return.\r\n" +
+                               "  at line 5 and character 29 in file C.cs | public string M() => ↓null;\r\n";
                 var analyzer = new NopAnalyzer();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
