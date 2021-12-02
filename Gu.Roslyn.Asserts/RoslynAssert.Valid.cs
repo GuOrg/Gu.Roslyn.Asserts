@@ -370,8 +370,8 @@
                 throw new ArgumentNullException(nameof(solution));
             }
 
-            var diagnosticsAndErrors = Analyze.GetDiagnosticsAndErrors(analyzer, solution);
-            NoDiagnosticsOrErrors(diagnosticsAndErrors);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -415,14 +415,6 @@
             }
 
             NoDiagnostics(diagnostics.SelectMany(x => x.All()));
-        }
-
-        private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
-        {
-            NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics.SelectMany(x => x));
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            NoCompilerErrors(diagnosticsAndErrors.Errors.SelectMany(x => x), SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
     }
 }
