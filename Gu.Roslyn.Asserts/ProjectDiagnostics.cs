@@ -18,15 +18,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectDiagnostics"/> class.
         /// </summary>
+        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
         /// <param name="project">The <see cref="Project"/>.</param>
         /// <param name="compilerDiagnostics">The compiler errors.</param>
         /// <param name="analyzerDiagnostics">The diagnostics for the analyzer.</param>
-        public ProjectDiagnostics(Project project, ImmutableArray<Diagnostic> compilerDiagnostics, ImmutableArray<Diagnostic> analyzerDiagnostics)
+        public ProjectDiagnostics(DiagnosticAnalyzer analyzer, Project project, ImmutableArray<Diagnostic> compilerDiagnostics, ImmutableArray<Diagnostic> analyzerDiagnostics)
         {
+            this.Analyzer = analyzer;
             this.Project = project;
             this.CompilerDiagnostics = compilerDiagnostics;
             this.AnalyzerDiagnostics = analyzerDiagnostics;
         }
+
+        public DiagnosticAnalyzer Analyzer { get; }
 
         /// <summary>
         /// The <see cref="Project"/>.
@@ -52,9 +56,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectDiagnostics"/> class.
         /// </summary>
-        /// <param name="project">The <see cref="Project"/>.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/></param>
-        public static async Task<ProjectDiagnostics> CreateAsync(Project project, DiagnosticAnalyzer analyzer)
+        /// <param name="project">The <see cref="Project"/>.</param>
+        public static async Task<ProjectDiagnostics> CreateAsync(DiagnosticAnalyzer analyzer, Project project)
         {
             if (project is null)
             {
@@ -73,6 +77,7 @@
             {
                 var diagnostics = compilation.GetDiagnostics(CancellationToken.None);
                 return new ProjectDiagnostics(
+                    analyzer,
                     project,
                     diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id != x.Id)).ToImmutableArray(),
                     diagnostics.Where(x => placeholder.SupportedDiagnostics.All(d => d.Id == x.Id)).ToImmutableArray());
@@ -85,6 +90,7 @@
                     CancellationToken.None);
                 var analyzerDiagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).ConfigureAwait(false);
                 return new ProjectDiagnostics(
+                    analyzer,
                     project,
                     compilation.GetDiagnostics(CancellationToken.None),
                     analyzerDiagnostics);
