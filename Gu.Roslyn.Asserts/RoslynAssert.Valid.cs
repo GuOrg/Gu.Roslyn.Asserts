@@ -398,6 +398,25 @@
             }
         }
 
+        /// <summary>
+        /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
+        /// </summary>
+        /// <param name="diagnostics">The diagnostics.</param>
+        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics)
+        {
+            if (diagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostics));
+            }
+
+            if (diagnostics.All(x => x.IsEmpty))
+            {
+                return;
+            }
+
+            NoDiagnostics(diagnostics.SelectMany(x => x.AnalyzerDiagnostics));
+        }
+
         private static void NoDiagnosticsOrErrors(Analyze.DiagnosticsAndErrors diagnosticsAndErrors)
         {
             NoDiagnostics(diagnosticsAndErrors.AnalyzerDiagnostics.SelectMany(x => x));
