@@ -12,7 +12,7 @@
         {
             Assert.AreEqual(true, ProjectFile.TryFind("Gu.Roslyn.Asserts.csproj", out var projectFile));
             var diagnostics = Analyze.GetDiagnostics(new FieldNameMustNotBeginWithUnderscore(), projectFile, Settings.Default);
-            CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x));
+            CollectionAssert.IsEmpty(diagnostics.SelectMany(x => x.AnalyzerDiagnostics));
         }
 
         [Test]
@@ -25,7 +25,7 @@
                 "ClassLibrary1Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
                 "ClassLibrary2Class1.cs(6,21): warning SA1309: Field '_value' must not begin with an underscore",
             };
-            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x).Select(SkipDirectory));
+            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x.AnalyzerDiagnostics).Select(SkipDirectory));
         }
 
         [Test]
