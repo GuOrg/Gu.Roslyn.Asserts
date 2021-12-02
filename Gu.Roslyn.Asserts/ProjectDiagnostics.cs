@@ -91,6 +91,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets <see cref="CompilerDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
+        /// </summary>
         public IEnumerable<Diagnostic> All()
         {
             foreach (var diagnostic in this.CompilerDiagnostics)
