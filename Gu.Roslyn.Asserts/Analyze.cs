@@ -64,53 +64,6 @@
         /// <summary>
         /// Creates a solution, compiles it and returns the diagnostics.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<Diagnostic>> GetDiagnosticsAsync(Solution solution)
-        {
-            if (solution is null)
-            {
-                throw new ArgumentNullException(nameof(solution));
-            }
-
-            var results = new List<Diagnostic>();
-            foreach (var project in solution.Projects)
-            {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false) ??
-                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
-                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
-            }
-
-            return results;
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<Diagnostic> GetDiagnostics(Solution solution)
-        {
-            if (solution is null)
-            {
-                throw new ArgumentNullException(nameof(solution));
-            }
-
-            var results = new List<Diagnostic>();
-            foreach (var project in solution.Projects)
-            {
-                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
-                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
-                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
-            }
-
-            return results;
-        }
-
-        /// <summary>
-        /// Creates a solution, compiles it and returns the diagnostics.
-        /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="project"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
@@ -148,6 +101,53 @@
             }
 
             return ProjectDiagnostics.CreateAsync(project, analyzer).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns the diagnostics.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <returns>A list with diagnostics per document.</returns>
+        public static async Task<IReadOnlyList<Diagnostic>> GetDiagnosticsAsync(Solution solution)
+        {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            var results = new List<Diagnostic>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = await project.GetCompilationAsync(CancellationToken.None)
+                                               .ConfigureAwait(false) ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
+                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns all diagnostics.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <returns>A list with diagnostics.</returns>
+        public static IReadOnlyList<Diagnostic> GetDiagnostics(Solution solution)
+        {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            var results = new List<Diagnostic>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
+                results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
+            }
+
+            return results;
         }
 
         /// <summary>
