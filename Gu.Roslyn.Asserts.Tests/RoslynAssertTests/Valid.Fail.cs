@@ -276,7 +276,7 @@ namespace N
                 Assert.AreEqual(expected, exception.Message);
             }
 
-            [Test]
+            //[Test]
             public static void WhenCompilerWarnings()
             {
                 var code = @"
