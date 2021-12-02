@@ -151,7 +151,9 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
+        private readonly int f = 1;
+
+        public int M() => this.f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -166,11 +168,13 @@ namespace N
                 var code = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int value;
+        private readonly int f = 1;
         
         public int WrongName { get; set; }
+
+        public int M() => this.f;
     }
 }";
 
@@ -188,7 +192,9 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
+        private readonly int f = 1;
+
+        public int M() => this.f;
     }
 }";
 
@@ -206,12 +212,12 @@ namespace N
 {
     public class C
     {
-        private readonly string value1;
+        private readonly string f;
     }
 }";
 
                 var analyzer = new NopAnalyzer();
-                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressed("CS1823", "CS8618"));
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressed("CS1823", "CS8618", "CS0169"));
                 RoslynAssert.Valid(analyzer, code, settings: settings);
                 RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
             }
@@ -226,7 +232,9 @@ namespace N
     {
 #pragma warning disable CA1823 // Avoid unused private fields
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        private readonly string value1;
+#pragma warning disable CS0169 // Remove unused private members
+        private readonly string f;
+#pragma warning restore CS0169 // Remove unused private members
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 #pragma warning restore CA1823 // Avoid unused private fields
     }
@@ -251,8 +259,6 @@ namespace N.Properties
                 var code = @"
 namespace N
 {
-    using N.Properties;
-
     public class C
     {
     }
@@ -260,7 +266,7 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
                 RoslynAssert.Valid(analyzer, resourcesCode, code);
                 RoslynAssert.Valid(analyzer, code, resourcesCode);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), resourcesCode, code);
+                RoslynAssert.Valid(analyzer.GetType(), resourcesCode, code);
             }
 
             [Test]
@@ -271,7 +277,9 @@ namespace N
 {
     public class C
     {
-        private int value;
+        private int value = 1;
+
+        public int M() => this.value;
     }
 }";
                 var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
@@ -284,11 +292,11 @@ namespace N
                 var code = @"
 namespace N
 {
-    using System.Reflection;
-
     public class C : BinaryReferencedAssembly.Base
     {
-        private int f;
+        private int f = 1;
+        
+        public int M() => this.f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -311,11 +319,11 @@ namespace BinaryReferencedAssembly
                 var code = @"
 namespace N
 {
-    using System.Reflection;
-
     public class C : BinaryReferencedAssembly.Base
     {
-        private int f;
+        private int f = 1;
+        
+        public int M() => this.f;
     }
 }";
                 var binaryReference = Asserts.MetadataReferences.CreateBinary(@"
