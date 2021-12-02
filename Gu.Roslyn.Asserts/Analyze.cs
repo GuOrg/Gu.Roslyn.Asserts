@@ -79,7 +79,7 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            return ProjectDiagnostics.CreateAsync(project, analyzer);
+            return ProjectDiagnostics.CreateAsync(analyzer, project);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            return ProjectDiagnostics.CreateAsync(project, analyzer).GetAwaiter().GetResult();
+            return ProjectDiagnostics.CreateAsync(analyzer, project).GetAwaiter().GetResult();
         }
 
         /// <summary>
