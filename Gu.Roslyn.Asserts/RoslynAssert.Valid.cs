@@ -402,7 +402,7 @@
         /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
         /// </summary>
         /// <param name="diagnostics">The diagnostics.</param>
-        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics)
+        public static void NoAnalyzerDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics)
         {
             if (diagnostics is null)
             {
