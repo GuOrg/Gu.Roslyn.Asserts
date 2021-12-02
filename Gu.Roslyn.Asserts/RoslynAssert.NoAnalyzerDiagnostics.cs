@@ -203,8 +203,8 @@
                 throw new ArgumentNullException(nameof(solution));
             }
 
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics.SelectMany(x => x));
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -226,8 +226,8 @@
             }
 
             var sln = CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            NoDiagnostics(diagnostics.SelectMany(x => x));
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
