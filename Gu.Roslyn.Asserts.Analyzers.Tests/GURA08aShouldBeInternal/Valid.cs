@@ -24,15 +24,11 @@ namespace N
         }
 
         [Test]
-        public static void RandomClass()
+        public static void EmptyClass()
         {
             var c = @"
 namespace N
 {
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
-
     public class C
     {
     }
