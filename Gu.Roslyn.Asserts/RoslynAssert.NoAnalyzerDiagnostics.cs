@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -298,6 +299,25 @@
         public static void NoAnalyzerDiagnostics(Type analyzerType, Solution solution)
         {
             NoAnalyzerDiagnostics((DiagnosticAnalyzer)Activator.CreateInstance(analyzerType, nonPublic: true)!, solution);
+        }
+
+        /// <summary>
+        /// Assert that <paramref name="diagnostics"/> is empty. Throw an AssertException with details if not.
+        /// </summary>
+        /// <param name="diagnostics">The diagnostics.</param>
+        public static void NoAnalyzerDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics)
+        {
+            if (diagnostics is null)
+            {
+                throw new ArgumentNullException(nameof(diagnostics));
+            }
+
+            if (diagnostics.All(x => x.IsEmpty))
+            {
+                return;
+            }
+
+            NoDiagnostics(diagnostics.SelectMany(x => x.AnalyzerDiagnostics));
         }
     }
 }
