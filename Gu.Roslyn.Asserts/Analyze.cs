@@ -156,7 +156,7 @@
         /// <param name="solution">The solution.</param>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<ImmutableArray<Diagnostic>>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution solution)
+        public static async Task<IReadOnlyList<ProjectDiagnostics>> GetDiagnosticsAsync(DiagnosticAnalyzer analyzer, Solution solution)
         {
             if (solution is null)
             {
@@ -168,25 +168,10 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            var results = new List<ImmutableArray<Diagnostic>>();
+            var results = new List<ProjectDiagnostics>();
             foreach (var project in solution.Projects)
             {
-                var compilation = await project.GetCompilationAsync(CancellationToken.None)
-                                               .ConfigureAwait(false) ??
-                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
-                if (analyzer is PlaceholderAnalyzer)
-                {
-                    results.Add(compilation.GetDiagnostics(CancellationToken.None));
-                }
-                else
-                {
-                    var withAnalyzers = compilation.WithAnalyzers(
-                        ImmutableArray.Create(analyzer),
-                        project.AnalyzerOptions,
-                        CancellationToken.None);
-                    results.Add(await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None)
-                                                   .ConfigureAwait(false));
-                }
+                results.Add(await ProjectDiagnostics.CreateAsync(analyzer, project).ConfigureAwait(false));
             }
 
             return results;
