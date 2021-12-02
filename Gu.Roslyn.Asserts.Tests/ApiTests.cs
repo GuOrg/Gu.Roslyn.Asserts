@@ -6,12 +6,15 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading;
+
     using Gu.Roslyn.Asserts.Internals;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.CodeRefactorings;
     using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.Text;
+
     using NUnit.Framework;
 
     public static class ApiTests
@@ -46,7 +49,11 @@
         [TestCaseSource(nameof(ValidMethods))]
         public static void AnalyzerParameter(IMethodSymbol method)
         {
-            if (method.TryFindParameterByType<DiagnosticAnalyzer>(out var parameter))
+            if (method.TryFindParameterByType<IReadOnlyList<ProjectDiagnostics>>(out _))
+            {
+                return;
+            }
+            else if (method.TryFindParameterByType<DiagnosticAnalyzer>(out var parameter))
             {
                 Assert.AreEqual(0, parameter!.Ordinal);
                 Assert.AreEqual(false, parameter.IsOptional, "Optional.");
@@ -180,6 +187,11 @@
         [TestCaseSource(nameof(NoAnalyzerDiagnosticsMethods))]
         public static void ValidCodeParameter(IMethodSymbol method)
         {
+            if (method.TryFindParameterByType<IReadOnlyList<ProjectDiagnostics>>(out _))
+            {
+                return;
+            }
+
             if (method.TryFindParameterByType<Solution>(out var sln))
             {
                 Assert.AreEqual("solution", sln!.MetadataName);
