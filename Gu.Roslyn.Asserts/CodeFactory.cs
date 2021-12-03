@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
@@ -462,46 +461,6 @@
         }
 
         /// <summary>
-        /// Create default compilation options for <paramref name="descriptor"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="descriptor">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticDescriptor descriptor, IEnumerable<string>? suppressed = null)
-        {
-            if (descriptor is null)
-            {
-                throw new ArgumentNullException(nameof(descriptor));
-            }
-
-            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
-        }
-
-        /// <summary>
-        /// Create default compilation options for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzers to report warning or error for.</param>
-        /// <param name="descriptor">The diagnostics to check for.</param>
-        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string>? suppressWarnings)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            if (descriptor is null)
-            {
-                throw new ArgumentNullException(nameof(descriptor));
-            }
-
-            return DefaultCompilationOptions(analyzer, descriptor.Id, suppressWarnings);
-        }
-
-        /// <summary>
         /// Searches parent directories for <paramref name="fileName"/>.
         /// </summary>
         /// <param name="directory">The directory to start in.</param>
@@ -534,59 +493,6 @@
 
             result = null;
             return false;
-        }
-
-        /// <summary>
-        /// Create diagnostic options that at least warns for <paramref name="enabled"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="enabled">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The diagnostic IDs to suppress.</param>
-        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
-        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticDescriptor>? enabled, IEnumerable<string>? suppressed)
-        {
-            var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
-            if (enabled != null)
-            {
-                foreach (var descriptor in enabled)
-                {
-                    diagnosticOptions.Add(descriptor.Id, WarnOrError(descriptor.DefaultSeverity));
-                }
-            }
-
-            diagnosticOptions.Add("AD0001", ReportDiagnostic.Error);
-            if (suppressed != null)
-            {
-                foreach (var id in suppressed)
-                {
-                    diagnosticOptions[id] = ReportDiagnostic.Suppress;
-                }
-            }
-
-            return diagnosticOptions;
-
-            static ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
-            {
-                switch (severity)
-                {
-                    case DiagnosticSeverity.Error:
-                        return ReportDiagnostic.Error;
-                    case DiagnosticSeverity.Hidden:
-                    case DiagnosticSeverity.Info:
-                    case DiagnosticSeverity.Warning:
-                        return ReportDiagnostic.Warn;
-                    default:
-                        throw new InvalidEnumArgumentException(nameof(severity), (int)severity, typeof(DiagnosticSeverity));
-                }
-            }
-        }
-
-        internal static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string>? suppressWarnings)
-        {
-            RoslynAssert.VerifyAnalyzerSupportsDiagnostic(analyzer, expectedId);
-            var descriptor = analyzer.SupportedDiagnostics.Single(x => x.Id == expectedId);
-            suppressWarnings ??= Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptor, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Select(x => x.Id).Where(x => x != expectedId)));
         }
 
         /// <summary>
