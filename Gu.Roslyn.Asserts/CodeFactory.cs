@@ -419,28 +419,6 @@
         }
 
         /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (analyzers is null)
-            {
-                throw new ArgumentNullException(nameof(analyzers));
-            }
-
-            return CreateSolutionWithOneProject(new[] { code }, analyzers, metadataReferences);
-        }
-
-        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
@@ -461,28 +439,6 @@
             }
 
             return CreateSolutionWithOneProject(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (compilationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(compilationOptions));
-            }
-
-            return CreateSolutionWithOneProject(new[] { code }, CSharpParseOptions.Default, compilationOptions, metadataReferences);
         }
 
         /// <summary>
@@ -967,24 +923,6 @@
                         throw new InvalidEnumArgumentException(nameof(severity), (int)severity, typeof(DiagnosticSeverity));
                 }
             }
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="diagnosticsAndSources"/>.
-        /// </summary>
-        /// <param name="diagnosticsAndSources">The code to create the solution from with .</param>
-        /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="suppressWarnings">The explicitly suppressed diagnostics.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        [Obsolete("Use overload with settings.")]
-        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, CSharpCompilationOptions? compilationOptions, IEnumerable<string> suppressWarnings, IEnumerable<MetadataReference> metadataReferences)
-        {
-            return CreateSolution(
-                diagnosticsAndSources.Code,
-                compilationOptions ?? DefaultCompilationOptions(analyzer, diagnosticsAndSources.ExpectedDiagnostics, suppressWarnings),
-                metadataReferences);
         }
 
         internal static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, string expectedId, IEnumerable<string>? suppressWarnings)

@@ -816,43 +816,6 @@
         }
 
         /// <summary>
-        /// Verifies that
-        /// 1. <paramref name="before"/> produces the expected diagnostics
-        /// 2. The code fix fixes the code.
-        /// </summary>
-        /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="before"/> with.</typeparam>
-        /// <typeparam name="TCodeFix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</typeparam>
-        /// <param name="before">The code with error positions indicated.</param>
-        /// <param name="after">The expected code produced by applying <typeparamref name="TCodeFix"/>.</param>
-        /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
-        [Obsolete("Use overload taking analyzer & fix as arguments.")]
-        public static void FixAllOneByOne<TAnalyzer, TCodeFix>(string before, string after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
-            where TAnalyzer : DiagnosticAnalyzer, new()
-            where TCodeFix : CodeFixProvider, new()
-        {
-            if (before is null)
-            {
-                throw new ArgumentNullException(nameof(before));
-            }
-
-            if (after is null)
-            {
-                throw new ArgumentNullException(nameof(after));
-            }
-
-            var analyzer = new TAnalyzer();
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before);
-            VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
-            var fix = new TCodeFix();
-            VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var sln = CodeFactory.CreateSolution(diagnosticsAndSources, analyzer, null, SuppressedDiagnostics, MetadataReferences);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, allowCompilationErrors);
-        }
-
-        /// <summary>
         /// Verifies that <paramref name="code"/> produces no diagnostics when analyzed with <typeparamref name="TAnalyzer"/>.
         /// </summary>
         /// <typeparam name="TAnalyzer">The type of <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</typeparam>
