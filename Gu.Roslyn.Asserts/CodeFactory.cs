@@ -462,18 +462,6 @@
         }
 
         /// <summary>
-        /// Create default compilation options for <paramref name="analyzers"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzers">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticAnalyzer>? analyzers, IEnumerable<string>? suppressed = null)
-        {
-            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(analyzers, suppressed));
-        }
-
-        /// <summary>
         /// Create default compilation options for <paramref name="descriptor"/>
         /// AD0001 is reported as error.
         /// </summary>
@@ -488,29 +476,6 @@
             }
 
             return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(new[] { descriptor }, suppressed));
-        }
-
-        /// <summary>
-        /// Create default compilation options for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzers to report warning or error for.</param>
-        /// <param name="expectedDiagnostic">The diagnostics to check for.</param>
-        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string>? suppressWarnings)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            if (expectedDiagnostic is null)
-            {
-                throw new ArgumentNullException(nameof(expectedDiagnostic));
-            }
-
-            return DefaultCompilationOptions(analyzer, expectedDiagnostic.Id, suppressWarnings);
         }
 
         /// <summary>
@@ -534,98 +499,6 @@
             }
 
             return DefaultCompilationOptions(analyzer, descriptor.Id, suppressWarnings);
-        }
-
-        /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzer"/>.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="analyzer">The analyzer to add diagnostic options for.</param>
-        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="suppressWarnings">The suppressed diagnostics.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, IEnumerable<string>? suppressWarnings = null, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            if (expectedDiagnostic is null)
-            {
-                throw new ArgumentNullException(nameof(expectedDiagnostic));
-            }
-
-            return CreateSolution(code, DefaultCompilationOptions(analyzer, expectedDiagnostic, suppressWarnings), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a Solution.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (compilationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(compilationOptions));
-            }
-
-            if (string.Equals(code.Extension, ".cs", StringComparison.OrdinalIgnoreCase))
-            {
-                return CreateSolution(new[] { File.ReadAllText(code.FullName) }, CSharpParseOptions.Default, compilationOptions, metadataReferences ?? Enumerable.Empty<MetadataReference>());
-            }
-
-            if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
-            {
-                var projectInfo = ProjectFile.ParseInfo(code);
-                return EmptySolution.AddProject(projectInfo)
-                                    .WithProjectCompilationOptions(
-                                        projectInfo.Id,
-                                        compilationOptions)
-                                    .AddMetadataReferences(
-                                        projectInfo.Id,
-                                        metadataReferences ?? Enumerable.Empty<MetadataReference>());
-            }
-
-            if (string.Equals(code.Extension, ".sln", StringComparison.OrdinalIgnoreCase))
-            {
-                var solution = EmptySolution;
-                var solutionInfo = SolutionFile.ParseInfo(code);
-                foreach (var projectInfo in solutionInfo.Projects)
-                {
-                    solution = solution.AddProject(projectInfo)
-                                       .WithProjectCompilationOptions(
-                                           projectInfo.Id,
-                                           compilationOptions)
-                                       .AddMetadataReferences(
-                                           projectInfo.Id,
-                                           metadataReferences ?? Enumerable.Empty<MetadataReference>());
-                }
-
-                return solution;
-            }
-
-            throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
         }
 
         /// <summary>
@@ -661,18 +534,6 @@
 
             result = null;
             return false;
-        }
-
-        /// <summary>
-        /// Create diagnostic options that at least warns for <paramref name="analyzers"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzers">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
-        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(IEnumerable<DiagnosticAnalyzer>? analyzers, IEnumerable<string>? suppressed)
-        {
-            return CreateSpecificDiagnosticOptions(analyzers?.SelectMany(x => x.SupportedDiagnostics).Distinct(), suppressed);
         }
 
         /// <summary>
