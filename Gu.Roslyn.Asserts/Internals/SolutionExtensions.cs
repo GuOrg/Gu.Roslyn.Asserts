@@ -7,13 +7,13 @@
 
     internal static class SolutionExtensions
     {
-        public static Solution WithWarningOrError(this Solution solution, IEnumerable<DiagnosticDescriptor> descriptors)
+        internal static Solution WithWarningOrError(this Solution solution, IEnumerable<DiagnosticDescriptor> descriptors)
         {
             var updated = solution;
             foreach (var project in solution.Projects)
             {
                 updated = updated.GetProject(project.Id)!
-                                 .WithCompilationOptions(((CSharpCompilationOptions)project.CompilationOptions).WithWarningOrError(descriptors))
+                                 .WithCompilationOptions(((CSharpCompilationOptions)project.CompilationOptions!).WithWarningOrError(descriptors))
                                  .Solution;
             }
 
