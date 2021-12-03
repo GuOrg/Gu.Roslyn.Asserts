@@ -78,8 +78,8 @@
             var benchmark = await Benchmark.CreateAsync(SolutionWithClassLibrary1, analyzer).ConfigureAwait(false);
             var expected = new List<string>
             {
-                "Gu.Roslyn.Asserts.AllowCompilationErrors.No",
-                "Gu.Roslyn.Asserts.AllowCompilationErrors.Yes",
+                "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None",
+                "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.Yes",
                 "ClassLibrary1.ClassLibrary1Class1._value",
             };
 

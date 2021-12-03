@@ -640,7 +640,7 @@ namespace N
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFix();
-                RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowCompilationErrors(AllowCompilationErrors.Yes));
+                RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Yes));
             }
 
             [Test]

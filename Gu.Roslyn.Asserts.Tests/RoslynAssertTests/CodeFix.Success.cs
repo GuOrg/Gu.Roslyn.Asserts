@@ -772,7 +772,7 @@ namespace N
                 var analyzer = new ClassMustHaveEventAnalyzer();
                 var fix = new InsertEventFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
-                var settings = Settings.Default.WithAllowCompilationErrors(AllowCompilationErrors.Yes);
+                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Yes);
                 RoslynAssert.CodeFix(analyzer, fix, before, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);
