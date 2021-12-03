@@ -487,7 +487,7 @@
         /// <param name="solution">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-        /// <param name="allowCompilationErrors">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.</param>
+        /// <param name="allowCompilationDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationDiagnostics.None"/>.</param>
         public static void CodeFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
@@ -495,7 +495,7 @@
             Solution solution,
             string after,
             string? fixTitle = null,
-            AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+            AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
         {
             if (analyzer is null)
             {
@@ -529,7 +529,7 @@
                 expectedDiagnostic,
                 solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode()).ToArray());
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, solution);
-            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationErrors);
+            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -581,10 +581,10 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowCompilationErrors);
+            VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowCompilationDiagnostics);
         }
 
-        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationErrors allowCompilationErrors = AllowCompilationErrors.No)
+        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
         {
             var fixableDiagnostics = diagnostics.SelectMany(x => x)
                                                 .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
@@ -603,7 +603,7 @@
                 throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }
 
-            if (allowCompilationErrors == AllowCompilationErrors.No)
+            if (allowCompilationDiagnostics == AllowCompilationDiagnostics.None)
             {
                 VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution).GetAwaiter().GetResult();
             }

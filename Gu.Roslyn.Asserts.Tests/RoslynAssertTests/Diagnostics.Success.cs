@@ -266,7 +266,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer, code, Settings.Default.WithAllowCompilationErrors(AllowCompilationErrors.Yes));
+                RoslynAssert.Diagnostics(analyzer, code, Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Yes));
             }
 
             [Test]

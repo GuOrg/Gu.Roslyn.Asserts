@@ -3,12 +3,12 @@
     /// <summary>
     /// Specifies if a code fix is allowed to introduce compiler errors.
     /// </summary>
-    public enum AllowCompilationErrors
+    public enum AllowCompilationDiagnostics
     {
         /// <summary>
-        /// Errors not allowed.
+        /// Errors and warnings not allowed.
         /// </summary>
-        No,
+        None,
 
         /// <summary>
         /// Errors allowed.

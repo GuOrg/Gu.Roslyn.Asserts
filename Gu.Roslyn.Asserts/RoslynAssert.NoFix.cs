@@ -304,7 +304,7 @@
                 settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            if (settings.AllowCompilationErrors == AllowCompilationErrors.No)
+            if (settings.AllowCompilationDiagnostics == AllowCompilationDiagnostics.None)
             {
                 NoCompilerErrors(sln);
             }

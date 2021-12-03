@@ -38,7 +38,7 @@
             var csproj = ProjectFile.ParseInfo(file);
             var expected = new[]
             {
-                "AllowCompilationErrors.cs",
+                "AllowCompilationDiagnostics.cs",
                 "AssemblyAttributes.cs",
                 "ClassLibrary1Class1.cs",
                 "AssemblyInfo.cs",
