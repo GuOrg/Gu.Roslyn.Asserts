@@ -115,5 +115,21 @@
                 yield return diagnostic;
             }
         }
+
+        /// <summary>
+        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowCompilationDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
+        /// </summary>
+        internal IEnumerable<Diagnostic> Filter(AllowCompilationDiagnostics allowCompilationDiagnostics)
+        {
+            return allowCompilationDiagnostics switch
+            {
+                AllowCompilationDiagnostics.None => this.All(),
+                AllowCompilationDiagnostics.Warnings
+                    => this.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)
+                           .Concat(this.AnalyzerDiagnostics),
+                AllowCompilationDiagnostics.WarningsAndErrors => this.AnalyzerDiagnostics,
+                _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
+            };
+        }
     }
 }
