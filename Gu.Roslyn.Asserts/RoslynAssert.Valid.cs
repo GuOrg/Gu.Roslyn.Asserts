@@ -435,12 +435,10 @@
                 {
                     case AllowCompilationDiagnostics.None:
                         return diagnostics.SelectMany(x => x.All());
-                    case AllowCompilationDiagnostics.Yes:
+                    case AllowCompilationDiagnostics.Warnings:
+                        return diagnostics.SelectMany(x => x.AnalyzerDiagnostics.Concat(x.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)));
+                    case AllowCompilationDiagnostics.WarningsAndErrors:
                         return diagnostics.SelectMany(x => x.AnalyzerDiagnostics);
-                    //case AllowedCompilerDiagnostics.Warnings:
-                    //    return diagnostics.SelectMany(x => x.AnalyzerDiagnostics.Concat(x.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)));
-                    //case AllowedCompilerDiagnostics.WarningsAndErrors:
-                    //    return diagnostics.SelectMany(x => x.AnalyzerDiagnostics);
                     default:
                         throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null);
                 }
