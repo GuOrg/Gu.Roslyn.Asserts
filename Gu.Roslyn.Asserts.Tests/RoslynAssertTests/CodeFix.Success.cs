@@ -3,7 +3,6 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.IO;
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     [TestFixture]
@@ -955,11 +954,7 @@ namespace ClassLibrary1
                     Path.Combine(csproj.DirectoryName, "ClassLibrary1Class1.cs"),
                     5,
                     20);
-                var solution = CodeFactory.CreateSolution(
-                    csproj,
-                    analyzer,
-                    expectedDiagnostic,
-                    metadataReferences: new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) });
+                var solution = CodeFactory.CreateSolution(csproj);
                 RoslynAssert.CodeFix(analyzer, new DoNotUseUnderscoreFix(), expectedDiagnostic, solution, after);
             }
         }
