@@ -31,7 +31,7 @@
             Assert.Pass($"Count: {AllAnalyzers.Count}");
         }
 
-        //[TestCaseSource(nameof(AllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void AnalyzersTestsProject(DiagnosticAnalyzer analyzer)
         {
             switch (analyzer)
@@ -41,12 +41,12 @@
                     _ = Analyze.GetDiagnostics(analyzer, AnalyzersTests);
                     break;
                 default:
-                    RoslynAssert.Valid(analyzer, AnalyzersTests);
+                    RoslynAssert.NoAnalyzerDiagnostics(analyzer, AnalyzersTests);
                     break;
             }
         }
 
-        //[TestCaseSource(nameof(AllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
         {
             switch (analyzer)
@@ -56,7 +56,7 @@
                     _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
                     break;
                 default:
-                    RoslynAssert.Valid(analyzer, AssertsTests);
+                    RoslynAssert.NoAnalyzerDiagnostics(analyzer, AssertsTests);
                     break;
             }
         }
