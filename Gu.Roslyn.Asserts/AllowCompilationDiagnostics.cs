@@ -11,8 +11,13 @@
         None,
 
         /// <summary>
-        /// Errors allowed.
+        /// Compiler warnings are allowed in the code.
         /// </summary>
-        Yes,
+        Warnings,
+
+        /// <summary>
+        /// Compiler warnings and errors are allowed in the code.
+        /// </summary>
+        WarningsAndErrors,
     }
 }
