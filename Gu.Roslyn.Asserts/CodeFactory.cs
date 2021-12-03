@@ -360,39 +360,6 @@
         /// <param name="code">The sources as strings.</param>
         /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static Solution CreateSolution(string code, params MetadataReference[] metadataReferences)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            return CreateSolution(new[] { code }, (IEnumerable<MetadataReference>)metadataReferences);
-        }
-
-        /// <summary>
-        /// Creates a solution for <paramref name="code"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The sources as strings.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, params MetadataReference[] metadataReferences)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            return CreateSolution(code, (IEnumerable<MetadataReference>)metadataReferences);
-        }
-
-        /// <summary>
-        /// Creates a solution for <paramref name="code"/>.
-        /// </summary>
-        /// <param name="code">The sources as strings.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
         public static Solution CreateSolution(string code, IEnumerable<MetadataReference> metadataReferences)
         {
             if (code is null)
@@ -428,28 +395,6 @@
             }
 
             return CreateSolution(code, CSharpParseOptions.Default, DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(string code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (compilationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(compilationOptions));
-            }
-
-            return CreateSolution(new[] { code }, CSharpParseOptions.Default, compilationOptions, metadataReferences);
         }
 
         /// <summary>
