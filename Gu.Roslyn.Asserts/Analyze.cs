@@ -107,7 +107,7 @@
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static async Task<IReadOnlyList<Diagnostic>> GetDiagnosticsAsync(Solution solution)
+        public static async Task<IReadOnlyList<Diagnostic>> GetAllDiagnosticsAsync(Solution solution)
         {
             if (solution is null)
             {
@@ -131,7 +131,7 @@
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics.</returns>
-        public static IReadOnlyList<Diagnostic> GetDiagnostics(Solution solution)
+        public static IReadOnlyList<Diagnostic> GetAllDiagnostics(Solution solution)
         {
             if (solution is null)
             {

@@ -306,7 +306,7 @@
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             if (settings.AllowCompilationDiagnostics == AllowCompilationDiagnostics.None)
             {
-                NoCompilerErrors(sln);
+                NoCompilerDiagnostics(sln);
             }
 
             VerifyNoFix(sln, diagnostics, fix);

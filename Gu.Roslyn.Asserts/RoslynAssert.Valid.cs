@@ -24,9 +24,10 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            var solution = CodeFactory.CreateSolution(code, analyzer, Settings.Default);
+            var settings = Settings.Default;
+            var solution = CodeFactory.CreateSolution(code, analyzer, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -50,9 +51,10 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            var solution = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
+            settings ??= Settings.Default;
+            var solution = CodeFactory.CreateSolution(code, analyzer, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -97,7 +99,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, Settings.Default);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, Settings.Default.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -128,10 +130,11 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
+            settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings ?? Settings.Default);
+            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -162,10 +165,11 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
+            settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default);
+            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -199,10 +203,11 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
+            settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default);
+            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -229,9 +234,10 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            var solution = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
+            settings ??= Settings.Default;
+            var solution = CodeFactory.CreateSolution(code, analyzer, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -255,9 +261,10 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default);
+            settings ??= Settings.Default;
+            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -376,7 +383,7 @@
             }
 
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
-            NoDiagnostics(diagnostics);
+            NoDiagnostics(diagnostics, Settings.Default.AllowCompilationDiagnostics);
         }
 
         /// <summary>
@@ -407,7 +414,7 @@
         /// Assert that <paramref name="diagnostics"/> is empty. Throws an AssertException with details if not.
         /// </summary>
         /// <param name="diagnostics">The diagnostics.</param>
-        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics)
+        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics, AllowCompilationDiagnostics allowCompilationDiagnostics)
         {
             if (diagnostics is null)
             {
@@ -419,7 +426,24 @@
                 return;
             }
 
-            NoDiagnostics(diagnostics.SelectMany(x => x.All()));
+            NoDiagnostics(EffectiveDiagnostics());
+
+            IEnumerable<Diagnostic> EffectiveDiagnostics()
+            {
+                switch (allowCompilationDiagnostics)
+                {
+                    case AllowCompilationDiagnostics.None:
+                        return diagnostics.SelectMany(x => x.All());
+                    case AllowCompilationDiagnostics.Yes:
+                        return diagnostics.SelectMany(x => x.AnalyzerDiagnostics);
+                    //case AllowedCompilerDiagnostics.Warnings:
+                    //    return diagnostics.SelectMany(x => x.AnalyzerDiagnostics.Concat(x.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)));
+                    //case AllowedCompilerDiagnostics.WarningsAndErrors:
+                    //    return diagnostics.SelectMany(x => x.AnalyzerDiagnostics);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null);
+                }
+            }
         }
     }
 }
