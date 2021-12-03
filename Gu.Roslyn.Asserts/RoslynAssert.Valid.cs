@@ -24,9 +24,9 @@
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -50,9 +50,9 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -95,9 +95,9 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, descriptor, Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -129,9 +129,9 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -163,9 +163,9 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -200,9 +200,9 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -229,9 +229,9 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(code, analyzer, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
@@ -255,9 +255,9 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            Valid(
-                analyzer,
-                CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default));
+            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, settings ?? Settings.Default);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            NoDiagnostics(diagnostics);
         }
 
         /// <summary>
