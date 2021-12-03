@@ -8,7 +8,6 @@
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CodeRefactorings;
-    using Microsoft.CodeAnalysis.Diagnostics;
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
@@ -22,9 +21,9 @@
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -38,8 +37,7 @@
 
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
-                CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
-                metadataReferences);
+                settings);
             var document = sln.Projects.Single().Documents.Single();
             var action = SingleAction(document, refactoring, position);
             var edit = action.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult().OfType<ApplyChangesOperation>().First();
@@ -53,9 +51,9 @@
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="title">The title of the refactoring to apply.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, string title, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -72,7 +70,7 @@
                 throw new ArgumentNullException(nameof(title));
             }
 
-            var actions = CodeActions(refactoring, testCode, position, metadataReferences)
+            var actions = CodeActions(refactoring, testCode, position, settings)
                           .Where(x => x.Title == title)
                           .ToArray();
             switch (actions.Length)
@@ -94,9 +92,9 @@
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
         /// <param name="index">The index of the refactoring to apply.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, int position, int index, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -108,7 +106,7 @@
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            var actions = CodeActions(refactoring, testCode, position, metadataReferences);
+            var actions = CodeActions(refactoring, testCode, position, settings);
             if (actions.Count == 0)
             {
                 throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
@@ -129,9 +127,9 @@
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -143,12 +141,7 @@
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            if (metadataReferences is null)
-            {
-                throw new ArgumentNullException(nameof(metadataReferences));
-            }
-
-            var actions = CodeActions(refactoring, testCode, span, metadataReferences);
+            var actions = CodeActions(refactoring, testCode, span, settings);
             switch (actions.Count)
             {
                 case 0:
@@ -168,9 +161,9 @@
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="title">The title of the refactoring to apply.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, string title, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -187,7 +180,7 @@
                 throw new ArgumentNullException(nameof(title));
             }
 
-            var actions = CodeActions(refactoring, testCode, span, metadataReferences)
+            var actions = CodeActions(refactoring, testCode, span, settings)
                           .Where(x => x.Title == title)
                           .ToArray();
             switch (actions.Length)
@@ -209,9 +202,9 @@
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
         /// <param name="index">The index of the refactoring to apply.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>The refactored document.</returns>
-        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, IEnumerable<MetadataReference>? metadataReferences = null)
+        public static Document Apply(CodeRefactoringProvider refactoring, string testCode, TextSpan span, int index, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -223,7 +216,7 @@
                 throw new ArgumentNullException(nameof(testCode));
             }
 
-            var actions = CodeActions(refactoring, testCode, span, metadataReferences);
+            var actions = CodeActions(refactoring, testCode, span, settings);
             if (actions.Count == 0)
             {
                 throw new InvalidOperationException("The refactoring did not register any refactorings at the current position.");
@@ -244,9 +237,9 @@
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="span">The position to pass in to the RefactoringContext.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
-        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, IEnumerable<MetadataReference>? metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, TextSpan span, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -260,8 +253,7 @@
 
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
-                CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
-                metadataReferences);
+                settings);
             var document = sln.Projects.Single().Documents.Single();
             var actions = new List<CodeAction>();
             var context = new CodeRefactoringContext(document, span, a => actions.Add(a), CancellationToken.None);
@@ -275,9 +267,9 @@
         /// <param name="refactoring">The <see cref="CodeRefactoringProvider"/>.</param>
         /// <param name="testCode">The code to refactor.</param>
         /// <param name="position">The position to pass in to the RefactoringContext.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>An <see cref="IReadOnlyList{CodeAction}"/> registered by <paramref name="refactoring"/>.</returns>
-        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, IEnumerable<MetadataReference>? metadataReferences)
+        public static IReadOnlyList<CodeAction> CodeActions(CodeRefactoringProvider refactoring, string testCode, int position, Settings? settings = null)
         {
             if (refactoring is null)
             {
@@ -291,8 +283,7 @@
 
             var sln = CodeFactory.CreateSolutionWithOneProject(
                 testCode,
-                CodeFactory.DefaultCompilationOptions(Array.Empty<DiagnosticAnalyzer>()),
-                metadataReferences);
+                settings);
             var document = sln.Projects.Single().Documents.Single();
             var context = new RefactoringContext(document, refactoring, position);
             var token = context.SyntaxRoot.FindToken(position);
