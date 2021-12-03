@@ -272,30 +272,10 @@
             }
         }
 
-        [TestCaseSource(nameof(NoCompilerErrorsMethods))]
-        public static void MetadataReferencesParameter(IMethodSymbol method)
-        {
-            if (method.TryFindParameterByType<IEnumerable<MetadataReference>>(out var parameter))
-            {
-                if (!method.Parameters.Last().IsParams)
-                {
-                    Assert.AreEqual(true, parameter!.IsOptional, "Not optional.");
-                    Assert.AreEqual(null, parameter.ExplicitDefaultValue);
-                    Assert.AreEqual("suppressWarnings", method.Parameters[parameter.Ordinal - 1].Name);
-                }
-
-                Assert.AreEqual("metadataReferences", parameter!.MetadataName);
-                Assert.AreEqual("A collection of <see cref=\"T:Microsoft.CodeAnalysis.MetadataReference\"/> to use when compiling. Default is <see langword=\"null\" /> meaning <see cref=\"F:Gu.Roslyn.Asserts.RoslynAssert.MetadataReferences\"/> are used.", parameter.DocComment());
-            }
-            else
-            {
-                Assert.AreEqual(true, method.Parameters.Any(x => x.Type.MetadataName == nameof(Solution)) || method.Parameters.Last().IsParams || method.GetAttributes().Any(), "Missing.");
-            }
-        }
-
         [TestCaseSource(nameof(CodeFixMethods))]
         [TestCaseSource(nameof(DiagnosticsMethods))]
         [TestCaseSource(nameof(FixAllMethods))]
+        [TestCaseSource(nameof(NoCompilerErrorsMethods))]
         [TestCaseSource(nameof(NoFixMethods))]
         [TestCaseSource(nameof(ValidMethods))]
         public static void SettingsParameter(IMethodSymbol method)
