@@ -355,27 +355,6 @@
         }
 
         /// <summary>
-        /// Creates a solution for <paramref name="code"/>.
-        /// </summary>
-        /// <param name="code">The sources as strings.</param>
-        /// <param name="metadataReferences">The <see cref="MetadataReference"/> to use when compiling.</param>
-        /// <returns>A list with diagnostics per document.</returns>
-        public static Solution CreateSolution(string code, IEnumerable<MetadataReference> metadataReferences)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (metadataReferences is null)
-            {
-                throw new ArgumentNullException(nameof(metadataReferences));
-            }
-
-            return CreateSolution(new[] { code }, metadataReferences);
-        }
-
-        /// <summary>
         /// Creates a solution for <paramref name="code"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>

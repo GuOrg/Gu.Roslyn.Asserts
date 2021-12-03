@@ -16,8 +16,8 @@
         /// <param name="code">The code to analyze.</param>
         public static void NoCompilerErrors(params string[] code)
         {
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             var solution = CodeFactory.CreateSolution(code, Settings.Default);
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }
@@ -27,12 +27,27 @@
         /// DiagnosticSettings.AllowedErrorIds()
         /// DiagnosticSettings.AllowedDiagnostics().
         /// </summary>
-        /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoCompilerErrors(IEnumerable<MetadataReference> metadataReferences, params string[] code)
+        public static void NoCompilerErrors(string code, Settings? settings = null)
         {
+            var solution = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
 #pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-            var solution = CodeFactory.CreateSolution(code, metadataReferences);
+            NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
+#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
+        }
+
+        /// <summary>
+        /// Check the solution for compiler errors and warnings, uses:
+        /// DiagnosticSettings.AllowedErrorIds()
+        /// DiagnosticSettings.AllowedDiagnostics().
+        /// </summary>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <param name="code">The code to analyze.</param>
+        public static void NoCompilerErrors(IEnumerable<string> code, Settings? settings = null)
+        {
+            var solution = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
+#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
             NoCompilerErrors(solution, SuppressedDiagnostics, DiagnosticSettings.AllowedDiagnostics());
 #pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
         }

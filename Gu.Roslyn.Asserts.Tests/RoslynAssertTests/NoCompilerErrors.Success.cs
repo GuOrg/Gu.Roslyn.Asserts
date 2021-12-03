@@ -34,7 +34,7 @@ namespace N
     {
         public C()
         {
-            var ints = new List<int> { 1, 2, 3 };
+            var xs = new List<int> { 1, 2, 3 };
         }
     }
 }";
@@ -52,7 +52,7 @@ namespace N
         public event EventHandler E;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(Enumerable.Empty<MetadataReference>(), code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoCompilerErrors(code, Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
                 var expected = "Found errors.\r\n" +
                                "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
                                "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
