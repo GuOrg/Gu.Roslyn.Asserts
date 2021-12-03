@@ -476,23 +476,6 @@
         }
 
         /// <summary>
-        /// Create default compilation options for <paramref name="descriptors"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="descriptors">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string>? suppressed = null)
-        {
-            if (descriptors is null)
-            {
-                throw new ArgumentNullException(nameof(descriptors));
-            }
-
-            return DefaultCompilationOptions(CreateSpecificDiagnosticOptions(descriptors, suppressed));
-        }
-
-        /// <summary>
         /// Create default compilation options for <paramref name="specificDiagnosticOptions"/>
         /// AD0001 is reported as error.
         /// </summary>
@@ -718,23 +701,6 @@
 
             result = null;
             return false;
-        }
-
-        /// <summary>
-        /// Create diagnostic options that at least warns for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzers to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>A collection to pass in as argument when creating compilation options.</returns>
-        public static IReadOnlyCollection<KeyValuePair<string, ReportDiagnostic>> CreateSpecificDiagnosticOptions(DiagnosticAnalyzer analyzer, IEnumerable<string> suppressed)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            return CreateSpecificDiagnosticOptions(new[] { analyzer }, suppressed);
         }
 
         /// <summary>
