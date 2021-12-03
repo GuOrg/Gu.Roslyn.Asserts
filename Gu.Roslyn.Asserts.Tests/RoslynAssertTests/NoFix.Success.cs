@@ -17,9 +17,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
 
-        public int M() => _value;
+        public int M() => _f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -38,9 +38,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
 
-        public int M() => _value;
+        public int M() => _f;
     }
 }";
 
