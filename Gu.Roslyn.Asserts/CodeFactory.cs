@@ -355,6 +355,45 @@
         }
 
         /// <summary>
+        /// Create default compilation options for <paramref name="specificDiagnosticOptions"/>
+        /// AD0001 is reported as error.
+        /// </summary>
+        /// <param name="specificDiagnosticOptions">A list of ids and <see cref="ReportDiagnostic"/>.</param>
+        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
+        public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? specificDiagnosticOptions = null)
+        {
+            // All arguments needed here to disambiguate. There was a breaking change between 3.0 and 3.3.1
+            return new CSharpCompilationOptions(
+                outputKind: OutputKind.DynamicallyLinkedLibrary,
+                reportSuppressedDiagnostics: false,
+                moduleName: null,
+                mainTypeName: null,
+                scriptClassName: null,
+                usings: null,
+                optimizationLevel: OptimizationLevel.Debug,
+                checkOverflow: false,
+                allowUnsafe: true,
+                cryptoKeyContainer: null,
+                cryptoKeyFile: null,
+                cryptoPublicKey: default,
+                delaySign: null,
+                platform: Platform.AnyCpu,
+                generalDiagnosticOption: ReportDiagnostic.Default,
+                warningLevel: 4,
+                specificDiagnosticOptions: specificDiagnosticOptions,
+                concurrentBuild: true,
+                deterministic: false,
+                xmlReferenceResolver: null,
+                sourceReferenceResolver: null,
+                metadataReferenceResolver: null,
+                assemblyIdentityComparer: null,
+                strongNameProvider: null,
+                publicSign: false,
+                metadataImportOptions: MetadataImportOptions.Public,
+                nullableContextOptions: NullableContextOptions.Enable);
+        }
+
+        /// <summary>
         /// Create default compilation options for <paramref name="analyzers"/>
         /// AD0001 is reported as error.
         /// </summary>
@@ -427,45 +466,6 @@
             }
 
             return DefaultCompilationOptions(analyzer, descriptor.Id, suppressWarnings);
-        }
-
-        /// <summary>
-        /// Create default compilation options for <paramref name="specificDiagnosticOptions"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="specificDiagnosticOptions">A list of ids and <see cref="ReportDiagnostic"/>.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? specificDiagnosticOptions)
-        {
-            // All arguments needed here to disambiguate. There was a breaking change between 3.0 and 3.3.1
-            return new CSharpCompilationOptions(
-                outputKind: OutputKind.DynamicallyLinkedLibrary,
-                reportSuppressedDiagnostics: false,
-                moduleName: null,
-                mainTypeName: null,
-                scriptClassName: null,
-                usings: null,
-                optimizationLevel: OptimizationLevel.Debug,
-                checkOverflow: false,
-                allowUnsafe: false,
-                cryptoKeyContainer: null,
-                cryptoKeyFile: null,
-                cryptoPublicKey: default,
-                delaySign: null,
-                platform: Platform.AnyCpu,
-                generalDiagnosticOption: ReportDiagnostic.Default,
-                warningLevel: 4,
-                specificDiagnosticOptions: specificDiagnosticOptions,
-                concurrentBuild: true,
-                deterministic: false,
-                xmlReferenceResolver: null,
-                sourceReferenceResolver: null,
-                metadataReferenceResolver: null,
-                assemblyIdentityComparer: null,
-                strongNameProvider: null,
-                publicSign: false,
-                metadataImportOptions: MetadataImportOptions.Public,
-                nullableContextOptions: NullableContextOptions.Enable);
         }
 
         /// <summary>
