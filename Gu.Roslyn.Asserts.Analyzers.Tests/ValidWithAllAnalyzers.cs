@@ -46,11 +46,9 @@
             }
         }
 
-        [Explicit("Temp suppress.")]
-        [TestCaseSource(nameof(AllAnalyzers))]
+        //[TestCaseSource(nameof(AllAnalyzers))]
         public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
         {
-            Assert.Inconclusive("VS does not understand [Explicit]");
             switch (analyzer)
             {
                 case InvocationAnalyzer _:
