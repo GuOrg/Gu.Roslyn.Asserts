@@ -224,6 +224,11 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
+            if (parseOptions == null)
+            {
+                throw new ArgumentNullException(nameof(parseOptions));
+            }
+
             if (compilationOptions is null)
             {
                 throw new ArgumentNullException(nameof(compilationOptions));
@@ -290,6 +295,48 @@
         }
 
         /// <summary>
+        /// Create a Solution by cloning a remote git repository.
+        /// </summary>
+        /// <param name="githubUrl">
+        /// The url to the code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// Sample URL: https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln.
+        /// </param>
+        /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
+        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="metadataReferences">The metadata references.</param>
+        /// <returns>>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(Uri githubUrl, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
+        {
+            if (githubUrl is null)
+            {
+                throw new ArgumentNullException(nameof(githubUrl));
+            }
+
+            if (parseOptions == null)
+            {
+                throw new ArgumentNullException(nameof(parseOptions));
+            }
+
+            if (compilationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(compilationOptions));
+            }
+
+            var git = new GitClient();
+            var gitFile = GitRepositoryProvider.ParseUrl(githubUrl);
+            var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var directoryInfo = Directory.CreateDirectory(tempDirectory);
+            git.Clone(
+                gitFile.RepositoryUrl,
+                directoryInfo.FullName,
+                GitClient.CloneFlags.Shallow,
+                gitFile.Branch);
+            var slnFileInfo = new FileInfo(Path.Combine(directoryInfo.FullName, gitFile.Path));
+            return CreateSolution(slnFileInfo, parseOptions, compilationOptions, metadataReferences);
+        }
+
+        /// <summary>
         /// Create a <see cref="Solution"/> for <paramref name="code"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
@@ -352,6 +399,27 @@
         {
             settings ??= Settings.Default;
             return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+        }
+
+        /// <summary>
+        /// Create a Solution by cloning a remote git repository.
+        /// </summary>
+        /// <param name="githubUrl">
+        /// The url to the code to create the solution from.
+        /// Can be a .cs, .csproj or .sln file.
+        /// Sample URL: https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln.
+        /// </param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>>A <see cref="Solution"/>.</returns>
+        public static Solution CreateSolution(Uri githubUrl, Settings? settings = null)
+        {
+            if (githubUrl is null)
+            {
+                throw new ArgumentNullException(nameof(githubUrl));
+            }
+
+            settings ??= Settings.Default;
+            return CreateSolution(githubUrl, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
         }
 
         /// <summary>
@@ -584,42 +652,6 @@
             }
 
             throw new NotSupportedException($"Cannot create a solution from {code.FullName}");
-        }
-
-        /// <summary>
-        /// Create a Solution by cloning a remote git repository.
-        /// </summary>
-        /// <param name="githubUrl">
-        /// The url to the code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// Sample URL: https://github.com/GuOrg/Gu.Roslyn.Asserts/blob/master/Gu.Roslyn.Asserts.sln.
-        /// </param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(Uri githubUrl, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (githubUrl is null)
-            {
-                throw new ArgumentNullException(nameof(githubUrl));
-            }
-
-            if (analyzers is null)
-            {
-                throw new ArgumentNullException(nameof(analyzers));
-            }
-
-            var git = new GitClient();
-            var gitFile = GitRepositoryProvider.ParseUrl(githubUrl);
-            var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            var directoryInfo = Directory.CreateDirectory(tempDirectory);
-            git.Clone(
-                gitFile.RepositoryUrl,
-                directoryInfo.FullName,
-                GitClient.CloneFlags.Shallow,
-                gitFile.Branch);
-            var slnFileInfo = new FileInfo(Path.Combine(directoryInfo.FullName, gitFile.Path));
-            return CreateSolution(slnFileInfo, analyzers, metadataReferences);
         }
 
         /// <summary>
