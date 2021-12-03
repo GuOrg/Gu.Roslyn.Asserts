@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
@@ -46,7 +46,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
@@ -59,14 +61,16 @@ namespace N
             }
 
             [Test]
-            public static void SingleDocumentOneErrorCodeFixFixedTheCode()
+            public static void SingleDocumentWithOneFixableDiagnostic()
             {
                 var code = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -81,26 +85,30 @@ namespace N
             [Test]
             public static void TwoDocumentsOneErrorCodeFixFixedTheCode()
             {
-                var barCode = @"
+                var c1 = @"
 namespace N
 {
-    class Bar
+    class C1
     {
-        private readonly int value;
+        private readonly int value = 1;
+
+        public int M() => this.value;
     }
 }";
 
                 var code = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, barCode, code));
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, c1, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
                                "  'Rename to: 'value''\r\n";

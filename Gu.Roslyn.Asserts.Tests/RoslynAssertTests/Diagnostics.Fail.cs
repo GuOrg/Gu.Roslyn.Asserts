@@ -536,12 +536,12 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
-        INCOMPLETE
+        public readonly int ↓_value1 = 1;
+        SYNTAX_ERROR
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var expected = @"Found error.
+                var expected = @"Expected no diagnostics, found:
 CS1519 Invalid token '}' in class, record, struct, or interface member declaration
   at line 7 and character 4 in file C.cs | ↓}
 ";

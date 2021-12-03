@@ -16,7 +16,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -33,7 +35,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
                 var expectedDiagnostic1 = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(
@@ -58,7 +62,9 @@ namespace N
 {
     class C
     {
-        private readonly int _value1;
+        private readonly int _f = 1;
+
+        public int M() => _f;
     }
 }";
 #pragma warning restore GURA02 // Indicate position.
@@ -76,12 +82,14 @@ namespace N
 {
     class C
     {
-        private readonly int _value1;
+        private readonly int _f = 1;
+
+        public int M() => _f;
     }
 }";
 #pragma warning restore GURA02 // Indicate position.
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_value1' must not begin with an underscore");
+                var expectedDiagnostic = ExpectedDiagnostic.Create("SA1309", "Field '_f' must not begin with an underscore");
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
             }
@@ -95,7 +103,9 @@ namespace N
 {
     class C
     {
-        private readonly int _value1;
+        private readonly int _f = 1;
+
+        public int M() => _f;
     }
 }";
 #pragma warning restore GURA02 // Indicate position.
@@ -113,7 +123,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -131,7 +143,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -149,11 +163,13 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_f' must not begin with an underscore", code, out code);
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
@@ -169,11 +185,13 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId, "Field '_value1' must not begin with an underscore");
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId, "Field '_f' must not begin with an underscore");
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
@@ -187,11 +205,13 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_value1' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_f' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
@@ -204,11 +224,13 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309b", "Field '_value1' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309b", "Field '_f' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
@@ -222,7 +244,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -237,7 +261,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
         INCOMPLETE
     }
 }";
@@ -253,8 +277,10 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -277,7 +303,9 @@ namespace N
 {
     class C1
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -292,7 +320,9 @@ namespace N
 {
     class C1
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f1 = 1;
+
+        public int M1() => _f1;
     }
 }";
                 var c2 = @"
@@ -300,7 +330,9 @@ namespace N
 {
     class C2
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M2() => _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -315,7 +347,9 @@ namespace N
 {
     class C1
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f1 = 1;
+
+        public int M1() => _f1;
     }
 }";
                 var c2 = @"
@@ -323,7 +357,9 @@ namespace N
 {
     class C2
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M2() => _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
@@ -336,11 +372,15 @@ namespace N
                 var code = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int ↓wrongName;
+        private int ↓wrongName = 1;
         
-        public int WrongName { get; set; }
+        public int WrongName
+        { 
+            get => this.wrongName;
+            set => this.wrongName = value;
+        }
     }
 }";
 
@@ -351,11 +391,15 @@ namespace N
                 code = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int wrongName;
+        private int wrongName = 1;
         
-        public int ↓WrongName { get; set; }
+        public int ↓WrongName
+        { 
+            get => this.wrongName;
+            set => this.wrongName = value;
+        }
     }
 }";
 
@@ -371,7 +415,9 @@ namespace N
 {
     ↓class C
     {
-        ↓private readonly int f;
+        ↓private readonly int f = 1;
+
+        public int M() => this.f;
     }
 }";
 

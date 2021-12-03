@@ -1,4 +1,4 @@
-// ReSharper disable RedundantNameQualifier
+﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Collections.Generic;
@@ -17,7 +17,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -36,7 +38,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
 
@@ -53,18 +57,22 @@ namespace N
                 var barCode = @"
 namespace N
 {
-    class Bar
+    class C1
     {
-        private readonly int value;
+        private readonly int value = 1;
+
+        public int M() => this.value;
     }
 }";
 
                 var code = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 2;
+
+        public int M() => _value;
     }
 }";
 
