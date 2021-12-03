@@ -414,6 +414,7 @@
         /// Assert that <paramref name="diagnostics"/> is empty. Throws an AssertException with details if not.
         /// </summary>
         /// <param name="diagnostics">The diagnostics.</param>
+        /// <param name="allowCompilationDiagnostics">The <see cref="AllowCompilationDiagnostics"/>.</param>
         public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics, AllowCompilationDiagnostics allowCompilationDiagnostics)
         {
             if (diagnostics is null)
