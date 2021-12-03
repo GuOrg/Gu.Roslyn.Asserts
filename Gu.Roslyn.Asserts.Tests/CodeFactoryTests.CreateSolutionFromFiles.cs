@@ -2,11 +2,9 @@
 namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using Microsoft.CodeAnalysis;
     using NUnit.Framework;
 
     public static partial class CodeFactoryTests
@@ -19,10 +17,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionFromProjectFile()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind(ExecutingAssemblyDll, out var projectFile));
-                var solution = CodeFactory.CreateSolution(
-                    projectFile!,
-                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(projectFile);
                 Assert.AreEqual(Path.GetFileNameWithoutExtension(ExecutingAssemblyDll.FullName), solution.Projects.Single().Name);
                 var expected = projectFile!.Directory
                                           .EnumerateFiles("*.cs", SearchOption.AllDirectories)
@@ -47,10 +42,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionFromWpfApp1()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("WpfApp1.csproj", out var projectFile));
-                var solution = CodeFactory.CreateSolution(
-                    projectFile!,
-                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(projectFile);
                 Assert.AreEqual("WpfApp1", solution.Projects.Single().Name);
                 var expected = new[]
                 {
@@ -78,10 +70,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionFromClassLibrary1()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
-                var solution = CodeFactory.CreateSolution(
-                    projectFile!,
-                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(projectFile);
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
                 {
@@ -106,10 +95,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionFromClassLibrary2()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary2.csproj", out var projectFile));
-                var solution = CodeFactory.CreateSolution(
-                    projectFile!,
-                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(projectFile);
                 Assert.AreEqual("ClassLibrary2", solution.Projects.Single().Name);
                 var expected = new[]
                 {
@@ -132,10 +118,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionFromSolutionFile()
             {
                 Assert.AreEqual(true, SolutionFile.TryFind("Gu.Roslyn.Asserts.sln", out var solutionFile));
-                var solution = CodeFactory.CreateSolution(
-                    solutionFile!,
-                    new[] { new FieldNameMustNotBeginWithUnderscore(), },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(solutionFile);
                 var expectedProjects = new[]
                 {
                     "AstView",
@@ -178,10 +161,7 @@ namespace Gu.Roslyn.Asserts.Tests
             [Test]
             public static void CreateSolutionFromSolutionFileAddsDependencies()
             {
-                var sln = CodeFactory.CreateSolution(
-                    SolutionFile.Find("Gu.Roslyn.Asserts.sln"),
-                    new[] { new FieldNameMustNotBeginWithUnderscore() },
-                    CreateMetadataReferences(typeof(object)));
+                var sln = CodeFactory.CreateSolution(SolutionFile.Find("Gu.Roslyn.Asserts.sln"));
                 var assertsProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts");
                 var analyzersProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Analyzers");
                 CollectionAssert.IsEmpty(analyzersProject.ProjectReferences);
@@ -196,10 +176,7 @@ namespace Gu.Roslyn.Asserts.Tests
             public static void CreateSolutionWithTwoAnalyzersReportingSameDiagnostic()
             {
                 Assert.AreEqual(true, ProjectFile.TryFind("ClassLibrary1.csproj", out var projectFile));
-                var solution = CodeFactory.CreateSolution(
-                    projectFile!,
-                    new[] { new SyntaxNodeAnalyzer(Descriptors.Id1), new SyntaxNodeAnalyzer(Descriptors.Id1) },
-                    CreateMetadataReferences(typeof(object)));
+                var solution = CodeFactory.CreateSolution(projectFile);
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
                 {
@@ -218,14 +195,6 @@ namespace Gu.Roslyn.Asserts.Tests
                 var actualString = string.Join(Environment.NewLine, actual);
                 //// ReSharper restore UnusedVariable
                 CollectionAssert.AreEqual(expected, actual);
-            }
-
-            private static IReadOnlyList<MetadataReference> CreateMetadataReferences(params Type[] types)
-            {
-                return types.Select(type => type.GetTypeInfo().Assembly)
-                            .Distinct()
-                            .Select(assembly => MetadataReference.CreateFromFile(assembly.Location))
-                            .ToArray();
             }
         }
     }
