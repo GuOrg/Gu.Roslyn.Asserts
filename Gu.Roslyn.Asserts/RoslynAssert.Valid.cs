@@ -370,6 +370,11 @@
                 throw new ArgumentNullException(nameof(solution));
             }
 
+            if (analyzer.SupportedDiagnostics.Any(x => !x.IsEnabledByDefault))
+            {
+                solution = solution.WithWarningOrError(analyzer.SupportedDiagnostics);
+            }
+
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics);
         }

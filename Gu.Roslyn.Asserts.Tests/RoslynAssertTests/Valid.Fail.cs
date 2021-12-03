@@ -193,14 +193,14 @@ namespace Project2
                 StringAssert.Contains(expected, exception.Message);
             }
 
-            //[Test]
+            [Test]
             public static void ClassLibrary1SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = ProjectFile.Find("ClassLibrary1.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary1Class1.cs | private int ↓_value;";
-                var solution = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() });
+                var solution = CodeFactory.CreateSolution(code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, solution));
                 StringAssert.Contains(expected, exception.Message);
@@ -209,14 +209,14 @@ namespace Project2
                 StringAssert.Contains(expected, exception.Message);
             }
 
-            //[Test]
+            [Test]
             public static void ClassLibrary2SolutionFileFieldNameMustNotBeginWithUnderscoreDisabled()
             {
                 var code = ProjectFile.Find("ClassLibrary2.csproj");
                 var expected = "Expected no diagnostics, found:\r\n" +
                                "SA13090 Field \'_value\' must not begin with an underscore\r\n" +
                                $"  at line 5 and character 20 in file {code.DirectoryName}\\ClassLibrary2Class1.cs | private int ↓_value;";
-                var solution = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscoreDisabled() });
+                var solution = CodeFactory.CreateSolution(code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, solution));
                 StringAssert.Contains(expected, exception.Message);
