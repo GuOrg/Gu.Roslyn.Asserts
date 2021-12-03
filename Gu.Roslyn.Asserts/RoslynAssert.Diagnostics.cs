@@ -229,7 +229,7 @@
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
             if (settings.AllowCompilationDiagnostics == AllowCompilationDiagnostics.None)
             {
-                NoCompilerErrors(sln);
+                NoCompilerDiagnostics(sln);
             }
         }
 
@@ -243,7 +243,7 @@
             var allDiagnostics = diagnostics.SelectMany(x => x).ToArray();
             if (allDiagnostics.Length == 0)
             {
-                allDiagnostics = Analyze.GetDiagnostics(solution).ToArray();
+                allDiagnostics = Analyze.GetAllDiagnostics(solution).ToArray();
             }
 
             if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, allDiagnostics))

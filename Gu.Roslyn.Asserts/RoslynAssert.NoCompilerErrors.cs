@@ -9,10 +9,11 @@
         /// Check that the solution has no compiler errors and warnings.
         /// </summary>
         /// <param name="code">The code to analyze.</param>
-        public static void NoCompilerErrors(params string[] code)
+        public static void NoCompilerDiagnostics(params string[] code)
         {
-            var solution = CodeFactory.CreateSolution(code, Settings.Default);
-            NoDiagnostics(Analyze.GetDiagnostics(solution));
+            var settings = Settings.Default;
+            var solution = CodeFactory.CreateSolution(code, settings);
+            NoDiagnostics(Analyze.GetAllDiagnostics(solution));
         }
 
         /// <summary>
@@ -20,10 +21,10 @@
         /// </summary>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoCompilerErrors(string code, Settings? settings = null)
+        public static void NoCompilerDiagnostics(string code, Settings? settings = null)
         {
             var solution = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            NoDiagnostics(Analyze.GetDiagnostics(solution));
+            NoDiagnostics(Analyze.GetAllDiagnostics(solution));
         }
 
         /// <summary>
@@ -31,18 +32,18 @@
         /// </summary>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <param name="code">The code to analyze.</param>
-        public static void NoCompilerErrors(IEnumerable<string> code, Settings? settings = null)
+        public static void NoCompilerDiagnostics(IEnumerable<string> code, Settings? settings = null)
         {
             var solution = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            NoDiagnostics(Analyze.GetDiagnostics(solution));
+            NoDiagnostics(Analyze.GetAllDiagnostics(solution));
         }
 
         /// <summary>
         /// Check that the solution has no compiler errors and warnings.
         /// </summary>
-        public static void NoCompilerErrors(Solution solution)
+        public static void NoCompilerDiagnostics(Solution solution)
         {
-            NoDiagnostics(Analyze.GetDiagnostics(solution));
+            NoDiagnostics(Analyze.GetAllDiagnostics(solution));
         }
     }
 }

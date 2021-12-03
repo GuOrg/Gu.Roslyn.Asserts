@@ -613,7 +613,7 @@
 
         private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution)
         {
-            var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
+            var diagnostics = await Analyze.GetAllDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
                 .Where(IsIncluded)
                 .ToArray();

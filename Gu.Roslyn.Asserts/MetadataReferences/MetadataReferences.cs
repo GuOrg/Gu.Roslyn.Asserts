@@ -96,7 +96,7 @@
                 Settings.Default.ParseOptions,
                 CodeFactory.DllCompilationOptions,
                 Settings.Default.MetadataReferences);
-            RoslynAssert.NoCompilerErrors(sln);
+            RoslynAssert.NoCompilerDiagnostics(sln);
 
             using var ms = new MemoryStream();
             _ = sln.Projects.Single().GetCompilationAsync().GetAwaiter().GetResult()!.Emit(ms);
