@@ -79,7 +79,8 @@
             var expected = new List<string>
             {
                 "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None",
-                "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.Yes",
+                "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.Warnings",
+                "Gu.Roslyn.Asserts.AllowCompilationDiagnostics.WarningsAndErrors",
                 "ClassLibrary1.ClassLibrary1Class1._value",
             };
 
