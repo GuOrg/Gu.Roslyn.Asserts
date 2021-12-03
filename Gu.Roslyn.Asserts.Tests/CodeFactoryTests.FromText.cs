@@ -74,7 +74,7 @@ namespace Project2
         private readonly C1 _value;
     }
 }";
-                var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                var sln = CodeFactory.CreateSolution(new[] { code1, code2 });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
                 Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                 var project1 = sln.Projects.Single(x => x.Name == "Project1");
@@ -103,7 +103,7 @@ namespace Project2
         private readonly Project1.C1 _value;
     }
 }";
-                var sln = CodeFactory.CreateSolution(new[] { code1, code2 }, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                var sln = CodeFactory.CreateSolution(new[] { code1, code2 });
                 CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
                 CollectionAssert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                 var project1 = sln.Projects.Single(x => x.Name == "Project1");
@@ -133,7 +133,7 @@ namespace N.Client
 }";
                 foreach (var sources in new[] { new[] { code1, code2 }, new[] { code2, code1 } })
                 {
-                    var sln = CodeFactory.CreateSolution(sources, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                    var sln = CodeFactory.CreateSolution(sources);
                     CollectionAssert.AreEquivalent(new[] { "N.Core", "N.Client" }, sln.Projects.Select(x => x.Name));
                     CollectionAssert.AreEquivalent(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
                     var project1 = sln.Projects.Single(x => x.Name == "N.Core");
@@ -164,7 +164,7 @@ namespace N.Bar
 }";
                 foreach (var sources in new[] { new[] { code1, code2 }, new[] { code2, code1 } })
                 {
-                    var sln = CodeFactory.CreateSolutionWithOneProject(sources, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                    var sln = CodeFactory.CreateSolutionWithOneProject(sources);
                     var project = sln.Projects.Single();
                     Assert.AreEqual("N", project.AssemblyName);
                     CollectionAssert.AreEquivalent(new[] { "C1.cs", "C2.cs" }, project.Documents.Select(x => x.Name));
