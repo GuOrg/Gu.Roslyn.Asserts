@@ -502,7 +502,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(DiagnosticsAndSources diagnosticsAndSources, DiagnosticAnalyzer analyzer, Settings settings)
+        internal static Solution CreateSolution(DiagnosticAnalyzer analyzer, DiagnosticsAndSources diagnosticsAndSources, Settings settings)
         {
             return CreateSolution(
                 diagnosticsAndSources.Code,
@@ -518,7 +518,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticAnalyzer analyzer, Settings settings)
+        internal static Solution CreateSolution(DiagnosticAnalyzer analyzer, IEnumerable<string> code,  Settings settings)
         {
             return CreateSolution(
                 code,
@@ -535,7 +535,7 @@
         /// <param name="descriptor">The <see cref="DiagnosticDescriptor"/> to check <paramref name="code"/> with.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        internal static Solution CreateSolution(IEnumerable<string> code, DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, Settings settings)
+        internal static Solution CreateSolution(DiagnosticAnalyzer analyzer, DiagnosticDescriptor descriptor, IEnumerable<string> code, Settings settings)
         {
             return CreateSolution(
                 code,

@@ -222,8 +222,8 @@
             settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             var sln = CodeFactory.CreateSolution(
-                diagnosticsAndSources,
                 analyzer,
+                diagnosticsAndSources,
                 settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);

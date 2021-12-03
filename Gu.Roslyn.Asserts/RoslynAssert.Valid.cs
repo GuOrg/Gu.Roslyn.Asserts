@@ -25,7 +25,7 @@
             }
 
             var settings = Settings.Default;
-            var solution = CodeFactory.CreateSolution(code, analyzer, settings);
+            var solution = CodeFactory.CreateSolution(analyzer, code, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
@@ -52,7 +52,7 @@
             }
 
             settings ??= Settings.Default;
-            var solution = CodeFactory.CreateSolution(code, analyzer, settings);
+            var solution = CodeFactory.CreateSolution(analyzer, code, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
@@ -97,7 +97,7 @@
             }
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, Settings.Default);
+            var solution = CodeFactory.CreateSolution(analyzer, descriptor, code, Settings.Default);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, Settings.Default.AllowCompilationDiagnostics);
         }
@@ -132,7 +132,7 @@
 
             settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, descriptor, settings);
+            var solution = CodeFactory.CreateSolution(analyzer, descriptor, new[] { code }, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
@@ -167,7 +167,7 @@
 
             settings ??= Settings.Default;
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
-            var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings);
+            var solution = CodeFactory.CreateSolution(analyzer, descriptor, code, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
@@ -262,7 +262,7 @@
             }
 
             settings ??= Settings.Default;
-            var solution = CodeFactory.CreateSolution(new[] { code }, analyzer, settings);
+            var solution = CodeFactory.CreateSolution(analyzer, new[] { code }, settings);
             var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
             NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
         }
