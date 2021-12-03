@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Linq;
     using NUnit.Framework;
@@ -18,7 +18,7 @@ namespace N
         private readonly int _value;
     }
 }";
-                var sln = CodeFactory.CreateSolution(code, new[] { new FieldNameMustNotBeginWithUnderscore() });
+                var sln = CodeFactory.CreateSolution(code);
                 Assert.AreEqual("N", sln.Projects.Single().Name);
                 Assert.AreEqual("C.cs", sln.Projects.Single().Documents.Single().Name);
             }

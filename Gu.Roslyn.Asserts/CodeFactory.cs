@@ -355,28 +355,6 @@
         }
 
         /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(string code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (analyzers is null)
-            {
-                throw new ArgumentNullException(nameof(analyzers));
-            }
-
-            return CreateSolution(new[] { code }, analyzers, metadataReferences);
-        }
-
-        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
@@ -400,25 +378,6 @@
         }
 
         /// <summary>
-        /// Create a <see cref="Solution"/> for <paramref name="code"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <param name="languageVersion">The <see cref="LanguageVersion"/>.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        [Obsolete("Use overload with CSharpParseOptions")]
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences = null, LanguageVersion languageVersion = LanguageVersion.Latest)
-        {
-            return CreateSolution(
-                code,
-                CSharpParseOptions.Default.WithLanguageVersion(languageVersion),
-                compilationOptions,
-                metadataReferences);
-        }
-
-        /// <summary>
         /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
         /// Each unique namespace in <paramref name="code"/> is added as a project.
         /// </summary>
@@ -439,23 +398,6 @@
             }
 
             return CreateSolutionWithOneProject(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create default compilation options for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzer to report warning or error for.</param>
-        /// <param name="suppressed">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IEnumerable<string>? suppressed = null)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            return DefaultCompilationOptions(new[] { analyzer }, suppressed);
         }
 
         /// <summary>
@@ -534,57 +476,6 @@
         }
 
         /// <summary>
-        /// Create default compilation options for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzers to report warning or error for.</param>
-        /// <param name="expectedDiagnostics">The diagnostics to check for.</param>
-        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<string>? suppressWarnings)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            if (expectedDiagnostics is null)
-            {
-                throw new ArgumentNullException(nameof(expectedDiagnostics));
-            }
-
-            RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, expectedDiagnostics);
-            var descriptors = analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.Any(e => e.Id == x.Id)).ToArray();
-            suppressWarnings ??= Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => expectedDiagnostics.All(e => e.Id != x.Id)).Select(x => x.Id)));
-        }
-
-        /// <summary>
-        /// Create default compilation options for <paramref name="analyzer"/>
-        /// AD0001 is reported as error.
-        /// </summary>
-        /// <param name="analyzer">The analyzers to report warning or error for.</param>
-        /// <param name="descriptors">The diagnostics to check for.</param>
-        /// <param name="suppressWarnings">The analyzer IDs to suppress.</param>
-        /// <returns>An instance of <see cref="CSharpCompilationOptions"/>.</returns>
-        public static CSharpCompilationOptions DefaultCompilationOptions(DiagnosticAnalyzer analyzer, IReadOnlyList<DiagnosticDescriptor> descriptors, IEnumerable<string> suppressWarnings)
-        {
-            if (analyzer is null)
-            {
-                throw new ArgumentNullException(nameof(analyzer));
-            }
-
-            if (descriptors is null)
-            {
-                throw new ArgumentNullException(nameof(descriptors));
-            }
-
-            RoslynAssert.VerifyAnalyzerSupportsDiagnostics(analyzer, descriptors);
-            suppressWarnings ??= Enumerable.Empty<string>();
-            return DefaultCompilationOptions(descriptors, suppressWarnings.Concat(analyzer.SupportedDiagnostics.Where(x => descriptors.All(e => e.Id != x.Id)).Select(x => x.Id)));
-        }
-
-        /// <summary>
         /// Create default compilation options for <paramref name="descriptors"/>
         /// AD0001 is reported as error.
         /// </summary>
@@ -638,28 +529,6 @@
                 publicSign: false,
                 metadataImportOptions: MetadataImportOptions.Public,
                 nullableContextOptions: NullableContextOptions.Enable);
-        }
-
-        /// <summary>
-        /// Create a Solution.
-        /// </summary>
-        /// <param name="code">
-        /// The code to create the solution from.
-        /// Can be a .cs, .csproj or .sln file.
-        /// </param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, IEnumerable<MetadataReference>? metadataReferences)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            return CreateSolution(
-                code,
-                DefaultCompilationOptions((IReadOnlyList<DiagnosticAnalyzer>?)null, null),
-                metadataReferences);
         }
 
         /// <summary>
