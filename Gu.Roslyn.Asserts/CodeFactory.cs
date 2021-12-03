@@ -355,52 +355,6 @@
         }
 
         /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (analyzers is null)
-            {
-                throw new ArgumentNullException(nameof(analyzers));
-            }
-
-            return CreateSolution(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
-        /// Create a Solution with diagnostic options set to warning for all supported diagnostics in <paramref name="analyzers"/>
-        /// Each unique namespace in <paramref name="code"/> is added as a project.
-        /// </summary>
-        /// <param name="code">The code to create the solution from.</param>
-        /// <param name="analyzers">The analyzers to add diagnostic options for.</param>
-        /// <param name="metadataReferences">The metadata references.</param>
-        /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolutionWithOneProject(IReadOnlyList<string> code, IReadOnlyList<DiagnosticAnalyzer> analyzers, IEnumerable<MetadataReference>? metadataReferences = null)
-        {
-            if (code is null)
-            {
-                throw new ArgumentNullException(nameof(code));
-            }
-
-            if (analyzers is null)
-            {
-                throw new ArgumentNullException(nameof(analyzers));
-            }
-
-            return CreateSolutionWithOneProject(code, CSharpParseOptions.Default, DefaultCompilationOptions(analyzers, null), metadataReferences);
-        }
-
-        /// <summary>
         /// Create default compilation options for <paramref name="analyzers"/>
         /// AD0001 is reported as error.
         /// </summary>
