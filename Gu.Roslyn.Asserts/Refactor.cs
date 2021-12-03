@@ -316,8 +316,7 @@
 
         private static CodeAction SingleAction(RefactoringContext context, SyntaxNode node)
         {
-            if (node != null &&
-                node.SpanStart == context.Position)
+            if (node.SpanStart == context.Position)
             {
                 context.Refactoring.ComputeRefactoringsAsync(context.CreateRefactoringContext(node.Span)).GetAwaiter().GetResult();
                 return context.Actions.Count switch

@@ -54,7 +54,7 @@
         public MetadataReferencesCollection? MetadataReferences { get; }
 
         /// <summary>
-        /// Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationErrors.No"/>.
+        /// Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is No.
         /// </summary>
         public AllowCompilationErrors AllowCompilationErrors { get; }
 
