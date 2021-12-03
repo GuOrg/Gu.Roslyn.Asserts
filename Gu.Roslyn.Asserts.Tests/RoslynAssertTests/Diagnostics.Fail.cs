@@ -122,14 +122,14 @@ namespace N
                 var code1 = @"
 namespace N
 {
-    class Code1
+    class C1
     {
     }
 }";
                 var code2 = @"
 namespace N
 {
-    class Code2
+    class C2
     {
     }
 }";
@@ -146,14 +146,14 @@ namespace N
                 var code1 = @"
 namespace N
 {
-    ↓class Code1
+    ↓class C1
     {
     }
 }";
                 var code2 = @"
 namespace N
 {
-    class Code2
+    class C2
     {
     }
 }";
@@ -162,7 +162,7 @@ namespace N
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA1309 \r\n" +
-                               "    at line 3 and character 4 in file Code1.cs | ↓class Code1\r\n" +
+                               "    at line 3 and character 4 in file C1.cs | ↓class C1\r\n" +
                                "Actual: <no diagnostics>\r\n";
                 Assert.AreEqual(expected, exception.Message);
             }
@@ -175,16 +175,18 @@ namespace N
 {
     class C
     {
-        private ↓readonly int _value1;
+        private ↓readonly int _f;
+
+        public int M() => _f;
     }
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA1309 \r\n" +
-                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
+                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f;\r\n" +
                                "Actual:\r\n" +
                                "  SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -198,16 +200,18 @@ namespace N
 {
     class C
     {
-        private ↓readonly int _value1;
+        private ↓readonly int _f;
+
+        public int M() => _f;
     }
 }";
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA1309 \r\n" +
-                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _value1;\r\n" +
+                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f;\r\n" +
                                "Actual:\r\n" +
                                "  SA1309 Field '_value1' must not begin with an underscore\r\n" +
-                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;\r\n";
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f;\r\n";
 
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
