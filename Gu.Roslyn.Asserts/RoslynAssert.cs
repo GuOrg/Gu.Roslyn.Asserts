@@ -249,22 +249,22 @@
 
                 throw new AssertException(errorBuilder.Return());
             }
-        }
 
-        private static bool IsIncluded(Diagnostic diagnostic)
-        {
-            return IsIncluded(diagnostic, DiagnosticSettings.AllowedDiagnostics());
-        }
-
-        private static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
-        {
-            return allowedDiagnostics switch
+            static bool IsIncluded(Diagnostic diagnostic)
             {
-                AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
-                AllowedDiagnostics.None => diagnostic.Severity == DiagnosticSeverity.Error || diagnostic.Severity == DiagnosticSeverity.Warning,
-                AllowedDiagnostics.WarningsAndErrors => false,
-                _ => throw new InvalidEnumArgumentException(nameof(allowedDiagnostics), (int)allowedDiagnostics, typeof(AllowedDiagnostics)),
-            };
+                return IsIncluded(diagnostic, DiagnosticSettings.AllowedDiagnostics());
+
+                static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
+                {
+                    return allowedDiagnostics switch
+                    {
+                        AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
+                        AllowedDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
+                        AllowedDiagnostics.WarningsAndErrors => false,
+                        _ => throw new InvalidEnumArgumentException(nameof(allowedDiagnostics), (int)allowedDiagnostics, typeof(AllowedDiagnostics)),
+                    };
+                }
+            }
         }
     }
 }
