@@ -224,7 +224,7 @@
                 throw new ArgumentNullException(nameof(code));
             }
 
-            if (parseOptions == null)
+            if (parseOptions is null)
             {
                 throw new ArgumentNullException(nameof(parseOptions));
             }
@@ -313,7 +313,7 @@
                 throw new ArgumentNullException(nameof(githubUrl));
             }
 
-            if (parseOptions == null)
+            if (parseOptions is null)
             {
                 throw new ArgumentNullException(nameof(parseOptions));
             }
