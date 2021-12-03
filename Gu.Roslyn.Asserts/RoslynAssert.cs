@@ -213,11 +213,7 @@
             var introducedDiagnostics = diagnostics
                 .Where(IsIncluded)
                 .ToArray();
-            if (introducedDiagnostics.Select(x => x.Id)
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                                     .Except(SuppressedDiagnostics)
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
-                                     .Any())
+            if (introducedDiagnostics.Select(x => x.Id).Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();
                 errorBuilder.AppendLine($"{fix.GetType().Name} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
