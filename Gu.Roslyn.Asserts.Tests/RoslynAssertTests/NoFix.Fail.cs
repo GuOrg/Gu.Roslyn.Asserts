@@ -17,7 +17,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -26,7 +28,9 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
                 var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
@@ -46,14 +50,14 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
 
-        public int M() => _value;
+        public int M() => _f;
     }
 }";
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
-                               "  'Rename to: 'value''\r\n";
+                               "  'Rename to: 'f''\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
@@ -68,9 +72,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value = 1;
+        private readonly int ↓_f = 1;
 
-        public int M() => _value;
+        public int M() => _f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -78,7 +82,7 @@ namespace N
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, code));
                 var expected = "Expected code to have no fixable diagnostics.\r\n" +
                                "The following actions were registered:\r\n" +
-                               "  'Rename to: 'value''\r\n";
+                               "  'Rename to: 'f''\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 

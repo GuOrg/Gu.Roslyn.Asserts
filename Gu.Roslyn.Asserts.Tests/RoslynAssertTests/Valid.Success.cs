@@ -103,14 +103,14 @@ namespace N
                 var code1 = @"
 namespace N
 {
-    class Code1
+    class C1
     {
     }
 }";
                 var code2 = @"
 namespace N
 {
-    class Code2
+    class C2
     {
     }
 }";
@@ -126,14 +126,14 @@ namespace N
                 var code1 = @"
 namespace Project1
 {
-    class Code1
+    class C1
     {
     }
 }";
                 var code2 = @"
 namespace Project2
 {
-    class Code2
+    class C2
     {
     }
 }";
@@ -170,11 +170,13 @@ namespace N
 {
     class C
     {
-        private readonly int value = 1;
+        private int value;
         
-        public int WrongName { get; set; }
-
-        public int M() => this.value;
+        public int WrongName
+        {
+            get => this.value;
+            set => this.value = value;
+        }
     }
 }";
 
@@ -277,7 +279,7 @@ namespace N
 {
     public class C
     {
-        private int value = 1;
+        private readonly int value = 1;
 
         public int M() => this.value;
     }
@@ -305,7 +307,6 @@ namespace BinaryReferencedAssembly
 {
     public class Base
     {
-        private int _fieldName;
     }
 }");
 
@@ -331,7 +332,6 @@ namespace BinaryReferencedAssembly
 {
     public class Base
     {
-        private int _fieldName;
     }
 }");
 
