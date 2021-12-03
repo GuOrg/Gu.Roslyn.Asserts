@@ -8,6 +8,7 @@
     /// <summary>
     /// For getting all warnings to suppress specified with [SuppressWarnings].
     /// </summary>
+    [Obsolete("Use settings.")]
     public static class SuppressWarnings
     {
         private static ImmutableArray<string> fromAttributes;
