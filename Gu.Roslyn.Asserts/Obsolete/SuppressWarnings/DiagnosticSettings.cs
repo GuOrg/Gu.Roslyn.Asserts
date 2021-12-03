@@ -6,6 +6,7 @@
     /// <summary>
     /// Helper for getting ignored errors from <see cref="IgnoredErrorsAttribute"/>.
     /// </summary>
+    [Obsolete("Use settings.")]
     internal static class DiagnosticSettings
     {
         private static AllowedDiagnostics? staticAllowedDiagnostics;

@@ -8,6 +8,7 @@
     /// Specify what compiler warnings to ignore when when compiling the code in asserts.
     /// Example: [assembly: SuppressWarnings("CS1701", "CS1702")].
     /// </summary>
+    [Obsolete("Use settings.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     public sealed class SuppressWarningsAttribute : Attribute
     {
