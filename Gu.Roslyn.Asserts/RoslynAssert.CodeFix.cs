@@ -3,8 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.ComponentModel;
     using System.Linq;
-
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Gu.Roslyn.Asserts.Internals;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -606,6 +609,62 @@
             }
 
             AreEqualAsync(after, operation.ChangedSolution, null).GetAwaiter().GetResult();
+        }
+
+        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution)
+        {
+            var diagnostics = await Analyze.GetDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
+            var introducedDiagnostics = diagnostics
+                .Where(IsIncluded)
+                .ToArray();
+            if (introducedDiagnostics.Select(x => x.Id).Any())
+            {
+                var errorBuilder = StringBuilderPool.Borrow();
+                errorBuilder.AppendLine($"{fix.GetType().Name} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                foreach (var introducedDiagnostic in introducedDiagnostics)
+                {
+                    errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");
+                }
+
+                var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None))).ConfigureAwait(false);
+
+                errorBuilder.AppendLine("First source file with error is:");
+                var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();
+                if (sources.TrySingle(x => CodeReader.FileName(x) == lineSpan.Path, out var match))
+                {
+                    errorBuilder.AppendLine(match);
+                }
+                else if (sources.TryFirst(x => CodeReader.FileName(x) == lineSpan.Path, out _))
+                {
+                    errorBuilder.AppendLine($"Found more than one document for {lineSpan.Path}.");
+                    foreach (var source in sources.Where(x => CodeReader.FileName(x) == lineSpan.Path))
+                    {
+                        errorBuilder.AppendLine(source);
+                    }
+                }
+                else
+                {
+                    errorBuilder.AppendLine($"Did not find a single document for {lineSpan.Path}.");
+                }
+
+                throw new AssertException(errorBuilder.Return());
+            }
+
+            static bool IsIncluded(Diagnostic diagnostic)
+            {
+                return IsIncluded(diagnostic, DiagnosticSettings.AllowedDiagnostics());
+
+                static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
+                {
+                    return allowedDiagnostics switch
+                    {
+                        AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
+                        AllowedDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
+                        AllowedDiagnostics.WarningsAndErrors => false,
+                        _ => throw new InvalidEnumArgumentException(nameof(allowedDiagnostics), (int)allowedDiagnostics, typeof(AllowedDiagnostics)),
+                    };
+                }
+            }
         }
     }
 }
