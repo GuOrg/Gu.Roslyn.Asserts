@@ -19,9 +19,7 @@
 
     public static class ApiTests
     {
-        private static readonly Project Project = CodeFactory.CreateSolution(
-                                                                 ProjectFile.Find("Gu.Roslyn.Asserts.csproj"),
-                                                                 Asserts.MetadataReferences.Transitive(typeof(CodeFixProvider)))
+        private static readonly Project Project = CodeFactory.CreateSolution(ProjectFile.Find("Gu.Roslyn.Asserts.csproj"))
                                                              .Projects
                                                              .Single();
 
