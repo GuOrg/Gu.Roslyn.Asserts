@@ -27,14 +27,7 @@ Use 1.x for Microsoft.CodeAnalysis 1.x
 - [Refactoring](#refactoring)
 - [AST](#ast)
   - [SyntaxFactoryWriter](#syntaxfactorywriter)
-- [Attributes](#attributes)
-  - [MetadataReferenceAttribute](#metadatareferenceattribute)
-  - [MetadataReferencesAttribute](#metadatareferencesattribute)
-  - [MetadataReferences](#metadatareferences)
-    - [Sample AssemblyInfo.cs (for the test project.)](#sample-assemblyinfocs-for-the-test-project)
-  - [Exlicit set RoslynAssert.MetadataReferences](#exlicit-set-roslynassertmetadatareferences)
-  - [IgnoredErrorsAttribute](#ignorederrorsattribute)
-  - [AllowedDiagnosticsAttribute](#alloweddiagnosticsattribute)
+- [Settings](#settings)
 - [Analyze](#analyze)
   - [GetDiagnosticsAsync](#getdiagnosticsasync)
 - [Fix](#fix)
@@ -459,102 +452,24 @@ var code = @"namespace A.B
 var call = SyntaxFactoryWriter.Serialize(code);
 ```
 
-# Attributes
+# Settings
 
-When creating the workspace to analyze metadata references need to be added. There are a couple of ways to provide them using this library.
-Some overloads of the asserts allow passing explicit references but it will be verbose to do that everywhere.
+Settings.Default is meant to be set once and contains information used by asserts and code factory methods.
+If specific settings are required for a test there are overloads acceping a settings intance.
 
-In most scenarios something like this in the test project is what you want:
-If you have an AssemblyInfo.cs you can put it there. If not you can put it in any .cs file for example AssemblyAttributes.cs
-
-### Sample AssemblyInfo.cs (for the test project.)
+### Sample ModuleInitializer.cs (for the test project.)
 
 ```c#
-using Gu.Roslyn.Asserts;
-
-
-[assembly: SuppressWarnings("CS1701")]
-[assembly: TransitiveMetadataReferences(typeof(TypeInTestProject))]
-
-// Below should not be needed, prefer TransitiveMetadataReferences as it updates as the resolution graph changes.
-[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
-[assembly: MetadataReferences(
-    typeof(System.Linq.Enumerable),
-    typeof(System.Net.WebClient),
-    typeof(System.Data.Common.DbConnection),
-    typeof(System.Reactive.Disposables.SerialDisposable),
-    typeof(System.Reactive.Disposables.ICancelable),
-    typeof(System.Reactive.Linq.Observable),
-    typeof(System.Xml.Serialization.XmlSerializer),
-    typeof(System.Windows.Media.Brush),
-    typeof(System.Windows.Controls.Control),
-    typeof(System.Windows.Media.Matrix),
-    typeof(System.Xaml.XamlLanguage),
-    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-    typeof(Microsoft.CodeAnalysis.Compilation),
-    typeof(NUnit.Framework.Assert))]
-```
-
-## TransitiveMetadataReferences
-For specifying a metadata reference to be used in the tests. Pass in a type in a top level assembly and let the attribute figure out all transitive dependencies.
-
-```c#
-[assembly: TransitiveMetadataReferences(typeof(TypeInTestProject))]
-```
-
-Or provide many top level types:
-
-```c#
-[assembly: TransitiveMetadataReferences(
-    typeof(Microsoft.EntityFrameworkCore.DbContext),
-    typeof(Microsoft.AspNetCore.Mvc.Controller))]
-```
-
-## MetadataReference
-For specifying a metadata reference to be used in the tests, with or without aliases.
-
-```c#
-[assembly: MetadataReference(typeof(object), new[] { "global", "corlib" })]
-```
-
-## MetadataReferences
-
-For specifying a batch of metadata references to be used in the tests.
-```c#
-[assembly: MetadataReferences(
-    typeof(System.Linq.Enumerable),
-    typeof(System.Net.WebClient),
-    typeof(System.Reactive.Disposables.SerialDisposable),
-    typeof(System.Reactive.Disposables.ICancelable),
-    typeof(System.Reactive.Linq.Observable),
-    typeof(Gu.Reactive.Condition),
-    typeof(Gu.Wpf.Reactive.ConditionControl),
-    typeof(System.Xml.Serialization.XmlSerializer),
-    typeof(System.Windows.Media.Matrix),
-    typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-    typeof(Microsoft.CodeAnalysis.Compilation),
-    typeof(NUnit.Framework.Assert))]
-```
-
-Calling `RoslynAssert.ResetMetadataReferences()` resets `RoslynAssert.MetadataReferences` to the list provided via the attribute or clears it if no attribute is provided.
-
-## MetadataReferences
-
-For getting all metadata references specified with attributes use:
-
-```cs
-var compilation = CSharpCompilation.Create(
-    "TestProject",
-    new[] { syntaxTree },
-    MetadataReferences.FromAttributes());
-```
-
-## SuppressWarnings
-
-For globally ignoring compiler warnings and errors introduced by code fixes when calling calling RoslynAssert.CodeFix and RoslynAssert.FixAll.
-
-```c#
-[assembly: SuppressWarnings("CS1701")]
+internal static class ModuleInitializer
+{
+    [ModuleInitializer]
+    internal static void Initialize()
+    {
+        Settings.Default = Settings.Default.WithMetadataReferences(
+            // This adds all metadata references from containing project.
+            Asserts.MetadataReferences.Transitive(typeof(ModuleInitializer)));
+    }
+}
 ```
 
 # Analyze
@@ -569,7 +484,7 @@ public async Task GetDiagnosticsFromProjectOnDisk()
 {
     var dllFile = new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath;
     Assert.AreEqual(true, CodeFactory.TryFindProjectFile(new FileInfo(dllFile), out FileInfo projectFile));
-    var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile, MetadataReferences)
+    var diagnostics = await Analyze.GetDiagnosticsAsync(new FieldNameMustNotBeginWithUnderscore(), projectFile)
                                     .ConfigureAwait(false);
     ...
 }
@@ -601,9 +516,9 @@ namespace N
     }
 }";
     var analyzer = new FieldNameMustNotBeginWithUnderscore();
-    var cSharpCompilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
+    var compilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
     var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
-    var sln = CodeFactory.CreateSolution(code, cSharpCompilationOptions, metadataReferences);
+    var sln = CodeFactory.CreateSolution(code, Settings.Default.WithCompilationOptions(compilationOptions).WithMetadataReferences(metadataReferences));
     var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
     var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
     CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
@@ -670,10 +585,7 @@ public void CreateSolutionFromProjectFile()
         CodeFactory.TryFindProjectFile(
             new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath),
             out FileInfo projectFile));
-    var solution = CodeFactory.CreateSolution(
-        projectFile,
-        new[] { new FieldNameMustNotBeginWithUnderscore(), },
-        CreateMetadataReferences(typeof(object)));
+    var solution = CodeFactory.CreateSolution(projectFile);
 }
 
 [Test]
@@ -684,10 +596,7 @@ public void CreateSolutionFromSolutionFile()
         CodeFactory.TryFindFileInParentDirectory(
             new FileInfo(new Uri(Assembly.GetExecutingAssembly().CodeBase, UriKind.Absolute).LocalPath).Directory, "Gu.Roslyn.Asserts.sln",
             out FileInfo solutionFile));
-    var solution = CodeFactory.CreateSolution(
-        solutionFile,
-        new[] { new FieldNameMustNotBeginWithUnderscore(), },
-        CreateMetadataReferences(typeof(object)));
+    var solution = CodeFactory.CreateSolution(solutionFile);
 }
 ```
 
@@ -699,8 +608,7 @@ Sample benchmark using BenchmarkDotNet.
 public class FieldNameMustNotBeginWithUnderscoreBenchmark
 {
     private static readonly Solution Solution = CodeFactory.CreateSolution(
-        CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"),
-        MetadataReferences.Transitive(typeof(Benchmark).Assembly).ToArray());
+        CodeFactory.FindSolutionFile("Gu.Roslyn.Asserts.sln"));
 
     private static readonly Benchmark Benchmark = Benchmark.Create(Solution, new FieldNameMustNotBeginWithUnderscore());
 
@@ -730,7 +638,7 @@ namespace N
         }
     }
 }");
-    var compilation = CSharpCompilation.Create("test", new[] { syntaxTree }, new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location), });
+    var compilation = CSharpCompilation.Create("test", new[] { syntaxTree });
     var semanticModel = compilation.GetSemanticModel(syntaxTree);
     var assignment = syntaxTree.FindAssignmentExpression("temp = 2");
     Assert.AreEqual("temp = 2", assignment.ToString());
@@ -749,7 +657,4 @@ namespace N
   <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 </PropertyGroup>
 ```
-
-## NetCoreApp2.0
-TODO figure out what is needed here.
 
