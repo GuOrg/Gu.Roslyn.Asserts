@@ -131,5 +131,20 @@
                 _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
             };
         }
+
+        /// <summary>
+        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowCompilationDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
+        /// </summary>
+        internal IEnumerable<Diagnostic> FilterCompilerDiagnostics(AllowCompilationDiagnostics allowCompilationDiagnostics)
+        {
+            return allowCompilationDiagnostics switch
+            {
+                AllowCompilationDiagnostics.None => this.CompilerDiagnostics,
+                AllowCompilationDiagnostics.Warnings
+                    => this.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error),
+                AllowCompilationDiagnostics.WarningsAndErrors => Enumerable.Empty<Diagnostic>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
+            };
+        }
     }
 }
