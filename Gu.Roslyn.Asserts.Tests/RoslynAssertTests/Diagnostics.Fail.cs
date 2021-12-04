@@ -428,7 +428,7 @@ namespace N
 {
     class C
     {
-        private ↓readonly int _f;
+        private ↓readonly int _f = 1;
 
         public int M() => _f;
     }
@@ -436,10 +436,10 @@ namespace N
                 var expected = "Expected and actual diagnostics do not match.\r\n" +
                                "Expected:\r\n" +
                                "  SA13090 \r\n" +
-                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f;\r\n" +
+                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f = 1;\r\n" +
                                "Actual:\r\n" +
                                "  SA13090 Field '_f' must not begin with an underscore\r\n" +
-                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f;\r\n";
+                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -555,20 +555,22 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int _value2;
+        private readonly int ↓_f1 = 1;
+        private readonly int _f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expected = @"Expected and actual diagnostics do not match.
 Expected:
   SA1309 
-    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
+    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
 Actual:
-  SA1309 Field '_value1' must not begin with an underscore
-    at line 5 and character 29 in file C.cs | private readonly int ↓_value1;
-  SA1309 Field '_value2' must not begin with an underscore
-    at line 6 and character 29 in file C.cs | private readonly int ↓_value2;
+  SA1309 Field '_f1' must not begin with an underscore
+    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
+  SA1309 Field '_f2' must not begin with an underscore
+    at line 6 and character 29 in file C.cs | private readonly int ↓_f2 = 2;
 ";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 CodeAssert.AreEqual(expected, exception.Message);

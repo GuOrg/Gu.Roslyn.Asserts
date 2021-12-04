@@ -226,12 +226,9 @@
                 analyzer,
                 diagnosticsAndSources,
                 settings);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            if (settings.AllowCompilationDiagnostics == AllowCompilationDiagnostics.None)
-            {
-                NoCompilerDiagnostics(sln);
-            }
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
+            NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowCompilationDiagnostics)));
         }
 
         [Obsolete("Remove")]
@@ -344,7 +341,7 @@
             }
 
             var error = StringBuilderPool.Borrow();
-            if (diagnostics.SelectMany(x => x.All()).TrySingle(out var single) &&
+            if (diagnostics.SelectMany(x => x.AnalyzerDiagnostics).TrySingle(out var single) &&
                 diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
                 diagnosticsAndSources.ExpectedDiagnostics[0].Id == single.Id)
             {
@@ -378,11 +375,11 @@
 
             throw new AssertException(error.Return());
 
-            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<Diagnostic> allDiagnostics)
+            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<Diagnostic> diagnostics)
             {
-                foreach (var diagnostic in allDiagnostics)
+                foreach (var diagnostic in diagnostics)
                 {
-                    if (expectedDiagnostics.Any(e => e.Matches(diagnostic)))
+                    if (expectedDiagnostics.Any(x => x.Matches(diagnostic)))
                     {
                         continue;
                     }
@@ -392,7 +389,7 @@
 
                 foreach (var expected in expectedDiagnostics)
                 {
-                    if (allDiagnostics.Any(a => expected.Matches(a)))
+                    if (diagnostics.Any(x => expected.Matches(x)))
                     {
                         continue;
                     }
