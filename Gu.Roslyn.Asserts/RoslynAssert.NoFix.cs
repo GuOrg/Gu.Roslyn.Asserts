@@ -1,7 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts
 {
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Linq;
 
     using Gu.Roslyn.Asserts.Internals;
@@ -302,19 +301,15 @@
                 analyzer,
                 diagnosticsAndSources,
                 settings);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
-            if (settings.AllowCompilationDiagnostics == AllowCompilationDiagnostics.None)
-            {
-                NoCompilerDiagnostics(sln);
-            }
-
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyNoFix(sln, diagnostics, fix);
+            NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowCompilationDiagnostics)));
         }
 
-        private static void VerifyNoFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, CodeFixProvider fix)
+        private static void VerifyNoFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, CodeFixProvider fix)
         {
-            var fixableDiagnostics = diagnostics.SelectMany(x => x)
+            var fixableDiagnostics = diagnostics.SelectMany(x => x.All())
                                          .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
                                          .ToArray();
 
