@@ -18,7 +18,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -27,7 +27,7 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -47,7 +47,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -56,7 +56,7 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -77,7 +77,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -86,7 +86,7 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -173,7 +173,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -182,7 +182,7 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -202,7 +202,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -211,18 +211,18 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'f'");
             }
 
             [Test]
@@ -233,7 +233,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -242,16 +242,16 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'f'");
             }
 
             [Test]
@@ -262,7 +262,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -271,20 +271,20 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, fixTitle: "Rename to: 'f'");
             }
 
-            [TestCase("Rename to: 'value1'", "value1")]
-            [TestCase("Rename to: 'value2'", "value2")]
+            [TestCase("Rename to: 'f1'", "f1")]
+            [TestCase("Rename to: 'f2'", "f2")]
             public static void SingleDocumentOneErrorTwoFixes(string fixTitle, string expected)
             {
                 var before = @"
@@ -292,7 +292,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -301,9 +301,9 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
-}".AssertReplace("value", expected);
+}".AssertReplace("f", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after, fixTitle);
@@ -323,8 +323,8 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1;
+        private readonly int ↓_f2;
     }
 }";
 
@@ -333,24 +333,24 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
-        private readonly int _value2;
+        private readonly int f1;
+        private readonly int _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value1'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'f1'");
 
                 after = @"
 namespace N
 {
     class C
     {
-        private readonly int _value1;
-        private readonly int value2;
+        private readonly int _f1;
+        private readonly int f2;
     }
 }";
-                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'value2'");
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'f2'");
             }
 
             [Test]
@@ -472,7 +472,7 @@ namespace N
 {
     public partial class C
     {
-        private int ↓_value;
+        private int ↓_f;
     }
 }";
 
@@ -489,7 +489,7 @@ namespace N
 {
     public partial class C
     {
-        private int value;
+        private int f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -503,9 +503,9 @@ namespace N
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, before }, new[] { after, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, before }, new[] { part2, after });
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'value'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'value'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'f'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'f'");
             }
 
             [Test]
@@ -516,7 +516,7 @@ namespace N
 {
     public partial class C
     {
-        private int ↓_value1;
+        private int ↓_f1;
     }
 }";
 
@@ -525,7 +525,7 @@ namespace N
 {
     public partial class C
     {
-        private int value2;
+        private int f2;
     }
 }";
 
@@ -534,7 +534,7 @@ namespace N
 {
     public partial class C
     {
-        private int value1;
+        private int f1;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -548,9 +548,9 @@ namespace N
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, before }, new[] { after, part2 });
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { part2, before }, new[] { part2, after });
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after, fixTitle: "Rename to: 'value1'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'value1'");
-                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'value1'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, after, fixTitle: "Rename to: 'f1'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { part2, after }, fixTitle: "Rename to: 'f1'");
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before, part2 }, new[] { after, part2 }, fixTitle: "Rename to: 'f1'");
             }
 
             [Test]
@@ -692,7 +692,7 @@ namespace N
 {
     class Bar
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
 
@@ -701,7 +701,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -710,7 +710,7 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
