@@ -679,8 +679,8 @@
                 analyzer,
                 diagnosticsAndSources,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationDiagnostics);
         }
 
@@ -961,8 +961,8 @@
                 analyzer,
                 diagnosticsAndSources,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics, scope);
         }
 
