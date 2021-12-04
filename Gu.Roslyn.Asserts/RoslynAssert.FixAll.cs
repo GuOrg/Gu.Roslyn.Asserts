@@ -970,10 +970,7 @@
         {
             var fixedSolution = Fix.ApplyAllFixableOneByOneAsync(solution, analyzer, fix, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
             AreEqualAsync(after, fixedSolution, "Applying fixes one by one failed.").GetAwaiter().GetResult();
-            if (allowCompilationDiagnostics == AllowCompilationDiagnostics.None)
-            {
-                VerifyNoCompilerErrorsAsync(fix, fixedSolution).ConfigureAwait(false).GetAwaiter().GetResult();
-            }
+            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowCompilationDiagnostics).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         private static void FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution sln, IReadOnlyList<string> after, string? fixTitle, AllowCompilationDiagnostics allowCompilationDiagnostics, FixAllScope scope)
@@ -981,10 +978,7 @@
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var fixedSolution = Fix.ApplyAllFixableScopeByScopeAsync(sln, analyzer, fix, scope, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
             AreEqualAsync(after, fixedSolution, $"Applying fixes for {scope} failed.").GetAwaiter().GetResult();
-            if (allowCompilationDiagnostics == AllowCompilationDiagnostics.None)
-            {
-                VerifyNoCompilerErrorsAsync(fix, fixedSolution).GetAwaiter().GetResult();
-            }
+            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowCompilationDiagnostics).GetAwaiter().GetResult();
         }
 
         private static List<string> MergeFixedCode(IReadOnlyList<string> codes, string after)
