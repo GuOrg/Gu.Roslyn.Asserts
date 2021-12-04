@@ -301,7 +301,7 @@
                 analyzer,
                 diagnosticsAndSources,
                 settings);
-            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyNoFix(sln, diagnostics, fix);
             NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowCompilationDiagnostics)));

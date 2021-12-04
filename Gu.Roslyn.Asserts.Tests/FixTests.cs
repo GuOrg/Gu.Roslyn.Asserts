@@ -29,7 +29,7 @@ namespace N
 }";
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var sln = CodeFactory.CreateSolution(code);
-            var diagnostic = Analyze.GetDiagnostics(analyzer, sln).SelectMany(x => x).Single();
+            var diagnostic = Analyze.GetDiagnostics(analyzer, sln).SelectMany(x => x.AnalyzerDiagnostics).Single();
             var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostic);
             CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 
