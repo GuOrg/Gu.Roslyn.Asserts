@@ -224,7 +224,7 @@
 
             static bool IsSingleLine(string text)
             {
-                bool foundNewLine = false;
+                var foundNewLine = false;
                 foreach (var c in text)
                 {
                     switch (c)
@@ -263,7 +263,7 @@
 
             static string GetEnd(string text)
             {
-                bool lastLine = false;
+                var lastLine = false;
                 var builder = StringBuilderPool.Borrow();
                 for (var i = text.Length - 1; i >= 0; i--)
                 {
