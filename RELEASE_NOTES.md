@@ -1,3 +1,6 @@
+#### 4.0.1
+* BREAKING: Broke everything, all I can say is I'm sorry. See the documentation for new API. Found no way out of the mess I created before.
+
 #### 3.3.1
 * BUGFIX: Handle collision in metadata references.
 

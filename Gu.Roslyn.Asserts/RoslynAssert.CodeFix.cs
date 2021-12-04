@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.ComponentModel;
     using System.Linq;
     using System.Threading;
@@ -602,15 +601,11 @@
                 throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }
 
-            if (allowCompilationDiagnostics == AllowCompilationDiagnostics.None)
-            {
-                VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution).GetAwaiter().GetResult();
-            }
-
+            VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution, allowCompilationDiagnostics).GetAwaiter().GetResult();
             AreEqualAsync(after, operation.ChangedSolution, null).GetAwaiter().GetResult();
         }
 
-        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution)
+        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution, AllowCompilationDiagnostics allowCompilationDiagnostics)
         {
             var diagnostics = await Analyze.GetAllDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
@@ -649,20 +644,15 @@
                 throw new AssertException(errorBuilder.Return());
             }
 
-            static bool IsIncluded(Diagnostic diagnostic)
+            bool IsIncluded(Diagnostic diagnostic)
             {
-                return IsIncluded(diagnostic, DiagnosticSettings.AllowedDiagnostics());
-
-                static bool IsIncluded(Diagnostic diagnostic, AllowedDiagnostics allowedDiagnostics)
+                return allowCompilationDiagnostics switch
                 {
-                    return allowedDiagnostics switch
-                    {
-                        AllowedDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
-                        AllowedDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
-                        AllowedDiagnostics.WarningsAndErrors => false,
-                        _ => throw new InvalidEnumArgumentException(nameof(allowedDiagnostics), (int)allowedDiagnostics, typeof(AllowedDiagnostics)),
-                    };
-                }
+                    AllowCompilationDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
+                    AllowCompilationDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
+                    AllowCompilationDiagnostics.WarningsAndErrors => false,
+                    _ => throw new InvalidEnumArgumentException(nameof(AllowCompilationDiagnostics), (int)allowCompilationDiagnostics, typeof(AllowCompilationDiagnostics)),
+                };
             }
         }
     }
