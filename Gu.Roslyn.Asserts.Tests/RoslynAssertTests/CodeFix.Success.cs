@@ -874,13 +874,11 @@ namespace N
             }
 
             [Test]
-            public static void InsertEventFix()
+            public static void InsertMethodFix()
             {
                 var before = @"
 namespace N
 {
-    using System;
-
     ↓class C
     {
     }
@@ -889,15 +887,15 @@ namespace N
                 var after = @"
 namespace N
 {
-    using System;
-
     class C
     {
-        public event EventHandler E;
+        public void M()
+        {
+        }
     }
 }";
                 var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
+                var fix = new InsertMethodFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
