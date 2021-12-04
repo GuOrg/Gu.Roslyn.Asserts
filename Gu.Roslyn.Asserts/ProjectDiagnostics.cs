@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeFixes;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     /// <summary>
@@ -145,6 +146,25 @@
                 AllowCompilationDiagnostics.WarningsAndErrors => Enumerable.Empty<Diagnostic>(),
                 _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
             };
+        }
+
+        internal IEnumerable<Diagnostic> FixableBy(CodeFixProvider fix)
+        {
+            foreach (var candidate in this.AnalyzerDiagnostics)
+            {
+                if (fix.FixableDiagnosticIds.Contains(candidate.Id))
+                {
+                    yield return candidate;
+                }
+            }
+
+            foreach (var candidate in this.CompilerDiagnostics)
+            {
+                if (fix.FixableDiagnosticIds.Contains(candidate.Id))
+                {
+                    yield return candidate;
+                }
+            }
         }
     }
 }
