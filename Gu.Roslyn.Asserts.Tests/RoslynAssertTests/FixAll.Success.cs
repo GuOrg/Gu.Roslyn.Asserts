@@ -10,14 +10,16 @@
         public static class Success
         {
             [Test]
-            public static void OneError()
+            public static void OneDiagnostic()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -26,7 +28,9 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -34,16 +38,18 @@ namespace N
                 RoslynAssert.FixAll(analyzer, fix, before, after);
             }
 
-            [TestCase("Rename to: 'value1'", "value1")]
-            [TestCase("Rename to: 'value2'", "value2")]
-            public static void SingleDocumentOneErrorTwoFixes(string fixTitle, string expected)
+            [TestCase("Rename to: 'f1'", "f1")]
+            [TestCase("Rename to: 'f2'", "f2")]
+            public static void SingleDocumentOneDiagnosticTwoFixes(string fixTitle, string expected)
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -52,9 +58,11 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
-}".AssertReplace("value", expected);
+}".AssertReplace("f", expected);
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DontUseUnderscoreManyFix();
@@ -62,15 +70,17 @@ namespace N
             }
 
             [Test]
-            public static void TwoErrors()
+            public static void TwoDiagnostics()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
 
@@ -79,8 +89,10 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
-        private readonly int value2;
+        private readonly int f1 = 1;
+        private readonly int f2 = 2;
+
+        public int M() => f1 + f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -89,15 +101,17 @@ namespace N
             }
 
             [Test]
-            public static void FixAllInDocumentTwoErrors()
+            public static void FixAllInDocumentTwoDiagnostics()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
 
@@ -106,8 +120,10 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
-        private readonly int value2;
+        private readonly int f1 = 1;
+        private readonly int f2 = 2;
+
+        public int M() => f1 + f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -116,15 +132,17 @@ namespace N
             }
 
             [Test]
-            public static void FixAllOneByOneTwoErrors()
+            public static void FixAllOneByOneTwoDiagnostics()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
 
@@ -133,8 +151,10 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
-        private readonly int value2;
+        private readonly int f1 = 1;
+        private readonly int f2 = 2;
+
+        public int M() => f1 + f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -143,14 +163,16 @@ namespace N
             }
 
             [Test]
-            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
+            public static void SingleDocumentOneDiagnosticCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics1()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        public readonly int ↓_value;
+        public readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -159,7 +181,9 @@ namespace N
 {
     class C
     {
-        public readonly int value;
+        public readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id1);
@@ -167,19 +191,21 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'f'");
             }
 
             [Test]
-            public static void SingleDocumentOneErrorCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
+            public static void SingleDocumentOneDiagnosticCorrectFixExplicitTitleExpectedDiagnosticWithPositionAnalyzerSupportsTwoDiagnostics2()
             {
                 var before = @"
 namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -188,7 +214,9 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
@@ -196,12 +224,12 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after);
                 RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after);
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'value'");
-                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'value'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, before, after, fixTitle: "Rename to: 'f'");
+                RoslynAssert.FixAll(analyzer, fix, expectedDiagnostic, new[] { before }, after, fixTitle: "Rename to: 'f'");
             }
 
             [Test]
-            public static void TwoDocumentsTwoErrorsTwoFixes()
+            public static void TwoDocumentsTwoDiagnosticsTwoFixes()
             {
                 var before1 = @"
 namespace N
@@ -252,14 +280,16 @@ namespace N
 
             [TestCase("Rename to: 'value1'", "value1")]
             [TestCase("Rename to: 'value2'", "value2")]
-            public static void TwoDocumentsOneErrorWhenCodeFixProviderHasManyFixes(string fixTitle, string expected)
+            public static void TwoDocumentsOneDiagnosticWhenCodeFixProviderHasManyFixes(string fixTitle, string expected)
             {
                 var before1 = @"
 namespace N
 {
     class C1
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M() => _value;
     }
 }";
                 var before2 = @"
@@ -267,7 +297,9 @@ namespace N
 {
     class C2
     {
-        private readonly int value;
+        private readonly int value2 = 2;
+
+        public int M() => this.value2;
     }
 }";
 
@@ -276,7 +308,9 @@ namespace N
 {
     class C1
     {
-        private readonly int value;
+        private readonly int value = 1;
+
+        public int M() => value;
     }
 }".AssertReplace("value", expected);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
@@ -297,7 +331,9 @@ namespace N
 {
     class C1
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M1() => _value;
     }
 }";
                 var before2 = @"
@@ -305,7 +341,9 @@ namespace N
 {
     class C2
     {
-        private readonly int value;
+        private readonly int f2 = 2;
+
+        public int M2() => this.f2;
     }
 }";
 
@@ -314,7 +352,9 @@ namespace N
 {
     class C1
     {
-        private readonly int value;
+        private readonly int value = 1;
+
+        public int M1() => value;
     }
 }".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -331,7 +371,9 @@ namespace N
 {
     class C1
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 1;
+
+        public int M1() => _value;
     }
 }";
                 var before2 = @"
@@ -339,7 +381,9 @@ namespace N
 {
     class C2
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 2;
+
+        public int M2() => _value;
     }
 }";
 
@@ -348,7 +392,9 @@ namespace N
 {
     class C1
     {
-        private readonly int value;
+        private readonly int value = 1;
+
+        public int M1() => value;
     }
 }".AssertReplace("value", expected);
 
@@ -357,7 +403,9 @@ namespace N
 {
     class C2
     {
-        private readonly int value;
+        private readonly int value = 2;
+
+        public int M2() => value;
     }
 }".AssertReplace("value", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -561,7 +609,7 @@ namespace N
 
     public class C
     {
-        public event EventHandler? ↓Bar;
+        public event EventHandler? ↓E;
     }
 }";
 
@@ -580,32 +628,38 @@ namespace N
             }
 
             [Test]
-            public static void TwoClassOneError()
+            public static void TwoClassOneDiagnostic()
             {
                 var barCode = @"
 namespace N
 {
-    class Bar
+    class C1
     {
-        private readonly int value;
+        private readonly int f1 = 1;
+
+        public int M1() => this.f1;
     }
 }";
 
                 var before = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int ↓_value;
+        private readonly int ↓_value = 2;
+
+        public int M2() => _value;
     }
 }";
 
                 var after = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int value;
+        private readonly int value = 2;
+
+        public int M2() => value;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
@@ -644,16 +698,16 @@ namespace N
             }
 
             [Test]
-            public static void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsDiagnostic()
             {
                 var before = @"
 namespace N
 {
     class Value
     {
-        private readonly int ↓wrongName;
+        private readonly int ↓wrongName = 1;
         
-        public int WrongName { get; set; }
+        public int WrongName => this.wrongName;
     }
 }";
 
@@ -662,9 +716,9 @@ namespace N
 {
     class Value
     {
-        private readonly int value;
+        private readonly int value = 1;
         
-        public int WrongName { get; set; }
+        public int WrongName => this.value;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);

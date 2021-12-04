@@ -370,7 +370,7 @@ namespace N
 class ↓Foo
 {
 }"";
-            var text = ""FooWord"";
+            _ = ""FooWord"";
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
@@ -393,7 +393,7 @@ namespace N
 class C
 {
 }"";
-            var text = ""FooWord"";
+            _ = ""FooWord"";
             RoslynAssert.Valid(Analyzer, foo);
         }
     }
