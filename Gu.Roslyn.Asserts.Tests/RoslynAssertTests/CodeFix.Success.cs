@@ -870,12 +870,12 @@ namespace N
 {
     class C
     {
-        public event EventHandler E;
+        public EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
-                var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveEventAnalyzer.DiagnosticId);
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = CodeFixes.InsertMethodFix.ReturnEventHandler;
+                var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveMethodAnalyzer.DiagnosticId);
                 var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.WarningsAndErrors);
                 RoslynAssert.CodeFix(analyzer, fix, before, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
@@ -941,7 +941,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = CodeFixes.InsertMethodFix.ReturnNullableEventHandler;
+                var fix = CodeFixes.InsertMethodFix.ReturnEventHandler;
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
@@ -967,7 +967,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = new InsertFullyQualifiedMethodFix();
+                var fix = CodeFixes.InsertMethodFix.ReturnFullyQualifiedEventHandler;
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
@@ -993,7 +993,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = new InsertFullyQualifiedSimplifiedMethodFix();
+                var fix = CodeFixes.InsertMethodFix.ReturnFullyQualifiedSimplifiedEventHandler;
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
@@ -1023,7 +1023,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = new InsertFullyQualifiedMethodFix();
+                var fix = CodeFixes.InsertMethodFix.ReturnFullyQualifiedEventHandler;
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });

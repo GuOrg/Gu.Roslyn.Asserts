@@ -30,7 +30,7 @@
                     CodeAction.Create(
                         $"Make sealed.",
                         cancellationToken => ApplyFixAsync(document, classDeclaration, cancellationToken),
-                        nameof(InsertEventFix)),
+                        nameof(MakeSealedFixProvider)),
                     diagnostic);
             }
         }

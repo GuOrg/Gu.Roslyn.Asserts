@@ -10,11 +10,14 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Editing;
+    using Microsoft.CodeAnalysis.Simplification;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertMethodFix))]
     internal class InsertMethodFix : CodeFixProvider
     {
-        internal static readonly InsertMethodFix ReturnNullableEventHandler = new(SyntaxFactory.ParseTypeName("EventHandler?"));
+        internal static readonly InsertMethodFix ReturnEventHandler = new(SyntaxFactory.ParseTypeName("EventHandler?"));
+        internal static readonly InsertMethodFix ReturnFullyQualifiedEventHandler = new(SyntaxFactory.ParseTypeName("System.EventHandler?"));
+        internal static readonly InsertMethodFix ReturnFullyQualifiedSimplifiedEventHandler = new(SyntaxFactory.ParseTypeName("System.EventHandler?").WithAdditionalAnnotations(Simplifier.Annotation));
 
         private readonly TypeSyntax returnType;
 
