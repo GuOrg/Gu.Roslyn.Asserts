@@ -219,7 +219,7 @@ namespace N
 }";
 
                 var analyzer = new NopAnalyzer();
-                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressed("CS1823", "CS8618", "CS0169"));
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS1823", "CS8618", "CS0169"));
                 RoslynAssert.Valid(analyzer, code, settings: settings);
                 RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
             }

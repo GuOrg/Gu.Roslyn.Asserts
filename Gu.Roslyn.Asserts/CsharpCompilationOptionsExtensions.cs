@@ -57,7 +57,7 @@
         /// <param name="ids">The diagnostic ids.</param>
         /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
         /// <exception cref="System.ArgumentNullException"></exception>
-        public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, IEnumerable<string> ids)
+        public static CSharpCompilationOptions WithSuppressedDiagnostics(this CSharpCompilationOptions options, IEnumerable<string> ids)
         {
             if (options is null)
             {
@@ -85,8 +85,8 @@
         /// <param name="ids">The diagnostic ids.</param>
         /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
         /// <exception cref="System.ArgumentNullException"></exception>
-        public static CSharpCompilationOptions WithSuppressed(this CSharpCompilationOptions options, params string[] ids)
-            => WithSuppressed(options, (IEnumerable<string>)ids);
+        public static CSharpCompilationOptions WithSuppressedDiagnostics(this CSharpCompilationOptions options, params string[] ids)
+            => WithSuppressedDiagnostics(options, (IEnumerable<string>)ids);
 
         internal static CSharpCompilationOptions WithSpecific(this CSharpCompilationOptions options, ImmutableArray<DiagnosticDescriptor> supportedDiagnostics, DiagnosticDescriptor descriptor)
         {

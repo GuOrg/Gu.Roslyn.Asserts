@@ -52,6 +52,44 @@ namespace N
             }
 
             [Test]
+            public static void OneDocumentOneErrorNoFixSuppressedWarnings()
+            {
+                var code = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f;
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new CodeFixes.NoFix();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS0169"));
+                RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code, settings);
+            }
+
+            [Test]
+            public static void OneDocumentOneErrorNoFixAllowWarnings()
+            {
+                var code = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f;
+    }
+}";
+
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new CodeFixes.NoFix();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code, settings);
+            }
+
+            [Test]
             public static void TwoDocumentsOneErrorNoFix()
             {
                 var barCode = @"

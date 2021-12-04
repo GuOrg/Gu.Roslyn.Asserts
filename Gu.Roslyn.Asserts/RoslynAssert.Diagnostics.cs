@@ -329,13 +329,11 @@
                 throw new AssertException("Expected code to have at least one error position indicated with '↓'");
             }
 
-            var allDiagnostics = diagnostics.SelectMany(x => x.All()).ToArray();
-
-            if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, allDiagnostics))
+            if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, diagnostics.SelectMany(x => x.AnalyzerDiagnostics)))
             {
                 if (expectedMessage != null)
                 {
-                    foreach (var actual in allDiagnostics)
+                    foreach (var actual in diagnostics.SelectMany(x => x.AnalyzerDiagnostics))
                     {
                         var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
                         TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
@@ -345,6 +343,7 @@
                 return;
             }
 
+            var allDiagnostics = diagnostics.SelectMany(x => x.All()).ToArray();
             var error = StringBuilderPool.Borrow();
             if (allDiagnostics.Length == 1 &&
                 diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
@@ -379,7 +378,7 @@
 
             throw new AssertException(error.Return());
 
-            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<Diagnostic> allDiagnostics)
+            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<Diagnostic> allDiagnostics)
             {
                 foreach (var diagnostic in allDiagnostics)
                 {
