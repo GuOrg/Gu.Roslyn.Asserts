@@ -177,7 +177,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -186,7 +188,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -206,7 +210,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -215,7 +221,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -237,7 +245,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -246,7 +256,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
@@ -266,7 +278,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -275,7 +289,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic.Id2);
@@ -331,8 +347,10 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f1;
-        private readonly int ↓_f2;
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f1 + _f2;
     }
 }";
 
@@ -341,8 +359,10 @@ namespace N
 {
     class C
     {
-        private readonly int f1;
-        private readonly int _f2;
+        private readonly int f1 = 1;
+        private readonly int _f2 = 2;
+
+        public int M() => f1 + _f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -354,8 +374,10 @@ namespace N
 {
     class C
     {
-        private readonly int _f1;
-        private readonly int f2;
+        private readonly int _f1 = 1;
+        private readonly int f2 = 2;
+
+        public int M() => _f1 + f2;
     }
 }";
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, fixTitle: "Rename to: 'f2'");
@@ -480,7 +502,9 @@ namespace N
 {
     public partial class C
     {
-        private int ↓_f;
+        private int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -497,7 +521,9 @@ namespace N
 {
     public partial class C
     {
-        private int f;
+        private int f = 1;
+
+        public int M() => f;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -524,7 +550,9 @@ namespace N
 {
     public partial class C
     {
-        private int ↓_f1;
+        private int ↓_f1 = 1;
+
+        public int M() => _f1 + this.f2;
     }
 }";
 
@@ -533,7 +561,7 @@ namespace N
 {
     public partial class C
     {
-        private int f2;
+        private int f2 = 2;
     }
 }";
 
@@ -542,7 +570,9 @@ namespace N
 {
     public partial class C
     {
-        private int f1;
+        private int f1 = 1;
+
+        public int M() => f1 + this.f2;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -698,27 +728,33 @@ namespace N.Client
                 var barCode = @"
 namespace N
 {
-    class Bar
+    class C1
     {
-        private readonly int f;
+        private readonly int f1 = 1;
+
+        public int M() => f1;
     }
 }";
 
                 var before = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f2 = 2;
+
+        public int M() => _f2;
     }
 }";
 
                 var after = @"
 namespace N
 {
-    class C
+    class C2
     {
-        private readonly int f;
+        private readonly int f2 = 2;
+
+        public int M() => f2;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -824,7 +860,7 @@ namespace N
                 var before = @"
 namespace N
 {
-    ↓class Value
+    ↓class C
     {
     }
 }";
@@ -832,7 +868,7 @@ namespace N
                 var after = @"
 namespace N
 {
-    class Value
+    class C
     {
         public event EventHandler E;
     }
@@ -855,22 +891,22 @@ namespace N
                 var before = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int ↓wrongName;
+        private readonly int ↓wrongName = 1;
         
-        public int WrongName { get; set; }
+        public int WrongName => this.wrongName;
     }
 }";
 
                 var after = @"
 namespace N
 {
-    class Value
+    class C
     {
-        private readonly int value;
+        private readonly int value = 1;
         
-        public int WrongName { get; set; }
+        public int WrongName => this.value;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId);
