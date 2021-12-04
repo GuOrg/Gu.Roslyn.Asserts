@@ -22,6 +22,7 @@
         {
             this.MetadataReferences = types.SelectMany(t => Asserts.MetadataReferences.Transitive(t.Assembly))
                                            .ToList();
+            Settings.Default = Settings.Default.WithMetadataReferences(x => x.Concat(this.MetadataReferences));
         }
 
         /// <summary>

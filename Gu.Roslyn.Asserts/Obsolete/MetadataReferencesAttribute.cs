@@ -22,6 +22,8 @@
         {
             this.MetadataReferences = types.Select(x => Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(x.Assembly))
                                            .ToArray();
+
+            Settings.Default = Settings.Default.WithMetadataReferences(x => x.Concat(this.MetadataReferences));
         }
 
         /// <summary>

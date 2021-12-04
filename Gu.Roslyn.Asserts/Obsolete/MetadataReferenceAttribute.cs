@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -35,6 +36,7 @@
             }
 
             this.MetadataReference = MetadataReferences.CreateFromAssembly(type.Assembly).WithAliases(this.Aliases);
+            Settings.Default = Settings.Default.WithMetadataReferences(x => x.Append(this.MetadataReference));
         }
 
         /// <summary>
