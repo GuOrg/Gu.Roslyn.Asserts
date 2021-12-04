@@ -524,11 +524,11 @@
 
             VerifyAnalyzerSupportsDiagnostic(analyzer, expectedDiagnostic);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
             var diagnosticsAndSources = DiagnosticsAndSources.Create(
                 expectedDiagnostic,
                 solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode()).ToArray());
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, solution);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationDiagnostics);
         }
 
@@ -579,20 +579,19 @@
                 diagnosticsAndSources: diagnosticsAndSources,
                 analyzer: analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            VerifyDiagnostics(diagnosticsAndSources, diagnostics, sln);
+            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowCompilationDiagnostics);
         }
 
-        private static void VerifyFix(Solution sln, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
+        private static void VerifyFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
         {
-            var fixableDiagnostics = diagnostics.SelectMany(x => x)
-                                                .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
+            var fixableDiagnostics = diagnostics.SelectMany(x => x.FixableBy(fix))
                                                 .ToArray();
             if (fixableDiagnostics.Length == 0)
             {
                 var message = $"Code analyzed with {analyzer.GetType().Name} did not generate any diagnostics fixable by {fix.GetType().Name}.{Environment.NewLine}" +
-                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x).Select(d => d.Id))}}}.{Environment.NewLine}" +
+                              $"The analyzed code contained the following diagnostics: {{{string.Join(", ", diagnostics.SelectMany(x => x.AnalyzerDiagnostics).Select(d => d.Id))}}}.{Environment.NewLine}" +
                               $"{fix.GetType().Name}.{nameof(fix.FixableDiagnosticIds)}: {{{string.Join(", ", fix.FixableDiagnosticIds)}}}.";
                 throw new AssertException(message);
             }
