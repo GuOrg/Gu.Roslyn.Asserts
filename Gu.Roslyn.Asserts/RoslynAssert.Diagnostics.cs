@@ -343,19 +343,19 @@
                 return;
             }
 
-            var allDiagnostics = diagnostics.SelectMany(x => x.All()).ToArray();
             var error = StringBuilderPool.Borrow();
-            if (allDiagnostics.Length == 1 &&
+            if (diagnostics.SelectMany(x => x.All()).TrySingle(out var single) &&
                 diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
-                diagnosticsAndSources.ExpectedDiagnostics[0].Id == allDiagnostics[0].Id)
+                diagnosticsAndSources.ExpectedDiagnostics[0].Id == single.Id)
             {
-                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(allDiagnostics[0]) &&
-                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(allDiagnostics[0]))
+                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(single) &&
+                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(single))
                 {
-                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message!, allDiagnostics[0].GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message!, single.GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
                 }
             }
 
+            var allDiagnostics = diagnostics.SelectMany(x => x.All()).ToArray();
             error.AppendLine("Expected and actual diagnostics do not match.")
                  .AppendLine("Expected:");
             foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
