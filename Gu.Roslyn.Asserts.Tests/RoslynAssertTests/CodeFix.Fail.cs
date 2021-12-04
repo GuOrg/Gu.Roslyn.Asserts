@@ -813,7 +813,7 @@ namespace N
 }";
 
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = InsertMethodFix.ReturnNullableEventHandler;
+                var fix = InsertMethodFix.ReturnEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = @"InsertMethodFix introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)

@@ -285,7 +285,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = InsertMethodFix.ReturnNullableEventHandler;
+                var fix = InsertMethodFix.ReturnEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
                 var expected = @"InsertMethodFix introduced syntax errors.
 CS0518 Predefined type 'System.Object' is not defined or imported

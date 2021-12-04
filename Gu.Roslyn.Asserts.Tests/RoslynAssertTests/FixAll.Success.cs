@@ -635,11 +635,11 @@ namespace N
 {
     class Value
     {
-        public event EventHandler E;
+        public EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = InsertMethodFix.ReturnEventHandler;
                 RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.WarningsAndErrors));
             }
 
