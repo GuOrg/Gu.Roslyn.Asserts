@@ -282,7 +282,7 @@ namespace N
     {
         private readonly int f1 = 1;
 
-        public int M1 => this.f1;
+        public int M1() => this.f1;
     }
 }";
 
@@ -292,6 +292,8 @@ namespace N
     class C2
     {
         private readonly int ↓_f2 = 2;
+
+        public int M2() => _f2;
     }
 }";
 
@@ -301,28 +303,37 @@ namespace N
     class C2
     {
         private readonly int wrong = 2;
+
+        public int M2() => wrong;
     }
 }";
-                var expected = "Mismatch on line 6 of file C2.cs.\r\n" +
-                               "Expected:         private readonly int wrong = 2;\r\n" +
-                               "Actual:           private readonly int f2 = 2;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C2\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int wrong = 2;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C2\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int f2 = 2;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = @"Mismatch on line 6 of file C2.cs.
+Expected:         private readonly int wrong = 2;
+Actual:           private readonly int f2 = 2;
+                                       ^
+Expected:
+
+namespace N
+{
+    class C2
+    {
+        private readonly int wrong = 2;
+
+        public int M2() => wrong;
+    }
+}
+Actual:
+
+namespace N
+{
+    class C2
+    {
+        private readonly int f2 = 2;
+
+        public int M2() => f2;
+    }
+}
+";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { c1, before }, after));
@@ -777,23 +788,23 @@ namespace N
 {
     class C
     {
-        public event EventHandler E;
+        public EventHandler? M() => null;
     }
 }";
 
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = new InsertMethodFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                var expected = @"InsertEventFix introduced syntax error.
+                var expected = @"InsertMethodFix introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
-  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;
+  at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
 First source file with error is:
 
 namespace N
 {
     class C
     {
-        public event EventHandler E;
+        public EventHandler? M() => null;
     }
 }
 ";
