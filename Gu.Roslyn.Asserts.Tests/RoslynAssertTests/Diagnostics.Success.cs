@@ -28,6 +28,42 @@ namespace N
             }
 
             [Test]
+            public static void OneErrorIndicatedPositionSuppressedWarning()
+            {
+                var code = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS0169"));
+                RoslynAssert.Diagnostics(analyzer, code, settings);
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
+            }
+
+            [Test]
+            public static void OneErrorIndicatedPositionAllowWarnings()
+            {
+                var code = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                RoslynAssert.Diagnostics(analyzer, code, settings);
+                RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
+            }
+
+            [Test]
             public static void TwoErrorsSamePosition()
             {
                 var code = @"
