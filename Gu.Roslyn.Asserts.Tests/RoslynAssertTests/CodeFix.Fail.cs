@@ -18,7 +18,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -27,12 +27,12 @@ namespace N
 {
     class C
     {
-        private readonly int value;
+        private readonly int f;
     }
 }";
                 var expected = "Did not find a code fix with title WRONG.\r\n" +
                                "Found:\r\n" +
-                               "Rename to: 'value'\r\n";
+                               "Rename to: 'f'\r\n";
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
@@ -54,8 +54,8 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value1;
-        private readonly int ↓_value2;
+        private readonly int ↓_f1;
+        private readonly int ↓_f2;
     }
 }";
 
@@ -64,13 +64,13 @@ namespace N
 {
     class C
     {
-        private readonly int value1;
-        private readonly int value2;
+        private readonly int f1;
+        private readonly int f2;
     }
 }";
                 var expected = @"Expected only one code fix, found 2:
-  Rename to: 'value1'
-  Rename to: 'value2'
+  Rename to: 'f1'
+  Rename to: 'f2'
 Use the overload that specifies title.
 Or maybe you meant to call RoslynAssert.FixAll?
 ";
@@ -170,15 +170,15 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new RenameTwoFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = @"Expected only one code fix, found 2:
-  Rename to: value1
-  Rename to: value2
+  Rename to: f1
+  Rename to: f2
 Use the overload that specifies title.
 Or maybe you meant to call RoslynAssert.FixAll?
 ";
@@ -193,7 +193,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -213,7 +213,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f;
     }
 }";
 
@@ -234,7 +234,7 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
     }
 }";
 
@@ -243,22 +243,22 @@ namespace N
 {
     class C
     {
-        private readonly int bar;
+        private readonly int wrong = 1;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = "Mismatch on line 6 of file C.cs.\r\n" +
-                               "Expected:         private readonly int bar;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
+                               "Expected:         private readonly int wrong = 1;\r\n" +
+                               "Actual:           private readonly int f = 1;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
                                "namespace N\r\n" +
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
-                               "        private readonly int bar;\r\n" +
+                               "        private readonly int wrong = 1;\r\n" +
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
@@ -266,7 +266,7 @@ namespace N
                                "{\r\n" +
                                "    class C\r\n" +
                                "    {\r\n" +
-                               "        private readonly int value;\r\n" +
+                               "        private readonly int f = 1;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
                 CodeAssert.AreEqual(expected, exception.Message);
@@ -291,7 +291,7 @@ namespace N
 {
     class C2
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f2 = 2;
     }
 }";
 
@@ -300,19 +300,19 @@ namespace N
 {
     class C2
     {
-        private readonly int bar;
+        private readonly int wrong = 2;
     }
 }";
                 var expected = "Mismatch on line 6 of file C2.cs.\r\n" +
-                               "Expected:         private readonly int bar;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
+                               "Expected:         private readonly int wrong = 2;\r\n" +
+                               "Actual:           private readonly int f2 = 2;\r\n" +
                                "                                       ^\r\n" +
                                "Expected:\r\n\r\n" +
                                "namespace N\r\n" +
                                "{\r\n" +
                                "    class C2\r\n" +
                                "    {\r\n" +
-                               "        private readonly int bar;\r\n" +
+                               "        private readonly int wrong = 2;\r\n" +
                                "    }\r\n" +
                                "}\r\n" +
                                "Actual:\r\n\r\n" +
@@ -320,7 +320,7 @@ namespace N
                                "{\r\n" +
                                "    class C2\r\n" +
                                "    {\r\n" +
-                               "        private readonly int value;\r\n" +
+                               "        private readonly int f2 = 2;\r\n" +
                                "    }\r\n" +
                                "}\r\n";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
