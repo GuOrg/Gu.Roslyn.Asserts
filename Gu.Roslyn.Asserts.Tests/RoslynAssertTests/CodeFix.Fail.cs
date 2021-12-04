@@ -235,6 +235,8 @@ namespace N
     class C
     {
         private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -244,31 +246,40 @@ namespace N
     class C
     {
         private readonly int wrong = 1;
+
+        public int M() => wrong;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                var expected = "Mismatch on line 6 of file C.cs.\r\n" +
-                               "Expected:         private readonly int wrong = 1;\r\n" +
-                               "Actual:           private readonly int f = 1;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int wrong = 1;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int f = 1;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = @"Mismatch on line 6 of file C.cs.
+Expected:         private readonly int wrong = 1;
+Actual:           private readonly int f = 1;
+                                       ^
+Expected:
+
+namespace N
+{
+    class C
+    {
+        private readonly int wrong = 1;
+
+        public int M() => wrong;
+    }
+}
+Actual:
+
+namespace N
+{
+    class C
+    {
+        private readonly int f = 1;
+
+        public int M() => f;
+    }
+}
+";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
@@ -348,7 +359,9 @@ namespace N
 {
     public partial class C
     {
-        private readonly int ↓_value;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -366,31 +379,38 @@ namespace N
     public partial class C
     {
         private readonly int wrong;
+
+        public int M() => wrong;
     }
 }";
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
-                var expected = "Mismatch on line 6.\r\n" +
-                               "Expected:         private readonly int wrong;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n" +
-                               "\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    public partial class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int wrong;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n" +
-                               "\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    public partial class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = @"Mismatch on line 6.
+Expected:         private readonly int wrong;
+Actual:           private readonly int f = 1;
+                                       ^
+Expected:
+
+namespace N
+{
+    public partial class C
+    {
+        private readonly int wrong;
+
+        public int M() => wrong;
+    }
+}
+Actual:
+
+namespace N
+{
+    public partial class C
+    {
+        private readonly int f = 1;
+
+        public int M() => f;
+    }
+}
+";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, new[] { before, part2 }, after));
@@ -793,7 +813,7 @@ namespace N
 }";
 
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = new InsertMethodFix();
+                var fix = InsertMethodFix.ReturnNullableEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
                 var expected = @"InsertMethodFix introduced syntax error.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)

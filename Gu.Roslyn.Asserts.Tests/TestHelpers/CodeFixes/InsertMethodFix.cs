@@ -14,6 +14,15 @@
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertMethodFix))]
     internal class InsertMethodFix : CodeFixProvider
     {
+        internal static readonly InsertMethodFix ReturnNullableEventHandler = new(SyntaxFactory.ParseTypeName("EventHandler?"));
+
+        private readonly TypeSyntax returnType;
+
+        internal InsertMethodFix(TypeSyntax returnType)
+        {
+            this.returnType = returnType;
+        }
+
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustHaveMethodAnalyzer.DiagnosticId);
 
         public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
@@ -30,31 +39,31 @@
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         $"Add method to {classDeclaration}",
-                        cancellationToken => ApplyFixAsync(document, classDeclaration, cancellationToken),
-                        nameof(InsertEventFix)),
+                        cancellationToken => ApplyFixAsync(document, classDeclaration, this.returnType, cancellationToken),
+                        nameof(InsertMethodFix)),
                     diagnostic);
-            }
-        }
 
-        private static async Task<Document> ApplyFixAsync(Document document, ClassDeclarationSyntax classDeclaration, CancellationToken cancellationToken)
-        {
-            var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
-                                             .ConfigureAwait(false);
-            editor.AddMember(
-                classDeclaration,
-                SyntaxFactory.MethodDeclaration(
-                    attributeLists: default,
-                    modifiers: SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)),
-                    returnType: SyntaxFactory.ParseTypeName("EventHandler?"),
-                    explicitInterfaceSpecifier: null,
-                    identifier: SyntaxFactory.Identifier("M"),
-                    typeParameterList: default,
-                    parameterList: SyntaxFactory.ParameterList(),
-                    constraintClauses: default,
-                    body: null,
-                    expressionBody: SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
-                    semicolonToken: SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
-            return editor.GetChangedDocument();
+                static async Task<Document> ApplyFixAsync(Document document, ClassDeclarationSyntax classDeclaration, TypeSyntax returnType, CancellationToken cancellationToken)
+                {
+                    var editor = await DocumentEditor.CreateAsync(document, cancellationToken)
+                                                     .ConfigureAwait(false);
+                    editor.AddMember(
+                        classDeclaration,
+                        SyntaxFactory.MethodDeclaration(
+                            attributeLists: default,
+                            modifiers: SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)),
+                            returnType: returnType,
+                            explicitInterfaceSpecifier: null,
+                            identifier: SyntaxFactory.Identifier("M"),
+                            typeParameterList: default,
+                            parameterList: SyntaxFactory.ParameterList(),
+                            constraintClauses: default,
+                            body: null,
+                            expressionBody: SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                            semicolonToken: SyntaxFactory.Token(SyntaxKind.SemicolonToken)));
+                    return editor.GetChangedDocument();
+                }
+            }
         }
     }
 }

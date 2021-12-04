@@ -31,7 +31,7 @@
                     CodeAction.Create(
                         $"Add method to {classDeclaration}",
                         cancellationToken => ApplyFixAsync(document, classDeclaration, cancellationToken),
-                        nameof(InsertEventFix)),
+                        nameof(InsertFullyQualifiedMethodFix)),
                     diagnostic);
             }
         }
