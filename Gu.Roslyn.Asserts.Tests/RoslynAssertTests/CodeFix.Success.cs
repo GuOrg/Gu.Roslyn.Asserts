@@ -18,7 +18,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -27,7 +29,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -292,7 +296,9 @@ namespace N
 {
     class C
     {
-        private readonly int ↓_f;
+        private readonly int ↓_f = 1;
+
+        public int M() => _f;
     }
 }";
 
@@ -301,7 +307,9 @@ namespace N
 {
     class C
     {
-        private readonly int f;
+        private readonly int f = 1;
+
+        public int M() => f;
     }
 }".AssertReplace("f", expected);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
@@ -904,7 +912,7 @@ namespace N
             }
 
             [Test]
-            public static void InsertFullyQualifiedEventFix()
+            public static void InsertFullyQualifiedMethodFix()
             {
                 var before = @"
 namespace N
@@ -930,7 +938,7 @@ namespace N
             }
 
             [Test]
-            public static void InsertFullyQualifiedSimplifiedEventFix()
+            public static void InsertFullyQualifiedSimplifiedMethodFix()
             {
                 var before = @"
 namespace N
@@ -945,11 +953,11 @@ namespace N
 {
     class C
     {
-        public event System.EventHandler E;
+        public System.EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertFullyQualifiedSimplifiedEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = new InsertFullyQualifiedSimplifiedMethodFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
@@ -975,11 +983,11 @@ namespace N
 
     class C
     {
-        public event EventHandler E;
+        public System.EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertFullyQualifiedSimplifiedEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = new InsertFullyQualifiedMethodFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });
