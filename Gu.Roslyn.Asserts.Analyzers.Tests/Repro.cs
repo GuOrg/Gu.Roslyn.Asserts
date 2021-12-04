@@ -27,9 +27,7 @@
         [TestCaseSource(nameof(AllAnalyzers))]
         public static void Run(DiagnosticAnalyzer analyzer)
         {
-            Assert.Inconclusive("VS does not understand [Explicit]");
-            var diagnostics = Analyze.GetDiagnostics(analyzer, Solution);
-            RoslynAssert.NoDiagnostics(diagnostics.SelectMany(x => x));
+            RoslynAssert.NoAnalyzerDiagnostics(analyzer, Solution);
         }
     }
 }

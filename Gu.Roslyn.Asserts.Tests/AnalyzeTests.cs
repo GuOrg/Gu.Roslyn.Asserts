@@ -40,11 +40,11 @@
 
             var sln = CodeFactory.CreateSolution(solutionFile);
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var diagnostics1 = await Analyze.GetDiagnosticsAsync(analyzer, sln).ConfigureAwait(false);
-            CollectionAssert.AreEquivalent(expected, diagnostics1.SelectMany(x => x.AnalyzerDiagnostics).Select(SkipDirectory));
+            var diagnostics = await Analyze.GetDiagnosticsAsync(analyzer, sln).ConfigureAwait(false);
+            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x.AnalyzerDiagnostics).Select(SkipDirectory));
 
-            var __diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            CollectionAssert.AreEquivalent(expected, __diagnostics.SelectMany(x => x).Select(SkipDirectory));
+            diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+            CollectionAssert.AreEquivalent(expected, diagnostics.SelectMany(x => x.AnalyzerDiagnostics).Select(SkipDirectory));
         }
 
         private static string SkipDirectory(Diagnostic diagnostic)

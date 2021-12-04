@@ -56,7 +56,7 @@
         /// <param name="diagnostics">The diagnostics.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered. If only one pass null.</param>
         /// <returns>The fixed solution or the same instance if no fix.</returns>
-        public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ImmutableArray<Diagnostic>> diagnostics, string? fixTitle = null)
+        public static Solution Apply(Solution solution, CodeFixProvider fix, IReadOnlyList<ProjectDiagnostics> diagnostics, string? fixTitle = null)
         {
             if (solution is null)
             {
@@ -73,19 +73,19 @@
                 throw new ArgumentNullException(nameof(diagnostics));
             }
 
-            var flatDiagnostics = diagnostics.SelectMany(x => x).ToArray();
-            if (flatDiagnostics.Length == 1)
+            var fixable = diagnostics.SelectMany(x => x.FixableBy(fix)).ToArray();
+            if (fixable.TrySingle(out var single))
             {
-                return Apply(solution, fix, flatDiagnostics[0], fixTitle);
+                return Apply(solution, fix, single, fixTitle);
             }
 
-            var trees = flatDiagnostics.Select(x => x.Location.SourceTree).Distinct().ToArray();
+            var trees = fixable.Select(x => x.Location.SourceTree).Distinct().ToArray();
             if (trees.Length == 1)
             {
                 var document = solution.Projects.SelectMany(x => x.Documents)
                                        .Single(x => x.GetSyntaxTreeAsync().GetAwaiter().GetResult() == trees[0]);
-                var provider = TestDiagnosticProvider.CreateAsync(solution, fix, fixTitle, flatDiagnostics).GetAwaiter().GetResult();
-                var context = new FixAllContext(document, fix, FixAllScope.Document, provider.EquivalenceKey, flatDiagnostics.Select(x => x.Id), provider, CancellationToken.None);
+                var provider = TestDiagnosticProvider.CreateAsync(solution, fix, fixTitle, fixable).GetAwaiter().GetResult();
+                var context = new FixAllContext(document, fix, FixAllScope.Document, provider.EquivalenceKey, fixable.Select(x => x.Id), provider, CancellationToken.None);
                 var action = WellKnownFixAllProviders.BatchFixer.GetFixAsync(context).GetAwaiter().GetResult();
                 var operations = action?.GetOperationsAsync(CancellationToken.None).GetAwaiter().GetResult() ??
                                  throw new InvalidOperationException("action!.GetOperationsAsync() returned null");

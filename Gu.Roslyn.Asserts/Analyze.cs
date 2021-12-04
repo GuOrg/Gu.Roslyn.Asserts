@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
@@ -26,7 +25,7 @@
         public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<string> code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
@@ -40,7 +39,7 @@
         public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, string code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings ?? Settings.Default);
-            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
@@ -57,7 +56,7 @@
         public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, FileInfo code, Settings? settings = null)
         {
             var sln = CodeFactory.CreateSolution(code, settings);
-            return GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            return GetDiagnostics(analyzer, sln);
         }
 
         /// <summary>
@@ -182,7 +181,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="solution"/> with.</param>
         /// <param name="solution">The solution.</param>
         /// <returns>A list with diagnostics per document.</returns>
-        public static IReadOnlyList<ImmutableArray<Diagnostic>> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
+        public static IReadOnlyList<ProjectDiagnostics> GetDiagnostics(DiagnosticAnalyzer analyzer, Solution solution)
         {
             if (analyzer is null)
             {
@@ -194,22 +193,10 @@
                 throw new ArgumentNullException(nameof(solution));
             }
 
-            var results = new List<ImmutableArray<Diagnostic>>();
+            var results = new List<ProjectDiagnostics>();
             foreach (var project in solution.Projects)
             {
-                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult();
-                if (analyzer is PlaceholderAnalyzer)
-                {
-                    results.Add(compilation!.GetDiagnostics(CancellationToken.None));
-                }
-                else
-                {
-                    var withAnalyzers = compilation!.WithAnalyzers(
-                        ImmutableArray.Create(analyzer),
-                        project.AnalyzerOptions,
-                        CancellationToken.None);
-                    results.Add(withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
-                }
+                results.Add(ProjectDiagnostics.CreateAsync(analyzer, project).GetAwaiter().GetResult());
             }
 
             return results;

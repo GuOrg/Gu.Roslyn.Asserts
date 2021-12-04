@@ -527,7 +527,7 @@
             var diagnosticsAndSources = DiagnosticsAndSources.Create(
                 expectedDiagnostic,
                 solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode()).ToArray());
-            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, solution).GetAwaiter().GetResult();
+            var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationDiagnostics);
         }
@@ -579,7 +579,7 @@
                 diagnosticsAndSources: diagnosticsAndSources,
                 analyzer: analyzer,
                 settings: settings);
-            var diagnostics = Analyze.GetDiagnosticsAsync(analyzer, sln).GetAwaiter().GetResult();
+            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowCompilationDiagnostics);
         }
