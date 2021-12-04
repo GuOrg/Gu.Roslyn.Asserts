@@ -941,7 +941,7 @@ namespace N
     }
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = new InsertMethodFix();
+                var fix = CodeFixes.InsertMethodFix.ReturnNullableEventHandler;
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });

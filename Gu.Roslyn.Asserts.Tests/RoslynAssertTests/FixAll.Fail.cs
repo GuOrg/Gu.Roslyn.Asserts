@@ -281,33 +281,33 @@ namespace N
 {
     class C
     {
-        public event EventHandler E;
+        public EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = InsertMethodFix.ReturnNullableEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
-                var expected = "InsertEventFix introduced syntax errors.\r\n" +
-                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
-                               "CS0518 Predefined type 'System.Object' is not defined or imported\r\n" +
-                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;\r\n" +
-                               "CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)\r\n" +
-                               "  at line 5 and character 21 in file C.cs | public event ↓EventHandler E;\r\n" +
-                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓E;\r\n" +
-                               "CS0518 Predefined type 'System.Void' is not defined or imported\r\n" +
-                               "  at line 5 and character 34 in file C.cs | public event EventHandler ↓E;\r\n" +
-                               "CS1729 'object' does not contain a constructor that takes 0 arguments\r\n" +
-                               "  at line 3 and character 10 in file C.cs | class ↓C\r\n" +
-                               "First source file with error is:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C\r\n" +
-                               "    {\r\n" +
-                               "        public event EventHandler E;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
+                var expected = @"InsertMethodFix introduced syntax errors.
+CS0518 Predefined type 'System.Object' is not defined or imported
+  at line 3 and character 10 in file C.cs | class ↓C
+CS0518 Predefined type 'System.Object' is not defined or imported
+  at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
+CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
+  at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
+CS0518 Predefined type 'System.Nullable`1' is not defined or imported
+  at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
+CS1729 'object' does not contain a constructor that takes 0 arguments
+  at line 3 and character 10 in file C.cs | class ↓C
+First source file with error is:
+
+namespace N
+{
+    class C
+    {
+        public EventHandler? M() => null;
+    }
+}
+";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
 
