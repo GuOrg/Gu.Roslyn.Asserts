@@ -32,10 +32,8 @@
                     set.UnionWith(attribute.Ids);
                 }
 
-#pragma warning disable CS0618 // Type or member is obsolete
                 var errorsAttributes = Attribute.GetCustomAttributes(assembly, typeof(IgnoredErrorsAttribute));
                 foreach (var attribute in errorsAttributes.Cast<IgnoredErrorsAttribute>())
-#pragma warning restore CS0618 // Type or member is obsolete
                 {
                     set.UnionWith(attribute.ErrorIds);
                 }
