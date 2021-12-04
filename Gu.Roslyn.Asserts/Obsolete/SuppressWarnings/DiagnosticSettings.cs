@@ -24,9 +24,7 @@
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
-#pragma warning disable CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 var attribute = assembly.GetCustomAttribute<AllowedDiagnosticsAttribute>();
-#pragma warning restore CS0618 // Suppress until removed. Will be replaced with MetadataReferences.FromAttributes()
                 if (attribute != null)
                 {
                     staticAllowedDiagnostics = attribute.AllowedDiagnostics;
