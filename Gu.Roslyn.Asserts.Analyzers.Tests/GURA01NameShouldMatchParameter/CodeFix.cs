@@ -282,7 +282,7 @@ namespace N
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'before'");
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'");
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'", settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings));
         }
 
         [Test]
@@ -327,7 +327,7 @@ namespace N
 }";
             var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
             var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'");
+            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'", settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings));
         }
 
         [Test]

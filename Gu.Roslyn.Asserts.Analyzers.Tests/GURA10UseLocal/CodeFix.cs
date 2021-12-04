@@ -50,7 +50,7 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings));
         }
     }
 }
