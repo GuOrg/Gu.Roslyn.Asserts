@@ -309,11 +309,7 @@
 
         private static void VerifyNoFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, CodeFixProvider fix)
         {
-            var fixableDiagnostics = diagnostics.SelectMany(x => x.All())
-                                         .Where(x => fix.FixableDiagnosticIds.Contains(x.Id))
-                                         .ToArray();
-
-            foreach (var fixableDiagnostic in fixableDiagnostics)
+            foreach (var fixableDiagnostic in diagnostics.SelectMany(x => x.FixableBy(fix)))
             {
                 var actions = Fix.GetActions(sln, fix, fixableDiagnostic);
                 if (actions.Any())
