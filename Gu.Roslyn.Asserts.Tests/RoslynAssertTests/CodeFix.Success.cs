@@ -879,6 +879,8 @@ namespace N
                 var before = @"
 namespace N
 {
+    using System;
+
     ↓class C
     {
     }
@@ -887,14 +889,14 @@ namespace N
                 var after = @"
 namespace N
 {
+    using System;
+
     class C
     {
-        public void M()
-        {
-        }
+        public EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
                 var fix = new InsertMethodFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
@@ -907,8 +909,6 @@ namespace N
                 var before = @"
 namespace N
 {
-    using System;
-
     ↓class C
     {
     }
@@ -917,15 +917,13 @@ namespace N
                 var after = @"
 namespace N
 {
-    using System;
-
     class C
     {
-        public event System.EventHandler E;
+        public System.EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveEventAnalyzer();
-                var fix = new InsertFullyQualifiedEventFix();
+                var analyzer = new ClassMustHaveMethodAnalyzer();
+                var fix = new InsertFullyQualifiedMethodFix();
                 RoslynAssert.CodeFix(analyzer, fix, before, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after });

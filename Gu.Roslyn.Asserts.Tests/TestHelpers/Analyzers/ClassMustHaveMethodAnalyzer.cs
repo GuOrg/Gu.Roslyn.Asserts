@@ -1,19 +1,20 @@
 ﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
+
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ClassMustHaveEventAnalyzer : DiagnosticAnalyzer
+    internal class ClassMustHaveMethodAnalyzer : DiagnosticAnalyzer
     {
-        internal const string DiagnosticId = "ClassMustHaveEvent";
+        internal const string DiagnosticId = "ClassMustHaveMethod";
 
         private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
-            title: "This analyzer reports warnings if a class does not have an event",
+            title: "This analyzer reports warnings if a class does not have a method",
             messageFormat: "Message format",
             category: "Category",
             defaultSeverity: DiagnosticSeverity.Warning,
@@ -34,7 +35,7 @@
             var classDeclaration = (ClassDeclarationSyntax)context.Node;
             foreach (var member in classDeclaration.Members)
             {
-                if (member is EventFieldDeclarationSyntax)
+                if (member is MethodDeclarationSyntax)
                 {
                     return;
                 }

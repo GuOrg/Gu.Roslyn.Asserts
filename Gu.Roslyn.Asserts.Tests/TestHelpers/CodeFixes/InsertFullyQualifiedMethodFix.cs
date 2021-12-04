@@ -11,8 +11,8 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Editing;
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertMethodFix))]
-    internal class InsertMethodFix : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertFullyQualifiedMethodFix))]
+    internal class InsertFullyQualifiedMethodFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustHaveMethodAnalyzer.DiagnosticId);
 
@@ -45,7 +45,7 @@
                 SyntaxFactory.MethodDeclaration(
                     attributeLists: default,
                     modifiers: SyntaxTokenList.Create(SyntaxFactory.Token(SyntaxKind.PublicKeyword)),
-                    returnType: SyntaxFactory.ParseTypeName("EventHandler?"),
+                    returnType: SyntaxFactory.ParseTypeName("System.EventHandler?"),
                     explicitInterfaceSpecifier: null,
                     identifier: SyntaxFactory.Identifier("M"),
                     typeParameterList: default,
