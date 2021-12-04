@@ -11,7 +11,7 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
         public static class Success
         {
             [Test]
-            public static void SingleDocumentOneError()
+            public static void SingleDocumentOneDiagnostic()
             {
                 var before = @"
 namespace N
@@ -37,6 +37,66 @@ namespace N
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after);
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after });
+            }
+
+            [Test]
+            public static void SingleDocumentOneDiagnosticSuppressedWarnings()
+            {
+                var before = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    class C
+    {
+        private readonly int value;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DoNotUseUnderscoreFix();
+                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS0169"));
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, settings: settings);
+            }
+
+            [Test]
+            public static void SingleDocumentOneDiagnosticAllowWarnings()
+            {
+                var before = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_value;
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    class C
+    {
+        private readonly int value;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new DoNotUseUnderscoreFix();
+                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, after, settings: settings);
+                RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, new[] { before }, new[] { after }, settings: settings);
             }
 
             [Test]
@@ -625,7 +685,7 @@ namespace N.Client
             }
 
             [Test]
-            public static void TwoDocumentsOneError()
+            public static void TwoDocumentsOneDiagnostic()
             {
                 var barCode = @"
 namespace N
@@ -782,7 +842,7 @@ namespace N
             }
 
             [Test]
-            public static void WithExpectedDiagnosticWhenOneReportsError()
+            public static void WithExpectedDiagnosticWhenOneReportsDiagnostic()
             {
                 var before = @"
 namespace N
