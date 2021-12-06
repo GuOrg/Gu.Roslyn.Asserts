@@ -20,13 +20,13 @@
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="metadataReferences">A collection of <see cref="MetadataReference"/> to use when compiling. Default is <see langword="null" /> meaning <see cref="MetadataReferences"/> are used.</param>
-        /// <param name="allowCompilationDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationDiagnostics.None"/>.</param>
-        public Settings(CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, MetadataReferencesCollection? metadataReferences, AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
+        /// <param name="allowedCompilerDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowedCompilerDiagnostics.None"/>.</param>
+        public Settings(CSharpCompilationOptions compilationOptions, CSharpParseOptions parseOptions, MetadataReferencesCollection? metadataReferences, AllowedCompilerDiagnostics allowedCompilerDiagnostics = AllowedCompilerDiagnostics.None)
         {
             this.CompilationOptions = compilationOptions;
             this.ParseOptions = parseOptions;
             this.MetadataReferences = metadataReferences;
-            this.AllowCompilationDiagnostics = allowCompilationDiagnostics;
+            this.AllowedCompilerDiagnostics = allowedCompilerDiagnostics;
         }
 
         /// <summary>
@@ -54,16 +54,16 @@
         public MetadataReferencesCollection? MetadataReferences { get; }
 
         /// <summary>
-        /// Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationDiagnostics.None"/>.
+        /// Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowedCompilerDiagnostics.None"/>.
         /// </summary>
-        public AllowCompilationDiagnostics AllowCompilationDiagnostics { get; }
+        public AllowedCompilerDiagnostics AllowedCompilerDiagnostics { get; }
 
         /// <summary>
         /// Create a new instance with new <see cref="CSharpCompilationOptions"/>.
         /// </summary>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithCompilationOptions(CSharpCompilationOptions compilationOptions) => new(compilationOptions, this.ParseOptions, this.MetadataReferences, this.AllowCompilationDiagnostics);
+        public Settings WithCompilationOptions(CSharpCompilationOptions compilationOptions) => new(compilationOptions, this.ParseOptions, this.MetadataReferences, this.AllowedCompilerDiagnostics);
 
         /// <summary>
         /// Create a new instance with new <see cref="CSharpCompilationOptions"/>.
@@ -77,7 +77,7 @@
                 throw new ArgumentNullException(nameof(update));
             }
 
-            return new(update(this.CompilationOptions), this.ParseOptions, this.MetadataReferences, this.AllowCompilationDiagnostics);
+            return new(update(this.CompilationOptions), this.ParseOptions, this.MetadataReferences, this.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@
         /// </summary>
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithParseOption(CSharpParseOptions parseOptions) => new(this.CompilationOptions, parseOptions, this.MetadataReferences, this.AllowCompilationDiagnostics);
+        public Settings WithParseOption(CSharpParseOptions parseOptions) => new(this.CompilationOptions, parseOptions, this.MetadataReferences, this.AllowedCompilerDiagnostics);
 
         /// <summary>
         /// Create a new instance with the array of <see cref="MetadataReference"/>/>.
@@ -96,7 +96,7 @@
             this.CompilationOptions,
             this.ParseOptions,
             metadataReferences is null ? null : new MetadataReferencesCollection(metadataReferences),
-            this.AllowCompilationDiagnostics);
+            this.AllowedCompilerDiagnostics);
 
         /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
@@ -107,7 +107,7 @@
             this.CompilationOptions,
             this.ParseOptions,
             metadataReferences is null ? null : new MetadataReferencesCollection(metadataReferences),
-            this.AllowCompilationDiagnostics);
+            this.AllowedCompilerDiagnostics);
 
         /// <summary>
         /// Create a new instance with new <see cref="IReadOnlyList{MetadataReference}"/>.
@@ -125,14 +125,14 @@
                 this.CompilationOptions,
                 this.ParseOptions,
                 update(this.MetadataReferences ?? Enumerable.Empty<MetadataReference>()) is { } metadataReferences ? new MetadataReferencesCollection(metadataReferences) : null,
-                this.AllowCompilationDiagnostics);
+                this.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
-        /// Create a new instance with new <see cref="AllowCompilationDiagnostics"/>.
+        /// Create a new instance with new <see cref="AllowedCompilerDiagnostics"/>.
         /// </summary>
-        /// <param name="allowCompilationDiagnostics">The <see cref="AllowCompilationDiagnostics"/>.</param>
+        /// <param name="allowedCompilerDiagnostics">The <see cref="AllowedCompilerDiagnostics"/>.</param>
         /// <returns>A new instance of <see cref="Settings"/>.</returns>
-        public Settings WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics allowCompilationDiagnostics) => new(this.CompilationOptions, this.ParseOptions, this.MetadataReferences, allowCompilationDiagnostics);
+        public Settings WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics allowedCompilerDiagnostics) => new(this.CompilationOptions, this.ParseOptions, this.MetadataReferences, allowedCompilerDiagnostics);
     }
 }

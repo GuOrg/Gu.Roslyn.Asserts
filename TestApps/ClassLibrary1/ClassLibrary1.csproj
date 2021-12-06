@@ -38,8 +38,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Gu.Roslyn.Asserts\AllowCompilationDiagnostics.cs">
-      <Link>AllowCompilationDiagnostics.cs</Link>
+    <Compile Include="..\..\Gu.Roslyn.Asserts\AllowedCompilerDiagnostics.cs">
+      <Link>AllowedCompilerDiagnostics.cs</Link>
     </Compile>
     <Compile Include="AssemblyAttributes.cs" />
     <Compile Include="ClassLibrary1Class1.cs" />

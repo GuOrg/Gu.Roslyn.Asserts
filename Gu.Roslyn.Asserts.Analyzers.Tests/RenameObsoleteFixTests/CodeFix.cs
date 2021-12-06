@@ -125,7 +125,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings));
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
         }
 
         [TestCase("fixedCode")]
@@ -164,7 +164,7 @@ namespace N
     }
 }";
             var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings));
+            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
         }
     }
 }

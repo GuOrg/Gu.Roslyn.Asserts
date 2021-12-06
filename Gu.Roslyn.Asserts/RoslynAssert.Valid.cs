@@ -27,7 +27,7 @@
             var settings = Settings.Default;
             var solution = CodeFactory.CreateSolution(analyzer, code, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@
             settings ??= Settings.Default;
             var solution = CodeFactory.CreateSolution(analyzer, code, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var solution = CodeFactory.CreateSolution(analyzer, descriptor, code, Settings.Default);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, Settings.Default.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, Settings.Default.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var solution = CodeFactory.CreateSolution(analyzer, descriptor, new[] { code }, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var solution = CodeFactory.CreateSolution(analyzer, descriptor, code, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@
             VerifyAnalyzerSupportsDiagnostic(analyzer, descriptor);
             var solution = CodeFactory.CreateSolution(code, analyzer, descriptor, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@
             settings ??= Settings.Default;
             var solution = CodeFactory.CreateSolution(code, analyzer, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@
             settings ??= Settings.Default;
             var solution = CodeFactory.CreateSolution(analyzer, new[] { code }, settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, settings.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -383,7 +383,7 @@
             }
 
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
-            NoDiagnostics(diagnostics, Settings.Default.AllowCompilationDiagnostics);
+            NoDiagnostics(diagnostics, Settings.Default.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -414,8 +414,8 @@
         /// Assert that <paramref name="diagnostics"/> is empty. Throws an AssertException with details if not.
         /// </summary>
         /// <param name="diagnostics">The diagnostics.</param>
-        /// <param name="allowCompilationDiagnostics">The <see cref="AllowCompilationDiagnostics"/>.</param>
-        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics, AllowCompilationDiagnostics allowCompilationDiagnostics)
+        /// <param name="allowedCompilerDiagnostics">The <see cref="AllowedCompilerDiagnostics"/>.</param>
+        public static void NoDiagnostics(IReadOnlyList<ProjectDiagnostics> diagnostics, AllowedCompilerDiagnostics allowedCompilerDiagnostics)
         {
             if (diagnostics is null)
             {
@@ -427,7 +427,7 @@
                 return;
             }
 
-            NoDiagnostics(diagnostics.SelectMany(x => x.Filter(allowCompilationDiagnostics)));
+            NoDiagnostics(diagnostics.SelectMany(x => x.Filter(allowedCompilerDiagnostics)));
         }
     }
 }

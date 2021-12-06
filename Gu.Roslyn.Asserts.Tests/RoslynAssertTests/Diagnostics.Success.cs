@@ -58,7 +58,7 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
                 RoslynAssert.Diagnostics(analyzer, code, settings);
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
             }
@@ -302,7 +302,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                RoslynAssert.Diagnostics(analyzer, code, Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.WarningsAndErrors));
+                RoslynAssert.Diagnostics(analyzer, code, Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.WarningsAndErrors));
             }
 
             [Test]

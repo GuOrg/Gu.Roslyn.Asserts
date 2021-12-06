@@ -74,7 +74,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
                 {
-                    "AllowCompilationDiagnostics.cs",
+                    "AllowedCompilerDiagnostics.cs",
                     "AssemblyAttributes.cs",
                     "AssemblyInfo.cs",
                     "ClassLibrary1Class1.cs",
@@ -180,7 +180,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 Assert.AreEqual("ClassLibrary1", solution.Projects.Single().Name);
                 var expected = new[]
                 {
-                    "AllowCompilationDiagnostics.cs",
+                    "AllowedCompilerDiagnostics.cs",
                     "AssemblyAttributes.cs",
                     "AssemblyInfo.cs",
                     "ClassLibrary1Class1.cs",

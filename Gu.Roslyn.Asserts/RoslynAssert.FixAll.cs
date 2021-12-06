@@ -512,14 +512,14 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllOneByOne(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics);
+            FixAllOneByOne(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics);
 
             var fixAllProvider = fix.GetFixAllProvider();
             if (fixAllProvider != null)
             {
                 foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
                 {
-                    FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics, scope);
+                    FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
                 }
             }
         }
@@ -629,7 +629,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllByScope(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationDiagnostics, FixAllScope.Document);
+            FixAllByScope(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowedCompilerDiagnostics, FixAllScope.Document);
         }
 
         /// <summary>
@@ -681,7 +681,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationDiagnostics);
+            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -740,7 +740,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationDiagnostics);
+            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -793,7 +793,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowCompilationDiagnostics);
+            FixAllOneByOne(analyzer, fix, sln, new[] { after }, fixTitle, settings.AllowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -848,7 +848,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics, scope);
+            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
         }
 
         /// <summary>
@@ -902,7 +902,7 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics, scope);
+            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
         }
 
         /// <summary>
@@ -963,22 +963,22 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowCompilationDiagnostics, scope);
+            FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
         }
 
-        private static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution solution, IReadOnlyList<string> after, string? fixTitle, AllowCompilationDiagnostics allowCompilationDiagnostics)
+        private static void FixAllOneByOne(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution solution, IReadOnlyList<string> after, string? fixTitle, AllowedCompilerDiagnostics allowedCompilerDiagnostics)
         {
             var fixedSolution = Fix.ApplyAllFixableOneByOneAsync(solution, analyzer, fix, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
             AreEqualAsync(after, fixedSolution, "Applying fixes one by one failed.").GetAwaiter().GetResult();
-            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowCompilationDiagnostics).ConfigureAwait(false).GetAwaiter().GetResult();
+            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowedCompilerDiagnostics).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        private static void FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution sln, IReadOnlyList<string> after, string? fixTitle, AllowCompilationDiagnostics allowCompilationDiagnostics, FixAllScope scope)
+        private static void FixAllByScope(DiagnosticAnalyzer analyzer, CodeFixProvider fix, Solution sln, IReadOnlyList<string> after, string? fixTitle, AllowedCompilerDiagnostics allowedCompilerDiagnostics, FixAllScope scope)
         {
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var fixedSolution = Fix.ApplyAllFixableScopeByScopeAsync(sln, analyzer, fix, scope, fixTitle, CancellationToken.None).GetAwaiter().GetResult();
             AreEqualAsync(after, fixedSolution, $"Applying fixes for {scope} failed.").GetAwaiter().GetResult();
-            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowCompilationDiagnostics).GetAwaiter().GetResult();
+            VerifyNoCompilerErrorsAsync(fix, fixedSolution, allowedCompilerDiagnostics).GetAwaiter().GetResult();
         }
 
         private static List<string> MergeFixedCode(IReadOnlyList<string> codes, string after)

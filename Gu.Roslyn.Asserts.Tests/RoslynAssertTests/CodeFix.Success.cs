@@ -95,7 +95,7 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
-                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.Descriptor);
@@ -876,7 +876,7 @@ namespace N
                 var analyzer = new ClassMustHaveMethodAnalyzer();
                 var fix = CodeFixes.InsertMethodFix.ReturnEventHandler;
                 var expectedDiagnostic = ExpectedDiagnostic.Create(ClassMustHaveMethodAnalyzer.DiagnosticId);
-                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.WarningsAndErrors);
+                var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.WarningsAndErrors);
                 RoslynAssert.CodeFix(analyzer, fix, before, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, after, settings: settings);
                 RoslynAssert.CodeFix(analyzer, fix, new[] { before }, new[] { after }, settings: settings);

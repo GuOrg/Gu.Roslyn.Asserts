@@ -304,7 +304,7 @@
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
             VerifyNoFix(sln, diagnostics, fix);
-            NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowCompilationDiagnostics)));
+            NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowedCompilerDiagnostics)));
         }
 
         private static void VerifyNoFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, CodeFixProvider fix)

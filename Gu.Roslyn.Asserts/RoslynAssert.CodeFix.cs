@@ -486,7 +486,7 @@
         /// <param name="solution">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-        /// <param name="allowCompilationDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationDiagnostics.None"/>.</param>
+        /// <param name="allowedCompilerDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowedCompilerDiagnostics.None"/>.</param>
         public static void CodeFix(
             DiagnosticAnalyzer analyzer,
             CodeFixProvider fix,
@@ -494,7 +494,7 @@
             Solution solution,
             string after,
             string? fixTitle = null,
-            AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
+            AllowedCompilerDiagnostics allowedCompilerDiagnostics = AllowedCompilerDiagnostics.None)
         {
             if (analyzer is null)
             {
@@ -528,7 +528,7 @@
                 solution.Projects.SelectMany(x => x.Documents).Select(x => x.GetCode()).ToArray());
             var diagnostics = Analyze.GetDiagnostics(analyzer, solution);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowCompilationDiagnostics);
+            VerifyFix(solution, diagnostics, analyzer, fix, MergeFixedCode(diagnosticsAndSources.Code, after), fixTitle, allowedCompilerDiagnostics);
         }
 
         /// <summary>
@@ -580,10 +580,10 @@
                 settings: settings);
             var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
             VerifyDiagnostics(diagnosticsAndSources, diagnostics);
-            VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowCompilationDiagnostics);
+            VerifyFix(sln, diagnostics, analyzer, fix, after, fixTitle, settings.AllowedCompilerDiagnostics);
         }
 
-        private static void VerifyFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
+        private static void VerifyFix(Solution sln, IReadOnlyList<ProjectDiagnostics> diagnostics, DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<string> after, string? fixTitle = null, AllowedCompilerDiagnostics allowedCompilerDiagnostics = AllowedCompilerDiagnostics.None)
         {
             var fixableDiagnostics = diagnostics.SelectMany(x => x.FixableBy(fix))
                                                 .ToArray();
@@ -601,11 +601,11 @@
                 throw new AssertException($"{fix.GetType().Name} did not change any document.");
             }
 
-            VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution, allowCompilationDiagnostics).GetAwaiter().GetResult();
+            VerifyNoCompilerErrorsAsync(fix, operation.ChangedSolution, allowedCompilerDiagnostics).GetAwaiter().GetResult();
             AreEqualAsync(after, operation.ChangedSolution, null).GetAwaiter().GetResult();
         }
 
-        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution, AllowCompilationDiagnostics allowCompilationDiagnostics)
+        private static async Task VerifyNoCompilerErrorsAsync(CodeFixProvider fix, Solution fixedSolution, AllowedCompilerDiagnostics allowedCompilerDiagnostics)
         {
             var diagnostics = await Analyze.GetAllDiagnosticsAsync(fixedSolution).ConfigureAwait(false);
             var introducedDiagnostics = diagnostics
@@ -646,12 +646,12 @@
 
             bool IsIncluded(Diagnostic diagnostic)
             {
-                return allowCompilationDiagnostics switch
+                return allowedCompilerDiagnostics switch
                 {
-                    AllowCompilationDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
-                    AllowCompilationDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
-                    AllowCompilationDiagnostics.WarningsAndErrors => false,
-                    _ => throw new InvalidEnumArgumentException(nameof(AllowCompilationDiagnostics), (int)allowCompilationDiagnostics, typeof(AllowCompilationDiagnostics)),
+                    AllowedCompilerDiagnostics.Warnings => diagnostic.Severity == DiagnosticSeverity.Error,
+                    AllowedCompilerDiagnostics.None => diagnostic.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning,
+                    AllowedCompilerDiagnostics.WarningsAndErrors => false,
+                    _ => throw new InvalidEnumArgumentException(nameof(allowedCompilerDiagnostics), (int)allowedCompilerDiagnostics, typeof(AllowedCompilerDiagnostics)),
                 };
             }
         }

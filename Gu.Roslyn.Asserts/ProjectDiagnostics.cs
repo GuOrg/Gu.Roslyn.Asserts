@@ -118,33 +118,33 @@
         }
 
         /// <summary>
-        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowCompilationDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
+        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowedCompilerDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
         /// </summary>
-        internal IEnumerable<Diagnostic> Filter(AllowCompilationDiagnostics allowCompilationDiagnostics)
+        internal IEnumerable<Diagnostic> Filter(AllowedCompilerDiagnostics allowedCompilerDiagnostics)
         {
-            return allowCompilationDiagnostics switch
+            return allowedCompilerDiagnostics switch
             {
-                AllowCompilationDiagnostics.None => this.All(),
-                AllowCompilationDiagnostics.Warnings
+                AllowedCompilerDiagnostics.None => this.All(),
+                AllowedCompilerDiagnostics.Warnings
                     => this.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)
                            .Concat(this.AnalyzerDiagnostics),
-                AllowCompilationDiagnostics.WarningsAndErrors => this.AnalyzerDiagnostics,
-                _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
+                AllowedCompilerDiagnostics.WarningsAndErrors => this.AnalyzerDiagnostics,
+                _ => throw new ArgumentOutOfRangeException(nameof(allowedCompilerDiagnostics), allowedCompilerDiagnostics, null),
             };
         }
 
         /// <summary>
-        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowCompilationDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
+        /// Gets <see cref="CompilerDiagnostics"/> filtered by <paramref name="allowedCompilerDiagnostics"/> and <see cref="AnalyzerDiagnostics"/>.
         /// </summary>
-        internal IEnumerable<Diagnostic> FilterCompilerDiagnostics(AllowCompilationDiagnostics allowCompilationDiagnostics)
+        internal IEnumerable<Diagnostic> FilterCompilerDiagnostics(AllowedCompilerDiagnostics allowedCompilerDiagnostics)
         {
-            return allowCompilationDiagnostics switch
+            return allowedCompilerDiagnostics switch
             {
-                AllowCompilationDiagnostics.None => this.CompilerDiagnostics,
-                AllowCompilationDiagnostics.Warnings
+                AllowedCompilerDiagnostics.None => this.CompilerDiagnostics,
+                AllowedCompilerDiagnostics.Warnings
                     => this.CompilerDiagnostics.Where(x => x.Severity == DiagnosticSeverity.Error),
-                AllowCompilationDiagnostics.WarningsAndErrors => Enumerable.Empty<Diagnostic>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(allowCompilationDiagnostics), allowCompilationDiagnostics, null),
+                AllowedCompilerDiagnostics.WarningsAndErrors => Enumerable.Empty<Diagnostic>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(allowedCompilerDiagnostics), allowedCompilerDiagnostics, null),
             };
         }
 

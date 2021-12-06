@@ -1,8 +1,8 @@
 ﻿#nullable enable
-Gu.Roslyn.Asserts.AllowCompilationDiagnostics
-Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None = 0 -> Gu.Roslyn.Asserts.AllowCompilationDiagnostics
-Gu.Roslyn.Asserts.AllowCompilationDiagnostics.Warnings = 1 -> Gu.Roslyn.Asserts.AllowCompilationDiagnostics
-Gu.Roslyn.Asserts.AllowCompilationDiagnostics.WarningsAndErrors = 2 -> Gu.Roslyn.Asserts.AllowCompilationDiagnostics
+Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
+Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.None = 0 -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
+Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.Warnings = 1 -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
+Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.WarningsAndErrors = 2 -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
 Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
 Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.None = 0 -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
 Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.Warnings = 1 -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
@@ -63,7 +63,7 @@ Gu.Roslyn.Asserts.DiagnosticAssert
 Gu.Roslyn.Asserts.DiagnosticAssert.Valid(params string![]! code) -> void
 Gu.Roslyn.Asserts.DiagnosticFixAssert
 Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.DiagnosticsAndSources! diagnosticsAndSources, System.Collections.Generic.IReadOnlyList<string!>! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
-Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, Microsoft.CodeAnalysis.Solution! solution, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.AllowCompilationDiagnostics allowCompilationDiagnostics = Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None) -> void
+Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, Microsoft.CodeAnalysis.Solution! solution, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.AllowedCompilerDiagnostics AllowedCompilerDiagnostics = Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.None) -> void
 Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, string! before, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 Gu.Roslyn.Asserts.DiagnosticFixAssert.CodeFix(Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, System.Collections.Generic.IReadOnlyList<string!>! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
@@ -139,12 +139,12 @@ Gu.Roslyn.Asserts.Refactor
 Gu.Roslyn.Asserts.ReferenceAssembly
 Gu.Roslyn.Asserts.RoslynAssert
 Gu.Roslyn.Asserts.Settings
-Gu.Roslyn.Asserts.Settings.AllowCompilationDiagnostics.get -> Gu.Roslyn.Asserts.AllowCompilationDiagnostics
+Gu.Roslyn.Asserts.Settings.AllowedCompilerDiagnostics.get -> Gu.Roslyn.Asserts.AllowedCompilerDiagnostics
 Gu.Roslyn.Asserts.Settings.CompilationOptions.get -> Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions!
 Gu.Roslyn.Asserts.Settings.MetadataReferences.get -> Gu.Roslyn.Asserts.MetadataReferencesCollection?
 Gu.Roslyn.Asserts.Settings.ParseOptions.get -> Microsoft.CodeAnalysis.CSharp.CSharpParseOptions!
-Gu.Roslyn.Asserts.Settings.Settings(Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions! compilationOptions, Microsoft.CodeAnalysis.CSharp.CSharpParseOptions! parseOptions, Gu.Roslyn.Asserts.MetadataReferencesCollection? metadataReferences, Gu.Roslyn.Asserts.AllowCompilationDiagnostics allowCompilationDiagnostics = Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None) -> void
-Gu.Roslyn.Asserts.Settings.WithAllowedCompilationDiagnostics(Gu.Roslyn.Asserts.AllowCompilationDiagnostics allowCompilationDiagnostics) -> Gu.Roslyn.Asserts.Settings!
+Gu.Roslyn.Asserts.Settings.Settings(Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions! compilationOptions, Microsoft.CodeAnalysis.CSharp.CSharpParseOptions! parseOptions, Gu.Roslyn.Asserts.MetadataReferencesCollection? metadataReferences, Gu.Roslyn.Asserts.AllowedCompilerDiagnostics AllowedCompilerDiagnostics = Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.None) -> void
+Gu.Roslyn.Asserts.Settings.WithAllowedCompilationDiagnostics(Gu.Roslyn.Asserts.AllowedCompilerDiagnostics AllowedCompilerDiagnostics) -> Gu.Roslyn.Asserts.Settings!
 Gu.Roslyn.Asserts.Settings.WithCompilationOptions(Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions! compilationOptions) -> Gu.Roslyn.Asserts.Settings!
 Gu.Roslyn.Asserts.Settings.WithCompilationOptions(System.Func<Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions!, Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions!>! update) -> Gu.Roslyn.Asserts.Settings!
 Gu.Roslyn.Asserts.Settings.WithMetadataReferences(params Microsoft.CodeAnalysis.MetadataReference![]! metadataReferences) -> Gu.Roslyn.Asserts.Settings!
@@ -265,7 +265,7 @@ static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.CodeFixes.C
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, System.Collections.Generic.IReadOnlyList<string!>! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.DiagnosticsAndSources! diagnosticsAndSources, System.Collections.Generic.IReadOnlyList<string!>! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
-static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, Microsoft.CodeAnalysis.Solution! solution, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.AllowCompilationDiagnostics allowCompilationDiagnostics = Gu.Roslyn.Asserts.AllowCompilationDiagnostics.None) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, Microsoft.CodeAnalysis.Solution! solution, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.AllowedCompilerDiagnostics AllowedCompilerDiagnostics = Gu.Roslyn.Asserts.AllowedCompilerDiagnostics.None) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, string! before, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, string! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.CodeFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! before, System.Collections.Generic.IReadOnlyList<string!>! after, string? fixTitle = null, Gu.Roslyn.Asserts.Settings? settings = null) -> void
@@ -322,7 +322,7 @@ static Gu.Roslyn.Asserts.RoslynAssert.NoCompilerDiagnostics(params string![]! co
 static Gu.Roslyn.Asserts.RoslynAssert.NoCompilerDiagnostics(string! code, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoCompilerDiagnostics(System.Collections.Generic.IEnumerable<string!>! code, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoDiagnostics(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>! diagnostics) -> void
-static Gu.Roslyn.Asserts.RoslynAssert.NoDiagnostics(System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.ProjectDiagnostics!>! diagnostics, Gu.Roslyn.Asserts.AllowCompilationDiagnostics allowCompilationDiagnostics) -> void
+static Gu.Roslyn.Asserts.RoslynAssert.NoDiagnostics(System.Collections.Generic.IReadOnlyList<Gu.Roslyn.Asserts.ProjectDiagnostics!>! diagnostics, Gu.Roslyn.Asserts.AllowedCompilerDiagnostics AllowedCompilerDiagnostics) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, System.Collections.Generic.IReadOnlyList<string!>! code, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.DiagnosticsAndSources! diagnosticsAndSources, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NoFix(Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer! analyzer, Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider! fix, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, params string![]! code) -> void

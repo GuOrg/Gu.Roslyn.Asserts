@@ -296,13 +296,13 @@
         /// <param name="solution">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
-        /// <param name="allowCompilationDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowCompilationDiagnostics.None"/>.</param>
+        /// <param name="allowedCompilerDiagnostics">Specify if compilation errors are accepted in the fixed code. This can be for example syntax errors. Default value is <see cref="AllowedCompilerDiagnostics.None"/>.</param>
         public void CodeFix(
             ExpectedDiagnostic expectedDiagnostic,
             Solution solution,
             string after,
             string? fixTitle = null,
-            AllowCompilationDiagnostics allowCompilationDiagnostics = AllowCompilationDiagnostics.None)
+            AllowedCompilerDiagnostics allowedCompilerDiagnostics = AllowedCompilerDiagnostics.None)
         {
             RoslynAssert.CodeFix(
                 this.CreateAnalyzer(),
@@ -311,7 +311,7 @@
                 solution,
                 after,
                 fixTitle,
-                allowCompilationDiagnostics);
+                allowedCompilerDiagnostics);
         }
 
         /// <summary>

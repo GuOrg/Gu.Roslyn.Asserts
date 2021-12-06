@@ -694,7 +694,7 @@ namespace N
 }";
                 var analyzer = new ClassMustHaveMethodAnalyzer();
                 var fix = InsertMethodFix.ReturnEventHandler;
-                RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.WarningsAndErrors));
+                RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.WarningsAndErrors));
             }
 
             [Test]

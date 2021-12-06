@@ -85,7 +85,7 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new CodeFixes.NoFix();
                 var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
-                var settings = Settings.Default.WithAllowedCompilationDiagnostics(AllowCompilationDiagnostics.Warnings);
+                var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
                 RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, code, settings);
             }
 
