@@ -39,7 +39,7 @@
         /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
         /// 3. Applying the current code fix provider results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -64,7 +64,7 @@
         /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
         /// 3. Applying the current code fix provider results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -89,7 +89,7 @@
         /// 2. <paramref name="before"/> produces diagnostics fixable by the current code fix provider.
         /// 3. Applying the current code fix provider results in <paramref name="after"/>.
         /// </summary>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -118,7 +118,7 @@
         /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
         /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
         /// </param>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -148,7 +148,7 @@
         /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
         /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
         /// </param>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -178,7 +178,7 @@
         /// The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If the
         /// current analyzer supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.
         /// </param>
-        /// <param name="before">The code to analyze with the current analyzer. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze with the current analyzer. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix provider.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -203,7 +203,7 @@
         /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
@@ -227,7 +227,7 @@
         /// 1. <paramref name="before"/> produces the expected diagnostics
         /// 2. The code fix fixes the code.
         /// </summary>
-        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="before">The code to analyze for the current expected diagnostic. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="after">The expected code produced by applying the current code fix.</param>
         /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>

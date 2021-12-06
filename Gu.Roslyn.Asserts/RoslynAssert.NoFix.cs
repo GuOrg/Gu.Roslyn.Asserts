@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, params string[] code)
         {
             if (analyzer is null)
@@ -45,7 +45,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             if (analyzer is null)
@@ -77,7 +77,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
@@ -121,7 +121,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
@@ -165,7 +165,7 @@
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostics">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void NoFix(DiagnosticAnalyzer analyzer, CodeFixProvider fix, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             if (analyzer is null)
@@ -196,7 +196,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,
@@ -233,7 +233,7 @@
         /// </summary>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>.</param>
-        /// <param name="code">The code to analyze. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             CodeFixProvider fix,
@@ -271,7 +271,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
         /// <param name="fix">The <see cref="CodeFixProvider"/> to apply on the <see cref="Diagnostic"/> reported.</param>
-        /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void NoFix(
             DiagnosticAnalyzer analyzer,

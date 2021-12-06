@@ -144,7 +144,7 @@
                 Assert.AreEqual(false, parameter!.IsOptional, "Optional.");
                 if (method.TryFindParameterByType<DiagnosticAnalyzer>(out var analyzerParameter))
                 {
-                    Assert.AreEqual($"The code to analyze with <paramref name=\"{analyzerParameter!.Name}\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                    Assert.AreEqual($"The code to analyze with <paramref name=\"{analyzerParameter!.Name}\"/>. Indicate diagnostic position with ↓ (alt + 25).", parameter.DocComment());
                 }
                 else if (method.TryFindParameterByType<CodeRefactoringProvider>(out var refactoringParameter))
                 {
@@ -159,7 +159,7 @@
                 }
                 else
                 {
-                    Assert.AreEqual("The code to analyze for <paramref name=\"expectedDiagnostic\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                    Assert.AreEqual("The code to analyze for <paramref name=\"expectedDiagnostic\"/>. Indicate diagnostic position with ↓ (alt + 25).", parameter.DocComment());
                 }
             }
         }
@@ -252,13 +252,13 @@
                         switch (method.Parameters[0].Name)
                         {
                             case "analyzer":
-                                Assert.AreEqual($"The code to analyze with <paramref name=\"analyzer\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                                Assert.AreEqual($"The code to analyze with <paramref name=\"analyzer\"/>. Indicate diagnostic position with ↓ (alt + 25).", parameter.DocComment());
                                 break;
                             case "analyzerType":
-                                Assert.AreEqual($"The code to analyze with <paramref name=\"analyzerType\"/>. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                                Assert.AreEqual($"The code to analyze with <paramref name=\"analyzerType\"/>. Indicate diagnostic position with ↓ (alt + 25).", parameter.DocComment());
                                 break;
                             case "fix":
-                                Assert.AreEqual($"The code to analyze. Indicate error position with ↓ (alt + 25).", parameter.DocComment());
+                                Assert.AreEqual($"The code to analyze. Indicate diagnostic position with ↓ (alt + 25).", parameter.DocComment());
                                 break;
                             default:
                                 Assert.Inconclusive($"Not handling {method.Parameters[0]}");

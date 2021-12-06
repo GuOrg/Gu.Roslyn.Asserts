@@ -13,7 +13,7 @@
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, params string[] code)
         {
             if (analyzer is null)
@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, ExpectedDiagnostic expectedDiagnostic, params string[] code)
         {
             if (analyzer is null)
@@ -56,7 +56,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostics">The expected diagnostics.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         public static void Diagnostics(DiagnosticAnalyzer analyzer, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, params string[] code)
         {
             if (analyzer is null)
@@ -79,7 +79,7 @@
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Diagnostics(
             DiagnosticAnalyzer analyzer,
@@ -106,7 +106,7 @@
         /// Verifies that <paramref name="code"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Diagnostics(
             DiagnosticAnalyzer analyzer,
@@ -134,7 +134,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Diagnostics(
             DiagnosticAnalyzer analyzer,
@@ -168,7 +168,7 @@
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="code"/> with.</param>
         /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="analyzer"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
-        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="code">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Diagnostics(
             DiagnosticAnalyzer analyzer,
@@ -201,7 +201,7 @@
         /// Verifies that <paramref name="diagnosticsAndSources"/> produces the expected diagnostics.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/> to check <paramref name="diagnosticsAndSources"/> with.</param>
-        /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate error position with ↓ (alt + 25).</param>
+        /// <param name="diagnosticsAndSources">The code to analyze with <paramref name="analyzer"/>. Indicate diagnostic position with ↓ (alt + 25).</param>
         /// <param name="settings">The <see cref="Settings"/>.</param>
         public static void Diagnostics(
             DiagnosticAnalyzer analyzer,

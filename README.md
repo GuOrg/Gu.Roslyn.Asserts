@@ -99,17 +99,17 @@ When testing all analyzers something like this can be used:
 ```c#
 public class Valid
 {
-    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers = typeof(TypeInAnalyzerAssembly)
-                                                                                .Assembly.GetTypes()
-                                                                                .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
-                                                                                .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t))
-                                                                                .ToArray();
+    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers =
+        typeof(TypeInAnalyzerAssembly)
+        .Assembly.GetTypes()
+        .Where(typeof(DiagnosticAnalyzer).IsAssignableFrom)
+        .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t))
+        .ToArray();
 
 
     private static readonly Solution ValidProjectSln = CodeFactory.CreateSolution(
         ProjectFile.Find("Valid.csproj"),
-        AllAnalyzers,
-        RoslynAssert.MetadataReferences);
+        AllAnalyzers);
 
     [TestCaseSource(nameof(AllAnalyzers))]
     public void Valid(DiagnosticAnalyzer analyzer)
@@ -466,7 +466,7 @@ internal static class ModuleInitializer
     internal static void Initialize()
     {
         Settings.Default = Settings.Default.WithMetadataReferences(
-            // This adds all metadata references from containing project.
+            // This adds all transitive metadata references from containing project.
             Asserts.MetadataReferences.Transitive(typeof(ModuleInitializer)));
     }
 }
@@ -516,9 +516,9 @@ namespace N
     }
 }";
     var analyzer = new FieldNameMustNotBeginWithUnderscore();
-    var compilationOptions = CodeFactory.DefaultCompilationOptions(analyzer);
-    var metadataReferences = new[] { MetadataReference.CreateFromFile(typeof(int).Assembly.Location) };
-    var sln = CodeFactory.CreateSolution(code, Settings.Default.WithCompilationOptions(compilationOptions).WithMetadataReferences(metadataReferences));
+    var settings = Settings.Default.WithCompilationOptions(CodeFactory.DefaultCompilationOptions(analyzer))
+                                   .WithMetadataReferences(MetadataReference.CreateFromFile(typeof(int).Assembly.Location))
+    var sln = CodeFactory.CreateSolution(code, settings: settings);
     var diagnostics = Analyze.GetDiagnostics(sln, analyzer);
     var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
     CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
