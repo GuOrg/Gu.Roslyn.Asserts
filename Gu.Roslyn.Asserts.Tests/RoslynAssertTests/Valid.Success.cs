@@ -302,7 +302,7 @@ namespace N
     }
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var binaryReference = Asserts.MetadataReferences.CreateBinary(@"
+                var binaryReference = BinaryReference.Compile(@"
 namespace BinaryReferencedAssembly
 {
     public class Base
@@ -327,7 +327,7 @@ namespace N
         public int M() => this.f;
     }
 }";
-                var binaryReference = Asserts.MetadataReferences.CreateBinary(@"
+                var binaryReference = BinaryReference.Compile(@"
 namespace BinaryReferencedAssembly
 {
     public class Base

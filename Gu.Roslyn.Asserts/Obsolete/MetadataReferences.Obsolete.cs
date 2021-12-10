@@ -51,7 +51,7 @@
         /// </summary>
         /// <param name="code">The code to create a dll project from.</param>
         /// <returns>A <see cref="MetadataReference"/>.</returns>
-        [Obsolete("Use MetadataReference.Compile()")]
+        [Obsolete("Use BinaryReference.Compile()")]
         public static MetadataReference CreateBinary(params string[] code) => BinaryReference.Compile(code);
     }
 }

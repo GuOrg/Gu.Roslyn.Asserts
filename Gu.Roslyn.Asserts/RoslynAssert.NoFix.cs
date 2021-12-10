@@ -34,7 +34,7 @@
             NoFix(
                 analyzer,
                 fix,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code));
+                DiagnosticsAndSources.FromMarkup(analyzer, code));
         }
 
         /// <summary>
@@ -222,7 +222,7 @@
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, code),
                 settings: settings);
         }
 
@@ -260,7 +260,7 @@
             NoFix(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, code),
                 settings: settings);
         }
 

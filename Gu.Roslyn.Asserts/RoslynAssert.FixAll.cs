@@ -362,7 +362,7 @@
             FixAll(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: new[] { after },
                 fixTitle: fixTitle,
                 settings: settings);
@@ -410,7 +410,7 @@
             FixAll(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: MergeFixedCode(before, after),
                 fixTitle: fixTitle,
                 settings: settings);
@@ -458,7 +458,7 @@
             FixAll(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: after,
                 fixTitle: fixTitle,
                 settings: settings);
@@ -672,7 +672,7 @@
             }
 
             settings ??= Settings.Default;
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before);
+            var diagnosticsAndSources = DiagnosticsAndSources.FromMarkup(analyzer, before);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(
@@ -893,7 +893,7 @@
             }
 
             settings ??= Settings.Default;
-            var diagnosticsAndSources = DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before);
+            var diagnosticsAndSources = DiagnosticsAndSources.FromMarkup(analyzer, before);
             VerifyAnalyzerSupportsDiagnostics(analyzer, diagnosticsAndSources.ExpectedDiagnostics);
             VerifyCodeFixSupportsAnalyzer(analyzer, fix);
             var sln = CodeFactory.CreateSolution(

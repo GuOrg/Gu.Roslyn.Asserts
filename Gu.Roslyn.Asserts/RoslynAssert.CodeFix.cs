@@ -56,7 +56,7 @@
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: new[] { after },
                 fixTitle: fixTitle,
                 settings: settings);
@@ -105,7 +105,7 @@
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: MergeFixedCode(before, after),
                 fixTitle: fixTitle,
                 settings: settings);
@@ -154,7 +154,7 @@
             CodeFix(
                 analyzer: analyzer,
                 fix: fix,
-                diagnosticsAndSources: DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, before),
+                diagnosticsAndSources: DiagnosticsAndSources.FromMarkup(analyzer, before),
                 after: after,
                 fixTitle: fixTitle,
                 settings: settings);

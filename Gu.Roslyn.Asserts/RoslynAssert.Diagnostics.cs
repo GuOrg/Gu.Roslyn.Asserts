@@ -23,7 +23,7 @@
 
             Diagnostics(
                 analyzer,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                DiagnosticsAndSources.FromMarkup(analyzer, code),
                 Settings.Default);
         }
 
@@ -98,7 +98,7 @@
 
             Diagnostics(
                 analyzer,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                DiagnosticsAndSources.FromMarkup(analyzer, code),
                 settings);
         }
 
@@ -125,7 +125,7 @@
 
             Diagnostics(
                 analyzer,
-                DiagnosticsAndSources.CreateFromCodeWithErrorsIndicated(analyzer, code),
+                DiagnosticsAndSources.FromMarkup(analyzer, code),
                 settings);
         }
 
