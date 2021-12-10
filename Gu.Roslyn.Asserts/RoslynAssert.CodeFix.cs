@@ -614,7 +614,10 @@
             if (introducedDiagnostics.Select(x => x.Id).Any())
             {
                 var errorBuilder = StringBuilderPool.Borrow();
-                errorBuilder.AppendLine($"{fix.GetType().Name} introduced syntax error{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.");
+                errorBuilder.AppendLine($"The fixed code by {fix.GetType().Name} contains compiler diagnostic{(introducedDiagnostics.Length > 1 ? "s" : string.Empty)}.")
+                            .AppendLine("  - fix the code used in the test")
+                            .AppendLine("  - suppress the warning in the test code using for example pragma")
+                            .AppendLine("  - suppress the warning by providing Settings to the assert.");
                 foreach (var introducedDiagnostic in introducedDiagnostics)
                 {
                     errorBuilder.AppendLine($"{introducedDiagnostic.ToErrorString()}");
@@ -622,7 +625,7 @@
 
                 var sources = await Task.WhenAll(fixedSolution.Projects.SelectMany(p => p.Documents).Select(d => CodeReader.GetStringFromDocumentAsync(d, CancellationToken.None))).ConfigureAwait(false);
 
-                errorBuilder.AppendLine("First source file with error is:");
+                errorBuilder.AppendLine("First source file with diagnostic is:");
                 var lineSpan = introducedDiagnostics.First().Location.GetMappedLineSpan();
                 if (sources.TrySingle(x => CodeReader.FileName(x) == lineSpan.Path, out var match))
                 {
