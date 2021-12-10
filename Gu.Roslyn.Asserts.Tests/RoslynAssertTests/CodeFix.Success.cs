@@ -261,7 +261,7 @@ namespace N
         public int M() => f;
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup(FieldNameMustNotBeginWithUnderscore.DiagnosticId, before, out before);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new DoNotUseUnderscoreFix();
                 RoslynAssert.CodeFix(analyzer, fix, expectedDiagnostic, before, after, "Rename to: 'f'");
@@ -629,7 +629,7 @@ namespace N.Core
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
 
-                expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before2, before1 }, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { after, before2 });
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, after);
@@ -674,7 +674,7 @@ namespace N.Core
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
 
-                expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before2, before1 }, after);
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { after, before2 });
                 RoslynAssert.CodeFix(fix, expectedDiagnostic, new[] { before1, before2 }, after);

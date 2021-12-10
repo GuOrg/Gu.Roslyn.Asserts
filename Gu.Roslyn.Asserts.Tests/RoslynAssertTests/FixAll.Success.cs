@@ -444,7 +444,7 @@ namespace N.Core
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, new[] { after, before2 });
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, new[] { before2, after });
@@ -481,7 +481,7 @@ namespace N.Core
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
@@ -519,7 +519,7 @@ namespace N.Core
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
@@ -556,7 +556,7 @@ namespace N.Core
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before1, out before1);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before1, out before1);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
@@ -593,7 +593,7 @@ namespace N.Client
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before2, out before2);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before2, out before2);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before1, before2 }, after);
                 RoslynAssert.FixAll(fix, expectedDiagnostic, new[] { before2, before1 }, after);
@@ -622,7 +622,7 @@ namespace N
     {
     }
 }";
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("CS0067", before, out before);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("CS0067", before, out before);
                 var fix = new RemoveUnusedFix();
                 RoslynAssert.FixAll(fix, expectedDiagnostic, before, after);
             }

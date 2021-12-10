@@ -237,7 +237,7 @@ namespace N
                                "  SA1309 Field '_f' must not begin with an underscore\r\n" +
                                "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -380,7 +380,7 @@ namespace N
                                "  SA1309 Field '_f' must not begin with an underscore\r\n" +
                                "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_f' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", "Field '_f' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code));
                 Assert.AreEqual(expected, exception.Message);
@@ -410,7 +410,7 @@ namespace N
                                "  SA1309 Field '_f' must not begin with an underscore\r\n" +
                                "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Wrong message", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", "Wrong message", code, out code);
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code));

@@ -76,12 +76,12 @@ namespace N
         public int M() => _f;
     }
 }";
-                var expectedDiagnostic1 = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(
+                var expectedDiagnostic1 = ExpectedDiagnostic.FromMarkup(
                     FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId1,
                     code,
                     out _);
 
-                var expectedDiagnostic2 = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated(
+                var expectedDiagnostic2 = ExpectedDiagnostic.FromMarkup(
                     FieldNameMustNotBeginWithUnderscoreReportsTwo.DiagnosticId2,
                     code,
                     out code);
@@ -165,7 +165,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
@@ -185,7 +185,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
@@ -205,7 +205,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_f' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", "Field '_f' must not begin with an underscore", code, out code);
 
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
@@ -247,7 +247,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309", "Field '_f' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309", "Field '_f' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
@@ -266,7 +266,7 @@ namespace N
     }
 }";
 
-                var expectedDiagnostic = ExpectedDiagnostic.CreateFromCodeWithErrorsIndicated("SA1309b", "Field '_f' must not begin with an underscore", code, out code);
+                var expectedDiagnostic = ExpectedDiagnostic.FromMarkup("SA1309b", "Field '_f' must not begin with an underscore", code, out code);
                 var analyzer = new FieldNameMustNotBeginWithUnderscoreDifferentDiagnosticsForPublic();
                 RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code);
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);

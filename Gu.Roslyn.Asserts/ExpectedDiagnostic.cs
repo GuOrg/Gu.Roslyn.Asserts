@@ -14,7 +14,7 @@
     /// Info about an expected diagnostic.
     /// </summary>
     [DebuggerDisplay("{Id} {Message} {Span}")]
-    public class ExpectedDiagnostic
+    public partial class ExpectedDiagnostic
     {
         private static readonly FileLinePositionSpan NoPosition = new("MISSING", default, default);
 
@@ -196,22 +196,22 @@
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>.
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id.</param>
-        /// <param name="code">The code with error position indicated..</param>
-        /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
+        /// <param name="markup">The code with diagnostic position indicated.</param>
+        /// <param name="code"><paramref name="markup"/> without position indicated.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string code, out string cleanedSources)
+        public static ExpectedDiagnostic FromMarkup(string diagnosticId, string markup, out string code)
         {
             if (diagnosticId is null)
             {
                 throw new ArgumentNullException(nameof(diagnosticId));
             }
 
-            if (code is null)
+            if (markup is null)
             {
-                throw new ArgumentNullException(nameof(code));
+                throw new ArgumentNullException(nameof(markup));
             }
 
-            return CreateFromCodeWithErrorsIndicated(diagnosticId, null, code, out cleanedSources);
+            return FromMarkup(diagnosticId, null, markup, out code);
         }
 
         /// <summary>
@@ -219,34 +219,34 @@
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
-        /// <param name="code">The code with error position indicated..</param>
-        /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
+        /// <param name="markup">The code with diagnostic position indicated.</param>
+        /// <param name="code"><paramref name="code"/> without position indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string? message, string code, out string cleanedSources)
+        public static ExpectedDiagnostic FromMarkup(string diagnosticId, string? message, string markup, out string code)
         {
             if (diagnosticId is null)
             {
                 throw new ArgumentNullException(nameof(diagnosticId));
             }
 
-            if (code is null)
+            if (markup is null)
             {
-                throw new ArgumentNullException(nameof(code));
+                throw new ArgumentNullException(nameof(markup));
             }
 
-            var positions = CodeReader.FindLinePositions(code).ToArray();
+            var positions = CodeReader.FindLinePositions(markup).ToArray();
             if (positions.Length == 0)
             {
-                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(code));
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(markup));
             }
 
             if (positions.Length > 1)
             {
-                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(code));
+                throw new ArgumentException($"Expected one error position indicated, was {positions.Length}.", nameof(markup));
             }
 
-            cleanedSources = code.Replace("↓", string.Empty);
-            var fileName = CodeReader.FileName(code);
+            code = markup.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(markup);
             var position = positions[0];
             return new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, position, position));
         }
@@ -256,10 +256,10 @@
         /// </summary>
         /// <param name="diagnosticId">The expected diagnostic id.</param>
         /// <param name="message">The expected message.</param>
-        /// <param name="codeWithErrorsIndicated">The code with error position indicated..</param>
-        /// <param name="cleanedSources"><paramref name="codeWithErrorsIndicated"/> without errors indicated.</param>
+        /// <param name="markup">The code with diagnostic position indicated.</param>
+        /// <param name="code"><paramref name="markup"/> without position indicated.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static IReadOnlyList<ExpectedDiagnostic> CreateManyFromCodeWithErrorsIndicated(string diagnosticId, string message, string codeWithErrorsIndicated, out string cleanedSources)
+        public static IReadOnlyList<ExpectedDiagnostic> ManyFromMarkup(string diagnosticId, string message, string markup, out string code)
         {
             if (diagnosticId is null)
             {
@@ -271,19 +271,19 @@
                 throw new ArgumentNullException(nameof(message));
             }
 
-            if (codeWithErrorsIndicated is null)
+            if (markup is null)
             {
-                throw new ArgumentNullException(nameof(codeWithErrorsIndicated));
+                throw new ArgumentNullException(nameof(markup));
             }
 
-            var positions = CodeReader.FindLinePositions(codeWithErrorsIndicated).ToArray();
+            var positions = CodeReader.FindLinePositions(markup).ToArray();
             if (positions.Length == 0)
             {
-                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(codeWithErrorsIndicated));
+                throw new ArgumentException("Expected one error position indicated, was zero.", nameof(markup));
             }
 
-            cleanedSources = codeWithErrorsIndicated.Replace("↓", string.Empty);
-            var fileName = CodeReader.FileName(codeWithErrorsIndicated);
+            code = markup.Replace("↓", string.Empty);
+            var fileName = CodeReader.FileName(markup);
             return positions.Select(p => new ExpectedDiagnostic(diagnosticId, message, new FileLinePositionSpan(fileName, p, p)))
                             .ToArray();
         }
