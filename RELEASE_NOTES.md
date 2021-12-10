@@ -1,3 +1,7 @@
+#### 4.0.3
+* Better error message for RoslynAssert.CodeFix
+* OBSOLETE: ExpectedDiagnostic.FromMarkup.
+
 #### 4.0.2
 * BREAKING: Remove duplicate enum AllowedCompilationDiagnostics.
 
