@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -579,6 +579,17 @@ namespace N
             var attribute = "Obsolete";
             Assert.AreEqual(attribute, syntaxTree.FindAttribute(attribute).ToString());
             Assert.AreEqual(attribute, syntaxTree.Find<AttributeSyntax>(attribute).ToString());
+        }
+
+        [Test]
+        public static void TopLevel()
+        {
+            var testCode = @"
+var x = 1;";
+            var syntaxTree = CSharpSyntaxTree.ParseText(testCode);
+            var name = "var x = 1";
+            Assert.AreEqual(name, syntaxTree.FindVariableDeclaration(name).ToString());
+            Assert.AreEqual(name, syntaxTree.Find<VariableDeclarationSyntax>(name).ToString());
         }
     }
 }
