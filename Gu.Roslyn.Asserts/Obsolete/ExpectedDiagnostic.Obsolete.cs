@@ -21,7 +21,7 @@
         /// <param name="code">The code with error position indicated..</param>
         /// <param name="cleanedSources"><paramref name="code"/> without error indicator.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
-        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string? message, string code, out string cleanedSources) => FromMarkup(diagnosticId, code, out cleanedSources);
+        public static ExpectedDiagnostic CreateFromCodeWithErrorsIndicated(string diagnosticId, string? message, string code, out string cleanedSources) => FromMarkup(diagnosticId, message, code, out cleanedSources);
 
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/>.

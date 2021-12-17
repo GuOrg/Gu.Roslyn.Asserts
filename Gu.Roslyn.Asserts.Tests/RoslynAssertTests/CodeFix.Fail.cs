@@ -793,7 +793,7 @@ namespace N
             }
 
             [Test]
-            public static void WhenFixIntroducesSyntaxErrors()
+            public static void WhenFixIntroducesDiagnostics()
             {
                 var before = @"
 namespace N
@@ -815,10 +815,13 @@ namespace N
                 var analyzer = new ClassMustHaveMethodAnalyzer();
                 var fix = InsertMethodFix.ReturnEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, after));
-                var expected = @"InsertMethodFix introduced syntax error.
+                var expected = @"The fixed code by InsertMethodFix contains compiler diagnostic.
+  - fix the code used in the test
+  - suppress the warning in the test code using for example pragma
+  - suppress the warning by providing Settings to the assert.
 CS0246 The type or namespace name 'EventHandler' could not be found (are you missing a using directive or an assembly reference?)
   at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
-First source file with error is:
+First source file with diagnostic is:
 
 namespace N
 {

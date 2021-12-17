@@ -266,7 +266,7 @@ namespace N
             }
 
             [Test]
-            public static void WhenFixIntroducesCompilerErrors()
+            public static void WhenFixIntroducesCompilerDiagnostics()
             {
                 var before = @"
 namespace N
@@ -287,7 +287,10 @@ namespace N
                 var analyzer = new ClassMustHaveMethodAnalyzer();
                 var fix = InsertMethodFix.ReturnEventHandler;
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
-                var expected = @"InsertMethodFix introduced syntax errors.
+                var expected = @"The fixed code by InsertMethodFix contains compiler diagnostics.
+  - fix the code used in the test
+  - suppress the warning in the test code using for example pragma
+  - suppress the warning by providing Settings to the assert.
 CS0518 Predefined type 'System.Object' is not defined or imported
   at line 3 and character 10 in file C.cs | class ↓C
 CS0518 Predefined type 'System.Object' is not defined or imported
@@ -298,7 +301,7 @@ CS0518 Predefined type 'System.Nullable`1' is not defined or imported
   at line 5 and character 15 in file C.cs | public ↓EventHandler? M() => null;
 CS1729 'object' does not contain a constructor that takes 0 arguments
   at line 3 and character 10 in file C.cs | class ↓C
-First source file with error is:
+First source file with diagnostic is:
 
 namespace N
 {
