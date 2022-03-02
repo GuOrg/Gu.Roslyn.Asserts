@@ -142,17 +142,12 @@
 
         private static ReportDiagnostic WarnOrError(DiagnosticSeverity severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case DiagnosticSeverity.Error:
-                    return ReportDiagnostic.Error;
-                case DiagnosticSeverity.Hidden:
-                case DiagnosticSeverity.Info:
-                case DiagnosticSeverity.Warning:
-                    return ReportDiagnostic.Warn;
-                default:
-                    throw new InvalidEnumArgumentException(nameof(severity), (int)severity, typeof(DiagnosticSeverity));
-            }
+                DiagnosticSeverity.Error => ReportDiagnostic.Error,
+                DiagnosticSeverity.Hidden or DiagnosticSeverity.Info or DiagnosticSeverity.Warning => ReportDiagnostic.Warn,
+                _ => throw new InvalidEnumArgumentException(nameof(severity), (int)severity, typeof(DiagnosticSeverity)),
+            };
         }
     }
 }

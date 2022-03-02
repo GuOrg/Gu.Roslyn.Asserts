@@ -83,14 +83,11 @@ namespace Gu.Roslyn.Asserts.Tests
 
             static string? Property(ParameterInfo parameter)
             {
-                switch (parameter.Name)
+                return parameter.Name switch
                 {
-                    case "quoteKind":
-                    case "kind":
-                        return "Kind()";
-                    default:
-                        return ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..], BindingFlags.Public | BindingFlags.Instance)?.Name;
-                }
+                    "quoteKind" or "kind" => "Kind()",
+                    _ => ((MethodInfo)parameter.Member).ReturnType.GetProperty(parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..], BindingFlags.Public | BindingFlags.Instance)?.Name,
+                };
             }
         }
 
@@ -147,23 +144,15 @@ namespace Gu.Roslyn.Asserts.Tests
 
             static string Property(ParameterInfo parameter)
             {
-                switch (parameter.Name)
+                return parameter.Name switch
                 {
-                    case "leading":
-                        return "LeadingTrivia";
-                    case "trailing":
-                        return "TrailingTrivia";
-                    case "contextualKind":
-                    case "kind":
-                        return "Kind()";
-                    case "text":
-                        return "Text";
-                    case "value":
-                    case "valueText":
-                        return "ValueText";
-                    default:
-                        return parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..];
-                }
+                    "leading" => "LeadingTrivia",
+                    "trailing" => "TrailingTrivia",
+                    "contextualKind" or "kind" => "Kind()",
+                    "text" => "Text",
+                    "value" or "valueText" => "ValueText",
+                    _ => parameter.Name![..1].ToUpperInvariant() + parameter.Name[1..],
+                };
             }
         }
 
