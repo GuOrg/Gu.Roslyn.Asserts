@@ -114,16 +114,12 @@
                 if (!modifiers.Any(SyntaxKind.StaticKeyword))
                 {
                     var first = modifiers.First();
-                    switch (first.Kind())
+                    return first.Kind() switch
                     {
-                        case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.ProtectedKeyword:
-                        case SyntaxKind.InternalKeyword:
-                        case SyntaxKind.PublicKeyword:
-                            return modifiers.Insert(1, SyntaxFactory.Token(SyntaxKind.StaticKeyword));
-                        default:
-                            return modifiers.Insert(0, SyntaxFactory.Token(SyntaxKind.StaticKeyword));
-                    }
+                        SyntaxKind.PrivateKeyword or SyntaxKind.ProtectedKeyword or SyntaxKind.InternalKeyword or SyntaxKind.PublicKeyword
+                            => modifiers.Insert(1, SyntaxFactory.Token(SyntaxKind.StaticKeyword)),
+                        _ => modifiers.Insert(0, SyntaxFactory.Token(SyntaxKind.StaticKeyword)),
+                    };
                 }
 
                 return modifiers;

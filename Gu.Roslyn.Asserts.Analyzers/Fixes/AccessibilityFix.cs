@@ -79,16 +79,12 @@
                         {
                             if (modifiers.TryFirst(out var first))
                             {
-                                switch (first.Kind())
+                                return first.Kind() switch
                                 {
-                                    case SyntaxKind.InternalKeyword:
-                                    case SyntaxKind.PublicKeyword:
-                                        return modifiers.Replace(
-                                            first,
-                                            token.WithTriviaFrom(first));
-                                    default:
-                                        return modifiers.Insert(0, token);
-                                }
+                                    SyntaxKind.InternalKeyword or SyntaxKind.PublicKeyword
+                                        => modifiers.Replace(first, token.WithTriviaFrom(first)),
+                                    _ => modifiers.Insert(0, token),
+                                };
                             }
 
                             return SyntaxTokenList.Create(token);
