@@ -191,6 +191,7 @@
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => x.Display));
         }
 
+        [Explicit("fragile")]
         [Test]
         public void TransitiveCSharpCompilation()
         {
@@ -272,6 +273,7 @@
             CollectionAssert.AreEqual(expected, Gu.Roslyn.Asserts.MetadataReferences.Transitive(type.Assembly).Select(x => Path.GetFileName(x.Display)));
         }
 
+        [Explicit("fragile")]
         [Test]
         public void ManyTransitive()
         {
