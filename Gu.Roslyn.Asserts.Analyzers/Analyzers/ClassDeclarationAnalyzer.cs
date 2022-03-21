@@ -156,7 +156,7 @@
                     using var walker = BorrowAndVisit(root, () => new UsingDirectiveWalker());
                     foreach (var directive in walker.usingDirectives)
                     {
-                        if (directive.Name is QualifiedNameSyntax { Left: IdentifierNameSyntax { Identifier: { ValueText: "NUnit" } }, Right: IdentifierNameSyntax { Identifier: { ValueText: "Framework" } } })
+                        if (directive.Name is QualifiedNameSyntax { Left: IdentifierNameSyntax { Identifier.ValueText: "NUnit" }, Right: IdentifierNameSyntax { Identifier.ValueText: "Framework" } })
                         {
                             return true;
                         }

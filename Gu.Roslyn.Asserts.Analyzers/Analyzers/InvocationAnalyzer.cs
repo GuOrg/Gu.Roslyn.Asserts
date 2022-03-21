@@ -210,13 +210,13 @@ namespace Gu.Roslyn.Asserts.Analyzers
         {
             return parameter switch
             {
-                { Name: "code", ContainingSymbol: { Name: "Valid" } } => true,
-                { Name: "code", ContainingSymbol: { Name: "Diagnostics" } } => true,
-                { Name: "code", ContainingSymbol: { Name: "NoDiagnostics" } } => true,
-                { Name: "before", ContainingSymbol: { Name: "CodeFix" } } => true,
-                { Name: "after", ContainingSymbol: { Name: "CodeFix" } } => true,
-                { Name: "before", ContainingSymbol: { Name: "Refactoring" } } => true,
-                { Name: "after", ContainingSymbol: { Name: "Refactoring" } } => true,
+                { Name: "code", ContainingSymbol.Name: "Valid" } => true,
+                { Name: "code", ContainingSymbol.Name: "Diagnostics" } => true,
+                { Name: "code", ContainingSymbol.Name: "NoDiagnostics" } => true,
+                { Name: "before", ContainingSymbol.Name: "CodeFix" } => true,
+                { Name: "after", ContainingSymbol.Name: "CodeFix" } => true,
+                { Name: "before", ContainingSymbol.Name: "Refactoring" } => true,
+                { Name: "after", ContainingSymbol.Name: "Refactoring" } => true,
                 _ => false,
             };
         }
@@ -262,7 +262,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
             if (invocation.Expression is MemberAccessExpressionSyntax { Expression: IdentifierNameSyntax identifierName } memberAccess &&
                 invocation.Parent is AssignmentExpressionSyntax { Left: IdentifierNameSyntax left } &&
                 left.Identifier.ValueText == identifierName.Identifier.ValueText &&
-                StringArgument.Create(identifierName, semanticModel, cancellationToken) is { Symbol: { Kind: SymbolKind.Local } } stringArgument &&
+                StringArgument.Create(identifierName, semanticModel, cancellationToken) is { Symbol.Kind: SymbolKind.Local } stringArgument &&
                 stringArgument.Value.IsKind(SyntaxKind.StringLiteralExpression))
             {
                 location = memberAccess.Name.GetLocation();

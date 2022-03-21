@@ -43,7 +43,7 @@
 
         internal static IEnumerable<WordAndLocation> FindReplacements(StringArgument argument)
         {
-            if (argument.StringLiteral is { Token: { ValueText: { } valueText } } literal &&
+            if (argument.StringLiteral is { Token.ValueText: { } valueText } literal &&
                 literal.IsKind(SyntaxKind.StringLiteralExpression))
             {
                 CodeLiteral? code = null;

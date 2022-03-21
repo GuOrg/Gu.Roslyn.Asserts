@@ -36,28 +36,16 @@
             };
         }
 
-        internal bool? HasPosition
+        internal bool? HasPosition => this.Value switch
         {
-            get
-            {
-                return this.Value switch
-                {
-                    LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
-                    InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
-                    _ => null,
-                };
-            }
-        }
+            LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
+            InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
+            _ => null,
+        };
 
-        public static bool operator ==(StringArgument left, StringArgument right)
-        {
-            return left.Equals(right);
-        }
+        public static bool operator ==(StringArgument left, StringArgument right) => left.Equals(right);
 
-        public static bool operator !=(StringArgument left, StringArgument right)
-        {
-            return !left.Equals(right);
-        }
+        public static bool operator !=(StringArgument left, StringArgument right) => !left.Equals(right);
 
         public bool Equals(StringArgument other) => this.Expression.Equals(other.Expression);
 
