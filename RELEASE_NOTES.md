@@ -1,3 +1,6 @@
+#### 4.0.4
+* BUGFIX: stop infinite loop in fix all when fix updates the code without fixing the issue.
+
 #### 4.0.3
 * Better error message for RoslynAssert.CodeFix
 * OBSOLETE: ExpectedDiagnostic.FromMarkup.
