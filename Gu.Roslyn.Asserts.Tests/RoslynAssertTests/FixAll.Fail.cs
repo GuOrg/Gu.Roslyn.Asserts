@@ -2,8 +2,12 @@
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System.Linq;
+
     using Gu.Roslyn.Asserts.Tests.CodeFixes;
+
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeFixes;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -318,21 +322,17 @@ namespace N
             public static void WhenFixDoesNotDoAnything()
             {
                 var before = @"
-namespace N
+namespace N;
+class C
 {
-    class C
-    {
-        private readonly int ↓_f = 1;
-    }
+    private readonly int ↓_f = 1;
 }";
 
                 var after = @"
-namespace N
+namespace N;
+class C
 {
-    class C
-    {
-        private readonly int _f = 1;
-    }
+    private readonly int _f = 1;
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var fix = new EmptyFix();
@@ -342,15 +342,85 @@ namespace N
   - suppress the warning in the test code using for example pragma
   - suppress the warning by providing Settings to the assert.
 CS0414 The field 'C._f' is assigned but its value is never used
-  at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;
+  at line 4 and character 25 in file C.cs | private readonly int ↓_f = 1;
 First source file with diagnostic is:
 
-namespace N
+namespace N;
+class C
 {
-    class C
-    {
-        private readonly int _f = 1;
-    }
+    private readonly int _f = 1;
+}
+";
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public static void WhenFixChangesCodeButAfterProducesDiagnostic()
+            {
+                var before = @"
+namespace N;
+class C
+{
+    private readonly int ↓_f = 1;
+}";
+
+                var after = @"
+namespace N;
+class C
+{
+    private readonly int _f = 2;
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new InitializeFieldWithTwoFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+                var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
+  - fix the code used in the test
+  - suppress the warning in the test code using for example pragma
+  - suppress the warning by providing Settings to the assert.
+CS0414 The field 'C._f' is assigned but its value is never used
+  at line 4 and character 25 in file C.cs | private readonly int ↓_f = 2;
+First source file with diagnostic is:
+
+namespace N;
+class C
+{
+    private readonly int _f = 2;
+}
+";
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public static void WhenFixChangesCodeButAfterProducesDiagnosticByScope()
+            {
+                var before = @"
+namespace N;
+class C
+{
+    private readonly int ↓_f = 1;
+}";
+
+                var after = @"
+namespace N;
+class C
+{
+    private readonly int _f = 2;
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new InitializeFieldWithTwoFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAllByScope(analyzer, fix, new[] { before }, new[] { after }, FixAllScope.Solution));
+                var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
+  - fix the code used in the test
+  - suppress the warning in the test code using for example pragma
+  - suppress the warning by providing Settings to the assert.
+CS0414 The field 'C._f' is assigned but its value is never used
+  at line 4 and character 25 in file C.cs | private readonly int ↓_f = 2;
+First source file with diagnostic is:
+
+namespace N;
+class C
+{
+    private readonly int _f = 2;
 }
 ";
                 CodeAssert.AreEqual(expected, exception.Message);

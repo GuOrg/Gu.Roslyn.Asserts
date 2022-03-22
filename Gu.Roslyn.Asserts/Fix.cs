@@ -230,8 +230,15 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableOneByOneAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
+            var n = 0;
             while (await ApplyNext(solution, analyzer, fix, fixTitle, cancellationToken).ConfigureAwait(false) is { } fixedSolution)
             {
+                if (n > 1_000)
+                {
+                    return solution;
+                }
+
+                n++;
                 solution = fixedSolution;
             }
 
