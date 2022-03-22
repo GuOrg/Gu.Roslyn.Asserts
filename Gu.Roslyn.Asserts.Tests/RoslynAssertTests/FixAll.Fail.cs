@@ -315,6 +315,48 @@ namespace N
             }
 
             [Test]
+            public static void WhenFixDoesNotDoAnything()
+            {
+                var before = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f = 1;
+    }
+}";
+
+                var after = @"
+namespace N
+{
+    class C
+    {
+        private readonly int _f = 1;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var fix = new EmptyFix();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+                var expected = @"The fixed code by EmptyFix contains compiler diagnostic.
+  - fix the code used in the test
+  - suppress the warning in the test code using for example pragma
+  - suppress the warning by providing Settings to the assert.
+CS0414 The field 'C._f' is assigned but its value is never used
+  at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;
+First source file with diagnostic is:
+
+namespace N
+{
+    class C
+    {
+        private readonly int _f = 1;
+    }
+}
+";
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
             public static void DuplicateId()
             {
                 var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
