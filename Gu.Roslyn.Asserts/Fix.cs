@@ -233,6 +233,9 @@
             var n = 0;
             while (await ApplyNext(solution, analyzer, fix, fixTitle, cancellationToken).ConfigureAwait(false) is { } fixedSolution)
             {
+                // Keeping it simple allowing 1000 retries
+                // This means the error case is slow but normal case fast
+                // Using a set with diagnostics nicer but means slight perf penalty for the happy path.
                 if (n > 1_000)
                 {
                     return solution;
