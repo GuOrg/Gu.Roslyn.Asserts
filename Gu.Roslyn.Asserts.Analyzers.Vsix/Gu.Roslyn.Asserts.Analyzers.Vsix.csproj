@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.1.4054" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.2.2141" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
