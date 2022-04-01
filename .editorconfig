@@ -172,3 +172,15 @@ csharp_space_between_square_brackets = false
 csharp_prefer_braces = true:silent
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+# 'using' directive preferences
+csharp_using_directive_placement = inside_namespace:error
+
+# IDE0045: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_assignment = false
+
+# IDE0046: Convert to conditional expression
+dotnet_style_prefer_conditional_expression_over_return = false
+
+# IDE0061: Use expression body for local functions
+csharp_style_expression_bodied_local_functions = false
