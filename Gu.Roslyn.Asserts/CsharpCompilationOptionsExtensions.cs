@@ -51,6 +51,44 @@
             => WithWarningOrError(options, (IEnumerable<DiagnosticDescriptor>)descriptors);
 
         /// <summary>
+        /// Configure all <paramref name="descriptors"/> to report an error for the suppressable diagnostics.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="descriptors">The descriptors.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public static CSharpCompilationOptions WithSuppressableAsError(this CSharpCompilationOptions options, IEnumerable<SuppressionDescriptor> descriptors)
+        {
+            if (options is null)
+            {
+                throw new System.ArgumentNullException(nameof(options));
+            }
+
+            if (descriptors is null)
+            {
+                throw new System.ArgumentNullException(nameof(descriptors));
+            }
+
+            var diagnosticOptions = options.SpecificDiagnosticOptions;
+            foreach (var descriptor in descriptors)
+            {
+                diagnosticOptions = diagnosticOptions.Add(descriptor.SuppressedDiagnosticId, ReportDiagnostic.Error);
+            }
+
+            return options.WithSpecificDiagnosticOptions(diagnosticOptions);
+        }
+
+        /// <summary>
+        /// Configure all <paramref name="descriptors"/> to report an error for the suppressable diagnostics.
+        /// </summary>
+        /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
+        /// <param name="descriptors">The descriptors.</param>
+        /// <returns>A <see cref="CSharpCompilationOptions"/></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public static CSharpCompilationOptions WithSuppressableAsError(this CSharpCompilationOptions options, params SuppressionDescriptor[] descriptors)
+            => WithSuppressableAsError(options, (IEnumerable<SuppressionDescriptor>)descriptors);
+
+        /// <summary>
         /// Configure all <paramref name="ids"/> suppressed.
         /// </summary>
         /// <param name="options">The <see cref="CSharpCompilationOptions"/>.</param>
