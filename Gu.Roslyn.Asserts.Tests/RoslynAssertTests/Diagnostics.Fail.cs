@@ -539,15 +539,6 @@ Actual:
             }
 
             [Test]
-            public static void DuplicateId()
-            {
-                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
-                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, ExpectedDiagnostic.Create(Descriptors.Id1), string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-            }
-
-            [Test]
             public static void SingleDocumentTwoErrors()
             {
                 var code = @"
