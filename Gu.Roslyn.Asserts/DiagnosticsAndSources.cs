@@ -75,7 +75,7 @@
         /// <summary>
         /// Get the expected diagnostics and cleaned sources.
         /// </summary>
-        /// <param name="analyzer">The descriptor that is expected to produce diagnostics.</param>
+        /// <param name="analyzer">The analyzer that is expected to produce diagnostics.</param>
         /// <param name="markup">The code with diagnostic positions indicated with ↓ (alt + 25).</param>
         /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
         public static DiagnosticsAndSources FromMarkup(DiagnosticAnalyzer analyzer, IReadOnlyList<string> markup)
@@ -92,6 +92,49 @@
 
             RoslynAssert.VerifySingleSupportedDiagnostic(analyzer, out var descriptor);
             return FromMarkup(descriptor.Id, null, markup);
+        }
+
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="suppressor">The descriptor that is expected to suppress diagnostics.</param>
+        /// <param name="markup">The code with diagnostic positions indicated with ↓ (alt + 25).</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources FromMarkup(DiagnosticSuppressor suppressor, string markup)
+        {
+            if (suppressor is null)
+            {
+                throw new ArgumentNullException(nameof(suppressor));
+            }
+
+            if (markup is null)
+            {
+                throw new ArgumentNullException(nameof(markup));
+            }
+
+            return FromMarkup(suppressor, new[] { markup });
+        }
+
+        /// <summary>
+        /// Get the expected diagnostics and cleaned sources.
+        /// </summary>
+        /// <param name="suppressor">The suppressor that is expected to suppress diagnostics.</param>
+        /// <param name="markup">The code with diagnostic positions indicated with ↓ (alt + 25).</param>
+        /// <returns>An instance of <see cref="DiagnosticsAndSources"/>.</returns>
+        public static DiagnosticsAndSources FromMarkup(DiagnosticSuppressor suppressor, IReadOnlyList<string> markup)
+        {
+            if (suppressor is null)
+            {
+                throw new ArgumentNullException(nameof(suppressor));
+            }
+
+            if (markup is null)
+            {
+                throw new ArgumentNullException(nameof(markup));
+            }
+
+            RoslynAssert.VerifySingleSupportedSuppression(suppressor, out var descriptor);
+            return FromMarkup(descriptor.SuppressedDiagnosticId, null, markup);
         }
 
         /// <summary>

@@ -92,12 +92,25 @@
                     ImmutableArray.Create(analyzer),
                     project.AnalyzerOptions,
                     CancellationToken.None);
-                var analyzerDiagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).ConfigureAwait(false);
-                return new ProjectDiagnostics(
-                    analyzer,
-                    project,
-                    compilation.GetDiagnostics(CancellationToken.None),
-                    analyzerDiagnostics);
+
+                if (analyzer is DiagnosticSuppressor)
+                {
+                    var compilerDiagnostics = await withAnalyzers.GetAllDiagnosticsAsync(CancellationToken.None).ConfigureAwait(false);
+                    return new ProjectDiagnostics(
+                        analyzer,
+                        project,
+                        compilerDiagnostics,
+                        ImmutableArray<Diagnostic>.Empty);
+                }
+                else
+                {
+                    var analyzerDiagnostics = await withAnalyzers.GetAnalyzerDiagnosticsAsync(CancellationToken.None).ConfigureAwait(false);
+                    return new ProjectDiagnostics(
+                        analyzer,
+                        project,
+                        compilation.GetDiagnostics(CancellationToken.None),
+                        analyzerDiagnostics);
+                }
             }
         }
 

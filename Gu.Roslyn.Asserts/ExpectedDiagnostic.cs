@@ -83,7 +83,7 @@
         /// <summary>
         /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the id from <paramref name="descriptor"/>.
         /// </summary>
-        /// <param name="descriptor">The expected diagnostic id.</param>
+        /// <param name="descriptor">The expected diagnostic descriptor.</param>
         /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
         public static ExpectedDiagnostic Create(DiagnosticDescriptor descriptor)
         {
@@ -93,6 +93,21 @@
             }
 
             return new ExpectedDiagnostic(descriptor.Id, null, NoPosition);
+        }
+
+        /// <summary>
+        /// Create a new instance of <see cref="ExpectedDiagnostic"/> and use the suppressed id from <paramref name="descriptor"/>.
+        /// </summary>
+        /// <param name="descriptor">The expected suppression descriptor.</param>
+        /// <returns>A new instance of <see cref="ExpectedDiagnostic"/>.</returns>
+        public static ExpectedDiagnostic Create(SuppressionDescriptor descriptor)
+        {
+            if (descriptor is null)
+            {
+                throw new ArgumentNullException(nameof(descriptor));
+            }
+
+            return new ExpectedDiagnostic(descriptor.SuppressedDiagnosticId, null, NoPosition);
         }
 
         /// <summary>
