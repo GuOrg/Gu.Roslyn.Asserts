@@ -158,27 +158,11 @@
         /// <param name="expectedId">The descriptor of the supported diagnostic.</param>
         internal static void VerifyAnalyzerSupportsDiagnostic(DiagnosticAnalyzer analyzer, string expectedId)
         {
-            if (analyzer.SupportedDiagnostics.Length > 0 &&
-                analyzer.SupportedDiagnostics.Length != analyzer.SupportedDiagnostics.Select(x => x.Id).Distinct().Count())
-            {
-                var message = $"{analyzer.GetType().Name}.SupportedDiagnostics has more than one descriptor with ID '{analyzer.SupportedDiagnostics.ToLookup(x => x.Id).First(x => x.Count() > 1).Key}'.";
-                throw new AssertException(message);
-            }
-
-            var descriptors = analyzer.SupportedDiagnostics.Count(x => x.Id == expectedId);
-            if (descriptors == 0)
+            if (!analyzer.SupportedDiagnostics.Any(x => x.Id == expectedId))
             {
                 var message = $"{analyzer.GetType().Name} does not produce a diagnostic with ID '{expectedId}'.{Environment.NewLine}" +
                               $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {Format(analyzer.SupportedDiagnostics)}.{Environment.NewLine}" +
                               $"The expected diagnostic is: '{expectedId}'.";
-                throw new AssertException(message);
-            }
-
-            if (descriptors > 1)
-            {
-                var message = $"{analyzer.GetType().Name} supports multiple diagnostics with ID '{expectedId}'.{Environment.NewLine}" +
-                              $"{analyzer.GetType().Name}.{nameof(analyzer.SupportedDiagnostics)}: {Format(analyzer.SupportedDiagnostics)}.{Environment.NewLine}" +
-                              $"The expected diagnostic is: {expectedId}.";
                 throw new AssertException(message);
             }
         }

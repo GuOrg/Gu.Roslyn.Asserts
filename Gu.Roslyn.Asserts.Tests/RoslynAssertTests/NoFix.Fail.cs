@@ -120,17 +120,6 @@ namespace N
             }
 
             [Test]
-            public static void DuplicateId()
-            {
-                var expected = "SyntaxNodeAnalyzer.SupportedDiagnostics has more than one descriptor with ID 'ID1'.";
-                var analyzer = new SyntaxNodeAnalyzer(Descriptors.Id1, Descriptors.Id1Duplicate);
-                var fix = new DuplicateIdFix();
-                var expectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.Id1);
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoFix(analyzer, fix, expectedDiagnostic, string.Empty));
-                Assert.AreEqual(expected, exception.Message);
-            }
-
-            [Test]
             public static void WhenNoAnalyzerDiagnosticsButCompilerError()
             {
                 var code = @"
