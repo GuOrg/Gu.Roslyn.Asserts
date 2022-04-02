@@ -186,6 +186,76 @@ namespace N
 
 If the analyzer supports many diagnostics the overload with `ExpectedDiagnostic` must be used. This suppresses all diagnstics other than the expected.
 
+# RoslynAssert.Suppressed
+
+Use `RoslynAssert.Suppressed(suppressor, code)` to test
+that the suppressor suppresses an error or warning at the position
+indicated by the character `↓`. To type this character, hold down <kbd>Alt</kbd>
+and use the numpad to type the number <kbd>2</kbd><kbd>5</kbd>.
+
+A typical test fixture looks like:
+
+```c#
+public class Suppression
+{
+    private static readonly DiagnosticSuppressor Suppressor = new YourSuppressor();
+
+    [Test]
+    public void M()
+    {
+        var code = @"
+namespace N
+{
+    class C
+    {
+        public string ↓F;
+    }
+}";
+        RoslynAssert.NotSuppressed(Suppressor, code);
+    }
+
+    [Test]
+    public void M()
+    {
+        var code = @"
+namespace N
+{
+    class C
+    {
+        public string ↓Magic;
+    }
+}";
+        RoslynAssert.Suppressed(Suppressor, code);
+
+    }
+    ...
+}
+```
+
+If the suppressor can suppress many diagnostics you can pass in a descriptor so that only diagnostics matching it are checked.
+
+```c#
+public class Diagnostics
+{
+    private static readonly DiagnosticSuppressor Suppressor = new YourSuppressor();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(YourSuppressor.Descriptor);
+
+    [Test]
+    public void M()
+    {
+        var code = @"
+namespace N
+{
+    class ↓Foo
+    {
+    }
+}";
+        RoslynAssert.Suppressed(Analyzer, ExpectedDiagnostic, code);
+    }
+    ...
+}
+```
+
 # CodeFix
 Test that the analyzer reports an error or warning at the position indicated by the character `↓` and that the code fix fixes it and produces the expected code.
 To type this character, hold down <kbd>Alt</kbd> and use the numpad to type the number <kbd>2</kbd><kbd>5</kbd>.

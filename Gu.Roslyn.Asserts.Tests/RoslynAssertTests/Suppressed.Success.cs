@@ -19,7 +19,7 @@ namespace N
 {
     public class C
     {
-        public string F;
+        public string ↓F;
     }
 }";
                 RoslynAssert.NotSuppressed(Suppressor, code);
@@ -33,7 +33,7 @@ namespace N
 {
     public class C
     {
-        public string Magic;
+        public string ↓Magic;
     }
 }";
                 RoslynAssert.Suppressed(Suppressor, code);
@@ -47,10 +47,11 @@ namespace N
 {
     public class C
     {
-        public string Magic;
+        public string ↓Magic;
     }
 }";
-                RoslynAssert.SuppressedBy(Suppressor, AllowUnassignedMagicMembers.FieldNameIsMagic, code);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(AllowUnassignedMagicMembers.FieldNameIsMagic);
+                RoslynAssert.Suppressed(Suppressor, expectedDiagnostic, code);
             }
 
             [Test]
@@ -61,7 +62,7 @@ namespace N
 {
     public class C
     {
-        public string Magic { get; set; }
+        public string ↓Magic { get; set; }
     }
 }";
                 RoslynAssert.Suppressed(Suppressor, code);
@@ -75,10 +76,11 @@ namespace N
 {
     public class C
     {
-        public string Magic { get; set; }
+        public string ↓Magic { get; set; }
     }
 }";
-                RoslynAssert.SuppressedBy(Suppressor, AllowUnassignedMagicMembers.PropertyNameIsMagic, code);
+                var expectedDiagnostic = ExpectedDiagnostic.Create(AllowUnassignedMagicMembers.PropertyNameIsMagic);
+                RoslynAssert.Suppressed(Suppressor, expectedDiagnostic, code);
             }
         }
     }

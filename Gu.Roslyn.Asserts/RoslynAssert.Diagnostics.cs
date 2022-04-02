@@ -229,86 +229,12 @@
             NoDiagnostics(diagnostics.SelectMany(x => x.FilterCompilerDiagnostics(settings.AllowedCompilerDiagnostics)));
         }
 
-        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ProjectDiagnostics> diagnostics, string? expectedMessage = null)
+        private static void VerifyDiagnostics(DiagnosticsAndSources diagnosticsAndSources, IReadOnlyList<ProjectDiagnostics> diagnostics)
         {
-            if (diagnosticsAndSources.ExpectedDiagnostics.Count == 0)
-            {
-                throw new AssertException("Expected code to have at least one error position indicated with '↓'");
-            }
-
-            if (AnyMatch(diagnosticsAndSources.ExpectedDiagnostics, diagnostics.SelectMany(x => x.AnalyzerDiagnostics)))
-            {
-                if (expectedMessage != null)
-                {
-                    foreach (var actual in diagnostics.SelectMany(x => x.AnalyzerDiagnostics))
-                    {
-                        var actualMessage = actual.GetMessage(CultureInfo.InvariantCulture);
-                        TextAssert.AreEqual(expectedMessage, actualMessage, $"Expected and actual diagnostic message for the diagnostic {actual} does not match");
-                    }
-                }
-
-                return;
-            }
-
-            var error = StringBuilderPool.Borrow();
-            if (diagnostics.SelectMany(x => x.AnalyzerDiagnostics).TrySingle(out var single) &&
-                diagnosticsAndSources.ExpectedDiagnostics.Count == 1 &&
-                diagnosticsAndSources.ExpectedDiagnostics[0].Id == single.Id)
-            {
-                if (diagnosticsAndSources.ExpectedDiagnostics[0].PositionMatches(single) &&
-                    !diagnosticsAndSources.ExpectedDiagnostics[0].MessageMatches(single))
-                {
-                    CodeAssert.AreEqual(diagnosticsAndSources.ExpectedDiagnostics[0].Message!, single.GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
-                }
-            }
-
-            var allDiagnostics = diagnostics.SelectMany(x => x.All()).ToArray();
-            error.AppendLine("Expected and actual diagnostics do not match.")
-                 .AppendLine("Expected:");
-            foreach (var expected in diagnosticsAndSources.ExpectedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
-            {
-                error.AppendLine(expected.ToString(diagnosticsAndSources.Code, "  "));
-            }
-
-            if (allDiagnostics.Length == 0)
-            {
-                error.AppendLine("Actual: <no diagnostics>");
-            }
-            else
-            {
-                error.AppendLine("Actual:");
-                foreach (var diagnostic in allDiagnostics.OrderBy(x => x.Location.SourceSpan.Start))
-                {
-                    error.AppendLine(diagnostic.ToErrorString("  "));
-                }
-            }
-
-            throw new AssertException(error.Return());
-
-            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IEnumerable<Diagnostic> diagnostics)
-            {
-                foreach (var diagnostic in diagnostics)
-                {
-                    if (expectedDiagnostics.Any(x => x.Matches(diagnostic)))
-                    {
-                        continue;
-                    }
-
-                    return false;
-                }
-
-                foreach (var expected in expectedDiagnostics)
-                {
-                    if (diagnostics.Any(x => expected.Matches(x)))
-                    {
-                        continue;
-                    }
-
-                    return false;
-                }
-
-                return true;
-            }
+            VerifyDiagnostics(
+                diagnosticsAndSources,
+                diagnostics.SelectMany(x => x.AnalyzerDiagnostics).ToList(),
+                diagnostics.SelectMany(x => x.All()).ToList());
         }
     }
 }

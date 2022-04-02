@@ -1,6 +1,7 @@
 ﻿// ReSharper disable RedundantNameQualifier
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
+    using System;
     using Gu.Roslyn.Asserts.Tests.TestHelpers.Suppressors;
     using Microsoft.CodeAnalysis.Diagnostics;
     using NUnit.Framework;
@@ -12,7 +13,7 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
             private static readonly DiagnosticSuppressor Suppressor = new AllowUnassignedMagicMembers();
 
             [Test]
-            public static void FailsINothingToSuppress()
+            public static void FailsIfNothingToSuppress()
             {
                 const string code = @"  
 namespace N
@@ -22,8 +23,9 @@ namespace N
         public string? F;
     }
 }";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Suppressed(Suppressor, code));
-                CodeAssert.AreEqual(exception.Message, "Found no errors to suppress");
+                var expected = "Expected code to have at least one error position indicated with '↓'";
+                var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Suppressed(Suppressor, code));
+                CodeAssert.AreEqual(expected, exception.Message);
             }
 
             [Test]
@@ -37,7 +39,7 @@ namespace N
         public string M()
         {
             string Magic;
-            return Magic;
+            return ↓Magic;
         }
     }
 }";
@@ -53,47 +55,11 @@ namespace N
 {
     public class C
     {
-        public string F;
+        public string ↓F;
     }
 }";
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Suppressed(Suppressor, code));
                 Assert.That(exception.Message, Does.Contain(AllowUnassignedMagicMembers.FieldNameIsMagic.SuppressedDiagnosticId));
-            }
-
-            [Test]
-            public static void DoesFailIfSuppressedByWrongSuppressionDescriptor()
-            {
-                const string code = @"  
-namespace N
-{
-    public class C
-    {
-        public string Magic;
-    }
-}";
-                var expected = "Expected diagnostic to be suppressed by AllowUnassignedMagicMembers:Property is called Magic but was:\r\n" +
-                               "AllowUnassignedMagicMembers:Field is called Magic\r\n";
-                var exception = Assert.Throws<AssertException>(() =>
-                    RoslynAssert.SuppressedBy(Suppressor, AllowUnassignedMagicMembers.PropertyNameIsMagic, code));
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
-
-            [Test]
-            public static void DoesSuppressDiagnosticAboutMagicPropertiesWithWrongSuppressionDescriptor()
-            {
-                const string code = @"  
-namespace N
-{
-    public class C
-    {
-        public string Magic { get; set; }
-    }
-}";
-                var expected = "Expected diagnostic to be suppressed by AllowUnassignedMagicMembers:Field is called Magic but was:\r\n" +
-                               "AllowUnassignedMagicMembers:Property is called Magic\r\n";
-                var exception = Assert.Throws<AssertException>(() =>
-                    RoslynAssert.SuppressedBy(Suppressor, AllowUnassignedMagicMembers.FieldNameIsMagic, code));
-                CodeAssert.AreEqual(expected, exception.Message);
             }
         }
     }

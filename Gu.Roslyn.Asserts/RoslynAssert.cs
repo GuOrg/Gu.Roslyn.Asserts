@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -69,6 +70,19 @@
         }
 
         /// <summary>
+        /// Check that the <paramref name="suppressor"/> supports <paramref name="expectedDiagnostics"/>.
+        /// </summary>
+        /// <param name="suppressor">The <see cref="DiagnosticSuppressor"/>.</param>
+        /// <param name="expectedDiagnostics">The <see cref="IReadOnlyList{ExpectedDiagnostic}"/>.</param>
+        internal static void VerifySuppressorSupportsDiagnostics(DiagnosticSuppressor suppressor, IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics)
+        {
+            foreach (var expectedDiagnostic in expectedDiagnostics)
+            {
+                VerifySuppressorSupportsDiagnostic(suppressor, expectedDiagnostic.Id);
+            }
+        }
+
+        /// <summary>
         /// Check that the <paramref name="analyzer"/> exports <paramref name="descriptors"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
@@ -110,6 +124,34 @@
         }
 
         /// <summary>
+        /// Check that the suppressor supports a diagnostic with <paramref name="descriptor"/>.
+        /// </summary>
+        /// <param name="suppressor">The <see cref="DiagnosticSuppressor"/>.</param>
+        /// <param name="descriptor">The descriptor of the supported suppression.</param>
+        internal static void VerifySingleSupportedSuppression(DiagnosticSuppressor suppressor, out SuppressionDescriptor descriptor)
+        {
+            if (suppressor.SupportedSuppressions.Length == 0)
+            {
+                var message = $"{suppressor.GetType().Name}.SupportedSuppressions returns an empty array.";
+                throw new AssertException(message);
+            }
+
+            if (suppressor.SupportedSuppressions.Select(x => x.SuppressedDiagnosticId).Distinct().Count() > 1)
+            {
+                var message = "This can only be used for analyzers with one SuppressedDiagnosticId.\r\n" +
+                              "Prefer overload with ExpectedDiagnostic.";
+                throw new AssertException(message);
+            }
+
+            descriptor = suppressor.SupportedSuppressions[0];
+            if (descriptor is null)
+            {
+                var message = $"{suppressor.GetType().Name}.SupportedDiagnostics[0] returns null.";
+                throw new AssertException(message);
+            }
+        }
+
+        /// <summary>
         /// Check that the analyzer supports a diagnostic with <paramref name="expectedId"/>.
         /// </summary>
         /// <param name="analyzer">The <see cref="DiagnosticAnalyzer"/>.</param>
@@ -141,6 +183,99 @@
             }
         }
 
+        /// <summary>
+        /// Check that the suppressor supports a diagnostic with <paramref name="expectedId"/>.
+        /// </summary>
+        /// <param name="suppressor">The <see cref="DiagnosticSuppressor"/>.</param>
+        /// <param name="expectedId">The descriptor of the supported diagnostic.</param>
+        internal static void VerifySuppressorSupportsDiagnostic(DiagnosticSuppressor suppressor, string expectedId)
+        {
+            if (!suppressor.SupportedSuppressions.Any(x => x.SuppressedDiagnosticId == expectedId))
+            {
+                var message = $"{suppressor.GetType().Name} does not supppress a diagnostic with ID '{expectedId}'.{Environment.NewLine}" +
+                              $"{suppressor.GetType().Name}.{nameof(suppressor.SupportedSuppressions)}: {Format(suppressor.SupportedSuppressions)}.{Environment.NewLine}" +
+                              $"The expected diagnostic is: '{expectedId}'.";
+                throw new AssertException(message);
+            }
+        }
+
+        private static void VerifyDiagnostics(
+            DiagnosticsAndSources diagnosticsAndSources,
+            IReadOnlyList<Diagnostic> selectedDiagnostics,
+            IReadOnlyList<Diagnostic> allDiagnostics)
+        {
+            var expectedDiagnostics = diagnosticsAndSources.ExpectedDiagnostics;
+
+            if (expectedDiagnostics.Count == 0)
+            {
+                throw new AssertException("Expected code to have at least one error position indicated with '↓'");
+            }
+
+            if (AnyMatch(expectedDiagnostics, selectedDiagnostics))
+            {
+                return;
+            }
+
+            if (selectedDiagnostics.TrySingle(out var single) &&
+                expectedDiagnostics.Count == 1 &&
+                expectedDiagnostics[0].Id == single.Id)
+            {
+                if (expectedDiagnostics[0].PositionMatches(single) &&
+                    !expectedDiagnostics[0].MessageMatches(single))
+                {
+                    CodeAssert.AreEqual(expectedDiagnostics[0].Message!, single.GetMessage(CultureInfo.InvariantCulture), "Expected and actual messages do not match.");
+                }
+            }
+
+            var error = StringBuilderPool.Borrow();
+            error.AppendLine("Expected and actual diagnostics do not match.")
+                 .AppendLine("Expected:");
+            foreach (var expected in expectedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
+            {
+                error.AppendLine(expected.ToString(diagnosticsAndSources.Code, "  "));
+            }
+
+            if (allDiagnostics.Count == 0)
+            {
+                error.AppendLine("Actual: <no diagnostics>");
+            }
+            else
+            {
+                error.AppendLine("Actual:");
+                foreach (var diagnostic in allDiagnostics.OrderBy(x => x.Location.SourceSpan.Start))
+                {
+                    error.AppendLine(diagnostic.ToErrorString("  "));
+                }
+            }
+
+            throw new AssertException(error.Return());
+
+            static bool AnyMatch(IReadOnlyList<ExpectedDiagnostic> expectedDiagnostics, IReadOnlyList<Diagnostic> diagnostics)
+            {
+                foreach (var diagnostic in diagnostics)
+                {
+                    if (expectedDiagnostics.Any(x => x.Matches(diagnostic)))
+                    {
+                        continue;
+                    }
+
+                    return false;
+                }
+
+                foreach (var expected in expectedDiagnostics)
+                {
+                    if (diagnostics.Any(x => expected.Matches(x)))
+                    {
+                        continue;
+                    }
+
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
         private static void VerifyCodeFixSupportsAnalyzer(DiagnosticAnalyzer analyzer, CodeFixProvider fix)
         {
             if (!analyzer.SupportedDiagnostics.Select(d => d.Id).Intersect(fix.FixableDiagnosticIds).Any())
@@ -155,6 +290,11 @@
         private static string Format(IEnumerable<DiagnosticDescriptor> supportedDiagnostics)
         {
             return Format(supportedDiagnostics.Select(x => x.Id));
+        }
+
+        private static string Format(IEnumerable<SuppressionDescriptor> supportedSuppressions)
+        {
+            return Format(supportedSuppressions.Select(x => x.SuppressedDiagnosticId));
         }
 
         private static string Format(IEnumerable<string> ids)
