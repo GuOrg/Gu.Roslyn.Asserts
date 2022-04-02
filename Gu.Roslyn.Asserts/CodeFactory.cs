@@ -576,5 +576,22 @@
                 settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
                 settings.MetadataReferences);
         }
+
+        /// <summary>
+        /// Create a <see cref="Solution"/> for <paramref name="code"/>.
+        /// </summary>
+        /// <param name="code">The code to create the solution from with.</param>
+        /// <param name="suppressor">The <see cref="DiagnosticSuppressor"/> to check <paramref name="code"/> with.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        /// <returns>A <see cref="Solution"/>.</returns>
+        internal static Solution CreateSolution(DiagnosticSuppressor suppressor, IEnumerable<string> code, Settings settings)
+        {
+            return CreateSolution(
+                code,
+                settings.ParseOptions,
+                settings.CompilationOptions.WithSuppressableAsError(suppressor.SupportedSuppressions)
+                                           .WithReportSuppressedDiagnostics(reportSuppressedDiagnostics: true),
+                settings.MetadataReferences);
+        }
     }
 }

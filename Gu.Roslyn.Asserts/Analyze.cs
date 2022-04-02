@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
@@ -143,6 +144,35 @@
                 var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
                                   throw new InvalidOperationException("project.GetCompilationAsync() returned null");
                 results.AddRange(compilation.GetDiagnostics(CancellationToken.None));
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Creates a solution, compiles it and returns all diagnostics.
+        /// </summary>
+        /// <param name="suppressor">The suppressor to run to suppress any error messages.</param>
+        /// <param name="solution">The solution.</param>
+        /// <returns>A list with diagnostics.</returns>
+        public static IReadOnlyList<Diagnostic> GetAllDiagnostics(DiagnosticSuppressor suppressor, Solution solution)
+        {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            var results = new List<Diagnostic>();
+            foreach (var project in solution.Projects)
+            {
+                var compilation = project.GetCompilationAsync(CancellationToken.None).GetAwaiter().GetResult() ??
+                                  throw new InvalidOperationException("project.GetCompilationAsync() returned null");
+                var withAnalyzers = compilation.WithAnalyzers(
+                    ImmutableArray.Create<DiagnosticAnalyzer>(suppressor),
+                    project.AnalyzerOptions,
+                    CancellationToken.None);
+
+                results.AddRange(withAnalyzers.GetAllDiagnosticsAsync(CancellationToken.None).GetAwaiter().GetResult());
             }
 
             return results;
