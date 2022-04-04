@@ -106,12 +106,8 @@ namespace N
                 var fix = new DoNotUseUnderscoreFix();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.CodeFix(analyzer, fix, before, string.Empty));
                 var expected = @"Expected and actual diagnostics do not match.
-Expected:
-  SA1309 
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
-Actual:
-  SA1309 Field '_f1' must not begin with an underscore
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
+Matched: 1 diagnostic(s).
+Missed:
   SA1309 Field '_f2' must not begin with an underscore
     at line 6 and character 29 in file C.cs | private readonly int ↓_f2 = 2;
 ";

@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>4.1.0</Version>
+    <Version>4.2.0</Version>
     <Authors>Johan Larsson, milleniumbug</Authors>
     <Copyright>Johan Larsson 2017</Copyright>
     <PackageProjectUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</PackageProjectUrl>
@@ -27,6 +27,8 @@
     <PackageTags>Roslyn Diagnostic Analyzer Test</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>
+      4.2.0
+      FEATURE: only show mismatched diagnostics, making things easier when there are lots.
       4.1.0
       FEATURE: add support for DiagnostisSuppressor with RoslynAssert.Suppressed
       4.0.4
