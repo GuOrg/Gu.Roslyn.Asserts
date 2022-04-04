@@ -211,22 +211,34 @@
                 }
             }
 
+            var missedDiagnostics = expectedDiagnostics.Where(e => !allDiagnostics.Any(a => e.Matches(a))).ToList();
+            var unexpectedDiagnostics = allDiagnostics.Where(a => !expectedDiagnostics.Any(e => e.Matches(a))).ToList();
+            int matchedDiagnostics = expectedDiagnostics.Count - missedDiagnostics.Count;
+
             var error = StringBuilderPool.Borrow();
-            error.AppendLine("Expected and actual diagnostics do not match.")
-                 .AppendLine("Expected:");
-            foreach (var expected in expectedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
+            error.AppendLine("Expected and actual diagnostics do not match.");
+            if (matchedDiagnostics > 0)
             {
-                error.AppendLine(expected.ToString(diagnosticsAndSources.Code, "  "));
+                error.AppendLine($"Matched: {matchedDiagnostics} diagnostic(s).");
+            }
+
+            if (missedDiagnostics.Count > 0)
+            {
+                error.AppendLine("Expected:");
+                foreach (var expected in missedDiagnostics.OrderBy(x => x.Span.StartLinePosition))
+                {
+                    error.AppendLine(expected.ToString(diagnosticsAndSources.Code, "  "));
+                }
             }
 
             if (allDiagnostics.Count == 0)
             {
                 error.AppendLine("Actual: <no diagnostics>");
             }
-            else
+            else if (unexpectedDiagnostics.Count > 0)
             {
-                error.AppendLine("Actual:");
-                foreach (var diagnostic in allDiagnostics.OrderBy(x => x.Location.SourceSpan.Start))
+                error.AppendLine(matchedDiagnostics > 0 ? "Missed:" : "Actual:");
+                foreach (var diagnostic in unexpectedDiagnostics.OrderBy(x => x.Location.SourceSpan.Start))
                 {
                     error.AppendLine(diagnostic.ToErrorString("  "));
                 }

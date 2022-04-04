@@ -462,14 +462,35 @@ namespace N
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
                 var expected = @"Expected and actual diagnostics do not match.
-Expected:
-  SA1309 
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
-Actual:
-  SA1309 Field '_f1' must not begin with an underscore
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
+Matched: 1 diagnostic(s).
+Missed:
   SA1309 Field '_f2' must not begin with an underscore
     at line 6 and character 29 in file C.cs | private readonly int ↓_f2 = 2;
+";
+                CodeAssert.AreEqual(expected, exception.Message);
+            }
+
+            [Test]
+            public static void OneErrorButTwoIndicated()
+            {
+                var code = @"
+namespace N
+{
+    class C
+    {
+        private readonly int ↓_f1 = 1;
+        private readonly int ↓f2 = 2;
+
+        public int M() => _f1 + f2;
+    }
+}";
+                var analyzer = new FieldNameMustNotBeginWithUnderscore();
+                var exception = Assert.Throws<AssertException>(() => RoslynAssert.Diagnostics(analyzer, code));
+                var expected = @"Expected and actual diagnostics do not match.
+Matched: 1 diagnostic(s).
+Expected:
+  SA1309 
+    at line 6 and character 29 in file C.cs | private readonly int ↓f2 = 2;
 ";
                 CodeAssert.AreEqual(expected, exception.Message);
             }
@@ -554,12 +575,8 @@ namespace N
 }";
                 var analyzer = new FieldNameMustNotBeginWithUnderscore();
                 var expected = @"Expected and actual diagnostics do not match.
-Expected:
-  SA1309 
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
-Actual:
-  SA1309 Field '_f1' must not begin with an underscore
-    at line 5 and character 29 in file C.cs | private readonly int ↓_f1 = 1;
+Matched: 1 diagnostic(s).
+Missed:
   SA1309 Field '_f2' must not begin with an underscore
     at line 6 and character 29 in file C.cs | private readonly int ↓_f2 = 2;
 ";
