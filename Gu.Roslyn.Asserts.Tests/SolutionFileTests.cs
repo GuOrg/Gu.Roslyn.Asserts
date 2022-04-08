@@ -44,7 +44,9 @@
             var analyzersProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Analyzers");
             CollectionAssert.IsEmpty(analyzersProject.ProjectReferences);
             var testProject = sln.Projects.Single(x => x.Name == "Gu.Roslyn.Asserts.Tests");
-            CollectionAssert.AreEqual(new[] { assertsProject.Id }, testProject.ProjectReferences.Select(x => x.ProjectId).ToArray());
+            CollectionAssert.AreEqual(
+                new[] { assertsProject.Id, analyzersProject.Id },
+                testProject.ProjectReferences.Select(x => x.ProjectId).ToArray());
         }
     }
 }
