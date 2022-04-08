@@ -31,6 +31,54 @@ namespace N
         }
 
         [Test]
+        public static void SuppressedOneParamWithPosition()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderSuppressor Suppressor = new PlaceholderSuppressor();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""↓class C { }"";
+            RoslynAssert.Suppressed(Suppressor, code);
+        }
+    }
+}";
+            Assert.Valid(Code.PlaceholderSuppressor, code);
+        }
+
+        [Test]
+        public static void NotSuppressedOneParamWithPosition()
+        {
+            var code = @"
+namespace N
+{
+    using Gu.Roslyn.Asserts;
+    using NUnit.Framework;
+
+    public static class C
+    {
+        private static readonly PlaceholderSuppressor Suppressor = new PlaceholderSuppressor();
+
+        [Test]
+        public static void M()
+        {
+            var code = ""↓class C { }"";
+            RoslynAssert.NotSuppressed(Suppressor, code);
+        }
+    }
+}";
+            Assert.Valid(Code.PlaceholderSuppressor, code);
+        }
+
+        [Test]
         public static void DiagnosticsOneParamWithPositionAssertReplace()
         {
             var code = @"

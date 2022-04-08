@@ -120,7 +120,7 @@ namespace Gu.Roslyn.Asserts.Analyzers
                                     return parameter switch
                                     {
                                         { Name: "before" } => true,
-                                        { Name: "code", ContainingSymbol: IMethodSymbol { Name: "Diagnostics" } } => true,
+                                        { Name: "code", ContainingSymbol: IMethodSymbol { Name: "Diagnostics" or "Suppressed" or "NotSuppressed" } } => true,
                                         _ => false,
                                     };
                                 }
@@ -213,6 +213,8 @@ namespace Gu.Roslyn.Asserts.Analyzers
                 { Name: "code", ContainingSymbol.Name: "Valid" } => true,
                 { Name: "code", ContainingSymbol.Name: "Diagnostics" } => true,
                 { Name: "code", ContainingSymbol.Name: "NoDiagnostics" } => true,
+                { Name: "code", ContainingSymbol.Name: "Suppressed" } => true,
+                { Name: "code", ContainingSymbol.Name: "NotSuppressed" } => true,
                 { Name: "before", ContainingSymbol.Name: "CodeFix" } => true,
                 { Name: "after", ContainingSymbol.Name: "CodeFix" } => true,
                 { Name: "before", ContainingSymbol.Name: "Refactoring" } => true,
