@@ -26,7 +26,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>4.0.0</Version>
+    <Version>4.1.0</Version>
     <Description>Analyzers and code fixes for Gu.Roslyn.Asserts. Fixes breaking changes etc.</Description>
     <Authors>Johan Larsson.</Authors>
     <DevelopmentDependency>true</DevelopmentDependency>
@@ -35,6 +35,9 @@
     <RepositoryUrl>https://github.com/GuOrg/Gu.Roslyn.Asserts</RepositoryUrl>
     <PackageTags>Roslyn Diagnostic Analyzer</PackageTags>
     <PackageReleaseNotes>
+      4.1.0
+      FEATURE: add support for DiagnostisSuppressor with RoslynAssert.Suppressed
+      4.0.0
       BUGFIX: handle breaking change in Roslyn 3.3.1
     </PackageReleaseNotes>
   </PropertyGroup>

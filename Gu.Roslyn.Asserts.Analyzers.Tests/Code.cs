@@ -24,6 +24,29 @@ namespace N
     }
 }";
 
+        public const string PlaceholderSuppressor = @"
+namespace N
+{
+    using System.Collections.Immutable;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.Diagnostics;
+
+    internal class PlaceholderSuppressor : DiagnosticSuppressor
+    {
+        private static readonly SuppressionDescriptor Placeholder = new(
+            id: nameof(PlaceholderSuppressor),
+            suppressedDiagnosticId: ""CS8618"",
+            justification: ""Placeholder"");
+
+        public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } =
+            ImmutableArray.Create(Placeholder);
+
+        public override void ReportSuppressions(SuppressionAnalysisContext context)
+        {
+        }
+    }
+}";
+
         public const string PlaceholderFix = @"
 namespace N
 {
