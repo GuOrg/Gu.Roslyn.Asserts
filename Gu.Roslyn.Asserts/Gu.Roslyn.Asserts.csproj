@@ -28,6 +28,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>
       4.2.0
+      FEATURE: add extra overload for RoslynAssert.NotSuppressed.
       FEATURE: only show mismatched diagnostics, making things easier when there are lots.
       4.1.0
       FEATURE: add support for DiagnostisSuppressor with RoslynAssert.Suppressed

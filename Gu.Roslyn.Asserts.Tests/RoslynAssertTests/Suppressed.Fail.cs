@@ -15,6 +15,7 @@ namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
             [Test]
             public static void FailsIfNothingToSuppress()
             {
+#pragma warning disable GURA02 // Indicate position
                 const string code = @"  
 namespace N
 {
@@ -23,6 +24,7 @@ namespace N
         public string? F;
     }
 }";
+#pragma warning restore GURA02 // Indicate position
                 var expected = "Expected code to have at least one error position indicated with '↓'";
                 var exception = Assert.Throws<InvalidOperationException>(() => RoslynAssert.Suppressed(Suppressor, code));
                 CodeAssert.AreEqual(expected, exception.Message);

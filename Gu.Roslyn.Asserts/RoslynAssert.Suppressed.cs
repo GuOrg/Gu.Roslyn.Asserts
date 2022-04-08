@@ -248,6 +248,33 @@
         }
 
         /// <summary>
+        /// Verifies that <paramref name="code"/> produces the expected diagnostics
+        /// and that these are suppressed by <paramref name="suppressor"/>.
+        /// </summary>
+        /// <param name="suppressor">The <see cref="DiagnosticSuppressor"/> to check <paramref name="code"/> with.</param>
+        /// <param name="expectedDiagnostic">The <see cref="ExpectedDiagnostic"/> with information about the expected <see cref="Diagnostic"/>. If <paramref name="suppressor"/> supports more than one <see cref="DiagnosticDescriptor.Id"/> this must be provided.</param>
+        /// <param name="code">The code to analyze using <paramref name="suppressor"/>. Analyzing the code is not expected to suppress any errors or warnings.</param>
+        /// <param name="settings">The <see cref="Settings"/>.</param>
+        public static void NotSuppressed(DiagnosticSuppressor suppressor, ExpectedDiagnostic expectedDiagnostic, string code, Settings? settings = null)
+        {
+            if (suppressor is null)
+            {
+                throw new ArgumentNullException(nameof(suppressor));
+            }
+
+            if (expectedDiagnostic is null)
+            {
+                throw new ArgumentNullException(nameof(expectedDiagnostic));
+            }
+
+            SuppressedOrNot(
+                suppressor,
+                DiagnosticsAndSources.Create(expectedDiagnostic, code),
+                settings,
+                d => d.IsSuppressed);
+        }
+
+        /// <summary>
         /// Verifies that <paramref name="diagnosticsAndSources"/> produces the expected diagnostics
         /// and that these are (not) suppressed by <paramref name="suppressor"/>.
         /// </summary>
