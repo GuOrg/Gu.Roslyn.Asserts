@@ -4,6 +4,7 @@ static Gu.Roslyn.Asserts.CsharpCompilationOptionsExtensions.WithSuppressableAsEr
 static Gu.Roslyn.Asserts.DiagnosticsAndSources.FromMarkup(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, string! markup) -> Gu.Roslyn.Asserts.DiagnosticsAndSources!
 static Gu.Roslyn.Asserts.DiagnosticsAndSources.FromMarkup(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, System.Collections.Generic.IReadOnlyList<string!>! markup) -> Gu.Roslyn.Asserts.DiagnosticsAndSources!
 static Gu.Roslyn.Asserts.ExpectedDiagnostic.Create(Microsoft.CodeAnalysis.SuppressionDescriptor! descriptor) -> Gu.Roslyn.Asserts.ExpectedDiagnostic!
+static Gu.Roslyn.Asserts.RoslynAssert.NotSuppressed(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, string! code, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.NotSuppressed(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, string! code, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Suppressed(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, Gu.Roslyn.Asserts.DiagnosticsAndSources! diagnosticsAndSources, Gu.Roslyn.Asserts.Settings? settings = null) -> void
 static Gu.Roslyn.Asserts.RoslynAssert.Suppressed(Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor! suppressor, Gu.Roslyn.Asserts.ExpectedDiagnostic! expectedDiagnostic, params string![]! code) -> void

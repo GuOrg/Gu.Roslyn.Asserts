@@ -26,6 +26,23 @@ namespace N
             }
 
             [Test]
+            public static void DoesNotSuppressSpecificDiagnostics()
+            {
+                const string code = @"  
+namespace N
+{
+    public class C
+    {
+        public string ↓F;
+    }
+}";
+                RoslynAssert.NotSuppressed(
+                    Suppressor,
+                    ExpectedDiagnostic.Create(AllowUnassignedMagicMembers.FieldNameIsMagic),
+                    code);
+            }
+
+            [Test]
             public static void DoesSuppressDiagnosticAboutMagicField()
             {
                 const string code = @"  
