@@ -284,8 +284,18 @@
         /// <returns>The fixed solution or the same instance if no fix.</returns>
         internal static async Task<Solution> ApplyAllFixableScopeByScopeAsync(Solution solution, DiagnosticAnalyzer analyzer, CodeFixProvider fix, FixAllScope scope, string? fixTitle = null, CancellationToken cancellationToken = default)
         {
+            var n = 0;
             while (await ApplyNext(solution, analyzer, fix, scope, fixTitle, cancellationToken).ConfigureAwait(false) is { } fixedSolution)
             {
+                // Keeping it simple allowing 1000 retries
+                // This means the error case is slow but normal case fast
+                // Using a set with diagnostics nicer but means slight perf penalty for the happy path.
+                if (n > 1_000)
+                {
+                    return solution;
+                }
+
+                n++;
                 solution = fixedSolution;
             }
 
