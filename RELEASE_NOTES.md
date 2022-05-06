@@ -1,3 +1,13 @@
+#### 4.2.1
+* BUGFIX: FixAll caused hangs in some cases.
+
+#### 4.2.0
+* FEATURE: add extra overload for RoslynAssert.NotSuppressed.
+* FEATURE: only show mismatched diagnostics, making things easier when there are lots.
+
+#### 4.1.0
+* FEATURE: add support for DiagnostisSuppressor with RoslynAssert.Suppressed
+
 #### 4.0.4
 * BUGFIX: stop infinite loop in fix all when fix updates the code without fixing the issue.
 
