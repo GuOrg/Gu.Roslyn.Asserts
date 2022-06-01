@@ -41,8 +41,9 @@
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="compilationOptions">The <see cref="CSharpCompilationOptions"/>.</param>
         /// <param name="metadataReferences">The metadata references.</param>
+        /// <param name="analyzerConfig">Additional analyzer configuration.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
+        public static Solution CreateSolution(IEnumerable<string> code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences, string? analyzerConfig = null)
         {
             if (code is null)
             {
@@ -67,6 +68,11 @@
             foreach (var projectInfo in solutionInfo.Projects)
             {
                 solution = solution.AddProject(projectInfo.WithProjectReferences(FindReferences(projectInfo)));
+            }
+
+            if (analyzerConfig is not null)
+            {
+                solution = AddAnalyzerConfig(solution, analyzerConfig);
             }
 
             return solution;
@@ -113,6 +119,7 @@
                                                 assemblyName,
                                                 assemblyName,
                                                 LanguageNames.CSharp,
+                                                filePath: assemblyName,
                                                 compilationOptions: compilationOptions,
                                                 metadataReferences: metadataReferences,
                                                 documents: kvp.Value.SelectMany(x => x.Value)
@@ -148,6 +155,41 @@
         }
 
         /// <summary>
+        /// Adds the specified <paramref name="analyzerConfig"/> to a analyzer.globalconfig file
+        /// and adds that to each project in the solution.
+        /// </summary>
+        /// <param name="solution">The solution to add the configuration to.</param>
+        /// <param name="analyzerConfig">The configuration text to add to the .editorconfig file in the solution.</param>
+        /// <returns>New solution with analyzer configuration file added.</returns>
+        public static Solution AddAnalyzerConfig(Solution solution, string? analyzerConfig)
+        {
+            if (solution is null)
+            {
+                throw new ArgumentNullException(nameof(solution));
+            }
+
+            if (analyzerConfig is null)
+            {
+                return solution;
+            }
+
+            const string globalConfigName = "/analyzer.globalconfig";
+
+            var editorConfigContents = SourceText.From($@"is_global = true
+
+{analyzerConfig}
+");
+
+            foreach (var project in solution.Projects)
+            {
+                var documentId = DocumentId.CreateNewId(project.Id, debugName: globalConfigName);
+                solution = solution.AddAnalyzerConfigDocument(documentId, globalConfigName, editorConfigContents, filePath: globalConfigName);
+            }
+
+            return solution;
+        }
+
+        /// <summary>
         /// Create a Solution.
         /// </summary>
         /// <param name="code">
@@ -157,8 +199,9 @@
         /// <param name="parseOptions">The <see cref="CSharpParseOptions"/>.</param>
         /// <param name="compilationOptions">The <see cref="CompilationOptions"/> to use when compiling.</param>
         /// <param name="metadataReferences">The metadata references.</param>
+        /// <param name="analyzerConfig">Additional analyzer configuration.</param>
         /// <returns>A <see cref="Solution"/>.</returns>
-        public static Solution CreateSolution(FileInfo code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences)
+        public static Solution CreateSolution(FileInfo code, CSharpParseOptions parseOptions, CSharpCompilationOptions compilationOptions, IEnumerable<MetadataReference>? metadataReferences, string? analyzerConfig = null)
         {
             if (code is null)
             {
@@ -176,7 +219,8 @@
                     new[] { File.ReadAllText(code.FullName) },
                     parseOptions,
                     compilationOptions,
-                    metadataReferences ?? Enumerable.Empty<MetadataReference>());
+                    metadataReferences ?? Enumerable.Empty<MetadataReference>(),
+                    analyzerConfig);
             }
 
             if (string.Equals(code.Extension, ".csproj", StringComparison.OrdinalIgnoreCase))
@@ -247,6 +291,7 @@
                     projectName,
                     projectName,
                     LanguageNames.CSharp,
+                    filePath: projectName,
                     metadataReferences: metadataReferences,
                     compilationOptions: compilationOptions,
                     documents: code.Select(
@@ -332,7 +377,7 @@
                 GitClient.CloneFlags.Shallow,
                 gitFile.Branch);
             var slnFileInfo = new FileInfo(Path.Combine(directoryInfo.FullName, gitFile.Path));
-            return CreateSolution(slnFileInfo, parseOptions, compilationOptions, metadataReferences);
+            return CreateSolution(slnFileInfo, parseOptions, compilationOptions, metadataReferences, null);
         }
 
         /// <summary>
@@ -345,7 +390,7 @@
         public static Solution CreateSolution(string code, Settings? settings = null)
         {
             settings ??= Settings.Default;
-            return CreateSolution(new[] { code }, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+            return CreateSolution(new[] { code }, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences, settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -358,7 +403,7 @@
         public static Solution CreateSolution(IEnumerable<string> code, Settings? settings = null)
         {
             settings ??= Settings.Default;
-            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences, settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -397,7 +442,7 @@
         public static Solution CreateSolution(FileInfo code, Settings? settings = null)
         {
             settings ??= Settings.Default;
-            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences);
+            return CreateSolution(code, settings.ParseOptions, settings.CompilationOptions, settings.MetadataReferences, settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -508,7 +553,8 @@
                 diagnosticsAndSources.Code,
                 settings.ParseOptions,
                 settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, diagnosticsAndSources.ExpectedDiagnostics),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -524,7 +570,8 @@
                 code,
                 settings.ParseOptions,
                 settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -541,7 +588,8 @@
                 code,
                 settings.ParseOptions,
                 settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -557,7 +605,8 @@
                 code,
                 settings.ParseOptions,
                 settings.CompilationOptions.WithWarningOrError(analyzer.SupportedDiagnostics),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -574,7 +623,8 @@
                 code,
                 settings.ParseOptions,
                 settings.CompilationOptions.WithSpecific(analyzer.SupportedDiagnostics, descriptor),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
 
         /// <summary>
@@ -591,7 +641,8 @@
                 settings.ParseOptions,
                 settings.CompilationOptions.WithSuppressableAsError(suppressor.SupportedSuppressions)
                                            .WithReportSuppressedDiagnostics(reportSuppressedDiagnostics: true),
-                settings.MetadataReferences);
+                settings.MetadataReferences,
+                settings.AnalyzerConfig);
         }
     }
 }

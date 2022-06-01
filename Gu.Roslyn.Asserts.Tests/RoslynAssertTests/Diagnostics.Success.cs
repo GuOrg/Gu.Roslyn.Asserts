@@ -272,6 +272,29 @@ namespace N
                 RoslynAssert.Diagnostics(analyzer, new[] { expectedDiagnostic }, code);
             }
 
+            [TestCase(null)]
+            [TestCase("_")]
+            [TestCase("m_")]
+            public static void AnalyzerWithConfiguration(string? prefix)
+            {
+                string? analyzerConfig = prefix is null ? null :
+                    $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
+
+                var code = @"
+namespace N
+{
+    public class C
+    {
+        private readonly int ↓f_value = 1;
+
+        public int M() => this.f_value;
+    }
+}";
+                var analyzer = new FieldNameMustHaveProperPrefix();
+                var settings = Settings.Default.WithAnalyzerConfig(analyzerConfig);
+                RoslynAssert.Diagnostics(analyzer, code, settings);
+            }
+
             [Test]
             public static void SingleDocumentOneErrorPassingAnalyzer()
             {

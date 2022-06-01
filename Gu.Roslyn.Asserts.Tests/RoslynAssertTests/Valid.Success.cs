@@ -288,6 +288,30 @@ namespace N
                 RoslynAssert.Valid(analyzer, code);
             }
 
+            [TestCase(null)]
+            [TestCase("_")]
+            [TestCase("m_")]
+            public static void AnalyzerWithConfiguration(string? prefix)
+            {
+                string? analyzerConfig = prefix is null ? null :
+                    $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
+                string prefixToUse = prefix ?? "_";
+
+                var code = @$"
+namespace N
+{{
+    public class C
+    {{
+        private readonly int {prefixToUse}value = 1;
+
+        public int M() => this.{prefixToUse}value;
+    }}
+}}";
+                var analyzer = new FieldNameMustHaveProperPrefix();
+                var settings = Settings.Default.WithAnalyzerConfig(analyzerConfig);
+                RoslynAssert.Valid(analyzer, code, settings);
+            }
+
             [Test]
             public static void BinaryStrings()
             {
