@@ -278,8 +278,9 @@ namespace N
             [TestCase("m_")]
             public static void AnalyzerWithConfiguration(string? prefix)
             {
-                string? analyzerConfig = prefix is null ? null :
-                    $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
+                var analyzerConfig = prefix is null
+                    ? null
+                    : $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
 
                 var code = @"
 namespace N
