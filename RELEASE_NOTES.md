@@ -1,3 +1,6 @@
+#### 4.3.0
+* FEATURE: add support for analyzer configuration.
+
 #### 4.2.1
 * BUGFIX: FixAll caused hangs in some cases.
 
