@@ -39,7 +39,7 @@
         internal bool? HasPosition => this.Value switch
         {
             LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) => literal.Token.ValueText.Contains("↓"),
-            InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token: { ValueText: { } valueText } } } => valueText.Contains("↓"),
+            InvocationExpressionSyntax { Expression: LiteralExpressionSyntax { Token.ValueText: { } valueText } } => valueText.Contains("↓"),
             _ => null,
         };
 
@@ -169,7 +169,7 @@
         internal bool TryGetNameFromCode([NotNullWhen(true)] out string? codeName)
         {
             codeName = null;
-            return this.StringLiteral is { Token: { ValueText: { } valueText } } &&
+            return this.StringLiteral is { Token.ValueText: { } valueText } &&
                    (TryGetName(valueText, "class ", out codeName) ||
                     TryGetName(valueText, "struct ", out codeName) ||
                     TryGetName(valueText, "interface ", out codeName) ||

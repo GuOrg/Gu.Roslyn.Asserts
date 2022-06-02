@@ -1,4 +1,5 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+﻿#pragma warning disable IDE0079 // Remove unnecessary suppression
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using Gu.Roslyn.Asserts.Tests.Refactorings;
     using Microsoft.CodeAnalysis.Text;

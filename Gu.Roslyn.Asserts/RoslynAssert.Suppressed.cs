@@ -9,8 +9,6 @@
     public static partial class RoslynAssert
     {
         // This has the same overloads as RoslynAssert.Diagnostics but here it complains?
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-#pragma warning disable RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads
 
         /// <summary>
         /// Verifies that <paramref name="code"/> produces the expected diagnostics

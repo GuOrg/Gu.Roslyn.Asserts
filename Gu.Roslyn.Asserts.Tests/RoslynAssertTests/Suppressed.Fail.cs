@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantNameQualifier
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
 {
     using System;
