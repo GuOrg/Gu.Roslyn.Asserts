@@ -66,7 +66,7 @@ namespace N
         }
 
         [Test]
-        public static void OneErrorIndicatedPositionAllowWarningsDefaultDisabledAnalyzer()
+        public static void DefaultDisabledAnalyzer()
         {
             var code = """
 
@@ -74,14 +74,16 @@ namespace N
 
                 class C
                 {
+                #pragma warning disable CS0169
                     private readonly int ↓_f;
                 }
                 """;
             var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+
+            RoslynAssert.Diagnostics(analyzer, code);
+            RoslynAssert.Diagnostics(analyzer, code, Settings.Default);
             var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDisabled.Descriptor.Id);
-            var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
-            RoslynAssert.Diagnostics(analyzer, code, settings);
-            RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
+            RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, Settings.Default);
         }
 
         [Test]
