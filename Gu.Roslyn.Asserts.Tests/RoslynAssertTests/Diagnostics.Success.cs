@@ -49,16 +49,36 @@ namespace N
         [Test]
         public static void OneErrorIndicatedPositionAllowWarnings()
         {
-            var code = @"
-namespace N
-{
-    class C
-    {
-        private readonly int ↓_f;
-    }
-}";
+            var code = """
+
+                namespace N;
+
+                class C
+                {
+                    private readonly int ↓_f;
+                }
+                """;
             var analyzer = new FieldNameMustNotBeginWithUnderscore();
             var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
+            var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
+            RoslynAssert.Diagnostics(analyzer, code, settings);
+            RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
+        }
+
+        [Test]
+        public static void OneErrorIndicatedPositionAllowWarningsDefaultDisabledAnalyzer()
+        {
+            var code = """
+
+                namespace N;
+
+                class C
+                {
+                    private readonly int ↓_f;
+                }
+                """;
+            var analyzer = new FieldNameMustNotBeginWithUnderscoreDisabled();
+            var expectedDiagnostic = ExpectedDiagnostic.Create(FieldNameMustNotBeginWithUnderscoreDisabled.Descriptor.Id);
             var settings = Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings);
             RoslynAssert.Diagnostics(analyzer, code, settings);
             RoslynAssert.Diagnostics(analyzer, expectedDiagnostic, code, settings);
