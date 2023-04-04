@@ -1,49 +1,48 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers;
+
+using Gu.Roslyn.AnalyzerExtensions.StyleCopComparers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
+
+internal static class DocumentEditorExt
 {
-    using Gu.Roslyn.AnalyzerExtensions.StyleCopComparers;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Editing;
-
-    internal static class DocumentEditorExt
+    internal static DocumentEditor AddPrivateStaticField(this DocumentEditor editor, TypeDeclarationSyntax typeDeclaration, ITypeSymbol type, string name)
     {
-        internal static DocumentEditor AddPrivateStaticField(this DocumentEditor editor, TypeDeclarationSyntax typeDeclaration, ITypeSymbol type, string name)
-        {
-            editor.ReplaceNode(
-                typeDeclaration,
-                (node, generator) => AddSorted(
-                    generator,
-                    (TypeDeclarationSyntax)node,
+        editor.ReplaceNode(
+            typeDeclaration,
+            (node, generator) => AddSorted(
+                generator,
+                (TypeDeclarationSyntax)node,
 #pragma warning disable SA1118 // Parameter should not span multiple lines
-                    (FieldDeclarationSyntax)generator.FieldDeclaration(
-                        name,
-                        editor.Generator.TypeExpression(type),
-                        Accessibility.Private,
-                        DeclarationModifiers.Static | DeclarationModifiers.ReadOnly,
-                        editor.Generator.ObjectCreationExpression(type))));
+                (FieldDeclarationSyntax)generator.FieldDeclaration(
+                    name,
+                    editor.Generator.TypeExpression(type),
+                    Accessibility.Private,
+                    DeclarationModifiers.Static | DeclarationModifiers.ReadOnly,
+                    editor.Generator.ObjectCreationExpression(type))));
 #pragma warning restore SA1118 // Parameter should not span multiple lines
-            return editor;
-        }
+        return editor;
+    }
 
-        private static TypeDeclarationSyntax AddSorted(
-            SyntaxGenerator generator,
-            TypeDeclarationSyntax containingType,
-            FieldDeclarationSyntax field)
+    private static TypeDeclarationSyntax AddSorted(
+        SyntaxGenerator generator,
+        TypeDeclarationSyntax containingType,
+        FieldDeclarationSyntax field)
+    {
+        foreach (var member in containingType.Members)
         {
-            foreach (var member in containingType.Members)
+            if (member.IsEquivalentTo(field))
             {
-                if (member.IsEquivalentTo(field))
-                {
-                    return containingType;
-                }
-
-                if (MemberDeclarationComparer.Compare(field, member) < 0)
-                {
-                    return (TypeDeclarationSyntax)generator.InsertNodesBefore(containingType, member, new[] { field });
-                }
+                return containingType;
             }
 
-            return (TypeDeclarationSyntax)generator.AddMembers(containingType, field);
+            if (MemberDeclarationComparer.Compare(field, member) < 0)
+            {
+                return (TypeDeclarationSyntax)generator.InsertNodesBefore(containingType, member, new[] { field });
+            }
         }
+
+        return (TypeDeclarationSyntax)generator.AddMembers(containingType, field);
     }
 }

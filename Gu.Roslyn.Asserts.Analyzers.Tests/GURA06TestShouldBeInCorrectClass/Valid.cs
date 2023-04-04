@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<MethodDeclarationAnalyzer>();
 
-    public static class Valid
+    [Test]
+    public static void WhenNoAsserts()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<MethodDeclarationAnalyzer>();
-
-        [Test]
-        public static void WhenNoAsserts()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using System;
@@ -27,13 +27,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenOneValid()
-        {
-            var code = @"
+    [Test]
+    public static void WhenOneValid()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -51,13 +51,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenTwoValid()
-        {
-            var code = @"
+    [Test]
+    public static void WhenTwoValid()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -82,13 +82,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenOneValidInNestedClass()
-        {
-            var code = @"
+    [Test]
+    public static void WhenOneValidInNestedClass()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -109,13 +109,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenOneCodeFixInNestedClass()
-        {
-            var code = @"
+    [Test]
+    public static void WhenOneCodeFixInNestedClass()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -138,7 +138,6 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
     }
 }

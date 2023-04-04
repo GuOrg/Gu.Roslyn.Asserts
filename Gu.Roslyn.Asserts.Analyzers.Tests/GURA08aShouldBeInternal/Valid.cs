@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08aShouldBeInternal);
 
-    public static class Valid
+    [Test]
+    public static void CodeRefactoringProvider()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08aShouldBeInternal);
-
-        [Test]
-        public static void CodeRefactoringProvider()
-        {
-            var refactoring = @"
+        var refactoring = @"
 namespace N
 {
     using System.Threading.Tasks;
@@ -20,26 +20,26 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            Assert.Valid(refactoring);
-        }
+        Assert.Valid(refactoring);
+    }
 
-        [Test]
-        public static void EmptyClass()
-        {
-            var c = @"
+    [Test]
+    public static void EmptyClass()
+    {
+        var c = @"
 namespace N
 {
     public class C
     {
     }
 }";
-            Assert.Valid(c);
-        }
+        Assert.Valid(c);
+    }
 
-        [Test]
-        public static void RoslynAssertDiagnostics()
-        {
-            var analyzer = @"
+    [Test]
+    public static void RoslynAssertDiagnostics()
+    {
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -60,7 +60,7 @@ namespace N
         }
     }
 }";
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -79,13 +79,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, diagnostics);
-        }
+        Assert.Valid(analyzer, diagnostics);
+    }
 
-        [Test]
-        public static void DiagnosticGenericAnalyzer()
-        {
-            var analyzer = @"
+    [Test]
+    public static void DiagnosticGenericAnalyzer()
+    {
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -107,7 +107,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -130,7 +130,6 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, diagnostics);
-        }
+        Assert.Valid(analyzer, diagnostics);
     }
 }

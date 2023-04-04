@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA04NameClassToMatchAsserts;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, RenameFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts));
 
-    public static class CodeFix
+    [Test]
+    public static void WhenOneValid()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, RenameFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts));
-
-        [Test]
-        public static void WhenOneValid()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -29,7 +29,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -47,13 +47,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void WhenTwoValid()
-        {
-            var before = @"
+    [Test]
+    public static void WhenTwoValid()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -79,7 +79,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -104,7 +104,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
     }
 }

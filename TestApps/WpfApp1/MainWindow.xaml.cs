@@ -1,12 +1,11 @@
-﻿namespace WpfApp1
-{
-    using System.Windows;
+﻿namespace WpfApp1;
 
-    public partial class MainWindow : Window
+using System.Windows;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-        }
+        this.InitializeComponent();
     }
 }

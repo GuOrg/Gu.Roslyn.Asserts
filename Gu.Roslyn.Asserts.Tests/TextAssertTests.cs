@@ -1,14 +1,14 @@
 // ReSharper disable RedundantNameQualifier
-namespace Gu.Roslyn.Asserts.Tests
-{
-    using NUnit.Framework;
+namespace Gu.Roslyn.Asserts.Tests;
 
-    public static class TextAssertTests
+using NUnit.Framework;
+
+public static class TextAssertTests
+{
+    [Test]
+    public static void WhenEqual()
     {
-        [Test]
-        public static void WhenEqual()
-        {
-            var expected = @"
+        var expected = @"
 namespace N
 {
     class C
@@ -17,7 +17,7 @@ namespace N
     }
 }";
 
-            var actual = @"
+        var actual = @"
 namespace N
 {
     class C
@@ -25,13 +25,13 @@ namespace N
         private readonly int _value;
     }
 }";
-            TextAssert.AreEqual(expected, actual);
-        }
+        TextAssert.AreEqual(expected, actual);
+    }
 
-        [Test]
-        public static void WhenNotEqual()
-        {
-            var expectedCode = @"
+    [Test]
+    public static void WhenNotEqual()
+    {
+        var expectedCode = @"
 namespace N
 {
     class C
@@ -40,7 +40,7 @@ namespace N
     }
 }";
 
-            var actualCode = @"
+        var actualCode = @"
 namespace N
 {
     class C
@@ -48,12 +48,11 @@ namespace N
         private readonly int bar;
     }
 }";
-            var exception = Assert.Throws<AssertException>(() => TextAssert.AreEqual(expectedCode, actualCode));
-            var expected = "Mismatch on line 6\r\n" +
-                           "Expected:         private readonly int _value;\r\n" +
-                           "Actual:           private readonly int bar;\r\n" +
-                           "                                       ^\r\n";
-            Assert.AreEqual(expected, exception.Message);
-        }
+        var exception = Assert.Throws<AssertException>(() => TextAssert.AreEqual(expectedCode, actualCode));
+        var expected = "Mismatch on line 6\r\n" +
+                       "Expected:         private readonly int _value;\r\n" +
+                       "Actual:           private readonly int bar;\r\n" +
+                       "                                       ^\r\n";
+        Assert.AreEqual(expected, exception.Message);
     }
 }

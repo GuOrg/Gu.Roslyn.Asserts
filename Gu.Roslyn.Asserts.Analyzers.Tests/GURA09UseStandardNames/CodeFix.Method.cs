@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
-{
-    using NUnit.Framework;
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames;
 
-    public static partial class CodeFix
+using NUnit.Framework;
+
+public static partial class CodeFix
+{
+    public static class Method
     {
-        public static class Method
+        [Test]
+        public static void Bar()
         {
-            [Test]
-            public static void Bar()
-            {
-                var before = @"
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -35,7 +35,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -61,13 +61,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
+        }
 
-            [Test]
-            public static void BarGeneric()
-            {
-                var before = @"
+        [Test]
+        public static void BarGeneric()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -93,7 +93,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -119,13 +119,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
+        }
 
-            [Test]
-            public static void BarOverloads()
-            {
-                var before = @"
+        [Test]
+        public static void BarOverloads()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -152,7 +152,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -179,8 +179,7 @@ namespace N
     }
 }";
 
-                Assert.FixAll(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
-            }
+            Assert.FixAll(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with M");
         }
     }
 }

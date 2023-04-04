@@ -1,54 +1,53 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.TestHelpers.Suppressors
+﻿namespace Gu.Roslyn.Asserts.Tests.TestHelpers.Suppressors;
+
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class AllowUnassignedMagicMembers : DiagnosticSuppressor
 {
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    public const string MagicFieldName = "Magic";
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class AllowUnassignedMagicMembers : DiagnosticSuppressor
+    public static readonly SuppressionDescriptor FieldNameIsMagic = new(
+        id: nameof(AllowUnassignedMagicMembers),
+        suppressedDiagnosticId: "CS8618",
+        justification: "Field is called " + MagicFieldName);
+
+    public static readonly SuppressionDescriptor PropertyNameIsMagic = new(
+        id: nameof(AllowUnassignedMagicMembers),
+        suppressedDiagnosticId: "CS8618",
+        justification: "Property is called " + MagicFieldName);
+
+    public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } =
+        ImmutableArray.Create(FieldNameIsMagic, PropertyNameIsMagic);
+
+    public override void ReportSuppressions(SuppressionAnalysisContext context)
     {
-        public const string MagicFieldName = "Magic";
-
-        public static readonly SuppressionDescriptor FieldNameIsMagic = new(
-            id: nameof(AllowUnassignedMagicMembers),
-            suppressedDiagnosticId: "CS8618",
-            justification: "Field is called " + MagicFieldName);
-
-        public static readonly SuppressionDescriptor PropertyNameIsMagic = new(
-            id: nameof(AllowUnassignedMagicMembers),
-            suppressedDiagnosticId: "CS8618",
-            justification: "Property is called " + MagicFieldName);
-
-        public override ImmutableArray<SuppressionDescriptor> SupportedSuppressions { get; } =
-            ImmutableArray.Create(FieldNameIsMagic, PropertyNameIsMagic);
-
-        public override void ReportSuppressions(SuppressionAnalysisContext context)
+        foreach (var diagnostic in context.ReportedDiagnostics)
         {
-            foreach (var diagnostic in context.ReportedDiagnostics)
+            var sourceTree = diagnostic.Location.SourceTree;
+
+            if (sourceTree is null)
             {
-                var sourceTree = diagnostic.Location.SourceTree;
+                continue;
+            }
 
-                if (sourceTree is null)
+            var node = sourceTree.GetRoot(context.CancellationToken)
+                                 .FindNode(diagnostic.Location.SourceSpan);
+
+            if (node.ToString().Contains(MagicFieldName))
+            {
+                if (node is PropertyDeclarationSyntax)
                 {
-                    continue;
+                    context.ReportSuppression(Suppression.Create(PropertyNameIsMagic, diagnostic));
                 }
-
-                var node = sourceTree.GetRoot(context.CancellationToken)
-                                     .FindNode(diagnostic.Location.SourceSpan);
-
-                if (node.ToString().Contains(MagicFieldName))
+                else if (node is VariableDeclaratorSyntax &&
+                    node.Parent is VariableDeclarationSyntax &&
+                    node.Parent.Parent is FieldDeclarationSyntax)
                 {
-                    if (node is PropertyDeclarationSyntax)
-                    {
-                        context.ReportSuppression(Suppression.Create(PropertyNameIsMagic, diagnostic));
-                    }
-                    else if (node is VariableDeclaratorSyntax &&
-                        node.Parent is VariableDeclarationSyntax &&
-                        node.Parent.Parent is FieldDeclarationSyntax)
-                    {
-                        context.ReportSuppression(Suppression.Create(FieldNameIsMagic, diagnostic));
-                    }
+                    context.ReportSuppression(Suppression.Create(FieldNameIsMagic, diagnostic));
                 }
             }
         }

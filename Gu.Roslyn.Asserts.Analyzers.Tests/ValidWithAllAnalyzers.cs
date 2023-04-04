@@ -1,64 +1,63 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+using NUnit.Framework;
+
+public static class ValidWithAllAnalyzers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers =
+        typeof(Descriptors)
+            .Assembly.GetTypes()
+            .Where(x => typeof(DiagnosticAnalyzer).IsAssignableFrom(x) && !x.IsAbstract)
+            .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t)!)
+            .ToArray();
 
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    private static readonly Solution AnalyzersTests = CodeFactory.CreateSolution(
+        ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"));
 
-    using NUnit.Framework;
+    private static readonly Solution AssertsTests = CodeFactory.CreateSolution(
+        ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"));
 
-    public static class ValidWithAllAnalyzers
+    [Test]
+    public static void NotEmpty()
     {
-        private static readonly IReadOnlyList<DiagnosticAnalyzer> AllAnalyzers =
-            typeof(Descriptors)
-                .Assembly.GetTypes()
-                .Where(x => typeof(DiagnosticAnalyzer).IsAssignableFrom(x) && !x.IsAbstract)
-                .Select(t => (DiagnosticAnalyzer)Activator.CreateInstance(t)!)
-                .ToArray();
+        CollectionAssert.IsNotEmpty(AllAnalyzers);
+        Assert.Pass($"Count: {AllAnalyzers.Count}");
+    }
 
-        private static readonly Solution AnalyzersTests = CodeFactory.CreateSolution(
-            ProjectFile.Find("Gu.Roslyn.Asserts.Analyzers.Tests.csproj"));
-
-        private static readonly Solution AssertsTests = CodeFactory.CreateSolution(
-            ProjectFile.Find("Gu.Roslyn.Asserts.Tests.csproj"));
-
-        [Test]
-        public static void NotEmpty()
+    [TestCaseSource(nameof(AllAnalyzers))]
+    public static void AnalyzersTestsProject(DiagnosticAnalyzer analyzer)
+    {
+        switch (analyzer)
         {
-            CollectionAssert.IsNotEmpty(AllAnalyzers);
-            Assert.Pass($"Count: {AllAnalyzers.Count}");
+            case InvocationAnalyzer _:
+            case MethodDeclarationAnalyzer _:
+                _ = Analyze.GetDiagnostics(analyzer, AnalyzersTests);
+                break;
+            default:
+                RoslynAssert.NoAnalyzerDiagnostics(analyzer, AnalyzersTests);
+                break;
         }
+    }
 
-        [TestCaseSource(nameof(AllAnalyzers))]
-        public static void AnalyzersTestsProject(DiagnosticAnalyzer analyzer)
+    [TestCaseSource(nameof(AllAnalyzers))]
+    public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
+    {
+        switch (analyzer)
         {
-            switch (analyzer)
-            {
-                case InvocationAnalyzer _:
-                case MethodDeclarationAnalyzer _:
-                    _ = Analyze.GetDiagnostics(analyzer, AnalyzersTests);
-                    break;
-                default:
-                    RoslynAssert.NoAnalyzerDiagnostics(analyzer, AnalyzersTests);
-                    break;
-            }
-        }
-
-        [TestCaseSource(nameof(AllAnalyzers))]
-        public static void AssertsTestsProject(DiagnosticAnalyzer analyzer)
-        {
-            switch (analyzer)
-            {
-                case InvocationAnalyzer _:
-                case MethodDeclarationAnalyzer _:
-                    _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
-                    break;
-                default:
-                    RoslynAssert.NoAnalyzerDiagnostics(analyzer, AssertsTests);
-                    break;
-            }
+            case InvocationAnalyzer _:
+            case MethodDeclarationAnalyzer _:
+                _ = Analyze.GetDiagnostics(analyzer, AssertsTests);
+                break;
+            default:
+                RoslynAssert.NoAnalyzerDiagnostics(analyzer, AssertsTests);
+                break;
         }
     }
 }

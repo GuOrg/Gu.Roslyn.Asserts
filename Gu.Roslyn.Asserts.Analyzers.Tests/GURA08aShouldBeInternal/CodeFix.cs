@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08aShouldBeInternal;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer, AccessibilityFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA08aShouldBeInternal));
 
-    public static class CodeFix
+    [Test]
+    public static void DiagnosticAnalyzer()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer, AccessibilityFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA08aShouldBeInternal));
-
-        [Test]
-        public static void DiagnosticAnalyzer()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -32,7 +32,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -52,7 +52,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -73,7 +73,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { before, diagnostics }, new[] { after, diagnostics.AssertReplace("↓", string.Empty) });
-        }
+        Assert.CodeFix(new[] { before, diagnostics }, new[] { after, diagnostics.AssertReplace("↓", string.Empty) });
     }
 }

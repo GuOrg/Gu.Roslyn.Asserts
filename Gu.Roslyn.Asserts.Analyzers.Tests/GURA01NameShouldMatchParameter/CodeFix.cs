@@ -1,19 +1,19 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using NUnit.Framework;
+    private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
+    private static readonly CodeFixProvider Fix = new RenameFix();
+    private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA01NameShouldMatchParameter);
 
-    public static class CodeFix
+    [Test]
+    public static void LocalAnalyzer()
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly CodeFixProvider Fix = new RenameFix();
-        private static readonly ExpectedDiagnostic ExpectedDiagnostic = ExpectedDiagnostic.Create(Descriptors.GURA01NameShouldMatchParameter);
-
-        [Test]
-        public static void LocalAnalyzer()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -31,7 +31,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -48,14 +48,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'analyzer'");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'analyzer'");
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'analyzer'");
+        RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'analyzer'");
+    }
 
-        [Test]
-        public static void StaticFieldAnalyzer()
-        {
-            var before = @"
+    [Test]
+    public static void StaticFieldAnalyzer()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -74,7 +74,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -92,14 +92,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'Wrong' should be 'Analyzer'");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'Analyzer'");
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'Wrong' should be 'Analyzer'");
+        RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, fixTitle: "Rename to 'Analyzer'");
+    }
 
-        [Test]
-        public static void RoslynAssertValidOneParam()
-        {
-            var before = @"
+    [Test]
+    public static void RoslynAssertValidOneParam()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -118,7 +118,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -136,14 +136,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
+        RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void RoslynAssertValidFieldAndLocal()
-        {
-            var before = @"
+    [Test]
+    public static void RoslynAssertValidFieldAndLocal()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -164,7 +164,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -184,14 +184,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
+        RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void RoslynAssertValidLocalAndField()
-        {
-            var before = @"
+    [Test]
+    public static void RoslynAssertValidLocalAndField()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -212,7 +212,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -232,14 +232,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
-            RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
+        RoslynAssert.CodeFix(Analyzer, Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void WhenOneBeforeHasPosition()
-        {
-            var before = @"
+    [Test]
+    public static void WhenOneBeforeHasPosition()
+    {
+        var before = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -260,7 +260,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.CodeFixes;
@@ -280,15 +280,15 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'before'");
-            var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'", settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'code2' should be 'before'");
+        var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
+        RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'before'", settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
+    }
 
-        [Test]
-        public static void WhenOneCodeHasPosition()
-        {
-            var before = @"
+    [Test]
+    public static void WhenOneCodeHasPosition()
+    {
+        var before = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -307,7 +307,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -325,15 +325,15 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
-            var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
-            RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'", settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
+        var diagnosticsAndSources = new DiagnosticsAndSources(new[] { expectedDiagnostic }, new[] { before });
+        RoslynAssert.CodeFix(Analyzer, Fix, diagnosticsAndSources, new[] { after }, fixTitle: "Rename to 'code'", settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
+    }
 
-        [Test]
-        public static void WhenAssertReplace()
-        {
-            var before = @"
+    [Test]
+    public static void WhenAssertReplace()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -352,7 +352,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -371,13 +371,13 @@ namespace N
     }
 }";
 
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
-        }
+        RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+    }
 
-        [Test]
-        public static void WhenLocalNameMatchesCode()
-        {
-            var before = @"
+    [Test]
+    public static void WhenLocalNameMatchesCode()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -401,7 +401,7 @@ namespace N
         }
     }
 }";
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -425,7 +425,6 @@ namespace N
         }
     }
 }";
-            RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        RoslynAssert.CodeFix(Analyzer, Fix, ExpectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
     }
 }

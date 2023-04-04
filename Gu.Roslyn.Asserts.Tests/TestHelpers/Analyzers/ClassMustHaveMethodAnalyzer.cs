@@ -1,47 +1,46 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System.Collections.Immutable;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class ClassMustHaveMethodAnalyzer : DiagnosticAnalyzer
 {
-    using System.Collections.Immutable;
+    internal const string DiagnosticId = "ClassMustHaveMethod";
 
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    private static readonly DiagnosticDescriptor Descriptor = new(
+        id: DiagnosticId,
+        title: "This analyzer reports warnings if a class does not have a method",
+        messageFormat: "Message format",
+        category: "Category",
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class ClassMustHaveMethodAnalyzer : DiagnosticAnalyzer
+    /// <inheritdoc/>
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
+
+    public override void Initialize(AnalysisContext context)
     {
-        internal const string DiagnosticId = "ClassMustHaveMethod";
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+        context.EnableConcurrentExecution();
+        context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.ClassDeclaration);
+    }
 
-        private static readonly DiagnosticDescriptor Descriptor = new(
-            id: DiagnosticId,
-            title: "This analyzer reports warnings if a class does not have a method",
-            messageFormat: "Message format",
-            category: "Category",
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <inheritdoc/>
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
-
-        public override void Initialize(AnalysisContext context)
+    private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
+    {
+        var classDeclaration = (ClassDeclarationSyntax)context.Node;
+        foreach (var member in classDeclaration.Members)
         {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.ClassDeclaration);
-        }
-
-        private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
-        {
-            var classDeclaration = (ClassDeclarationSyntax)context.Node;
-            foreach (var member in classDeclaration.Members)
+            if (member is MethodDeclarationSyntax)
             {
-                if (member is MethodDeclarationSyntax)
-                {
-                    return;
-                }
+                return;
             }
-
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
         }
+
+        context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
     }
 }

@@ -1,44 +1,43 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
-{
-    using Gu.Roslyn.Asserts.Tests.Refactorings;
-    using Microsoft.CodeAnalysis.Text;
-    using NUnit.Framework;
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
 
-    public static partial class NoRefactoring
+using Gu.Roslyn.Asserts.Tests.Refactorings;
+using Microsoft.CodeAnalysis.Text;
+using NUnit.Framework;
+
+public static partial class NoRefactoring
+{
+    public static class Fail
     {
-        public static class Fail
+        [Test]
+        public static void WhenActionIsRegistered()
         {
-            [Test]
-            public static void WhenActionIsRegistered()
-            {
-                var code = @"
+            var code = @"
 class ↓c
 {
 }";
 
-                var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                var expected = "Expected the refactoring to not register any code actions.";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, title: "To uppercase"));
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var refactoring = new ClassNameToUpperCaseRefactoringProvider();
+            var expected = "Expected the refactoring to not register any code actions.";
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code));
+            Assert.AreEqual(expected, exception.Message);
+            exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, title: "To uppercase"));
+            Assert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void WhenActionIsRegisteredWithSpan()
-            {
-                var code = @"
+        [Test]
+        public static void WhenActionIsRegisteredWithSpan()
+        {
+            var code = @"
 class c
 {
 }";
 
-                var refactoring = new ClassNameToUpperCaseRefactoringProvider();
-                var expected = "Expected the refactoring to not register any code actions.";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, new TextSpan(8, 3)));
-                Assert.AreEqual(expected, exception.Message);
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, new TextSpan(8, 3), title: "To uppercase"));
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var refactoring = new ClassNameToUpperCaseRefactoringProvider();
+            var expected = "Expected the refactoring to not register any code actions.";
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, new TextSpan(8, 3)));
+            Assert.AreEqual(expected, exception.Message);
+            exception = Assert.Throws<AssertException>(() => RoslynAssert.NoRefactoring(refactoring, code, new TextSpan(8, 3), title: "To uppercase"));
+            Assert.AreEqual(expected, exception.Message);
         }
     }
 }

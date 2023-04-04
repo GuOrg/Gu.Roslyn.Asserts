@@ -1,42 +1,41 @@
-﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes
+﻿namespace Gu.Roslyn.Asserts.Tests.CodeFixes;
+
+using System.Collections.Immutable;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
+
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToValueFix))]
+internal sealed class RenameToValueFix : CodeFixProvider
 {
-    using System.Collections.Immutable;
-    using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
-    using Microsoft.CodeAnalysis.CodeFixes;
+    public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
+        FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId,
+        FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId,
+        PropertyMustBeNamedValueAnalyzer.DiagnosticId);
 
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToValueFix))]
-    internal sealed class RenameToValueFix : CodeFixProvider
+    public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+
+    public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
-        public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
-            FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId,
-            FieldAndPropertyMustBeNamedValueAnalyzer.PropertyDiagnosticId,
-            PropertyMustBeNamedValueAnalyzer.DiagnosticId);
+        var document = context.Document;
+        var root = await document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
-
-        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        foreach (var diagnostic in context.Diagnostics)
         {
-            var document = context.Document;
-            var root = await document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            foreach (var diagnostic in context.Diagnostics)
+            var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
+            if (!string.IsNullOrEmpty(token.ValueText))
             {
-                var token = root.FindToken(diagnostic.Location.SourceSpan.Start);
-                if (!string.IsNullOrEmpty(token.ValueText))
-                {
-                    var newName = diagnostic.Id == FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId
-                        ? "value"
-                        : "Value";
+                var newName = diagnostic.Id == FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId
+                    ? "value"
+                    : "Value";
 
-                    context.RegisterCodeFix(
-                        CodeAction.Create(
-                            $"Rename to: {newName}",
-                            cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
-                            nameof(RenameToValueFix)),
-                        diagnostic);
-                }
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        $"Rename to: {newName}",
+                        cancellationToken => RenameHelper.RenameSymbolAsync(document, root, token, newName, cancellationToken),
+                        nameof(RenameToValueFix)),
+                    diagnostic);
             }
         }
     }

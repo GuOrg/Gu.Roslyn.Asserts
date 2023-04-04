@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA10UseLocal
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA10UseLocal;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, CopyToLocalFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA10UseLocal));
 
-    public static class CodeFix
+    [Test]
+    public static void StaticField()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, CopyToLocalFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA10UseLocal));
-
-        [Test]
-        public static void StaticField()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -30,7 +30,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -50,7 +50,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
     }
 }

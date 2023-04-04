@@ -1,8 +1,8 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests;
+
+public static class Code
 {
-    public static class Code
-    {
-        public const string PlaceholderAnalyzer = @"
+    public const string PlaceholderAnalyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -24,7 +24,7 @@ namespace N
     }
 }";
 
-        public const string PlaceholderSuppressor = @"
+    public const string PlaceholderSuppressor = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -47,7 +47,7 @@ namespace N
     }
 }";
 
-        public const string PlaceholderFix = @"
+    public const string PlaceholderFix = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -64,7 +64,7 @@ namespace N
     }
 }";
 
-        public const string PlaceholderRefactoring = @"
+    public const string PlaceholderRefactoring = @"
 namespace N
 {
     using System.Threading.Tasks;
@@ -75,5 +75,4 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-    }
 }

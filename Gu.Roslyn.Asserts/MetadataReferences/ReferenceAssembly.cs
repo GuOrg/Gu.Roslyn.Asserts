@@ -1,120 +1,119 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts;
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Microsoft.CodeAnalysis;
+
+/// <summary>
+/// For finding MetadataReferences in the Reference assemblies folder.
+/// Everything in this class is cargo culted. Don't know if there are any docs for this.
+/// </summary>
+public static class ReferenceAssembly
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Immutable;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using Microsoft.CodeAnalysis;
+    private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new();
+    private static DirectoryInfo? directory;
 
     /// <summary>
-    /// For finding MetadataReferences in the Reference assemblies folder.
-    /// Everything in this class is cargo culted. Don't know if there are any docs for this.
+    /// Gets or sets the reference assembly location to use.
     /// </summary>
-    public static class ReferenceAssembly
+    public static DirectoryInfo? Directory
     {
-        private static readonly ConcurrentDictionary<string, MetadataReference> CachedReferences = new();
-        private static DirectoryInfo? directory;
-
-        /// <summary>
-        /// Gets or sets the reference assembly location to use.
-        /// </summary>
-        public static DirectoryInfo? Directory
+        get
         {
-            get
-            {
-                return directory ??= GetDefault();
+            return directory ??= GetDefault();
 
-                static DirectoryInfo? GetDefault()
+            static DirectoryInfo? GetDefault()
+            {
+                var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
+                if (System.IO.Directory.Exists(referenceAssemblies))
                 {
-                    var referenceAssemblies = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Reference Assemblies");
-                    if (System.IO.Directory.Exists(referenceAssemblies))
+                    var expectedName = typeof(int).Assembly.GetName();
+                    foreach (var mscorlib in System.IO.Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
                     {
-                        var expectedName = typeof(int).Assembly.GetName();
-                        foreach (var mscorlib in System.IO.Directory.EnumerateFiles(referenceAssemblies, "mscorlib.dll", SearchOption.AllDirectories).OrderByDescending(x => File.GetCreationTimeUtc(x)))
+                        var name = AssemblyName.GetAssemblyName(mscorlib);
+                        if (expectedName.FullName == name.FullName)
                         {
-                            var name = AssemblyName.GetAssemblyName(mscorlib);
-                            if (expectedName.FullName == name.FullName)
-                            {
-                                return new DirectoryInfo(Path.GetDirectoryName(mscorlib)!);
-                            }
+                            return new DirectoryInfo(Path.GetDirectoryName(mscorlib)!);
                         }
                     }
-
-                    return null;
                 }
-            }
 
-            set
-            {
-                CachedReferences.Clear();
-                NameFileMap.Clear();
-                directory = value;
+                return null;
             }
         }
 
-        /// <summary>
-        /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
-        /// </summary>
-        /// <param name="assembly">Example 'System'.</param>
-        /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
-        /// <returns>A value indicating a reference was found.</returns>
-        public static bool TryGet(Assembly assembly, [NotNullWhen(true)] out MetadataReference? metadataReference)
+        set
         {
-            if (assembly is null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            CachedReferences.Clear();
+            NameFileMap.Clear();
+            directory = value;
+        }
+    }
 
-            if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var dllFile))
-            {
-                metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
-                return metadataReference != null;
-            }
-
-            metadataReference = null;
-            return false;
+    /// <summary>
+    /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
+    /// </summary>
+    /// <param name="assembly">Example 'System'.</param>
+    /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
+    /// <returns>A value indicating a reference was found.</returns>
+    public static bool TryGet(Assembly assembly, [NotNullWhen(true)] out MetadataReference? metadataReference)
+    {
+        if (assembly is null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
         }
 
-        /// <summary>
-        /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
-        /// </summary>
-        /// <param name="name">Example 'System'.</param>
-        /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
-        /// <returns>A value indicating a reference was found.</returns>
-        public static bool TryGet(string name, [NotNullWhen(true)] out MetadataReference? metadataReference)
+        if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(assembly.Location), out var dllFile))
         {
-            if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var dllFile))
-            {
-                metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
-                return metadataReference != null;
-            }
-
-            metadataReference = null;
-            return false;
+            metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
+            return metadataReference != null;
         }
 
-        private static class NameFileMap
+        metadataReference = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Try get a <see cref="MetadataReference"/> from the C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\{version}.
+    /// </summary>
+    /// <param name="name">Example 'System'.</param>
+    /// <param name="metadataReference">The <see cref="MetadataReference"/> if found.</param>
+    /// <returns>A value indicating a reference was found.</returns>
+    public static bool TryGet(string name, [NotNullWhen(true)] out MetadataReference? metadataReference)
+    {
+        if (NameFileMap.Value.TryGetValue(Path.GetFileNameWithoutExtension(name), out var dllFile))
         {
-            private static ImmutableDictionary<string, FileInfo>? value;
+            metadataReference = CachedReferences.GetOrAdd(dllFile.FullName, x => MetadataReference.CreateFromFile(x));
+            return metadataReference != null;
+        }
 
-            internal static ImmutableDictionary<string, FileInfo> Value => value ??= Create();
+        metadataReference = null;
+        return false;
+    }
 
-            internal static void Clear()
-            {
-                value = null;
-            }
+    private static class NameFileMap
+    {
+        private static ImmutableDictionary<string, FileInfo>? value;
 
-            private static ImmutableDictionary<string, FileInfo> Create()
-            {
-                return Directory?.EnumerateFiles("*.dll", SearchOption.AllDirectories)
-                                 .ToImmutableDictionary(
-                                     x => Path.GetFileNameWithoutExtension(x.FullName),
-                                     x => x) ??
-                       ImmutableDictionary<string, FileInfo>.Empty;
-            }
+        internal static ImmutableDictionary<string, FileInfo> Value => value ??= Create();
+
+        internal static void Clear()
+        {
+            value = null;
+        }
+
+        private static ImmutableDictionary<string, FileInfo> Create()
+        {
+            return Directory?.EnumerateFiles("*.dll", SearchOption.AllDirectories)
+                             .ToImmutableDictionary(
+                                 x => Path.GetFileNameWithoutExtension(x.FullName),
+                                 x => x) ??
+                   ImmutableDictionary<string, FileInfo>.Empty;
         }
     }
 }

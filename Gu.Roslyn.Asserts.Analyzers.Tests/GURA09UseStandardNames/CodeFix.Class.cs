@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
-{
-    using NUnit.Framework;
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames;
 
-    public static partial class CodeFix
+using NUnit.Framework;
+
+public static partial class CodeFix
+{
+    public static class Class
     {
-        public static class Class
+        [TestCase("Foo")]
+        [TestCase("Bar")]
+        public static void SingleClassNamed(string name)
         {
-            [TestCase("Foo")]
-            [TestCase("Bar")]
-            public static void SingleClassNamed(string name)
-            {
-                var before = @"
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -29,7 +29,7 @@ namespace N
     }
 }".AssertReplace("Foo", name);
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -48,14 +48,14 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
+        }
 
-            [TestCase("Foo")]
-            [TestCase("Bar")]
-            public static void SingleMultilineClassNamed(string name)
-            {
-                var before = @"
+        [TestCase("Foo")]
+        [TestCase("Bar")]
+        public static void SingleMultilineClassNamed(string name)
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -80,7 +80,7 @@ namespace N
     }
 }".AssertReplace("Foo", name);
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -105,14 +105,14 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
+        }
 
-            [TestCase("Foo")]
-            [TestCase("Bar")]
-            public static void GenericClassNamed(string name)
-            {
-                var before = @"
+        [TestCase("Foo")]
+        [TestCase("Bar")]
+        public static void GenericClassNamed(string name)
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -131,7 +131,7 @@ namespace N
     }
 }".AssertReplace("Foo", name);
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -150,15 +150,15 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace {name} with C");
+        }
 
-            [TestCase("Other")]
-            [TestCase("FooBase")]
-            [TestCase("AbstractFoo")]
-            public static void ClassNamedFooAnd(string name)
-            {
-                var before = @"
+        [TestCase("Other")]
+        [TestCase("FooBase")]
+        [TestCase("AbstractFoo")]
+        public static void ClassNamedFooAnd(string name)
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -178,7 +178,7 @@ namespace N
     }
 }".AssertReplace("FooBase", name);
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -198,14 +198,14 @@ namespace N
     }
 }".AssertReplace("FooBase", name);
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: "Replace Foo with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: "Replace Foo with C");
+        }
 
-            [Ignore("Not sure if we want to touch this.")]
-            [Test]
-            public static void FooException()
-            {
-                var before = @"
+        [Ignore("Not sure if we want to touch this.")]
+        [Test]
+        public static void FooException()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -224,7 +224,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -243,13 +243,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+        }
 
-            [Test]
-            public static void FooWithFactoryMethod()
-            {
-                var before = @"
+        [Test]
+        public static void FooWithFactoryMethod()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -273,7 +273,7 @@ class ↓Foo
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -297,13 +297,13 @@ class C
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
+        }
 
-            [Test]
-            public static void DoesNotTouchWordInTestMethodName()
-            {
-                var before = @"
+        [Test]
+        public static void DoesNotTouchWordInTestMethodName()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -325,7 +325,7 @@ class ↓Foo
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -347,13 +347,13 @@ class C
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
+        }
 
-            [Test]
-            public static void DoesNotTouchWordPart()
-            {
-                var before = @"
+        [Test]
+        public static void DoesNotTouchWordPart()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -376,7 +376,7 @@ class ↓Foo
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -399,13 +399,13 @@ class C
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C");
+        }
 
-            [Test]
-            public static void C1AndBarInSameDocument()
-            {
-                var before = @"
+        [Test]
+        public static void C1AndBarInSameDocument()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -426,7 +426,7 @@ class ↓Bar { }"";
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -447,13 +447,13 @@ class C2 { }"";
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with C2");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with C2");
+        }
 
-            [Test]
-            public static void C1AndBarInDifferentDocuments()
-            {
-                var before = @"
+        [Test]
+        public static void C1AndBarInDifferentDocuments()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -473,7 +473,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -493,13 +493,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with C2");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Bar with C2");
+        }
 
-            [Test]
-            public static void C1C2AndBaz()
-            {
-                var before = @"
+        [Test]
+        public static void C1C2AndBaz()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -520,7 +520,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -541,13 +541,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Baz with C3");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Baz with C3");
+        }
 
-            [Test]
-            public static void ClassNamedFooWithMethodNamedC()
-            {
-                var before = @"
+        [Test]
+        public static void ClassNamedFooWithMethodNamedC()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -573,7 +573,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -598,13 +598,13 @@ namespace N
         }
     }
 }";
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C3");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C3");
+        }
 
-            [Test]
-            public static void ClassNamedFooWithPropertyNamedC()
-            {
-                var before = @"
+        [Test]
+        public static void ClassNamedFooWithPropertyNamedC()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -630,7 +630,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -656,13 +656,13 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C2");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C2");
+        }
 
-            [Test]
-            public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
-            {
-                var before = @"
+        [Test]
+        public static void ClassNamedFooWithExpressionBodyPropertyNamedC()
+        {
+            var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -688,7 +688,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -714,8 +714,7 @@ namespace N
     }
 }";
 
-                Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C1");
-            }
+            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after }, fixTitle: $"Replace Foo with C1");
         }
     }
 }

@@ -1,66 +1,65 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System;
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class FieldNameMustNotBeginWithUnderscoreDisabled : DiagnosticAnalyzer
 {
-    using System;
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    internal static readonly DiagnosticDescriptor Descriptor = new(
+        "SA13090",
+        "Field names must not begin with underscore",
+        "Field '{0}' must not begin with an underscore",
+        "Naming",
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: false);
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class FieldNameMustNotBeginWithUnderscoreDisabled : DiagnosticAnalyzer
+    private static readonly Action<SyntaxNodeAnalysisContext> FieldDeclarationAction = HandleFieldDeclaration;
+
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
+
+    /// <inheritdoc/>
+    public override void Initialize(AnalysisContext context)
     {
-        internal static readonly DiagnosticDescriptor Descriptor = new(
-            "SA13090",
-            "Field names must not begin with underscore",
-            "Field '{0}' must not begin with an underscore",
-            "Naming",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: false);
-
-        private static readonly Action<SyntaxNodeAnalysisContext> FieldDeclarationAction = HandleFieldDeclaration;
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
-
-        /// <inheritdoc/>
-        public override void Initialize(AnalysisContext context)
+        if (context is null)
         {
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            context.EnableConcurrentExecution();
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.RegisterSyntaxNodeAction(FieldDeclarationAction, SyntaxKind.FieldDeclaration);
+            throw new ArgumentNullException(nameof(context));
         }
 
-        private static void HandleFieldDeclaration(SyntaxNodeAnalysisContext context)
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+        context.RegisterSyntaxNodeAction(FieldDeclarationAction, SyntaxKind.FieldDeclaration);
+    }
+
+    private static void HandleFieldDeclaration(SyntaxNodeAnalysisContext context)
+    {
+        var syntax = (FieldDeclarationSyntax)context.Node;
+
+        var variables = syntax.Declaration?.Variables;
+        if (variables is null)
         {
-            var syntax = (FieldDeclarationSyntax)context.Node;
+            return;
+        }
 
-            var variables = syntax.Declaration?.Variables;
-            if (variables is null)
+        foreach (var variableDeclarator in variables.Value)
+        {
+            var identifier = variableDeclarator.Identifier;
+            if (identifier.IsMissing)
             {
-                return;
+                continue;
             }
 
-            foreach (var variableDeclarator in variables.Value)
+            if (!identifier.ValueText.StartsWith("_", StringComparison.Ordinal))
             {
-                var identifier = variableDeclarator.Identifier;
-                if (identifier.IsMissing)
-                {
-                    continue;
-                }
-
-                if (!identifier.ValueText.StartsWith("_", StringComparison.Ordinal))
-                {
-                    continue;
-                }
-
-                var name = identifier.ValueText;
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, identifier.GetLocation(), name));
+                continue;
             }
+
+            var name = identifier.ValueText;
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, identifier.GetLocation(), name));
         }
     }
 }

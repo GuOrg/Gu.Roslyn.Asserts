@@ -1,17 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests;
+
+using System.Runtime.CompilerServices;
+
+using Gu.Roslyn.Asserts;
+
+internal static class ModuleInitializer
 {
-    using System.Runtime.CompilerServices;
-
-    using Gu.Roslyn.Asserts;
-
-    internal static class ModuleInitializer
+    [ModuleInitializer]
+    internal static void Initialize()
     {
-        [ModuleInitializer]
-        internal static void Initialize()
-        {
-            Settings.Default = Settings.Default
-                .WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS0281", "CS1701", "CS1702"))
-                .WithMetadataReferences(MetadataReferences.Transitive(typeof(ModuleInitializer)));
-        }
+        Settings.Default = Settings.Default
+            .WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS0281", "CS1701", "CS1702"))
+            .WithMetadataReferences(MetadataReferences.Transitive(typeof(ModuleInitializer)));
     }
 }

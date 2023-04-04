@@ -1,18 +1,18 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA01NameShouldMatchParameter;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using NUnit.Framework;
+
+public static class Valid
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using NUnit.Framework;
+    private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
+    private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
 
-    public static class Valid
+    [Test]
+    public static void ValidAnalyzerAndCode()
     {
-        private static readonly DiagnosticAnalyzer Analyzer = new InvocationAnalyzer();
-        private static readonly DiagnosticDescriptor Descriptor = Descriptors.GURA01NameShouldMatchParameter;
-
-        [Test]
-        public static void ValidAnalyzerAndCode()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -30,13 +30,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenTwoAnalyzers()
-        {
-            var code = @"
+    [Test]
+    public static void WhenTwoAnalyzers()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -56,13 +56,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void ValidAnalyzerAndCodeAndSettings()
-        {
-            var code = @"
+    [Test]
+    public static void ValidAnalyzerAndCodeAndSettings()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -81,13 +81,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenTypeOfAnalyzer()
-        {
-            var code = @"
+    [Test]
+    public static void WhenTypeOfAnalyzer()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -103,13 +103,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenAnalyzerGetType()
-        {
-            var code = @"
+    [Test]
+    public static void WhenAnalyzerGetType()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -127,14 +127,14 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [TestCase("Analyzer")]
-        [TestCase("PlaceholderAnalyzer")]
-        public static void WhenFieldAnalyzer(string name)
-        {
-            var code = @"
+    [TestCase("Analyzer")]
+    [TestCase("PlaceholderAnalyzer")]
+    public static void WhenFieldAnalyzer(string name)
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -152,13 +152,13 @@ namespace N
         }
     }
 }".AssertReplace("Name", name);
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void OneParam()
-        {
-            var code = @"
+    [Test]
+    public static void OneParam()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -177,13 +177,13 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void TwoParams()
-        {
-            var code = @"
+    [Test]
+    public static void TwoParams()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -203,13 +203,13 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void TwoParamsExplicitArray()
-        {
-            var code = @"
+    [Test]
+    public static void TwoParamsExplicitArray()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -229,13 +229,13 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void InlineStringEmptyParams()
-        {
-            var code = @"
+    [Test]
+    public static void InlineStringEmptyParams()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -253,15 +253,15 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [TestCase("string.Empty")]
-        [TestCase("\"\"")]
-        [TestCase("\"SYNTAX_ERROR\"")]
-        public static void WhenNoNameInCode(string expression)
-        {
-            var code = @"
+    [TestCase("string.Empty")]
+    [TestCase("\"\"")]
+    [TestCase("\"SYNTAX_ERROR\"")]
+    public static void WhenNoNameInCode(string expression)
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -280,13 +280,13 @@ namespace N
     }
 }".AssertReplace("string.Empty", expression);
 
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixOneParamWithPosition()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixOneParamWithPosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -304,13 +304,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixTwoParamsWithOnePosition()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixTwoParamsWithOnePosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -329,13 +329,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixTwoParamsWithOnePositionConst()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixTwoParamsWithOnePositionConst()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -354,13 +354,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixTwoParamsWithOnePositionInstanceField()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixTwoParamsWithOnePositionInstanceField()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -379,13 +379,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixArrayWithOnePosition()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixArrayWithOnePosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -404,13 +404,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixOneBefore()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixOneBefore()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -429,14 +429,14 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+    }
 
-        [Ignore("tbd")]
-        [Test]
-        public static void CodeFixExpectedDiagnosticMatchingId()
-        {
-            var code = @"
+    [Ignore("tbd")]
+    [Test]
+    public static void CodeFixExpectedDiagnosticMatchingId()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -457,13 +457,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+    }
 
-        [Test]
-        public static void Refactoring()
-        {
-            var code = @"
+    [Test]
+    public static void Refactoring()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -504,13 +504,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderRefactoring, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderRefactoring, code);
+    }
 
-        [Test]
-        public static void FixAllMany()
-        {
-            var code = @"
+    [Test]
+    public static void FixAllMany()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -532,13 +532,13 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+    }
 
-        [Test]
-        public static void WhenTwoWithPosition()
-        {
-            var code = @"
+    [Test]
+    public static void WhenTwoWithPosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -558,13 +558,13 @@ namespace N
     }
 }";
 
-            RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenMetadataReferencesInOtherClass()
-        {
-            var code = @"
+    [Test]
+    public static void WhenMetadataReferencesInOtherClass()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -588,7 +588,6 @@ namespace N
         }
     }
 }";
-            RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
-        }
+        RoslynAssert.Valid(Analyzer, Descriptor, Code.PlaceholderAnalyzer, code);
     }
 }

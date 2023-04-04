@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
-{
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Gu.Roslyn.Asserts.Tests.CodeFixes;
-    using NUnit.Framework;
+﻿namespace Gu.Roslyn.Asserts.Tests;
 
-    public static class FixTests
+using System.Linq;
+using System.Threading.Tasks;
+using Gu.Roslyn.Asserts.Tests.CodeFixes;
+using NUnit.Framework;
+
+public static class FixTests
+{
+    [Test]
+    public static async Task SingleDocumentOneError()
     {
-        [Test]
-        public static async Task SingleDocumentOneError()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     class C
@@ -19,7 +19,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     class C
@@ -27,20 +27,20 @@ namespace N
         private readonly int value;
     }
 }";
-            var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(code);
-            var diagnostic = Analyze.GetDiagnostics(analyzer, sln).SelectMany(x => x.AnalyzerDiagnostics).Single();
-            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostic);
-            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
+        var analyzer = new FieldNameMustNotBeginWithUnderscore();
+        var sln = CodeFactory.CreateSolution(code);
+        var diagnostic = Analyze.GetDiagnostics(analyzer, sln).SelectMany(x => x.AnalyzerDiagnostics).Single();
+        var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostic);
+        CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
 
-            fixedSln = await Fix.ApplyAsync(sln, new DoNotUseUnderscoreFix(), diagnostic).ConfigureAwait(false);
-            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
-        }
+        fixedSln = await Fix.ApplyAsync(sln, new DoNotUseUnderscoreFix(), diagnostic).ConfigureAwait(false);
+        CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
+    }
 
-        [Test]
-        public static void SingleDocumentTwoErrors()
-        {
-            var code = @"
+    [Test]
+    public static void SingleDocumentTwoErrors()
+    {
+        var code = @"
 namespace N
 {
     class C
@@ -50,7 +50,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     class C
@@ -59,17 +59,17 @@ namespace N
         private readonly int value2;
     }
 }";
-            var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(code);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
-            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
-        }
+        var analyzer = new FieldNameMustNotBeginWithUnderscore();
+        var sln = CodeFactory.CreateSolution(code);
+        var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+        var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
+        CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
+    }
 
-        [Test]
-        public static void SingleDocumentOneErrorCorrectFixAll()
-        {
-            var code = @"
+    [Test]
+    public static void SingleDocumentOneErrorCorrectFixAll()
+    {
+        var code = @"
 namespace N
 {
     class C
@@ -78,7 +78,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     class C
@@ -86,11 +86,10 @@ namespace N
         private readonly int value;
     }
 }";
-            var analyzer = new FieldNameMustNotBeginWithUnderscore();
-            var sln = CodeFactory.CreateSolution(code);
-            var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
-            var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
-            CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
-        }
+        var analyzer = new FieldNameMustNotBeginWithUnderscore();
+        var sln = CodeFactory.CreateSolution(code);
+        var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
+        var fixedSln = Fix.Apply(sln, new DoNotUseUnderscoreFix(), diagnostics);
+        CodeAssert.AreEqual(after, fixedSln.Projects.Single().Documents.Single());
     }
 }

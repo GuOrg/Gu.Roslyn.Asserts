@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA07TestClassShouldBePublicStatic
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA07TestClassShouldBePublicStatic;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, MakePublicStaticFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA07TestClassShouldBePublicStatic));
 
-    public static class CodeFix
+    [Test]
+    public static void WhenInternalStatic()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, MakePublicStaticFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA07TestClassShouldBePublicStatic));
-
-        [Test]
-        public static void WhenInternalStatic()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -29,7 +29,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -48,13 +48,13 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+    }
 
-        [Test]
-        public static void WhenExplicitInternal()
-        {
-            var before = @"
+    [Test]
+    public static void WhenExplicitInternal()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -73,7 +73,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -92,13 +92,13 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+    }
 
-        [Test]
-        public static void WhenPublic()
-        {
-            var before = @"
+    [Test]
+    public static void WhenPublic()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -117,7 +117,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -136,13 +136,13 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
+    }
 
-        [Test]
-        public static void WhenImplicitInternalPrivate()
-        {
-            var before = @"
+    [Test]
+    public static void WhenImplicitInternalPrivate()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -161,7 +161,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -180,7 +180,6 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
 }

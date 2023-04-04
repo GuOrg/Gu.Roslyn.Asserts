@@ -1,23 +1,22 @@
-﻿namespace Gu.Roslyn.Asserts.Internals
+﻿namespace Gu.Roslyn.Asserts.Internals;
+
+using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+
+internal static class SolutionExtensions
 {
-    using System.Collections.Generic;
-
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-
-    internal static class SolutionExtensions
+    internal static Solution WithWarningOrError(this Solution solution, IEnumerable<DiagnosticDescriptor> descriptors)
     {
-        internal static Solution WithWarningOrError(this Solution solution, IEnumerable<DiagnosticDescriptor> descriptors)
+        var updated = solution;
+        foreach (var project in solution.Projects)
         {
-            var updated = solution;
-            foreach (var project in solution.Projects)
-            {
-                updated = updated.GetProject(project.Id)!
-                                 .WithCompilationOptions(((CSharpCompilationOptions)project.CompilationOptions!).WithWarningOrError(descriptors))
-                                 .Solution;
-            }
-
-            return updated;
+            updated = updated.GetProject(project.Id)!
+                             .WithCompilationOptions(((CSharpCompilationOptions)project.CompilationOptions!).WithWarningOrError(descriptors))
+                             .Solution;
         }
+
+        return updated;
     }
 }

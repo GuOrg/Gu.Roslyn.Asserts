@@ -1,19 +1,19 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, RenameFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA03NameShouldMatchCode));
 
-    public static class CodeFix
+    [TestCase("class C1 { }", "private const", "C1")]
+    [TestCase("class C1 { }", "private static readonly", "C1")]
+    [TestCase("class C1 { }", "const", "C1")]
+    [TestCase("public class C1 { }", "private const", "C1")]
+    public static void FieldClassWhenSingleArgument(string declaration, string modifiers, string name)
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, RenameFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA03NameShouldMatchCode));
-
-        [TestCase("class C1 { }", "private const", "C1")]
-        [TestCase("class C1 { }", "private static readonly", "C1")]
-        [TestCase("class C1 { }", "const", "C1")]
-        [TestCase("public class C1 { }", "private const", "C1")]
-        public static void FieldClassWhenSingleArgument(string declaration, string modifiers, string name)
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -36,9 +36,9 @@ namespace N
         }
     }
 }".AssertReplace("public class C1 { }", declaration)
-  .AssertReplace("private const", modifiers);
+.AssertReplace("private const", modifiers);
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -61,15 +61,15 @@ namespace N
         }
     }
 }".AssertReplace("public class C1 { }", declaration)
-  .AssertReplace("private const", modifiers)
-  .AssertReplace("C1", name);
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+.AssertReplace("private const", modifiers)
+.AssertReplace("C1", name);
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void LocalWhenSingleArgument()
-        {
-            var before = @"
+    [Test]
+    public static void LocalWhenSingleArgument()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -88,7 +88,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -106,13 +106,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void LocalWhenSingleArgumentWhenComment()
-        {
-            var before = @"
+    [Test]
+    public static void LocalWhenSingleArgumentWhenComment()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -135,7 +135,7 @@ class C
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -157,13 +157,13 @@ class C
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void LocalWhenAssertReplace()
-        {
-            var before = @"
+    [Test]
+    public static void LocalWhenAssertReplace()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -182,7 +182,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -200,13 +200,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void FieldClassWhenParams()
-        {
-            var before = @"
+    [Test]
+    public static void FieldClassWhenParams()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -231,7 +231,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -255,13 +255,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void FieldClassWhenTwoParams()
-        {
-            var before = @"
+    [Test]
+    public static void FieldClassWhenTwoParams()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -293,7 +293,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -324,13 +324,13 @@ namespace N
         }
     }
 }";
-            Assert.FixAll(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.FixAll(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void ClassWhenArray()
-        {
-            var before = @"
+    [Test]
+    public static void ClassWhenArray()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -355,7 +355,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -379,7 +379,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
     }
 }

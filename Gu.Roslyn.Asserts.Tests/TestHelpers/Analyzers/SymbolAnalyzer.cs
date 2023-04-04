@@ -1,44 +1,43 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class SymbolAnalyzer : DiagnosticAnalyzer
 {
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    private static readonly DiagnosticDescriptor Descriptor = new(
+        "123",
+        "SymbolAnalyzer",
+        "SymbolAnalyzer",
+        "SymbolAnalyzer",
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class SymbolAnalyzer : DiagnosticAnalyzer
+    private readonly SymbolKind[] kinds;
+    private readonly List<SymbolAnalysisContext> contexts = new();
+
+    internal SymbolAnalyzer(params SymbolKind[] kinds)
     {
-        private static readonly DiagnosticDescriptor Descriptor = new(
-            "123",
-            "SymbolAnalyzer",
-            "SymbolAnalyzer",
-            "SymbolAnalyzer",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        this.kinds = kinds;
+    }
 
-        private readonly SymbolKind[] kinds;
-        private readonly List<SymbolAnalysisContext> contexts = new();
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
 
-        internal SymbolAnalyzer(params SymbolKind[] kinds)
-        {
-            this.kinds = kinds;
-        }
+    internal IReadOnlyList<SymbolAnalysisContext> Contexts => this.contexts;
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
+    /// <inheritdoc/>
+    public override void Initialize(AnalysisContext context)
+    {
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.EnableConcurrentExecution();
+        context.RegisterSymbolAction(this.Handle, this.kinds);
+    }
 
-        internal IReadOnlyList<SymbolAnalysisContext> Contexts => this.contexts;
-
-        /// <inheritdoc/>
-        public override void Initialize(AnalysisContext context)
-        {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(this.Handle, this.kinds);
-        }
-
-        private void Handle(SymbolAnalysisContext context)
-        {
-            this.contexts.Add(context);
-        }
+    private void Handle(SymbolAnalysisContext context)
+    {
+        this.contexts.Add(context);
     }
 }

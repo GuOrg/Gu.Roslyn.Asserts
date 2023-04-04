@@ -1,46 +1,45 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class SyntaxNodeContextAnalyzer : DiagnosticAnalyzer
 {
-    using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    private static readonly DiagnosticDescriptor Descriptor = new(
+        "12345",
+        "SyntaxNodeAnalyzer",
+        "SyntaxNodeAnalyzer",
+        "SyntaxNodeAnalyzer",
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class SyntaxNodeContextAnalyzer : DiagnosticAnalyzer
+    private readonly SyntaxKind[] kinds;
+    private readonly List<SyntaxNodeAnalysisContext> contexts = new();
+
+    internal SyntaxNodeContextAnalyzer(params SyntaxKind[] kinds)
     {
-        private static readonly DiagnosticDescriptor Descriptor = new(
-            "12345",
-            "SyntaxNodeAnalyzer",
-            "SyntaxNodeAnalyzer",
-            "SyntaxNodeAnalyzer",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
+        this.kinds = kinds;
+    }
 
-        private readonly SyntaxKind[] kinds;
-        private readonly List<SyntaxNodeAnalysisContext> contexts = new();
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
+        ImmutableArray.Create(Descriptor);
 
-        internal SyntaxNodeContextAnalyzer(params SyntaxKind[] kinds)
-        {
-            this.kinds = kinds;
-        }
+    internal IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
-            ImmutableArray.Create(Descriptor);
+    /// <inheritdoc/>
+    public override void Initialize(AnalysisContext context)
+    {
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.EnableConcurrentExecution();
+        context.RegisterSyntaxNodeAction(this.Handle, this.kinds);
+    }
 
-        internal IReadOnlyList<SyntaxNodeAnalysisContext> Contexts => this.contexts;
-
-        /// <inheritdoc/>
-        public override void Initialize(AnalysisContext context)
-        {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(this.Handle, this.kinds);
-        }
-
-        private void Handle(SyntaxNodeAnalysisContext context)
-        {
-            this.contexts.Add(context);
-        }
+    private void Handle(SyntaxNodeAnalysisContext context)
+    {
+        this.contexts.Add(context);
     }
 }

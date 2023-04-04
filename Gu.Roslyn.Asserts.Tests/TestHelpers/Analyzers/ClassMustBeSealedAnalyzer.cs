@@ -1,41 +1,40 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class ClassMustBeSealedAnalyzer : DiagnosticAnalyzer
 {
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    internal const string DiagnosticId = "ClassMustBeSealed";
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class ClassMustBeSealedAnalyzer : DiagnosticAnalyzer
+    private static readonly DiagnosticDescriptor Descriptor = new(
+        id: DiagnosticId,
+        title: "This analyzer reports warnings if a class is not sealed",
+        messageFormat: "Message format",
+        category: "Category",
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
+
+    /// <inheritdoc/>
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
+
+    public override void Initialize(AnalysisContext context)
     {
-        internal const string DiagnosticId = "ClassMustBeSealed";
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+        context.EnableConcurrentExecution();
+        context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.ClassDeclaration);
+    }
 
-        private static readonly DiagnosticDescriptor Descriptor = new(
-            id: DiagnosticId,
-            title: "This analyzer reports warnings if a class is not sealed",
-            messageFormat: "Message format",
-            category: "Category",
-            defaultSeverity: DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <inheritdoc/>
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
-
-        public override void Initialize(AnalysisContext context)
+    private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
+    {
+        var classDeclaration = (ClassDeclarationSyntax)context.Node;
+        if (!classDeclaration.Modifiers.Any(SyntaxKind.SealedKeyword))
         {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(HandleDeclaration, SyntaxKind.ClassDeclaration);
-        }
-
-        private static void HandleDeclaration(SyntaxNodeAnalysisContext context)
-        {
-            var classDeclaration = (ClassDeclarationSyntax)context.Node;
-            if (!classDeclaration.Modifiers.Any(SyntaxKind.SealedKeyword))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
-            }
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, classDeclaration.GetLocation()));
         }
     }
 }

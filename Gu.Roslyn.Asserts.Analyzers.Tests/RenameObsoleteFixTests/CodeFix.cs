@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameObsoleteFixTests
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.RenameObsoleteFixTests;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using NUnit.Framework;
+
+public static partial class CodeFix
 {
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using NUnit.Framework;
+    private static readonly CodeFixProvider Fix = new RenameObsoleteFix();
 
-    public static partial class CodeFix
+    [Test]
+    public static void ChangeToRoslynAssert()
     {
-        private static readonly CodeFixProvider Fix = new RenameObsoleteFix();
-
-        [Test]
-        public static void ChangeToRoslynAssert()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -28,7 +28,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -45,14 +45,14 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.Create("CS0103");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, settings: Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS8019", "CS1701", "CS1702")));
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.Create("CS0103");
+        RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after, settings: Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS8019", "CS1701", "CS1702")));
+    }
 
-        [Test]
-        public static void ChangeToRoslynAssertFullyQualified()
-        {
-            var before = @"
+    [Test]
+    public static void ChangeToRoslynAssertFullyQualified()
+    {
+        var before = @"
 namespace N
 {
     using NUnit.Framework;
@@ -69,7 +69,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using NUnit.Framework;
@@ -85,15 +85,15 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.Create("CS0234");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.Create("CS0234");
+        RoslynAssert.CodeFix(Fix, expectedDiagnostic, new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [TestCase("code")]
-        [TestCase("codeWithErrorsIndicated")]
-        public static void ChangeParameterNameToBefore(string name)
-        {
-            var before = @"
+    [TestCase("code")]
+    [TestCase("codeWithErrorsIndicated")]
+    public static void ChangeParameterNameToBefore(string name)
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -109,7 +109,7 @@ namespace N
     }
 }".AssertReplace("code", name);
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -124,15 +124,15 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
+        RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
+    }
 
-        [TestCase("fixedCode")]
-        [TestCase("fixedcode")]
-        public static void ChangeParameterNameToAfter(string name)
-        {
-            var before = @"
+    [TestCase("fixedCode")]
+    [TestCase("fixedcode")]
+    public static void ChangeParameterNameToAfter(string name)
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -148,7 +148,7 @@ namespace N
     }
 }".AssertReplace("fixedCode", name);
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -163,8 +163,7 @@ namespace N
         }
     }
 }";
-            var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
-            RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
-        }
+        var expectedDiagnostic = ExpectedDiagnostic.Create("CS1739");
+        RoslynAssert.CodeFix(Fix, expectedDiagnostic, before, after, settings: Settings.Default.WithAllowedCompilerDiagnostics(AllowedCompilerDiagnostics.Warnings));
     }
 }

@@ -1,19 +1,19 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA03NameShouldMatchCode;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA03NameShouldMatchCode);
 
-    public static class Valid
+    [TestCase("class C1 { }", "private const string C1")]
+    [TestCase("class C1 { }", "private static readonly string C1")]
+    [TestCase("class C1 { }", "const string C1")]
+    [TestCase("public class C1 { }", "private const string C1")]
+    [TestCase("public partial class C1 { }", "private const string C1")]
+    public static void Class(string declaration, string field)
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA03NameShouldMatchCode);
-
-        [TestCase("class C1 { }", "private const string C1")]
-        [TestCase("class C1 { }", "private static readonly string C1")]
-        [TestCase("class C1 { }", "const string C1")]
-        [TestCase("public class C1 { }", "private const string C1")]
-        [TestCase("public partial class C1 { }", "private const string C1")]
-        public static void Class(string declaration, string field)
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -37,14 +37,14 @@ namespace N
         }
     }
 }".AssertReplace("public class C1 { }", declaration)
-  .AssertReplace("private const string C1", field);
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+.AssertReplace("private const string C1", field);
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void GenericClassOneTypeParameters()
-        {
-            var code = @"
+    [Test]
+    public static void GenericClassOneTypeParameters()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -68,13 +68,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void GenericClassWithTwoTypeParameters()
-        {
-            var code = @"
+    [Test]
+    public static void GenericClassWithTwoTypeParameters()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -98,13 +98,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void Struct()
-        {
-            var code = @"
+    [Test]
+    public static void Struct()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -128,13 +128,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void IgnorePartialClass()
-        {
-            var code = @"
+    [Test]
+    public static void IgnorePartialClass()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -164,13 +164,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void Inline()
-        {
-            var code = @"
+    [Test]
+    public static void Inline()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -187,13 +187,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void OneParam()
-        {
-            var code = @"
+    [Test]
+    public static void OneParam()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -212,13 +212,13 @@ namespace N
     }
 }";
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void TwoParams()
-        {
-            var code = @"
+    [Test]
+    public static void TwoParams()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -238,13 +238,13 @@ namespace N
     }
 }";
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void TwoParamsExplicitArray()
-        {
-            var code = @"
+    [Test]
+    public static void TwoParamsExplicitArray()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -264,13 +264,13 @@ namespace N
     }
 }";
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void InlineStringEmptyParam()
-        {
-            var code = @"
+    [Test]
+    public static void InlineStringEmptyParam()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -288,15 +288,15 @@ namespace N
     }
 }";
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [TestCase("string.Empty")]
-        [TestCase("\"\"")]
-        [TestCase("\"SYNTAX_ERROR\"")]
-        public static void WhenNoNameInCode(string expression)
-        {
-            var code = @"
+    [TestCase("string.Empty")]
+    [TestCase("\"\"")]
+    [TestCase("\"SYNTAX_ERROR\"")]
+    public static void WhenNoNameInCode(string expression)
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -315,13 +315,13 @@ namespace N
     }
 }".AssertReplace("string.Empty", expression);
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenLocalNameMatchesParameter()
-        {
-            var code = @"
+    [Test]
+    public static void WhenLocalNameMatchesParameter()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -346,7 +346,6 @@ namespace N
     }
 }";
 
-            Assert.Valid(new[] { Code.PlaceholderAnalyzer, code });
-        }
+        Assert.Valid(new[] { Code.PlaceholderAnalyzer, code });
     }
 }

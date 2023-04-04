@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA02IndicateErrorPosition);
 
-    public static class Valid
+    [Test]
+    public static void DiagnosticsOneParamWithPosition()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>(Descriptors.GURA02IndicateErrorPosition);
-
-        [Test]
-        public static void DiagnosticsOneParamWithPosition()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -27,13 +27,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void SuppressedOneParamWithPosition()
-        {
-            var code = @"
+    [Test]
+    public static void SuppressedOneParamWithPosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -51,13 +51,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderSuppressor, code);
-        }
+        Assert.Valid(Code.PlaceholderSuppressor, code);
+    }
 
-        [Test]
-        public static void NotSuppressedOneParamWithPosition()
-        {
-            var code = @"
+    [Test]
+    public static void NotSuppressedOneParamWithPosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -75,13 +75,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderSuppressor, code);
-        }
+        Assert.Valid(Code.PlaceholderSuppressor, code);
+    }
 
-        [Test]
-        public static void DiagnosticsOneParamWithPositionAssertReplace()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsOneParamWithPositionAssertReplace()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -99,13 +99,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsTwoParamsWithOnePosition()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsTwoParamsWithOnePosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -124,13 +124,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplace()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplace()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -149,13 +149,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplaceWithPosition()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsTwoParamsWithOnePositionAndAssertReplaceWithPosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -174,13 +174,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsTwoParamsWithOnePositionConst()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsTwoParamsWithOnePositionConst()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -199,13 +199,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsTwoParamsWithOnePositionInstanceField()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsTwoParamsWithOnePositionInstanceField()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -224,13 +224,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticsArrayWithOnePosition()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticsArrayWithOnePosition()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -249,13 +249,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void CodeFixOneBefore()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixOneBefore()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -274,13 +274,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+    }
 
-        [Test]
-        public static void CodeFixAssertReplace()
-        {
-            var code = @"
+    [Test]
+    public static void CodeFixAssertReplace()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -327,13 +327,13 @@ namespace N
         }
         }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
+    }
 
-        [Test]
-        public static void WhenAssertReplacingOne()
-        {
-            var code = @"
+    [Test]
+    public static void WhenAssertReplacingOne()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -369,13 +369,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenAssertReplacingOnePartial()
-        {
-            var code = @"
+    [Test]
+    public static void WhenAssertReplacingOnePartial()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -411,7 +411,6 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 }

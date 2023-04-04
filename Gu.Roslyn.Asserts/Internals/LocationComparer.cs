@@ -1,39 +1,38 @@
-﻿namespace Gu.Roslyn.Asserts.Internals
+﻿namespace Gu.Roslyn.Asserts.Internals;
+
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
+
+/// <inheritdoc />
+internal sealed class LocationComparer : IComparer<Location>
 {
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
+    /// <summary>
+    /// The default instance.
+    /// </summary>
+    internal static readonly LocationComparer BySourceSpan = new();
+
+    private LocationComparer()
+    {
+    }
 
     /// <inheritdoc />
-    internal sealed class LocationComparer : IComparer<Location>
+    public int Compare(Location? x, Location? y)
     {
-        /// <summary>
-        /// The default instance.
-        /// </summary>
-        internal static readonly LocationComparer BySourceSpan = new();
-
-        private LocationComparer()
+        if (ReferenceEquals(x, y))
         {
+            return 0;
         }
 
-        /// <inheritdoc />
-        public int Compare(Location? x, Location? y)
+        if (x is null)
         {
-            if (ReferenceEquals(x, y))
-            {
-                return 0;
-            }
-
-            if (x is null)
-            {
-                return -1;
-            }
-
-            if (y is null)
-            {
-                return 1;
-            }
-
-            return x.SourceSpan.CompareTo(y.SourceSpan);
+            return -1;
         }
+
+        if (y is null)
+        {
+            return 1;
+        }
+
+        return x.SourceSpan.CompareTo(y.SourceSpan);
     }
 }

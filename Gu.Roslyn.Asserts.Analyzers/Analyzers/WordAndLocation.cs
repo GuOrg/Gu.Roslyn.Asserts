@@ -1,16 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers
+﻿namespace Gu.Roslyn.Asserts.Analyzers;
+
+using Microsoft.CodeAnalysis;
+
+internal readonly struct WordAndLocation
 {
-    using Microsoft.CodeAnalysis;
+    internal readonly string Word;
+    internal readonly Location Location;
 
-    internal readonly struct WordAndLocation
+    internal WordAndLocation(string before, Location location)
     {
-        internal readonly string Word;
-        internal readonly Location Location;
-
-        internal WordAndLocation(string before, Location location)
-        {
-            this.Word = before;
-            this.Location = location;
-        }
+        this.Word = before;
+        this.Location = location;
     }
 }

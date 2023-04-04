@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA08bShouldBePublic;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08bShouldBePublic);
 
-    public static class Valid
+    [Test]
+    public static void DiagnosticAnalyzer()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ObjectCreationAnalyzer>(Descriptors.GURA08bShouldBePublic);
-
-        [Test]
-        public static void DiagnosticAnalyzer()
-        {
-            var analyzer = @"
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -31,7 +31,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -50,13 +50,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, diagnostics);
-        }
+        Assert.Valid(analyzer, diagnostics);
+    }
 
-        [Test]
-        public static void CodeFixProvider()
-        {
-            var analyzer = @"
+    [Test]
+    public static void CodeFixProvider()
+    {
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -78,7 +78,7 @@ namespace N
     }
 }";
 
-            var fix = @"
+        var fix = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -95,7 +95,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -115,13 +115,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, fix, diagnostics);
-        }
+        Assert.Valid(analyzer, fix, diagnostics);
+    }
 
-        [Test]
-        public static void CodeRefactoringProvider()
-        {
-            var placeholderRefactoring = @"
+    [Test]
+    public static void CodeRefactoringProvider()
+    {
+        var placeholderRefactoring = @"
 namespace N
 {
     using System.Threading.Tasks;
@@ -132,26 +132,26 @@ namespace N
         public override Task ComputeRefactoringsAsync(CodeRefactoringContext context) => Task.CompletedTask;
     }
 }";
-            Assert.Valid(placeholderRefactoring);
-        }
+        Assert.Valid(placeholderRefactoring);
+    }
 
-        [Test]
-        public static void EmptyClass()
-        {
-            var c = @"
+    [Test]
+    public static void EmptyClass()
+    {
+        var c = @"
 namespace N
 {
     public class C
     {
     }
 }";
-            Assert.Valid(c);
-        }
+        Assert.Valid(c);
+    }
 
-        [Test]
-        public static void RoslynAssertDiagnostics()
-        {
-            var analyzer = @"
+    [Test]
+    public static void RoslynAssertDiagnostics()
+    {
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -172,7 +172,7 @@ namespace N
         }
     }
 }";
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -191,13 +191,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, diagnostics);
-        }
+        Assert.Valid(analyzer, diagnostics);
+    }
 
-        [Test]
-        public static void DiagnosticGenericAnalyzer()
-        {
-            var analyzer = @"
+    [Test]
+    public static void DiagnosticGenericAnalyzer()
+    {
+        var analyzer = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -219,7 +219,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -242,7 +242,6 @@ namespace N
         }
     }
 }";
-            Assert.Valid(analyzer, diagnostics);
-        }
+        Assert.Valid(analyzer, diagnostics);
     }
 }

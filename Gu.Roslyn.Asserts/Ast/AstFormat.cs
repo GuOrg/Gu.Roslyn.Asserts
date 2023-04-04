@@ -1,18 +1,17 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts;
+
+/// <summary>
+/// For configuring output from <see cref="AstWriter"/>.
+/// </summary>
+public enum AstFormat
 {
     /// <summary>
-    /// For configuring output from <see cref="AstWriter"/>.
+    /// Custom format with less noise than JSON.
     /// </summary>
-    public enum AstFormat
-    {
-        /// <summary>
-        /// Custom format with less noise than JSON.
-        /// </summary>
-        Light,
+    Light,
 
-        /// <summary>
-        /// JSON.
-        /// </summary>
-        Json,
-    }
+    /// <summary>
+    /// JSON.
+    /// </summary>
+    Json,
 }

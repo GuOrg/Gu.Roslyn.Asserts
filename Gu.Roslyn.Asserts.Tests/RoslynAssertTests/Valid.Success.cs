@@ -1,68 +1,68 @@
 ﻿// ReSharper disable RedundantNameQualifier
 // ReSharper disable AssignNullToNotNullAttribute
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
+
+using System.Linq;
+
+using NUnit.Framework;
+
+public static partial class Valid
 {
-    using System.Linq;
-
-    using NUnit.Framework;
-
-    public static partial class Valid
+    public static class Success
     {
-        public static class Success
+        [Test]
+        public static void WithSingleMetadataReference()
         {
-            [Test]
-            public static void WithSingleMetadataReference()
-            {
-                var code = @"
+            var code = @"
 namespace N
 {
     class C
     {
     }
 }";
-                var analyzer = new NopAnalyzer();
-                var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
-                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
-            }
+            var analyzer = new NopAnalyzer();
+            var metadataReferences = new[] { Gu.Roslyn.Asserts.MetadataReferences.CreateFromAssembly(typeof(object).Assembly) };
+            RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
+        }
 
-            [Test]
-            public static void WithTransitiveMetadataReference()
-            {
-                var code = @"
+        [Test]
+        public static void WithTransitiveMetadataReference()
+        {
+            var code = @"
 namespace N
 {
     class C
     {
     }
 }";
-                var analyzer = new NopAnalyzer();
-                var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
-                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
-            }
+            var analyzer = new NopAnalyzer();
+            var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation)).ToArray();
+            RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
+        }
 
-            [Test]
-            public static void SingleDocumentNopAnalyzer()
-            {
-                var code = @"
+        [Test]
+        public static void SingleDocumentNopAnalyzer()
+        {
+            var code = @"
 namespace N
 {
     class C
     {
     }
 }";
-                var descriptor = Descriptors.Id1;
-                var analyzer = new NopAnalyzer(descriptor);
-                RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(typeof(NopAnalyzer), code);
+            var descriptor = Descriptors.Id1;
+            var analyzer = new NopAnalyzer(descriptor);
+            RoslynAssert.Valid(analyzer, code);
+            RoslynAssert.Valid(typeof(NopAnalyzer), code);
 
-                RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
-            }
+            RoslynAssert.Valid(analyzer, descriptor, code);
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
+        }
 
-            [Test]
-            public static void SevenPointThreeFeature()
-            {
-                var code = @"
+        [Test]
+        public static void SevenPointThreeFeature()
+        {
+            var code = @"
 namespace N
 {
     class C<T>
@@ -70,83 +70,83 @@ namespace N
     {
     }
 }";
-                var descriptor = Descriptors.Id1;
-                var analyzer = new NopAnalyzer(descriptor);
-                RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(typeof(NopAnalyzer), code);
+            var descriptor = Descriptors.Id1;
+            var analyzer = new NopAnalyzer(descriptor);
+            RoslynAssert.Valid(analyzer, code);
+            RoslynAssert.Valid(typeof(NopAnalyzer), code);
 
-                RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
-            }
+            RoslynAssert.Valid(analyzer, descriptor, code);
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code);
+        }
 
-            [Test]
-            public static void ProjectFileNopAnalyzer()
-            {
-                Assert.Inconclusive("This has dependency problems in bot net472 and netcoreapp.");
-                var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
-                var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
-                                               typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
-                                               typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider))
-                                           .ToArray();
-                var descriptor = Descriptors.Id1;
-                var analyzer = new NopAnalyzer(descriptor);
-                RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
-                RoslynAssert.Valid(typeof(NopAnalyzer), code, Settings.Default.WithMetadataReferences(metadataReferences));
+        [Test]
+        public static void ProjectFileNopAnalyzer()
+        {
+            Assert.Inconclusive("This has dependency problems in bot net472 and netcoreapp.");
+            var code = ProjectFile.Find("Gu.Roslyn.Asserts.csproj");
+            var metadataReferences = Gu.Roslyn.Asserts.MetadataReferences.Transitive(
+                                           typeof(Microsoft.CodeAnalysis.CSharp.CSharpCompilation),
+                                           typeof(Microsoft.CodeAnalysis.CodeFixes.CodeFixProvider))
+                                       .ToArray();
+            var descriptor = Descriptors.Id1;
+            var analyzer = new NopAnalyzer(descriptor);
+            RoslynAssert.Valid(analyzer, code, Settings.Default.WithMetadataReferences(metadataReferences));
+            RoslynAssert.Valid(typeof(NopAnalyzer), code, Settings.Default.WithMetadataReferences(metadataReferences));
 
-                RoslynAssert.Valid(analyzer, descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
-                RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
-            }
+            RoslynAssert.Valid(analyzer, descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
+            RoslynAssert.Valid(typeof(NopAnalyzer), descriptor, code, Settings.Default.WithMetadataReferences(metadataReferences));
+        }
 
-            [Test]
-            public static void TwoDocumentsNopAnalyzer()
-            {
-                var code1 = @"
+        [Test]
+        public static void TwoDocumentsNopAnalyzer()
+        {
+            var code1 = @"
 namespace N
 {
     class C1
     {
     }
 }";
-                var code2 = @"
+            var code2 = @"
 namespace N
 {
     class C2
     {
     }
 }";
-                var analyzer = new NopAnalyzer();
-                RoslynAssert.Valid(analyzer, code1, code2);
-                RoslynAssert.Valid(analyzer, code2, code1);
-                RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
-            }
+            var analyzer = new NopAnalyzer();
+            RoslynAssert.Valid(analyzer, code1, code2);
+            RoslynAssert.Valid(analyzer, code2, code1);
+            RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
+        }
 
-            [Test]
-            public static void TwoProjectsNopAnalyzer()
-            {
-                var code1 = @"
+        [Test]
+        public static void TwoProjectsNopAnalyzer()
+        {
+            var code1 = @"
 namespace Project1
 {
     class C1
     {
     }
 }";
-                var code2 = @"
+            var code2 = @"
 namespace Project2
 {
     class C2
     {
     }
 }";
-                var analyzer = new NopAnalyzer();
-                RoslynAssert.Valid(analyzer, code1, code2);
-                RoslynAssert.Valid(analyzer, code2, code1);
-                RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
-            }
+            var analyzer = new NopAnalyzer();
+            RoslynAssert.Valid(analyzer, code1, code2);
+            RoslynAssert.Valid(analyzer, code2, code1);
+            RoslynAssert.Valid(typeof(NopAnalyzer), code1, code2);
+        }
 
-            [Test]
-            public static void WithExpectedDiagnostic()
-            {
-                var code = @"
+        [Test]
+        public static void WithExpectedDiagnostic()
+        {
+            var code = @"
 namespace N
 {
     class C
@@ -156,16 +156,16 @@ namespace N
         public int M() => this.f;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
-                RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var descriptor = FieldNameMustNotBeginWithUnderscore.Descriptor;
+            RoslynAssert.Valid(analyzer, descriptor, code);
+            RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscore), descriptor, code);
+        }
 
-            [Test]
-            public static void WithExpectedDiagnosticWhenOtherReportsError()
-            {
-                var code = @"
+        [Test]
+        public static void WithExpectedDiagnosticWhenOtherReportsError()
+        {
+            var code = @"
 namespace N
 {
     class C
@@ -180,16 +180,16 @@ namespace N
     }
 }";
 
-                var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
-                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
-                RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedValueAnalyzer), descriptor, code);
-            }
+            var descriptor = FieldAndPropertyMustBeNamedValueAnalyzer.FieldDescriptor;
+            var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
+            RoslynAssert.Valid(analyzer, descriptor, code);
+            RoslynAssert.Valid(typeof(FieldAndPropertyMustBeNamedValueAnalyzer), descriptor, code);
+        }
 
-            [Test]
-            public static void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
-            {
-                var code = @"
+        [Test]
+        public static void WithExpectedDiagnosticWhenAnalyzerSupportsTwoDiagnostics()
+        {
+            var code = @"
 namespace N
 {
     class C
@@ -200,16 +200,16 @@ namespace N
     }
 }";
 
-                var descriptor = FieldNameMustNotBeginWithUnderscoreReportsTwo.Descriptor1;
-                var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
-                RoslynAssert.Valid(analyzer, descriptor, code);
-                RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
-            }
+            var descriptor = FieldNameMustNotBeginWithUnderscoreReportsTwo.Descriptor1;
+            var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
+            RoslynAssert.Valid(analyzer, descriptor, code);
+            RoslynAssert.Valid(typeof(FieldNameMustNotBeginWithUnderscoreReportsTwo), descriptor, code);
+        }
 
-            [Test]
-            public static void Suppressed()
-            {
-                var code = @"
+        [Test]
+        public static void Suppressed()
+        {
+            var code = @"
 namespace N
 {
     public class C
@@ -218,16 +218,16 @@ namespace N
     }
 }";
 
-                var analyzer = new NopAnalyzer();
-                var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS1823", "CS8618", "CS0169"));
-                RoslynAssert.Valid(analyzer, code, settings: settings);
-                RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
-            }
+            var analyzer = new NopAnalyzer();
+            var settings = Settings.Default.WithCompilationOptions(x => x.WithSuppressedDiagnostics("CS1823", "CS8618", "CS0169"));
+            RoslynAssert.Valid(analyzer, code, settings: settings);
+            RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code, settings: settings);
+        }
 
-            [Test]
-            public static void Pragma()
-            {
-                var code = @"
+        [Test]
+        public static void Pragma()
+        {
+            var code = @"
 namespace N
 {
     public class C
@@ -242,15 +242,15 @@ namespace N
     }
 }";
 
-                var analyzer = new NopAnalyzer();
-                RoslynAssert.Valid(analyzer, code);
-                RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code);
-            }
+            var analyzer = new NopAnalyzer();
+            RoslynAssert.Valid(analyzer, code);
+            RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code);
+        }
 
-            [Test]
-            public static void Issue53()
-            {
-                var resourcesCode = @"
+        [Test]
+        public static void Issue53()
+        {
+            var resourcesCode = @"
 namespace N.Properties
 {
     public class Resources
@@ -258,23 +258,23 @@ namespace N.Properties
     }
 }";
 
-                var code = @"
+            var code = @"
 namespace N
 {
     public class C
     {
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
-                RoslynAssert.Valid(analyzer, resourcesCode, code);
-                RoslynAssert.Valid(analyzer, code, resourcesCode);
-                RoslynAssert.Valid(analyzer.GetType(), resourcesCode, code);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscoreReportsTwo();
+            RoslynAssert.Valid(analyzer, resourcesCode, code);
+            RoslynAssert.Valid(analyzer, code, resourcesCode);
+            RoslynAssert.Valid(analyzer.GetType(), resourcesCode, code);
+        }
 
-            [Test]
-            public static void AnalyzerWithTwoDiagnostics()
-            {
-                var code = @"
+        [Test]
+        public static void AnalyzerWithTwoDiagnostics()
+        {
+            var code = @"
 namespace N
 {
     public class C
@@ -284,20 +284,20 @@ namespace N
         public int M() => this.value;
     }
 }";
-                var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
-                RoslynAssert.Valid(analyzer, code);
-            }
+            var analyzer = new FieldAndPropertyMustBeNamedValueAnalyzer();
+            RoslynAssert.Valid(analyzer, code);
+        }
 
-            [TestCase(null)]
-            [TestCase("_")]
-            [TestCase("m_")]
-            public static void AnalyzerWithConfiguration(string? prefix)
-            {
-                string? analyzerConfig = prefix is null ? null :
-                    $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
-                string prefixToUse = prefix ?? "_";
+        [TestCase(null)]
+        [TestCase("_")]
+        [TestCase("m_")]
+        public static void AnalyzerWithConfiguration(string? prefix)
+        {
+            string? analyzerConfig = prefix is null ? null :
+                $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
+            string prefixToUse = prefix ?? "_";
 
-                var code = @$"
+            var code = @$"
 namespace N
 {{
     public class C
@@ -307,15 +307,15 @@ namespace N
         public int M() => this.{prefixToUse}value;
     }}
 }}";
-                var analyzer = new FieldNameMustHaveProperPrefix();
-                var settings = Settings.Default.WithAnalyzerConfig(analyzerConfig);
-                RoslynAssert.Valid(analyzer, code, settings);
-            }
+            var analyzer = new FieldNameMustHaveProperPrefix();
+            var settings = Settings.Default.WithAnalyzerConfig(analyzerConfig);
+            RoslynAssert.Valid(analyzer, code, settings);
+        }
 
-            [Test]
-            public static void BinaryStrings()
-            {
-                var code = @"
+        [Test]
+        public static void BinaryStrings()
+        {
+            var code = @"
 namespace N
 {
     public class C : BinaryReferencedAssembly.Base
@@ -325,8 +325,8 @@ namespace N
         public int M() => this.f;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var binaryReference = BinaryReference.Compile(@"
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var binaryReference = BinaryReference.Compile(@"
 namespace BinaryReferencedAssembly
 {
     public class Base
@@ -334,14 +334,14 @@ namespace BinaryReferencedAssembly
     }
 }");
 
-                var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
-                RoslynAssert.Valid(analyzer, code, settings);
-            }
+            var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
+            RoslynAssert.Valid(analyzer, code, settings);
+        }
 
-            [Test]
-            public static void BinarySolution()
-            {
-                var code = @"
+        [Test]
+        public static void BinarySolution()
+        {
+            var code = @"
 namespace N
 {
     public class C : BinaryReferencedAssembly.Base
@@ -351,7 +351,7 @@ namespace N
         public int M() => this.f;
     }
 }";
-                var binaryReference = BinaryReference.Compile(@"
+            var binaryReference = BinaryReference.Compile(@"
 namespace BinaryReferencedAssembly
 {
     public class Base
@@ -359,14 +359,13 @@ namespace BinaryReferencedAssembly
     }
 }");
 
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
-                var solution = CodeFactory.CreateSolution(
-                    code,
-                    settings);
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var settings = Settings.Default.WithMetadataReferences(x => x.Append(binaryReference));
+            var solution = CodeFactory.CreateSolution(
+                code,
+                settings);
 
-                RoslynAssert.Valid(analyzer, solution);
-            }
+            RoslynAssert.Valid(analyzer, solution);
         }
     }
 }

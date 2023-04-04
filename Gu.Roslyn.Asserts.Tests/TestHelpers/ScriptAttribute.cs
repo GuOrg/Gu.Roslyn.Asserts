@@ -1,12 +1,11 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
-{
-    using NUnit.Framework;
+﻿namespace Gu.Roslyn.Asserts.Tests;
 
-    public sealed class ScriptAttribute : ExplicitAttribute
+using NUnit.Framework;
+
+public sealed class ScriptAttribute : ExplicitAttribute
+{
+    public ScriptAttribute()
+     : base("SCRIPT")
     {
-        public ScriptAttribute()
-         : base("SCRIPT")
-        {
-        }
     }
 }

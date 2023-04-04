@@ -1,8 +1,7 @@
-namespace AstView
-{
-    using System.Windows;
+namespace AstView;
 
-    public partial class App : Application
-    {
-    }
+using System.Windows;
+
+public partial class App : Application
+{
 }

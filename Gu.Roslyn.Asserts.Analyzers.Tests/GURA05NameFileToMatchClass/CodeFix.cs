@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA05NameFileToMatchClass
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA05NameFileToMatchClass;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, RenameFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts));
 
-    public static class CodeFix
+    [Test]
+    public static void WhenValidCode()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer, RenameFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA04NameClassToMatchAsserts));
-
-        [Test]
-        public static void WhenValidCode()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -29,7 +29,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -48,7 +48,6 @@ namespace N
     }
 }";
 
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
-{
-    using System.Runtime.CompilerServices;
+﻿namespace Gu.Roslyn.Asserts.Tests;
 
-    internal static class ModuleInitializer
+using System.Runtime.CompilerServices;
+
+internal static class ModuleInitializer
+{
+    [ModuleInitializer]
+    internal static void Initialize()
     {
-        [ModuleInitializer]
-        internal static void Initialize()
-        {
-            Settings.Default = Settings.Default.WithMetadataReferences(Asserts.MetadataReferences.Transitive(typeof(ModuleInitializer)));
-        }
+        Settings.Default = Settings.Default.WithMetadataReferences(Asserts.MetadataReferences.Transitive(typeof(ModuleInitializer)));
     }
 }

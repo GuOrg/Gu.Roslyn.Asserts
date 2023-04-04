@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA07TestClassShouldBePublicStatic
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA07TestClassShouldBePublicStatic;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer>();
 
-    public static class Valid
+    [Test]
+    public static void WhenNoAsserts()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<ClassDeclarationAnalyzer>();
-
-        [Test]
-        public static void WhenNoAsserts()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using System;
@@ -25,13 +25,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenPublicStatic()
-        {
-            var code = @"
+    [Test]
+    public static void WhenPublicStatic()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -49,13 +49,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void WhenNestedClass()
-        {
-            var code = @"
+    [Test]
+    public static void WhenNestedClass()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -75,13 +75,13 @@ namespace N
         private class C { }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void ScriptAttribute()
-        {
-            var code = @"
+    [Test]
+    public static void ScriptAttribute()
+    {
+        var code = @"
 namespace N
 {
     using NUnit.Framework;
@@ -94,7 +94,6 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 }

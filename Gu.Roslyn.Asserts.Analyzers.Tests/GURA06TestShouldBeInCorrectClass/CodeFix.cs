@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA06TestShouldBeInCorrectClass;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<MethodDeclarationAnalyzer, MoveFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA06TestShouldBeInCorrectClass));
 
-    public static class CodeFix
+    [Test]
+    public static void WhenMixCreatingClass()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<MethodDeclarationAnalyzer, MoveFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA06TestShouldBeInCorrectClass));
-
-        [Test]
-        public static void WhenMixCreatingClass()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -36,7 +36,7 @@ namespace N
     }
 }";
 
-            var valid = @"
+        var valid = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -55,7 +55,7 @@ namespace N
     }
 }";
 
-            var diagnostics = @"
+        var diagnostics = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -73,13 +73,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, valid, diagnostics });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, valid, diagnostics });
+    }
 
-        [Test]
-        public static void WhenMixAndClassExists()
-        {
-            var before = @"
+    [Test]
+    public static void WhenMixAndClassExists()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -105,7 +105,7 @@ namespace N
     }
 }";
 
-            var diagnosticsBefore = @"
+        var diagnosticsBefore = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -124,7 +124,7 @@ namespace N
     }
 }";
 
-            var valid = @"
+        var valid = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -143,7 +143,7 @@ namespace N
     }
 }";
 
-            var diagnosticsAfter = @"
+        var diagnosticsAfter = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -168,7 +168,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before, diagnosticsBefore }, new[] { Code.PlaceholderAnalyzer, valid, diagnosticsAfter });
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before, diagnosticsBefore }, new[] { Code.PlaceholderAnalyzer, valid, diagnosticsAfter });
     }
 }

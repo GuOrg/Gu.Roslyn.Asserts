@@ -1,109 +1,108 @@
-﻿namespace Gu.Roslyn.Asserts
+﻿namespace Gu.Roslyn.Asserts;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+
+/// <summary>
+/// A collection with set semantics only adding unique references.
+/// Determining if equal by checking the <see cref="PortableExecutableReference.FilePath"/> property.
+/// Reason for this class is to make sure explicit references with aliases are not overwritten by added transitive.
+/// This class has weird semantics and is not elegant but doing it like this to make the breaking change when changing from List&lt;MetadataReference&gt; minimal.
+/// </summary>
+[DebuggerTypeProxy(typeof(DebugView))]
+[DebuggerDisplay("Count = {this.inner.Count}")]
+public class MetadataReferencesCollection : IEnumerable<MetadataReference>
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using Microsoft.CodeAnalysis;
+    private readonly List<MetadataReference> inner = new();
 
     /// <summary>
-    /// A collection with set semantics only adding unique references.
-    /// Determining if equal by checking the <see cref="PortableExecutableReference.FilePath"/> property.
-    /// Reason for this class is to make sure explicit references with aliases are not overwritten by added transitive.
-    /// This class has weird semantics and is not elegant but doing it like this to make the breaking change when changing from List&lt;MetadataReference&gt; minimal.
+    /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
     /// </summary>
-    [DebuggerTypeProxy(typeof(DebugView))]
-    [DebuggerDisplay("Count = {this.inner.Count}")]
-    public class MetadataReferencesCollection : IEnumerable<MetadataReference>
+    public MetadataReferencesCollection()
     {
-        private readonly List<MetadataReference> inner = new();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
-        /// </summary>
-        public MetadataReferencesCollection()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
+    /// </summary>
+    public MetadataReferencesCollection(IEnumerable<MetadataReference> list)
+    {
+        this.AddRange(list);
+    }
+
+    /// <summary>
+    /// Add a collection of <see cref="MetadataReference"/>.
+    /// </summary>
+    /// <param name="items">The references to add.</param>
+    public void AddRange(IEnumerable<MetadataReference> items)
+    {
+        if (items is null)
         {
+            throw new ArgumentNullException(nameof(items));
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MetadataReferencesCollection"/> class.
-        /// </summary>
-        public MetadataReferencesCollection(IEnumerable<MetadataReference> list)
+        foreach (var item in items)
         {
-            this.AddRange(list);
+            _ = this.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Adds the item if it does not exist in the collection.
+    /// If the item exists the one with aliases wins.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    public bool Add(MetadataReference item)
+    {
+        if (item is null)
+        {
+            throw new ArgumentNullException(nameof(item));
         }
 
-        /// <summary>
-        /// Add a collection of <see cref="MetadataReference"/>.
-        /// </summary>
-        /// <param name="items">The references to add.</param>
-        public void AddRange(IEnumerable<MetadataReference> items)
+        for (var i = 0; i < this.inner.Count; i++)
         {
-            if (items is null)
+            var existing = this.inner[i];
+            if (MetadataReferenceComparer.Equals(existing, item))
             {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            foreach (var item in items)
-            {
-                _ = this.Add(item);
-            }
-        }
-
-        /// <summary>
-        /// Adds the item if it does not exist in the collection.
-        /// If the item exists the one with aliases wins.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        public bool Add(MetadataReference item)
-        {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            for (var i = 0; i < this.inner.Count; i++)
-            {
-                var existing = this.inner[i];
-                if (MetadataReferenceComparer.Equals(existing, item))
+                if (item.Properties.Aliases.Length > 0)
                 {
-                    if (item.Properties.Aliases.Length > 0)
-                    {
-                        this.inner[i] = item;
-                        return true;
-                    }
-
-                    return false;
+                    this.inner[i] = item;
+                    return true;
                 }
-            }
 
-            this.inner.Add(item);
-            return true;
+                return false;
+            }
         }
 
-        /// <summary>
-        /// Clear the collection.
-        /// </summary>
-        public void Clear() => this.inner.Clear();
+        this.inner.Add(item);
+        return true;
+    }
 
-        /// <inheritdoc />
-        public IEnumerator<MetadataReference> GetEnumerator() => this.inner.GetEnumerator();
+    /// <summary>
+    /// Clear the collection.
+    /// </summary>
+    public void Clear() => this.inner.Clear();
 
-        /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)this.inner).GetEnumerator();
+    /// <inheritdoc />
+    public IEnumerator<MetadataReference> GetEnumerator() => this.inner.GetEnumerator();
 
-        private class DebugView
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)this.inner).GetEnumerator();
+
+    private class DebugView
+    {
+        private readonly MetadataReferencesCollection metaDataReferences;
+
+        internal DebugView(MetadataReferencesCollection set)
         {
-            private readonly MetadataReferencesCollection metaDataReferences;
-
-            internal DebugView(MetadataReferencesCollection set)
-            {
-                this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
-            }
-
-            [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-            internal MetadataReference[] Items => this.metaDataReferences.ToArray();
+            this.metaDataReferences = set ?? throw new ArgumentNullException(nameof(set));
         }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        internal MetadataReference[] Items => this.metaDataReferences.ToArray();
     }
 }

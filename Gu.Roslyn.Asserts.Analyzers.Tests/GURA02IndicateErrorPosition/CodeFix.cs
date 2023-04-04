@@ -1,16 +1,16 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA02IndicateErrorPosition;
+
+using NUnit.Framework;
+
+public static class CodeFix
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, IndicateErrorPositionFix>(
+        ExpectedDiagnostic.Create(Descriptors.GURA02IndicateErrorPosition));
 
-    public static class CodeFix
+    [Test]
+    public static void DiagnosticsOneParamWithoutPosition()
     {
-        private static readonly DiagnosticFixAssert Assert = RoslynAssert.Create<InvocationAnalyzer, IndicateErrorPositionFix>(
-            ExpectedDiagnostic.Create(Descriptors.GURA02IndicateErrorPosition));
-
-        [Test]
-        public static void DiagnosticsOneParamWithoutPosition()
-        {
-            var before = @"
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -29,7 +29,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -47,13 +47,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void DiagnosticsOneParamWithoutPositionVerbatimString()
-        {
-            var before = @"
+    [Test]
+    public static void DiagnosticsOneParamWithoutPositionVerbatimString()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -74,7 +74,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -94,13 +94,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void DiagnosticsTowParamWithoutPositionOneWithMatchingName()
-        {
-            var before = @"
+    [Test]
+    public static void DiagnosticsTowParamWithoutPositionOneWithMatchingName()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -120,7 +120,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -139,13 +139,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void DiagnosticsTowParamWithoutPositionOneLocalOneConstField()
-        {
-            var before = @"
+    [Test]
+    public static void DiagnosticsTowParamWithoutPositionOneLocalOneConstField()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -165,7 +165,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -184,13 +184,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void DiagnosticsTowParamWithoutPositionOneLocalOneInstanceField()
-        {
-            var before = @"
+    [Test]
+    public static void DiagnosticsTowParamWithoutPositionOneLocalOneInstanceField()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -210,7 +210,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -229,13 +229,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, after);
+    }
 
-        [Test]
-        public static void CodeFixLocal()
-        {
-            var before = @"
+    [Test]
+    public static void CodeFixLocal()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -256,7 +256,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -276,13 +276,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+    }
 
-        [Test]
-        public static void CodeFixLocalsWithBefore()
-        {
-            var before = @"
+    [Test]
+    public static void CodeFixLocalsWithBefore()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -304,7 +304,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -325,13 +325,13 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
+    }
 
-        [Test]
-        public static void CodeFixLiterals()
-        {
-            var before = @"
+    [Test]
+    public static void CodeFixLiterals()
+    {
+        var before = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -350,7 +350,7 @@ namespace N
     }
 }";
 
-            var after = @"
+        var after = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -368,7 +368,6 @@ namespace N
         }
     }
 }";
-            Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
-        }
+        Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
     }
 }

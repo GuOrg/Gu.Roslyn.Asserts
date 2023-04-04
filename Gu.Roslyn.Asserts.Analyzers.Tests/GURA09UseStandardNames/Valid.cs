@@ -1,15 +1,15 @@
-﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames
+﻿namespace Gu.Roslyn.Asserts.Analyzers.Tests.GURA09UseStandardNames;
+
+using NUnit.Framework;
+
+public static class Valid
 {
-    using NUnit.Framework;
+    private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>();
 
-    public static class Valid
+    [Test]
+    public static void SimpleClass()
     {
-        private static readonly DiagnosticAssert Assert = RoslynAssert.Create<InvocationAnalyzer>();
-
-        [Test]
-        public static void SimpleClass()
-        {
-            var code = @"
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -42,13 +42,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void DiagnosticAnalyzer()
-        {
-            var code = @"
+    [Test]
+    public static void DiagnosticAnalyzer()
+    {
+        var code = @"
 namespace N
 {
     using System.Collections.Immutable;
@@ -69,13 +69,13 @@ namespace N
         }
     }
 }";
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
+    }
 
-        [Test]
-        public static void StringLiteral()
-        {
-            var code = @"
+    [Test]
+    public static void StringLiteral()
+    {
+        var code = @"
 namespace N
 {
     using Gu.Roslyn.Asserts;
@@ -98,7 +98,6 @@ class C
     }
 }";
 
-            Assert.Valid(Code.PlaceholderAnalyzer, code);
-        }
+        Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 }

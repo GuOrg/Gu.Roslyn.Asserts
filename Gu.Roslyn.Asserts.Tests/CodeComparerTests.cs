@@ -1,13 +1,13 @@
-namespace Gu.Roslyn.Asserts.Tests
-{
-    using NUnit.Framework;
+namespace Gu.Roslyn.Asserts.Tests;
 
-    public static class CodeComparerTests
+using NUnit.Framework;
+
+public static class CodeComparerTests
+{
+    [Test]
+    public static void WhenEqual()
     {
-        [Test]
-        public static void WhenEqual()
-        {
-            var x = @"
+        var x = @"
 namespace N
 {
     class C
@@ -16,7 +16,7 @@ namespace N
     }
 }";
 
-            var y = @"
+        var y = @"
 namespace N
 {
     class C
@@ -24,13 +24,13 @@ namespace N
         private readonly int _value;
     }
 }";
-            Assert.AreEqual(true, CodeComparer.Equals(x, y));
-        }
+        Assert.AreEqual(true, CodeComparer.Equals(x, y));
+    }
 
-        [Test]
-        public static void WhenEqualWhitespaceEnd()
-        {
-            var x = @"
+    [Test]
+    public static void WhenEqualWhitespaceEnd()
+    {
+        var x = @"
 namespace N
 {
     class C
@@ -42,7 +42,7 @@ namespace N
 a
 ";
 
-            var y = @"
+        var y = @"
 namespace N
 {
     class C
@@ -54,19 +54,19 @@ namespace N
 a
 ";
 
-            Assert.AreEqual(true, CodeComparer.Equals(x, y));
-        }
+        Assert.AreEqual(true, CodeComparer.Equals(x, y));
+    }
 
-        [TestCase("\r\nExpected:\r\n\r\nnamespace N", "\r\nExpected:\r\n\nnamespace N")]
-        public static void WhenEqualMixedNewLines(string x, string y)
-        {
-            Assert.AreEqual(true, CodeComparer.Equals(x, y));
-        }
+    [TestCase("\r\nExpected:\r\n\r\nnamespace N", "\r\nExpected:\r\n\nnamespace N")]
+    public static void WhenEqualMixedNewLines(string x, string y)
+    {
+        Assert.AreEqual(true, CodeComparer.Equals(x, y));
+    }
 
-        [Test]
-        public static void WhenNotEqual()
-        {
-            var x = @"
+    [Test]
+    public static void WhenNotEqual()
+    {
+        var x = @"
 namespace N
 {
     class C
@@ -75,7 +75,7 @@ namespace N
     }
 }";
 
-            var y = @"
+        var y = @"
 namespace N
 {
     class C
@@ -84,7 +84,6 @@ namespace N
     }
 }";
 
-            Assert.AreEqual(false, CodeComparer.Equals(x, y));
-        }
+        Assert.AreEqual(false, CodeComparer.Equals(x, y));
     }
 }

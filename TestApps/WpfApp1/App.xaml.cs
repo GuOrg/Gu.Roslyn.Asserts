@@ -1,8 +1,7 @@
-﻿namespace WpfApp1
-{
-    using System.Windows;
+﻿namespace WpfApp1;
 
-    public partial class App : Application
-    {
-    }
+using System.Windows;
+
+public partial class App : Application
+{
 }

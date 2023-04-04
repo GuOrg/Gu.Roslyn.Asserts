@@ -1,32 +1,31 @@
-﻿namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests;
+
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+internal sealed class FieldWithAdditionalLocationClassAnalyzer : DiagnosticAnalyzer
 {
-    using System.Collections.Immutable;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
+    /// <inheritdoc/>
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
+        ImmutableArray.Create(Descriptors.Id1);
 
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal sealed class FieldWithAdditionalLocationClassAnalyzer : DiagnosticAnalyzer
+    public override void Initialize(AnalysisContext context)
     {
-        /// <inheritdoc/>
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } =
-            ImmutableArray.Create(Descriptors.Id1);
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+        context.EnableConcurrentExecution();
+        context.RegisterSyntaxNodeAction(x => Handle(x), SyntaxKind.FieldDeclaration);
+    }
 
-        public override void Initialize(AnalysisContext context)
-        {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(x => Handle(x), SyntaxKind.FieldDeclaration);
-        }
-
-        private static void Handle(SyntaxNodeAnalysisContext context)
-        {
-            context.ReportDiagnostic(
-                Diagnostic.Create(
-                    Descriptors.Id1,
-                    context.Node.GetLocation(),
-                    additionalLocations: new[] { context.Node.FirstAncestorOrSelf<ClassDeclarationSyntax>().GetLocation() }));
-        }
+    private static void Handle(SyntaxNodeAnalysisContext context)
+    {
+        context.ReportDiagnostic(
+            Diagnostic.Create(
+                Descriptors.Id1,
+                context.Node.GetLocation(),
+                additionalLocations: new[] { context.Node.FirstAncestorOrSelf<ClassDeclarationSyntax>().GetLocation() }));
     }
 }

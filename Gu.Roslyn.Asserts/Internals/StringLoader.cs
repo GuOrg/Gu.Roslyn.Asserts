@@ -1,44 +1,43 @@
-namespace Gu.Roslyn.Asserts.Internals
+namespace Gu.Roslyn.Asserts.Internals;
+
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
+
+/// <summary>
+/// A <see cref="TextLoader"/> for documents passed as strings.
+/// </summary>
+internal class StringLoader : TextLoader
 {
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Text;
+    private readonly Task<TextAndVersion> textAndVersion;
 
     /// <summary>
-    /// A <see cref="TextLoader"/> for documents passed as strings.
+    /// Initializes a new instance of the <see cref="StringLoader"/> class.
     /// </summary>
-    internal class StringLoader : TextLoader
+    /// <param name="document">The code of the document.</param>
+    internal StringLoader(string document)
     {
-        private readonly Task<TextAndVersion> textAndVersion;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StringLoader"/> class.
-        /// </summary>
-        /// <param name="document">The code of the document.</param>
-        internal StringLoader(string document)
-        {
-            this.Code = document;
-            this.textAndVersion = Task.FromResult(
-                TextAndVersion.Create(
-                    SourceText.From(document, (Encoding?)null, SourceHashAlgorithm.Sha1),
-                    VersionStamp.Default));
-        }
-
-        /// <summary>
-        /// Gets the code in the document.
-        /// </summary>
-        internal string Code { get; }
-
-        /// <inheritdoc />
-        public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;
-
-        /// <summary>
-        /// Create a <see cref="StringLoader"/> for the document.
-        /// </summary>
-        /// <param name="document">The document text.</param>
-        /// <returns>A <see cref="StringLoader"/>.</returns>
-        internal static StringLoader Create(string document) => new(document);
+        this.Code = document;
+        this.textAndVersion = Task.FromResult(
+            TextAndVersion.Create(
+                SourceText.From(document, (Encoding?)null, SourceHashAlgorithm.Sha1),
+                VersionStamp.Default));
     }
+
+    /// <summary>
+    /// Gets the code in the document.
+    /// </summary>
+    internal string Code { get; }
+
+    /// <inheritdoc />
+    public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;
+
+    /// <summary>
+    /// Create a <see cref="StringLoader"/> for the document.
+    /// </summary>
+    /// <param name="document">The document text.</param>
+    /// <returns>A <see cref="StringLoader"/>.</returns>
+    internal static StringLoader Create(string document) => new(document);
 }

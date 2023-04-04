@@ -1,24 +1,24 @@
 ﻿// ReSharper disable RedundantNameQualifier
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests
+namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
+
+using System.Linq;
+
+using Gu.Roslyn.Asserts.Tests.CodeFixes;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
+
+using NUnit.Framework;
+
+[TestFixture]
+public static partial class FixAll
 {
-    using System.Linq;
-
-    using Gu.Roslyn.Asserts.Tests.CodeFixes;
-
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeFixes;
-
-    using NUnit.Framework;
-
-    [TestFixture]
-    public static partial class FixAll
+    public static class Fail
     {
-        public static class Fail
+        [Test]
+        public static void SingleDocumentTwoErrorsOnlyOneIndicated()
         {
-            [Test]
-            public static void SingleDocumentTwoErrorsOnlyOneIndicated()
-            {
-                var before = @"
+            var before = @"
 namespace N
 {
     class C
@@ -30,22 +30,22 @@ namespace N
     }
 }";
 
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var expected = @"Expected and actual diagnostics do not match.
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var expected = @"Expected and actual diagnostics do not match.
 Matched: 1 diagnostic(s).
 Missed:
   SA1309 Field '_f2' must not begin with an underscore
     at line 6 and character 29 in file C.cs | private readonly int ↓_f2 = 2;
 ";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void SingleDocumentExplicitTitle()
-            {
-                var before = @"
+        [Test]
+        public static void SingleDocumentExplicitTitle()
+        {
+            var before = @"
 namespace N
 {
     class C
@@ -54,19 +54,19 @@ namespace N
     }
 }";
 
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var expected = "Did not find a code fix with title WRONG.\r\n" +
-                               "Found:\r\n" +
-                               "Rename to: 'value'\r\n";
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty, "WRONG"));
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var expected = "Did not find a code fix with title WRONG.\r\n" +
+                           "Found:\r\n" +
+                           "Rename to: 'value'\r\n";
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty, "WRONG"));
+            Assert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void SingleDocumentOneErrorWrongPosition()
-            {
-                var before = @"
+        [Test]
+        public static void SingleDocumentOneErrorWrongPosition()
+        {
+            var before = @"
 namespace N
 {
     class C
@@ -76,23 +76,23 @@ namespace N
         public int M() => _f;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected:\r\n" +
-                               "  SA1309 \r\n" +
-                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f = 1;\r\n" +
-                               "Actual:\r\n" +
-                               "  SA1309 Field '_f' must not begin with an underscore\r\n" +
-                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
+            var expected = "Expected and actual diagnostics do not match.\r\n" +
+                           "Expected:\r\n" +
+                           "  SA1309 \r\n" +
+                           "    at line 5 and character 16 in file C.cs | private ↓readonly int _f = 1;\r\n" +
+                           "Actual:\r\n" +
+                           "  SA1309 Field '_f' must not begin with an underscore\r\n" +
+                           "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
+            Assert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void FixDoesNotMatchAnalyzer()
-            {
-                var before = @"
+        [Test]
+        public static void FixDoesNotMatchAnalyzer()
+        {
+            var before = @"
 namespace N
 {
     class C
@@ -103,7 +103,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     class C
@@ -114,19 +114,19 @@ namespace N
     }
 }";
 
-                var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
-                var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
-                var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
-                               "NopAnalyzer.SupportedDiagnostics: 'IdWithNoFix'.\r\n" +
-                               "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.";
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var analyzer = new NopAnalyzer(Descriptors.IdWithNoFix);
+            var fix = new DoNotUseUnderscoreFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+            var expected = "NopAnalyzer does not produce diagnostics fixable by DoNotUseUnderscoreFix.\r\n" +
+                           "NopAnalyzer.SupportedDiagnostics: 'IdWithNoFix'.\r\n" +
+                           "DoNotUseUnderscoreFix.FixableDiagnosticIds: {SA1309, SA1309a, SA1309b}.";
+            Assert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void SingleDocumentOneErrorErrorInFix()
-            {
-                var before = @"
+        [Test]
+        public static void SingleDocumentOneErrorErrorInFix()
+        {
+            var before = @"
 namespace N
 {
     class C
@@ -135,7 +135,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     class C
@@ -143,37 +143,37 @@ namespace N
         private readonly int bar;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
-                var expected = "Applying fixes one by one failed.\r\n" +
-                               "Mismatch on line 6 of file C.cs.\r\n" +
-                               "Expected:         private readonly int bar;\r\n" +
-                               "Actual:           private readonly int value;\r\n" +
-                               "                                       ^\r\n" +
-                               "Expected:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int bar;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n" +
-                               "Actual:\r\n\r\n" +
-                               "namespace N\r\n" +
-                               "{\r\n" +
-                               "    class C\r\n" +
-                               "    {\r\n" +
-                               "        private readonly int value;\r\n" +
-                               "    }\r\n" +
-                               "}\r\n";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+            var expected = "Applying fixes one by one failed.\r\n" +
+                           "Mismatch on line 6 of file C.cs.\r\n" +
+                           "Expected:         private readonly int bar;\r\n" +
+                           "Actual:           private readonly int value;\r\n" +
+                           "                                       ^\r\n" +
+                           "Expected:\r\n\r\n" +
+                           "namespace N\r\n" +
+                           "{\r\n" +
+                           "    class C\r\n" +
+                           "    {\r\n" +
+                           "        private readonly int bar;\r\n" +
+                           "    }\r\n" +
+                           "}\r\n" +
+                           "Actual:\r\n\r\n" +
+                           "namespace N\r\n" +
+                           "{\r\n" +
+                           "    class C\r\n" +
+                           "    {\r\n" +
+                           "        private readonly int value;\r\n" +
+                           "    }\r\n" +
+                           "}\r\n";
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void TwoDocumentsOneErrorErrorInFix()
-            {
-                var barCode = @"
+        [Test]
+        public static void TwoDocumentsOneErrorErrorInFix()
+        {
+            var barCode = @"
 namespace N
 {
     class C1
@@ -184,7 +184,7 @@ namespace N
     }
 }";
 
-                var before = @"
+            var before = @"
 namespace N
 {
     class C2
@@ -195,7 +195,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     class C2
@@ -205,10 +205,10 @@ namespace N
         public int M2() => this.f2;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, new[] { barCode, after }));
-                var expected = @"Applying fixes one by one failed.
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, new[] { barCode, before }, new[] { barCode, after }));
+            var expected = @"Applying fixes one by one failed.
 Mismatch on line 8 of file C2.cs.
 Expected:         public int M2() => this.f2;
 Actual:           public int M2() => f2;
@@ -236,13 +236,13 @@ namespace N
     }
 }
 ";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void IndicatedAndActualPositionDoNotMatch()
-            {
-                var before = @"
+        [Test]
+        public static void IndicatedAndActualPositionDoNotMatch()
+        {
+            var before = @"
 namespace N
 {
     class C
@@ -252,23 +252,23 @@ namespace N
         public int M() => _f;
     }
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new DoNotUseUnderscoreFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
-                var expected = "Expected and actual diagnostics do not match.\r\n" +
-                               "Expected:\r\n" +
-                               "  SA1309 \r\n" +
-                               "    at line 5 and character 16 in file C.cs | private ↓readonly int _f = 1;\r\n" +
-                               "Actual:\r\n" +
-                               "  SA1309 Field '_f' must not begin with an underscore\r\n" +
-                               "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
-                Assert.AreEqual(expected, exception.Message);
-            }
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new DoNotUseUnderscoreFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, string.Empty));
+            var expected = "Expected and actual diagnostics do not match.\r\n" +
+                           "Expected:\r\n" +
+                           "  SA1309 \r\n" +
+                           "    at line 5 and character 16 in file C.cs | private ↓readonly int _f = 1;\r\n" +
+                           "Actual:\r\n" +
+                           "  SA1309 Field '_f' must not begin with an underscore\r\n" +
+                           "    at line 5 and character 29 in file C.cs | private readonly int ↓_f = 1;\r\n";
+            Assert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void WhenFixIntroducesCompilerDiagnostics()
-            {
-                var before = @"
+        [Test]
+        public static void WhenFixIntroducesCompilerDiagnostics()
+        {
+            var before = @"
 namespace N
 {
     ↓class C
@@ -276,7 +276,7 @@ namespace N
     }
 }";
 
-                var after = @"
+            var after = @"
 namespace N
 {
     class C
@@ -284,10 +284,10 @@ namespace N
         public EventHandler? M() => null;
     }
 }";
-                var analyzer = new ClassMustHaveMethodAnalyzer();
-                var fix = InsertMethodFix.ReturnEventHandler;
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
-                var expected = @"The fixed code by InsertMethodFix contains compiler diagnostics.
+            var analyzer = new ClassMustHaveMethodAnalyzer();
+            var fix = InsertMethodFix.ReturnEventHandler;
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after, settings: Settings.Default.WithMetadataReferences(Enumerable.Empty<MetadataReference>())));
+            var expected = @"The fixed code by InsertMethodFix contains compiler diagnostics.
   - fix the code used in the test
   - suppress the warning in the test code using for example pragma
   - suppress the warning by providing Settings to the assert.
@@ -311,29 +311,29 @@ namespace N
     }
 }
 ";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void WhenFixDoesNotDoAnything()
-            {
-                var before = @"
+        [Test]
+        public static void WhenFixDoesNotDoAnything()
+        {
+            var before = @"
 namespace N;
 class C
 {
     private readonly int ↓_f = 1;
 }";
 
-                var after = @"
+            var after = @"
 namespace N;
 class C
 {
     private readonly int _f = 1;
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new EmptyFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
-                var expected = @"The fixed code by EmptyFix contains compiler diagnostic.
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new EmptyFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+            var expected = @"The fixed code by EmptyFix contains compiler diagnostic.
   - fix the code used in the test
   - suppress the warning in the test code using for example pragma
   - suppress the warning by providing Settings to the assert.
@@ -347,29 +347,29 @@ class C
     private readonly int _f = 1;
 }
 ";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void WhenFixChangesCodeButAfterProducesDiagnostic()
-            {
-                var before = @"
+        [Test]
+        public static void WhenFixChangesCodeButAfterProducesDiagnostic()
+        {
+            var before = @"
 namespace N;
 class C
 {
     private readonly int ↓_f = 1;
 }";
 
-                var after = @"
+            var after = @"
 namespace N;
 class C
 {
     private readonly int _f = 2;
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new InitializeFieldWithTwoFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
-                var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new InitializeFieldWithTwoFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAll(analyzer, fix, before, after));
+            var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
   - fix the code used in the test
   - suppress the warning in the test code using for example pragma
   - suppress the warning by providing Settings to the assert.
@@ -383,29 +383,29 @@ class C
     private readonly int _f = 2;
 }
 ";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            CodeAssert.AreEqual(expected, exception.Message);
+        }
 
-            [Test]
-            public static void WhenFixChangesCodeButAfterProducesDiagnosticByScope()
-            {
-                var before = @"
+        [Test]
+        public static void WhenFixChangesCodeButAfterProducesDiagnosticByScope()
+        {
+            var before = @"
 namespace N;
 class C
 {
     private readonly int ↓_f = 1;
 }";
 
-                var after = @"
+            var after = @"
 namespace N;
 class C
 {
     private readonly int _f = 2;
 }";
-                var analyzer = new FieldNameMustNotBeginWithUnderscore();
-                var fix = new InitializeFieldWithTwoFix();
-                var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAllByScope(analyzer, fix, new[] { before }, new[] { after }, FixAllScope.Solution));
-                var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
+            var analyzer = new FieldNameMustNotBeginWithUnderscore();
+            var fix = new InitializeFieldWithTwoFix();
+            var exception = Assert.Throws<AssertException>(() => RoslynAssert.FixAllByScope(analyzer, fix, new[] { before }, new[] { after }, FixAllScope.Solution));
+            var expected = @"The fixed code by InitializeFieldWithTwoFix contains compiler diagnostic.
   - fix the code used in the test
   - suppress the warning in the test code using for example pragma
   - suppress the warning by providing Settings to the assert.
@@ -419,8 +419,7 @@ class C
     private readonly int _f = 2;
 }
 ";
-                CodeAssert.AreEqual(expected, exception.Message);
-            }
+            CodeAssert.AreEqual(expected, exception.Message);
         }
     }
 }
