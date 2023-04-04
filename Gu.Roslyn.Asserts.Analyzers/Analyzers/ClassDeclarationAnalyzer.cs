@@ -27,8 +27,7 @@ internal class ClassDeclarationAnalyzer : DiagnosticAnalyzer
 
     private static void Handle(SyntaxNodeAnalysisContext context)
     {
-        if (context.Node is ClassDeclarationSyntax classDeclaration &&
-            context.ContainingSymbol is INamedTypeSymbol type)
+        if (context is { Node: ClassDeclarationSyntax classDeclaration, ContainingSymbol: INamedTypeSymbol type })
         {
             if (InvocationWalker.TryFindName(classDeclaration, out var name) &&
                 type.Name != name &&
