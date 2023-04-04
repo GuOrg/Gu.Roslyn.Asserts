@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Immutable;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldNameMustNotBeginWithUnderscore : DiagnosticAnalyzer
+    internal sealed class FieldNameMustNotBeginWithUnderscore : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = "SA1309";
 
@@ -41,13 +41,8 @@ namespace Gu.Roslyn.Asserts.Tests
                 return;
             }
 
-            foreach (VariableDeclaratorSyntax variableDeclarator in variables.Value)
+            foreach (var variableDeclarator in variables.Value)
             {
-                if (variableDeclarator is null)
-                {
-                    continue;
-                }
-
                 var identifier = variableDeclarator.Identifier;
                 if (identifier.IsMissing)
                 {

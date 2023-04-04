@@ -295,7 +295,7 @@ namespace N
                 exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer, analyzer.SupportedDiagnostics[0], code));
                 Assert.AreEqual(expected, exception.Message);
 
-                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(analyzer.GetType(), code));
+                exception = Assert.Throws<AssertException>(() => RoslynAssert.Valid(typeof(NopAnalyzer), code));
                 Assert.AreEqual(expected, exception.Message);
             }
         }

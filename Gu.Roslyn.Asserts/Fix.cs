@@ -173,11 +173,7 @@
             {
                 if (TryFindOperation(solution, fix, fixableDiagnostic, fixTitle, out var operation))
                 {
-                    if (temp is null)
-                    {
-                        temp = new List<ApplyChangesOperation>();
-                    }
-
+                    temp ??= new List<ApplyChangesOperation>();
                     temp.Add(operation);
                 }
             }

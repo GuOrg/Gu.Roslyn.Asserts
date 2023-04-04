@@ -6,7 +6,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class SymbolAnalyzer : DiagnosticAnalyzer
+    internal sealed class SymbolAnalyzer : DiagnosticAnalyzer
     {
         private static readonly DiagnosticDescriptor Descriptor = new(
             "123",

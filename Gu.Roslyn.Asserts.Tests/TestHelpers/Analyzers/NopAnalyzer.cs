@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -6,7 +6,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class NopAnalyzer : DiagnosticAnalyzer
+    internal sealed class NopAnalyzer : DiagnosticAnalyzer
     {
         private readonly SyntaxKind[] kinds;
 

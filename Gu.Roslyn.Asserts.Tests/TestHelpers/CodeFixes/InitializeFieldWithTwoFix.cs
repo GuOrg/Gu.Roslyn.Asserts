@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InitializeFieldWithTwoFix))]
-internal class InitializeFieldWithTwoFix : CodeFixProvider
+internal sealed class InitializeFieldWithTwoFix : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
         ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);

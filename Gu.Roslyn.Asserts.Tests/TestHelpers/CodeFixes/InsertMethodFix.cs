@@ -13,7 +13,7 @@
     using Microsoft.CodeAnalysis.Simplification;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InsertMethodFix))]
-    internal class InsertMethodFix : CodeFixProvider
+    internal sealed class InsertMethodFix : CodeFixProvider
     {
         internal static readonly InsertMethodFix ReturnEventHandler = new(SyntaxFactory.ParseTypeName("EventHandler?"));
         internal static readonly InsertMethodFix ReturnFullyQualifiedEventHandler = new(SyntaxFactory.ParseTypeName("System.EventHandler?"));

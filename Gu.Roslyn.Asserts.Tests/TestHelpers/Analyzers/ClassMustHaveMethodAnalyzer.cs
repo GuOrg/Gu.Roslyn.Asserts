@@ -8,7 +8,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class ClassMustHaveMethodAnalyzer : DiagnosticAnalyzer
+    internal sealed class ClassMustHaveMethodAnalyzer : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = "ClassMustHaveMethod";
 

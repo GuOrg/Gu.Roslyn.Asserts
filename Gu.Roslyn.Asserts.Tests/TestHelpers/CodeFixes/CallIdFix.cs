@@ -11,7 +11,7 @@
     using Microsoft.CodeAnalysis.Text;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CallIdFix))]
-    internal class CallIdFix : CodeFixProvider
+    internal sealed class CallIdFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             CallIdAnalyzer.DiagnosticId);

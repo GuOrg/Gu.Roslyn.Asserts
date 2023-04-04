@@ -32,12 +32,7 @@
                 }
             }
 
-            if (staticAllowedDiagnostics is null)
-            {
-                staticAllowedDiagnostics = Asserts.AllowedDiagnostics.Warnings;
-            }
-
-            return staticAllowedDiagnostics.Value;
+            return staticAllowedDiagnostics ??= Asserts.AllowedDiagnostics.Warnings;
         }
     }
 }

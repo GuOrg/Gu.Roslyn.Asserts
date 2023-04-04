@@ -151,7 +151,7 @@
 
         private SyntaxFactoryWriter Write(SyntaxToken token)
         {
-            if (token.Kind() == SyntaxKind.None)
+            if (token.IsKind(SyntaxKind.None))
             {
                 this.writer.Append("default");
                 return this;

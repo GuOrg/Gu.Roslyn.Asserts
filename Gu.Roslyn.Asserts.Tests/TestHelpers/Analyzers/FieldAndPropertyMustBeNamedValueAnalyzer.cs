@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -7,7 +7,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldAndPropertyMustBeNamedValueAnalyzer : DiagnosticAnalyzer
+    internal sealed class FieldAndPropertyMustBeNamedValueAnalyzer : DiagnosticAnalyzer
     {
         internal const string FieldDiagnosticId = "Field";
         internal const string PropertyDiagnosticId = "Property";

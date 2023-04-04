@@ -11,7 +11,7 @@
     using Microsoft.CodeAnalysis.Editing;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MakeSealedFixProvider))]
-    internal class MakeSealedFixProvider : CodeFixProvider
+    internal sealed class MakeSealedFixProvider : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(ClassMustBeSealedAnalyzer.DiagnosticId);
 

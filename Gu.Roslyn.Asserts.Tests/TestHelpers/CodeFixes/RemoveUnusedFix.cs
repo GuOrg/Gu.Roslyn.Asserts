@@ -10,7 +10,7 @@
     using Microsoft.CodeAnalysis.Editing;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveUnusedFix))]
-    internal class RemoveUnusedFix : CodeFixProvider
+    internal sealed class RemoveUnusedFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create("CS0067");
 

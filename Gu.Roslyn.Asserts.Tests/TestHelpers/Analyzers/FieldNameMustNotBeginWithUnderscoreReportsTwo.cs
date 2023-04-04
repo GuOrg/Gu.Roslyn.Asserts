@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System;
     using System.Collections.Immutable;
@@ -8,7 +8,7 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldNameMustNotBeginWithUnderscoreReportsTwo : DiagnosticAnalyzer
+    internal sealed class FieldNameMustNotBeginWithUnderscoreReportsTwo : DiagnosticAnalyzer
     {
         internal const string DiagnosticId1 = "SA1309_1";
         internal const string DiagnosticId2 = "SA2309_2";
@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
-        internal static readonly DiagnosticDescriptor Descriptor2 = new(
+        private static readonly DiagnosticDescriptor Descriptor2 = new(
             DiagnosticId2,
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore 2",
@@ -53,13 +53,8 @@ namespace Gu.Roslyn.Asserts.Tests
                 return;
             }
 
-            foreach (VariableDeclaratorSyntax variableDeclarator in variables.Value)
+            foreach (var variableDeclarator in variables.Value)
             {
-                if (variableDeclarator is null)
-                {
-                    continue;
-                }
-
                 var identifier = variableDeclarator.Identifier;
                 if (identifier.IsMissing)
                 {

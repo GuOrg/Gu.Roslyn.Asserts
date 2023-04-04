@@ -8,7 +8,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldNameMustHaveProperPrefix : DiagnosticAnalyzer
+    internal sealed class FieldNameMustHaveProperPrefix : DiagnosticAnalyzer
     {
         internal const string DefaultFieldPrefix = "_";
 
@@ -45,18 +45,13 @@
 
             if (!context.Options.AnalyzerConfigOptionsProvider
                 .GetOptions(syntax.SyntaxTree)
-                .TryGetValue("dotnet_diagnostic.SA1309.field_name_prefix", out string? prefix))
+                .TryGetValue("dotnet_diagnostic.SA1309.field_name_prefix", out var prefix))
             {
                 prefix = DefaultFieldPrefix;
             }
 
             foreach (var variableDeclarator in variables.Value)
             {
-                if (variableDeclarator is null)
-                {
-                    continue;
-                }
-
                 var identifier = variableDeclarator.Identifier;
                 if (identifier.IsMissing)
                 {

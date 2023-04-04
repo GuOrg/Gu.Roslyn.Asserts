@@ -6,7 +6,7 @@
     using Microsoft.CodeAnalysis.CodeFixes;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NoFix))]
-    internal class NoFix : CodeFixProvider
+    internal sealed class NoFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(FieldNameMustNotBeginWithUnderscore.DiagnosticId);
 

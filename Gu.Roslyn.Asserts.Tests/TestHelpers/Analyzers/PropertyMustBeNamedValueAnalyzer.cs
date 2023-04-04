@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests
+﻿namespace Gu.Roslyn.Asserts.Tests
 {
     using System.Collections.Immutable;
     using Microsoft.CodeAnalysis;
@@ -7,11 +7,11 @@ namespace Gu.Roslyn.Asserts.Tests
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class PropertyMustBeNamedValueAnalyzer : DiagnosticAnalyzer
+    internal sealed class PropertyMustBeNamedValueAnalyzer : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = "PropertyMustBeNamedValueAnalyzer";
 
-        internal static readonly DiagnosticDescriptor PropertyDescriptor = new(
+        private static readonly DiagnosticDescriptor Descriptor = new(
             id: DiagnosticId,
             title: "The Property must be named Value",
             messageFormat: "Message format",
@@ -21,7 +21,7 @@ namespace Gu.Roslyn.Asserts.Tests
 
         /// <inheritdoc/>
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(
-            PropertyDescriptor);
+            Descriptor);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -41,7 +41,7 @@ namespace Gu.Roslyn.Asserts.Tests
                 property.Name != "Value" &&
                 context.Node is PropertyDeclarationSyntax propertyDeclaration)
             {
-                context.ReportDiagnostic(Diagnostic.Create(PropertyDescriptor, propertyDeclaration.Identifier.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, propertyDeclaration.Identifier.GetLocation()));
             }
         }
     }

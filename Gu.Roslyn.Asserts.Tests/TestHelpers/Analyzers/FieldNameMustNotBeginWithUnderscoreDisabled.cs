@@ -8,12 +8,10 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class FieldNameMustNotBeginWithUnderscoreDisabled : DiagnosticAnalyzer
+    internal sealed class FieldNameMustNotBeginWithUnderscoreDisabled : DiagnosticAnalyzer
     {
-        internal const string DiagnosticId = "SA13090";
-
         internal static readonly DiagnosticDescriptor Descriptor = new(
-            DiagnosticId,
+            "SA13090",
             "Field names must not begin with underscore",
             "Field '{0}' must not begin with an underscore",
             "Naming",

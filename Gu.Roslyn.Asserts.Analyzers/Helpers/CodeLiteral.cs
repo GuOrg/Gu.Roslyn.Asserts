@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Text;
 
-    internal struct CodeLiteral
+    internal readonly struct CodeLiteral
     {
         internal readonly ImmutableArray<SyntaxToken> Identifiers;
         private readonly LiteralExpressionSyntax stringLiteral;
@@ -40,7 +40,7 @@
 
         internal bool TryFind(Location location, out SyntaxToken identifier)
         {
-            foreach (SyntaxToken candidate in this.Identifiers)
+            foreach (var candidate in this.Identifiers)
             {
                 if (location.SourceSpan == this.Span(candidate))
                 {

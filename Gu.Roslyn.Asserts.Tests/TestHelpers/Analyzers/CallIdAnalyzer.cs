@@ -7,7 +7,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class CallIdAnalyzer : DiagnosticAnalyzer
+    internal sealed class CallIdAnalyzer : DiagnosticAnalyzer
     {
         internal const string DiagnosticId = "CallId";
 

@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ClassNameToUpperCaseRefactoringProvider))]
-    internal class ClassNameToUpperCaseRefactoringProvider : CodeRefactoringProvider
+    internal sealed class ClassNameToUpperCaseRefactoringProvider : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
         {

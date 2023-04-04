@@ -7,7 +7,7 @@
     using Microsoft.CodeAnalysis.CodeFixes;
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RenameToValueFix))]
-    internal class RenameToValueFix : CodeFixProvider
+    internal sealed class RenameToValueFix : CodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(
             FieldAndPropertyMustBeNamedValueAnalyzer.FieldDiagnosticId,
