@@ -519,7 +519,10 @@ public static partial class RoslynAssert
         {
             foreach (var scope in fixAllProvider.GetSupportedFixAllScopes())
             {
-                FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
+                if (scope is FixAllScope.Document or FixAllScope.Project or FixAllScope.Solution)
+                {
+                    FixAllByScope(analyzer, fix, sln, after, fixTitle, settings.AllowedCompilerDiagnostics, scope);
+                }
             }
         }
     }
