@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Gu.Roslyn.Asserts.Internals;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -88,6 +90,11 @@ public class ProjectDiagnostics
         }
         else
         {
+            if (analyzer.SupportedDiagnostics.Any(x => !x.IsEnabledByDefault))
+            {
+                analyzer = new DefaultEnabledAnalyzer(analyzer);
+            }
+
             var withAnalyzers = compilation.WithAnalyzers(
                 ImmutableArray.Create(analyzer),
                 project.AnalyzerOptions,
