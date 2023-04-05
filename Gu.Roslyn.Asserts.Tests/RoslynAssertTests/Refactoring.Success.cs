@@ -12,15 +12,19 @@ public static partial class Refactoring
         [Test]
         public static void WithPositionIndicated()
         {
-            var before = @"
-class ↓c
-{
-}";
+            var before = """
 
-            var after = @"
-class C
-{
-}";
+                class ↓c
+                {
+                }
+                """;
+
+            var after = """
+
+                class C
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             RoslynAssert.Refactoring(refactoring, before, after);
@@ -31,16 +35,20 @@ class C
         public static void WithSpan()
         {
 #pragma warning disable GURA02 // Indicate position.
-            var before = @"
-class c
-{
-}";
+            var before = """
+
+                class c
+                {
+                }
+                """;
 #pragma warning restore GURA02 // Indicate position.
 
-            var after = @"
-class C
-{
-}";
+            var after = """
+
+                class C
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             RoslynAssert.Refactoring(refactoring, before, new TextSpan(8, 3), after);
