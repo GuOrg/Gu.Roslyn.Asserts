@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
+﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
 
 using Gu.Roslyn.Asserts.Tests.Refactorings;
 using Microsoft.CodeAnalysis.Text;
@@ -11,10 +11,11 @@ public static partial class NoRefactoring
         [Test]
         public static void WhenActionIsRegistered()
         {
-            var code = @"
-class ↓c
-{
-}";
+            var code = """
+                class ↓c
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             var expected = "Expected the refactoring to not register any code actions.";
@@ -27,10 +28,11 @@ class ↓c
         [Test]
         public static void WhenActionIsRegisteredWithSpan()
         {
-            var code = @"
-class c
-{
-}";
+            var code = """
+                class c
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             var expected = "Expected the refactoring to not register any code actions.";
