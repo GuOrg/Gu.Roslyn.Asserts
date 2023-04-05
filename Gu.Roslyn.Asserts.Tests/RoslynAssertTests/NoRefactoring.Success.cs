@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
+﻿namespace Gu.Roslyn.Asserts.Tests.RoslynAssertTests;
 
 using Gu.Roslyn.Asserts.Tests.Refactorings;
 using Microsoft.CodeAnalysis.Text;
@@ -11,10 +11,11 @@ public static partial class NoRefactoring
         [Test]
         public static void WhenNoActionWithPositionIndicated()
         {
-            var code = @"
-class ↓C
-{
-}";
+            var code = """
+                class ↓C
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             RoslynAssert.NoRefactoring(refactoring, code);
@@ -24,10 +25,11 @@ class ↓C
         [Test]
         public static void WhenNoActionWithSpan()
         {
-            var code = @"
-class C
-{
-}";
+            var code = """
+                class C
+                {
+                }
+                """;
 
             var refactoring = new ClassNameToUpperCaseRefactoringProvider();
             RoslynAssert.NoRefactoring(refactoring, code, new TextSpan(8, 3));
