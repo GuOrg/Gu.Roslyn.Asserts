@@ -10,49 +10,51 @@ public static class FixAll
     [Test]
     public static void CodeFixLocals()
     {
-        var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var before = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+                public static class C
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                    private static readonly PlaceholderFix Fix = new PlaceholderFix();
 
-        [Test]
-        public static void M()
-        {
-            var c1 = ↓""class C1 { }"";
-            var c2 = ↓""class C2 { }"";
-            var after = ""class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
-        }
-    }
-}";
+                    [Test]
+                    public static void M()
+                    {
+                        var c1 = ↓"class C1 { }";
+                        var c2 = ↓"class C2 { }";
+                        var after = "class C { }";
+                        RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
+                    }
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var after = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
-        private static readonly PlaceholderFix Fix = new PlaceholderFix();
+                public static class C
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                    private static readonly PlaceholderFix Fix = new PlaceholderFix();
 
-        [Test]
-        public static void M()
-        {
-            var c1 = ""↓class C1 { }"";
-            var c2 = ""class C2 { }"";
-            var after = ""class C { }"";
-            RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
-        }
-    }
-}";
+                    [Test]
+                    public static void M()
+                    {
+                        var c1 = "↓class C1 { }";
+                        var c2 = "class C2 { }";
+                        var after = "class C { }";
+                        RoslynAssert.CodeFix(Analyzer, Fix, new [] { c1, c2 }, after);
+                    }
+                }
+            }
+            """;
         Assert.FixAll(new[] { Code.PlaceholderAnalyzer, Code.PlaceholderFix, before }, after);
     }
 }
