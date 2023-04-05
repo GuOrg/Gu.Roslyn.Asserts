@@ -13,24 +13,25 @@ public static class NoFix
     [Test]
     public static void WhenNameCollision()
     {
-        var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var code = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class C
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [TestCase(""C { }"")]
-        public static void M(string code)
-        {
-            var wrong = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, ↓wrong);
-        }
-    }
-}";
+                    [TestCase("C { }")]
+                    public static void M(string code)
+                    {
+                        var wrong = "class C { }";
+                        RoslynAssert.Valid(Analyzer, ↓wrong);
+                    }
+                }
+            }
+            """;
 
         var expectedDiagnostic = ExpectedDiagnostic.WithMessage("Name of 'wrong' should be 'code'");
         RoslynAssert.NoFix(Analyzer, Fix, expectedDiagnostic, Code.PlaceholderAnalyzer, Code.PlaceholderFix, code);
