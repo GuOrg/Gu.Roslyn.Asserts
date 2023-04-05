@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Gu.Roslyn.Asserts.Internals;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -196,6 +199,11 @@ public static class Analyze
             throw new ArgumentNullException(nameof(analyzer));
         }
 
+        if (analyzer.SupportedDiagnostics.Any(x => !x.IsEnabledByDefault))
+        {
+            analyzer = new DefaultEnabledAnalyzer(analyzer);
+        }
+
         var results = new List<ProjectDiagnostics>();
         foreach (var project in solution.Projects)
         {
@@ -221,6 +229,11 @@ public static class Analyze
         if (solution is null)
         {
             throw new ArgumentNullException(nameof(solution));
+        }
+
+        if (analyzer.SupportedDiagnostics.Any(x => !x.IsEnabledByDefault))
+        {
+            analyzer = new DefaultEnabledAnalyzer(analyzer);
         }
 
         var results = new List<ProjectDiagnostics>();
