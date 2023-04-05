@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,19 +11,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 internal sealed class FieldNameMustHaveProperPrefix : DiagnosticAnalyzer
 {
-    internal const string DefaultFieldPrefix = "_";
-
-    internal const string DiagnosticId = "SA1309";
-
-    internal static readonly DiagnosticDescriptor Descriptor = new(
-        DiagnosticId,
+    private static readonly DiagnosticDescriptor Descriptor = new(
+        "SA1309",
         "Field names must begin with proper prefix",
         "Field '{0}' must begin with '{1}'",
         "Naming",
         DiagnosticSeverity.Warning,
         isEnabledByDefault: true);
-
-    private static readonly Action<SyntaxNodeAnalysisContext> FieldDeclarationAction = HandleFieldDeclaration;
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create(Descriptor);
 
@@ -31,7 +26,7 @@ internal sealed class FieldNameMustHaveProperPrefix : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(FieldDeclarationAction, SyntaxKind.FieldDeclaration);
+        context.RegisterSyntaxNodeAction(x => HandleFieldDeclaration(x), SyntaxKind.FieldDeclaration);
     }
 
     private static void HandleFieldDeclaration(SyntaxNodeAnalysisContext context)
@@ -47,7 +42,7 @@ internal sealed class FieldNameMustHaveProperPrefix : DiagnosticAnalyzer
             .GetOptions(syntax.SyntaxTree)
             .TryGetValue("dotnet_diagnostic.SA1309.field_name_prefix", out var prefix))
         {
-            prefix = DefaultFieldPrefix;
+            prefix = "_";
         }
 
         foreach (var variableDeclarator in variables.Value)
