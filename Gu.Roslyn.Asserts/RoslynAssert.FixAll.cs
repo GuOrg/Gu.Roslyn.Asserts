@@ -1,5 +1,6 @@
 ﻿namespace Gu.Roslyn.Asserts;
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.CodeAnalysis;
@@ -475,6 +476,7 @@ public static partial class RoslynAssert
     /// <param name="after">The expected code produced by applying <paramref name="fix"/>.</param>
     /// <param name="fixTitle">The expected title of the fix. Must be provided if more than one code action is registered.</param>
     /// <param name="settings">The <see cref="Settings"/>.</param>
+    [Obsolete("Handle all FixAllScopes")]
     public static void FixAll(
         DiagnosticAnalyzer analyzer,
         CodeFixProvider fix,
