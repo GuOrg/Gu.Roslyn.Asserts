@@ -9,91 +9,95 @@ public static class Valid
     [Test]
     public static void WhenNoAsserts()
     {
-        var code = @"
-namespace N
-{
-    using System;
+        var code = """
+            namespace N
+            {
+                using System;
 
-    internal class C
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                internal class C
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        void M()
-        {
-            var c = ""class C { }"";
-            Console.WriteLine(c);
-        }
-    }
-}";
+                    void M()
+                    {
+                        var c = "class C { }";
+                        Console.WriteLine(c);
+                    }
+                }
+            }
+            """;
         Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 
     [Test]
     public static void WhenPublicStatic()
     {
-        var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var code = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
         Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 
     [Test]
     public static void WhenNestedClass()
     {
-        var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var code = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
+                    [Test]
+                    public static void M()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
 
-        private class C { }
-    }
-}";
+                    private class C { }
+                }
+            }
+            """;
         Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 
     [Test]
     public static void ScriptAttribute()
     {
-        var code = @"
-namespace N
-{
-    using NUnit.Framework;
+        var code = """
+            namespace N
+            {
+                using NUnit.Framework;
 
-    public class ScriptAttribute : ExplicitAttribute
-    {
-        public ScriptAttribute()
-         : base(""SCRIPT"")
-        {
-        }
-    }
-}";
+                public class ScriptAttribute : ExplicitAttribute
+                {
+                    public ScriptAttribute()
+                     : base("SCRIPT")
+                    {
+                    }
+                }
+            }
+            """;
         Assert.Valid(Code.PlaceholderAnalyzer, code);
     }
 }

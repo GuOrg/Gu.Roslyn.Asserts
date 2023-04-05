@@ -10,31 +10,32 @@ public static class NoFix
     [Test]
     public static void ParameterNameFoo()
     {
-        var code = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var code = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M()
-        {
-            var c = @""
-namespace N
-{
-    class C
-    {
-        c(int ↓foo) { }
-    }
-}"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M()
+                    {
+                        var c = @"
+            namespace N
+            {
+                class C
+                {
+                    c(int ↓foo) { }
+                }
+            }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
         Assert.NoFix(Code.PlaceholderAnalyzer, code);
     }
 }

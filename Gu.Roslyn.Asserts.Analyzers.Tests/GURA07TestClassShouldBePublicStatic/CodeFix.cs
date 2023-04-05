@@ -10,43 +10,45 @@ public static class CodeFix
     [Test]
     public static void WhenInternalStatic()
     {
-        var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var before = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    internal static class ↓Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                internal static class ↓Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        internal static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    internal static void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var after = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
         Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
@@ -54,43 +56,45 @@ namespace N
     [Test]
     public static void WhenExplicitInternal()
     {
-        var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var before = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    internal class ↓Valid
-    {
-        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                internal class ↓Valid
+                {
+                    private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        internal void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    internal void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var after = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
         Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
@@ -98,43 +102,45 @@ namespace N
     [Test]
     public static void WhenPublic()
     {
-        var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var before = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public class ↓Valid
-    {
-        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public class ↓Valid
+                {
+                    private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var after = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
         Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
@@ -142,43 +148,45 @@ namespace N
     [Test]
     public static void WhenImplicitInternalPrivate()
     {
-        var before = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var before = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    class ↓Valid
-    {
-        private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                class ↓Valid
+                {
+                    private readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    using Gu.Roslyn.Asserts;
-    using NUnit.Framework;
+        var after = """
+            namespace N
+            {
+                using Gu.Roslyn.Asserts;
+                using NUnit.Framework;
 
-    public static class Valid
-    {
-        private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
+                public static class Valid
+                {
+                    private static readonly PlaceholderAnalyzer Analyzer = new PlaceholderAnalyzer();
 
-        [Test]
-        public static void M1()
-        {
-            var c = ""class C { }"";
-            RoslynAssert.Valid(Analyzer, c);
-        }
-    }
-}";
+                    [Test]
+                    public static void M1()
+                    {
+                        var c = "class C { }";
+                        RoslynAssert.Valid(Analyzer, c);
+                    }
+                }
+            }
+            """;
 
         Assert.CodeFix(new[] { Code.PlaceholderAnalyzer, before }, new[] { Code.PlaceholderAnalyzer, after });
     }
