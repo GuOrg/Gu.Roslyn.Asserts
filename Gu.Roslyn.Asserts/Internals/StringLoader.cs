@@ -1,4 +1,4 @@
-namespace Gu.Roslyn.Asserts.Internals;
+﻿namespace Gu.Roslyn.Asserts.Internals;
 
 using System.Text;
 using System.Threading;
@@ -32,7 +32,8 @@ internal class StringLoader : TextLoader
     internal string Code { get; }
 
     /// <inheritdoc />
-    public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace workspace, DocumentId documentId, CancellationToken cancellationToken) => this.textAndVersion;
+    [System.Obsolete]
+    public override Task<TextAndVersion> LoadTextAndVersionAsync(Workspace? workspace, DocumentId? documentId, CancellationToken cancellationToken) => this.textAndVersion;
 
     /// <summary>
     /// Create a <see cref="StringLoader"/> for the document.

@@ -15,7 +15,7 @@ internal sealed class DefaultEnabledAnalyzer : DiagnosticAnalyzer
 {
     private readonly DiagnosticAnalyzer inner;
 
-    public DefaultEnabledAnalyzer(DiagnosticAnalyzer inner)
+    internal DefaultEnabledAnalyzer(DiagnosticAnalyzer inner)
     {
         this.inner = inner;
         this.SupportedDiagnostics = EnabledDiagnostics(inner.SupportedDiagnostics);
@@ -23,9 +23,8 @@ internal sealed class DefaultEnabledAnalyzer : DiagnosticAnalyzer
         static ImmutableArray<DiagnosticDescriptor> EnabledDiagnostics(ImmutableArray<DiagnosticDescriptor> source)
         {
             var builder = ImmutableArray.CreateBuilder<DiagnosticDescriptor>(source.Length);
-            for (var i = 0; i < source.Length; i++)
+            foreach (var diagnostic in source)
             {
-                var diagnostic = source[i];
                 builder.Add(
                     new DiagnosticDescriptor(
                         diagnostic.Id,
@@ -33,7 +32,7 @@ internal sealed class DefaultEnabledAnalyzer : DiagnosticAnalyzer
                         diagnostic.MessageFormat,
                         diagnostic.Category,
                         diagnostic.DefaultSeverity,
-                        true,
+                        isEnabledByDefault: true,
                         diagnostic.Description,
                         diagnostic.HelpLinkUri,
                         diagnostic.CustomTags?.ToArray() ?? Array.Empty<string>()));
@@ -45,5 +44,7 @@ internal sealed class DefaultEnabledAnalyzer : DiagnosticAnalyzer
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
 
+#pragma warning disable RS1025, RS1026
     public override void Initialize(AnalysisContext context) => this.inner.Initialize(context);
+#pragma warning restore RS1025, RS1026
 }
