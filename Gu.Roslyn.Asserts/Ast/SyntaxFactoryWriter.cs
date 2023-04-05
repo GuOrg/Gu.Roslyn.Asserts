@@ -125,12 +125,7 @@ public class SyntaxFactoryWriter
         var parameters = method.GetParameters();
         foreach (var parameter in parameters)
         {
-            var writer = ArgumentWriters[parameter];
-            if (writer is null)
-            {
-                throw new NotSupportedException($"Could not write {parameter}");
-            }
-
+            var writer = ArgumentWriters[parameter] ?? throw new NotSupportedException($"Could not write {parameter}");
             writer.Invoke(this, node, parameter.Position == parameters.Length - 1);
         }
 

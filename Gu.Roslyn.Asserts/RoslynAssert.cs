@@ -213,7 +213,7 @@ public static partial class RoslynAssert
 
         var missedDiagnostics = expectedDiagnostics.Where(e => !allDiagnostics.Any(a => e.Matches(a))).ToList();
         var unexpectedDiagnostics = allDiagnostics.Where(a => !expectedDiagnostics.Any(e => e.Matches(a))).ToList();
-        int matchedDiagnostics = expectedDiagnostics.Count - missedDiagnostics.Count;
+        var matchedDiagnostics = expectedDiagnostics.Count - missedDiagnostics.Count;
 
         var error = StringBuilderPool.Borrow();
         error.AppendLine("Expected and actual diagnostics do not match.");

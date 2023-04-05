@@ -67,12 +67,7 @@ public static class ProjectFile
     public static FileInfo Find(string projectFile)
     {
         var sln = SolutionFile.Find(Assembly.GetCallingAssembly());
-        var result = sln.Directory!.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault();
-        if (result is null)
-        {
-            throw new InvalidOperationException("Did not find a file named: " + projectFile);
-        }
-
+        var result = sln.Directory!.EnumerateFiles(projectFile, SearchOption.AllDirectories).FirstOrDefault() ?? throw new InvalidOperationException("Did not find a file named: " + projectFile);
         return result;
     }
 
@@ -178,12 +173,7 @@ public static class ProjectFile
 
                 foreach (var compile in compiles)
                 {
-                    var include = compile.Attribute("Include")?.Value;
-                    if (include is null)
-                    {
-                        throw new InvalidOperationException("Parsing failed, no Include found.");
-                    }
-
+                    var include = compile.Attribute("Include")?.Value ?? throw new InvalidOperationException("Parsing failed, no Include found.");
                     var csFile = Path.Combine(csproj.Directory!.FullName, include);
                     yield return CreateDocumentInfo(new FileInfo(csFile));
                 }
@@ -219,12 +209,7 @@ public static class ProjectFile
 
                 foreach (var compile in compiles)
                 {
-                    var include = compile.Attribute("Include")?.Value;
-                    if (include is null)
-                    {
-                        throw new InvalidOperationException("Parsing failed, no Include found.");
-                    }
-
+                    var include = compile.Attribute("Include")?.Value ?? throw new InvalidOperationException("Parsing failed, no Include found.");
                     if (include.Contains("\\") &&
                         Path.Combine(csproj.Directory.FullName, include) is { } fileName &&
                         File.Exists(fileName))

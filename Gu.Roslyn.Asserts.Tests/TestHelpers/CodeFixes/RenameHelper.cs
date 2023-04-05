@@ -13,12 +13,7 @@ internal static class RenameHelper
     {
         var annotatedRoot = root.ReplaceToken(declarationToken, declarationToken.WithAdditionalAnnotations(RenameAnnotation.Create()));
         var annotatedSolution = document.Project.Solution.WithDocumentSyntaxRoot(document.Id, annotatedRoot);
-        var annotatedDocument = annotatedSolution.GetDocument(document.Id);
-        if (annotatedDocument is null)
-        {
-            throw new InvalidOperationException($"Did not find a document matching {document.Name}");
-        }
-
+        var annotatedDocument = annotatedSolution.GetDocument(document.Id) ?? throw new InvalidOperationException($"Did not find a document matching {document.Name}");
         annotatedRoot = await annotatedDocument.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
         var annotatedToken = annotatedRoot.FindToken(declarationToken.SpanStart);
 

@@ -293,9 +293,9 @@ namespace N
         [TestCase("m_")]
         public static void AnalyzerWithConfiguration(string? prefix)
         {
-            string? analyzerConfig = prefix is null ? null :
+            var analyzerConfig = prefix is null ? null :
                 $"dotnet_diagnostic.SA1309.field_name_prefix = {prefix}";
-            string prefixToUse = prefix ?? "_";
+            var prefixToUse = prefix ?? "_";
 
             var code = @$"
 namespace N
