@@ -10,23 +10,25 @@ public static class FixTests
     [Test]
     public static async Task SingleDocumentOneError()
     {
-        var code = @"
-namespace N
-{
-    class C
-    {
-        private readonly int _value;
-    }
-}";
+        var code = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int _value;
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    class C
-    {
-        private readonly int value;
-    }
-}";
+        var after = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int value;
+                }
+            }
+            """;
         var analyzer = new FieldNameMustNotBeginWithUnderscore();
         var sln = CodeFactory.CreateSolution(code);
         var diagnostic = Analyze.GetDiagnostics(analyzer, sln).SelectMany(x => x.AnalyzerDiagnostics).Single();
@@ -40,25 +42,27 @@ namespace N
     [Test]
     public static void SingleDocumentTwoErrors()
     {
-        var code = @"
-namespace N
-{
-    class C
-    {
-        private readonly int _value1;
-        private readonly int _value2;
-    }
-}";
+        var code = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int _value1;
+                    private readonly int _value2;
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    class C
-    {
-        private readonly int value1;
-        private readonly int value2;
-    }
-}";
+        var after = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int value1;
+                    private readonly int value2;
+                }
+            }
+            """;
         var analyzer = new FieldNameMustNotBeginWithUnderscore();
         var sln = CodeFactory.CreateSolution(code);
         var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
@@ -69,23 +73,25 @@ namespace N
     [Test]
     public static void SingleDocumentOneErrorCorrectFixAll()
     {
-        var code = @"
-namespace N
-{
-    class C
-    {
-        private readonly int _value;
-    }
-}";
+        var code = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int _value;
+                }
+            }
+            """;
 
-        var after = @"
-namespace N
-{
-    class C
-    {
-        private readonly int value;
-    }
-}";
+        var after = """
+            namespace N
+            {
+                class C
+                {
+                    private readonly int value;
+                }
+            }
+            """;
         var analyzer = new FieldNameMustNotBeginWithUnderscore();
         var sln = CodeFactory.CreateSolution(code);
         var diagnostics = Analyze.GetDiagnostics(analyzer, sln);
