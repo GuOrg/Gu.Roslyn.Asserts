@@ -41,7 +41,36 @@ public static partial class CodeFactoryTests
         }
 
         [Test]
-        public static void CreateSolutionFromSources()
+        public static void CreateSolutionFromSourcesFileScoped()
+        {
+            var code1 = """
+                namespace Project1;
+
+                class C1
+                {
+                    private readonly int _value;
+                }
+                """;
+
+            var code2 = """
+                namespace Project2;
+
+                class C2
+                {
+                    private readonly int _value;
+                }
+                """;
+            var sln = CodeFactory.CreateSolution(new[] { code1, code2 });
+            CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
+            Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+
+            sln = CodeFactory.CreateSolution(new[] { code2, code1 });
+            CollectionAssert.AreEqual(new[] { "Project1", "Project2" }, sln.Projects.Select(x => x.Name));
+            Assert.AreEqual(new[] { "C1.cs", "C2.cs" }, sln.Projects.Select(x => x.Documents.Single().Name));
+        }
+
+        [Test]
+        public static void CreateSolutionFromSourcesLegacy()
         {
             var code1 = """
                 namespace Project1
